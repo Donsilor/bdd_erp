@@ -104,7 +104,7 @@ class AddonConfig extends BaseAddonConfig
      *      'other'     => "其他",
      * ]
      */
-    public $group = 'business';
+    public $group = 'plug';
 
     /**
      * 微信接收消息类别
