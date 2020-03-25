@@ -6,7 +6,7 @@ return [
     'config' => [
         // 菜单配置
         'menu' => [
-            'location' => 'addons', // default:系统顶部菜单;addons:应用中心菜单
+            'location' => 'default', // default:系统顶部菜单;addons:应用中心菜单
             'icon' => 'fa fa-puzzle-piece',
         ],
         // 子模块配置
@@ -23,15 +23,20 @@ return [
     // ----------------------- 菜单配置 ----------------------- //
 
     'menu' => [
-
+            [
+                    'title' => '款式列表',
+                    'route' => 'default/index',
+                    'icon' => 'fa fa-cog',
+                    'params' => [],
+            ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //
 
     'authItem' => [
-        [
-            'title' => '所有权限',
-            'name' => '*',
-        ],
+            [
+                    'title' => '款式列表',
+                    'name' => 'default/index',
+            ],
     ],
 ];
