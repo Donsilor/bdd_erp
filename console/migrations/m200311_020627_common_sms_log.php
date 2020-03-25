@@ -28,7 +28,7 @@ class m200311_020627_common_sms_log extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_短信发送日志'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_短信发送日志'");
         
         /* 索引设置 */
         $this->createIndex('error_code','{{%common_sms_log}}','error_code',0);

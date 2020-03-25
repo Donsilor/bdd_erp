@@ -22,7 +22,7 @@ class m200311_020625_api_access_token extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='api_授权秘钥表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='api_授权秘钥表'");
         
         /* 索引设置 */
         $this->createIndex('access_token','{{%api_access_token}}','access_token',1);

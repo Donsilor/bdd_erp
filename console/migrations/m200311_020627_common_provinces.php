@@ -24,7 +24,7 @@ class m200311_020627_common_provinces extends Migration
             'tree' => "varchar(200) NOT NULL",
             'sort' => "tinyint(3) unsigned NULL DEFAULT '0' COMMENT '排序'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='公用_省市区记录表'");
+        ], "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COMMENT='公用_省市区记录表'");
         
         /* 索引设置 */
         $this->createIndex('parentid','{{%common_provinces}}','pid',0);

@@ -22,7 +22,7 @@ class m200311_020629_oauth2_authorization_code extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`authorization_code`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='oauth2_授权回调code'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='oauth2_授权回调code'");
         
         /* 索引设置 */
         $this->createIndex('authorization_code','{{%oauth2_authorization_code}}','authorization_code',0);

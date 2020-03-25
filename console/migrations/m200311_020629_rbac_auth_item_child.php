@@ -17,7 +17,7 @@ class m200311_020629_rbac_auth_item_child extends Migration
             'app_id' => "varchar(20) NOT NULL DEFAULT '' COMMENT '类别'",
             'is_addon' => "tinyint(1) unsigned NULL DEFAULT '0' COMMENT '是否插件'",
             'addons_name' => "varchar(100) NULL DEFAULT '' COMMENT '插件名称'",
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公用_授权角色权限表'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公用_授权角色权限表'");
         
         /* 索引设置 */
         $this->createIndex('role_id','{{%rbac_auth_item_child}}','role_id',0);

@@ -14,7 +14,7 @@ class m200311_020626_backend_notify_subscription_config extends Migration
             'member_id' => "int(10) unsigned NOT NULL COMMENT '用户id'",
             'action' => "json NULL COMMENT '订阅事件'",
             'PRIMARY KEY (`member_id`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统_消息配置表'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统_消息配置表'");
         
         /* 索引设置 */
         

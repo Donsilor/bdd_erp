@@ -24,7 +24,7 @@ class m200311_020629_rbac_auth_role extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '添加时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_角色表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_角色表'");
         
         /* 索引设置 */
         

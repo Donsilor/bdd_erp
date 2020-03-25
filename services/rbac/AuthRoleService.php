@@ -9,6 +9,7 @@ use common\enums\WhetherEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\TreeHelper;
 use common\models\rbac\AuthRole;
+use common\enums\AppEnum;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -45,11 +46,16 @@ class AuthRoleService extends Service
                 throw new UnauthorizedHttpException('未授权角色，请联系管理员');
             }
 
+            $merchant_id = $this->getMerchantId();
+            if (Yii::$app->id == AppEnum::BACKEND) {
+                $merchant_id = '';
+            }
+
             $assignment = ArrayHelper::toArray($assignment);
             $this->roles = AuthRole::find()
                 ->where(['id' => $assignment['role_id']])
                 ->andWhere(['status' => StatusEnum::ENABLED])
-                ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
+                ->andFilterWhere(['merchant_id' => $merchant_id])
                 ->asArray()
                 ->one();
 
@@ -139,7 +145,11 @@ class AuthRoleService extends Service
         $models = ArrayHelper::itemsMerge($list);
         $data = ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models), 'id', 'title');
 
-        return ArrayHelper::merge([0 => '顶级角色'], $data);
+        if (Yii::$app->services->auth->isSuperAdmin()) {
+            return ArrayHelper::merge([0 => '顶级角色'], $data);
+        }
+
+        return $data;
     }
 
     /**
@@ -177,9 +187,16 @@ class AuthRoleService extends Service
     {
         $list = $this->findAll($app_id, Yii::$app->services->merchant->getId(), $this->roleCondition($sourceAuthChild));
 
-        $models = ArrayHelper::itemsMerge($list);
+        $pid = 0;
+        $treeStat = 1;
+        if ($sourceAuthChild == true && ($role = Yii::$app->services->rbacAuthRole->getRole())) {
+            $pid = $role['id'];
+            $treeStat = $role['level'] + 1;
+        }
 
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models), 'id', 'title');
+        $models = ArrayHelper::itemsMerge($list, $pid);
+
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models, 'id', 'title', $treeStat), 'id', 'title');
     }
 
     /**

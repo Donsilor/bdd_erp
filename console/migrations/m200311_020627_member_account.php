@@ -27,7 +27,7 @@ class m200311_020627_member_account extends Migration
             'frozen_integral' => "int(11) NULL DEFAULT '0' COMMENT '冻结积分'",
             'status' => "tinyint(4) NULL DEFAULT '1' COMMENT '状态[-1:删除;0:禁用;1启用]'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='会员_账户统计表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='会员_账户统计表'");
         
         /* 索引设置 */
         $this->createIndex('member_id','{{%member_account}}','member_id',0);

@@ -43,7 +43,7 @@ class m200311_020627_common_report_log extends Migration
             'time' => "datetime NULL COMMENT '客户端时间'",
             'created_at' => "int(10) NULL DEFAULT '0' COMMENT '创建时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_风控日志'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_风控日志'");
         
         /* 索引设置 */
         $this->createIndex('log_id','{{%common_report_log}}','log_id',0);

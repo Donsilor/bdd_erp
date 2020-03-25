@@ -68,7 +68,7 @@ header: {
 
 #### 数据迁移出现 Specified key was too long; max key length is 767 bytes 
 
-> 由于数据库版本问题，解决方法找到数据迁移目录下的那张表，修改编码 utf8 为 utf8
+> 由于数据库版本问题，解决方法找到数据迁移目录下的那张表，修改编码 utf8mb4 为 utf8
 
 #### Api应用增加了控制器方法，还是出现404
 

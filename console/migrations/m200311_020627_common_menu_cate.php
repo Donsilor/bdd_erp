@@ -27,7 +27,7 @@ class m200311_020627_common_menu_cate extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '添加时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='系统_菜单分类表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='系统_菜单分类表'");
         
         /* 索引设置 */
         
