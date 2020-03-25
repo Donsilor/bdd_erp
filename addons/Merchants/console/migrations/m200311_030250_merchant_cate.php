@@ -23,7 +23,7 @@ class m200311_030250_merchant_cate extends Migration
             'created_at' => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='扩展_微商城_商品_分类表'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扩展_微商城_商品_分类表'");
         
         /* 索引设置 */
         

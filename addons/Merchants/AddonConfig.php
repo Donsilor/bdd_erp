@@ -19,7 +19,7 @@ class AddonConfig extends BaseAddonConfig
     public $info = [
         'name' => 'Merchants',
         'title' => '商户管理',
-        'brief_introduction' => 'ERP-商家基础管理',
+        'brief_introduction' => '商家基础管理',
         'description' => '管理商家权限、商家菜单、商家配置等',
         'author' => '简言',
         'version' => '1.0.0',
