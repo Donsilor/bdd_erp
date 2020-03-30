@@ -11,6 +11,22 @@ return [
         'password_hash',
         'password_repetition',
     ],
+        
+    //自定义配置 begin
+    'languages'=>[
+            'zh-CN'=>'简体中文',
+            'zh-TW'=>'繁体中文',
+            'en-US'=>'English',
+    ],
+    'areaId'  =>1,//默认地区
+    'language'=>'zh-CN',//默认语言
+    'currency' =>'CNY',//当前货币代号
+    'currencyBase' =>'CNY',//基础货币代号
+    'currencySign' =>'CNY',//当前货币符号
+    'cachePrefix'=>'erp',//缓存前缀
+    'goodsType.diamond'=>15,//裸钻产品线
+    //自定义配置 end
+    
     // 是否在模块内
     'inAddon' => false,
     // 系统管理员账号id
