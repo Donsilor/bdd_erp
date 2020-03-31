@@ -54,7 +54,7 @@ return [
                             ],
                             [
                                     'title' => '款式分类',
-                                    'route' => 'category/index',
+                                    'route' => 'style-cate/index',
                             ],
                             [
                                     'title' => '产品线',

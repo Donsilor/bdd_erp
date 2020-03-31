@@ -33,14 +33,13 @@ class CategoryService extends Service
             $query->andWhere(['a.pid'=>$pid]);
         }
         
-        $models =$query->leftJoin('{{%goods_category_lang}} b', 'b.master_id = a.id and b.language = "'.$language.'"')
-            ->select(['a.*', 'b.cat_name'])
-            ->orderBy('sort asc,created_at asc')
-            ->asArray()
-            ->all();
+        $models = $query->select(['a.*'])
+                    ->orderBy('sort asc,created_at asc')
+                    ->asArray()
+                    ->all();
 
         $models = ArrayHelper::itemsMerge($models);
         
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','cat_name'), 'id', 'cat_name');
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','cate_name'), 'id', 'cate_name');
     }
 }

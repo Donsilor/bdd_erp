@@ -34,7 +34,7 @@ use common\models\base\BaseModel;
  * @property int $updated_at 商品编辑时间
  * @property string $spec_key 规格值唯一key(规格值ID逗号隔开的字符串)
  */
-class Goods extends BaseModel
+class StyleGoods extends BaseModel
 {
     /**
      * {@inheritdoc}

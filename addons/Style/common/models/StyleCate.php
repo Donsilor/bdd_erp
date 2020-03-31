@@ -3,7 +3,7 @@
 namespace addons\style\common\models;
 
 use Yii;
-use common\behaviors\MerchantBehavior;
+
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\traits\Tree;
@@ -21,16 +21,16 @@ use common\traits\Tree;
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
-class GoodsType extends \common\models\base\BaseModel
+class ProductType extends BaseModel
 {
-    use Tree, MerchantBehavior;
+    use Tree;
     
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::dbName().'.{{style_goods_type}}';
+        return self::dbName().'.{{style_category}}';
     }
     
     /**
@@ -39,8 +39,9 @@ class GoodsType extends \common\models\base\BaseModel
     public function rules()
     {
         return [
-                [['pid','status'], 'required'],
+                [['pid','status','cate_name'], 'required'],
                 [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
+                [['cate_name'], 'string', 'max' => 100],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
                 [['type_name'], 'safe'],
@@ -54,7 +55,7 @@ class GoodsType extends \common\models\base\BaseModel
     {
         return [
                 'id' => 'ID',
-                'type_name' => '产品线',
+                'cate_name' => '分类名称',
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',
@@ -90,15 +91,13 @@ class GoodsType extends \common\models\base\BaseModel
      */
     public static function getDropDownForEdit($id = '')
     {
-        $list = self::find()->alias('a')
-        ->where(['>=', 'status', StatusEnum::DISABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->andFilterWhere(['<>', 'a.id', $id])
-        ->leftJoin(GoodsTypeLang::tableName().' b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-        ->select(['a.id', 'b.type_name', 'pid', 'level'])
-        ->orderBy('sort asc')
-        ->asArray()
-        ->all();
+        $list = self::find()
+            ->where(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['<>', 'a.id', $id])
+            ->select(['id', 'cate_name', 'pid', 'level'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
         
         $models = ArrayHelper::itemsMerge($list);
         $data = ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'type_name'), 'id', 'type_name');
@@ -111,16 +110,13 @@ class GoodsType extends \common\models\base\BaseModel
     public static function getDropDown()
     {
         $models = self::find()->alias('a')
-        ->where(['status' => StatusEnum::ENABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->leftJoin('{{%goods_type_lang}} b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-        ->select(['a.*', 'b.type_name'])
-        ->orderBy('sort asc,created_at asc')
-        ->asArray()
-        ->all();
+            ->where(['status' => StatusEnum::ENABLED])
+            ->orderBy('sort asc,created_at asc')
+            ->asArray()
+            ->all();
         
         $models = ArrayHelper::itemsMerge($models);
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'type_name'), 'id', 'type_name');
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'cate_name'), 'id', 'cate_name');
     }
     
     /**
@@ -129,32 +125,5 @@ class GoodsType extends \common\models\base\BaseModel
     public function getParent()
     {
         return $this->hasOne(self::class, ['id' => 'pid']);
-    }
-    
-    /**
-     * 语言扩展表
-     * @return \addons\style\common\models\AttributeLang
-     */
-    public function langModel()
-    {
-        return new GoodsTypeLang();
-    }
-    
-    public function getLangs()
-    {
-        return $this->hasMany(GoodsTypeLang::class,['master_id'=>'id']);
-        
-    }
-    
-    /**
-     * 关联语言一对一
-     * @param string $languge
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLang()
-    {
-        return $this->hasOne(GoodsTypeLang::class, ['master_id'=>'id'])->alias('lang')->where(['lang.language' => Yii::$app->params['language']]);
-    }
-    
-    
+    } 
 }
