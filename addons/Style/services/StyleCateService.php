@@ -6,7 +6,7 @@ use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\Category;
+use addons\style\common\models\StyleCate;
 
 
 /**
@@ -14,7 +14,7 @@ use addons\style\common\models\Category;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class CategoryService extends Service
+class StyleCateService extends Service
 {
     
     /**
@@ -25,7 +25,7 @@ class CategoryService extends Service
         if(empty($language)){
             $language = Yii::$app->language;
         }
-        $query = Category::find()->alias('a')
+        $query = StyleCate::find()->alias('a')
                     ->where(['status' => StatusEnum::ENABLED])
                     ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()]);
         

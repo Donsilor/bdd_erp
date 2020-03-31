@@ -132,7 +132,7 @@ class AttributeController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $is_new = $model->isNewRecord;             
             try{
-                $trans = Yii::$app->db->beginTransaction();
+                $trans = Yii::$app->transaction->beginTransaction();
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }

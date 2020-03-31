@@ -9,7 +9,7 @@ use common\helpers\ArrayHelper;
 use common\traits\Tree;
 
 /**
- * This is the model class for table "{{%addon_article_cate}}".
+
  *
  * @property int $id 主键
  * @property string $title 标题
@@ -21,7 +21,7 @@ use common\traits\Tree;
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
-class ProductType extends BaseModel
+class StyleCate extends BaseModel
 {
     use Tree;
     
