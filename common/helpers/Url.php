@@ -205,4 +205,31 @@ class Url extends BaseUrl
 
         return $url;
     }
+    
+    /**
+     * 获取当前地址
+     * @return string|mixed
+     */
+    public static function getReturnUrl()
+    {
+        $url = parse_url(Yii::$app->request->url);
+        $returnUrlParams = [];
+        if (isset($url['query'])) {
+            $parts = explode('&', $url['query']);
+            foreach ($parts as $part) {
+                $pieces = explode('=', $part);
+                
+                if (count($pieces) == 2 && strlen($pieces[1]) > 0) {
+                    $returnUrlParams[] = $part;
+                }
+            }
+        }
+        if (count($returnUrlParams) > 0) {
+            $returnUrl = $url['path'] . '?' . implode('&', $returnUrlParams);
+        } else {
+            $returnUrl = $url['path'];
+        }
+        
+        return $returnUrl;
+    }
 }

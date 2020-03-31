@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use Yii;
-use addons\style\common\models\Attribute;
+use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
-use addons\style\common\models\AttributeValue;
+use addons\Style\common\models\AttributeValue;
 use yii\base\Exception;
 use common\traits\Curd;
 /**

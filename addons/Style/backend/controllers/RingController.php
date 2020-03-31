@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use common\enums\StatusEnum;
 use addons\style\common\models\RingRelation;
@@ -8,7 +8,7 @@ use addons\style\common\models\Style;
 use services\goods\StyleService;
 use Yii;
 use addons\style\common\models\Ring;
-use common\components\Curd;
+use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use common\helpers\ResultHelper;

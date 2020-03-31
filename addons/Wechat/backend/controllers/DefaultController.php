@@ -20,6 +20,7 @@ class DefaultController extends BaseController
     */
     public function actionIndex()
     {
+        echo '111';exit;
         return $this->render('index',[
 
         ]);

@@ -1,14 +1,11 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\CategoryLang;
 use Yii;
-use common\components\Curd;
+use common\traits\Curd;
 use addons\style\common\models\Category;
 use yii\data\ActiveDataProvider;
-use backend\controllers\BaseController;
-
 /**
  * 商品分类
  *
@@ -23,28 +20,14 @@ class CategoryController extends BaseController
     /**
      * @var CategoryController
      */
-    public $modelClass = Category::class;
+    public $modelClass = Cate::class;
 
     /**
      * Lists all Tree models.
      * @return mixed
      */
     public function actionIndex()
-    {
-        $title = Yii::$app->request->get('title',null);
-        $query = Category::find()->alias('a')
-            ->orderBy('sort asc, created_at asc')
-            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
-            ->leftJoin('{{%goods_category_lang}} b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-            ->select(['a.*', 'b.cat_name']);
-        if(!empty($title)){
-            $query->andWhere(['or',['=','a.id',$title],['like','b.cat_name',$title]]);
-        }
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => false
-        ]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+    {        
 
         return $this->render('index', [
             'dataProvider' => $dataProvider

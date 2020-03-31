@@ -18,6 +18,11 @@ use common\helpers\TransactionHelper;
  */
 class DefaultController extends BaseController
 {
+
+    public function init()
+    {
+        $this->noAuthOptional = ['index'];
+    }
     /**
     * 首页
     *
@@ -25,7 +30,7 @@ class DefaultController extends BaseController
     */
     public function actionIndex()
     {
-
+        
         $trans = \Yii::$app->transaction->beginTransaction();
         $smsLog = SmsLog::find()->where(['id'=>1])->one();
         $smsLog->mobile = time();

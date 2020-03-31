@@ -1,21 +1,20 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\Type;
+use addons\style\common\models\ProductType;
 use Yii;
-use common\components\Curd;
+use common\traits\Curd;
 use yii\data\ActiveDataProvider;
 use backend\controllers\BaseController;
 use common\models\base\SearchModel;
 /**
- * 商品类型(产品线)
+ * 产品线
  *
- * Class ArticleCateController
- * @package addons\RfArticle\backend\controllers
- * @author jianyan74 <751393839@qq.com>
+ * Class ProductTypeController
+ * @package addons\Style\backend\controllers;
  */
-class TypeController extends BaseController
+class ProductTypeController extends BaseController
 {
     use Curd;
 

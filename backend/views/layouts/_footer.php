@@ -136,10 +136,54 @@ $this->registerJs($script);
     $('#ajaxModalMax').on('shown.bs.modal', function (e) {
         autoFontColor()
     });
+    //批量审核
+    function batchAudit(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        let text = $e.text();
+        let grid = $e.data('grid');
+        let id = $e.closest("tr").data("key");
+
+        let ids = [];
+        if(id) {
+            ids.push(id);
+        }
+        else if($("#"+grid).length>0) {
+            ids = $("#"+grid).yiiGridView("getSelectedRows");
+        }
+
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+
+        appConfirm("确定要"+text+"吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
+            }
+
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
 
     // 启用状态 status 1:启用;0禁用;
     function rfStatus(obj) {
         let id = $(obj).attr('data-id');
+        let url = $(obj).attr('data-url');
         let status = 0;
         self = $(obj);
         if (self.hasClass("btn-success")) {
@@ -153,10 +197,12 @@ $this->registerJs($script);
         if (!id) {
             id = $(obj).parent().parent().attr('data-key');
         }
-
+        if(!url){
+             url = "<?= Url::to(['ajax-update'])?>";
+        } 
         $.ajax({
             type: "get",
-            url: "<?= Url::to(['ajax-update'])?>",
+            url: url,
             dataType: "json",
             data: {
                 id: id,
@@ -181,10 +227,53 @@ $this->registerJs($script);
             }
         });
     }
+    //批量启用1/禁用0/软删除-1
+    $(".jsBatchStatus").click(function(){
 
+    	let grid = $(this).attr('data-grid');
+    	let url = $(this).attr('data-url');
+    	let status = $(this).attr('data-value');
+    	let text = $(this).text();
+    	let ids = $("#"+grid).yiiGridView("getSelectedRows");
+    	if(!url){
+   		 	url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if(ids=="" || !ids){
+        	rfInfo('未选中数据！','');
+            return false;
+        }
+        
+    	appConfirm("确定要"+text+"吗?", '', function (code) {
+    		switch (code) {
+                case "defeat":
+                	$.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status:status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            }else {
+                            	//rfAffirm(data.message);
+                            	window.location.reload(); 
+                            }
+                        }
+                    });
+                    break;
+            	default:
+        	}
+    		
+        })
+
+    });    
     // 排序
     function rfSort(obj) {
         let id = $(obj).attr('data-id');
+        let url = $(obj).attr('data-url');
 
         if (!id) {
             id = $(obj).parent().parent().attr('id');
@@ -193,7 +282,9 @@ $this->registerJs($script);
         if (!id) {
             id = $(obj).parent().parent().attr('data-key');
         }
-
+        if(!url){
+            url = "<?= Url::to(['ajax-update'])?>";
+        } 
         var sort = $(obj).val();
         if (isNaN(sort)) {
             rfAffirm('排序只能为数字');
@@ -201,7 +292,7 @@ $this->registerJs($script);
         } else {
             $.ajax({
                 type: "get",
-                url: "<?= Url::to(['ajax-update'])?>",
+                url: url,
                 dataType: "json",
                 data: {
                     id: id,
@@ -214,5 +305,24 @@ $this->registerJs($script);
                 }
             });
         }
+    }
+
+    //显示360 主图
+    function view_3ds() {
+        var ds3 = $("#ds3").val();
+        if(ds3 == ''){
+            rfMsg('请填写360°主图');
+            return;
+        }
+        var title = '360°主图';
+        var width = '498px';
+        var height = '498px';
+        var offset = "0";
+        var btn = [];
+        // var href = ds3;
+        var href = "https://spins0.arqspin.com/iframe.html?spin=" + ds3 + "&is=0.16"
+        openIframe(title, width, height, href, offset,btn);
+        e.preventDefault();
+        return false;
     }
 </script>

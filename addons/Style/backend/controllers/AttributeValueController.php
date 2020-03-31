@@ -1,9 +1,9 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use Yii;
-use common\components\Curd;
+use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use addons\style\common\models\AttributeValue;

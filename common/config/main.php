@@ -105,6 +105,18 @@ return [
                 'cache' => 'common\components\WechatCache',
             ]
         ],
+        /** ------ i18n 国际化 ------ **/
+        'i18n' => [
+                'translations' => [
+                        '*' => [
+                                'class' => 'yii\i18n\PhpMessageSource',
+                                'basePath' => '@app/languages',
+                                'fileMap' => [
+                                        
+                                ],
+                        ],
+                ],
+        ],
 		'attribute' => [
             'class' => 'common\components\Attribute',
         ],

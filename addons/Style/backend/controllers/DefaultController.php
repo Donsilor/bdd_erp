@@ -19,10 +19,7 @@ class DefaultController extends BaseController
     * @return string
     */
     public function actionIndex()
-    {
-        echo '1111111111';
-        echo Attribute::fullTableName();
-        
+    {        
         return $this->render('index',[
 
         ]);

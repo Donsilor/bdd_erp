@@ -1,17 +1,16 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use Yii;
-use addons\style\common\models\Style;
-use common\components\Curd;
 use common\models\base\SearchModel;
-
-use backend\controllers\BaseController;
 use yii\base\Exception;
 use common\helpers\ResultHelper;
 use common\helpers\ArrayHelper;
+use common\traits\Curd;
 
+use addons\Style\backend\controllers\BaseController;
+use addons\Style\common\models\Style;
 
 /**
 * Style
@@ -37,7 +36,7 @@ class StyleController extends BaseController
     */
     public function actionIndex()
     {
-        $type_id = Yii::$app->request->get('type_id',0);
+        $cate_id = Yii::$app->request->get('cate_id',0);
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -47,14 +46,14 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize
         ]);
-        $typeModel = Yii::$app->services->goodsType->getAllTypesById($type_id,null);
+        //$typeModel = Yii::$app->services->goodsType->getAllTypesById($type_id,null);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['style_name','language']);
         //切换默认语言
-        $this->setLocalLanguage($searchModel->language);
+        /* $this->setLocalLanguage($searchModel->language);
         if($typeModel){
             $dataProvider->query->andFilterWhere(['in', 'type_id',$typeModel['ids']]);
-        }
+        } */
         $dataProvider->query->joinWith(['lang']);
         $dataProvider->query->andFilterWhere(['like', 'lang.style_name',$searchModel->style_name]);
 

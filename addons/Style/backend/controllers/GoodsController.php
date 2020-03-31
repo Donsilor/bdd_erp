@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use Yii;
 use addons\style\common\models\Goods;
-use common\components\Curd;
+use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 

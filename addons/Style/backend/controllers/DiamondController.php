@@ -1,13 +1,13 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use common\enums\AttrIdEnum;
 use common\helpers\ArrayHelper;
 use addons\style\common\models\Style;
 use Yii;
 use addons\style\common\models\Diamond;
-use common\components\Curd;
+use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use common\helpers\ResultHelper;

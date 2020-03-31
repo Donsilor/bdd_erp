@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\modules\goods\controllers;
+namespace addons\Style\backend\controllers;
 
 use Yii;
 use addons\style\common\models\Attribute;
-use common\components\Curd;
+use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use addons\style\common\models\AttributeSpec;
@@ -36,7 +36,6 @@ class AttributeSpecController extends BaseController
      */
     public function actionIndex()
     {
-        //Yii::$app->language = 'zh-TW';
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',

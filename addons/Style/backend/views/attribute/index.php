@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="box-body table-responsive">
-    <?php echo Html::batchButtons(false)?>        
+    <?php //echo Html::batchButtons(false)?>        
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
