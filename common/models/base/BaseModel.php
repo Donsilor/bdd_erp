@@ -34,7 +34,7 @@ class BaseModel extends ActiveRecord
      */
     public static function dbName()
     {
-        preg_match("/dbname=([^;]+)/i", self::getDb()->dsn, $matches);
+        preg_match("/dbname=([^;]+)/i", static::getDb()->dsn, $matches);
         return $matches[1];
-    }  
+    }
 }

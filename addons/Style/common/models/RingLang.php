@@ -23,7 +23,7 @@ class RingLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%ring_lang}}';
+        return self::dbName().'.{{style_ring_lang}}';
     }
     /**
      * behaviors

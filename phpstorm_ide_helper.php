@@ -31,7 +31,9 @@ class Yii
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat
  * @property \Da\QrCode\Component\QrCodeComponent $qr
- *
+ * @property \common\components\Attribute $attribute
+ * @property \common\components\Transaction $transaction
+ * @property \yii\db\Connection $styleDb //款式库连接
  * @author jianyan74 <751393839@qq.com>
  */
 class MyApplication

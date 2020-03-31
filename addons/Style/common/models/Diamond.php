@@ -41,7 +41,7 @@ class Diamond extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%diamond}}';
+        return self::dbName().'.{{style_diamond}}';
     }
 
     /**

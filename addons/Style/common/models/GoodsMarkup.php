@@ -27,7 +27,7 @@ class GoodsMarkup extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%goods_markup}}';
+        return self::dbName().'.{{style_goods_markup}}';
     }
 
     /**

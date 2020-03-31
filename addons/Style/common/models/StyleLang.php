@@ -27,7 +27,7 @@ class StyleLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%style_lang}}';
+        return self::dbName().'.{{style_style_lang}}';
     }
     /**
      * behaviors

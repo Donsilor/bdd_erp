@@ -27,7 +27,7 @@ class Ring extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%ring}}';
+        return self::dbName().'.{{style_ring}}';
     }
 
     /**

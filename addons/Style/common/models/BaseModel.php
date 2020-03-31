@@ -16,5 +16,14 @@ class BaseModel extends \common\models\base\BaseModel
     {
          return \Yii::$app->styleDb;    
     }
- 
+    
+    /**
+     * 获取数据库名称
+     * @return unknown
+     */
+    public static function dbName()
+    {
+        return parent::dbName();
+    }
+     
 }

@@ -25,11 +25,11 @@ return [
         //款式库
         'styleDb' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=bdd_erp',
+                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=erp_style;',
                 'username' => 'root',
                 'password' => 'root',
                 'charset' => 'utf8',
-                'tablePrefix'=>'style_',
+                'tablePrefix'=>'',
                 'attributes' => [
 
                 ],
@@ -105,8 +105,9 @@ return [
                 'cache' => 'common\components\WechatCache',
             ]
         ],
-		'attr' => [
-            'class' => 'common\components\Attr',
+		'attribute' => [
+            'class' => 'common\components\Attribute',
         ],
+        'transaction'=>'common\components\Transaction'
     ],
 ];

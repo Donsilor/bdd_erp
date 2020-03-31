@@ -21,7 +21,7 @@ class AttributeLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%attribute_lang}}';
+        return self::dbName().'.{{style_attribute_lang}}';
     }
     /**
      * behaviors

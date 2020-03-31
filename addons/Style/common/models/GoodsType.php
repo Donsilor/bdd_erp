@@ -30,7 +30,7 @@ class GoodsType extends \common\models\base\BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%goods_type}}';
+        return self::dbName().'.{{style_goods_type}}';
     }
     
     /**

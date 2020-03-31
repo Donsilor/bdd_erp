@@ -21,7 +21,7 @@ class RingRelation extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%ring_relation}}';
+        return self::dbName().'.{{style_ring_relation}}';
     }
 
     /**

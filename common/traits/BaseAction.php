@@ -21,6 +21,8 @@ trait BaseAction
      * @var int
      */
     protected $pageSize = 10;
+    
+    protected $noAuthOptional = [];
 
     /**
      * 商户id

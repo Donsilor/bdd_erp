@@ -14,7 +14,7 @@ use addons\style\common\models\AttributeValueLang;
  * @package common\components
  * @author gaopeng
  */
-class Attr
+class Attribute
 {
     /**
      * 返回属性名称

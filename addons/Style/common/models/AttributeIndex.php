@@ -21,7 +21,7 @@ class AttributeIndex extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%attribute_index}}';
+        return self::dbName().'.{{style_attribute_index}}';
     }
     /**
      * behaviors

@@ -22,7 +22,7 @@ class DiamondSource extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%diamond_source}}';
+        return self::dbName().'.{{style_diamond_source}}';
     }
 
     /**

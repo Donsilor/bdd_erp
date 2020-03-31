@@ -22,7 +22,7 @@ class GoodsLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%goods_lang}}';
+        return self::dbName().'.{{style_goods_lang}}';
     }    
     /**
      * behaviors

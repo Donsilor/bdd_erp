@@ -26,7 +26,7 @@ class StyleMarkup extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{%style_markup}}';
+        return self::dbName().'.{{style_style_markup}}';
     }
 
     /**

@@ -6,6 +6,9 @@ use Yii;
 use common\controllers\AddonsController;
 use addons\style\common\models\Attribute;
 use addons\style\common\models\AttributeLang;
+use common\models\common\SmsLog;
+use yii\db\Transaction;
+use common\helpers\TransactionHelper;
 
 /**
  * 默认控制器
@@ -22,11 +25,20 @@ class DefaultController extends BaseController
     */
     public function actionIndex()
     {
-        //echo AttributeLang::fullTableName();exit;
-        $res = Attribute::find()->alias('a')->innerJoin(AttributeLang::tableName().' lang','a.id=lang.master_id2')->all();
-        print_r($res);
-        return $this->render('index',[
 
-        ]);
+        $trans = \Yii::$app->transaction->beginTransaction();
+        $smsLog = SmsLog::find()->where(['id'=>1])->one();
+        $smsLog->mobile = time();
+        $res = $smsLog->save(false);
+        var_dump($res);
+        $attribute = Attribute::find()->where(['id'=>2])->one();
+        $attribute->code = rand(10000,20000);
+        $res = $attribute->save(false);
+        var_dump($res);
+        echo $smsLog->mobile.'---'.$attribute->code.'<br/>';
+        $trans->commit();
+        echo 'merchant:'.\Yii::$app->controller->route;
+        exit;
+        
     }
 }
