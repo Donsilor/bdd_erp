@@ -37,7 +37,7 @@ class AddonConfig extends BaseAddonConfig
         'merchant' => 'common/config/merchant.php',
         'html5' => 'common/config/html5.php',
         'api' => 'common/config/api.php',
-        'oauth2' => 'common/config/oauth2.php',
+        'oauth2' => 'common/config/oauth2.php', 
     ];
 
     /**

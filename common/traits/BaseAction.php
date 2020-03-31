@@ -108,8 +108,46 @@ trait BaseAction
         if (!$msgType || !in_array($msgType, ['success', 'error', 'info', 'warning'])) {
             $msgType = 'success';
         }
-
+        //$msgText = Yii::t('message',$msgText);
+        $msgText = \yii\helpers\StringHelper::truncate($msgText, 900);
         Yii::$app->getSession()->setFlash($msgType, $msgText);
         return $skipUrl;
+    }
+    
+    /**
+     * 新增/编辑多语言
+     * @param unknown $model
+     * @param string $is_ajax
+     */
+    protected function editLang(& $model,$is_ajax = false){
+        
+        $langModel = $model->langModel();
+        $langClassName = substr(strrchr($langModel->className(), '\\'), 1);
+        $langPosts = Yii::$app->request->post($langClassName);
+        if(empty($langPosts)){
+            return false;
+        }
+        foreach ($langPosts as $lang_key=>$lang_post){
+            $is_new = true;
+            foreach ($model->langs as $langModel){
+                if($lang_key == $langModel->language){
+                    $langModel->load([$langClassName =>$langPosts[$langModel->language]]);
+                    $model->link('langs', $langModel);
+                    $is_new = false;
+                    break;
+                }
+            }
+            if($is_new == true){
+                $langModel = $model->langModel();
+                $langModel->load([$langClassName =>$lang_post]);
+                $langModel->master_id = $model->id;
+                $langModel->language = $lang_key;
+                if(false === $langModel->save()){
+                    throw new UnprocessableEntityHttpException($this->getError($langModel));
+                }
+            }
+        }
+        
+        return true;
     }
 }

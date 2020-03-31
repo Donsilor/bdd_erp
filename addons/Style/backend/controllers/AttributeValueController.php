@@ -6,7 +6,7 @@ use Yii;
 use common\components\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
-use common\models\goods\AttributeValue;
+use addons\style\common\models\AttributeValue;
 
 /**
  * Attribute

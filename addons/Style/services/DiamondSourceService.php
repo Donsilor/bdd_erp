@@ -1,0 +1,29 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: BDD
+ * Date: 2019/12/7
+ * Time: 13:53
+ */
+
+namespace services\goods;
+
+
+use common\enums\StatusEnum;
+use common\helpers\ArrayHelper;
+use addons\style\common\models\DiamondSource;
+
+class DiamondSourceService
+{
+    public function getDropDown(){
+        $model = DiamondSource::find()
+            ->where(['status' => StatusEnum::ENABLED])
+            ->select(['id','name'])
+            ->asArray()
+            ->all();
+
+        return ArrayHelper::map($model,'id', 'name');
+    }
+
+
+}

@@ -17,7 +17,7 @@ class BaseModel extends ActiveRecord
      * @return array
      */
     public function behaviors()
-    {
+    {        
         return [
             [
                 'class' => TimestampBehavior::class,
@@ -28,4 +28,13 @@ class BaseModel extends ActiveRecord
             ],
         ];
     }
+    /**
+     * 获取数据库名称
+     * @return unknown
+     */
+    public static function dbName()
+    {
+        preg_match("/dbname=([^;]+)/i", self::getDb()->dsn, $matches);
+        return $matches[1];
+    }  
 }

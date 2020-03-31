@@ -3,12 +3,12 @@
 namespace backend\modules\goods\controllers;
 
 use Yii;
-use common\models\goods\Attribute;
-use common\components\Curd;
+use addons\style\common\models\Attribute;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
-use common\models\goods\AttributeValue;
+use addons\style\common\models\AttributeValue;
 use yii\base\Exception;
+use common\traits\Curd;
 /**
 * Attribute
 *

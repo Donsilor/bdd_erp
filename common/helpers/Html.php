@@ -299,4 +299,96 @@ Css
 
         return Auth::verify($route);
     }
+    
+    /**
+     * 多语言表单input的name值生成
+     * @param unknown $lang
+     * @param unknown $field
+     * @return string
+     */
+    public static function langInputName ($model,$language,$field)
+    {
+        $className = substr(strrchr($model->className(), '\\'), 1);
+        return "{$className}[{$language}][{$field}]";
+    }
+    /**
+     * 多语言input参数
+     * @param unknown $model
+     * @param unknown $language
+     * @param unknown $field
+     * @param array $attrKeys
+     * @param array $options
+     * @return array
+     */
+    public static function langInputOptions($model, $language, $field, $options = [])
+    {
+        $options['name'] = self::langInputName($model, $language, $field);
+        $options['id'] = $field."_".$language;
+        return $options;
+    }
+    
+    /**
+     * 多语言tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+    public static function langTab($tab = 'tab',$title = null)
+    {
+        return self::tab(Yii::$app->params['languages'],Yii::$app->language,$tab,$title);
+    }
+    /**
+     * 地区tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+    public static function areaTab($tab = 'areaTab',$title = null)
+    {
+        return self::tab(AreaEnum::getMap(),Yii::$app->params['areaId'],$tab,$title);
+    }
+    /**
+     * tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+    public static function tab($options,$curValue,$tab = 'tab',$title = null)
+    {
+        $str = '<ul class="nav nav-tabs">';
+        if($title){
+            $str .= '<li><a href="javascript:void(0)">'.$title.'</a></li>';
+        }
+        foreach ($options as $key=>$name){
+            $active = $curValue == $key?"active":"";
+            $id = $tab.'_'.$key;
+            $str.='<li class="'.$active.'"><a href="#'.$id.'" id="a_'.$id.'" data-toggle="tab" aria-expanded="false">'.$name.'</a></li>';
+            if($key === 0){
+                $str .='<script type="text/javascript">';
+                $str .= '$("#a_'.$id.'").click(function(){';
+                foreach ($options as $k=>$v){
+                    if($k > 0){
+                        $str .='$("#'.$tab.'_'.$k.'").removeClass("active").addClass("active");';
+                    }
+                }
+                $str .= '})</script>';
+            }
+        }
+        $str .='</ul>';
+        return $str;
+    }
+    
+    /**
+     * 批量审核
+     * @param array|string $url
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchAudit($url = ['ajax-batch-audit'], $content = '审核', $options = [])
+    {
+        $options = ArrayHelper::merge([
+                'class' => "btn btn-primary btn-sm",
+                'onclick' => "batchAudit(this);return false;"
+        ], $options);
+        
+        return self::a($content, $url, $options);
+    }
 }

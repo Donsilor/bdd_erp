@@ -15,6 +15,25 @@ return [
         'common\components\Init', // 加载默认的配置
     ],
     'components' => [
+        'db' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=bdd_erp;',
+                'username' => 'root',
+                'password' => 'root',
+                'charset' => 'utf8',
+        ],
+        //款式库
+        'styleDb' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=bdd_erp',
+                'username' => 'root',
+                'password' => 'root',
+                'charset' => 'utf8',
+                'tablePrefix'=>'style_',
+                'attributes' => [
+
+                ],
+        ],
         /** ------ 缓存 ------ **/
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -42,7 +61,7 @@ return [
             'class' => 'yii\redis\Connection',
             'hostname' => '127.0.0.1',
             'port' => 6379,
-            'database' => 0,
+            'database' => 3,
         ],
         /** ------ 网站碎片管理 ------ **/
         'debris' => [
@@ -85,6 +104,9 @@ return [
             'rebinds' => [
                 'cache' => 'common\components\WechatCache',
             ]
+        ],
+		'attr' => [
+            'class' => 'common\components\Attr',
         ],
     ],
 ];

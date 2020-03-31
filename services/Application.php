@@ -149,5 +149,8 @@ class Application extends Service
         'oauth2AccessToken' => 'services\oauth2\AccessTokenService',
         'oauth2RefreshToken' => 'services\oauth2\RefreshTokenService',
         'oauth2AuthorizationCode' => 'services\oauth2\AuthorizationCodeService',
+            
+        /***-----------新增通用service-------------**/    
+        'currency'=>'services\common\CurrencyService', 
     ];
 }
