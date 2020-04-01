@@ -31,8 +31,6 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-date-range": "*",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
-		"kartik-v/yii2-checkbox-x": "@dev",
-        "kartik-v/yii2-mpdf": "^1.0",
         "2amigos/qrcode-library": "^1.1",
         "aliyuncs/oss-sdk-php": "~2.0",
         "linslin/yii2-curl": "*",
