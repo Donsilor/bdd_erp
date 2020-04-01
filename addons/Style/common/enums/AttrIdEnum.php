@@ -1,6 +1,6 @@
 <?php
 
-namespace common\enums;
+namespace addons\Style\common\enums;
 
 /**
  * 属性ID枚举

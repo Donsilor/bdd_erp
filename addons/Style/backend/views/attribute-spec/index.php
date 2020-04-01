@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit', 'type_id' => 0], '创建', [
+                    <?= Html::create(['ajax-edit', 'style_cate_id' => 0], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'attr_values',
                 'value' => function($model){
-                    $attrValues = Yii::$app->services->goodsAttribute->getValuesByValueIds($model->attr_values);
+                    $attrValues = Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
                     return implode(",",$attrValues);
                 },                  
                 'filter' => false,
@@ -70,9 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 //'label' => 'type_name',
-                'attribute' => 'type.type_name',
+                'attribute' => 'cate.name',
                 'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeDropDownList($searchModel, 'type_id', Yii::$app->services->goodsType->getDropDown(), [
+                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', Yii::$app->styleService->styleCate->getDropDown(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
                 ]),
@@ -82,9 +82,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
-                    return \common\enums\AttrTypeEnum::getValue($model->attr_type);
+                    return \addons\Style\common\enums\AttrTypeEnum::getValue($model->attr_type);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'attr_type',\common\enums\AttrTypeEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'attr_type',\addons\Style\common\enums\AttrTypeEnum::getMap(), [
                         'prompt' => '全部',
                         'class' => 'form-control'
                 ]),

@@ -3,7 +3,6 @@
 namespace addons\style\common\models;
 
 use Yii;
-use common\models\base\BaseModel;
 
 /**
  * This is the model class for table "{{%goods_attribute_spec_value}}".

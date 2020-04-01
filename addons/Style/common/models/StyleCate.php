@@ -1,11 +1,6 @@
 <?php
 
 namespace addons\style\common\models;
-
-use Yii;
-
-use common\enums\StatusEnum;
-use common\helpers\ArrayHelper;
 use common\traits\Tree;
 
 /**

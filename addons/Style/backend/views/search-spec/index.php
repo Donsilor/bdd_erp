@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'name'=>'id',  //设置每行数据的复选框属性
                 'headerOptions' => ['width'=>'30'],
                 'footer'=> Html::batchButtons(),//['search_export','status_disabled']
-                'footerOptions' => ['colspan' => 3],  //设置删除按钮垮列显示                        
+                'footerOptions' => ['colspan' => 3],  //设置删除按钮垮列显示
             ],
             [
                 'attribute'=>'attr_id',
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'attr_values',
                 'value' => function($model){
-                    $attrValues = Yii::$app->services->goodsAttribute->getValuesByValueIds($model->attr_values);
+                    $attrValues = Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
                     return implode(",",$attrValues);
                 },                  
                 'filter' => false,

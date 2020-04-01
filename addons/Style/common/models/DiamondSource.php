@@ -2,7 +2,6 @@
 
 namespace addons\style\common\models;
 
-use common\models\base\BaseModel;
 use Yii;
 
 /**

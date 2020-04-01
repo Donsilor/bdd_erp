@@ -1,9 +1,7 @@
 <?php
 
 namespace addons\style\common\models;
-
 use Yii;
-use common\models\base\BaseModel;
 
 /**
  * This is the model class for table "{{%goods_category_spec}}".
@@ -37,17 +35,18 @@ class AttributeSpec extends BaseModel
     public function rules()
     {
         return [
-            [['type_id', 'attr_id', 'attr_type', 'input_type', 'is_require', 'status'], 'required'],
-            [['type_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_show' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require', 'status'], 'required'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_show' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             //[['attr_values'], 'string', 'max' => 500],
-            [['attr_id'],'unique', 'targetAttribute'=>['type_id','attr_id'],
+            [['attr_id'],'unique', 'targetAttribute'=>['style_cate_id','attr_id'],
               //'targetClass' => '\models\Dishes', // 模型，缺省时默认当前模型。
               'comboNotUnique' => '当前产品线已添加过该属性' //错误信息
             ],
             [['attr_values'],'implodeArray','params'=>['split'=>',']],
             [['attr_name','language'], 'safe'],
         ];
-    }    
+    }
+
 
     /**
      * {@inheritdoc}
@@ -56,7 +55,7 @@ class AttributeSpec extends BaseModel
     {
         return [
             'id' => 'ID',
-            'type_id' => '产品线',
+            'style_cate_id' => '款式分类',
             'attr_id' => '属性',
             'attr_type' => '属性类型',
             'attr_values' => '属性值',
@@ -80,11 +79,11 @@ class AttributeSpec extends BaseModel
         return $this->hasOne(AttributeLang::class, ['master_id'=>'attr_id'])->alias('attr')->where(['attr.language'=>Yii::$app->params['language']]);
     }
     /**
-     * 关联产品线一对一
+     * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getType()
+    public function getCate()
     {
-        return $this->hasOne(ProductType::class, ['id'=>'type_id']);
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }
 }
