@@ -20,7 +20,7 @@ class AttributeValueLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_attribute_value_lang';
+        return self::dbName().'.attribute_value_lang';
     }
     /**
      * behaviors

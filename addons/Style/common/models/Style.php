@@ -53,7 +53,7 @@ class Style extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_style';
+        return self::dbName().'.style';
     }
 
     /**

@@ -25,7 +25,7 @@ class StyleCate extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_category';
+        return self::dbName().'.style_cate';
     }
     
     /**
