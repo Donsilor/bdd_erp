@@ -21,7 +21,7 @@ class AttributeValue extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{style_attribute_value}}';
+        return self::dbName().'.style_attribute_value';
     }
 
     /**
