@@ -10,18 +10,18 @@ namespace common\enums;
  */
 class AttrUsageEnum extends BaseEnum
 {
-    const TYPE_ALL = 0;
-    const TYPE_BASE = 1;
-    const TYPE_SEARCH = 2;
+    const USAGE_ALL = 0;
+    const USAGE_BASE = 1;
+    const USAGE_SEARCH = 2;
     /**
      * @return array
      */
     public static function getMap(): array
     {
         return [
-                self::TYPE_BASE => '基础属性',
-                self::TYPE_SEARCH => '搜索属性',
-                self::TYPE_ALL => '基础+搜索',
+                self::USAGE_BASE => '基础属性',
+                self::USAGE_SEARCH => '搜索属性',
+                self::USAGE_ALL => '基础+搜索',
         ];
     }
 }
