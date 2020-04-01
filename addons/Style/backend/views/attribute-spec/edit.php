@@ -113,7 +113,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
             [
                 'attribute'=>'attr_value_id',
                 'value'=>function($searchModel){
-                    return \Yii::$app->attr->valueName($searchModel->attr_value_id);                
+                    return \Yii::$app->attr->valueName($searchModel->attr_value_id);
                  }
             ],
             [
@@ -125,7 +125,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
             [
                 'attribute'=>'URL',
                 'value'=>function($searchModel) use($model){
-                    return '/goods-list/?type_id='.$model->type_id."&attr_id=".$searchModel->attr_value_id;
+                    return '/goods-list/?style_cate_id='.$model->style_cate_id."&attr_id=".$searchModel->attr_value_id;
                 },
                 'visible'=>true
             ],

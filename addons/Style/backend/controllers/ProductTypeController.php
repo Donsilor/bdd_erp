@@ -83,7 +83,7 @@ class ProductTypeController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Yii::$app->styleService->productType->getDropDown($id),
+            'cateDropDownList' => Yii::$app->styleService->productType->getDropDownForEdit($id),
         ]);
     }
     
