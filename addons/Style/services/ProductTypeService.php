@@ -16,23 +16,34 @@ use common\helpers\ArrayHelper;
  */
 class ProductTypeService extends Service
 {
-    
+
+
+    /**
+     * 编辑获取下拉
+     *
+     * @param string $id
+     * @return array
+     */
+    public static function getDropDownForEdit($pid = ''){
+        $data = self::getDropDown($pid);
+        return ArrayHelper::merge([0 => '顶级分类'], $data);
+
+    }
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getDropDown($pid = null,$treeStat = 1,$language = null)
+    public static function getDropDown($pid = null)
     {
-        $query = ProductType::find()
-            ->where(['status' => StatusEnum::ENABLED]);
+        $list = ProductType::find()
+            ->where(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name', 'pid', 'level'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
 
-        if($pid !== null){
-            $query->andWhere(['pid'=>$pid]);
-        }
-
-        $models = $query->select(['id' ,'level', 'pid', 'name'])->orderBy('sort asc,created_at asc')->asArray()->all();
-
-        $models = ArrayHelper::itemsMerge($models);
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','name',$treeStat), 'id', 'name');
+        $models = ArrayHelper::itemsMerge($list);
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'name'), 'id', 'name');
     }
     /**
      * 分组下拉框

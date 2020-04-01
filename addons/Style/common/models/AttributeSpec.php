@@ -85,6 +85,6 @@ class AttributeSpec extends BaseModel
      */
     public function getType()
     {
-        return $this->hasOne(GoodsTypeLang::class, ['master_id'=>'type_id'])->alias('type')->where(['type.language'=>Yii::$app->params['language']]);
+        return $this->hasOne(ProductType::class, ['id'=>'type_id']);
     }
 }

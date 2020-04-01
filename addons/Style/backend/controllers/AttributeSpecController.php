@@ -6,7 +6,6 @@ use Yii;
 use addons\style\common\models\Attribute;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use backend\controllers\BaseController;
 use addons\style\common\models\AttributeSpec;
 use addons\style\common\models\AttributeSpecValue;
 use yii\base\Exception;
@@ -48,9 +47,9 @@ class AttributeSpecController extends BaseController
         
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['attr_name','language']);
-        
-        $this->setLocalLanguage($searchModel->language);
-        
+
+        //$this->setLocalLanguage($searchModel->language);
+
         $dataProvider->query->andWhere(['>','status',-1]);
         $dataProvider->query->joinWith(['attr']);
         $dataProvider->query->with(['type']);

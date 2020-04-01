@@ -16,24 +16,36 @@ use addons\style\common\models\StyleCate;
  */
 class StyleCateService extends Service
 {
-    
+
+
+    /**
+     * 编辑获取下拉
+     *
+     * @param string $id
+     * @return array
+     */
+    public static function getDropDownForEdit($pid = ''){
+        $data = self::getDropDown($pid);
+        return ArrayHelper::merge([0 => '顶级分类'], $data);
+
+    }
+
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function getDropDown($pid = null)
     {
 
-        $query = StyleCate::find()
-                    ->where(['status' => StatusEnum::ENABLED]);
-        
-        if($pid !== null){
-            $query->andWhere(['pid'=>$pid]);
-        }
-        
-        $models = $query->select(['id','level','pid', 'name'])->orderBy('sort asc,created_at asc')->asArray()->all();
+        $list = StyleCate::find()
+            ->where(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name', 'pid', 'level'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
 
-        $models = ArrayHelper::itemsMerge($models);
-        
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','name'), 'id', 'name');
+        $models = ArrayHelper::itemsMerge($list);
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'name'), 'id', 'name');
+
     }
 }
