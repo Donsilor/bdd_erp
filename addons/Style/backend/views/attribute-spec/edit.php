@@ -30,15 +30,15 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
                         ],
                 ]);
                 ?>
-                <?= $form->field($model, 'type_id')->widget(kartik\select2\Select2::class, [
- 			        'data' => Yii::$app->services->goodsType->getGrpDropDown(),
+                <?= $form->field($model, 'style_cate_id')->widget(kartik\select2\Select2::class, [
+ 			        'data' => Yii::$app->styleService->styleCate->getGrpDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
                 ]);?>
                 <?= $form->field($model, 'attr_id')->widget(kartik\select2\Select2::class, [
-                        'data' => Yii::$app->services->goodsAttribute->getDropDown(),
+                        'data' => Yii::$app->styleService->attribute->getDropDown(),
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => true
@@ -47,7 +47,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
                 <?php 
                 $attr_values = [];
                 if ($model->attr_id){
-                    $attr_values = \Yii::$app->services->goodsAttribute->getValuesByAttrId($model->attr_id);
+                    $attr_values = \Yii::$app->styleService->attribute->getValuesByAttrId($model->attr_id);
                 }
                 ?>
     			<div id="box-attributespec-attr_values" style="<?php echo empty($attr_values)?'display:none':''?>">
@@ -55,7 +55,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
     			</div>
     			
     			<?= $form->field($model, 'attr_type')->widget(kartik\select2\Select2::class, [
-    			        'data' => common\enums\AttrTypeEnum::getRemarkMap(),
+    			        'data' => \addons\Style\common\enums\AttrTypeEnum::getRemarkMap(),
                         'options' => [],
                         'pluginOptions' => [
                             'allowClear' => false
