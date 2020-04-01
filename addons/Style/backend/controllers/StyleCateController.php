@@ -74,16 +74,10 @@ class StyleCateController extends BaseController
         // ajax 验证
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $trans = Yii::$app->db->beginTransaction();
             $res = $model->save();
-            $resl = $this->editLang($model,true);
-            $resl = true;
-
-            if($res && $resl){
-                $trans->commit();
+            if($res){
                 $this->redirect(['index']);
             }else{
-                $trans->rollBack();
                 $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }
 
@@ -91,7 +85,7 @@ class StyleCateController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Yii::$app->services->($id),
+            'cateDropDownList' => Yii::$app->styleService->styleCate->getDropDown($id),
         ]);
     }
     

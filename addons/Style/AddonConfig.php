@@ -2,12 +2,14 @@
 
 namespace addons\Style;
 
+use addons\Style\services\Application;
 use common\components\BaseAddonConfig;
 use addons\Style\common\components\Bootstrap;
 
 /**
  * Class Addon
- * @package addons\Style */
+ * @package addons\Style
+ */
 class AddonConfig extends BaseAddonConfig
 {
     /**
@@ -47,7 +49,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var Bootstrap
     */
-    public $bootstrap = '';
+    public $bootstrap = Bootstrap::class;
 
     /**
     * 服务层
@@ -64,7 +66,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var string
     */
-    public $service = '';
+    public $service = Application::class;
 
     /**
      * 参数配置开启

@@ -1,6 +1,6 @@
 <?php
 
-namespace services\goods;
+namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
@@ -10,8 +10,8 @@ use addons\style\common\models\StyleCate;
 
 
 /**
- * Class CategoryService
- * @package services\common
+ * Class StyleCateService
+ * @package addons\Style\services
  * @author jianyan74 <751393839@qq.com>
  */
 class StyleCateService extends Service
@@ -20,20 +20,17 @@ class StyleCateService extends Service
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getDropDown($pid = null,$language = null)
+    public static function getDropDown($pid = null)
     {
-        if(empty($language)){
-            $language = Yii::$app->language;
-        }
-        $query = StyleCate::find()->alias('a')
-                    ->where(['status' => StatusEnum::ENABLED])
-                    ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()]);
+
+        $query = StyleCate::find()
+                    ->where(['status' => StatusEnum::ENABLED]);
         
         if($pid !== null){
-            $query->andWhere(['a.pid'=>$pid]);
+            $query->andWhere(['pid'=>$pid]);
         }
         
-        $models = $query->select(['a.*'])
+        $models = $query->select(['*'])
                     ->orderBy('sort asc,created_at asc')
                     ->asArray()
                     ->all();

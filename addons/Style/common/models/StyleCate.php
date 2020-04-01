@@ -39,14 +39,17 @@ class StyleCate extends BaseModel
     public function rules()
     {
         return [
-                [['pid','status','cate_name'], 'required'],
+                [['status','cate_name'], 'required'],
                 [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['cate_name'], 'string', 'max' => 100],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
-                [['cate_name'], 'safe'],
+                [['pid','cate_name'], 'safe'],
+
         ];
     }
+
+
     
     /**
      * {@inheritdoc}
@@ -66,58 +69,20 @@ class StyleCate extends BaseModel
                 'updated_at' => '更新时间',
         ];
     }
-    
+
+
     /**
-     * 获取树状数据
-     *
-     * @return mixed
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
      */
-    public static function getTree()
+    public function beforeSave($insert)
     {
-        $cates = self::find()
-        ->where(['status' => StatusEnum::ENABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->asArray()
-        ->all();
-        
-        return ArrayHelper::itemsMerge($cates);
+        $this->pid = $this->pid ? $this->pid : 0;
+        return parent::beforeSave($insert);
     }
     
-    /**
-     * 获取下拉
-     *
-     * @param string $id
-     * @return array
-     */
-    public static function getDropDownForEdit($id = '')
-    {
-        $list = self::find()
-            ->where(['>=', 'status', StatusEnum::DISABLED])
-            ->andFilterWhere(['<>', 'a.id', $id])
-            ->select(['id', 'cate_name', 'pid', 'level'])
-            ->orderBy('sort asc')
-            ->asArray()
-            ->all();
-        
-        $models = ArrayHelper::itemsMerge($list);
-        $data = ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'type_name'), 'id', 'type_name');
-        return ArrayHelper::merge([0 => '顶级分类'], $data);
-    }
-    
-    /**
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public static function getDropDown()
-    {
-        $models = self::find()->alias('a')
-            ->where(['status' => StatusEnum::ENABLED])
-            ->orderBy('sort asc,created_at asc')
-            ->asArray()
-            ->all();
-        
-        $models = ArrayHelper::itemsMerge($models);
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'cate_name'), 'id', 'cate_name');
-    }
+
     
     /**
      * @return \yii\db\ActiveQuery
