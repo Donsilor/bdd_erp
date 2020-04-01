@@ -40,7 +40,7 @@ class StyleGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{style_goods}}';
+        return self::dbName().'.style_goods';
     }
 
     /**

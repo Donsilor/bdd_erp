@@ -41,7 +41,7 @@ class Diamond extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.{{style_diamond}}';
+        return self::dbName().'.style_diamond';
     }
 
     /**
