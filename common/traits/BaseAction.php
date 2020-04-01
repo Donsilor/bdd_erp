@@ -5,6 +5,7 @@ namespace common\traits;
 use Yii;
 use yii\base\Model;
 use common\components\Init;
+use yii\web\UnprocessableEntityHttpException;
 
 /**
  * trait BaseAction
@@ -110,7 +111,6 @@ trait BaseAction
         if (!$msgType || !in_array($msgType, ['success', 'error', 'info', 'warning'])) {
             $msgType = 'success';
         }
-        //$msgText = Yii::t('message',$msgText);
         $msgText = \yii\helpers\StringHelper::truncate($msgText, 900);
         Yii::$app->getSession()->setFlash($msgType, $msgText);
         return $skipUrl;
