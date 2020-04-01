@@ -6,7 +6,7 @@
  * Time: 13:53
  */
 
-namespace services\goods;
+namespace addons\Style\services;
 
 
 use common\enums\StatusEnum;

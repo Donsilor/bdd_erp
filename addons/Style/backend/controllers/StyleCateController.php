@@ -43,7 +43,7 @@ class StyleCateController extends BaseController
         $query = StyleCate::find()
             ->orderBy('sort asc, created_at asc');
         if(!empty($title)){
-            $query->andWhere(['or',['=','id',$title],['like','cate_name',$title]]);
+            $query->andWhere(['or',['=','id',$title],['like','name',$title]]);
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -82,7 +82,6 @@ class StyleCateController extends BaseController
             }
 
         }
-
         return $this->renderAjax($this->action->id, [
             'model' => $model,
             'cateDropDownList' => Yii::$app->styleService->styleCate->getDropDown($id),

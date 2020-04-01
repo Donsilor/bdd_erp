@@ -3,7 +3,6 @@ use common\widgets\webuploader\Files;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use common\enums\StatusEnum;
-use common\helpers\Html;
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
@@ -21,7 +20,6 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
 
-        <?php echo Html::langTab('tab')?>
 
         <div class="tab-content">
 
@@ -32,21 +30,9 @@ $form = ActiveForm::begin([
                     'allowClear' => true
                 ],
             ]);?>
-            <?php
-            echo common\widgets\langbox\LangBox::widget(['form'=>$form,'model'=>$model,'tab'=>'tab',
-                'fields'=>
-                    [
-                        'type_name'=>['type'=>'textInput'],
-                        'type_title'=> ['type'=>'textInput'],
-                        'type_desc'=> ['type'=>'textArea','options'=>['rows'=>'3']],
-                        'meta_title'=>['type'=>'textInput'],
-                        'meta_word'=>['type'=>'textInput'],
-                        'meta_desc'=>['type'=>'textArea','options'=>['rows'=>'3']]
-                    ]]);
-            ?>
-        </div>
 
 
+           <?= $form->field($model, 'name')->textInput(); ?>
             <?= $form->field($model, 'image')->widget(Files::class, [
                 'config' => [
                     // 可设置自己的上传地址, 不设置则默认地址

@@ -21,7 +21,7 @@ class ProductTypeController extends BaseController
     /**
      * @var TypeController
      */
-    public $modelClass = Type::class;
+    public $modelClass = ProductType::class;
 
     /**
      * Lists all Tree models.
@@ -39,13 +39,10 @@ class ProductTypeController extends BaseController
             ],
             'pageSize' => $this->pageSize
         ]);
-        $query = Type::find()->alias('a')
-            ->orderBy('sort asc, created_at asc')
-            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
-            ->leftJoin('{{%goods_type_lang}} b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-            ->select(['a.*', 'b.type_name']);
+        $query = ProductType::find()
+            ->orderBy('sort asc, created_at asc');
         if(!empty($title)){
-            $query->andWhere(['or',['=','a.id',$title],['like','b.type_name',$title]]);
+            $query->andWhere(['or',['=','id',$title],['like','name',$title]]);
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -64,7 +61,7 @@ class ProductTypeController extends BaseController
      * @return mixed|string|\yii\console\Response|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxEditLang()
+    public function actionAjaxEdit()
     {
         $request = Yii::$app->request;
         $id = $request->get('id');
@@ -76,16 +73,10 @@ class ProductTypeController extends BaseController
         // ajax 验证
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $trans = Yii::$app->db->beginTransaction();
             $res = $model->save();
-            $resl = $this->editLang($model,true);
-            $resl = true;
-
-            if($res && $resl){
-                $trans->commit();
+            if($res){
                 $this->redirect(['index']);
             }else{
-                $trans->rollBack();
                 $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }
 
@@ -93,7 +84,7 @@ class ProductTypeController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Type::getDropDownForEdit($id),
+            'cateDropDownList' => Yii::$app->styleService->styleCate->getDropDown($id),
         ]);
     }
     

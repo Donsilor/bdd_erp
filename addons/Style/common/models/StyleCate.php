@@ -39,12 +39,12 @@ class StyleCate extends BaseModel
     public function rules()
     {
         return [
-                [['status','cate_name'], 'required'],
+                [['status','name'], 'required'],
                 [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
-                [['cate_name'], 'string', 'max' => 100],
+                [['name'], 'string', 'max' => 100],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
-                [['pid','cate_name'], 'safe'],
+                [['pid','level','name'], 'safe'],
 
         ];
     }
@@ -58,7 +58,7 @@ class StyleCate extends BaseModel
     {
         return [
                 'id' => 'ID',
-                'cate_name' => '分类名称',
+                'name' => '分类名称',
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',

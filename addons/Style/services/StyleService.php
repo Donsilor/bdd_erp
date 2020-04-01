@@ -1,6 +1,6 @@
 <?php
 
-namespace services\goods;
+namespace addons\Style\services;
 
 
 use addons\style\common\models\StyleLang;

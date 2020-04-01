@@ -1,6 +1,6 @@
 <?php
 
-namespace services\goods;
+namespace addons\Style\services;
 use common\components\Service;
 use common\enums\StatusEnum;
 use common\enums\AreaEnum;
