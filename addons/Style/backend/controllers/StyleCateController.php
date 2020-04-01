@@ -2,10 +2,12 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\style\common\models\StyleCate;
+use common\models\base\SearchModel;
 use Yii;
 use common\traits\Curd;
-use addons\style\common\models\Category;
 use yii\data\ActiveDataProvider;
+
 /**
  * 商品分类
  *
@@ -13,24 +15,46 @@ use yii\data\ActiveDataProvider;
  * @package addons\RfArticle\backend\controllers
  * @author jianyan74 <751393839@qq.com>
  */
-class CategoryController extends BaseController
+class StyleCateController extends BaseController
 {
     use Curd;
 
     /**
-     * @var CategoryController
+     * @var StyleCateController
      */
-    public $modelClass = Cate::class;
+    public $modelClass = StyleCate::class;
 
     /**
      * Lists all Tree models.
      * @return mixed
      */
     public function actionIndex()
-    {        
+    {
+        $title = Yii::$app->request->get('title',null);
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_ASC
+            ],
+            'pageSize' => $this->pageSize
+        ]);
+        $query = StyleCate::find()
+            ->orderBy('sort asc, created_at asc');
+        if(!empty($title)){
+            $query->andWhere(['or',['=','id',$title],['like','cate_name',$title]]);
+        }
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+        $dataProvider->query->andWhere(['>','status',-1]);
+
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -38,7 +62,7 @@ class CategoryController extends BaseController
      * @return mixed|string|\yii\console\Response|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxEditLang()
+    public function actionAjaxEdit()
     {
         $request = Yii::$app->request;
         $id = $request->get('id');
@@ -67,7 +91,7 @@ class CategoryController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Category::getDropDownForEdit($id),
+            'cateDropDownList' => Yii::$app->services->($id),
         ]);
     }
     

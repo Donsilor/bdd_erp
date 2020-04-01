@@ -21,7 +21,7 @@ use common\traits\Tree;
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
-class ProductType extends BaseModel
+class StyleCate extends BaseModel
 {
     use Tree;
     
@@ -44,7 +44,7 @@ class ProductType extends BaseModel
                 [['cate_name'], 'string', 'max' => 100],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
-                [['type_name'], 'safe'],
+                [['cate_name'], 'safe'],
         ];
     }
     

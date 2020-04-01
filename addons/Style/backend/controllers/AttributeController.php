@@ -5,7 +5,6 @@ namespace addons\Style\backend\controllers;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
-use backend\controllers\BaseController;
 use addons\Style\common\models\AttributeValue;
 use yii\base\Exception;
 use common\traits\Curd;

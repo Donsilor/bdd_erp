@@ -1,8 +1,10 @@
 <?php
 use common\helpers\Html;
 use jianyan\treegrid\TreeGrid;
+use yii\widgets\ActiveForm;
+use common\helpers\Url;
 
-$this->title = '款式分类';
+$this->title = '产品线管理';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
@@ -13,7 +15,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <div class="box-header">
                 <h3 class="box-title"><?= $this->title; ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit-lang'], '创建', [
+                    <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ])?>
@@ -21,38 +23,57 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             </div>
 
             <div class="box-body table-responsive">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?php $form = ActiveForm::begin([
+                            'action' => Url::to(['index']),
+                            'method' => 'get',
+                        ]); ?>
 
+                        <div class="col-sm-4">
+                            <div class="input-group m-b">
+                                <input type="text" class="form-control" name="title" placeholder="标题或者ID" value="<?= Yii::$app->request->get('title') ?>"/>
+                                <span class="input-group-btn"><button class="btn btn-white"><i class="fa fa-search"></i> 搜索</button></span>
+                            </div>
+                        </div>
+                        <?php ActiveForm::end(); ?>
+                    </div>
+                </div>
                 <?= TreeGrid::widget([
                     'dataProvider' => $dataProvider,
                     'keyColumnName' => 'id',
                     'parentColumnName' => 'pid',
                     'parentRootValue' => '0', //first parentId value
                     'pluginOptions' => [
-                        'initialState' => 'collapsed',
+//                        'initialState' => 'collapsed',
                     ],
                     'options' => ['class' => 'table table-hover'],
 
                     'columns' => [
 
 
+
                         [
-                            'attribute'=>'id',
-                            'value'=> 'id',
-                            'style'=>'width:50px;'
-                        ],
-                        [
-                            'attribute' => 'cat_name',
+                            'attribute' => 'cate_name',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column){
-                                $str = Html::tag('span', $model->lang->cat_name, [
+                                $str = Html::tag('span', $model->cate_name, [
                                     'class' => 'm-l-sm'
                                 ]);
-                                $str .= Html::a(' <i class="icon ion-android-add-circle"></i>', ['ajax-edit-lang', 'pid' => $model['id']], [
+                                $str .= Html::a(' <i class="icon ion-android-add-circle"></i>', ['ajax-edit', 'pid' => $model['id']], [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
                                 ]);
                                 return $str;
                             },
+
+                           ],
+
+                        [
+                            'attribute'=>'id',
+                            'value'=> 'id',
+                            'headerOptions'=>['style'=>'width:50px;'],
+
                         ],
                         [
                             'attribute' => 'sort',
@@ -65,10 +86,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
-                            'template'=> '{edit} {status} {delete}',
+                            'template'=> '{edit} {status}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
-                                    return Html::edit(['ajax-edit-lang','id' => $model->id], '编辑', [
+                                    return Html::edit(['ajax-edit','id' => $model->id], '编辑', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModalLg',
                                     ]);
