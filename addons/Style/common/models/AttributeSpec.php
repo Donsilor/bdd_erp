@@ -35,10 +35,10 @@ class AttributeSpec extends BaseModel
     public function rules()
     {
         return [
-            [['type_id', 'attr_id', 'attr_type', 'input_type', 'is_require', 'status'], 'required'],
-            [['type_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_show' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require', 'status'], 'required'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_show' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             //[['attr_values'], 'string', 'max' => 500],
-            [['attr_id'],'unique', 'targetAttribute'=>['type_id','attr_id'],
+            [['attr_id'],'unique', 'targetAttribute'=>['style_cate_id','attr_id'],
               //'targetClass' => '\models\Dishes', // 模型，缺省时默认当前模型。
               'comboNotUnique' => '当前产品线已添加过该属性' //错误信息
             ],
@@ -47,18 +47,6 @@ class AttributeSpec extends BaseModel
         ];
     }
 
-    /**
-     *
-     * @param unknown $attribute
-     * @param unknown $params
-     */
-    public function implodeArray($attribute, $params)
-    {
-        $split = isset($params['split'])?$params['split']:',';
-        if(is_array($this->$attribute) && !empty($this->$attribute)){
-            $this->$attribute = implode($split, $this->$attribute);
-        }
-    }
 
     /**
      * {@inheritdoc}
@@ -67,7 +55,7 @@ class AttributeSpec extends BaseModel
     {
         return [
             'id' => 'ID',
-            'type_id' => '产品线',
+            'style_cate_id' => '款式分类',
             'attr_id' => '属性',
             'attr_type' => '属性类型',
             'attr_values' => '属性值',
@@ -94,7 +82,7 @@ class AttributeSpec extends BaseModel
      * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getStyleCate()
+    public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }

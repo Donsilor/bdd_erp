@@ -5,7 +5,7 @@
  * Date: 2019/11/25
  * Time: 14:07
  */
-namespace common\enums;
+namespace addons\Style\common\enums;
 
 class DiamondEnum extends  BaseEnum
 {

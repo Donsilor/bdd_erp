@@ -43,10 +43,10 @@ class AttributeSpecController extends BaseController
                         'id' => SORT_DESC
                 ],
                 'pageSize' => $this->pageSize,
-                'relations' => [
-                    'attr' => ['attr_name'],
-                    'styleCate' => ['name'],
-                ]
+//                'relations' => [
+//                    'attr' => ['attr_name'],
+//                    'styleCate' => ['name'],
+//                ]
         ]);
         
         $dataProvider = $searchModel
@@ -54,10 +54,10 @@ class AttributeSpecController extends BaseController
 
 //        $this->setLocalLanguage($searchModel->language);
         $dataProvider->query->andWhere(['>','status',-1]);
-//        $dataProvider->query->joinWith(['attr']);
-//        $dataProvider->query->with(['type']);
+        $dataProvider->query->joinWith(['attr']);
+        $dataProvider->query->with(['cate']);
         
-//        $dataProvider->query->andFilterWhere(['like', 'attr.attr_name',$searchModel->attr_name]) ;
+        $dataProvider->query->andFilterWhere(['like', 'attr.attr_name',$searchModel->attr_name]) ;
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
