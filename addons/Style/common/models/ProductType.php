@@ -21,7 +21,7 @@ use common\traits\Tree;
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
-class ProductType extends \common\models\base\BaseModel
+class ProductType extends BaseModel
 {
     use Tree, MerchantBehavior;
     

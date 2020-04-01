@@ -34,7 +34,7 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class Diamond extends \yii\db\ActiveRecord
+class Diamond extends BaseModel
 {
     /**
      * {@inheritdoc}

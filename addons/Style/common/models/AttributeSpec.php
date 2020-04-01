@@ -1,9 +1,7 @@
 <?php
 
 namespace addons\style\common\models;
-
 use Yii;
-use common\models\base\BaseModel;
 
 /**
  * This is the model class for table "{{%goods_category_spec}}".
@@ -47,7 +45,20 @@ class AttributeSpec extends BaseModel
             [['attr_values'],'implodeArray','params'=>['split'=>',']],
             [['attr_name','language'], 'safe'],
         ];
-    }    
+    }
+
+    /**
+     *
+     * @param unknown $attribute
+     * @param unknown $params
+     */
+    public function implodeArray($attribute, $params)
+    {
+        $split = isset($params['split'])?$params['split']:',';
+        if(is_array($this->$attribute) && !empty($this->$attribute)){
+            $this->$attribute = implode($split, $this->$attribute);
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -80,11 +91,11 @@ class AttributeSpec extends BaseModel
         return $this->hasOne(AttributeLang::class, ['master_id'=>'attr_id'])->alias('attr')->where(['attr.language'=>Yii::$app->params['language']]);
     }
     /**
-     * 关联产品线一对一
+     * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getType()
+    public function getStyleCate()
     {
-        return $this->hasOne(ProductType::class, ['id'=>'type_id']);
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }
 }

@@ -42,19 +42,22 @@ class AttributeSpecController extends BaseController
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ],
-                'pageSize' => $this->pageSize
+                'pageSize' => $this->pageSize,
+                'relations' => [
+                    'attr' => ['attr_name'],
+                    'styleCate' => ['name'],
+                ]
         ]);
         
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['attr_name','language']);
+            ->search(Yii::$app->request->queryParams);
 
-        //$this->setLocalLanguage($searchModel->language);
-
+//        $this->setLocalLanguage($searchModel->language);
         $dataProvider->query->andWhere(['>','status',-1]);
-        $dataProvider->query->joinWith(['attr']);
-        $dataProvider->query->with(['type']);
+//        $dataProvider->query->joinWith(['attr']);
+//        $dataProvider->query->with(['type']);
         
-        $dataProvider->query->andFilterWhere(['like', 'attr.attr_name',$searchModel->attr_name]) ;
+//        $dataProvider->query->andFilterWhere(['like', 'attr.attr_name',$searchModel->attr_name]) ;
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
