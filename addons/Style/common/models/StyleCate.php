@@ -9,7 +9,7 @@ use common\helpers\ArrayHelper;
 use common\traits\Tree;
 
 /**
- * This is the model class for table "{{%addon_article_cate}}".
+
  *
  * @property int $id 主键
  * @property string $title 标题

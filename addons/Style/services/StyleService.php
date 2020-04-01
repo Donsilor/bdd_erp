@@ -2,7 +2,7 @@
 
 namespace services\goods;
 
-use addons\style\common\models\RingRelation;
+
 use addons\style\common\models\StyleLang;
 use addons\style\common\models\StyleMarkup;
 use Yii;
@@ -32,30 +32,6 @@ class StyleService extends Service
             ->one();
         return $model;
     }
-
-
-    public function getRelationByRing($ring_id){
-        $model = RingRelation::find()
-            ->where(['ring_id'=>$ring_id])
-            ->asArray()
-            ->all();
-        return $model;
-    }
-
-    //获取对戒库存
-    public function getRingStorage($id){
-        $model = RingRelation::find()->alias('r')
-            ->where(['r.ring_id'=>$id])
-            ->leftJoin('{{%goods_style}} s','s.id = r.style_id')
-            ->select('s.goods_storage')
-            ->asArray()
-            ->all();
-        if(empty($model)) return 0;
-        $ring_storage_list = array_column($model,'goods_storage');
-        return min($ring_storage_list);
-    }
-
-
 
     //获取商品信息
     public function getStyleList($type_id=null, $limit=null, $order=null, $fields=['*'],$language=null ){
