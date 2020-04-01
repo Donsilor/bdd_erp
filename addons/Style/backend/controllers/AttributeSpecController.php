@@ -43,10 +43,6 @@ class AttributeSpecController extends BaseController
                         'id' => SORT_DESC
                 ],
                 'pageSize' => $this->pageSize,
-//                'relations' => [
-//                    'attr' => ['attr_name'],
-//                    'styleCate' => ['name'],
-//                ]
         ]);
         
         $dataProvider = $searchModel

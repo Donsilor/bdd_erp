@@ -72,15 +72,16 @@ class Attribute
     {
         $cacheKey = CacheEnum::getPrefix('goodsAttr',$merchant_id).':'.$attr_id;
         if (!($info = Yii::$app->cache->get($cacheKey)) || $noCache == true) {
-            $models = AttributeValue::find()
-                ->select(['master_id','language','attr_name'])
+            $models = AttributeValue::find()->alias("val")
+                ->select(['lang.master_id',"lang.attr_value_name",'lang.language'])
+                ->leftJoin(AttributeValueLang::tableName()." lang","val.id=lang.master_id")
                 ->where(['master_id'=>$attr_id])
                 ->asArray()->all();
             $info['info'] = [];
             foreach ($models as $row) {
                 $info['info'][$row['language']] = [
                         'id'=>$row['master_id'],
-                        'name'=>$row['attr_name']
+                        'name'=>$row['attr_value_name']
                 ];
             }
             $models = AttributeValue::find()->alias("val")

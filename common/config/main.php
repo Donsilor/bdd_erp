@@ -117,9 +117,9 @@ return [
                         ],
                 ],
         ],
-		'attribute' => [
+		'attr' => [
             'class' => 'common\components\Attribute',
         ],
-        'transaction'=>'common\components\Transaction'
+        'trans'=>'common\components\Transaction'
     ],
 ];
