@@ -49,15 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'headerOptions' => ['width'=>'80'],
             ],
-            [
-                    'attribute' => 'image',
-                    'value' => function ($model) {
-                         return common\helpers\ImageHelper::fancyBox($model->image);
-                     },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
+//            [
+//                    'attribute' => 'image',
+//                    'value' => function ($model) {
+//                         return common\helpers\ImageHelper::fancyBox($model->image);
+//                     },
+//                    'filter' => false,
+//                    'format' => 'raw',
+//                    'headerOptions' => ['width'=>'80'],
+//            ],
             [
                 'attribute'=>'attr_name',
                 'headerOptions' => ['class' => 'col-md-1'],

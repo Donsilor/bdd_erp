@@ -48,4 +48,34 @@ class StyleCateService extends Service
         return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'name'), 'id', 'name');
 
     }
+
+
+    /**
+     * 分组下拉框
+     * @param unknown $pid
+     * @param unknown $language
+     * @return array
+     */
+    public static function getGrpDropDown($pid = null,$treeStat = 1)
+    {
+
+        $query = StyleCate::find()->alias('a')
+            ->where(['status' => StatusEnum::ENABLED]) ;
+        if($pid !== null){
+            if($pid ==0){
+                $query->andWhere(['a.pid'=>$pid]);
+            }
+            else{
+                $query->andWhere(['or',['a.pid'=>$pid],['a.id'=>$pid]]);
+            }
+        }
+
+        $models =$query
+            ->select(['id', 'name', 'pid', 'level'])
+            ->orderBy('sort asc,created_at asc')
+            ->asArray()
+            ->all();
+
+        return  ArrayHelper::itemsMergeGrpDropDown($models,0,'id','name','pid',$treeStat);
+    }
 }
