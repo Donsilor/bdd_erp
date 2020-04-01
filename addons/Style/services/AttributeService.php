@@ -1,6 +1,6 @@
 <?php
 
-namespace services\goods;
+namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
@@ -34,7 +34,7 @@ class AttributeService extends Service
             		val_lang.`language`,
             		GROUP_CONCAT(attr_value_name) AS attr_values
             	FROM
-            		goods_attribute_value_lang val_lang
+            		'.AttributeValueLang::tableName().' val_lang
             	INNER JOIN '.AttributeValue::tableName().' val ON val_lang.master_id = val.id
             	WHERE
             		val.attr_id = '.$attr_id.' and val.`status`=1 

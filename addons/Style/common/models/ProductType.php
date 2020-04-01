@@ -39,11 +39,11 @@ class ProductType extends \common\models\base\BaseModel
     public function rules()
     {
         return [
-                [['pid','status'], 'required'],
+                [['name','status'], 'required'],
                 [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
-                [['type_name'], 'safe'],
+                [['pid','name'], 'safe'],
         ];
     }
     
@@ -54,7 +54,7 @@ class ProductType extends \common\models\base\BaseModel
     {
         return [
                 'id' => 'ID',
-                'type_name' => '产品线',
+                'name' => '产品线',
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',
@@ -65,64 +65,19 @@ class ProductType extends \common\models\base\BaseModel
                 'updated_at' => '更新时间',
         ];
     }
-    
+
     /**
-     * 获取树状数据
-     *
-     * @return mixed
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
      */
-    public static function getTree()
+    public function beforeSave($insert)
     {
-        $cates = self::find()
-        ->where(['status' => StatusEnum::ENABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->asArray()
-        ->all();
-        
-        return ArrayHelper::itemsMerge($cates);
+        $this->pid = $this->pid ? $this->pid : 0;
+        return parent::beforeSave($insert);
     }
-    
-    /**
-     * 获取下拉
-     *
-     * @param string $id
-     * @return array
-     */
-    public static function getDropDownForEdit($id = '')
-    {
-        $list = self::find()->alias('a')
-        ->where(['>=', 'status', StatusEnum::DISABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->andFilterWhere(['<>', 'a.id', $id])
-        ->leftJoin(GoodsTypeLang::tableName().' b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-        ->select(['a.id', 'b.type_name', 'pid', 'level'])
-        ->orderBy('sort asc')
-        ->asArray()
-        ->all();
-        
-        $models = ArrayHelper::itemsMerge($list);
-        $data = ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'type_name'), 'id', 'type_name');
-        return ArrayHelper::merge([0 => '顶级分类'], $data);
-    }
-    
-    /**
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public static function getDropDown()
-    {
-        $models = self::find()->alias('a')
-        ->where(['status' => StatusEnum::ENABLED])
-        ->andWhere(['merchant_id' => Yii::$app->services->merchant->getId()])
-        ->leftJoin('{{%goods_type_lang}} b', 'b.master_id = a.id and b.language = "'.Yii::$app->language.'"')
-        ->select(['a.*', 'b.type_name'])
-        ->orderBy('sort asc,created_at asc')
-        ->asArray()
-        ->all();
-        
-        $models = ArrayHelper::itemsMerge($models);
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'type_name'), 'id', 'type_name');
-    }
-    
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -131,30 +86,7 @@ class ProductType extends \common\models\base\BaseModel
         return $this->hasOne(self::class, ['id' => 'pid']);
     }
     
-    /**
-     * 语言扩展表
-     * @return \addons\style\common\models\AttributeLang
-     */
-    public function langModel()
-    {
-        return new ProductTypeLang();
-    }
-    
-    public function getLangs()
-    {
-        return $this->hasMany(ProductTypeLang::class,['master_id'=>'id']);
-        
-    }
-    
-    /**
-     * 关联语言一对一
-     * @param string $languge
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLang()
-    {
-        return $this->hasOne(ProductTypeLang::class, ['master_id'=>'id'])->alias('lang')->where(['lang.language' => Yii::$app->params['language']]);
-    }
+
     
     
 }

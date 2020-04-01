@@ -75,7 +75,7 @@ class AttributeValueController extends BaseController
             $this->editLang($model,true);
             
             //更新属性值到attribute_lang.attr_values;
-            Yii::$app->services->attribute->updateAttrValues($model->attr_id);
+            Yii::$app->styleService->attribute->updateAttrValues($model->attr_id);
             
             return $this->redirect(['attribute/edit-lang?id='.$model->attr_id]);
         }else{

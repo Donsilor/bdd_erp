@@ -54,10 +54,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 
                         [
-                            'attribute' => 'cate_name',
+                            'attribute' => 'name',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column){
-                                $str = Html::tag('span', $model->cate_name, [
+                                $str = Html::tag('span', $model->name, [
                                     'class' => 'm-l-sm'
                                 ]);
                                 $str .= Html::a(' <i class="icon ion-android-add-circle"></i>', ['ajax-edit', 'pid' => $model['id']], [

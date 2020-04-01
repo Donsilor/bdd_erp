@@ -1,6 +1,6 @@
 <?php
 
-namespace services\goods;
+namespace addons\Style\services;
 use common\components\Attr;
 use common\components\Service;
 use addons\style\common\models\Attribute;

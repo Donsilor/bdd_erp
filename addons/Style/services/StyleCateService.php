@@ -30,13 +30,10 @@ class StyleCateService extends Service
             $query->andWhere(['pid'=>$pid]);
         }
         
-        $models = $query->select(['*'])
-                    ->orderBy('sort asc,created_at asc')
-                    ->asArray()
-                    ->all();
+        $models = $query->select(['id','level','pid', 'name'])->orderBy('sort asc,created_at asc')->asArray()->all();
 
         $models = ArrayHelper::itemsMerge($models);
         
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','cate_name'), 'id', 'cate_name');
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id','name'), 'id', 'name');
     }
 }
