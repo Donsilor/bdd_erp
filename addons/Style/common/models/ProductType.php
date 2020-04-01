@@ -66,17 +66,6 @@ class ProductType extends \common\models\base\BaseModel
         ];
     }
 
-    /**
-     * @param bool $insert
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    public function beforeSave($insert)
-    {
-        $this->pid = $this->pid ? $this->pid : 0;
-        return parent::beforeSave($insert);
-    }
-
 
     /**
      * @return \yii\db\ActiveQuery

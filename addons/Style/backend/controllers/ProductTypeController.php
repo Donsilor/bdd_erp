@@ -6,7 +6,6 @@ use addons\style\common\models\ProductType;
 use Yii;
 use common\traits\Curd;
 use yii\data\ActiveDataProvider;
-use backend\controllers\BaseController;
 use common\models\base\SearchModel;
 /**
  * 产品线
@@ -84,7 +83,7 @@ class ProductTypeController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Yii::$app->styleService->styleCate->getDropDown($id),
+            'cateDropDownList' => Yii::$app->styleService->productType->getDropDown($id),
         ]);
     }
     

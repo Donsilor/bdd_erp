@@ -85,6 +85,7 @@ class StyleCateController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
             'cateDropDownList' => Yii::$app->styleService->styleCate->getDropDown($id),
+
         ]);
     }
     
