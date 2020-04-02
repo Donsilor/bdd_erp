@@ -44,23 +44,18 @@ class StyleController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                 'lang' => ['style_name'],
+            ]
         ]);
-        //$typeModel = Yii::$app->services->goodsType->getAllTypesById($type_id,null);
-        $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['style_name','language']);
-        //切换默认语言
-        /* $this->setLocalLanguage($searchModel->language);
-        if($typeModel){
-            $dataProvider->query->andFilterWhere(['in', 'type_id',$typeModel['ids']]);
-        } */
-        $dataProvider->query->joinWith(['lang']);
-        $dataProvider->query->andFilterWhere(['like', 'lang.style_name',$searchModel->style_name]);
 
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        exit;
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,  
-            'typeModel'  =>$typeModel,  
+            'searchModel' => $searchModel, 
+
         ]);
     }
     
