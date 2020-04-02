@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "goods".
+ * 款式商品
  *
  * @property int $id 商品id(SKU)
  * @property int $style_id 款式id
@@ -40,7 +40,7 @@ class StyleGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_goods';
+        return self::tableFullName("style_goods");
     }
 
     /**

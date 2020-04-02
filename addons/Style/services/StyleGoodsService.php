@@ -26,7 +26,7 @@ use yii\db\Expression;
  * Class GoodsService
  * @package services\common
  */
-class GoodsService extends Service
+class StyleGoodsService extends Service
 {    
     
     /**

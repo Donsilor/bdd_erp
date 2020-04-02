@@ -30,7 +30,7 @@ class ProductType extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.product_type';
+        return self::tableFullName("product_type");
     }
     
     /**

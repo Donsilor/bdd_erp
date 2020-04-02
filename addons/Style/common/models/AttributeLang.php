@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%goods_attribute_lang}}".
+ * 属性语言表 Model
  *
  * @property int $id 主键
  * @property string $language 语言类型(zh-CN,zh-HK,en-US)
@@ -21,7 +21,7 @@ class AttributeLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.attribute_lang';
+        return self::tableFullName("attribute_lang");
     }
     /**
      * behaviors

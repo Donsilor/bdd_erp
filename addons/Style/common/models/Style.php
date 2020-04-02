@@ -7,7 +7,7 @@ use common\models\base\BaseModel;
 use common\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "goods_style".
+ * 款式表 Model
  *
  * @property int $id 款式ID
  * @property string $style_sn 款式编号
@@ -53,7 +53,7 @@ class Style extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style';
+        return self::tableFullName("style");
     }
 
     /**

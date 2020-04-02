@@ -13,8 +13,7 @@ use common\components\Service;
  * @property \addons\Style\services\ProductTypeService $productType 商品类型（产品线）
  * @property \addons\Style\services\DiamondService $diamond 裸钻
  * @property \addons\Style\services\DiamondSourceService $diamondSource 裸钻来源
- * @property \addons\Style\services\GoodsService $styleGoods 商品
- * @property \addons\Style\services\SalepolicyService $salepolicy 销售政策
+ * @property \addons\Style\services\StyleGoodsService $styleGoods 款式商品
  * @property \addons\Style\services\StyleService $style 款式
  */
 class Application extends Service
@@ -28,7 +27,7 @@ class Application extends Service
 		'productType' => 'addons\style\services\ProductTypeService',
         'attribute' => 'addons\style\services\AttributeService',                
         'style' => 'addons\style\services\StyleService',
-        'styleGoods' => 'addons\style\services\GoodsService',      
+        'styleGoods' => 'addons\style\services\StyleGoodsService',      
         'diamond' => 'addons\style\services\DiamondService',
         'diamondSource' => 'addons\style\services\DiamondSourceService',        
     ];

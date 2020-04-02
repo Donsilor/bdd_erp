@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "goods_style_lang".
+ * 款式语言表
  *
  * @property int $id 商品公共表id
  * @property int $master_id 款式ID
@@ -27,7 +27,7 @@ class StyleLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_lang';
+        return self::tableFullName("style_lang");
     }
     /**
      * behaviors

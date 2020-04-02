@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%goods_attribute}}".
+ * 属性表 Model
  *
  * @property int $id 主键
  * @property int $cat_id 分类ID

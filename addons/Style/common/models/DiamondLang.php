@@ -24,7 +24,7 @@ class DiamondLang extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.diamond_lang';
+        return self::tableFullName("diamond_lang");
     }
     /**
      * behaviors
