@@ -22,7 +22,7 @@ class StyleChannel extends BaseModel
      */
     public static function tableName()
     {
-        return 'style_channel';
+        return 'style_style_channel';
     }
 
     /**
@@ -50,5 +50,15 @@ class StyleChannel extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+
+    /**
+     * 关联款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
     }
 }
