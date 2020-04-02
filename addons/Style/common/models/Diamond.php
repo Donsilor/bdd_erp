@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%goods_diamond}}".
+ * 裸钻表 Model
  *
  * @property int $id
  * @property string $goods_sn 商品编码
@@ -41,7 +41,7 @@ class Diamond extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.diamond';
+        return self::tableFullName("diamond");
     }
 
     /**

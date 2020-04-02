@@ -37,7 +37,17 @@ class BaseModel extends ActiveRecord
         preg_match("/dbname=([^;]+)/i", static::getDb()->dsn, $matches);
         return $matches[1];
     }
-
+    /**
+     * 表全称
+     * @param unknown $tableName
+     * @return string
+     */
+    public static function tableFullName($tableName)
+    {
+        //return "`".static::dbName()."`.`".static::getDb()->tablePrefix.preg_replace('/[\{\}\%]+/is','',$tableName)."`";
+        return "`".static::dbName()."`.`".static::getDb()->tablePrefix.$tableName."`";
+    }
+  
     /**
      *
      * @param unknown $attribute

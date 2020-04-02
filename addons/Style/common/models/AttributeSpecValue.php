@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%goods_attribute_spec_value}}".
+ * 属性规格值表（属性值和款式分类关系表）Model
  *
  * @property int $id ID
  * @property int $spec_id 规格ID
@@ -23,7 +23,7 @@ class AttributeSpecValue extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.attribute_spec_value';
+        return self::tableFullName("attribute_spec_value");
     }
 
     /**

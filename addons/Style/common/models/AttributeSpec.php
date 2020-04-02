@@ -4,7 +4,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%goods_category_spec}}".
+ * 属性规格表（款式分类和属性 组合关系表）Model
  *
  * @property int $id 主键
  * @property int $type_id 产品线ID

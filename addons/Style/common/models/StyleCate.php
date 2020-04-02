@@ -4,8 +4,7 @@ namespace addons\style\common\models;
 use common\traits\Tree;
 
 /**
-
- *
+ * 款式分类
  * @property int $id 主键
  * @property string $title 标题
  * @property string $tree 树
@@ -25,7 +24,7 @@ class StyleCate extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_cate';
+        return self::tableFullName("style_cate");
     }
     
     /**

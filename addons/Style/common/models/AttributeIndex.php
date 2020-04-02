@@ -5,7 +5,7 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "goods_attribute_index".
+ * 款式属性关系索引表 Model
  *
  * @property int $attr_type 商品id
  * @property int $cat_id 分类id
@@ -21,7 +21,7 @@ class AttributeIndex extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.style_attribute_index';
+        return self::tableFullName("attribute_index");
     }
     /**
      * behaviors
