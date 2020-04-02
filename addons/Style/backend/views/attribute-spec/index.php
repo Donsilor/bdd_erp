@@ -51,12 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'80'],
             ],
             [
-                'attribute'=>'attr_name',
+                'attribute'=>'attr.attr_name',
                 'value' =>'attr.attr_name',
-                'filter' => Html::activeTextInput($searchModel, 'attr_name', [
+                'filter' => Html::activeTextInput($searchModel, 'attr.attr_name', [
                         'class' => 'form-control',
                         //'style' =>'width:100px'
                 ]),
+
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [

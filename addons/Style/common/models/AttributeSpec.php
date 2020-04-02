@@ -43,7 +43,7 @@ class AttributeSpec extends BaseModel
               'comboNotUnique' => '当前产品线已添加过该属性' //错误信息
             ],
             [['attr_values'],'implodeArray','params'=>['split'=>',']],
-            [['attr_name','language'], 'safe'],
+//            [['attr_name','language'], 'safe'],
         ];
     }
 
@@ -84,6 +84,6 @@ class AttributeSpec extends BaseModel
      */
     public function getCate()
     {
-        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
 }

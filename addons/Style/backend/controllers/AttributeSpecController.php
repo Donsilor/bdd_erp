@@ -38,22 +38,25 @@ class AttributeSpecController extends BaseController
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
-                'partialMatchAttributes' => [], // 模糊查询
+                'partialMatchAttributes' => ['attr_name'], // 模糊查询
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ],
                 'pageSize' => $this->pageSize,
+                'relations' => [
+                    'attr' => ['attr_name'],
+                    'cate' => ['name'],
+                ]
         ]);
         
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
 //        $this->setLocalLanguage($searchModel->language);
-        $dataProvider->query->andWhere(['>','status',-1]);
-        $dataProvider->query->joinWith(['attr']);
-        $dataProvider->query->with(['cate']);
-        
-        $dataProvider->query->andFilterWhere(['like', 'attr.attr_name',$searchModel->attr_name]) ;
+        $dataProvider->query->andWhere(['>',AttributeSpec::tableName().'.status',-1]);
+//        $dataProvider->query->joinWith(['attr']);
+//        $dataProvider->query->with(['cate']);
+
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
