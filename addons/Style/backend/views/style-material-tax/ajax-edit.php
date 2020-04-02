@@ -2,7 +2,6 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
-use yii\base\Widget;
 
 $form = ActiveForm::begin([
     'id' => $model->formName(),
@@ -19,11 +18,19 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+
+            <?= $form->field($model, 'material_id')->widget(kartik\select2\Select2::class, [
+                    'data' => \addons\Style\common\enums\MaterialEnum::getMap(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+            ]);?>
+
+            <?= $form->field($model, 'tax_rate')->textInput() ?>
             <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
 
-                   
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

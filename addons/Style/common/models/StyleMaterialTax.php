@@ -5,25 +5,29 @@ namespace addons\style\common\models;
 use Yii;
 
 /**
- * This is the model class for table "style_style_channel".
+ * This is the model class for table "style_gold_loss_rate".
  *
  * @property int $id
- * @property int $merchant_id 商户ID
- * @property string $name 渠道名称
+ * @property int $style_cate_id 款式分类
+ * @property int $material_id 材质ID
+ * @property string $loss_rate 金损率(%)
+ * @property int $creator_id 配置人ID
+ * @property int $sort
  * @property int $status 状态 1启用 0禁用 -1删除
- * @property int $creator_id 创建人ID
  * @property int $created_at
  * @property int $updated_at
  */
-class StyleSource extends BaseModel
+class StyleMaterialTax extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('style_source');
+        return self::tableFullName("material_tax");
     }
+
+
 
     /**
      * {@inheritdoc}
@@ -31,8 +35,11 @@ class StyleSource extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'string', 'max' => 100],
+            [['material_id'], 'required'],
+            [[ 'material_id', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['tax_rate'], 'number'],
+            ['material_id','unique'],
+
         ];
     }
 
@@ -43,16 +50,15 @@ class StyleSource extends BaseModel
     {
         return [
             'id' => 'ID',
-            'merchant_id' => '商户 ID',
-            'name' => '来源名称',
-            'status' => '状态',
+            'material_id' => '材质',
+            'tax_rate' => '税点(%)',
+            'creator_id' => '配置人',
             'sort' => '排序',
-            'creator_id' => '创建人 ID',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }
-
 
     /**
      * @param bool $insert
@@ -68,8 +74,9 @@ class StyleSource extends BaseModel
         return parent::beforeSave($insert);
     }
 
+
     /**
-     * 关联管理员一对一
+     * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
     public function getMember()

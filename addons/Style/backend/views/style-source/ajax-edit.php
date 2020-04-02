@@ -20,8 +20,9 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
-            <?= $form->field($model, 'sort')->textInput() ?> 
+
                    
     </div>
     <div class="modal-footer">
