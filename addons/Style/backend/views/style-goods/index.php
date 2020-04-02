@@ -22,15 +22,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="box-body table-responsive">
-    <?php echo Html::batchButtons(false)?>         
+    <?php echo Html::batchButtons(true)?> <br/><br/>        
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'showFooter' => true,//显示footer行
+        'id'=>'grid', 
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
                 'visible' => false,
+            ],
+            [
+                    'class'=>'yii\grid\CheckboxColumn',
+                    'name'=>'id',  //设置每行数据的复选框属性
+                    'headerOptions' => ['width'=>'30'],
             ],
             [
                 'attribute' => 'id',
@@ -96,12 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute'=>'销售价格',
-                'filter' =>false,
-                'value' => function ($model) {
-                    return $model->sale_price ;
-                },
-                'headerOptions' => ['width'=>'100'],
+                    'attribute'=>'销售价',
+                    'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                            'class' => 'form-control',
+                    ]),
+                    'value' => function ($model) {
+                        return $model->sale_price ;
+                    },
+                    'headerOptions' => ['width'=>'120'],
             ],
             [
                 'attribute' => 'status',                
@@ -118,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {view}',
+                'template' => '{status}',
                 'buttons' => [
                     'status' => function($url, $model, $key){
                             return Html::status($model['status']);

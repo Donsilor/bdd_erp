@@ -8,7 +8,7 @@ namespace addons\Style\common\enums;
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
-class AttrUsageEnum extends BaseEnum
+class AttrUsageEnum extends \common\enums\BaseEnum
 {
     const USAGE_ALL = 0;
     const USAGE_BASE = 1;

@@ -17,7 +17,7 @@ class StyleGoodsController extends BaseController
     use Curd;
 
     /**
-    * @var Goods
+    * @var StyleGoods
     */
     public $modelClass = StyleGoods::class;
 
@@ -43,6 +43,7 @@ class StyleGoodsController extends BaseController
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['>',StyleGoods::tableName().'.status',-1]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

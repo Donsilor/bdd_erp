@@ -17,10 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit-lang']) ?>
+                    <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]); ?>
                 </div>
             </div>
-            <div class="box-body table-responsive">       
+            <div class="box-body table-responsive">  
+    <?php echo Html::batchButtons()?> <br/><br/>                   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -63,9 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                     'headerOptions' => ['width'=>'400'],
-                    'attribute' => 'lang.style_name',
-                    'value' => 'lang.style_name',
-                    'filter' => Html::activeTextInput($searchModel, 'lang.style_name', [
+                    'attribute' => 'style_name',
+                    'value' => 'style_name',
+                    'filter' => Html::activeTextInput($searchModel, 'style_name', [
                           'class' => 'form-control',
                     ]),
                     'format' => 'raw',   
@@ -121,16 +125,25 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {status}',
+                'template' => '{edit} {audit} {status} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['edit-lang','id' => $model->id,'type_id'=>Yii::$app->request->get('type_id'),'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['data-toggle' => 'modal','data-target' => '#ajaxModalLg']);
+                    },
+                    'audit' => function($url, $model, $key){
+                        if($model->audit_status != 1){
+                            return Html::batchAudit(['ajax-batch-audit'],'审核',['class'=>'btn btn-success btn-sm']);
+                        }
                     },
                     'status' => function($url, $model, $key){
-                        return Html::status($model['status']);
+                        if($model->audit_status == 1){
+                            return Html::status($model->status);
+                        }                        
                     },
                     'delete' => function($url, $model, $key){
-                        return Html::delete(['delete', 'id' => $model->id]);
+                        if($model->audit_status == 0){
+                            return Html::delete(['delete', 'id' => $model->id]);
+                        }
                     },                    
                 ]
             ]

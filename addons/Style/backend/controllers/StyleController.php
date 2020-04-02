@@ -40,13 +40,13 @@ class StyleController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['lang.style_name'], // 模糊查询
+            'partialMatchAttributes' => ['style_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 'lang' => ['style_name'],
+                 
             ]
         ]);
 

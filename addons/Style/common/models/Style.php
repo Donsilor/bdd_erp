@@ -43,10 +43,7 @@ use common\helpers\ArrayHelper;
  */
 class Style extends BaseModel
 {
-    
-    public $attr_require;//必填属性
-    public $attr_custom;//选填属性
-        
+         
     /**
      * {@inheritdoc}
      */
@@ -61,8 +58,8 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['product_type_id','style_cate_id','style_sex', 'merchant_id','sale_volume','goods_num','status', 'audit_status','created_at', 'updated_at'], 'integer'],
-                [['product_type_id','style_cate_id','style_sn'], 'required'],
+                [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','status', 'audit_status','created_at', 'updated_at'], 'integer'],
+                [['product_type_id','style_cate_id','style_sn','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price'], 'number'],
                 ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['market_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -72,11 +69,8 @@ class Style extends BaseModel
                 ['cost_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 [['style_sn'], 'string', 'max' => 50],
                 [['style_image','style_3ds'], 'string', 'max' => 100],
-                [['audit_remark'], 'string', 'max' => 255], 
-                [['style_sn'],'unique'],                
-                [['attr_require'], 'required','isEmpty'=>function($value){
-                    return false;
-                }],
+                [['audit_remark','remark','style_name'], 'string', 'max' => 255],
+                [['style_sn'],'unique'],
         ];
     }
     /**
@@ -86,10 +80,13 @@ class Style extends BaseModel
     {
         return [
             'id' => "ID",
-            'merchant_id' => '商户ID',
+            'merchant_id' => '商户',
             'style_sn' => '款式编号',
-            'style_cat_id' => '款式分类',
+            'style_name' => '款式名称',
+            'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
+            'style_source_id' => '款式来源',
+            'style_channel_id' =>'归属渠道',
             'style_sex' => '款式性别',
             'style_image' => '款式图片',
             'style_3ds' => '360主图',
@@ -98,38 +95,14 @@ class Style extends BaseModel
             'market_price' => '市场价',
             'cost_price' =>'成本价',
             'goods_num'=> "商品数量",
+            'is_made' => '是否支持定制',   
             'status' => '状态',
+            'remark' => '备注',
             'audit_status' => "审核状态",
             'audit_remark' => "审核备注",
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
-    }
-    
-    /**
-     * 语言扩展表
-     * @return \addons\style\common\models\AttributeLang
-     */
-    public function langModel()
-    {
-        return new StyleLang();
-    }
-    /**
-     * 关联语言一对多
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLangs()
-    {
-        return $this->hasMany(StyleLang::class,['master_id'=>'id'])->alias('langs');
-        
-    }
-    /**
-     * 关联语言一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLang($language = null)
-    {
-        return $this->hasOne(StyleLang::class, ['master_id'=>'id'])->alias('lang')->where(['lang.language'=>Yii::$app->params['language']]);
     }
     /**
      * 关联产品线分类一对一

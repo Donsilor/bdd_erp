@@ -414,11 +414,11 @@ Css
                                 "data-grid"=>"grid",
                                 "data-value"=>"0",
                         ]),
-                /* 'search_export' => self::tag('span', '批量导出',
-                 [
-                 'class' => "btn btn-primary btn-sm jsBatchExport",
-                 "data-grid"=>"grid",
-                 ]), */
+                 'search_export' => self::tag('span', '批量导出',
+                         [
+                         'class' => "btn btn-primary btn-sm jsBatchExport",
+                         "data-grid"=>"grid",
+                         ]), 
                 /* 'status_delete' => self::tag('span', '批量删除',
                  [
                  'class' => "btn btn-danger btn-sm jsBatchStatus",
@@ -432,9 +432,8 @@ Css
                                 "data-url"=>Url::to(['ajax-batch-delete']),
                         ]),
         ];
-        
         $buttonHtml = "";
-        if(!empty($options)){
+        if(is_array($options) && !empty($options)){
             foreach ($options as $key=>$val){
                 if(isset($listBut[$val]) && (is_numeric($key) || empty($val))){
                     $buttonHtml .= $listBut[$val].'  ';
