@@ -47,7 +47,7 @@ class Member extends User
      */
     public static function tableName()
     {
-        return '{{%backend_member}}';
+        return self::tableFullName('member');
     }
 
     /**

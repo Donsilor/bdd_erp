@@ -7,24 +7,19 @@ use common\helpers\ImageHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$goods_title = Yii::t('goods', $typeModel['type_name'].'商品列表');
-$this->title = Yii::t('goods', $typeModel['type_name'].'管理');
+$this->title = '款式管理';
 $this->params['breadcrumbs'][] = $this->title;
-$type_id = Yii::$app->request->get('type_id',0);
 ?>
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="<?= Url::to(['style/index?type_id='.$type_id]) ?>"> <?= Html::encode($this->title) ?></a></li>
-                <li><a href="<?= Url::to(['goods/index?type_id='.$type_id]) ?>"> <?= Html::encode($goods_title) ?></a></li>
-                <li class="pull-right">
-                	<div class="box-header box-tools">
-                    <?= Html::create(['edit-lang','type_id'=>$type_id]) ?>
-                    </div>
-                </li>
-            </ul>
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?= Html::create(['edit-lang']) ?>
+                </div>
+            </div>
             <div class="box-body table-responsive">       
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -72,26 +67,26 @@ $type_id = Yii::$app->request->get('type_id',0);
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'120'],
             ],
-            [
+            /* [
                     'attribute' => 'cate_id',
                     'value' => "type.name",
-                    'filter' => Html::activeDropDownList($searchModel, 'cate_id',Yii::$app->services->styleCate->getGrpDropDown($type_id,0), [
+                    'filter' => Html::activeDropDownList($searchModel, 'cate_id',Yii::$app->services->styleCate->getGrpDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'120'],
-            ],  
-            [
+            ],   */
+            /* [
                     'attribute' => 'type_id',
                     'value' => "type.type_name",
-                    'filter' => Html::activeDropDownList($searchModel, 'type_id',Yii::$app->services->productType->getGrpDropDown($type_id,0), [
+                    'filter' => Html::activeDropDownList($searchModel, 'type_id',Yii::$app->services->productType->getGrpDropDown(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'120'],
-            ],       
+            ],      */  
             [
                 'attribute' => 'sale_price',
                 'value' => "sale_price",

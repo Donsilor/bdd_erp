@@ -3,7 +3,6 @@
 namespace addons\style\common\models;
 
 use Yii;
-use common\models\base\BaseModel;
 use common\helpers\ArrayHelper;
 
 /**
@@ -53,7 +52,7 @@ class Style extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName("style");
+        return static::tableFullName("style");
     }
 
     /**
@@ -62,8 +61,7 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['style_name','language','id'], 'safe'],
-                [['type_id', 'merchant_id','sale_volume','virtual_volume','virtual_clicks','goods_clicks','goods_storage','goods_clicks', 'storage_alarm', 'is_recommend', 'is_lock', 'supplier_id', 'status', 'verify_status','onsale_time', 'created_at', 'updated_at'], 'integer'],
+                [['type_id', 'merchant_id','sale_volume','virtual_volume','virtual_clicks','goods_clicks','goods_storage','goods_clicks', 'storage_alarm', 'is_recommend', 'is_lock', 'supplier_id', 'status', 'audit_status','onsale_time', 'created_at', 'updated_at'], 'integer'],
                 [['type_id','style_sn','sale_price','goods_storage'], 'required'],
                 [['sale_price', 'market_price', 'cost_price'], 'number'],
                 ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -74,12 +72,7 @@ class Style extends BaseModel
                 ['cost_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 [['style_sn'], 'string', 'max' => 50],
                 [['style_image','style_3ds'], 'string', 'max' => 100],
-                [['verify_remark'], 'string', 'max' => 255],
-                [['attr_require','attr_custom'],'parseStyleAttr'],    
-                [['style_spec'],'parseStyleSpec'],
-                [['goods_images'],'parseGoodsImages'],
-                [['style_salepolicy'],'parseStyleSalepolicy'],//销售政策
-                [['goods_salepolicy'],'parseGoodsSalepolicy'],//销售政策
+                [['audit_remark'], 'string', 'max' => 255], 
                 [['style_sn'],'unique'],                
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     return false;
@@ -100,87 +93,7 @@ class Style extends BaseModel
                 }
             }            
         }        
-    } */
-    /**
-     * 款式基础属性
-     */
-    public function parseStyleAttr()
-    {   
-        if(!$this->style_attr){
-            $this->style_attr = [];
-        }else if(!is_array($this->style_attr)){
-            $this->style_attr = json_decode($this->style_attr,true);
-        }
-        
-        if(!empty($this->attr_require)){
-            $this->style_attr =  $this->attr_require + $this->style_attr;
-        }
-        if(!empty($this->attr_custom)){
-            $this->style_attr =  $this->attr_custom + $this->style_attr;
-        }
-        $this->style_attr = json_encode($this->style_attr);
-    }    
-    /**
-     * 款式规格属性
-     */
-    public function parseStyleSpec()
-    {
-        if(is_array($this->style_spec)){
-            $this->style_spec = json_encode($this->style_spec);
-        }        
-    }
-    /**
-     * 款式图库
-     */
-    public function parseGoodsImages()
-    {
-        $goods_images = $this->goods_images;
-        if(!empty($goods_images[0]) && is_array($goods_images)){
-            $this->style_image = $goods_images[0];
-        }
-        if(is_array($goods_images)){
-            $this->goods_images = implode(',',$goods_images);
-        }
-    }
-    /**
-     * 款式销售政策（地区价格）
-     */
-    public function parseStyleSalepolicy()
-    {
-        if(is_array($this->style_salepolicy)){
-            $style_salepolicy = [];
-            foreach ($this->style_salepolicy as $key=>$area) {
-                $style_salepolicy[$key] = [
-                    'area_id' =>$area['area_id'],
-                    'markup_rate' =>$area['markup_rate'],
-                    'markup_value' =>$area['markup_value'],
-                    'status' =>$area['status'],
-                ];
-            }
-            $this->style_salepolicy= json_encode($style_salepolicy);
-        } 
-    }
-    /**
-     * 商品销售政策（地区价格）
-     */
-    public function parseGoodsSalepolicy()
-    {
-        //print_r($this->goods_salepolicy);exit;
-        if(is_array($this->goods_salepolicy)){
-            $goods_salepolicy = [];
-            foreach ($this->goods_salepolicy as $key=>$goodsAreas) {
-                foreach ($goodsAreas as $goods_id=> $area){
-                    $goods_salepolicy[$key][$goods_id] = [
-                        'area_id' =>$area['area_id'],
-                        'markup_rate' =>$area['markup_rate'],
-                        'markup_value' =>$area['markup_value'],
-                        'status' =>$area['status'],
-                    ];
-                }
-            }
-            $this->goods_salepolicy = json_encode($goods_salepolicy);
-        }
-    }
+    } */        
 
     /**
      * {@inheritdoc}
@@ -264,19 +177,5 @@ class Style extends BaseModel
     public function getCate()
     {
         return $this->hasOne(CategoryLang::class, ['master_id'=>'cat_id'])->alias('cate')->where(['cate.language'=>Yii::$app->params['language']]);
-    }
-    
-    public function imageModel()
-    {
-        return new Images();
-    }
-
-    /**
-     * 对应加价率模型
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMarkup()
-    {
-        return $this->hasOne(StyleMarkup::class, ['style_id'=>'id']);
-    }
+    }    
 }
