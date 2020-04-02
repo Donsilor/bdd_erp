@@ -26,7 +26,7 @@ class Attribute extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.attribute';
+        return self::tableFullName("attribute");
     }
     /**
      * {@inheritdoc}
