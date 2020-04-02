@@ -22,7 +22,7 @@ class StyleChannel extends BaseModel
      */
     public static function tableName()
     {
-        return 'style_style_channel';
+        return self::tableFullName('style_channel');
     }
 
     /**
@@ -46,12 +46,27 @@ class StyleChannel extends BaseModel
             'merchant_id' => '商户 ID',
             'name' => '渠道名称',
             'status' => '状态',
+            'sort' => '排序',
             'creator_id' => '创建人 ID',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }
 
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+        }
+
+        return parent::beforeSave($insert);
+    }
 
     /**
      * 关联款式分类一对一
