@@ -49,15 +49,15 @@ class StyleGoods extends BaseModel
     public function rules()
     {
         return [
-            [['style_id', 'type_id','status'], 'required'],
-            [['style_id', 'type_id', 'merchant_id', 'type_id','promotion_type', 'storage_alarm', 'goods_clicks', 'sale_volume', 'goods_collects', 'goods_comments', 'goods_stars', 'goods_storage', 'status', 'verify_status', 'created_at', 'updated_at'], 'integer'],
-            [['sale_price', 'market_price', 'promotion_price'], 'number'],
+            [['style_id', 'product_type_id','style_cate_id','status','id'], 'required'],
+            [['style_id', 'product_type_id','style_cate_id', 'merchant_id','sale_volume', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['sale_price', 'market_price', 'cost_price'], 'number'],
             ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
             ['market_price','compare','compareValue' => 0, 'operator' => '>'],
             ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
-            [['goods_sn'], 'string', 'max' => 50],
-            [['goods_image', 'verify_remark'], 'string', 'max' => 100],
-            [['spec_key','id'], 'safe'],
+            [['goods_sn','style_sn'], 'string', 'max' => 50],
+            ['goods_name', 'string', 'max' => 500],
+            [['goods_image','spec_key'], 'string', 'max' => 100],
         ];
     }
 
@@ -67,65 +67,39 @@ class StyleGoods extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('goods', 'ID'),
-            'merchant_id' => Yii::t('goods', 'Merchant ID'),
-            'style_id' => Yii::t('goods', '款式ID'),
-            'goods_sn' => Yii::t('goods', '商品编号'),
-            'type_id' => Yii::t('goods', 'Goods Type'),
-            'goods_image' => Yii::t('goods', '商品图片'),
-            'type_id' => Yii::t('goods', 'Type ID'),
-            'cost_price' => Yii::t('goods', 'Cost Price'),
-            'sale_price' => Yii::t('goods', '基础销售价'),
-            'market_price' => Yii::t('goods', 'Market Price'),
-            'promotion_price' => Yii::t('goods', 'Promotion Price'),
-            'promotion_type' => Yii::t('goods', 'Promotion Type'),
-            'storage_alarm' => Yii::t('goods', 'Storage Alarm'),
-            'goods_clicks' => Yii::t('goods', 'Goods Clicks'),
-            'sale_volume' => Yii::t('goods', 'Sale Volume'),
-            'goods_collects' => Yii::t('goods', 'Goods Collects'),
-            'goods_comments' => Yii::t('goods', 'Goods Comments'),
-            'goods_stars' => Yii::t('goods', 'Goods Stars'),
-            'goods_storage' => Yii::t('goods', 'Goods Storage'),
-            'status' => Yii::t('goods', '上架状态'),
-            'verify_status' => Yii::t('goods', 'Verify Status'),
-            'verify_remark' => Yii::t('goods', 'Verify Remark'),
-            'created_at' => Yii::t('goods', 'Created At'),
-            'updated_at' => Yii::t('goods', 'Updated At'),
+            'id' => 'ID',
+            'merchant_id' =>'商户',
+            'style_id' => '款号',
+            'style_sn' => '款式编号',
+            'goods_sn' => '商品编号',
+            'goods_image' => '商品图片',
+            'goods_name' => '商品名称',
+            'style_cate_id' => "款式分类",            
+            'product_type_id' => "产品线",
+            'cost_price' => "成本价",
+            'sale_price' => "销售价",
+            'market_price' => "市场价",
+            'goods_num' => "商品数量",
+            'sale_volume' => "商品销量",
+            'status' => "状态",           
+            'created_at' => "创建时间",
+            'updated_at' => "更新时间",
         ];
     }
-
-
     /**
-     * 对应款式模型
+     * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getStyle()
+    public function getType()
     {
-        return $this->hasOne(Style::class, ['id'=>'style_id']);
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
     }
-
     /**
-     * 对应款式多语言模型
+     * 款式分类一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getStyleLang()
+    public function getCate()
     {
-        return $this->hasOne(StyleLang::class, ['master_id'=>'style_id'])->where(['goods_style_lang.language'=>Yii::$app->params['language']]);
-    }
-
-
-    /**
-     * 对应商品加价率模型
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMarkup()
-    {
-        if(Yii::$app->params['areaId']){
-            return $this->hasOne(GoodsMarkup::class, ['goods_id'=>'id'])->where(['goods_markup.area_id'=>Yii::$app->params['areaId']]);
-        }else{
-            return $this->hasOne(GoodsMarkup::class, ['goods_id'=>'id']);
-        }
-
-    }
-
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }    
 }

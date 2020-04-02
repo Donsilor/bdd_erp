@@ -36,11 +36,11 @@ class StyleController extends BaseController
     */
     public function actionIndex()
     {
-        $cate_id = Yii::$app->request->get('cate_id',0);
+        $cate_id = Yii::$app->request->get('cate_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['lang.style_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -51,11 +51,10 @@ class StyleController extends BaseController
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        exit;
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 
-
         ]);
     }
     
@@ -66,70 +65,37 @@ class StyleController extends BaseController
      */
     public function actionEditLang()
     {
-        $id = Yii::$app->request->get('id', null);
-        $type_id = Yii::$app->request->get('type_id', 0);
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','type_id'=>$type_id]);
-        $model = $this->findModel($id);
         
+        $id = Yii::$app->request->get('id');
+        
+        $cate_id = Yii::$app->request->get('cate_id');
+        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $model = $this->findModel($id);
+
         $status = $model ? $model->status:0;        
         if ($model->load(Yii::$app->request->post())) {
             
             try{
-                $trans = Yii::$app->db->beginTransaction();
-                if($model->status == 1 && $status == 0){
-                    $model->onsale_time = time();
-                }                
+                $trans = Yii::$app->trans->beginTransaction();              
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
-                }                
+                } 
+                
                 $this->editLang($model);
                 
                 $trans->commit();                
             }catch (Exception $e){
                 $trans->rollBack();
-                $error = $e->getMessage();
-                \Yii::error($error);
-                return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id,'type_id'=>$type_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
             }
             
             //商品更新
-            \Yii::$app->services->goods->syncStyleToGoods($model->id);
+            //\Yii::$app->services->goods->syncStyleToGoods($model->id);
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
     }
-    
-    /**
-     * ajax更新排序/状态
-     *
-     * @param $id
-     * @return array
-     */
-    public function actionAjaxUpdate($id)
-    {
-        if (!($model = $this->modelClass::findOne($id))) {
-            return ResultHelper::json(404, '找不到数据');
-        }
-        $status = $model ? $model->status :0;
-        $model->attributes = ArrayHelper::filter(Yii::$app->request->get(), ['sort', 'status']);
-        
-        if($model->status ==1 && $status == 0){
-            $model->onsale_time = time();
-        }
-        if (!$model->save(false)) {
-            return ResultHelper::json(422, $this->getError($model));
-        }
-        return ResultHelper::json(200, '修改成功');
-    }
-    
-    public function actionTest($id)
-    {
-        $model = $this->modelClass::findOne($id);
-        $res = \Yii::$app->services->goods->formatStyleAttrs($model,true);
-        echo '<pre/>';
-        print_r($res);
-        exit;
-    }
+   
 }

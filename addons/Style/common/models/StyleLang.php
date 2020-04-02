@@ -61,16 +61,12 @@ class StyleLang extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('goods', 'ID'),
-            'master_id' => Yii::t('goods', 'Master ID'),
-            'language' => Yii::t('common', '语言类型'),
-            'style_name' => Yii::t('goods', '商品名称'),
-            'style_desc' => Yii::t('goods', '商品描述'),
-            'goods_body' => Yii::t('goods', '商品详情'),
-            'mobile_body' => Yii::t('goods', 'Mobile Body'),
-            'meta_title' => Yii::t('goods', 'SEO标题'),
-            'meta_word' => Yii::t('goods', 'SEO关键词'),
-            'meta_desc' => Yii::t('goods', 'SEO描述'),
+            'id' => 'ID',
+            'master_id' => 'Master ID',
+            'language' => '语言类型',
+            'style_name' => '款式名称',
+            'style_desc' => '款式描述',
+            'goods_body' => '商品详情',
         ];
     }
 }

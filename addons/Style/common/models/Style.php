@@ -61,8 +61,8 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['type_id', 'merchant_id','sale_volume','virtual_volume','virtual_clicks','goods_clicks','goods_storage','goods_clicks', 'storage_alarm', 'is_recommend', 'is_lock', 'supplier_id', 'status', 'audit_status','onsale_time', 'created_at', 'updated_at'], 'integer'],
-                [['type_id','style_sn','sale_price','goods_storage'], 'required'],
+                [['product_type_id','style_cate_id','style_sex', 'merchant_id','sale_volume','goods_num','status', 'audit_status','created_at', 'updated_at'], 'integer'],
+                [['product_type_id','style_cate_id','style_sn'], 'required'],
                 [['sale_price', 'market_price', 'cost_price'], 'number'],
                 ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['market_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -76,64 +76,33 @@ class Style extends BaseModel
                 [['style_sn'],'unique'],                
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     return false;
-                }], 
-                /* [['sale_price','goods_storage'], 'required','isEmpty'=>function($value){
-                    return $value <= 0 ? true: false;
-                }], */
-                //['attr_require','validAttrRequire'],
+                }],
         ];
-    }    
-    /* public function validAttrRequire($attribute, $params)
-    {
-        
-        if($this->$attribute && is_array($this->$attribute)){
-            foreach ($this->$attribute as $key=>$val){
-                if($val == ""){
-                    $this->addError($attribute."[{$key}]","当前属性不能为空222");
-                }
-            }            
-        }        
-    } */        
-
+    }
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
-        $currency = \Yii::$app->params['currency'];
         return [
-            'id' => Yii::t('goods', 'ID'),
-            'style_sn' => Yii::t('goods', '款式编号'),
-            'cat_id' => Yii::t('goods', '款式分类'),
-            'type_id' => Yii::t('goods', '产品线'),
-            'merchant_id' => Yii::t('goods', '商户ID'),
-            'style_image' => Yii::t('goods', '商品图片'),
-            'style_3ds' => Yii::t('goods', '360主图'),
-            'goods_images' => Yii::t('goods', '商品图片'),
-            'style_attr' => Yii::t('goods', '款式属性'),            
-            'style_spec' => Yii::t('goods', '款式规格'),
-            'style_salepolicy' => Yii::t('goods', '销售政策'),
-            'sale_price' => Yii::t('goods', '销售价')."({$currency})",
-            'sale_volume' => Yii::t('goods', '销量'),
-            'virtual_volume'=>  Yii::t('goods', '虚拟销量'),
-            'market_price' => Yii::t('goods', '市场价')."({$currency})",
-            'cost_price' => Yii::t('goods', '成本价')."({$currency})",
-            'goods_storage'=>  Yii::t('goods', '库存'),
-            'goods_clicks'=>  Yii::t('goods', '浏览量'),
-            'virtual_clicks'=>  Yii::t('goods', '虚拟浏览量'),
-            'storage_alarm' => Yii::t('goods', 'Storage Alarm'),
-            'is_recommend' => Yii::t('goods', 'Is Recommend'),
-            'is_lock' => Yii::t('goods', 'Is Lock'),
-            'supplier_id' => Yii::t('goods', 'Supplier ID'),
-            'status' => Yii::t('goods', '上架状态'),
-            'verify_status' => Yii::t('goods', 'Verify Status'),
-            'verify_remark' => Yii::t('goods', 'Verify Remark'),
-            'onsale_time' => Yii::t('goods', '上架时间'),
-            'created_at' => Yii::t('goods', '创建时间'),
-            'updated_at' => Yii::t('goods', '更新时间'),
-            //自定义属性    
-            'attr_require' => Yii::t('goods', '当前属性'),
-            'attr_custom' => Yii::t('goods', '当前属性'),
+            'id' => "ID",
+            'merchant_id' => '商户ID',
+            'style_sn' => '款式编号',
+            'style_cat_id' => '款式分类',
+            'product_type_id' => '产品线',
+            'style_sex' => '款式性别',
+            'style_image' => '款式图片',
+            'style_3ds' => '360主图',
+            'sale_price' => '销售价',
+            'sale_volume' => '销量',
+            'market_price' => '市场价',
+            'cost_price' =>'成本价',
+            'goods_num'=> "商品数量",
+            'status' => '状态',
+            'audit_status' => "审核状态",
+            'audit_remark' => "审核备注",
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
     
@@ -168,7 +137,7 @@ class Style extends BaseModel
      */
     public function getType()
     {
-        return $this->hasOne(TypeLang::class, ['master_id'=>'type_id'])->alias('type')->where(['type.language'=>Yii::$app->params['language']]);
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
     }
     /**
      * 款式分类一对一
@@ -176,6 +145,6 @@ class Style extends BaseModel
      */
     public function getCate()
     {
-        return $this->hasOne(CategoryLang::class, ['master_id'=>'cat_id'])->alias('cate')->where(['cate.language'=>Yii::$app->params['language']]);
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }    
 }

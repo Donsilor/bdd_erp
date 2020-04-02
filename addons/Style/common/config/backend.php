@@ -34,7 +34,7 @@ return [
                             ],
                             [
                                     'title' => '商品列表',
-                                    'route' => 'goods/index',
+                                    'route' => 'style-goods/index',
                             ],
                             [
                                     'title' => '裸钻列表',
