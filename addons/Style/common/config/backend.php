@@ -53,7 +53,7 @@ return [
                                     'route' => 'attribute/index',
                             ],
                             [
-                                    'title' => '款式分类',
+                                    'title' => '产品分类',
                                     'route' => 'style-cate/index',
                             ],
                             [
@@ -63,7 +63,12 @@ return [
                             [
                                     'title' => '产品规格',
                                     'route' => 'attribute-spec/index',
+                            ],
+                            [
+                                'title' => '款式渠道',
+                                'route' => 'style-channel/index',
                             ]
+
                     ],
                     
             ],

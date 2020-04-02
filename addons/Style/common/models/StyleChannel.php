@@ -1,0 +1,54 @@
+<?php
+
+namespace addons\style\common\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "style_style_channel".
+ *
+ * @property int $id
+ * @property int $merchant_id 商户ID
+ * @property string $name 渠道名称
+ * @property int $status 状态 1启用 0禁用 -1删除
+ * @property int $creator_id 创建人ID
+ * @property int $created_at
+ * @property int $updated_at
+ */
+class StyleChannel extends BaseModel
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'style_channel';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['merchant_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['name'], 'string', 'max' => 100],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'merchant_id' => '商户 ID',
+            'name' => '渠道名称',
+            'status' => '状态',
+            'creator_id' => '创建人 ID',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+        ];
+    }
+}
