@@ -265,7 +265,9 @@ class SearchModel extends Model
                 foreach ((array)$attributes as $attribute) {
                     // $attributeName = str_replace('.', '_', $relation) . '_' . $attribute;
                     $attributeName = $relation . '.' . $attribute;
-                    $tableAttribute = $this->internalRelations[$relation]['tableName'] . '.' . $attribute;
+
+                   //$tableAttribute = $this->internalRelations[$relation]['tableName'] . '.' . $attribute; // 2020-04-02 连表查询用别名
+                    $tableAttribute = $attributeName;
                     $this->rules[] = [$attributeName, 'safe'];
                     $this->scenarios[$this->scenario][] = $attributeName;
                     $this->attributes[$attributeName] = '';

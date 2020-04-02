@@ -59,18 +59,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    'headerOptions' => ['width'=>'80'],
 //            ],
             [
-                'attribute'=>'attr_name',
+                'attribute'=>'lang.attr_name',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'value' =>'lang.attr_name',
-                'filter' => Html::activeTextInput($searchModel, 'attr_name', [
+                'filter' => Html::activeTextInput($searchModel, 'lang.attr_name', [
                         'class' => 'form-control',
                 ]),
             ],
             [
-                    'attribute'=>'remark',
+                    'attribute'=>'lang.remark',
                     'headerOptions' => ['class' => 'col-md-1'],
                     'value' =>'lang.remark',
-                    'filter' => Html::activeTextInput($searchModel, 'remark', [
+                    'filter' => Html::activeTextInput($searchModel, 'lang.remark', [
                             'class' => 'form-control',
                             //'style' =>'width:100px'
                     ]),

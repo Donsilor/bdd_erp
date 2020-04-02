@@ -36,20 +36,20 @@ class AttributeController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['lang.attr_name','lang.remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'lang' => ['attr_name','remark'],
+            ]
         ]);
    
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['attr_name','language','remark']);
+            ->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['>','status',-1]); 
-        $dataProvider->query->joinWith(['lang']);
-        $dataProvider->query->andFilterWhere(['like', 'lang.attr_name',$searchModel->attr_name]) ;
-        $dataProvider->query->andFilterWhere(['like', 'lang.remark',$searchModel->remark]) ;
+        $dataProvider->query->andWhere(['>','status',-1]);
        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -98,12 +98,14 @@ class AttributeController extends BaseController
                     'id' => SORT_DESC
                 ],
                 'pageSize' => $this->pageSize,
+                'relations' => [
+                    'lang' => ['attr_value_name'],
+                ]
             ]);
             
             $dataProvider = $searchModel
               ->search(Yii::$app->request->queryParams);
-            
-            $dataProvider->query->with(['lang']);
+
             $dataProvider->query->andWhere(['attr_id'=>$id]);
             $dataProvider->query->andWhere(['>','status',-1]);            
             
