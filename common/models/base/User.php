@@ -23,7 +23,7 @@ use common\models\rbac\AuthAssignment;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends BaseModel implements IdentityInterface
 {
     /**
      * 禁用登录
