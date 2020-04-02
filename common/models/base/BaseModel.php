@@ -45,7 +45,7 @@ class BaseModel extends ActiveRecord
     public static function tableFullName($tableName)
     {
         //return "`".static::dbName()."`.`".static::getDb()->tablePrefix.preg_replace('/[\{\}\%]+/is','',$tableName)."`";
-        return "`".static::dbName()."`.`".static::getDb()->tablePrefix.$tableName."`";
+        return static::dbName().".".static::getDb()->tablePrefix.$tableName;
     }
   
     /**

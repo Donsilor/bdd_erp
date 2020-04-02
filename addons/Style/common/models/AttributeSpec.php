@@ -26,7 +26,7 @@ class AttributeSpec extends BaseModel
      */
     public static function tableName()
     {
-        return self::dbName().'.attribute_spec';
+        return self::tableFullName("attribute_spec");
     }
 
     /**
