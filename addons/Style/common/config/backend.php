@@ -67,6 +67,10 @@ return [
                             [
                                 'title' => '款式渠道',
                                 'route' => 'style-channel/index',
+                            ],
+                            [
+                                'title' => '款式来源',
+                                'route' => 'style-source/index',
                             ]
 
                     ],

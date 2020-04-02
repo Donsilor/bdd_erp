@@ -8,7 +8,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '款式渠道管理');
+$this->title = Yii::t('style_channel', '款式来源管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">

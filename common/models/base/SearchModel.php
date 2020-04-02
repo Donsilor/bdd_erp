@@ -219,7 +219,7 @@ class SearchModel extends Model
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$ignores = [])
     {
         $query = call_user_func([$this->modelClassName, 'find']);
         $dataProvider = new ActiveDataProvider(
@@ -292,6 +292,9 @@ class SearchModel extends Model
 
         $this->load($params);
         foreach ($this->attributes as $name => $value) {
+            if(in_array($name,$ignores)){
+                continue;
+            }
             $this->addCondition($query, $name, in_array($name, $this->partialMatchAttributes));
         }
 

@@ -2,19 +2,20 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\style\common\models\StyleSource;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\style\common\models\StyleChannel;
+
 
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StyleChannelController extends BaseController
+class StyleSourceController extends BaseController
 {
     use Curd;
-    public $modelClass = StyleChannel::class;
+    public $modelClass = StyleSource::class;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -39,11 +40,11 @@ class StyleChannelController extends BaseController
 
         $updated_at = $searchModel->updated_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',StyleChannel::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',StyleChannel::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StyleSource::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StyleSource::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',StyleChannel::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',StyleSource::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
