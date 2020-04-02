@@ -71,7 +71,21 @@ return [
                             [
                                 'title' => '款式来源',
                                 'route' => 'style-source/index',
-                            ]
+                            ],
+                            [
+                                'title' => '金损配置',
+                                'route' => 'style-gold-loss-rate/index',
+                            ],
+                            [
+                                'title' => '材质税率信息',
+                                'route' => 'style-material-tax/index',
+                            ],
+                            [
+                                'title' => '毛利率配置',
+                                'route' => 'style-profit-rate/index',
+                            ],
+
+
 
                     ],
                     

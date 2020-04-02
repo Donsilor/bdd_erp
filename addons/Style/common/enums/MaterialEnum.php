@@ -3,10 +3,10 @@
 namespace addons\Style\common\enums;
 
 /**
- * 加工费类型 枚举
+ * 材质 枚举
  * @package common\enums
  */
-class FactoryFeeEnum extends \common\enums\BaseEnum
+class MaterialEnum extends BaseEnum
 {
     const FEE_18K = 1;
     const FEE_PT950 = 2;

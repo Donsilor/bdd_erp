@@ -8,7 +8,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '款式渠道管理');
+$this->title = Yii::t('style_channel', '材质税率信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit', 'style_cate_id' => 0], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                 </div>
             </div>
@@ -41,23 +41,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
+
                         [
-                            'attribute'=>'name',
-                            'filter' => Html::activeTextInput($searchModel, 'name', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'label' => '添加人',
-                            'attribute' => 'member.username',
+                            'attribute' => 'material_id',
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\MaterialEnum::getValue($model->material_id);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material_id',\addons\Style\common\enums\MaterialEnum::getMap(), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
+
                             ]),
-
                         ],
-
+                        'tax_rate',
 
                         [
                             'attribute'=>'updated_at',
@@ -76,14 +74,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
 
                             ]),
                             'value'=>function($model){
                                 return date('Y-m-d',$model->updated_at);
                             }
+
+                        ],
+                        [
+                            'label' => '配置人',
+                            'attribute' => 'member.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                'class' => 'form-control',
+                            ]),
 
                         ],
 
@@ -117,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
+                                        'data-target' => '#ajaxModalLg',
                                     ]);
                                 },
 

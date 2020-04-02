@@ -69,7 +69,7 @@ class StyleChannel extends BaseModel
     }
 
     /**
-     * 关联款式分类一对一
+     * 关联管理员一对一
      * @return \yii\db\ActiveQuery
      */
     public function getMember()
