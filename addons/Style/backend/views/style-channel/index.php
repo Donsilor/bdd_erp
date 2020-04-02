@@ -3,7 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-
+use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -48,14 +48,37 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
-
                         [
                             'label' => '添加人',
-                            'attribute' => 'member.realname',
+                            'attribute' => 'member.username',
                             'headerOptions' => ['class' => 'col-md-1'],
-//                            'filter' => Html::activeTextInput($searchModel, 'member.realname', [
-//                                'class' => 'form-control',
-//                            ]),
+
+                        ],
+
+                        [
+                            'attribute'=>'updated_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'updated_at',
+                                'value' => $searchModel->created_at,
+                                'options' => ['readonly' => true,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+
+
+                                ],
+
+                            ]),
+                            'value'=>'updated_at:date',
+
                         ],
 
 
