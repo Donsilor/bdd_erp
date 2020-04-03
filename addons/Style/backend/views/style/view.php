@@ -118,17 +118,44 @@ $this->params['breadcrumbs'][] = $this->title;
             
             <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_2">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-th"></i> 商品信息</li>
+                    <li class="pull-left header"><i class="fa fa-th"></i> 款式属性</li>
                 </ul>
                 <div class="box-body table-responsive col-lg-12">
-                        
-                 </div>
-                <div class="box-body col-lg-12">
-                    <div class="row">
-
-          
-                    </div>
-                </div>
+                  <table class="table table-hover">
+                    <tr style="border:none">
+                        <td>PHP版本</td>
+                        <td><?= phpversion(); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Mysql版本</td>
+                        <td><?= Yii::$app->db->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION); ?></td>
+                    </tr>
+                    <tr>
+                        <td>解析引擎</td>
+                        <td><?= $_SERVER['SERVER_SOFTWARE']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>数据库大小</td>
+                        <td><?= Yii::$app->formatter->asShortSize($mysql_size, 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td>附件目录</td>
+                        <td><?= $prefix . Yii::getAlias('@attachurl'); ?>/</td>
+                    </tr>
+                    <tr>
+                        <td>附件目录大小</td>
+                        <td><?= Yii::$app->formatter->asShortSize($attachment_size, 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td>超时时间</td>
+                        <td><?= ini_get('max_execution_time'); ?>秒</td>
+                    </tr>
+                    <tr>
+                        <td>客户端信息</td>
+                        <td><?= $_SERVER['HTTP_USER_AGENT'] ?></td>
+                    </tr>
+                </table>
+                 </div>                
             </div>
             
         </div>
