@@ -59,6 +59,42 @@ class StyleController extends BaseController
     }
     
     /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        
+        $model = $this->findModel($id);
+        
+        $dataProvider = null;
+       /*  if (!is_null($id)) {
+            $searchModel = new SearchModel([
+                    'model' => OrderGoods::class,
+                    'scenario' => 'default',
+                    'partialMatchAttributes' => [], // 模糊查询
+                    'defaultOrder' => [
+                            'id' => SORT_DESC
+                    ],
+                    'pageSize' => $this->pageSize,
+            ]);
+            
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            
+            $dataProvider->query->andWhere(['=', 'order_id', $id]);
+            
+            $dataProvider->setSort(false);
+        } */
+        
+        return $this->render($this->action->id, [
+                'model' => $model,
+                'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    /**
      * 编辑/创建 多语言
      *
      * @return mixed

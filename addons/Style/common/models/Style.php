@@ -4,6 +4,7 @@ namespace addons\style\common\models;
 
 use Yii;
 use common\helpers\ArrayHelper;
+use common\models\backend\Member;
 
 /**
  * 款式表 Model
@@ -39,7 +40,7 @@ use common\helpers\ArrayHelper;
  * @property int $verify_status 商品审核 1通过，0未通过，10审核中
  * @property string $verify_remark 审核失败原因
  * @property int $created_at 商品添加时间
- * @property int $updated_at
+ * @property int $updated_at 更新时间
  */
 class Style extends BaseModel
 {
@@ -58,7 +59,7 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','status', 'audit_status','created_at', 'updated_at'], 'integer'],
+                [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
                 [['product_type_id','style_cate_id','style_sn','style_sex','style_name','is_made'], 'required'],
                 [['sale_price', 'market_price', 'cost_price'], 'number'],
                 ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -95,11 +96,14 @@ class Style extends BaseModel
             'market_price' => '市场价',
             'cost_price' =>'成本价',
             'goods_num'=> "商品数量",
-            'is_made' => '是否支持定制',   
-            'status' => '状态',
-            'remark' => '备注',
+            'is_made' => '是否支持定制',
             'audit_status' => "审核状态",
             'audit_remark' => "审核备注",
+            'audit_time' => "审核时间",
+            'auditor_id' => "审核人",
+            'creator_id'=>'创建人', 
+            'status' => '状态',
+            'remark' => '备注', 
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
@@ -119,5 +123,37 @@ class Style extends BaseModel
     public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    } 
+    /**
+     * 款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
     }    
+    /**
+     * 款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSource()
+    {
+        return $this->hasOne(StyleSource::class, ['id'=>'style_source_id'])->alias('source');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
 }

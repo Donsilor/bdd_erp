@@ -51,6 +51,7 @@ return [
             'decimalSeparator' => ',',
             'thousandSeparator' => ' ',
             'currencyCode' => 'CNY',
+            'nullDisplay' => ''
         ],
         /** ------ 服务层 ------ **/
         'services' => [

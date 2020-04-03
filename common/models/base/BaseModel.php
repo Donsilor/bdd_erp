@@ -45,8 +45,7 @@ class BaseModel extends ActiveRecord
     public static function tableFullName($tableName)
     {  
         return static::dbName().".".static::getDb()->tablePrefix.$tableName;
-    }
-  
+    }    
     /**
      *
      * @param unknown $attribute
