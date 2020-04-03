@@ -341,10 +341,10 @@ Css
      * @param array $options
      * @param string $tab
      */
-    public static function areaTab($tab = 'areaTab',$title = null)
+   /*  public static function areaTab($tab = 'areaTab',$title = null)
     {
         return self::tab(AreaEnum::getMap(),Yii::$app->params['areaId'],$tab,$title);
-    }
+    } */
     /**
      * tab 标签初始化
      * @param array $options
@@ -370,6 +370,22 @@ Css
                 }
                 $str .= '})</script>';
             }
+        }
+        $str .='</ul>';
+        return $str;
+    }
+    /**
+     * 动态导航页签
+     * @param array $options
+     * @param string $value 当前标签ID
+     * @return string
+     */
+    public static function menuTab($options,$value)
+    {
+        $str = '<ul class="nav nav-tabs">';
+        foreach ($options as $key=>$option){
+            $active = $value == $key?"active":"";
+            $str.='<li class="'.$active.'"><a href="'.$option['url'].'" >'.$option['name'].'</a></li>';            
         }
         $str .='</ul>';
         return $str;

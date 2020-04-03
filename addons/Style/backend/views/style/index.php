@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {status} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['data-toggle' => 'modal','data-target' => '#ajaxModalLg']);
+                        return Html::edit(['edit-info','id' => $model->id,'returnUrl' => Url::getReturnUrl()]);
                     },
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
