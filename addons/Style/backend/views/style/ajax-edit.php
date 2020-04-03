@@ -17,9 +17,9 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
 </div>
     <div class="modal-body"> 
-       <div class="col-sm-12  nav-tabs-custom">
+       <div class="col-sm-12">
    			<div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled'=>$model->isNewRecord?null:'disabled'])?></div>
                 <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()?></div>
             </div>
 			<div class="row">
@@ -32,8 +32,8 @@ $form = ActiveForm::begin([
                         'disabled'=>$model->isNewRecord?null:'disabled'
                     ],
                 ]);?>
-            </div>
-            <div class="col-lg-6">
+                </div>
+                <div class="col-lg-6">
                 <?= $form->field($model, 'product_type_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->styleService->productType->getGrpDropDown(),
                     'options' => ['placeholder' => '请选择'],
@@ -53,8 +53,8 @@ $form = ActiveForm::begin([
                         'allowClear' => true
                     ],
                 ]);?>
-            </div>
-            <div class="col-lg-6">
+                </div>
+                <div class="col-lg-6">
                 <?= $form->field($model, 'style_channel_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->styleService->styleChannel->getdropDown(),
                     'options' => ['placeholder' => '请选择'],
