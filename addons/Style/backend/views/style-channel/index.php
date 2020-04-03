@@ -10,17 +10,24 @@ use kartik\daterange\DateRangePicker;
 
 $this->title = Yii::t('style_channel', '款式渠道管理');
 $this->params['breadcrumbs'][] = $this->title;
+
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
+
 ?>
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools">
+                <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['ajax-edit', 'style_cate_id' => 0], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                </div>
+                <div class="box-tools" >
+                    <a href="<?= Url::to(['index?action=export'.$params])?>" class="blue">导出Excel</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
