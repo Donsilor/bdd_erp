@@ -104,8 +104,8 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -118,7 +118,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -137,8 +137,8 @@ class StyleController extends BaseController
     {    
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -151,7 +151,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -170,8 +170,8 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $tab = Yii::$app->request->get('tab',3);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -184,7 +184,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -203,8 +203,8 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $tab = Yii::$app->request->get('tab',4);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -217,7 +217,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -236,8 +236,8 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $tab = Yii::$app->request->get('tab',5);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -250,7 +250,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -270,7 +270,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -283,7 +283,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -303,7 +303,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -316,7 +316,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
@@ -336,7 +336,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index','cate_id'=>$cate_id]);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
@@ -349,7 +349,7 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id,'cate_id'=>$cate_id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }

@@ -83,9 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-6"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap())?></div>
                     <div class="col-lg-6"><?= $form->field($model, 'is_made')->radioList(\common\enums\ConfirmEnum::getMap())?></div>
                 </div>
-                <div class="row">
+          
                 <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
-                </div>
+          
       
          </div>
         <!-- ./box-body -->
