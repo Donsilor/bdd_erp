@@ -2,14 +2,10 @@
 
 namespace addons\Style\services;
 
-
-use addons\style\common\models\StyleLang;
-use addons\style\common\models\StyleMarkup;
 use Yii;
 use common\components\Service;
-use common\enums\StatusEnum;
-use common\helpers\ArrayHelper;
 use addons\style\common\models\Style;
+use common\helpers\Url;
 
 
 /**
@@ -19,46 +15,27 @@ use addons\style\common\models\Style;
  */
 class StyleService extends Service
 {
-
-    public function getStyle($id,$language = null){
-        if(empty($language)){
-            $language = Yii::$app->language;
-        }
-        $model = Style::find()->alias('a')
-            ->andWhere(['a.id'=>$id])
-            ->leftJoin('{{%goods_style_lang}} b',  'b.master_id = a.id and b.language = "'.$language.'"')
-            ->select(['a.*', 'b.style_name'])
-            ->asArray()
-            ->one();
-        return $model;
+    
+    /**
+     * 款式编辑 tab
+     * @param string $mod
+     * @return string[][]|boolean[][]
+     */
+    public function editTabList($id)
+    {
+        $tab_list = [
+                1=>['name'=>'基础信息','url'=>Url::to(['edit-info','id'=>$id,'tab'=>1])],
+                2=>['name'=>'款式属性','url'=>Url::to(['edit-attr','id'=>$id,'tab'=>2])],
+                3=>['name'=>'款式规格','url'=>Url::to(['edit-goods','id'=>$id,'tab'=>3])],
+                4=>['name'=>'石头信息','url'=>Url::to(['edit-stone','id'=>$id,'tab'=>4])],
+                5=>['name'=>'工厂信息','url'=>Url::to(['edit-factory','id'=>$id,'tab'=>5])],
+                6=>['name'=>'工费信息','url'=>Url::to(['edit-factory-fee','id'=>$id,'tab'=>6])],
+                7=>['name'=>'款式图片','url'=>Url::to(['edit-images','id'=>$id,'tab'=>7])],
+                8=>['name'=>'日志信息','url'=>Url::to(['logs','id'=>$id,'tab'=>8])]
+        ];
+        
+        return $tab_list;
     }
-
-    //获取商品信息
-    public function getStyleList($type_id=null, $limit=null, $order=null, $fields=['*'],$language=null ){
-        $area_id = $this->getAreaId(); 
-        if(empty($language)){
-            $language = Yii::$app->params['language'];
-        }
-        $query = Style::find()->alias('m')
-            ->leftJoin(StyleLang::tableName().' lang',"m.id=lang.master_id and lang.language='".$language."'")
-            ->leftJoin(StyleMarkup::tableName().' markup', 'm.id=markup.style_id and markup.status=1 and markup.area_id='.$area_id)
-            ->where(['m.status'=>StatusEnum::ENABLED])
-            ->andWhere(['or',['=','markup.status',1],['IS','markup.status',new \yii\db\Expression('NULL')]]);
-        if(!empty($type_id)){
-            $query->andWhere(['m.type_id'=>$type_id]);
-        }
-        if(!empty($limit)){
-            $query->limit($limit);
-        }
-        if($order){
-            $query->orderBy($order);
-        }
-        $result = $query->asArray()->select($fields)->all();
-        return $result;
-    }
-
-
-
-
+    
 
 }
