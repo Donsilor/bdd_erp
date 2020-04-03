@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use common\helpers\ExcelHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -45,10 +46,29 @@ class StyleChannelController extends BaseController
 
         $dataProvider->query->andWhere(['>',StyleChannel::tableName().'.status',-1]);
 
+        //导出
+        if(Yii::$app->request->get('action') === 'export'){
+            $this->getExport($dataProvider);
+        }
+
+
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+
+    public function getExport($dataProvider)
+    {
+        $list = $dataProvider->models;
+        $header = [
+            ['ID', 'id'],
+            ['渠道名称', 'name', 'text'],
+        ];
+        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
+
     }
 
 
