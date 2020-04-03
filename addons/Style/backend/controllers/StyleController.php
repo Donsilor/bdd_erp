@@ -104,7 +104,7 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
+        $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         
