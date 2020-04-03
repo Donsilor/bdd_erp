@@ -59,7 +59,7 @@ class Style extends BaseModel
     {
         return [
                 [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','status', 'audit_status','created_at', 'updated_at'], 'integer'],
-                [['product_type_id','style_cate_id','style_sn','style_sex','style_name'], 'required'],
+                [['product_type_id','style_cate_id','style_sn','style_sex','style_name','is_made'], 'required'],
                 [['sale_price', 'market_price', 'cost_price'], 'number'],
                 ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['market_price','compare','compareValue' => 0, 'operator' => '>'],

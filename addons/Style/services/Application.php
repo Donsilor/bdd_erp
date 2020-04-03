@@ -15,6 +15,9 @@ use common\components\Service;
  * @property \addons\Style\services\DiamondSourceService $diamondSource 裸钻来源
  * @property \addons\Style\services\StyleGoodsService $styleGoods 款式商品
  * @property \addons\Style\services\StyleService $style 款式
+ * @property \addons\Style\services\StyleChannelService $styleChannel 款式渠道
+ * @property \addons\Style\services\StyleSourceService $styleSource 款式来源
+ * 
  */
 class Application extends Service
 {
@@ -29,6 +32,8 @@ class Application extends Service
         'style' => 'addons\style\services\StyleService',
         'styleGoods' => 'addons\style\services\StyleGoodsService',      
         'diamond' => 'addons\style\services\DiamondService',
-        'diamondSource' => 'addons\style\services\DiamondSourceService',        
+        'diamondSource' => 'addons\style\services\DiamondSourceService',  
+        'styleSource' => 'addons\style\services\StyleSourceService',
+        'styleChannel' => 'addons\style\services\StyleChannelService',
     ];
 }
