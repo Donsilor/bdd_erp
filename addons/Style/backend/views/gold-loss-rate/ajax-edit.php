@@ -25,13 +25,7 @@ $form = ActiveForm::begin([
                         'allowClear' => true
                     ],
             ]);?>
-            <?= $form->field($model, 'material_id')->widget(kartik\select2\Select2::class, [
-                    'data' => \addons\Style\common\enums\MaterialEnum::getMap(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-            ]);?>
+            <?= $form->field($model, 'material_id')->dropDownList(\addons\Style\common\enums\MaterialEnum::getMap(),['prompt'=>'请选择']);?>
 
             <?= $form->field($model, 'loss_rate')->textInput() ?>
             <?= $form->field($model, 'sort')->textInput() ?>

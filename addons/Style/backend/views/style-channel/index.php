@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                             'value'=>function($model){
-                                return date('Y-m-d',$model->updated_at);
+                                return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
 
                         ],
