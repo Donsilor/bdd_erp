@@ -17,7 +17,7 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class StyleGoldLossRate extends BaseModel
+class GoldLossRate extends BaseModel
 {
     /**
      * {@inheritdoc}

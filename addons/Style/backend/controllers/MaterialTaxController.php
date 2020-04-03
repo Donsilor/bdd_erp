@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\StyleMaterialTax;
+use addons\style\common\models\MaterialTax;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -12,10 +12,10 @@ use common\models\base\SearchModel;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StyleMaterialTaxController extends BaseController
+class MaterialTaxController extends BaseController
 {
     use Curd;
-    public $modelClass = StyleMaterialTax::class;
+    public $modelClass = MaterialTax::class;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -40,11 +40,11 @@ class StyleMaterialTaxController extends BaseController
 
         $updated_at = $searchModel->updated_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',StyleMaterialTax::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',StyleMaterialTax::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',MaterialTax::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',MaterialTax::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',StyleMaterialTax::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',MaterialTax::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

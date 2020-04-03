@@ -74,15 +74,15 @@ return [
                             ],
                             [
                                 'title' => '金损配置',
-                                'route' => 'style-gold-loss-rate/index',
+                                'route' => 'gold-loss-rate/index',
                             ],
                             [
                                 'title' => '材质税率信息',
-                                'route' => 'style-material-tax/index',
+                                'route' => 'material-tax/index',
                             ],
                             [
                                 'title' => '毛利率配置',
-                                'route' => 'style-profit-rate/index',
+                                'route' => 'profit-rate/index',
                             ],
 
 
