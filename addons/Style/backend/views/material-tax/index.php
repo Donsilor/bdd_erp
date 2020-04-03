@@ -8,7 +8,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '毛利率配置');
+$this->title = Yii::t('style_channel', '材质税率信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -42,22 +42,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         [
-                            'label' => '产品分类',
-                            'attribute'=>'cate.name',
-                            'filter' => Html::activeTextInput($searchModel, 'cate.name', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
+                            'attribute' => 'id',
+                            'filter' => true,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '产品线',
-                            'attribute'=>'product.name',
-                            'filter' => Html::activeTextInput($searchModel, 'product.name', [
+                            'attribute' => 'material_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\MaterialEnum::getValue($model->material_id);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material_id',\addons\Style\common\enums\MaterialEnum::getMap(), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
+
                             ]),
-                            'headerOptions' => [],
                         ],
-                        'profit_rate',
+                        'tax_rate',
 
                         [
                             'attribute'=>'updated_at',
@@ -65,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'updated_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => true,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [

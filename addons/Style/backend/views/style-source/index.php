@@ -42,6 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         [
+                            'attribute' => 'id',
+                            'filter' => true,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
                             'attribute'=>'name',
                             'filter' => Html::activeTextInput($searchModel, 'name', [
                                 'class' => 'form-control',
@@ -65,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'updated_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => true,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
