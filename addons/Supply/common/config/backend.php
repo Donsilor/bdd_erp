@@ -23,7 +23,34 @@ return [
     // ----------------------- 菜单配置 ----------------------- //
 
     'menu' => [
-
+            [
+                    'title' => '生产管理',
+                    'route' => 'indexStyle',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '布产列表',
+                                    'route' => 'produce/index',
+                            ],                            
+                    ],
+                    
+            ],
+            [
+                    'title' => '功能配置',
+                    'route' => 'indexStyleConfig',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '供应商管理',
+                                    'route' => 'supplier/index',
+                            ],
+                            [
+                                    'title' => '工厂管理',
+                                    'route' => 'factory/index',
+                            ],
+                    ],
+                    
+            ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //
