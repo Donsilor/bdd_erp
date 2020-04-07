@@ -26,14 +26,14 @@ class Application extends Service
      */
     public $childService = [       
         /*********款号相关*********/
-        'styleCate' => 'addons\style\services\StyleCateService',
-		'productType' => 'addons\style\services\ProductTypeService',
-        'attribute' => 'addons\style\services\AttributeService',                
-        'style' => 'addons\style\services\StyleService',
-        'styleGoods' => 'addons\style\services\StyleGoodsService',      
-        'diamond' => 'addons\style\services\DiamondService',
-        'diamondSource' => 'addons\style\services\DiamondSourceService',  
-        'styleSource' => 'addons\style\services\StyleSourceService',
-        'styleChannel' => 'addons\style\services\StyleChannelService',
+        'styleCate' => 'addons\Style\services\StyleCateService',
+		'productType' => 'addons\Style\services\ProductTypeService',
+        'attribute' => 'addons\Style\services\AttributeService',                
+        'style' => 'addons\Style\services\StyleService',
+        'styleGoods' => 'addons\Style\services\StyleGoodsService',      
+        'diamond' => 'addons\Style\services\DiamondService',
+        'diamondSource' => 'addons\Style\services\DiamondSourceService',  
+        'styleSource' => 'addons\Style\services\StyleSourceService',
+        'styleChannel' => 'addons\Style\services\StyleChannelService',
     ];
 }
