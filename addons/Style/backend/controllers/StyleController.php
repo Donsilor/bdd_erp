@@ -11,7 +11,7 @@ use common\traits\Curd;
 
 use addons\Style\backend\controllers\BaseController;
 use addons\Style\common\models\Style;
-use common\helpers\Url;
+use addons\Style\common\forms\StyleAttrForm;
 
 /**
 * Style
@@ -122,15 +122,15 @@ class StyleController extends BaseController
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
+        $model = StyleAttrForm::find($id)->one();   
+        // ajax 校验
+        $this->activeFormValidate($model);
         
         if ($model->load(Yii::$app->request->post())) {
-            
+            $attr_list = $model->getPostAttrs();
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
+                Yii::$app->styleService->style->createStyleAttribute($attr_list);
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
@@ -158,7 +158,7 @@ class StyleController extends BaseController
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
-            
+            print_r($model->combineAttrs());exit;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){

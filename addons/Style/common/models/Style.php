@@ -44,7 +44,10 @@ use common\models\backend\Member;
  */
 class Style extends BaseModel
 {
-         
+    //属性必填字段
+    public $attr_require;
+    //属性非必填
+    public $attr_custom;
     /**
      * {@inheritdoc}
      */
@@ -72,6 +75,10 @@ class Style extends BaseModel
                 [['style_image','style_3ds'], 'string', 'max' => 100],
                 [['audit_remark','remark','style_name'], 'string', 'max' => 255],
                 [['style_sn'],'unique'],
+                [['attr_require'], 'required','isEmpty'=>function($value){
+                    return false;
+                }],
+                [['attr_require','attr_custom'],'combineAttrs'],
         ];
     }
     /**
@@ -108,6 +115,20 @@ class Style extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+    /**
+     * 款式基础属性
+     */
+    public function combineAttrs()
+    {
+        $attr_list = [];
+        if(!empty($this->attr_require)){
+            $attr_list =  $this->attr_require + $attr_list;
+        }
+        if(!empty($this->attr_custom)){
+            $attr_list =  $this->attr_custom + $attr_list;
+        }
+        return $attr_list;
+    }    
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery

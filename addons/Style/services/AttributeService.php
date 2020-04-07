@@ -77,12 +77,12 @@ class AttributeService extends Service
     
     /**
      * 根据产品线查询属性列表（数据行）
-     * @param unknown $type_id
+     * @param unknown $style_cate_id
      * @param number $status
      * @param unknown $language
      * @return array
      */
-    public function getAttrListByTypeId($type_id,$status = 1,$language = null)
+    public function getAttrListByTypeId($style_cate_id,$status = 1,$language = null)
     {
         if(empty($language)){
             $language = Yii::$app->params['language'];
@@ -91,7 +91,7 @@ class AttributeService extends Service
                     ->select(["attr.id","lang.attr_name",'spec.attr_type','spec.input_type','spec.is_require'])
                     ->innerJoin(Attribute::tableName()." attr",'spec.attr_id=attr.id')
                     ->innerJoin(AttributeLang::tableName().' lang',"attr.id=lang.master_id and lang.language='".$language."'")
-                    ->where(['spec.type_id'=>$type_id]);
+                    ->where(['spec.style_cate_id'=>$style_cate_id]);
         if(is_numeric($status)){
             $query->andWhere(['=','spec.status',$status]);
         }
@@ -108,11 +108,11 @@ class AttributeService extends Service
     /**
      * 根据属性ID和产品线ID查询 属性列表
      * @param unknown $attr_ids
-     * @param unknown $type_id
+     * @param unknown $style_cate_id
      * @param number $status
      * @param unknown $language
      */
-    public function getSpecAttrList($attr_ids,$type_id,$status = 1,$language = null)
+    public function getSpecAttrList($attr_ids,$style_cate_id,$status = 1,$language = null)
     {
         if(empty($language)){
             $language = Yii::$app->params['language'];
@@ -121,7 +121,7 @@ class AttributeService extends Service
             ->select(["attr.id","lang.attr_name",'spec.attr_type','spec.input_type','spec.is_require'])
             ->innerJoin(Attribute::tableName()." attr",'spec.attr_id=attr.id')
             ->innerJoin(AttributeLang::tableName().' lang',"attr.id=lang.master_id and lang.language='".$language."'")
-            ->where(['spec.type_id'=>$type_id,'spec.attr_id'=>$attr_ids]);
+            ->where(['spec.style_cate_id'=>$style_cate_id,'spec.attr_id'=>$attr_ids]);
         if(is_numeric($status)){
             $query->andWhere(['=','spec.status',$status]);
         }

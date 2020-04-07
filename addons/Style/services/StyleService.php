@@ -37,5 +37,12 @@ class StyleService extends Service
         return $tab_list;
     }
     
+    public function createStyleAttribute($style_id,array $attr_list)
+    {
+        foreach ($attr_list as $attr_id) {
+            
+        }
+    }
+    
 
 }
