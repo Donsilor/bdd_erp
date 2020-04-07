@@ -134,11 +134,11 @@ class StyleController extends BaseController
             $attr_list = $model->getPostAttrs();
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                Yii::$app->styleService->style->createStyleAttribute($id, $attr_list);
+                Yii::$app->styleService->styleAttribute->createStyleAttribute($id, $attr_list);
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'error');
             }
             return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
             //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
