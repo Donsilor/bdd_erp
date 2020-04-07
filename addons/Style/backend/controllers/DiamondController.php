@@ -4,16 +4,16 @@ namespace addons\Style\backend\controllers;
 
 use common\enums\AttrIdEnum;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\Style;
+use addons\Style\common\models\Style;
 use Yii;
-use addons\style\common\models\Diamond;
+use addons\Style\common\models\Diamond;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use common\helpers\ResultHelper;
 use yii\base\Exception;
 use common\helpers\ExcelHelper;
-use addons\style\common\models\DiamondLang;
+use addons\Style\common\models\DiamondLang;
 
 /**
 * Diamond

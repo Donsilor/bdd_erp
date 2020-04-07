@@ -5,7 +5,7 @@ namespace addons\Style\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\style\common\models\StyleGoods;
+use addons\Style\common\models\StyleGoods;
 /**
 * Goods
 *

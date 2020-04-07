@@ -6,7 +6,7 @@ use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\StyleCate;
+use addons\Style\common\models\StyleCate;
 
 
 /**

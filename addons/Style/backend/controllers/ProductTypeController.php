@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\ProductType;
+use addons\Style\common\models\ProductType;
 use Yii;
 use common\traits\Curd;
 use yii\data\ActiveDataProvider;

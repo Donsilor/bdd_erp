@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\GoldLossRate;
+use addons\Style\common\models\GoldLossRate;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;

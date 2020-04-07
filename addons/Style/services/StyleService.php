@@ -4,7 +4,7 @@ namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
-use addons\style\common\models\Style;
+use addons\Style\common\models\Style;
 use common\helpers\Url;
 
 

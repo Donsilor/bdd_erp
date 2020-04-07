@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\style\common\models;
+namespace addons\Style\common\models;
 
 use Yii;
 
@@ -61,7 +61,7 @@ class Attribute extends BaseModel
     
     /**
      * 语言扩展表
-     * @return \addons\style\common\models\AttributeLang
+     * @return \addons\Style\common\models\AttributeLang
      */
     public function langModel()
     {

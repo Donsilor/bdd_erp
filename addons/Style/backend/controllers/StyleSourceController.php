@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\StyleSource;
+use addons\Style\common\models\StyleSource;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;

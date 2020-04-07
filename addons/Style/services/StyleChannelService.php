@@ -11,7 +11,7 @@ namespace addons\Style\services;
 
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\StyleChannel;
+use addons\Style\common\models\StyleChannel;
 
 class StyleChannelService
 {

@@ -11,7 +11,7 @@ namespace addons\Style\services;
 
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\StyleSource;
+use addons\Style\common\models\StyleSource;
 
 class StyleSourceService
 {

@@ -2,7 +2,7 @@
 
 namespace addons\Style\services;
 
-use addons\style\common\models\ProductType;
+use addons\Style\common\models\ProductType;
 use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;

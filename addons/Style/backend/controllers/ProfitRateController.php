@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\ProfitRate;
+use addons\Style\common\models\ProfitRate;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;

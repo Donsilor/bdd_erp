@@ -3,11 +3,11 @@
 namespace addons\Style\backend\controllers;
 
 use common\enums\StatusEnum;
-use addons\style\common\models\RingRelation;
-use addons\style\common\models\Style;
+use addons\Style\common\models\RingRelation;
+use addons\Style\common\models\Style;
 use services\goods\StyleService;
 use Yii;
-use addons\style\common\models\Ring;
+use addons\Style\common\models\Ring;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;

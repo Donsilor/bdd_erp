@@ -2,10 +2,10 @@
 
 namespace addons\Style\services;
 use common\components\Service;
-use addons\style\common\models\Diamond;
-use addons\style\common\models\Style;
-use addons\style\common\models\Goods;
-use addons\style\common\models\StyleLang;
+use addons\Style\common\models\Diamond;
+use addons\Style\common\models\Style;
+use addons\Style\common\models\Goods;
+use addons\Style\common\models\StyleLang;
 use yii\base\Exception;
 use yii\db\Expression;
 

@@ -4,7 +4,7 @@ use common\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\DiamondSource */
+/* @var $model addons\Style\common\models\DiamondSource */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('goods_diamond_source', 'Diamond Source');

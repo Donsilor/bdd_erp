@@ -70,24 +70,7 @@ class StyleController extends BaseController
         
         $model = $this->findModel($id);
         
-        $dataProvider = null;
-       /*  if (!is_null($id)) {
-            $searchModel = new SearchModel([
-                    'model' => OrderGoods::class,
-                    'scenario' => 'default',
-                    'partialMatchAttributes' => [], // 模糊查询
-                    'defaultOrder' => [
-                            'id' => SORT_DESC
-                    ],
-                    'pageSize' => $this->pageSize,
-            ]);
-            
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            
-            $dataProvider->query->andWhere(['=', 'order_id', $id]);
-            
-            $dataProvider->setSort(false);
-        } */
+        $dataProvider = null;      
         
         return $this->render($this->action->id, [
                 'model' => $model,

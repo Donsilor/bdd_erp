@@ -10,7 +10,7 @@ use common\enums\AreaEnum;
 use common\helpers\AmountHelper;
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\Style */
+/* @var $model addons\Style\common\models\Style */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('goods', '裸钻发布');

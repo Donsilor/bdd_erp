@@ -5,11 +5,11 @@ namespace addons\Style\services;
 use Yii;
 use common\components\Service;
 use common\helpers\ArrayHelper;
-use addons\style\common\models\AttributeValueLang;
-use addons\style\common\models\Attribute;
-use addons\style\common\models\AttributeLang;
-use addons\style\common\models\AttributeValue;
-use addons\style\common\models\AttributeSpec;
+use addons\Style\common\models\AttributeValueLang;
+use addons\Style\common\models\Attribute;
+use addons\Style\common\models\AttributeLang;
+use addons\Style\common\models\AttributeValue;
+use addons\Style\common\models\AttributeSpec;
 
 
 /**

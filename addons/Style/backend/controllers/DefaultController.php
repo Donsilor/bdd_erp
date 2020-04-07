@@ -3,7 +3,7 @@
 namespace addons\Style\backend\controllers;
 
 use Yii;
-use addons\style\common\models\Attribute;
+use addons\Style\common\models\Attribute;
 
 /**
  * 默认控制器

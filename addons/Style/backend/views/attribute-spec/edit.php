@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use common\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\Attribute */
+/* @var $model addons\Style\common\models\Attribute */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('attribute', 'Attribute');

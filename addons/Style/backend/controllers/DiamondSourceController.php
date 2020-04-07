@@ -3,7 +3,7 @@
 namespace addons\Style\backend\controllers;
 
 use Yii;
-use addons\style\common\models\DiamondSource;
+use addons\Style\common\models\DiamondSource;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;

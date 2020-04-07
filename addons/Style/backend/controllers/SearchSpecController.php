@@ -3,11 +3,11 @@
 namespace addons\Style\backend\controllers;
 
 use Yii;
-use addons\style\common\models\Attribute;
+use addons\Style\common\models\Attribute;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
-use addons\style\common\models\SearchSpec;
+use addons\Style\common\models\SearchSpec;
 
 /**
  * Attribute

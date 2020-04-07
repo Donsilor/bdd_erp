@@ -8,7 +8,7 @@ use common\widgets\langbox\LangBox;
 
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\Ring */
+/* @var $model addons\Style\common\models\Ring */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('goods_ring', 'Ring');

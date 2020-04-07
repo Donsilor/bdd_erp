@@ -4,8 +4,8 @@ namespace addons\Style\merchant\controllers;
 
 use Yii;
 use common\controllers\AddonsController;
-use addons\style\common\models\Attribute;
-use addons\style\common\models\AttributeLang;
+use addons\Style\common\models\Attribute;
+use addons\Style\common\models\AttributeLang;
 use common\models\common\SmsLog;
 use yii\db\Transaction;
 use common\helpers\TransactionHelper;

@@ -3,7 +3,7 @@
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\Goods */
+/* @var $model addons\Style\common\models\Goods */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('goods', 'Goods');

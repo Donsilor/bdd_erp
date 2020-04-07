@@ -6,7 +6,7 @@ use common\helpers\ExcelHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\style\common\models\StyleChannel;
+use addons\Style\common\models\StyleChannel;
 
 
 /**

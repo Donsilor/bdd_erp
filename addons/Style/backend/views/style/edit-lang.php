@@ -10,10 +10,10 @@ use common\helpers\ArrayHelper;
 use common\enums\StatusEnum;
 use common\helpers\AmountHelper;
 use common\enums\AreaEnum;
-use addons\style\common\models\Goods;
+use addons\Style\common\models\Goods;
 
 /* @var $this yii\web\View */
-/* @var $model addons\style\common\models\Style */
+/* @var $model addons\Style\common\models\Style */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('goods', 'Style');

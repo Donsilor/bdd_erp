@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\style\common\models\RingRelation;
+use addons\Style\common\models\RingRelation;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
