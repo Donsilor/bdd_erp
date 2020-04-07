@@ -5,8 +5,8 @@ namespace common\components;
 use Yii;
 use common\enums\CacheEnum;
 use common\enums\StatusEnum;
-use addons\style\common\models\AttributeValue;
-use addons\style\common\models\AttributeValueLang;
+use addons\Style\common\models\AttributeValue;
+use addons\Style\common\models\AttributeValueLang;
 
 
 /**

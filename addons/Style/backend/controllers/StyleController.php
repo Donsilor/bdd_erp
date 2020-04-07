@@ -121,8 +121,12 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = StyleAttrForm::find($id)->one();   
+        //$returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $style = $this->findModel($id);
+        
+        $model = new StyleAttrForm();
+        $model->style_id = $style->id;
+        $model->style_cate_id = $style->style_cate_id;
         // ajax 校验
         $this->activeFormValidate($model);
         
@@ -130,14 +134,16 @@ class StyleController extends BaseController
             $attr_list = $model->getPostAttrs();
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                Yii::$app->styleService->style->createStyleAttribute($attr_list);
+                Yii::$app->styleService->style->createStyleAttribute($id, $attr_list);
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id]), 'error');
             }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
+            //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
+        $model->initAttrs();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,

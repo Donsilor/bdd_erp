@@ -215,19 +215,4 @@ class AttributeService extends Service
         return $models;
     }
 
-    /**
-     * 根据属性值ID，查询属性图标
-     * @param unknown $ids
-     * @param unknown $language
-     * @return array
-     */
-    /* public function getAttrImageByValueId($id)
-    {
-        $models = AttributeValue::find()
-            ->select(['image'])
-            ->where(['id'=>$id])
-           ->one();
-        return $models->image;
-    } */
-
 }
