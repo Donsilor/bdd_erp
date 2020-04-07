@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\style\common\models;
+namespace addons\Style\common\models;
 
 use Yii;
 
