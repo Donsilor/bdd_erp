@@ -11,16 +11,22 @@ var langLabel = {
 		'batchFill':'批量填充',
 		'enable':'启用',
 		'disable':'禁用',
+		'enableTip':'点击启用',
+		'disableTip':'点击禁用',
 	},
 	'zh-TW':{
 		'batchFill':'批量填充',
 		'enable':'启用',
 		'disable':'禁用',
+		'enableTip':'点击启用',
+		'disableTip':'点击禁用',
 	},
 	'en-US':{
 		'batch_fill':'批量填充',
 		'enable':'启用',
 		'disable':'禁用',
+		'enableTip':'点击启用',
+		'disableTip':'点击禁用',
 	}
 };
 lang = typeof lang != 'undefined'? lang: "zh-CN";
@@ -168,7 +174,7 @@ $(function(){
                     		SKUTableDom += '<input type="hidden" name="'+inputName+'[b]['+_propvalids+'][ids]" value="'+propids+'"/>';
                     		SKUTableDom += '<input type="hidden" name="'+inputName+'[b]['+_propvalids+'][vids]" value="'+propvalids+'"/>';
                     		SKUTableDom += '<input type="hidden" class="setsku-' +skuName+'" name="'+inputName+'[c]['+_propvalids+'][' +skuName+']" value="'+skuVal+'"/>';
-                    		SKUTableDom += '<span class="btn btn-default btn-sm sku-status">'+langLabel[lang].disable+'</span></td>';
+                    		SKUTableDom += '<span class="btn btn-default btn-sm sku-status" data-toggle="tooltip" data-original-title="'+langLabel[lang].disableTip+'">'+langLabel[lang].disable+'</span></td>';
                     	}else{
                         	SKUTableDom += '<td><input type="text" class="form-control setsku-' +skuName+'" name="'+inputName+'[c]['+_propvalids+'][' +skuName+']" value="'+skuVal+'"/></td>';
                     	}
@@ -186,21 +192,21 @@ $(function(){
         //初始化skuInput表单编辑状态
         $("#skuTable tr[class*='sku_table_tr']").each(function(){
         	if($(this).find("input[class*='setsku-status']").val()==1){
-        		$(this).find(".sku-status").removeClass("btn-success").addClass("btn-default").html(langLabel[lang].disable);
+        		$(this).find(".sku-status").removeClass("btn-success").addClass("btn-default").html(langLabel[lang].disable).attr('data-original-title',langLabel[lang].disableTip);
         		$(this).find("input[type*='text']").attr("readonly",false);
         	}else{
-        		$(this).find(".sku-status").removeClass("btn-default").addClass("btn-success").html(langLabel[lang].enable);
+        		$(this).find(".sku-status").removeClass("btn-default").addClass("btn-success").html(langLabel[lang].enable).attr('data-original-title',langLabel[lang].enableTip);
         		$(this).find("input[type*='text']").attr("readonly",true);
         	}
         });
         $("#skuTable tr[class*='sku_table_tr']").find(".sku-status").click(function(){
             var rowBox = $(this).parent().parent();
 	        if($(this).parent().find("input[class*='setsku-status']").val()==0){
-	    		$(this).removeClass("btn-success").addClass("btn-default").html(langLabel[lang].disable);
+	    		$(this).removeClass("btn-success").addClass("btn-default").html(langLabel[lang].disable).attr('data-original-title',langLabel[lang].disableTip);
 	    		rowBox.find("input[class*='setsku-status']").val(1);
 	    		rowBox.find("input[type*='text']").attr("readonly",false);
 	    	}else{
-	    		$(this).removeClass("btn-default").addClass("btn-success").html(langLabel[lang].enable);
+	    		$(this).removeClass("btn-default").addClass("btn-success").html(langLabel[lang].enable).attr('data-original-title',langLabel[lang].enableTip);
 	    		rowBox.find("input[class*='setsku-status']").val(0);
 	    		rowBox.find("input[type*='text']").attr("readonly",true);
 	    	}
