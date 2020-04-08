@@ -41,7 +41,7 @@ class StyleGoods extends BaseModel
         return [
             [['style_id', 'product_type_id','style_cate_id','status','id'], 'required'],
             [['style_id', 'product_type_id','style_cate_id', 'merchant_id','sale_volume', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['sale_price', 'market_price', 'cost_price'], 'number'],
+            [['sale_price', 'market_price', 'cost_price',''], 'number'],
             ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
             ['market_price','compare','compareValue' => 0, 'operator' => '>'],
             ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
