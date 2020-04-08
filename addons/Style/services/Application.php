@@ -17,7 +17,7 @@ use common\components\Service;
  * @property \addons\Style\services\StyleService $style 款式
  * @property \addons\Style\services\StyleChannelService $styleChannel 款式渠道
  * @property \addons\Style\services\StyleSourceService $styleSource 款式来源
- * @property \addons\Style\services\StyleAttributeService $styleAttribute 款式属性
+ * @property \addons\Style\services\StyleAttributeService $styleAttribute 款和属性关系
  */
 class Application extends Service
 {

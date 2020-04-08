@@ -166,12 +166,14 @@ class StyleController extends BaseController
         $model = new StyleGoodsForm();
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
+        $model->style_sn = $style->style_sn;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
+                $goods_list = $model->getPostGoods();
                 $trans = Yii::$app->trans->beginTransaction();
-                
+                \Yii::$app->styleService->styleGoods->createStyleGoods($id, $goods_list);
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
@@ -180,6 +182,7 @@ class StyleController extends BaseController
             //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             return $this->message("保存成功" , $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
         }
+        $model->initGoods();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,

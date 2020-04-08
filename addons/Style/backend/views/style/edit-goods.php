@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit', 'id' => $model->style_id]),       
+        'validationUrl' => Url::to(['edit-goods', 'id' => $model->style_id]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header">款式发布</h2>
@@ -41,9 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         continue;
                     }
                     ?>
-                    <div class="box-header with-border">
-                    	<h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
-                	</div>
                     <div class="box-body" style="margin-left:10px">   
                         <?php 
                           $data = [];                          
@@ -58,11 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
                           }
                          
                           if(!empty($data)){
-                             echo common\widgets\skutable\SkuTable::widget(['form' => $form,'model' => $model,'data' =>$data,'name'=>'StyleGoods']);
+                             echo common\widgets\skutable\SkuTable::widget(['form' => $form,'model' => $model,'data' =>$data,'name'=>'StyleGoodsForm[style_spec]']);
                              ?>
                              <script type="text/javascript">
                                  $(function(){  
-                                  	$('form#Style').on('submit', function (e) {
+                                  	$('form#StyleGoodsForm').on('submit', function (e) {
                                 		var r = checkSkuInputData();
                                     	if(!r){
                                         	e.preventDefault();

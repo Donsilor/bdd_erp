@@ -29,7 +29,7 @@ class StyleService extends Service
         $tab_list = [
                 1=>['name'=>'基础信息','url'=>Url::to(['edit-info','id'=>$id,'tab'=>1])],
                 2=>['name'=>'款式属性','url'=>Url::to(['edit-attr','id'=>$id,'tab'=>2])],
-                3=>['name'=>'款式规格','url'=>Url::to(['edit-goods','id'=>$id,'tab'=>3])],
+                3=>['name'=>'商品属性','url'=>Url::to(['edit-goods','id'=>$id,'tab'=>3])],
                 4=>['name'=>'石头信息','url'=>Url::to(['edit-stone','id'=>$id,'tab'=>4])],
                 5=>['name'=>'工厂信息','url'=>Url::to(['edit-factory','id'=>$id,'tab'=>5])],
                 6=>['name'=>'工费信息','url'=>Url::to(['edit-factory-fee','id'=>$id,'tab'=>6])],
