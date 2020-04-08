@@ -6,10 +6,6 @@ use Yii;
 use common\components\Service;
 use addons\Style\common\models\Style;
 use common\helpers\Url;
-use addons\Style\common\models\AttributeSpec;
-use addons\Style\common\models\StyleAttribute;
-use common\enums\StatusEnum;
-
 
 /**
  * Class TypeService
