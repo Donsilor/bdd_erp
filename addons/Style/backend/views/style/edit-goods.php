@@ -95,109 +95,114 @@ $(function(){
 
          $(this).parent().find("input[type*='checkbox']").prop("checked",checked);
 	});	
-	//销售价批量填充
-	$(document).on("click",'.batch-sale_price',function(){
-		var hasEdit = false;
-		var fromValue = $("#style-sale_price").val();
-		if(fromValue ==""){
-             alert("<?= Yii::t("goods","请先填写销售价")?>");
-             return false;
-		}
-		$("#skuTable tr[class*='sku_table_tr']").each(function(){
-			var skuValue = $(this).find(".setsku-sale_price").val();
-        	if(skuValue != '' && skuValue != fromValue){
-        		hasEdit = true;
-        		return ;
-        	}
-        });
-        if(hasEdit === true){
-           	 if(!confirm("<?= Yii::t("goods","销售价已修改过,是否覆盖")?>?")){
-               	return false;
-           	 }
-        }
-    	$("#skuTable tr[class*='sku_table_tr']").each(function(){
-        	if($(this).find(".setsku-status").val() == 1){
-        		$(this).find(".setsku-sale_price").val(fromValue);
-        	}
-        });
-	});
 	//成本价批量填充
 	$(document).on("click",'.batch-cost_price',function(){
-		var hasEdit = false;
-		var fromValue = $("#style-cost_price").val();
-		if(fromValue ==""){
-             alert("<?= Yii::t("goods","请先填写成本价")?>");
-             return false;
-		}
-		$("#skuTable tr[class*='sku_table_tr']").each(function(){
-			var skuValue = $(this).find(".setsku-cost_price").val();
-        	if(skuValue != '' && skuValue != fromValue){
-        		hasEdit = true;
-        		return ;
-        	}
-        });
-        if(hasEdit === true){
-           	 if(!confirm("<?= Yii::t("goods","销售价已修改过,是否覆盖")?>?")){
-               	return false;
-           	 }
-        }
-    	$("#skuTable tr[class*='sku_table_tr']").each(function(){
-        	if($(this).find(".setsku-status").val() == 1){
-        		$(this).find(".setsku-cost_price").val(fromValue);
-        	}
-        });
+		batchFillDouble('cost_price','成本价','');
 	});
-	//库存批量填充
-	$(document).on("click",'.batch-goods_storage',function(){
-		var hasEdit = false;
-		var fromValue = $("#style-goods_storage").val();		
-		if(fromValue = prompt("<?= Yii::t("goods","请输入库存数量")?>","10")){
+	//副石1重量
+	$(document).on("click",'.batch-second_stone_weight1',function(){
+		batchFillDouble('second_stone_weight1','副石1重量','');
+	});
+	//副石2重量
+	$(document).on("click",'.batch-second_stone_weight2',function(){
+		batchFillDouble('second_stone_weight2','副石2重量','');
+	});
+	//副石1数量
+	$(document).on("click",'.batch-second_stone_num1',function(){
+		batchFillInteger('second_stone_num1','副石1数量','');
+	});
+	//副石2数量
+	$(document).on("click",'.batch-second_stone_num2',function(){
+		batchFillInteger('second_stone_num2','副石2数量','');
+	});
+    //18K标准金重
+	$(document).on("click",'.batch-g18k_weight',function(){
+		batchFillDouble('g18k_weight','18K标准金重','');
+	});
+	//18K上下公差
+	$(document).on("click",'.batch-g18k_diff',function(){
+		batchFillDouble('g18k_diff','18K上下公差','');
+	});
+	//PT950标准金重
+	$(document).on("click",'.batch-pt950_weight',function(){
+		batchFillDouble('pt950_weight','PT950标准金重','');
+	});
+	//PT950上下公差
+	$(document).on("click",'.batch-pt950_diff',function(){
+		batchFillDouble('pt950_diff','PT950上下公差','');
+	});
+	//银标准金重
+	$(document).on("click",'.batch-silver_weight',function(){
+		batchFillDouble('silver_weight','银标准金重','');
+	});
+	//银上下公差
+	$(document).on("click",'.batch-silver_diff',function(){
+		batchFillDouble('silver_diff','银上下公差','');
+	});
+	//改圈范围
+	$(document).on("click",'.batch-finger_range',function(){
+		batchFillDouble('finger_range','改圈范围','');
+	});
+	   
+	//批量填充整数类型文本框
+	function batchFillInteger(inputName,title,defaultValue){
+		var hasEdit = false;	
+		if(fromValue = prompt("请输入【"+title+"】(大于等于0的整数)",defaultValue)){
 			var r = /^\+?[1-9][0-9]*$/;
 			if(!r.test(fromValue)) {
-                 alert("<?= Yii::t("goods","库存数量不合法")?>");
+                 alert("【"+title+"】不合法!");
                  return false;
 			}
 		}else {
             return false; 
 		}
 		$("#skuTable tr[class*='sku_table_tr']").each(function(){
-			var skuValue = $(this).find(".setsku-goods_storage").val();
+			var skuValue = $(this).find(".setsku-"+inputName).val();
         	if(skuValue != '' && skuValue != fromValue){
         		hasEdit = true;
         		return ;
         	}
         });
         if(hasEdit === true){
-           	 if(!confirm("<?= Yii::t("goods","商品库存已修改过,是否覆盖")?>?")){
+           	 if(!confirm("【"+title+"】已修改过,是否覆盖?")){
                	return false;
            	 }
         }
     	$("#skuTable tr[class*='sku_table_tr']").each(function(){
         	if($(this).find(".setsku-status").val() == 1){
-        		$(this).find(".setsku-goods_storage").val(fromValue);
+        		$(this).find(".setsku-"+inputName).val(fromValue);
+        	}
+        });    
+    }
+    //批量填充数字类型文本框
+	function batchFillDouble(inputName,title,defaultValue){
+		var hasEdit = false;
+		if(fromValue = prompt("请输入【"+title+"】(大于等于0的数字)",defaultValue)){
+			var r = /^\d+(\.\d+)?$/;
+			if(!r.test(fromValue)) {
+				 alert("【"+title+"】不合法!");
+                 return false;
+			}
+		}else {
+            return false; 
+		}
+		$("#skuTable tr[class*='sku_table_tr']").each(function(){
+			var skuValue = $(this).find(".setsku-"+inputName).val();
+        	if(skuValue != '' && skuValue != fromValue){
+        		hasEdit = true;
+        		return ;
         	}
         });
-        goodsStroageSum();
-	});
-	$(document).on("blur",'.setsku-goods_storage',function(){
-    	goodsStroageSum();
-	});
-	$(document).on("click",'.sku-status',function(){
-    	goodsStroageSum();
-	});	
-	function goodsStroageSum(){
-		var total = 0;
-		$("#skuTable tr[class*='sku_table_tr']").each(function(){
+        if(hasEdit === true){
+           	 if(!confirm("【"+title+"】已修改过,是否覆盖?")){
+               	return false;
+           	 }
+        }
+    	$("#skuTable tr[class*='sku_table_tr']").each(function(){
         	if($(this).find(".setsku-status").val() == 1){
-        		var storage = $(this).find(".setsku-goods_storage").val();
-        		if(parseInt(storage)){
-        			total += parseInt(storage);
-        		}
+        		$(this).find(".setsku-"+inputName).val(fromValue);
         	}
-        }); 
-		$("#style-goods_storage").val(total).attr('readonly',true);
-        return total; 
-	}
-
+        });    
+    }
 });
 </script>
