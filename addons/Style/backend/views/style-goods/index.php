@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="box-body table-responsive">
-    <?php echo Html::batchButtons(true)?> <br/><br/>        
+    <?php //echo Html::batchButtons(true)?>      
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -66,10 +66,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'form-control',
                     ]),
                     'value' => function ($model) {
-                        return $model->goods_name;
+                         return $model->goods_name;
                     },
                     'headerOptions' => ['width'=>'300'],
-            ],  
+            ], 
+            [
+                    'attribute'=>'style_sn',
+                    'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                            'class' => 'form-control',
+                    ]),
+                    'value' => function ($model) {
+                          return $model->style_sn;
+                    },
+                    'headerOptions' => ['width'=>'120'],
+            ],
             [
                     'label' => '款式分类',
                     'attribute' => 'style_cate_id',
@@ -91,14 +101,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
-            ],  
+            ],            
             [
-                    'attribute'=>'style_sn',
-                    'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                    'attribute'=>'成本价',
+                    'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                             'class' => 'form-control',
                     ]),
                     'value' => function ($model) {
-                        return $model->style_sn;
+                        return $model->cost_price ;
                     },
                     'headerOptions' => ['width'=>'120'],
             ],
@@ -108,10 +118,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'form-control',
                     ]),
                     'value' => function ($model) {
-                        return $model->sale_price ;
+                    return $model->sale_price ;
                     },
                     'headerOptions' => ['width'=>'120'],
-            ],
+           ],
             [
                 'attribute' => 'status',                
                 'value' => function ($model){

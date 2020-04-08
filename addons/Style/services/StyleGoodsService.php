@@ -33,9 +33,9 @@ class StyleGoodsService extends Service
                 'goods_image'=>$style->style_image,
                 'status'=> StatusEnum::DISABLED,
         ];
-        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]);
+        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]);        
         foreach ($goods_list as $goods) {
-            $styleGoods = StyleGoods::find()->where(['style_id'=>$style_id,'spec_key'=>$key])->one();
+            $styleGoods = StyleGoods::find()->where(['style_id'=>$style_id,'spec_key'=>$goods['spec_key']])->one();
             if(!$styleGoods) {
                 //新增
                 $styleGoods = new StyleGoods();
@@ -45,11 +45,11 @@ class StyleGoodsService extends Service
             $styleGoods->style_cate_id = $style->style_cate_id;
             $styleGoods->product_type_id = $style->product_type_id;
             $styleGoods->goods_image  = $style->style_image;//商品默认图片
-            $styleGoods->status  = $goods['status']? 1: 0;//商品状态
-            $res = $styleGoods->save();
-            print_r($res);
+            //$styleGoods->status  = $goods['status']? 1: 0;//商品状态
+            $styleGoods->save();
         }
-        
+        $style->goods_num = count($goods_list);
+        $style->save(false);
     }   
     
     /**
