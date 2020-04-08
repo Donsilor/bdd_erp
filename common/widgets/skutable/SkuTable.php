@@ -63,7 +63,7 @@ class SkuTable extends Widget
      * @var
      */
     public $form;
-    public $name = 'Style[style_spec]';
+    public $name = 'StyleGoods';
     public $inputs;
     /**
      * @inheritdoc
@@ -75,11 +75,22 @@ class SkuTable extends Widget
         $asset = AppAsset::register($this->getView());
         if(!isset($this->inputs)){
             $this->inputs =  [
-                    ['name'=>'goods_sn','title'=>'库存编号','require'=>1,'batch'=>1,'unique'=>1,'dtype'=>"string"],
-                    ['name'=>'sale_price','title'=>"销售价({$currency})",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double"],
-                    ['name'=>'cost_price','title'=>"成本价({$currency})",'require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
-                    ['name'=>'market_price','title'=>"市场价({$currency})",'require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],                    
-                    ['name'=>'goods_storage','title'=>'库存','require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"integer"],
+                    ['name'=>'goods_sn','title'=>'商品编号','require'=>1,'batch'=>1,'unique'=>1,'dtype'=>"string"],
+                    //['name'=>'sale_price','title'=>"销售价({$currency})",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'cost_price','title'=>"成本价({$currency})",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    //['name'=>'market_price','title'=>"市场价({$currency})",'require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],                    
+                    ['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'second_stone_num1','title'=>'副石1数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'second_stone_weight2','title'=>'副石2重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'second_stone_num2','title'=>'副石2数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    
+                    ['name'=>'g18k_weight','title'=>'18K标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'g18k_diff','title'=>'18K上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'pt950_weight','title'=>'PT950标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'pt950_diff','title'=>'PT950上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'silver_weight','title'=>'银标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'silver_diff','title'=>'银上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
+                    ['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double"],
                     ['name'=>'status','title'=>'状态','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
             ];
         }        

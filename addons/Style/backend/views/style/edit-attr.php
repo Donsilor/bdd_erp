@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['edit-attr', 'id' => $model->id]),       
+        'validationUrl' => Url::to(['edit-attr', 'id' => $model->style_id]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header">款式发布</h2>
@@ -43,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                           foreach ($attr_list as $k=>$attr){ 
                               $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
                               $attr_field_name = "{$attr_field}[{$attr['id']}]";                                  
-                              $model->{$attr_field} = [];
                               //通用属性值列表
                               $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);                                  
                               switch ($attr['input_type']){

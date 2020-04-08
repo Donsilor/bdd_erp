@@ -6,6 +6,9 @@ use Yii;
 use common\components\Service;
 use addons\Style\common\models\Style;
 use common\helpers\Url;
+use addons\Style\common\models\AttributeSpec;
+use addons\Style\common\models\StyleAttribute;
+use common\enums\StatusEnum;
 
 
 /**
@@ -18,8 +21,8 @@ class StyleService extends Service
     
     /**
      * 款式编辑 tab
-     * @param string $mod
-     * @return string[][]|boolean[][]
+     * @param int $id 款式ID
+     * @return array
      */
     public function editTabList($id)
     {
@@ -35,13 +38,6 @@ class StyleService extends Service
         ];
         
         return $tab_list;
-    }
-    
-    public function createStyleAttribute($style_id,array $attr_list)
-    {
-        foreach ($attr_list as $attr_id) {
-            
-        }
     }
     
 

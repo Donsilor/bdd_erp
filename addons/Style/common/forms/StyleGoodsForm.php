@@ -7,6 +7,7 @@ use Yii;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleAttribute;
 use yii\base\Model;
+use addons\Style\common\enums\AttrTypeEnum;
 
 /**
  * 款式属性 Form
@@ -14,13 +15,11 @@ use yii\base\Model;
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
-class StyleAttrForm extends Model
+class StyleGoodsForm extends Model
 {
-    //属性必填字段
-    public $attr_require;
-    //属性非必填
-    public $attr_custom;
-    
+    //选中属性值列表
+    public $style_spec;
+
     public $style_id;
     
     public $style_cate_id;
@@ -31,11 +30,7 @@ class StyleAttrForm extends Model
     {
         return [
                 [['style_id','style_cate_id'], 'required'],
-                [['attr_require'], 'required','isEmpty'=>function($value){
-                    return false;
-                }],
-                [['attr_require','attr_custom'],'getPostAttrs'],
-           ];
+                [['style_spec'],'getPostAttrs'],];
     }
     /**
      * {@inheritdoc}
@@ -43,10 +38,9 @@ class StyleAttrForm extends Model
     public function attributeLabels()
     {
         return [
-              'attr_require'=>'当前属性',
-              'attr_custom'=>'当前属性',
-              'style_id'=>'款号id',
-              'style_cate_id'=>'款式分类id'
+                'style_spec'=>'规格属性',
+                'style_id'=>'款号id',
+                'style_cate_id'=>'款式分类id'
         ];
     }
     /**
@@ -68,7 +62,7 @@ class StyleAttrForm extends Model
      */
     public function initAttrs()
     {
-        $attr_list = StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id])->asArray()->all();
+        $attr_list = StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id,'attr_type'=>AttrTypeEnum::TYPE_SALE])->asArray()->all();
         if(empty($attr_list)) {
             return ;
         }
@@ -79,8 +73,8 @@ class StyleAttrForm extends Model
                 $attr_value = $split_value;
             }
         }
-        $this->attr_custom  = $attr_list;
-        $this->attr_require = $attr_list;
+        $style_spec['a'] = $attr_list;
+        $this->attr_spec_a  = $attr_list;
     }
     
 }
