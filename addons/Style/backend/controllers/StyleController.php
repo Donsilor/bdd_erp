@@ -4,9 +4,6 @@ namespace addons\Style\backend\controllers;
 
 use Yii;
 use common\models\base\SearchModel;
-use yii\base\Exception;
-use common\helpers\ResultHelper;
-use common\helpers\ArrayHelper;
 use common\traits\Curd;
 
 use addons\Style\backend\controllers\BaseController;
@@ -100,10 +97,10 @@ class StyleController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }
@@ -142,7 +139,7 @@ class StyleController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 Yii::$app->styleService->styleAttribute->createStyleAttribute($id, $attr_list);
                 $trans->commit();
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }
@@ -181,7 +178,7 @@ class StyleController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 \Yii::$app->styleService->styleGoods->createStyleGoods($id, $goods_list);
                 $trans->commit();
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }

@@ -75,7 +75,7 @@ class StyleGoodsForm extends Model
                     $goods['material'] = $attr_value_id;
                 }
             }
-            $goods['spec_key'] = $spec_key;
+            $goods['spec_key'] =  $spec_key.'';
             $goods['goods_spec'] = json_encode($goods_spec,true); 
             $goods['goods_sn'] = $goods_sn;            
             $goods_list[] = $goods;
