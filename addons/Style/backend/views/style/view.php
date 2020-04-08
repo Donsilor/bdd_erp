@@ -122,38 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </ul>
                 <div class="box-body table-responsive col-lg-12">
                   <table class="table table-hover">
-                    <tr style="border:none">
-                        <td>PHP版本</td>
-                        <td><?= phpversion(); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Mysql版本</td>
-                        <td><?= Yii::$app->db->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION); ?></td>
-                    </tr>
-                    <tr>
-                        <td>解析引擎</td>
-                        <td><?= $_SERVER['SERVER_SOFTWARE']; ?></td>
-                    </tr>
-                    <tr>
-                        <td>数据库大小</td>
-                        <td><?= Yii::$app->formatter->asShortSize($mysql_size, 2); ?></td>
-                    </tr>
-                    <tr>
-                        <td>附件目录</td>
-                        <td><?= $prefix . Yii::getAlias('@attachurl'); ?>/</td>
-                    </tr>
-                    <tr>
-                        <td>附件目录大小</td>
-                        <td><?= Yii::$app->formatter->asShortSize($attachment_size, 2); ?></td>
-                    </tr>
-                    <tr>
-                        <td>超时时间</td>
-                        <td><?= ini_get('max_execution_time'); ?>秒</td>
-                    </tr>
-                    <tr>
-                        <td>客户端信息</td>
-                        <td><?= $_SERVER['HTTP_USER_AGENT'] ?></td>
-                    </tr>
+                    
                 </table>
                  </div>                
             </div>
