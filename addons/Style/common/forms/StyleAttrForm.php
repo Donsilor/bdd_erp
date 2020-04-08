@@ -9,7 +9,7 @@ use addons\Style\common\models\StyleAttribute;
 use yii\base\Model;
 
 /**
- * 款式属性 Form
+ * 款式编辑-款式属性 Form
  *
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性

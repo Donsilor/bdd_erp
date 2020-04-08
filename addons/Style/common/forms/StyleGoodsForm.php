@@ -5,76 +5,120 @@ namespace addons\Style\common\forms;
 use Yii;
 
 use addons\Style\common\models\Style;
-use addons\Style\common\models\StyleAttribute;
 use yii\base\Model;
-use addons\Style\common\enums\AttrTypeEnum;
+use addons\Style\common\models\StyleGoods;
+use addons\Style\common\enums\AttrIdEnum;
 
 /**
- * 款式属性 Form
+ * 款式编辑-商品属性 Form
  *
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
 class StyleGoodsForm extends Model
 {
-    //选中属性值列表
-    public $style_spec;
-
-    public $style_id;
     
+    //款式ID
+    public $style_id;
+    //款式分类ID
     public $style_cate_id;
+    //款式编号
+    public $style_sn;
+    //款式规格属性
+    public $style_spec;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-                [['style_id','style_cate_id'], 'required'],
-                [['style_spec'],'getPostAttrs'],];
+                [['style_id','style_cate_id','style_sn'], 'required'],
+                [['style_spec'],'safe']                
+        ];
     }
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
-        return [
-                'style_spec'=>'规格属性',
-                'style_id'=>'款号id',
-                'style_cate_id'=>'款式分类id'
+        return [                
+                'style_id'=>'款式id',
+                'style_sn'=>'款式编号',
+                'style_cate_id'=>'款式分类id',
+                'style_spec'=>'款式规格',
         ];
     }
     /**
      * 款式基础属性
      */
-    public function getPostAttrs()
+    public function getPostGoods()
     {
-        $attr_list = [];
-        if(!empty($this->attr_require)){
-            $attr_list =  $this->attr_require + $attr_list;
+
+        $spec_b = $this->style_spec['b'] ??[];
+        $spec_c = $this->style_spec['c'] ??[];
+        $goods_list = [];
+        foreach ($spec_c as $spec_key =>$goods) {
+            if(!$spec_b[$spec_key]) {
+                continue;
+            }
+            $attr_ids = explode(",", $spec_b[$spec_key]['ids']);
+            $attr_vids = explode(",", $spec_b[$spec_key]['vids']);
+            $goods_sn = $this->style_sn;
+            foreach ($attr_ids as $k=>$attr_id){
+                $attr_value_id = $attr_vids[$k];
+                $goods_spec[$attr_id] = $attr_value_id;
+                $goods_sn .= '-'.$attr_value_id;
+                $attr_value = Yii::$app->attr->valueName($attr_value_id);
+                if($attr_id == AttrIdEnum::FINGER) {
+                    $goods['finger'] = $attr_value;
+                }elseif($attr_id == AttrIdEnum::MATERIAL) {
+                    $goods['material'] = $attr_value_id;
+                }
+            }
+            $goods['spec_key'] = $spec_key;
+            $goods['goods_spec'] = json_encode($goods_spec,true); 
+            $goods['goods_sn'] = $goods_sn;            
+            $goods_list[] = $goods;
         }
-        if(!empty($this->attr_custom)){
-            $attr_list =  $this->attr_custom + $attr_list;
-        }
-        return $attr_list;
+        return $goods_list;
     }
     /**
      * 自动填充已填写 表单属性
      */
-    public function initAttrs()
+    public function initGoods()
     {
-        $attr_list = StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id,'attr_type'=>AttrTypeEnum::TYPE_SALE])->asArray()->all();
-        if(empty($attr_list)) {
+        $goods_list = StyleGoods::find()->where(['style_id'=>$this->style_id])->all();
+        if(empty($goods_list)) {
             return ;
         }
-        $attr_list = array_column($attr_list,'attr_values','attr_id');
-        foreach ($attr_list as $attr_id => & $attr_value) {
-            $split_value = explode(",",$attr_value);
-            if(count($split_value) > 1) {
-                $attr_value = $split_value;
+        $spec_a = [];//选中属性数组
+        $spec_c = [];//商品属性固定填写内容
+        foreach ($goods_list as $goods) {
+            $goods_spec = json_decode($goods['goods_spec'],true);
+            foreach ($goods_spec as $attr_id=>$attr_value){
+                $spec_a[$attr_id][] = $attr_value;
             }
+            $_goods = array();
+            $_goods['goods_sn'] = $goods['goods_sn'];
+            $_goods['cost_price'] = $goods['cost_price']/1;
+            $_goods['second_stone_weight1'] = $goods['second_stone_weight1']/1;
+            $_goods['second_stone_num1'] = $goods['second_stone_num1']/1;
+            $_goods['second_stone_weight2'] = $goods['second_stone_weight2']/1;
+            $_goods['second_stone_num2'] = $goods['second_stone_num2']/1;
+            $_goods['g18k_weight'] = $goods['g18k_weight']/1;
+            $_goods['g18k_diff'] = $goods['g18k_diff']/1;
+            $_goods['pt950_weight'] = $goods['pt950_weight']/1;
+            $_goods['pt950_diff'] = $goods['pt950_diff']/1;
+            $_goods['silver_weight'] = $goods['silver_weight']/1;
+            $_goods['silver_diff'] = $goods['silver_diff']/1;
+            $_goods['finger_range'] = $goods['finger_range']/1;
+            $_goods['status'] = $goods['status']?1:0;            
+            $spec_c[$goods['spec_key']] = $_goods;
         }
-        $style_spec['a'] = $attr_list;
-        $this->attr_spec_a  = $attr_list;
+        $this->style_spec  = [
+                'a'=>$spec_a,
+                'c'=>$spec_c                
+        ];
     }
     
 }

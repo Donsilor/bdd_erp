@@ -13,7 +13,7 @@ class AttrIdEnum
     const CUT = 4;//切工ID
     const WEIGHT = 5;//主石重量ID
     const SHAPE = 6;//钻石形状 ID
-    const COLOR = 7;//颜色
+    const COLOR = 7;//钻石颜色
     const FLUORESCENCE = 8;//荧光
     const FINENESS = 10;//成色
     const GRAM_WEIGHT = 11;//克重
@@ -43,5 +43,6 @@ class AttrIdEnum
     const SIDE_STONE_CLARITY = 47;//副石净度
     const CERT_TYPE = 48;//钻石证书类型ID
 
-    
+    const FINGER = 38;//手寸（指圈）
+    const MATERIAL = 10;//材质（成色）
 }

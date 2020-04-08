@@ -17,18 +17,8 @@ use Yii;
  * @property string $sale_price 商品价格
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
- * @property string $promotion_price 促销价格
- * @property int $promotion_type 促销类型 0无促销，1抢购，2限时折扣
- * @property int $storage_alarm 库存报警值
- * @property int $goods_clicks 商品点击数量
- * @property int $sale_volume 销售数量
- * @property int $goods_collects 收藏数量
- * @property int $goods_comments 评价数
- * @property int $goods_stars 好评星级
- * @property int $goods_storage 商品库存
+ * @property int $goods_num 商品库存
  * @property int $status 商品状态 0下架，1上架，10违规（禁售）
- * @property int $verify_status 商品审核 1通过，0未通过，10审核中
- * @property string $verify_remark
  * @property int $created_at 商品添加时间
  * @property int $updated_at 商品编辑时间
  * @property string $spec_key 规格值唯一key(规格值ID逗号隔开的字符串)
@@ -51,7 +41,7 @@ class StyleGoods extends BaseModel
         return [
             [['style_id', 'product_type_id','style_cate_id','status','id'], 'required'],
             [['style_id', 'product_type_id','style_cate_id', 'merchant_id','sale_volume', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['sale_price', 'market_price', 'cost_price'], 'number'],
+            [['sale_price', 'market_price', 'cost_price',''], 'number'],
             ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
             ['market_price','compare','compareValue' => 0, 'operator' => '>'],
             ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
