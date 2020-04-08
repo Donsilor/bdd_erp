@@ -45,11 +45,9 @@ class StyleGoodsService extends Service
             $styleGoods->style_cate_id = $style->style_cate_id;
             $styleGoods->product_type_id = $style->product_type_id;
             $styleGoods->goods_image  = $style->style_image;//商品默认图片
-            $styleGoods->status  = $goods['status']? 1: 0;//商品状态
-            $res = $styleGoods->save();
-            print_r($res);
+            //$styleGoods->status  = $goods['status']? 1: 0;//商品状态
+            $styleGoods->save();
         }
-        
     }   
     
     /**
