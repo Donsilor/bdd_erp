@@ -3,6 +3,8 @@
 namespace addons\Style\common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "style_gold_loss_rate".
@@ -76,6 +78,21 @@ class StyleLog extends BaseModel
         return parent::beforeSave($insert);
     }
 
+
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
+        ];
+    }
 
     /**
      * 关联款式一对一
