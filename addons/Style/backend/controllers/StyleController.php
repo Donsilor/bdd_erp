@@ -12,6 +12,7 @@ use common\traits\Curd;
 use addons\Style\backend\controllers\BaseController;
 use addons\Style\common\models\Style;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\forms\StyleGoodsForm;
 
 /**
 * Style
@@ -160,22 +161,24 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
+        //$returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $style = $this->findModel($id);
+        $model = new StyleGoodsForm();
+        $model->style_id = $style->id;
+        $model->style_cate_id = $style->style_cate_id;
+        // ajax 校验
+        $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            print_r($model->combineAttrs());exit;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
+                
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'error');
             }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功" , $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
         }
         return $this->render($this->action->id, [
                 'model' => $model,

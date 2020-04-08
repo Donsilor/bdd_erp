@@ -10,19 +10,20 @@ use common\enums\StatusEnum;
 use common\helpers\AmountHelper;
 use common\enums\AreaEnum;
 use addons\Style\common\models\Goods;
+use addons\Style\common\enums\AttrTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $model addons\Style\common\models\Style */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = Yii::t('goods', 'Style');
+$this->title = "商品编辑";
 $this->params['breadcrumbs'][] = ['label' => Yii::t('goods', 'Styles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit', 'id' => $model->id]),       
+        'validationUrl' => Url::to(['ajax-edit', 'id' => $model->style_id]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header">款式发布</h2>
@@ -32,63 +33,53 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tabList[$tab]['name']??'';?></li>
             </ul>
-            <div class="box-body col-sm-10" style="margin-left:9px">
-       			<div class="row">
-                    <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled'=>$model->isNewRecord?null:'disabled'])?></div>
-                    <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()?></div>
-                </div>
-    			<div class="row">
-                    <div class="col-lg-6">
-                    <?= $form->field($model, 'style_cate_id')->widget(\kartik\select2\Select2::class, [
-                        'data' => \Yii::$app->styleService->styleCate->getGrpDropDown(),
-                        'options' => ['placeholder' => '请选择'],
-                        'pluginOptions' => [
-                            'allowClear' => false,
-                            'disabled'=>$model->isNewRecord?null:'disabled'
-                        ],
-                    ]);?>
+            <div class="box-body col-lg-14">
+               <?php               
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByTypeId($model->style_cate_id);
+                foreach ($attr_list_all as $attr_type=>$attr_list){
+                    if($attr_type != AttrTypeEnum::TYPE_SALE){
+                        continue;
+                    }
+                    ?>
+                    <div class="box-header with-border">
+                    	<h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
+                	</div>
+                    <div class="box-body" style="margin-left:10px">   
+                        <?php 
+                          $data = [];                          
+                          foreach ($attr_list as $k=>$attr){   
+                              $values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
+                              $data[] = [
+                                  'id'=>$attr['id'],
+                                  'name'=>$attr['attr_name'],
+                                  'value'=>Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']),
+                                  'current'=>$model->style_spec['a'][$attr['id']]??[]
+                              ];   
+                          }
+                         
+                          if(!empty($data)){
+                             echo common\widgets\skutable\SkuTable::widget(['form' => $form,'model' => $model,'data' =>$data,'name'=>'StyleGoods']);
+                             ?>
+                             <script type="text/javascript">
+                                 $(function(){  
+                                  	$('form#Style').on('submit', function (e) {
+                                		var r = checkSkuInputData();
+                                    	if(!r){
+                                        	e.preventDefault();
+                                    	}
+                                    });
+                                 });
+                             </script>
+                             <?php 
+                          }
+                       ?>
                     </div>
-                    <div class="col-lg-6">
-                    <?= $form->field($model, 'product_type_id')->widget(\kartik\select2\Select2::class, [
-                        'data' => \Yii::$app->styleService->productType->getGrpDropDown(),
-                        'options' => ['placeholder' => '请选择'],
-                        'pluginOptions' => [
-                            'allowClear' => false,
-                            'disabled'=>$model->isNewRecord?null:'disabled'
-                        ],
-                    ]);?>                
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                    <?= $form->field($model, 'style_source_id')->widget(\kartik\select2\Select2::class, [
-                        'data' => \Yii::$app->styleService->styleSource->getdropDown(),
-                        'options' => ['placeholder' => '请选择'],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ]);?>
-                    </div>
-                    <div class="col-lg-6">
-                    <?= $form->field($model, 'style_channel_id')->widget(\kartik\select2\Select2::class, [
-                        'data' => \Yii::$app->styleService->styleChannel->getdropDown(),
-                        'options' => ['placeholder' => '请选择'],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ]);?>                
-                    </div>
-                </div>
-       		    <div class="row">
-                    <div class="col-lg-6"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap())?></div>
-                    <div class="col-lg-6"><?= $form->field($model, 'is_made')->radioList(\common\enums\ConfirmEnum::getMap())?></div>
-                </div>
-                <div class="row">
-                <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
-                </div>
-      
-         </div>
-        <!-- ./box-body -->
+                    <!-- ./box-body -->
+                    <?php 
+                }//end foreach $attr_list_all
+                ?>  
+           </div>  
+      	 <!-- ./box-body -->
       </div>          
       
     </div>
@@ -99,8 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 	</div>
 </div>
-
 <?php ActiveForm::end(); ?>
+
 <script type="text/javascript">
 $(function(){ 
 	$(document).on("click",'.control-label',function(){
