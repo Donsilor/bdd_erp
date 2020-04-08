@@ -13,6 +13,7 @@ use addons\Style\backend\controllers\BaseController;
 use addons\Style\common\models\Style;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\forms\StyleGoodsForm;
+use common\helpers\Url;
 
 /**
 * Style
@@ -89,7 +90,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $model = $this->findModel($id);
         // ajax 校验
@@ -125,7 +126,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $style = $this->findModel($id);
         
@@ -165,7 +166,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $style = $this->findModel($id);
         $model = new StyleGoodsForm();
