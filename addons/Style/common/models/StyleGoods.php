@@ -57,7 +57,7 @@ class StyleGoods extends BaseModel
     public function rules()
     {
         return [
-                [['merchant_id', 'style_id', 'style_cate_id', 'product_type_id', 'material', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'goods_num', 'is_stock', 'status', 'created_at', 'updated_at'], 'integer'],
+                [['id','merchant_id', 'style_id', 'style_cate_id', 'product_type_id', 'material', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'goods_num', 'is_stock', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['style_id'], 'required'],
                 [['xiangkou', 'finger', 'main_stone_weight', 'second_stone_weight1', 'second_stone_weight2', 'pt950_weight', 'pt950_diff', 'g18k_weight', 'g18k_diff', 'silver_weight', 'silver_diff', 'finger_range', 'cost_price', 'sale_price'], 'number'],
                 [['style_sn'], 'string', 'max' => 30],
@@ -74,7 +74,7 @@ class StyleGoods extends BaseModel
     public function attributeLabels()
     {
         return [
-                'id' => '商品id(SKU)',
+                'id' => 'ID',
                 'merchant_id' => '商户ID',
                 'style_id' => '款式id',
                 'style_sn' => '款式编号',
@@ -105,7 +105,7 @@ class StyleGoods extends BaseModel
                 'spec_key' => '规格key(属性值ID逗号隔开)',
                 'goods_spec' => '规格属性(ID)',
                 'is_stock' => '是否现货 1现货 0期货',
-                'status' => '商品状态 0下架，1上架，-1已删除',
+                'status' => '商品状态',
                 'created_at' => '商品添加时间',
                 'updated_at' => '商品编辑时间',
         ];
