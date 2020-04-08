@@ -89,11 +89,13 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
+        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
         
-        if ($model->load(Yii::$app->request->post())) {
-            
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+
+        if ($model->load(Yii::$app->request->post())) {            
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -102,14 +104,15 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
         }
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
+                'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
+                'returnUrl'=>$returnUrl,
         ]);
     }
     /**
@@ -122,7 +125,8 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        //$returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
+        
         $style = $this->findModel($id);
         
         $model = new StyleAttrForm();
@@ -139,16 +143,16 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }
-            return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
-            //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
         }
         $model->initAttrs();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
+                'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
+                'returnUrl'=>$returnUrl,
         ]);
     }
     /**
@@ -161,7 +165,8 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->controller->route);
+        
         $style = $this->findModel($id);
         $model = new StyleGoodsForm();
         $model->style_id = $style->id;
@@ -177,182 +182,17 @@ class StyleController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
             }
-            //return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-            return $this->message("保存成功" , $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab]), 'success');
+            return $this->message("保存成功", $this->redirect([$this->action->id,'id'=>$id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
         }
         $model->initGoods();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
                 'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
+                'returnUrl'=>$returnUrl,
         ]);
-    }
-    /**
-     * 编辑-属性模块
-     *
-     * @return mixed
-     */
-    public function actionEditStone()
-    {
-        
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
-        if ($model->load(Yii::$app->request->post())) {
-            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-        }
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
-        ]);
-    }
-    /**
-     * 编辑-工厂模块
-     *
-     * @return mixed
-     */
-    public function actionEditFactory()
-    {
-        
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
-        if ($model->load(Yii::$app->request->post())) {
-            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-        }
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
-        ]);
-    }
-    /**
-     * 编辑-工费
-     *
-     * @return mixed
-     */
-    public function actionEditFactoryFee()
-    {
-        
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
-        if ($model->load(Yii::$app->request->post())) {
-            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-        }
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
-        ]);
-    }
-    /**
-     * 编辑-工费
-     *
-     * @return mixed
-     */
-    public function actionEditImages()
-    {
-        
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
-        if ($model->load(Yii::$app->request->post())) {
-            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-        }
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
-        ]);
-    }
-    /**
-     * 款式日志
-     *
-     * @return mixed
-     */
-    public function actionLogs()
-    {
-        
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-        $model = $this->findModel($id);
-        
-        if ($model->load(Yii::$app->request->post())) {
-            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
-        }
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),                
-        ]);
-    }
+    }    
     
 }

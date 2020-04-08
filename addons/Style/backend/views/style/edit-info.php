@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit', 'id' => $model->id]),       
+        'validationUrl' => Url::to(['edit-info', 'id' => $model->id,'returnUrl'=>$returnUrl]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header">款式发布</h2>
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-footer">
         <div class="col-sm-10 text-center">
             <button class="btn btn-primary" type="submit">保存</button>
-            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
+            <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
         </div>
 	</div>
 </div>
