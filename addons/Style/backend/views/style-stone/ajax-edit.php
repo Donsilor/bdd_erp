@@ -3,10 +3,11 @@
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 $style_id =  Yii::$app->request->get('style_id');
+$returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
+    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id'],'returnUrl'=>$returnUrl]),
     'fieldConfig' => [
         'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]

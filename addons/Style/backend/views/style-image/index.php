@@ -7,9 +7,10 @@ use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = Yii::t('style_channel', '款式图片');
 $this->params['breadcrumbs'][] = $this->title;
+
+$position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchModel->type);
 ?>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">款式发布</h2>
@@ -22,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-header">
                             <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                             <div class="box-tools">
-                                <?= Html::create(['ajax-edit', 'style_id' => $style_id], '创建', [
+                                <?= Html::create(['ajax-edit', 'style_id' => $style_id,'returnUrl' => Url::getReturnUrl()], '创建', [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModalLg',
                                 ]); ?>
@@ -76,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'raw',
                                         'headerOptions' => ['class' => 'col-md-1'],
                                         'value' => function ($model){
-                                            return \addons\Style\common\enums\ImageTypeEnum::getValue($model->type);
+                                            return addons\Style\common\enums\ImageTypeEnum::getValue($model->type);
                                         },
                                         'filter' => Html::activeDropDownList($searchModel, 'type',\addons\Style\common\enums\ImageTypeEnum::getMap(), [
                                             'prompt' => '全部',
@@ -90,9 +91,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'raw',
                                         'headerOptions' => ['class' => 'col-md-1'],
                                         'value' => function ($model){
-                                            return \addons\Style\common\enums\ImagePositionEnum::getValue($model->position);
+                                            if($model->type == 1){
+                                                return \addons\Style\common\enums\ImagePositionEnum::getValue($model->position);
+                                            }else{
+
+                                            }
+
                                         },
-                                        'filter' => Html::activeDropDownList($searchModel, 'position',\addons\Style\common\enums\ImagePositionEnum::getMap(), [
+                                        'filter' => Html::activeDropDownList($searchModel, 'position',$position_arr, [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
 
@@ -139,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'template' => '{edit} {info} {status}',
                                         'buttons' => [
                                             'edit' => function($url, $model, $key){
-                                                return Html::edit(['ajax-edit','id' => $model->id, 'style_id' => $model->style_id ,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl(), 'style_id' => $model->style_id ,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                     'data-toggle' => 'modal',
                                                     'data-target' => '#ajaxModalLg',
                                                 ]);

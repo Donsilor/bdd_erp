@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-header">
                             <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                             <div class="box-tools">
-                                <?= Html::create(['ajax-edit', 'style_id' => $style_id], '创建', [
+                                <?= Html::create(['ajax-edit', 'style_id' => $style_id,'returnUrl' => Url::getReturnUrl()], '创建', [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModalLg',
                                 ]); ?>
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'template' => '{edit} {info} {status}',
                                         'buttons' => [
                                             'edit' => function($url, $model, $key){
-                                                return Html::edit(['ajax-edit','id' => $model->id, 'style_id' => $model->style_id ,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl(), 'style_id' => $model->style_id ,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                     'data-toggle' => 'modal',
                                                     'data-target' => '#ajaxModalLg',
                                                 ]);
