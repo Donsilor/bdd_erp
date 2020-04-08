@@ -39,6 +39,7 @@ class StyleFactoryFee extends BaseModel
             [[ 'style_id','fee_type', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remark'], 'string', 'max' => 255],
             [['fee_price'], 'number'],
+            ['fee_type','unique'],
 
         ];
     }
@@ -51,9 +52,9 @@ class StyleFactoryFee extends BaseModel
         return [
             'id' => 'ID',
             'style_id' => '款号ID',
-            'factory_id' => '工厂ID',
-            'is_made' => '是否支持定制',
-            'remark' => '备注(计费方式)',
+            'fee_type' => '工费类型',
+            'fee_price' => '费用',
+            'remark' => '备注',
             'creator_id' => '配置人',
             'sort' => '排序',
             'status' => '状态',

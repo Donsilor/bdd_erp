@@ -21,7 +21,7 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools" style="right: 100px;">
-                    <?= Html::create(['ajax-edit', 'style_cate_id' => 0], '创建', [
+                    <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
