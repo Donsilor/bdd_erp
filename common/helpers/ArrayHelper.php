@@ -192,14 +192,14 @@ class ArrayHelper extends BaseArrayHelper
     {
         $str = '';
         for ($i = 1; $i < $level; $i++) {
-            $str .= '　　';
-
+            //$str .= '　';
+            $str .= '';
             if ($i == $level - $treeStat) {
                 if (isset($models[$k + 1])) {
-                    return $str . "├──";
+                    return $str . "├─";
                 }
 
-                return $str . "└──";
+                return $str . "└─";
             }
         }
 
