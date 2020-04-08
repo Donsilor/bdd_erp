@@ -2,7 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\Style\common\models\StyleFactoryFee;
+use addons\Style\common\models\StyleLog;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -12,10 +12,10 @@ use common\models\base\SearchModel;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StyleFactoryFeeController extends BaseController
+class StyleLogController extends BaseController
 {
     use Curd;
-    public $modelClass = StyleFactoryFee::class;
+    public $modelClass = StyleLog::class;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -27,22 +27,18 @@ class StyleFactoryFeeController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['factory.factory_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
-            'relations' => [
-                'member' => ['username'],
-                'style' => ['style_sn'],
-            ]
+
         ]);
 
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
-        $dataProvider->query->andWhere(['>',StyleFactoryFee::tableName().'.status',-1]);
-        $dataProvider->query->andWhere(['=',StyleFactoryFee::tableName().'.style_id',$style_id]);
+        $dataProvider->query->andWhere(['=',StyleLog::tableName().'.style_id',$style_id]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

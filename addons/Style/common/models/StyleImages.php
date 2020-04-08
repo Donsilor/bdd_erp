@@ -2,11 +2,7 @@
 
 namespace addons\Style\common\models;
 
-use addons\Supply\common\models\Factory;
-use common\helpers\StringHelper;
 use Yii;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "style_gold_loss_rate".
@@ -21,14 +17,14 @@ use yii\behaviors\TimestampBehavior;
  * @property int $created_at
  * @property int $updated_at
  */
-class StyleFactory extends BaseModel
+class StyleImages extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName("style_factory");
+        return self::tableFullName("style_images");
     }
 
 
@@ -39,10 +35,10 @@ class StyleFactory extends BaseModel
     public function rules()
     {
         return [
-            [['style_id','factory_id'], 'required'],
-            [[ 'style_id','factory_id','is_made', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['remark'], 'string', 'max' => 255],
-            [['shipping_time'], 'safe'],
+            [['style_id'], 'required'],
+            [[ 'style_id','type','position', 'creator_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['image'], 'string', 'max' => 100],
+            [['type','position'],'unique','targetAttribute' => ['type', 'position'],'comboNotUnique'=>'已经存在']
 
         ];
     }
@@ -55,12 +51,10 @@ class StyleFactory extends BaseModel
         return [
             'id' => 'ID',
             'style_id' => '款号ID',
-            'factory_id' => '工厂ID',
-            'is_made' => '是否支持定制',
-            'remark' => '备注(计费方式)',
+            'image' => '图片',
+            'type' => '图片类型',
+            'position' => '位置',
             'creator_id' => '配置人',
-            'shipping_time' => '出货时间',
-            'sort' => '排序',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -77,11 +71,9 @@ class StyleFactory extends BaseModel
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
         }
-        $this->shipping_time = StringHelper::dateToInt($this->shipping_time);
 
         return parent::beforeSave($insert);
     }
-
 
 
     /**
@@ -91,15 +83,6 @@ class StyleFactory extends BaseModel
     public function getStyle()
     {
         return $this->hasOne(Style::class, ['id'=>'style_id'])->alias('style');
-    }
-
-    /**
-     * 关联工厂一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFactory()
-    {
-        return $this->hasOne(Factory::class, ['id'=>'factory_id'])->alias('factory');
     }
 
     /**

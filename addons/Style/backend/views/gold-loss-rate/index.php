@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit', 'style_cate_id' => 0], '创建', [
+                    <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         ],
                         [
-                            'label' => '配置人',
+                            'label' => '操作人',
                             'attribute' => 'member.username',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'member.username', [

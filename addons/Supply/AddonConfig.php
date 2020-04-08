@@ -2,12 +2,14 @@
 
 namespace addons\Supply;
 
+use addons\Supply\services\Application;
 use common\components\BaseAddonConfig;
 use addons\Supply\common\components\Bootstrap;
 
 /**
  * Class Addon
- * @package addons\Supply */
+ * @package addons\Supply
+ */
 class AddonConfig extends BaseAddonConfig
 {
     /**

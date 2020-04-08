@@ -28,6 +28,7 @@ class Yii
  * @property \addons\TinyDistribution\services\Application $tinyDistributionService
  * @property \addons\Wechat\services\Application $wechatService
  * @property \addons\Style\services\Application $styleService
+ * @property \addons\Supply\services\Application $supplyService
  * @property \addons\RfOnlineDoc\services\Application $rfOnlineDocService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat
