@@ -164,3 +164,8 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
         </div>
     </div>
 </div>
+<script>
+    jQuery("#searchmodel-type").change(function () {
+         $("#searchmodel-position").val('');
+    });
+</script>
