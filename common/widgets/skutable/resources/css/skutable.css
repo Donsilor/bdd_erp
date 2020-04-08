@@ -1,9 +1,4 @@
 /*实例标题*/
-.demo-title{
-	font-size: 22px;
-	text-align: center;
-	color: red;
-}
 /*sku选择样式*/
 .sku_type,.sku_value {
 	padding-inline-start: 0px; float: left;
@@ -47,7 +42,8 @@ table.skuTable th {
     border-style: solid;
     border-color: #ddd;
     color:#666;
-    background-color: #ededed;
+    background-color: #ededed;	
+    font-size:11px;
 }
 table.skuTable td {
     border-width: 1px;

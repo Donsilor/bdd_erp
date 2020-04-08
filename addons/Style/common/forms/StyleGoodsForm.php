@@ -95,8 +95,10 @@ class StyleGoodsForm extends Model
         $spec_c = [];//商品属性固定填写内容
         foreach ($goods_list as $goods) {
             $goods_spec = json_decode($goods['goods_spec'],true);
-            foreach ($goods_spec as $attr_id=>$attr_value){
-                $spec_a[$attr_id][] = $attr_value;
+            if(!empty($goods_spec)) {
+                foreach ($goods_spec as $attr_id=>$attr_value){
+                    $spec_a[$attr_id][] = $attr_value;
+                }
             }
             $_goods = array();
             $_goods['goods_sn'] = $goods['goods_sn'];

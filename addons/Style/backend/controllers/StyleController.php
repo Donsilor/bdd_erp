@@ -161,7 +161,7 @@ class StyleController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        //$returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $style = $this->findModel($id);
         $model = new StyleGoodsForm();
         $model->style_id = $style->id;
@@ -186,7 +186,7 @@ class StyleController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id),
+                'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
         ]);
     }
     /**

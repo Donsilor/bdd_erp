@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
      <h2 class="page-header">款式发布</h2>
      <?php echo Html::menuTab($tabList,$tab)?>
      <div class="tab-content">     
-       <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
-            <ul class="nav nav-tabs pull-right">
-              <li class="pull-left header"><i class="fa fa-th"></i> <?= $tabList[$tab]['name']??'';?></li>
-            </ul>
-            <div class="box-body col-sm-10" style="margin-left:9px">
+       <div class="row nav-tabs-custom">
+            <div class="box-header with-border">
+                 <h3 class="box-title">基础信息</h3>
+            </div>
+            <div class="box-body col-sm-10" style="margin-left:9px">                
        			<div class="row">
                     <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled'=>$model->isNewRecord?null:'disabled'])?></div>
                     <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()?></div>

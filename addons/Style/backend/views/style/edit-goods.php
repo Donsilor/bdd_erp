@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 continue;
             }
             ?>
-            <div class="box-body" style="margin-left:10px">   
+            <div class="box-body">   
                 <?php 
                   $data = [];                          
                   foreach ($attr_list as $k=>$attr){   
