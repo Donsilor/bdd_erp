@@ -2,7 +2,11 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\FaceWorkEnum;
+use addons\Style\common\enums\ImagePositionEnum;
+use addons\Style\common\enums\ImageTypeEnum;
 use addons\Style\common\models\StyleImages;
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -16,6 +20,7 @@ class StyleImageController extends BaseController
 {
     use Curd;
     public $modelClass = StyleImages::class;
+    public $noAuthOptional = ['get-position'];
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -51,6 +56,16 @@ class StyleImageController extends BaseController
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->editTabList($style_id),
         ]);
+    }
+
+
+
+
+    public function actionGetPosition(){
+        $type = Yii::$app->request->post('type');
+        $position = ImageTypeEnum::getPosition($type);
+        return ResultHelper::json(200, 'ok',$position);
+
     }
 
 

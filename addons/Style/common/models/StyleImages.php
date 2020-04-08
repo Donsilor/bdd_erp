@@ -35,7 +35,7 @@ class StyleImages extends BaseModel
     public function rules()
     {
         return [
-            [['style_id'], 'required'],
+            [['style_id','image','type','position'], 'required'],
             [[ 'style_id','type','position', 'creator_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['image'], 'string', 'max' => 100],
             [['type','position'],'unique','targetAttribute' => ['type', 'position'],'comboNotUnique'=>'已经存在']

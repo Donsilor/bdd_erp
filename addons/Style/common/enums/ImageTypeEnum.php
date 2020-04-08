@@ -9,10 +9,9 @@ namespace addons\Style\common\enums;
 class ImageTypeEnum extends BaseEnum
 {
     const ORIGINAL = 1;
-    const Glaze = 2;
-    const Frosted = 3;
-    const WireDrawing = 4;
-    const GlazeFrosted = 5;
+    const FACE_WORK = 2;
+
+
     /**
      * @return array
      *光面，磨砂，拉丝，光面+磨砂
@@ -20,12 +19,26 @@ class ImageTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-                self::ORIGINAL => "商品图",
-                self::Glaze => "光面",
-                self::Frosted => "磨砂",
-                self::WireDrawing => "拉丝",
-                self::GlazeFrosted => "光面&磨砂",
+                self::ORIGINAL => "原图",
+                self::FACE_WORK => "表面工艺",
+
         ];
+    }
+
+    public static function getPosition($type):array
+    {
+        $position = [];
+        switch ($type){
+            case self::ORIGINAL:
+                $position =  ImagePositionEnum::getMap();
+                break;
+            case  self::FACE_WORK:
+                $position = FaceWorkEnum::getMap();
+                break;
+            default: $position =  ImagePositionEnum::getMap() + FaceWorkEnum::getMap();
+        }
+        return $position;
+
     }
     
 }

@@ -8,9 +8,9 @@ namespace addons\Style\common\enums;
  */
 class ImagePositionEnum extends BaseEnum
 {
-    const POSITIVE = 1;
-    const SIDE = 2;
-    const DEGREES_45 = 3;
+    const POSITIVE = 51;
+    const SIDE = 52;
+    const DEGREES_45 = 53;
 
     /**
      * @return array

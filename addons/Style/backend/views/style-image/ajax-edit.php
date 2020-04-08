@@ -4,10 +4,11 @@ use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use kartik\datetime\DateTimePicker;
 $style_id =  Yii::$app->request->get('style_id');
+$returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
+    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id'],'returnUrl'=>$returnUrl]),
     'fieldConfig' => [
         'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]
@@ -38,3 +39,23 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+
+<script>
+    jQuery("#styleimages-type").change(function () {
+        var html = '<option>请选择</option>';
+        $.ajax({
+            url: '<?= \yii\helpers\Url::to(["get-position"]) ?>',
+            type: 'post',
+            dataType: 'json',
+            data: {type: $(this).val()},
+            success: function (msg) {
+                console.log(msg.data)
+                $.each(msg.data, function (key, val) {
+                    html += '<option value="' + key + '">' + val + '</option>';
+                });
+                $("#styleimages-position").html(html);
+            }
+        })
+    });
+
+</script>
