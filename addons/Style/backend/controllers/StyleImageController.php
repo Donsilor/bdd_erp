@@ -28,6 +28,7 @@ class StyleImageController extends BaseController
     public function actionIndex()
     {
         $style_id = Yii::$app->request->get('id');
+        $returnUrl = Yii::$app->request->get('returnUrl');
         $tab = Yii::$app->request->get('tab');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -54,7 +55,7 @@ class StyleImageController extends BaseController
             'searchModel' => $searchModel,
             'tab'=>$tab,
             'style_id' => $style_id,
-            'tabList'=>\Yii::$app->styleService->style->editTabList($style_id),
+            'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
         ]);
     }
 
