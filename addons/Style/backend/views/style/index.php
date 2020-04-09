@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'form-control',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['class' => 'col-md-1','style'=>'width:150px;'],
             ], 
             [
                     'label' => '产品线',
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['class' => 'col-md-1','style'=>'width:130px;'],
             ],  
             [
                     'label' => '成本价',
