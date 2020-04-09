@@ -68,6 +68,7 @@ class StyleAttributeController extends BaseController
                 'searchModel' => $searchModel,
                 'tab'=>$tab,
                 'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+                'returnUrl'=>$returnUrl,
                 'style' => $style,
         ]);
     }

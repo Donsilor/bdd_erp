@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp; </span>
                     </li>
                 </ul>
-                <div class="box-body col-lg-12" style="margin-left:9px">
+                <div class="box-body col-lg-10" style="margin-left:9px">
                     <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('id') ?> ：</label>                        
@@ -117,21 +117,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             
-            <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_2">
-                <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-th"></i> 款式属性</li>
-                </ul>
-                <div class="box-body table-responsive col-lg-12">
-                  <table class="table table-hover">
-                    
-                </table>
-                 </div>                
-            </div>
-            
         </div>
         <div class="modal-footer">
             <div class="text-center">
-                <span class="btn btn-white" onclick="history.go(-1)">返回</span>
+                <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
             </div>
         </div>
  </div>
