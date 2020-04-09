@@ -25,7 +25,7 @@ class ImageTypeEnum extends BaseEnum
         ];
     }
 
-    public static function getPosition($type):array
+    public static function getPosition($type=null):array
     {
         $position = [];
         switch ($type){
