@@ -19,7 +19,7 @@ class ImageTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-                self::ORIGINAL => "原图",
+                self::ORIGINAL => "商品图片",
                 self::FACE_WORK => "表面工艺",
 
         ];

@@ -30,6 +30,7 @@ $form = ActiveForm::begin([
         ]); ?>
         <?= $form->field($model, 'type')->dropDownList(\addons\Style\common\enums\ImageTypeEnum::getMap(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'position')->dropDownList(\addons\Style\common\enums\ImagePositionEnum::getMap(),['prompt'=>'请选择']);?>
+        <?= $form->field($model, 'is_default')->radioList(common\enums\ConfirmEnum::getMap())?>
         <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
         <?= \yii\helpers\Html::activeHiddenInput($model,'style_id',array('value'=>$style_id)) ?>
 

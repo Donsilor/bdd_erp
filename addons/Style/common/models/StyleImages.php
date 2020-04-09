@@ -36,9 +36,9 @@ class StyleImages extends BaseModel
     {
         return [
             [['style_id','image','type','position'], 'required'],
-            [[ 'style_id','type','position', 'creator_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [[ 'style_id','type','is_default','position', 'creator_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['image'], 'string', 'max' => 100],
-            [['type','position'],'unique','targetAttribute' => ['type', 'position'],'comboNotUnique'=>'已经存在']
+            [['style_id','type','position'],'unique','targetAttribute' => ['type', 'style_id','position'],'comboNotUnique'=>'已经存在']
 
         ];
     }
@@ -55,6 +55,7 @@ class StyleImages extends BaseModel
             'type' => '图片类型',
             'position' => '位置',
             'creator_id' => '配置人',
+            'is_default' => '是否默认',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -71,6 +72,8 @@ class StyleImages extends BaseModel
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
         }
+
+
 
         return parent::beforeSave($insert);
     }
