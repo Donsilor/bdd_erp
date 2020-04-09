@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleFactory;
 use Yii;
 use common\traits\Curd;
@@ -25,6 +26,8 @@ class StyleFactoryController extends BaseController
         $style_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
         $returnUrl = Yii::$app->request->get('returnUrl');
+        $model = Style::find()->where(['id'=>$style_id])->one();
+
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -52,6 +55,7 @@ class StyleFactoryController extends BaseController
             'tab'=>$tab,
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+            'model' => $model,
         ]);
     }
 
