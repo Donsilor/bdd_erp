@@ -93,7 +93,8 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                         'format' => 'raw',
                                         'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                                         'value' => function ($model){
-                                            return \addons\Style\common\enums\ImageTypeEnum::getPosition($model->type)[$model->position];
+                                            return \addons\Style\common\enums\ImageTypeEnum::getPosition()[$model->position];
+
                                         },
                                         'filter' => Html::activeDropDownList($searchModel, 'position',$position_arr, [
                                             'prompt' => '全部',

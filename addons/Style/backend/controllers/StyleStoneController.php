@@ -24,7 +24,7 @@ class StyleStoneController extends BaseController
      */
     public function actionIndex()
     {
-        $style_id = Yii::$app->request->get('id');
+        $style_id = Yii::$app->request->get('style_id');
         $tab = Yii::$app->request->get('tab');
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         $style = Style::find()->where(['id'=>$style_id])->one();
