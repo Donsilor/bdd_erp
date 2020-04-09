@@ -12,7 +12,7 @@ $this->title = Yii::t('style_channel', '石头信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
+    <h2 class="page-header">款式发布 - <?php echo $style->style_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row nav-tabs-custom tab-pane tab0 active">
@@ -55,7 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     [
                                         'label' => '款式编号',
-                                        'attribute'=>'style.style_sn',
+                                        'value' => function($model) use($style){
+                                            return $style->style_sn;
+                                        },
                                         'filter' => false,
                                         'headerOptions' => [],
                                     ],
