@@ -23,7 +23,7 @@ class Attribute
      * @param bool $noCache true 不从缓存读取 false 从缓存读取
      * @return bool|string
      */
-    public function attrName($attr_id, $language = null,$noCache = false,$merchant_id = '')
+    public function attrName($attr_id, $language = null,$noCache = true,$merchant_id = '')
     {
         if($language == null) {
             $language = \Yii::$app->params['language'];

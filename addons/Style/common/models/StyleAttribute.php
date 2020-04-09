@@ -58,4 +58,13 @@ class StyleAttribute extends BaseModel
             'is_require' =>'必填项'    
         ];
     }
+    /**
+     * 属性关系  一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttr()
+    {
+        $language = \Yii::$app->params['language'];
+        return $this->hasOne(AttributeLang::class, ['master_id'=>'attr_id'])->alias('attr')->where(['attr.language'=>$language]);
+    }
 }

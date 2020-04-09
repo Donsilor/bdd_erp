@@ -69,6 +69,8 @@ class StyleController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $model = $this->findModel($id);
         
@@ -77,6 +79,9 @@ class StyleController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
                 'dataProvider' => $dataProvider,
+                'tab'=>$tab,
+                'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
+                'returnUrl'=>$returnUrl,
         ]);
     }
     
@@ -121,7 +126,7 @@ class StyleController extends BaseController
      *
      * @return mixed
      */
-    public function actionEditAttr()
+   /*  public function actionEditAttr()
     {    
         
         $id = Yii::$app->request->get('id');
@@ -156,7 +161,7 @@ class StyleController extends BaseController
                 'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
-    }
+    } */
     /**
      * 编辑-款式商品
      *

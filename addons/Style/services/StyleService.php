@@ -23,8 +23,8 @@ class StyleService extends Service
     public function editTabList($id,$returnUrl = null)
     {
         $tab_list = [
-                1=>['name'=>'基础信息','url'=>Url::to(['style/edit-info','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                2=>['name'=>'款式属性','url'=>Url::to(['style/edit-attr','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                1=>['name'=>'基础信息','url'=>Url::to(['style/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                2=>['name'=>'款式属性','url'=>Url::to(['style-attribute/index','style_id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
                 3=>['name'=>'商品属性','url'=>Url::to(['style/edit-goods','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
                 4=>['name'=>'石头信息','url'=>Url::to(['style-stone/index','id'=>$id,'tab'=>4,'returnUrl'=>$returnUrl])],
                 5=>['name'=>'工厂信息','url'=>Url::to(['style-factory/index','id'=>$id,'tab'=>5,'returnUrl'=>$returnUrl])],

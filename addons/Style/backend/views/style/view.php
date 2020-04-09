@@ -11,13 +11,14 @@ use common\helpers\Url;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = Yii::t('order', '款式详情');
+$this->title = '款式详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
     <div class="box-body nav-tabs-custom">
-        <h2 class="page-header">款式详情</h2>
+        <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
+        <?php echo Html::menuTab($tabList,$tab)?>
         <div class="tab-content">
             <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
                 <ul class="nav nav-tabs pull-right">
