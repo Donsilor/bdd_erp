@@ -221,6 +221,7 @@ $this->registerJs($script);
                         self.attr("data-original-title", '点击启用');
                         self.text('启用');
                     }
+                    window.location.reload();
                 } else {
                     rfAffirm(data.message);
                 }
