@@ -12,7 +12,7 @@ $this->title = Yii::t('style_channel', '石头信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式发布</h2>
+    <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row nav-tabs-custom tab-pane tab0 active">
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'attribute' => 'position',
                                         'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                                         'value' => function ($model){
                                             return \addons\Style\common\enums\StoneEnum::getValue($model->position,'getPositionMap');
                                         },
@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'attribute' => 'status',
                                         'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:105px;'],
                                         'value' => function ($model){
                                             return \common\enums\StatusEnum::getValue($model->status);
                                         },

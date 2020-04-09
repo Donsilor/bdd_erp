@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchModel->type);
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式发布</h2>
+    <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row nav-tabs-custom tab-pane tab0 active">
@@ -75,7 +75,7 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                     [
                                         'attribute' => 'type',
                                         'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
                                         'value' => function ($model){
                                             return addons\Style\common\enums\ImageTypeEnum::getValue($model->type);
                                         },
@@ -89,7 +89,7 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                     [
                                         'attribute' => 'position',
                                         'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                                         'value' => function ($model){
                                             return \addons\Style\common\enums\ImageTypeEnum::getPosition($model->type)[$model->position];
                                         },
@@ -123,7 +123,7 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                     [
                                         'attribute' => 'status',
                                         'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                                         'value' => function ($model){
                                             return \common\enums\StatusEnum::getValue($model->status);
                                         },

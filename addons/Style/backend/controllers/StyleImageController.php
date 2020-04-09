@@ -5,6 +5,7 @@ namespace addons\Style\backend\controllers;
 use addons\Style\common\enums\FaceWorkEnum;
 use addons\Style\common\enums\ImagePositionEnum;
 use addons\Style\common\enums\ImageTypeEnum;
+use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
 use common\helpers\ResultHelper;
 use Yii;
@@ -30,6 +31,7 @@ class StyleImageController extends BaseController
         $style_id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl');
         $tab = Yii::$app->request->get('tab');
+        $model = Style::find()->where(['id'=>$style_id])->one();
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -56,6 +58,7 @@ class StyleImageController extends BaseController
             'tab'=>$tab,
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+            'model' => $model,
         ]);
     }
 
