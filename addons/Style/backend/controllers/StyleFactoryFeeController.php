@@ -24,6 +24,7 @@ class StyleFactoryFeeController extends BaseController
     {
         $style_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
+        $returnUrl = Yii::$app->request->get('returnUrl');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -49,7 +50,7 @@ class StyleFactoryFeeController extends BaseController
             'searchModel' => $searchModel,
             'tab'=>$tab,
             'style_id' => $style_id,
-            'tabList'=>\Yii::$app->styleService->style->editTabList($style_id),
+            'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
         ]);
     }
 
