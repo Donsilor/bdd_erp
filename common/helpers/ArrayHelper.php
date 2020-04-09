@@ -193,7 +193,7 @@ class ArrayHelper extends BaseArrayHelper
         $str = '';
         for ($i = 1; $i < $level; $i++) {
             //$str .= '　';
-            $str .= '';
+            $str .= '　';
             if ($i == $level - $treeStat) {
                 if (isset($models[$k + 1])) {
                     return $str . "├─";
@@ -442,7 +442,7 @@ class ArrayHelper extends BaseArrayHelper
         foreach($models as $key=>$model){
             if($model[$pidField] == $pid){                      //匹配子记录
                 $attr = self::itemsMergeGrpDropDown($models,$model[$idField],$idField,$titleField,$pidField, $treeStat);
-                $title = self::itemsLevel($model['level'], $models, $key,$treeStat) . " " . $model[$titleField];
+                $title = self::itemsLevel($model['level'], $models, $key,$treeStat) . "" . $model[$titleField];
                 if(empty($attr)){
                     $tree[$model[$idField]] = $title;
                 }else{

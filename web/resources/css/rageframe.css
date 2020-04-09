@@ -1611,3 +1611,9 @@ nav.page-tabs .page-tabs-content {
 tr.filters{
     background: #ecf0f5;
 }
+
+/*select2*/
+.select2-results__group , .select2-results__option[aria-selected] {
+    padding: 3px 0px 3px 12px !important;
+}
+
