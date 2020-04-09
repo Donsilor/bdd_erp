@@ -24,13 +24,15 @@ class StyleAttrForm extends Model
     public $style_id;
     
     public $style_cate_id;
+    
+    public $style_sn;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-                [['style_id','style_cate_id'], 'required'],
+                [['style_id','style_cate_id','style_sn'], 'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     return false;
                 }],

@@ -113,16 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'120'],
             ],
             [
-                    'attribute'=>'销售价',
-                    'filter' => Html::activeTextInput($searchModel, 'sale_price', [
-                            'class' => 'form-control',
-                    ]),
-                    'value' => function ($model) {
-                    return $model->sale_price ;
-                    },
-                    'headerOptions' => ['width'=>'120'],
-           ],
-            [
                 'attribute' => 'status',                
                 'value' => function ($model){
                     return \common\enums\StatusEnum::getValue($model->status);
@@ -137,8 +127,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{status}',
+                'template' => '{edit}',
                 'buttons' => [
+                    'edit' => function($url, $model, $key){
+                        return Html::edit(['style/edit-goods','id' => $model->style_id,'returnUrl' => Url::getReturnUrl()]);
+                    },
                     'status' => function($url, $model, $key){
                             return Html::status($model['status']);
                     },

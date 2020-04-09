@@ -125,7 +125,7 @@ class StyleController extends BaseController
     {    
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
+        $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $style = $this->findModel($id);
@@ -133,6 +133,7 @@ class StyleController extends BaseController
         $model = new StyleAttrForm();
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
+        $model->style_sn = $style->style_sn;
         // ajax 校验
         $this->activeFormValidate($model);
         
@@ -165,7 +166,7 @@ class StyleController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab');
+        $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         
         $style = $this->findModel($id);

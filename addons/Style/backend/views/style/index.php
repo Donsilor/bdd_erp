@@ -144,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status} {delete}',
+                'template' => '{edit} {audit} {status}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         return Html::edit(['edit-info','id' => $model->id,'returnUrl' => Url::getReturnUrl()]);

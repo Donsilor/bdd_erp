@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'validationUrl' => Url::to(['edit-attr', 'id' => $model->style_id, 'returnUrl'=>$returnUrl]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
-     <h2 class="page-header">款式发布</h2>
+     <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
      <?php echo Html::menuTab($tabList,$tab)?>
      <div class="box-body col-lg-12">
        <?php               
