@@ -122,7 +122,19 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
 
                                     ],
 
+                                    [
+                                        'attribute' => 'is_default',
+                                        'format' => 'raw',
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                                        'value' => function ($model){
+                                            return \common\enums\ConfirmEnum::getValue($model->is_default);
+                                        },
+                                        'filter' => Html::activeDropDownList($searchModel, 'is_default',\common\enums\ConfirmEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
 
+                                        ]),
+                                    ],
                                     [
                                         'attribute' => 'status',
                                         'format' => 'raw',

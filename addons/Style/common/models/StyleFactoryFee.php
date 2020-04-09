@@ -39,7 +39,7 @@ class StyleFactoryFee extends BaseModel
             [[ 'style_id','fee_type', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remark'], 'string', 'max' => 255],
             [['fee_price'], 'number'],
-            ['fee_type','unique'],
+            [['style_id','fee_type'],'unique','targetAttribute' => [ 'style_id','fee_type'],'comboNotUnique'=>'已经存在']
 
         ];
     }

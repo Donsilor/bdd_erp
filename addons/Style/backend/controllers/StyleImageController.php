@@ -7,12 +7,13 @@ use addons\Style\common\enums\ImagePositionEnum;
 use addons\Style\common\enums\ImageTypeEnum;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
+use common\enums\ConfirmEnum;
 use common\helpers\ResultHelper;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-
+use yii\db\Exception;
 
 
 /**
@@ -64,6 +65,44 @@ class StyleImageController extends BaseController
     }
 
 
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if($model->is_default == ConfirmEnum::YES){
+                    StyleImages::updateAll(['is_default'=>ConfirmEnum::NO],['style_id'=>$model->style_id]);
+                    Style::updateAll(['style_image'=>$model->image],['id'=>$model->style_id]);
+                }
+                if(false === $model->save()){
+                    throw new Exception($this->getError($model));
+                }
+
+                $trans->commit();
+            }catch (Exception $e){
+                $trans->rollBack();
+                $error = $e->getMessage();
+                \Yii::error($error);
+                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 
 
     public function actionGetPosition(){
