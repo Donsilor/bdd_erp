@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => false,
-                            'disabled'=>$model->isNewRecord?null:'disabled'
+                            'disabled'=>$model->isNewRecord || empty($model->product_type_id) ?null:'disabled'
                         ],
                     ]);?>                
                     </div>
