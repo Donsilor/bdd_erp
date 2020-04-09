@@ -8,6 +8,7 @@ use addons\Style\common\enums\ImageTypeEnum;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
 use common\helpers\ResultHelper;
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -29,9 +30,9 @@ class StyleImageController extends BaseController
     public function actionIndex()
     {
         $style_id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl');
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
         $tab = Yii::$app->request->get('tab');
-        $model = Style::find()->where(['id'=>$style_id])->one();
+        $style = Style::find()->where(['id'=>$style_id])->one();
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -58,7 +59,7 @@ class StyleImageController extends BaseController
             'tab'=>$tab,
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
-            'model' => $model,
+            'style' => $style,
         ]);
     }
 

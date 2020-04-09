@@ -4,6 +4,7 @@ namespace addons\Style\backend\controllers;
 
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleLog;
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -25,8 +26,8 @@ class StyleLogController extends BaseController
     {
         $style_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl');
-        $model = Style::find()->where(['id'=>$style_id])->one();
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
+        $style = Style::find()->where(['id'=>$style_id])->one();
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -49,7 +50,7 @@ class StyleLogController extends BaseController
             'tab'=>$tab,
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
-            'model' => $model,
+            'style' => $style,
         ]);
     }
 
