@@ -22,10 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-header">
                             <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                             <div class="box-tools">
-                                <?= Html::create(['edit', 'style_id' => $style->id,'returnUrl' => $returnUrl], '编辑属性'); ?>
+                                <?= Html::create(['ajax-edit', 'style_id' => $style->id,'returnUrl' => $returnUrl], '编辑属性',[
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#ajaxModalLg',
+                                    ]); 
+                                ?>
                             </div>
                         </div>
-                        <div class="box-body table-responsive">
+                        <div class="box-body table-responsive" >
                             <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'filterModel' => $searchModel,
@@ -118,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                $attrValues = $model->attr_values;
                                             }else{
                                                $attrValues = Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
-                                               $attrValues = implode(",",$attrValues);
+                                               $attrValues = implode("，",$attrValues);
                                             }
                                             return $attrValues;
                                         },

@@ -210,7 +210,7 @@ function openIframe(title, width, height, content, offset) {
         btn: ['保存', '关闭'],
         yes: function (index, layero) {
             var body = layer.getChildFrame('body', index);
-            var form = body.find('#w0');
+            var form = body.find('form');
             var postUrl = form.attr('action');
             $.ajax({
                 type: "post",

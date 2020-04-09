@@ -79,7 +79,7 @@ class StyleAttributeController extends BaseController
      *
      * @return mixed
      */
-    public function actionEdit()
+    public function actionAjaxEdit()
     {
         
         $style_id = Yii::$app->request->get('style_id');
@@ -109,7 +109,7 @@ class StyleAttributeController extends BaseController
             return $this->message("保存成功", $this->redirect(['index','style_id'=>$style_id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
         }
         $model->initAttrs();
-        return $this->render($this->action->id, [
+        return $this->renderAjax($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
                 'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),

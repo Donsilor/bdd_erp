@@ -2,13 +2,9 @@
 
 use common\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
 use yii\base\Widget;
 
 use common\helpers\Url;
-use common\enums\StatusEnum;
-use common\helpers\AmountHelper;
-use common\enums\AreaEnum;
 use addons\Style\common\models\Goods;
 use addons\Style\common\enums\AttrTypeEnum;
 
@@ -26,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'validationUrl' => Url::to(['edit-goods', 'id' => $model->style_id,'returnUrl'=>$returnUrl]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
-     <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
+     <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
      <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-body">
        <?php               
@@ -36,6 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 continue;
             }
             ?>
+            <div class="box-header with-border">
+                  <h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
+            </div>
             <div class="box-body">   
                 <?php 
                   $data = [];                          

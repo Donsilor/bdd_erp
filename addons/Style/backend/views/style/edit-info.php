@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'validationUrl' => Url::to(['edit-info', 'id' => $model->id,'returnUrl'=>$returnUrl]),       
 ]); ?>
 <div class="box-body nav-tabs-custom">
-     <h2 class="page-header">款式发布 - <?php echo $model->style_sn?></h2>
+     <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
      <?php echo Html::menuTab($tabList,$tab)?>
      <div class="tab-content">     
        <div class="row nav-tabs-custom">
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => false,
-                            'disabled'=>$model->isNewRecord?null:'disabled'
+                            'disabled'=>$model->isNewRecord || empty($model->product_type_id) ?null:'disabled'
                         ],
                     ]);?>                
                     </div>
