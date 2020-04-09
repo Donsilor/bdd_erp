@@ -35,7 +35,7 @@ class ProductTypeService extends Service
     public static function getDropDown($pid = null)
     {
         $list = ProductType::find()
-            ->where(['>=', 'status', StatusEnum::DISABLED])
+            ->where(['=', 'status', StatusEnum::ENABLED])
             ->andFilterWhere(['<>', 'id', $pid])
             ->select(['id', 'name', 'pid', 'level'])
             ->orderBy('sort asc')

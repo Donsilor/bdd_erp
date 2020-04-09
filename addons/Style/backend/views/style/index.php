@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => '款式分类',
                     'attribute' => 'cate.name',
                     'value' => "cate.name",
-                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getGrpDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                     ]),
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => '产品线',
                     'attribute' => 'type.name',
                     'value' => "type.name",
-                    'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getGrpDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
                     ]),

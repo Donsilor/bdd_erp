@@ -37,7 +37,7 @@ class StyleCateService extends Service
     {
 
         $list = StyleCate::find()
-            ->where(['>=', 'status', StatusEnum::DISABLED])
+            ->where(['=', 'status', StatusEnum::ENABLED])
             ->andFilterWhere(['<>', 'id', $pid])
             ->select(['id', 'name', 'pid', 'level'])
             ->orderBy('sort asc')
