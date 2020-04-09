@@ -266,4 +266,28 @@ trait Curd
         }
         return ResultHelper::json(200, '修改成功',[],true);
     }
+    
+    /**
+     * ajax 批量审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            return $model->save()
+            ? $this->redirect(Yii::$app->request->referrer)
+            : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
 }

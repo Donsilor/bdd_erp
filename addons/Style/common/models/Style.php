@@ -3,51 +3,39 @@
 namespace addons\Style\common\models;
 
 use Yii;
-use common\helpers\ArrayHelper;
 use common\models\backend\Member;
 
 /**
  * 款式表 Model
  *
  * @property int $id 款式ID
- * @property string $style_sn 款式编号
- * @property int $cat_id 产品分类
- * @property int $type_id 产品线
  * @property int $merchant_id 商户ID
+ * @property string $style_sn 款式编号
+ * @property int $style_cate_id 产品分类
+ * @property int $product_type_id 产品线
  * @property string $style_image 商品主图
  * @property string $style_3ds 360主图
- * @property string $goods_images 商品图库
- * @property string $style_attr 款式属性
- * @property string $style_custom 款式自定义属性
- * @property string $style_salepolicy 款式销售政策
- * @property string $goods_salepolicy 商品销售政策
- * @property string $style_spec 款式规格属性
- * @property string $goods_body 商品内容
- * @property string $mobile_body 手机端商品描述
  * @property string $sale_price 销售价
  * @property string $sale_volume 销量
- * @property string $virtual_volume 虚拟销量
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
- * @property string $goods_storage 库存量
- * @property string $goods_clicks 浏览量
- * @property string $virtual_clicks 虚拟浏览量
- * @property int $storage_alarm 库存报警值
+ * @property string $cost_price_min 成本价最小值
+ * @property string $cost_price_max 成本价最大值
+ * @property string $goods_num 商品数量
  * @property int $is_recommend 商品推荐 1是，0否，默认为0
  * @property int $is_lock 商品锁定 0未锁，1已锁
  * @property int $supplier_id 供应商id
  * @property int $status 款式状态 0下架，1正常，-1删除
- * @property int $verify_status 商品审核 1通过，0未通过，10审核中
- * @property string $verify_remark 审核失败原因
- * @property int $created_at 商品添加时间
+ * @property int $audit_status 商品审核 1通过，0未通过，10审核中
+ * @property int $auditor_id 审核人
+ * @property int $audit_time 审核时间
+ * @property string $audit_remark 审核失败原因
+ * @property int $creator_id 添加人
+ * @property int $created_at 添加时间
  * @property int $updated_at 更新时间
  */
 class Style extends BaseModel
 {
-    //属性必填字段
-    public $attr_require;
-    //属性非必填
-    public $attr_custom;
     /**
      * {@inheritdoc}
      */
@@ -63,22 +51,18 @@ class Style extends BaseModel
     {
         return [
                 [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
-                [['product_type_id','style_cate_id','style_sn','style_sex','style_name','is_made'], 'required'],
-                [['sale_price', 'market_price', 'cost_price'], 'number'],
-                ['sale_price','compare','compareValue' => 0, 'operator' => '>'],
-                ['market_price','compare','compareValue' => 0, 'operator' => '>'],
+                [['product_type_id','style_cate_id','style_sn','style_sex','style_name'], 'required'],
+                [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
+                //['sale_price','compare','compareValue' => 0, 'operator' => '>'],
+                //['market_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
-                ['market_price','compare','compareValue' => 1000000000, 'operator' => '<'],
-                ['sale_price','compare','compareValue' => 1000000000, 'operator' => '<'],
+                //['market_price','compare','compareValue' => 1000000000, 'operator' => '<'],
+                //['sale_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 ['cost_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 [['style_sn'], 'string', 'max' => 50],
                 [['style_image','style_3ds'], 'string', 'max' => 100],
                 [['audit_remark','remark','style_name'], 'string', 'max' => 255],
                 [['style_sn'],'unique'],
-                [['attr_require'], 'required','isEmpty'=>function($value){
-                    return false;
-                }],
-                [['attr_require','attr_custom'],'combineAttrs'],
         ];
     }
     /**
@@ -114,20 +98,6 @@ class Style extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
-    }
-    /**
-     * 款式基础属性
-     */
-    public function combineAttrs()
-    {
-        $attr_list = [];
-        if(!empty($this->attr_require)){
-            $attr_list =  $this->attr_require + $attr_list;
-        }
-        if(!empty($this->attr_custom)){
-            $attr_list =  $this->attr_custom + $attr_list;
-        }
-        return $attr_list;
     }    
     /**
      * 关联产品线分类一对一

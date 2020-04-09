@@ -34,7 +34,9 @@ class StyleGoodsService extends Service
                 'goods_image'=>$style->style_image,
                 'status'=> StatusEnum::DISABLED,
         ];
-        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]);        
+        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]); 
+        $cost_prices = array();
+        $goods_num   = 0;
         foreach ($goods_list as $goods) {
             $styleGoods = StyleGoods::find()->where(['style_id'=>$style_id,'spec_key'=>$goods['spec_key']])->one();
             if(!$styleGoods) {
@@ -50,8 +52,16 @@ class StyleGoodsService extends Service
             if(!$styleGoods->save()) {
                 throw new \Exception($this->getError($styleGoods));
             }
+            $cost_prices[] = $styleGoods->cost_price;
+            $goods_num += $styleGoods->status == 1 ? 1 : 0;
         }
-        $style->goods_num = count($goods_list);
+        $cost_price_min = min($cost_prices);
+        $cost_price_max = max($cost_prices);
+        
+        $style->goods_num = $goods_num;
+        $style->cost_price = $cost_price_min;
+        $style->cost_price_min = $cost_price_min;
+        $style->cost_price_max = $cost_price_max;
         $style->save(false);
     }   
     

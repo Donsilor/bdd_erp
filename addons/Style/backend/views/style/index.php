@@ -97,8 +97,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-1'],
             ],  
             [
-                    'attribute' => 'sale_price',
-                    'value' => "sale_price",
+                    'label' => '成本价',
+                    'attribute' => 'cost_price',
+                    'value' => function ($model){
+                        if($model->cost_price_max > $model->cost_price_min){
+                            return $model->cost_price_min.'<br/>'.$model->cost_price_max;
+                        }else{
+                            return $model->cost_price;
+                        }
+                    },
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -110,6 +117,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
+            [
+                    'attribute' => 'audit_status',
+                    'value' => function ($model){
+                        return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+                    ], 
             [
                     'attribute' => 'status',                    
                     'value' => function ($model){
@@ -132,7 +151,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
-                            return Html::batchAudit(['ajax-batch-audit'],'审核',['class'=>'btn btn-success btn-sm']);
+                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                    'class'=>'btn btn-success btn-sm',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModal',
+                             ]); 
                         }
                     },
                     'status' => function($url, $model, $key){

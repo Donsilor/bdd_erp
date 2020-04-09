@@ -11,6 +11,9 @@ use addons\Style\common\models\Style;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\forms\StyleGoodsForm;
 use common\helpers\Url;
+use common\enums\AuditStatusEnum;
+use addons\Style\common\forms\StyleAuditForm;
+use common\enums\StatusEnum;
 
 /**
 * Style
@@ -191,6 +194,45 @@ class StyleController extends BaseController
                 'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
-    }    
+    }  
+    
+    /**
+     * 审核-款号
+     *
+     * @return mixed
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        
+        $this->modelClass = StyleAuditForm::class;
+        $model = $this->findModel($id);        
+        // ajax 校验
+        $this->activeFormValidate($model);        
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->auditor_id = \Yii::$app->user->id;
+                    $model->audit_time = time();
+                    $model->status = StatusEnum::ENABLED;
+                }else{
+                    $model->status = StatusEnum::DISABLED;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        }
+
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     
 }

@@ -86,20 +86,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'120'],
             ],
-            //'goods_image',
-            //'goods_num',
-//            [
-//                'attribute' => 'cert_type',
-//                'format' => 'raw',
-//                'headerOptions' => ['class' => 'col-md-1'],
-//                'value' => function ($model){
-//                    return $cert_type[$model->cert_type];
-//                },
-//                'filter' => Html::activeDropDownList($searchModel, 'cert_type',$cert_type, [
-//                    'prompt' => '全部',
-//                    'class' => 'form-control',
-//                ]),
-//            ],
             [
                 'attribute' => 'cert_id',
                 'value' => 'cert_id',
@@ -115,7 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => true,
                 'format' => 'raw',
             ],
-
             //'cost_price',
             [
                 'attribute' => 'carat',

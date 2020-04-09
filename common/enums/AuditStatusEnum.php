@@ -22,8 +22,8 @@ class AuditStatusEnum extends BaseEnum
     {
         return [
                 self::PENDING => '待审核',
-                self::PASS => '已审核',                
-                self::UNPASS => '审核失败',
+                self::PASS => '审核通过',                
+                self::UNPASS => '不通过',
                 self::CLOSE => '已关闭',
         ];
     }
