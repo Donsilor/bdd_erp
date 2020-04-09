@@ -119,4 +119,15 @@ class AddonsController extends Controller
     {
         return AddonHelper::setConfig($config);
     }
+    /**
+     * Iframe 渲染
+     * @param unknown $view
+     * @param array $params
+     * @return string
+     */
+    protected function rendIframe($view,$params = [])
+    {
+        $this->layout = "@backend/views/layouts/iframe";
+        return $this->render($view,$params);
+    }
 }

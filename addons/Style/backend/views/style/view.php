@@ -22,10 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="tab-content">
             <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp; </span>
-                    </li>
+                    <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp; </span></li>
                 </ul>
-                <div class="box-body col-lg-10" style="margin-left:9px">
+                <div class="box-body col-lg-12" style="margin-left:9px">
                     <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('id') ?> ：</label>                        
@@ -100,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>                    
                     <div class="row">
                         <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('remark') ?> ：</label>
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('remark') ?>：</label>
                             <?= $model->remark ?>
                         </div>
                     
@@ -110,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
         
                         <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?> ：</label>
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>
                             <?= $model->audit_remark ?>
                         </div>
                     </div>

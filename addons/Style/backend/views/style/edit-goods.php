@@ -2,13 +2,9 @@
 
 use common\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
 use yii\base\Widget;
 
 use common\helpers\Url;
-use common\enums\StatusEnum;
-use common\helpers\AmountHelper;
-use common\enums\AreaEnum;
 use addons\Style\common\models\Goods;
 use addons\Style\common\enums\AttrTypeEnum;
 
@@ -36,6 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 continue;
             }
             ?>
+            <div class="box-header with-border">
+                  <h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
+            </div>
             <div class="box-body">   
                 <?php 
                   $data = [];                          
