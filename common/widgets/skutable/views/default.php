@@ -28,8 +28,8 @@ foreach ($data as $key => $val){
 	<a href="javascript:void(0);" class="delCusSkuVal">删除</a>
 </li>
 <div class="clear"></div>
-<div id="skuTable"></div>
+<div id="skuTable" style="overflow-y:scroll;width:100%"></div>
 <?php foreach ($inputs as $input){?>
-	<input type="hidden" name="skuInput[]" attr-require="<?= $input['require']??0 ?>" attr-name="<?= $input['name']??'' ?>" attr-title="<?= $input['title']??'' ?>" attr-batch="<?= $input['batch']??0 ?>" attr-unique="<?= $input['unique']??0?>" attr-dtype="<?= $input['dtype']??'string'?>" value="<?= $input['name']?>"/>
+	<input type="hidden" name="skuInput[]" attr-require="<?= $input['require']??0 ?>" attr-name="<?= $input['name']??'' ?>" attr-title="<?= $input['title']??'' ?>" attr-batch="<?= $input['batch']??0 ?>" attr-unique="<?= $input['unique']??0?>" attr-dtype="<?= $input['dtype']??'string'?>" attr-style="<?= $input['style']??''?>" attr-attrs="<?= $input['attrs']??''?>" value="<?= $input['name']?>"/>
 <?php }?>
 </div>

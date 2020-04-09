@@ -163,6 +163,8 @@ $(function(){
                     defaultSkuInputs.each(function(t){
                     	var skuVal= "";
                     	var skuName = $(this).attr('attr-name');
+                    	var skuStyle = $(this).attr('attr-style');
+                    	var skuAttrs = $(this).attr('attr-attrs');
                     	var skuValDefined = false;
                     	if(alreadySetSkuVals[_propvalids] && typeof alreadySetSkuVals[_propvalids][skuName] != 'undefined'){
                     		skuVal = alreadySetSkuVals[_propvalids][skuName];
@@ -176,7 +178,7 @@ $(function(){
                     		SKUTableDom += '<input type="hidden" class="setsku-' +skuName+'" name="'+inputName+'[c]['+_propvalids+'][' +skuName+']" value="'+skuVal+'"/>';
                     		SKUTableDom += '<span class="btn btn-default btn-sm sku-status" data-toggle="tooltip" data-original-title="'+langLabel[lang].disableTip+'">'+langLabel[lang].disable+'</span></td>';
                     	}else{
-                        	SKUTableDom += '<td><input type="text" class="form-control setsku-' +skuName+'" name="'+inputName+'[c]['+_propvalids+'][' +skuName+']" value="'+skuVal+'"/></td>';
+                        	SKUTableDom += '<td><input type="text" class="form-control setsku-' +skuName+'" name="'+inputName+'[c]['+_propvalids+'][' +skuName+']" style="'+skuStyle+'" '+skuAttrs+' value="'+skuVal+'"/></td>';
                     	}
                     });
                     SKUTableDom += '</tr>';
