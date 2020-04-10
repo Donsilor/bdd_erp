@@ -55,4 +55,5 @@ table.skuTable td {
     widows: auto;
     text-align: center;
     font-size: 12px;
+	white-space: nowrap;
 }
