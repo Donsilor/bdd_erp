@@ -30,13 +30,14 @@ $form = ActiveForm::begin([
                         'remark'=>['type'=>'textArea','options'=>[]] 
                     ]]);
     	    ?>
-    	    <?= $form->field($model, 'image')->widget(\common\widgets\webuploader\Files::class, [
-                'config' => [
-                    'pick' => [
-                        'multiple' => false,
-                    ],
-                ]
-            ]); ?>
+    	    <?php  /**$form->field($model, 'image')->widget(\common\widgets\webuploader\Files::class, [
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                            ]
+                        ]);*/ ?>
+            <?= $form->field($model, 'code')->textInput()?>
             <?= $form->field($model, 'status')->radioList(\common\enums\StatusEnum::getMap())?>
             <?= $form->field($model, 'sort')->textInput() ?>
             </div> 

@@ -16,6 +16,7 @@ class AttrTypeEnum extends \common\enums\BaseEnum
   const TYPE_MADE = 3;
   const TYPE_CATE = 4;
   const TYPE_SERVER = 5;
+  const TYPE_EXTEND = 6;
     
   /**
    * @return array
@@ -27,6 +28,7 @@ class AttrTypeEnum extends \common\enums\BaseEnum
         self::TYPE_SALE => '销售属性',
         self::TYPE_MADE => '定制属性',
         self::TYPE_CATE => '款式分类',
+        self::TYPE_EXTEND => '扩展属性',
     ];
   }
    
@@ -37,6 +39,7 @@ class AttrTypeEnum extends \common\enums\BaseEnum
             self::TYPE_SALE => '销售属性（跟商品sku价格相关的属性-eg:指圈号/金属材质等）',
             self::TYPE_MADE => '定制属性（目前仅限：定制/售后模块）',
             self::TYPE_CATE => '款式分类（按照商品特性对进行分类：eg:款式，系列等）',
+            self::TYPE_EXTEND => '扩展属性（商品sku扩展属性）',
         ];
     }
 

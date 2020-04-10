@@ -46,5 +46,4 @@ class StyleAttributeService extends Service
         }
     }
     
-    
 }
