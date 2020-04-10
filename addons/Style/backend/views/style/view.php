@@ -22,8 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="tab-content">
             <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp; </span></li>
-                </ul>
+                    <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp;
+                   </li>
+                </ul>                
                 <div class="box-body col-lg-12" style="margin-left:9px">
                     <div class="row">
                         <div class="col-lg-4">
@@ -61,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_source_id') ?>：</label>
-                            <?= $model->source->name ?>
+                            <?= $model->source->name ??'' ?>
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('created_at') ?>：</label>
@@ -119,6 +120,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="modal-footer">
             <div class="text-center">
+                 <?= Html::edit(['ajax-edit'], '编辑', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModalLg',
+                 ]); ?>
                 <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
             </div>
         </div>
