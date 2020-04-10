@@ -6,6 +6,7 @@ use common\widgets\langbox\LangBox;
 use yii\base\Widget;
 use common\widgets\skutable\SkuTable;
 use common\helpers\Url;
+use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -119,20 +120,20 @@ $this->params['breadcrumbs'][] = $this->title;
             
         </div>
         <div class="modal-footer">
-            <div class="text-center">                 
+            <div class="text-center">
+                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModalLg',
+                 ]); ?>   
                  <?php 
-                 if($model->audit_status != 1){
+                 if($model->audit_status != AuditStatusEnum::PASS){
                      echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                              'class'=>'btn btn-success btn-sm',
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModal',
                      ]);
                  }
-                 ?>
-                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
-                 ]); ?>                
+                 ?>             
                 <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
             </div>
         </div>
