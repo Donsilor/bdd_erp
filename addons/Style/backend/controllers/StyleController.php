@@ -14,6 +14,8 @@ use common\helpers\Url;
 use common\enums\AuditStatusEnum;
 use addons\Style\common\forms\StyleAuditForm;
 use common\enums\StatusEnum;
+use yii\behaviors\AttributeTypecastBehavior;
+use addons\Style\common\enums\AttrTypeEnum;
 
 /**
 * Style
@@ -183,9 +185,14 @@ class StyleController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
-                $goods_list = $model->getPostGoods();
                 $trans = Yii::$app->trans->beginTransaction();
+                $goods_list = $model->getPostGoods();
+                $attr_list  = $model->getPostAttrs();                
+                //更新商品属性
+                \Yii::$app->styleService->styleAttribute->createStyleAttribute($id, $attr_list,AttrTypeEnum::TYPE_SALE);
+                 //更新款式商品
                 \Yii::$app->styleService->styleGoods->createStyleGoods($id, $goods_list);
+                
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
