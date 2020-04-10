@@ -119,11 +119,20 @@ $this->params['breadcrumbs'][] = $this->title;
             
         </div>
         <div class="modal-footer">
-            <div class="text-center">
-                 <?= Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+            <div class="text-center">                 
+                 <?php 
+                 if($model->audit_status != 1){
+                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                             'class'=>'btn btn-success btn-sm',
+                             'data-toggle' => 'modal',
+                             'data-target' => '#ajaxModal',
+                     ]);
+                 }
+                 ?>
+                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModalLg',
-                 ]); ?>
+                 ]); ?>                
                 <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
             </div>
         </div>
