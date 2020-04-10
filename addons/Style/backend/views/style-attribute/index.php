@@ -61,6 +61,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'headerOptions' => ['width'=>'120'],
                                     ],
                                     [
+                                        'label' => '产品线',
+                                        'attribute' => 'product_type',
+                                        'format' => 'raw',
+                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'value' => function($model) use($style){
+                                            return $style->type->name ?? '';
+                                         },
+                                         'filter' => false,
+                                    ],   
+                                    [
                                         'label' => '款式分类',
                                         'attribute'=>'style_cate',
                                         'filter' => false,
@@ -68,17 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return $style->cate->name ?? '';
                                          },
                                          'headerOptions' => ['class' => 'col-md-1'],
-                                    ],
-                                    [
-                                        'label' => '产品线',
-                                        'attribute' => 'product_type',
-                                        'format' => 'raw',
-                                        'headerOptions' => ['class' => 'col-md-1'],
-                                        'value' => function($model) use($style){
-                                            return $style->type->name ?? '';
-                                        },
-                                        'filter' => false,
-                                    ],                                    
+                                    ],                                                                     
                                     [
                                         'label'=>'显示方式',
                                         'attribute'=>'style_cate',
