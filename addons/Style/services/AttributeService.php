@@ -119,7 +119,7 @@ class AttributeService extends Service
             $language = Yii::$app->params['language'];
         }
         $query = AttributeSpec::find()->alias("spec")
-            ->select(["attr.id","lang.attr_name","attr.code","attr.dbcode",'spec.attr_type','spec.input_type','spec.is_require'])
+            ->select(["attr.id","lang.attr_name","attr.code",'spec.attr_type','spec.input_type','spec.is_require'])
             ->innerJoin(Attribute::tableName()." attr",'spec.attr_id=attr.id')
             ->innerJoin(AttributeLang::tableName().' lang',"attr.id=lang.master_id and lang.language='".$language."'")
             ->where(['spec.style_cate_id'=>$style_cate_id]);
