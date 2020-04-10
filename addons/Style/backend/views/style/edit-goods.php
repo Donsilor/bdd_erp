@@ -92,55 +92,20 @@ $(function(){
 
          $(this).parent().find("input[type*='checkbox']").prop("checked",checked);
 	});	
-	//成本价批量填充
-	$(document).on("click",'.batch-cost_price',function(){
-		batchFillDouble('cost_price','成本价','');
-	});
-	//副石1重量
-	$(document).on("click",'.batch-second_stone_weight1',function(){
-		batchFillDouble('second_stone_weight1','副石1重量','');
-	});
-	//副石2重量
-	$(document).on("click",'.batch-second_stone_weight2',function(){
-		batchFillDouble('second_stone_weight2','副石2重量','');
-	});
-	//副石1数量
-	$(document).on("click",'.batch-second_stone_num1',function(){
-		batchFillInteger('second_stone_num1','副石1数量','');
-	});
-	//副石2数量
-	$(document).on("click",'.batch-second_stone_num2',function(){
-		batchFillInteger('second_stone_num2','副石2数量','');
-	});
-    //18K标准金重
-	$(document).on("click",'.batch-g18k_weight',function(){
-		batchFillDouble('g18k_weight','18K标准金重','');
-	});
-	//18K上下公差
-	$(document).on("click",'.batch-g18k_diff',function(){
-		batchFillDouble('g18k_diff','18K上下公差','');
-	});
-	//PT950标准金重
-	$(document).on("click",'.batch-pt950_weight',function(){
-		batchFillDouble('pt950_weight','PT950标准金重','');
-	});
-	//PT950上下公差
-	$(document).on("click",'.batch-pt950_diff',function(){
-		batchFillDouble('pt950_diff','PT950上下公差','');
-	});
-	//银标准金重
-	$(document).on("click",'.batch-silver_weight',function(){
-		batchFillDouble('silver_weight','银标准金重','');
-	});
-	//银上下公差
-	$(document).on("click",'.batch-silver_diff',function(){
-		batchFillDouble('silver_diff','银上下公差','');
-	});
-	//改圈范围
-	$(document).on("click",'.batch-finger_range',function(){
-		batchFillDouble('finger_range','改圈范围','');
-	});
-	   
+	<?php 
+	foreach ($inputs as $input) {
+	    if(empty($input['batch'])) continue;
+	    ?>
+		//<?= $input['title']?>批量填充
+		$(document).on("click",'.batch-<?= $input['name']?>',function(){
+			<?php if($input['dtype']=='double') {?>
+			batchFillDouble('<?= $input['name']?>','<?= $input['title']?>','');
+			<?php }else if($input['dtype']=='integer'){?>
+			batchFillInteger('<?= $input['name']?>','<?= $input['title']?>','');
+			<?php }?>
+		});
+	    <?php 	    
+	}?>	   
 	//批量填充整数类型文本框
 	function batchFillInteger(inputName,title,defaultValue){
 		var hasEdit = false;	
