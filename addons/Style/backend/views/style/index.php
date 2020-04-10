@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'style_sn',
                     'value'=>function($model) {
-                         return Html::a($model->style_sn, ['edit-info', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                         return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => true,
                     'format' => 'raw',
