@@ -25,12 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
      <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
      <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-body">
-       <?php               
-        $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByTypeId($model->style_cate_id);
+       <?php   
+        $inputs = \Yii::$app->styleService->styleGoods->getSKuTableInputs($model->style_cate_id);
+        $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,AttrTypeEnum::TYPE_SALE);
         foreach ($attr_list_all as $attr_type=>$attr_list){
-            if($attr_type != AttrTypeEnum::TYPE_SALE){
-                continue;
-            }
             ?>
             <div class="box-header with-border">
                   <h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
@@ -49,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   }
                  
                   if(!empty($data)){
-                     echo common\widgets\skutable\SkuTable::widget(['form' => $form,'model' => $model,'data' =>$data,'name'=>'StyleGoodsForm[style_spec]']);
+                      echo common\widgets\skutable\SkuTable::widget(['form' => $form,'model' => $model,'inputs'=>$inputs,'data' =>$data,'name'=>'StyleGoodsForm[style_spec]']);
                      ?>
                      <script type="text/javascript">
                          $(function(){  

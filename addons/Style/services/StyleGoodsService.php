@@ -72,10 +72,10 @@ class StyleGoodsService extends Service
     public function getSKuTableInputs($style_cate_id)
     {
         $inputs =  [
-                ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
-                ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
-                ['name'=>'cost_price','title'=>"成本价",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
-                /* ['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
+                 ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
+                 ['name'=>'cost_price','title'=>"成本价",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+                 ['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
                  ['name'=>'second_stone_num1','title'=>'副石1数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
                  ['name'=>'second_stone_weight2','title'=>'副石2重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
                  ['name'=>'second_stone_num2','title'=>'副石2数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
@@ -85,15 +85,8 @@ class StyleGoodsService extends Service
                  ['name'=>'pt950_diff','title'=>'PT950上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:80px'],
                  ['name'=>'silver_weight','title'=>'银标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
                  ['name'=>'silver_diff','title'=>'银上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
-                 ['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'], */
-        ]; 
-        $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($style_cate_id,AttrTypeEnum::TYPE_EXTEND);
-        if(!empty($attr_list[AttrTypeEnum::TYPE_EXTEND])) {
-            foreach ($attr_list[AttrTypeEnum::TYPE_EXTEND] as $attr) {
-                $name = $attr['dbcode'] ? $attr['dbcode'] : 'attr_'.$attr['id'];
-                $inputs[] = ['name'=>$name,'title'=>$attr['attr_name'],'require'=>$attr['is_require'],'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'];
-            }
-        }
+                 ['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'], 
+        ];         
         return $inputs;
     }   
 
