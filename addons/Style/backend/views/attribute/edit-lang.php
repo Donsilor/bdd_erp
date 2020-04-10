@@ -36,13 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'remark'=>['type'=>'textArea','options'=>[]]                            
                                 ]]);
                 	    ?>
-                	    <?= $form->field($model, 'image')->widget(\common\widgets\webuploader\Files::class, [
+                	    <?php  /**$form->field($model, 'image')->widget(\common\widgets\webuploader\Files::class, [
                             'config' => [
                                 'pick' => [
                                     'multiple' => false,
                                 ],
                             ]
-                        ]); ?>
+                        ]);*/ ?>
+                        <?= $form->field($model, 'code')->textInput()?>
                         <?= $form->field($model, 'status')->radioList(\common\enums\StatusEnum::getMap())?>
                         <?= $form->field($model, 'sort')->textInput() ?>                    
                     </div>  
@@ -81,16 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn',
                 'visible' => false,
             ],
-            'id',
-            [
-                'attribute' => 'image',
-                'value' => function ($model) {
-                     return common\helpers\ImageHelper::fancyBox($model->image);
-                 },
-                'filter' => false,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
-            ],
+            'id',            
             [
                 'attribute'=>'lang.attr_value_name',
             ], 

@@ -48,6 +48,10 @@ class StyleGoodsForm extends Model
                 'style_spec'=>'款式规格',
         ];
     }
+    public function getPostAttrs()
+    {
+        return $this->style_spec['a'] ?? [];
+    }
     /**
      * 款式基础属性
      */

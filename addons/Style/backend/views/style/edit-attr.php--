@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
        <?php               
         $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByTypeId($model->style_cate_id);
         foreach ($attr_list_all as $attr_type=>$attr_list){
-            if($attr_type == AttrTypeEnum::TYPE_SALE){ 
+            if(in_array($attr_type ,[AttrTypeEnum::TYPE_SALE,AttrTypeEnum::TYPE_EXTEND])){ 
                 continue;
             }
             ?>

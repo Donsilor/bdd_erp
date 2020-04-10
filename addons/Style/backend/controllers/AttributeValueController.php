@@ -102,7 +102,7 @@ class AttributeValueController extends BaseController
           $model->save(false);
           
           //更新属性值到attribute_lang.attr_values;
-          Yii::$app->services->goodsAttribute->updateAttrValues($model->attr_id);
+          Yii::$app->styleService->attribute->updateAttrValues($model->attr_id);
           return $this->message("删除成功", $this->redirect(['attribute/edit-lang?id='.$model->attr_id]));
       }
       

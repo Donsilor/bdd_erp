@@ -108,7 +108,7 @@ $(function(){
             	var skuTitle = $(this).attr("attr-title");
             	var skuName  = $(this).attr("attr-name");
                 if($(this).attr('attr-batch')==1){
-                	skuTitle += "<a class='btn btn-primary btn-xs batch-"+skuName+"'>"+langLabel[lang].batchFill+"</a>"
+                	skuTitle += "<br/><a class='btn btn-primary btn-xs batch-"+skuName+"'>"+langLabel[lang].batchFill+"</a>"
                 }
             	if($(this).attr("attr-require") == 1){
             		SKUTableDom += '<th class="required"><em>*</em>'+skuTitle+'</th>';

@@ -36,7 +36,8 @@ class Attribute extends BaseModel
         return [
             [['status'], 'required'],
             [['id','status', 'sort','created_at', 'updated_at'], 'integer'],
-            //[['image'], 'string','max'=>100],
+            [['image'], 'string','max'=>100],
+            [['code'], 'string','max'=>30],
             [['image'], 'safe'],
         ];
     }

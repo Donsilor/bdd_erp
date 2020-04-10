@@ -69,7 +69,7 @@ class AttributeController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $is_new = $model->isNewRecord;            
             try{
-                $trans = Yii::$app->db->beginTransaction();
+                $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
@@ -97,7 +97,7 @@ class AttributeController extends BaseController
                     'sort'=>SORT_ASC,
                     'id' => SORT_DESC
                 ],
-                'pageSize' => $this->pageSize,
+                'pageSize' => 100,
                 'relations' => [
                     'lang' => ['attr_value_name'],
                 ]
@@ -133,7 +133,7 @@ class AttributeController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $is_new = $model->isNewRecord;             
             try{
-                $trans = Yii::$app->transaction->beginTransaction();
+                $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }

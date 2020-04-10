@@ -8,6 +8,7 @@ use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\AttributeSpec;
 use common\enums\StatusEnum;
+use addons\Style\common\enums\AttrTypeEnum;
 
 
 /**
@@ -24,11 +25,18 @@ class StyleAttributeService extends Service
      * @param unknown $style_id
      * @param array $attr_list
      */
-    public function createStyleAttribute($style_id,array $attr_list)
+    public function createStyleAttribute($style_id,array $attr_list,$attr_type = null)
     {
         $style = Style::find()->select(['id','style_cate_id'])->where(['id'=>$style_id])->one();
+        
         //批量删除
-        StyleAttribute::updateAll(['status'=>StatusEnum::DISABLED],['style_id'=>$style_id]);
+        $updateWhere = ['style_id'=>$style_id];
+        if($attr_type) {
+            $updateWhere['attr_type'] = $attr_type;
+        }else {
+            $updateWhere['attr_type'] = AttrTypeEnum::TYPE_BASE;
+        }
+        StyleAttribute::updateAll(['status'=>StatusEnum::DISABLED],$updateWhere);
         foreach ($attr_list as $attr_id => $attr_value) {
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$style->style_cate_id])->one();
             $model = StyleAttribute::find()->where(['style_id'=>$style_id,'attr_id'=>$attr_id])->one();
@@ -45,6 +53,5 @@ class StyleAttributeService extends Service
             $model->save();
         }
     }
-    
     
 }

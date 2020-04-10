@@ -8,6 +8,7 @@ use addons\Style\common\models\Goods;
 use common\enums\StatusEnum;
 use addons\Style\common\models\StyleGoods;
 use yii\base\Exception;
+use addons\Style\common\enums\AttrTypeEnum;
 
 
 /**
@@ -63,26 +64,30 @@ class StyleGoodsService extends Service
         $style->cost_price_min = $cost_price_min;
         $style->cost_price_max = $cost_price_max;
         $style->save(false);
-    }   
+    } 
     
     /**
-     * 下单商品库存更改
-     * @param unknown $goods_id  商品ID
-     * @param unknown $quantity  变化数量
-     * @param unknown $for_sale 销售
+     * 获取skuTable 扩展字段配置
      */
-   /*  public function updateGoodsStorageForOrder($goods_id,$quantity,$goods_type)
-    {        
-        if($goods_type == \Yii::$app->params['goodsType.diamond']){
-            \Yii::$app->services->diamond->updateGoodsStorageForOrder($goods_id, $quantity);
-        }else {
-            $data = [
-                'goods_storage'=> new Expression("goods_storage+({$quantity})"),
-                'sale_volume'  =>new Expression("sale_volume-({$quantity})")
-            ];            
-            Goods::updateAll($data,['id'=>$goods_id]);
-            Style::updateAll($data,['in','id',Goods::find()->select(['style_id'])->where(['id'=>$goods_id])]);
-        }
-    } */
+    public function getSKuTableInputs($style_cate_id)
+    {
+        $inputs =  [
+                 ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
+                 ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
+                 ['name'=>'cost_price','title'=>"成本价",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+                 ['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'second_stone_num1','title'=>'副石1数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+                 ['name'=>'second_stone_weight2','title'=>'副石2重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'second_stone_num2','title'=>'副石2数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+                 ['name'=>'g18k_weight','title'=>'18K标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'g18k_diff','title'=>'18K上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'pt950_weight','title'=>'PT950标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:80px'],
+                 ['name'=>'pt950_diff','title'=>'PT950上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:80px'],
+                 ['name'=>'silver_weight','title'=>'银标准金重','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'silver_diff','title'=>'银上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                 ['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'], 
+        ];         
+        return $inputs;
+    }   
 
 }
