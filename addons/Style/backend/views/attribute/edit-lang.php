@@ -82,16 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn',
                 'visible' => false,
             ],
-            'id',
-            [
-                'attribute' => 'image',
-                'value' => function ($model) {
-                     return common\helpers\ImageHelper::fancyBox($model->image);
-                 },
-                'filter' => false,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
-            ],
+            'id',            
             [
                 'attribute'=>'lang.attr_value_name',
             ], 
