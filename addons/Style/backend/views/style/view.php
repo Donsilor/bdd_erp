@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="modal-footer">
             <div class="text-center">
-                 <?= Html::edit(['ajax-edit'], '编辑', [
+                 <?= Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModalLg',
                  ]); ?>
