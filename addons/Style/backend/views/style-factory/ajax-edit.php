@@ -27,6 +27,7 @@ $form = ActiveForm::begin([
                 'allowClear' => true
             ],
         ]);?>
+        <?= $form->field($model, 'factory_mo')->textInput() ?>
         <?= $form->field($model, 'remark')->textInput() ?>
         <?= $form->field($model, 'shipping_time')->widget(DateTimePicker::class, [
             'language' => 'zh-CN',
@@ -41,6 +42,7 @@ $form = ActiveForm::begin([
             ]
         ]);?>
             <?= $form->field($model, 'is_made')->radioList(common\enums\ConfirmEnum::getMap())?>
+            <?= $form->field($model, 'is_default')->radioList(common\enums\ConfirmEnum::getMap())?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
             <?= \yii\helpers\Html::activeHiddenInput($model,'style_id',array('value'=>$style_id)) ?>
 

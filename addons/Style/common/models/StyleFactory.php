@@ -3,6 +3,7 @@
 namespace addons\Style\common\models;
 
 use addons\Supply\common\models\Factory;
+use common\enums\ConfirmEnum;
 use common\helpers\StringHelper;
 use Yii;
 use yii\db\ActiveRecord;
@@ -40,8 +41,9 @@ class StyleFactory extends BaseModel
     {
         return [
             [['style_id','factory_id'], 'required'],
-            [[ 'style_id','factory_id','is_made', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [[ 'style_id','factory_id','is_made','is_default', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remark'], 'string', 'max' => 255],
+            [['factory_mo'], 'string', 'max' => 30],
             [['shipping_time'], 'safe'],
 
         ];
@@ -57,7 +59,9 @@ class StyleFactory extends BaseModel
             'style_id' => '款号ID',
             'factory_id' => '工厂ID',
             'is_made' => '是否支持定制',
+            'is_default' => '是否默认',
             'remark' => '备注(计费方式)',
+            'factory_mo' => '工厂模号',
             'creator_id' => '配置人',
             'shipping_time' => '出货时间',
             'sort' => '排序',
@@ -76,7 +80,17 @@ class StyleFactory extends BaseModel
     {
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
+
+            //如果第一次添加，则强制默认为第一张
+            $style_factory = self::find()->where(['style_id'=>$this->style_id])->all();
+            if(empty($style_factory)) $this->is_default = ConfirmEnum::YES;
         }
+
+        if($this->is_default == ConfirmEnum::YES){
+            self::updateAll(['is_default'=>ConfirmEnum::NO],['style_id'=>$this->style_id]);
+            Style::updateAll(['factory_mo'=>$this->factory_mo, 'factory_id'=>$this->factory_id],['id'=>$this->style_id]);
+        }
+
         $this->shipping_time = StringHelper::dateToInt($this->shipping_time);
 
         return parent::beforeSave($insert);

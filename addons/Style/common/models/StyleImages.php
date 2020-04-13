@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\models;
 
+use common\enums\ConfirmEnum;
 use Yii;
 
 /**
@@ -71,7 +72,21 @@ class StyleImages extends BaseModel
     {
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
+
+            //如果第一次添加，则强制默认为第一张
+            $style_image = self::find()->where(['style_id'=>$this->style_id])->all();
+            if(empty($style_image)) $this->is_default = ConfirmEnum::YES;
         }
+
+        if($this->is_default == ConfirmEnum::YES){
+            self::updateAll(['is_default'=>ConfirmEnum::NO],['style_id'=>$this->style_id]);
+            Style::updateAll(['style_image'=>$this->image],['id'=>$this->style_id]);
+        }
+
+
+
+
+
 
 
 

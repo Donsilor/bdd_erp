@@ -64,6 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'filter' =>true,
                                     ],
                                     [
+                                        'attribute' => 'factory_mo',
+                                        'format' => 'raw',
+                                        'headerOptions' => ['class' => 'col-md-1'],
+                                        'value' => 'factory_mo',
+                                        'filter' =>true,
+                                    ],
+                                    [
                                         'label' => '工厂计费方式',
                                         'attribute'=>'remark',
                                         'filter' => false,
@@ -96,6 +103,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Yii::$app->formatter->asDatetime($model->updated_at);
                                         }
 
+                                    ],
+                                    [
+                                        'attribute' => 'is_default',
+                                        'format' => 'raw',
+                                        'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                                        'value' => function ($model){
+                                            return \common\enums\ConfirmEnum::getValue($model->is_default);
+                                        },
+                                        'filter' => Html::activeDropDownList($searchModel, 'is_default',\common\enums\ConfirmEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+
+                                        ]),
                                     ],
                                     [
                                         'attribute' => 'is_made',
