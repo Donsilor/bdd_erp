@@ -177,16 +177,14 @@ a.desc:after {
 }
 
 .box-header {
-    padding: 20px 5px 12px 0px;
-	margin: 0px 15px 0px 20px;
-	border-bottom:1px solid #eee;
+    padding: 25px 25px 10px 20px;
 }
 
 .box-header > .box-tools {
     right: 25px;
-    top: 20px;
+    top: 25px;
 }
-
+/******详情 内页 begin********/
 .box-body .box-header {
     padding: 15px 5px 12px 0px;
 	margin: 0px 15px 0px 20px;
@@ -198,6 +196,11 @@ a.desc:after {
 .box-body .box-header .box-title {
     font-size: 16px;
 }
+.box-body .box-header > .box-tools {
+    right: 25px;
+    top: 15px;
+}
+/******详情 内页  end********/
 .box-header > .fa,
 .box-header > .glyphicon,
 .box-header > .ion,
