@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4">默认工厂：</label>
-                            AAAAAAAAAAAAAAAAAAA
+                            <?= $model->factory->factory_name ?? '';?>
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_status') ?>：</label>
@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4">工厂模号：</label>
-                           	xxxxxxxxx
+                           	<?= $model->factory_mo ?? ''?>
                         </div>
                         
                         <div class="col-lg-4">

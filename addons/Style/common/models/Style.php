@@ -4,6 +4,7 @@ namespace addons\Style\common\models;
 
 use Yii;
 use common\models\backend\Member;
+use addons\Supply\common\models\Factory;
 
 /**
  * 款式表 Model
@@ -147,4 +148,13 @@ class Style extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
+    /**
+     * 关联工厂一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFactory()
+    {
+        return $this->hasOne(Factory::class, ['id'=>'factory_id'])->alias('factory');
+    }
+    
 }
