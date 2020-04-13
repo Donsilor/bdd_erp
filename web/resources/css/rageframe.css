@@ -177,7 +177,9 @@ a.desc:after {
 }
 
 .box-header {
-    padding: 20px 20px 10px 20px;
+    padding: 20px 5px 12px 0px;
+	margin: 0px 15px 0px 20px;
+	border-bottom:1px solid #eee;
 }
 
 .box-header > .box-tools {
@@ -185,11 +187,22 @@ a.desc:after {
     top: 20px;
 }
 
+.box-body .box-header {
+    padding: 15px 5px 12px 0px;
+	margin: 0px 15px 0px 20px;
+	border-bottom:1px solid #f4f4f4;
+}
+.box-body .page-header {
+	padding-bottom:12px
+}
+.box-body .box-header .box-title {
+    font-size: 16px;
+}
 .box-header > .fa,
 .box-header > .glyphicon,
 .box-header > .ion,
 .box-header .box-title {
-    font-size: 16px;
+    font-size: 20px;
     color: #37474f;
 }
 

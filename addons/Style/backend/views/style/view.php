@@ -20,13 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-body nav-tabs-custom">
         <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
         <?php echo Html::menuTab($tabList,$tab)?>
-        <div class="tab-content">
-            <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
-                <ul class="nav nav-tabs pull-right">
-                    <li class="pull-left header"><i class="fa fa-th"></i> 基本信息&nbsp;
-                   </li>
-                </ul>                
-                <div class="box-body col-lg-12" style="margin-left:9px">
+    <div class="tab-content">
+        <div class="row col-xs-12">
+         <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">基本信息</h3>
+                <div class="box-tools" >
+                </div>
+            </div>
+            <div class="box-body">
                     <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('id') ?> ：</label>                        
@@ -114,12 +116,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>
                             <?= $model->audit_remark ?>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
+                    </div>            
         </div>
-        <div class="modal-footer">
+        <div class="box-footer">
             <div class="text-center">
                  <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                             'data-toggle' => 'modal',
@@ -136,5 +135,8 @@ $this->params['breadcrumbs'][] = $this->title;
                  ?>             
                 <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
             </div>
-        </div>
- </div>
+      </div>
+    </div>
+    <!-- box end -->
+</div>
+</div>    
