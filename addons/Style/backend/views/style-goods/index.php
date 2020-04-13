@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['style/edit-goods','id' => $model->style_id,'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['edit-all','id' => $model->style_id,'returnUrl' => Url::getReturnUrl()]);
                     },
                     'status' => function($url, $model, $key){
                             return Html::status($model['status']);
