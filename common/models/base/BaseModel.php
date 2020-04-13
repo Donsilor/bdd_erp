@@ -38,13 +38,21 @@ class BaseModel extends ActiveRecord
         return $matches[1];
     }
     /**
+     * 表前缀
+     * @return string
+     */
+    public static function tablePrefix()
+    {
+        return static::getDb()->tablePrefix;
+    }
+    /**
      * 表全称
      * @param unknown $tableName
      * @return string
      */
     public static function tableFullName($tableName)
     {  
-        return static::dbName().".".static::getDb()->tablePrefix.$tableName;
+        return static::dbName().".".static::tablePrefix().$tableName;
     }    
     /**
      *

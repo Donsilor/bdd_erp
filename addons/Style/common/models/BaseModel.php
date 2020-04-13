@@ -18,6 +18,15 @@ class BaseModel extends \common\models\base\BaseModel
      */
     public static function getDb() 
     {
-         return \Yii::$app->styleDb;    
+         return \Yii::$app->styleDb;
+    }
+    
+    /**
+     * 表前缀
+     * @return string
+     */
+    public static function tablePrefix()
+    {
+        return "style_";
     }
 }

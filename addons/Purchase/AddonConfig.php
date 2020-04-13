@@ -4,6 +4,7 @@ namespace addons\Purchase;
 
 use common\components\BaseAddonConfig;
 use addons\Purchase\common\components\Bootstrap;
+use addons\Purchase\services\Application;
 
 /**
  * Class Addon
@@ -47,7 +48,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var Bootstrap
     */
-    public $bootstrap = '';
+    public $bootstrap = Bootstrap::class;
 
     /**
     * 服务层
@@ -64,7 +65,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var string
     */
-    public $service = '';
+    public $service = Application::class;
 
     /**
      * 参数配置开启
@@ -87,7 +88,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var bool
     */
-    public $isMerchantRouteMap = true;
+    public $isMerchantRouteMap = false;
 
     /**
      * 类别

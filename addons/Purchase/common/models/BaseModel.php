@@ -1,11 +1,11 @@
 <?php
 
-namespace addons\Supply\common\models;
+namespace addons\Purchase\common\models;
 
 use Yii;
 
 /**
- * 款式库 基类Model
+ * 采购 基类Model
  * Class BaseModel
  * @package common\models\common
  * @author jianyan74 <751393839@qq.com>
@@ -18,7 +18,7 @@ class BaseModel extends \common\models\base\BaseModel
      */
     public static function getDb()
     {
-         return \Yii::$app->db;
+        return \Yii::$app->db;
     }
     
     /**
@@ -27,6 +27,6 @@ class BaseModel extends \common\models\base\BaseModel
      */
     public static function tablePrefix()
     {
-        return "supply_";
+        return "purchase_";
     }
 }

@@ -21,7 +21,7 @@ class Factory extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('supply_factory');
+        return self::tableFullName('factory');
     }
 
     /**
