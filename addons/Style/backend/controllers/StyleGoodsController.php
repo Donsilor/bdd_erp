@@ -37,13 +37,13 @@ class StyleGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name'], // 模糊查询
+            'partialMatchAttributes' => ['goods_name','style.style_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 
+                 'style'=>['style_name','style_image','style_cate_id','product_type_id']
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

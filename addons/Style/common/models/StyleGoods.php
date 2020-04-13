@@ -125,5 +125,13 @@ class StyleGoods extends BaseModel
     public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
-    }    
+    } 
+    /**
+     * 款式一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStyle()
+    {
+        return $this->hasOne(Style::class, ['id'=>'style_id'])->alias('style');
+    }
 }
