@@ -172,17 +172,16 @@ a.desc:after {
     color: rgba(255, 255, 255, .95);
 }
 
-.box-body,
-.box-footer {
-    padding: 20px 20px;
+.box-body,.box-footer {
+    padding: 20px 15px 20px 20px;
 }
 
 .box-header {
-    padding: 20px 25px 10px 20px;
+    padding: 20px 20px 10px 20px;
 }
 
 .box-header > .box-tools {
-    right: 20px;
+    right: 25px;
     top: 20px;
 }
 
