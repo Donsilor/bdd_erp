@@ -62,7 +62,32 @@ class StyleController extends BaseController
             'searchModel' => $searchModel, 
         ]);
     }
-    
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->isNewRecord){
+                $model->creator_id = \Yii::$app->user->id;
+            }
+            return $model->save()
+            ? $this->redirect(Yii::$app->request->referrer)
+            : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     /**
      * 详情展示页
      * @return string
