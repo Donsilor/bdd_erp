@@ -107,7 +107,7 @@ class StyleController extends BaseController
                 'model' => $model,
                 'dataProvider' => $dataProvider,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($id,$returnUrl),
+                'tabList'=>\Yii::$app->styleService->style->menuTabList($id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }    

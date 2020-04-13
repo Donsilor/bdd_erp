@@ -49,7 +49,7 @@ class StyleLogController extends BaseController
             'searchModel' => $searchModel,
             'tab'=>$tab,
             'style_id' => $style_id,
-            'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+            'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
             'style' => $style,
         ]);
     }

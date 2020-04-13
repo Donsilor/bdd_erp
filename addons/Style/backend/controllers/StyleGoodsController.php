@@ -96,7 +96,7 @@ class StyleGoodsController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+                'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }  

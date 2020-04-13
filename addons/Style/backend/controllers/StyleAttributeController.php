@@ -67,7 +67,7 @@ class StyleAttributeController extends BaseController
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+                'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
                 'style' => $style,
         ]);
@@ -112,7 +112,7 @@ class StyleAttributeController extends BaseController
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->editTabList($style_id,$returnUrl),
+                'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }
