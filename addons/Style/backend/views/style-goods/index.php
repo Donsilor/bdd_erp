@@ -8,7 +8,7 @@ use common\helpers\ImageHelper;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('goods', '款式商品管理');
+$this->title = Yii::t('goods', '商品列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['edit-all','id' => $model->style_id,'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['edit-all','style_id' => $model->style_id,'returnUrl' => Url::getReturnUrl()]);
                     },
                     'status' => function($url, $model, $key){
                             return Html::status($model['status']);

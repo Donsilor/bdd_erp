@@ -7,7 +7,7 @@ use common\helpers\ImageHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '款式管理';
+$this->title = '款式列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
