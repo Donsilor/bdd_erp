@@ -107,7 +107,7 @@ class StyleGoodsForm extends Model
             $_goods = array();
             $_goods['goods_sn'] = $goods['goods_sn'];
             $_goods['cost_price'] = $goods['cost_price']/1;
-            $_goods['gold_price'] = $goods['cost_price']/1;
+            $_goods['gold_price'] = $goods['gold_price']/1;
             $_goods['second_stone_weight1'] = $goods['second_stone_weight1']/1;
             $_goods['second_stone_num1'] = $goods['second_stone_num1']/1;
             $_goods['second_stone_weight2'] = $goods['second_stone_weight2']/1;
