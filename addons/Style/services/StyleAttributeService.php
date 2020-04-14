@@ -34,9 +34,9 @@ class StyleAttributeService extends Service
         if($attr_type) {
             $updateWhere['attr_type'] = $attr_type;
         }else {
-            $updateWhere['attr_type'] = AttrTypeEnum::TYPE_BASE;
+            $updateWhere['attr_type'] = [1,3,4];
         }
-        StyleAttribute::updateAll(['status'=>StatusEnum::DISABLED],$updateWhere);
+        StyleAttribute::updateAll(['status'=>StatusEnum::DELETE],$updateWhere);
         foreach ($attr_list as $attr_id => $attr_value) {
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$style->style_cate_id])->one();
             $model = StyleAttribute::find()->where(['style_id'=>$style_id,'attr_id'=>$attr_id])->one();

@@ -25,15 +25,11 @@ use Yii;
  * @property int $second_stone_num1 副石1数量
  * @property string $second_stone_weight2 副石2重
  * @property int $second_stone_num2 副石2数量
- * @property double $pt950_weight PT950标准金重
- * @property double $pt950_diff PT950上下金差
- * @property double $g18k_weight 18K标准金重
- * @property double $g18k_diff 18k上下金差
- * @property double $silver_weight 银标准金重
- * @property double $silver_diff 银上下公差
+ * @property string $gold_price 金托成本
+ * @property double $gold_weight 金托重量
+ * @property double $gold_weight_diff 金托上下金差
  * @property double $finger_range 改圈范围
  * @property string $cost_price 成本价
- * @property string $sale_price 商品价格
  * @property int $goods_num 商品库存
  * @property string $spec_key 规格key(属性值ID逗号隔开)
  * @property string $goods_spec 规格属性(ID)
@@ -59,7 +55,7 @@ class StyleGoods extends BaseModel
         return [
                 [['id','merchant_id', 'style_id', 'style_cate_id', 'product_type_id', 'material', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'goods_num', 'is_stock', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['style_id'], 'required'],
-                [['xiangkou', 'finger', 'main_stone_weight', 'second_stone_weight1', 'second_stone_weight2', 'pt950_weight', 'pt950_diff', 'g18k_weight', 'g18k_diff', 'silver_weight', 'silver_diff', 'finger_range', 'cost_price', 'sale_price'], 'number'],
+                [['xiangkou', 'finger', 'main_stone_weight', 'second_stone_weight1', 'second_stone_weight2','gold_price','gold_weight', 'gold_weight_diff', 'finger_range', 'cost_price'], 'number'],
                 [['style_sn'], 'string', 'max' => 30],
                 [['goods_sn', 'spec_key'], 'string', 'max' => 50],
                 [['goods_image'], 'string', 'max' => 100],
@@ -91,17 +87,13 @@ class StyleGoods extends BaseModel
                 'second_stone_weight1' => '副石1重量',
                 'second_stone_num1' => '副石1数量',
                 'second_stone_weight2' => '副石2重',
-                'second_stone_num2' => '副石2数量',
-                'pt950_weight' => 'PT950标准金重',
-                'pt950_diff' => 'PT950上下金差',
-                'g18k_weight' => '18K标准金重',
-                'g18k_diff' => '18k上下金差',
-                'silver_weight' => '银标准金重',
-                'silver_diff' => '银上下公差',
+                'second_stone_num2' => '副石2数量',                           
                 'finger_range' => '改圈范围',
                 'cost_price' => '成本价',
-                'sale_price' => '商品价格',
-                'goods_num' => '商品库存',
+                'gold_price' => '金托成本',
+                'gold_weight' => '金拖标准金重',
+                'gold_weight_diff' => '金拖上下公差',
+                'goods_num' => '商品数量',
                 'spec_key' => '规格key',
                 'goods_spec' => '规格属性',
                 'is_stock' => '是否现货',
