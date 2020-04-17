@@ -40,7 +40,7 @@ class ProductType extends BaseModel
     {
         return [
                 [['name','status'], 'required'],
-                [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
+                [['id','merchant_id','is_combine','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
                 [['pid','name'], 'safe'],
@@ -58,6 +58,7 @@ class ProductType extends BaseModel
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',
+                'is_combine' => '是否镶嵌',
                 'level' => '级别',
                 'pid' => '父级',
                 'status' => '状态',

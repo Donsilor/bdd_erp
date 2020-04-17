@@ -76,6 +76,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
                         ],
                         [
+                            'attribute'=>'is_combine',
+                            'value'=> function($model){
+                                return \common\enums\ConfirmEnum::getValue($model->is_combine);
+                            },
+                            'headerOptions'=>['style'=>'width:50px;'],
+
+                        ],
+                        [
                             'attribute' => 'sort',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],

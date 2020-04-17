@@ -53,7 +53,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
          
             <?= $form->field($model, 'input_type')->radioList(common\enums\InputTypeEnum::getMap()) ?>
             <?= $form->field($model, 'is_require')->radioList(common\enums\ConfirmEnum::getMap())?>
-            <?= $form->field($model, 'is_show')->radioList(common\enums\ConfirmEnum::getMap())?>
+            <?= $form->field($model, 'is_combine')->radioList(common\enums\ConfirmEnum::getMap())?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
             <?= $form->field($model, 'sort')->textInput() ?> 
                    
