@@ -21,14 +21,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class Purchase extends \yii\db\ActiveRecord
+class Purchase extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'purchase';
+        return self::tableFullName('purchase');
     }
 
     /**
@@ -53,14 +53,14 @@ class Purchase extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'purchase_sn' => '采购单号',
-            'cost_total' => '总成本',
-            'goods_total' => '总数量',
+            'cost_total' => '采购成本',
+            'goods_total' => '采购数量',
             'creator_id' => '创建人',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
             'remark' => '采购备注',
-            'status' => '状态 1已布产 0待布产  -1删除',
+            'status' => '状态 ',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

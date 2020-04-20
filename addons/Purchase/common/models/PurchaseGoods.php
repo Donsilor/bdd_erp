@@ -22,14 +22,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class PurchaseGoods extends \yii\db\ActiveRecord
+class PurchaseGoods extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'purchase_goods';
+        return self::tableFullName('purchase_goods');
     }
 
     /**

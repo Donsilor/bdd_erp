@@ -12,16 +12,24 @@ use Yii;
  * @property int $attr_value_id 属性值ID
  * @property string $attr_value 属性值
  */
-class PurchaseGoodsAttribute extends \yii\db\ActiveRecord
+class PurchaseGoodsAttribute extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'purchase_goods_attribute';
+        return self::tableFullName('purchase_goods_attribute');
     }
-
+    /**
+     * 重置 behaviors
+     * {@inheritDoc}
+     * @see \yii\base\Component::behaviors()
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
