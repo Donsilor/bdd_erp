@@ -38,9 +38,9 @@ class Purchase extends BaseModel
     {
         return [
             [['cost_total'], 'number'],
-            [['goods_total', 'creator_id', 'auditor_id', 'audit_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id','goods_total', 'creator_id', 'auditor_id', 'audit_status','produce_status', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title', 'audit_remark', 'remark'], 'string', 'max' => 255],
-            [['purchase_sn'], 'string', 'max' => 30],
+            [['purchase_sn','produce_sn'], 'string', 'max' => 30],
         ];
     }
 
@@ -60,6 +60,8 @@ class Purchase extends BaseModel
             'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
             'remark' => '采购备注',
+            'produce_sn' => '布产单号',
+            'produce_status' => '布产状态',
             'status' => '状态 ',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

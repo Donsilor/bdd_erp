@@ -435,4 +435,14 @@ class StringHelper extends BaseStringHelper
 
         return $string;
     }
+    
+    /**
+     * 生成订单号
+     * @param unknown $order_id
+     * @param string $prefix
+     */
+    public static function createOrderSn($prefix = 'BDD')
+    {
+        return $prefix.date('Ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),6,'1',STR_PAD_LEFT);
+    }
 }

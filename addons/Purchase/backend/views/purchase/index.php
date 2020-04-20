@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
                 </div>
             </div>
@@ -57,14 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'130'],
             ],
             [
-                    'label' => '总成本',
                     'attribute' => 'cost_total',
                     'value' => function ($model){
-                        if($model->cost_price_max > $model->cost_price_min){
-                            return $model->cost_price_min.'<br/>'.$model->cost_price_max;
-                        }else{
-                            return $model->cost_price;
-                        }
+                        return $model->cost_total;
                     },
                     'filter' => true,
                     'format' => 'raw',
@@ -78,28 +73,55 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'80'],
             ],
             [
-                    'attribute' => 'audit_status',
-                    'value' => function ($model){
-                        return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-                    ], 
+                'attribute' => 'remark',
+                'value' => "remark",
+                'filter' => true,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'200'],
+            ],
             [
-                    'attribute' => 'status',                    
-                    'value' => function ($model){
-                        return \common\enums\StatusEnum::getValue($model->status);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'attribute' => 'produce_sn',
+                'value' => "produce_sn",
+                'filter' => true,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'150'],
+            ],
+            [
+                'attribute' => 'produce_status',
+                'value' => function ($model){
+                    return \common\enums\AuditStatusEnum::getValue($model->produce_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'produce_status',\common\enums\AuditStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],  
+            [
+                'attribute' => 'audit_status',
+                'value' => function ($model){
+                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                         'prompt' => '全部',
-                        'class' => 'form-control',                        
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                        'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],         
+           
+            [
+                'attribute' => 'status',                    
+                'value' => function ($model){
+                    return \common\enums\StatusEnum::getValue($model->status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',                        
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
             ],            
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -109,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'edit' => function($url, $model, $key){
                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModalLg',
+                                'data-target' => '#ajaxModal',
                         ]);
                     },
                     'audit' => function($url, $model, $key){
