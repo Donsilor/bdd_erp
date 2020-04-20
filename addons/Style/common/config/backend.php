@@ -33,6 +33,10 @@ return [
                                     'route' => 'style/index',
                             ],
                             [
+                                'title' => '起版列表',
+                                'route' => 'qiban/index',
+                            ],
+                            [
                                     'title' => '商品列表',
                                     'route' => 'style-goods/index',
                             ],
@@ -43,6 +47,26 @@ return [
                     ],
                     
             ],
+
+            [
+                'title' => '起版管理',
+                'route' => 'indexQiban',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+
+                    [
+                        'title' => '有款起版',
+                        'route' => 'style-qiban/index',
+                    ],
+                    [
+                        'title' => '无款起版',
+                        'route' => 'qiban/index',
+                    ],
+
+                ],
+
+            ],
+
             [
                     'title' => '功能配置',
                     'route' => 'indexStyleConfig',
