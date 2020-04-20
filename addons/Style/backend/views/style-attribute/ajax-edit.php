@@ -28,15 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="modal-body" style="overflow-y:scroll; height:500px">
        <?php               
-        $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByTypeId($model->style_cate_id);
+        $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,null,$model->is_combine);
         foreach ($attr_list_all as $attr_type=>$attr_list){
             if(in_array($attr_type ,[AttrTypeEnum::TYPE_SALE,AttrTypeEnum::TYPE_EXTEND])){
                 continue;
             }
             ?>
-            <div class="box-header with-border">
+            <!-- <div class="box-header with-border">
             	<h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
-        	</div>
+        	</div> -->
             <div class="box-body" style="margin-left:10px;">
               <?php                        
                   foreach ($attr_list as $k=>$attr){ 

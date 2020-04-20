@@ -58,7 +58,7 @@ class ProductType extends BaseModel
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',
-                'is_combine' => '是否镶嵌',
+                'is_combine' => '镶嵌分类',
                 'level' => '级别',
                 'pid' => '父级',
                 'status' => '状态',

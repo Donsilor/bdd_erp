@@ -70,7 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'word-break:break-all;'],
             ],
             [
-                //'label' => 'type_name',
                 'attribute' => 'cate.name',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', Yii::$app->styleService->styleCate->getDropDown(), [
@@ -78,6 +77,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control',
                 ]),
             ],
+            [
+                    'attribute' => 'is_combine',
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+                    'value' => function ($model){
+                         return \addons\Style\common\enums\CombineEnum::getValue($model->is_combine);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'is_combine',\addons\Style\common\enums\CombineEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control'
+                    ]),
+            ], 
             [
                 'attribute' => 'attr_type',
                 'format' => 'raw',
@@ -90,6 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control'
                 ]),
             ],
+           
             [
                 'attribute' => 'input_type',
                 'format' => 'raw',
@@ -113,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'prompt' => '全部',
                         'class' => 'form-control'
                 ]),
-            ],            
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',

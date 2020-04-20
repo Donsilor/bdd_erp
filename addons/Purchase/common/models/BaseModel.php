@@ -27,6 +27,6 @@ class BaseModel extends \common\models\base\BaseModel
      */
     public static function tablePrefix()
     {
-        return "purchase_";
+        return "";
     }
 }

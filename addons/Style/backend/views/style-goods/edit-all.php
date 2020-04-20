@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
      <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-body">
        <?php   
-        $inputs = \Yii::$app->styleService->styleGoods->getSKuTableInputs($model->style_cate_id);
+        $inputs = $model->getSKuTableInputs();
         $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,AttrTypeEnum::TYPE_SALE);
         foreach ($attr_list_all as $attr_type=>$attr_list){
             ?>

@@ -113,7 +113,7 @@ class AttributeService extends Service
      * @param string $language
      * @return array
      */
-    public function getAttrListByCateId($style_cate_id,$attr_type = null,$status = 1,$language = null)
+    public function getAttrListByCateId($style_cate_id, $attr_type = null, $is_combine = null, $status = 1, $language = null)
     {
         if(empty($language)){
             $language = Yii::$app->params['language'];
@@ -128,6 +128,11 @@ class AttributeService extends Service
         }
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
+        }
+        if($is_combine  !== null){
+            if($is_combine == 0) {
+                $query->andWhere(['spec.is_combine'=>0]);
+            }
         }
         $models = $query->orderBy("spec.sort asc")->asArray()->all();
         

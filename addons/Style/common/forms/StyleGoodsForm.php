@@ -26,13 +26,15 @@ class StyleGoodsForm extends Model
     public $style_sn;
     //款式规格属性
     public $style_spec;
+    //是否镶嵌
+    public $is_combine;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-                [['style_id','style_cate_id','style_sn'], 'required'],
+                [['style_id','style_cate_id','style_sn','is_combine'], 'required'],
                 [['style_spec'],'safe']                
         ];
     }
@@ -123,5 +125,74 @@ class StyleGoodsForm extends Model
                 'c'=>$spec_c                
         ];
     }
+    
+    /**
+     * 获取skuTable 扩展字段配置
+     */
+    public function getSKuTableInputs()
+    {
+        $config = [
+                'gold_price'=>['name'=>'gold_price','title'=>"金托成本",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+                'gold_weight'=>['name'=>'gold_weight','title'=>'金托重量','require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'gold_weight_diff'=>['name'=>'gold_weight_diff','title'=>'金托上下公差','require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'second_stone_weight1'=>['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'second_stone_num1'=>['name'=>'second_stone_num1','title'=>'副石1数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+                'second_stone_weight2'=>['name'=>'second_stone_weight2','title'=>'副石2重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'second_stone_num2'=>['name'=>'second_stone_num2','title'=>'副石2数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+                'finger_range'=>['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+                'remark'=>['name'=>'remark','title'=>'备注','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
+        ];
+        $inputs =  [
+                ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
+                ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
+                ['name'=>'cost_price','title'=>"总成本",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+        ];
+        $maps = [
+                //女戒-镶嵌
+                '14-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //女戒-非镶嵌
+                '14-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
+                //男戒-镶嵌
+                '13-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //男戒-非镶嵌
+                '13-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
+                //项链-镶嵌
+                '4-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //项链-非镶嵌
+                '4-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                //吊坠-镶嵌
+                '5-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //吊坠-非镶嵌
+                '5-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                //耳钉-镶嵌
+                '6-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //耳钉-非镶嵌
+                '6-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                //耳环-镶嵌
+                '7-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //耳环-非镶嵌
+                '7-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                //手链-镶嵌
+                '8-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //手链-非镶嵌
+                '8-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                //手镯-镶嵌
+                '9-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                //手镯-非镶嵌
+                '9-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
+                
+        ];
+
+        $key = $this->style_cate_id.'-'.$this->is_combine;
+        if(isset($maps[$key])){
+            foreach ($maps[$key] as $field){
+                if(isset($config[$field])) {
+                    $inputs[] = $config[$field];
+                }
+            }
+            
+        }
+        return $inputs;
+    }   
     
 }

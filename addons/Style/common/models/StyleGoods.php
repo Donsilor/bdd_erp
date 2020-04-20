@@ -60,7 +60,7 @@ class StyleGoods extends BaseModel
                 [['goods_sn', 'spec_key'], 'string', 'max' => 50],
                 [['goods_image'], 'string', 'max' => 100],
                 [['goods_name'], 'string', 'max' => 500],
-                [['goods_spec'], 'string', 'max' => 255],
+                [['goods_spec','remark'], 'string', 'max' => 255],
         ];
     }
     
@@ -96,6 +96,7 @@ class StyleGoods extends BaseModel
                 'goods_num' => '商品数量',
                 'spec_key' => '规格key',
                 'goods_spec' => '规格属性',
+                'remark' => '备注',
                 'is_stock' => '是否现货',
                 'status' => '商品状态',
                 'created_at' => '商品添加时间',

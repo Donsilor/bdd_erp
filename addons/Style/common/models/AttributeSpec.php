@@ -35,7 +35,7 @@ class AttributeSpec extends BaseModel
     public function rules()
     {
         return [
-            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require', 'status'], 'required'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_combine', 'status'], 'required'],
             [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_combine' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             //[['attr_values'], 'string', 'max' => 500],
             [['attr_id'],'unique', 'targetAttribute'=>['style_cate_id','attr_id'],

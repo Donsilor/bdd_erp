@@ -46,7 +46,7 @@ $form = ActiveForm::begin([
 
 
             <?= $form->field($model, 'sort')->textInput(); ?>
-            <?= $form->field($model, 'is_combine')->radioList(\common\enums\ConfirmEnum::getMap()); ?>
+            <?= $form->field($model, 'is_combine')->radioList(\addons\Style\common\enums\CombineEnum::getMap()); ?>
             <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
             <!-- /.tab-pane -->
         </div>
