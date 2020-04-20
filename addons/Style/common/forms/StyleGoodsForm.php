@@ -118,7 +118,7 @@ class StyleGoodsForm extends Model
             $_goods['gold_weight_diff'] = $goods['gold_weight_diff']/1;            
             $_goods['finger_range'] = $goods['finger_range']/1;
             $_goods['status'] = $goods['status']?1:0;  
-            $_goods['remark'] = $goods['remark']?1:0;      
+            $_goods['remark'] = $goods['remark'];      
             $spec_c[$goods['spec_key']] = $_goods;
         }
         $this->style_spec  = [
