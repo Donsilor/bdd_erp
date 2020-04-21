@@ -72,7 +72,6 @@ class PurchaseGoodsController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');        
-        $tab = Yii::$app->request->get('tab',2);
         $purchase_id = Yii::$app->request->get('purchase_id');
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index','purchase_id'=>$purchase_id]));
         $model = $this->findModel($id);
@@ -88,9 +87,9 @@ class PurchaseGoodsController extends BaseController
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'purchase_id'=>$purchase_id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect(['index','purchase_id'=>$purchase_id,'returnUrl'=>$returnUrl]), 'error');
             }
-            return $this->message("保存成功", $this->redirect([$this->action->id,'purchase_id'=>$purchase_id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
+            return $this->message("保存成功", $this->redirect(['index','purchase_id'=>$purchase_id,'returnUrl'=>$returnUrl]), 'success');
         }
         
         return $this->renderAjax($this->action->id, [
