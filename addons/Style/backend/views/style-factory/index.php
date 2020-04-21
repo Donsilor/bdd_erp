@@ -12,7 +12,7 @@ $this->title = Yii::t('style_channel', '工厂信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式发布 - <?php echo $style->style_sn?></h2>
+    <h2 class="page-header">款式详情 - <?php echo $style->style_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
