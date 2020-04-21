@@ -40,7 +40,7 @@ class PurchaseGoodsController extends BaseController
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
-                'partialMatchAttributes' => [], // 模糊查询
+                'partialMatchAttributes' => ['goods_name'], // 模糊查询
                 'defaultOrder' => [
                      'id' => SORT_DESC
                 ],
@@ -74,7 +74,7 @@ class PurchaseGoodsController extends BaseController
         $id = Yii::$app->request->get('id');        
         $tab = Yii::$app->request->get('tab',2);
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-goods/index','purchase_id'=>$purchase_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index','purchase_id'=>$purchase_id]));
         $model = $this->findModel($id);
         
         // ajax 校验
