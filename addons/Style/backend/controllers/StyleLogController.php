@@ -31,7 +31,7 @@ class StyleLogController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['factory.factory_name'], // 模糊查询
+            'partialMatchAttributes' => ['log_msg'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],

@@ -17,7 +17,7 @@ class SnHelper
      */
     public static function createOrderSn($prefix = 'BDD')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
     }
     /**
      * 采购单号
