@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '采购单号',
-                                'value' => function($model) use($style){
+                                'value' => function($model) use($purchase){
                                     return $purchase->purchase_sn;
                                 },
                                 'filter' => false,
