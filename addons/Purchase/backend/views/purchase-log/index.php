@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             <div class="box-body table-responsive">  
-                                       <?= GridView::widget([
+                  <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '操作内容',
                                 'attribute'=>'log_msg',
-                                'filter' => false,
+                                'filter' => true,
                                 'headerOptions' => [],
                             ],
 

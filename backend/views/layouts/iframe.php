@@ -1,9 +1,7 @@
 <?php
 
-use yii\widgets\Breadcrumbs;
 use common\helpers\Html;
 use backend\assets\AppAsset;
-use backend\widgets\Alert;
 
 /* @var $this yii\web\View */
 
@@ -12,34 +10,26 @@ AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
-    <html lang="<?= Yii::$app->language; ?>">
+    <html lang="<?= Yii::$app->language ?>">
     <head>
-        <meta charset="<?= Yii::$app->charset; ?>">
+        <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="renderer" content="webkit">
         <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title); ?></title>
+        <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="hold-transition sidebar-mini fixed">
     <?php $this->beginBody() ?>
-    <div class="wrapper-content">        
-        <section class="content">
-            <?= $content; ?>
-        </section>
-        <?= Alert::widget(); ?>
-    </div>
-    <!-- 公用底部-->
+    <?= $content; ?>
     <script>
         // 配置
         let config = {
-            tag: "<?= Yii::$app->debris->backendConfig('sys_tags') ?? false; ?>",
+            tag: "<?= Yii::$app->debris->config('sys_tags') ?? false; ?>",
             isMobile: "<?= Yii::$app->params['isMobile'] ?? false; ?>",
             emojiBaseUrl: "<?= Yii::$app->request->baseUrl ?>/resources/img/emoji/",
         };
     </script>
     <?= $this->render('_footer') ?>
     <?php $this->endBody() ?>
-    </body>
     </html>
 <?php $this->endPage() ?>

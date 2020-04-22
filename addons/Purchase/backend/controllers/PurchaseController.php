@@ -89,8 +89,10 @@ class PurchaseController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord){
-              $model->purchase_sn = SnHelper::createPurchaseSn();
+               $model->purchase_sn = SnHelper::createPurchaseSn();
+               
             }
+            $model->creator_id  = \Yii::$app->user->identity->id;
             return $model->save()
             ? $this->redirect(Yii::$app->request->referrer)
             : $this->message($this->getError($model), $this->redirect(['index']), 'error');

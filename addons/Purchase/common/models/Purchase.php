@@ -3,6 +3,7 @@
 namespace addons\Purchase\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "purchase".
@@ -38,8 +39,8 @@ class Purchase extends BaseModel
     {
         return [
             [['cost_total'], 'number'],
-            [['id','goods_total', 'creator_id', 'auditor_id', 'audit_status','produce_status', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['id','goods_count', 'creator_id', 'auditor_id', 'audit_status','produce_status', 'status','audit_time', 'created_at', 'updated_at'], 'integer'],
+            [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['purchase_sn','produce_sn'], 'string', 'max' => 30],
         ];
     }
@@ -51,13 +52,13 @@ class Purchase extends BaseModel
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
             'purchase_sn' => '采购单号',
             'cost_total' => '采购成本',
-            'goods_total' => '采购数量',
+            'goods_count' => '商品数量',  
             'creator_id' => '创建人',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '采购备注',
             'produce_sn' => '布产单号',
@@ -66,5 +67,22 @@ class Purchase extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }
