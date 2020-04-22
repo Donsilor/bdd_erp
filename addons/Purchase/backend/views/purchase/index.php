@@ -66,8 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'goods_total',
-                    'value' => "goods_total",
+                    'attribute' => 'goods_count',
+                    'value' => "goods_count",
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],

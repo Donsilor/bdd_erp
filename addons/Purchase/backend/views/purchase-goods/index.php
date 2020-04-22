@@ -16,9 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                     <div class="box-tools">
-                        <?= Html::create(['ajax-edit', 'purchase' => $purchase->id,'returnUrl' => Url::getReturnUrl()], '创建', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
+                        <?= Html::create(['edit', 'purchase' => $purchase->id,'returnUrl' => Url::getReturnUrl()], '创建', [
+                            'class' => 'btn btn-primary btn-xs openIframe'
                         ]); ?>
                     </div>
                 </div>

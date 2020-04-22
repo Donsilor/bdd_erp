@@ -9,6 +9,7 @@ use common\traits\Curd;
 use addons\Purchase\common\models\Purchase;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
+use common\helpers\ResultHelper;
 /**
  * Attribute
  *
@@ -94,6 +95,30 @@ class PurchaseGoodsController extends BaseController
         
         return $this->renderAjax($this->action->id, [
             'model' => $model,                
+        ]);
+    }
+    
+    /**
+     * 编辑/创建
+     *
+     * @return mixed
+     */
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        
+        $id = Yii::$app->request->get('id', null);
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return ResultHelper::json(200, '保存成功');
+            }
+            
+            return ResultHelper::json(422, $this->getError($model));
+        }
+        
+        return $this->render($this->action->id, [
+                'model' => $model,
         ]);
     }
 

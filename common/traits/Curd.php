@@ -8,6 +8,7 @@ use yii\base\InvalidConfigException;
 use common\helpers\ResultHelper;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
+use common\enums\AuditStatusEnum;
 
 /**
  * Trait Curd
@@ -236,7 +237,7 @@ trait Curd
             $trans->commit();
             
             return ResultHelper::json(200, '删除成功',[],true);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             
             $trans->rollBack();
             return ResultHelper::json(422, '删除失败');
@@ -281,6 +282,13 @@ trait Curd
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            $model->audit_time = time();
+            $model->auditor_id = \Yii::$app->user->identity->id;
+            if($model->audit_status == AuditStatusEnum::PASS){
+                $model->status = StatusEnum::ENABLED;
+            }else{
+                $model->status = StatusEnum::DISABLED;
+            }
             return $model->save()
             ? $this->redirect(Yii::$app->request->referrer)
             : $this->message($this->getError($model), $this->redirect(['index']), 'error');
