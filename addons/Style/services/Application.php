@@ -18,6 +18,7 @@ use common\components\Service;
  * @property \addons\Style\services\StyleChannelService $styleChannel 款式渠道
  * @property \addons\Style\services\StyleSourceService $styleSource 款式来源
  * @property \addons\Style\services\StyleAttributeService $styleAttribute 款和属性关系
+ * @property \addons\Style\services\StyleAttributeService $qibanAttribute 起版和属性关系
  */
 class Application extends Service
 {
@@ -36,5 +37,6 @@ class Application extends Service
         'styleSource' => 'addons\Style\services\StyleSourceService',
         'styleChannel' => 'addons\Style\services\StyleChannelService',
         'styleAttribute' => 'addons\Style\services\StyleAttributeService',
+        'qibanAttribute' => 'addons\Style\services\QibanAttributeService',
     ];
 }

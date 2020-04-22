@@ -55,11 +55,7 @@ return [
                 'child' => [
 
                     [
-                        'title' => '有款起版',
-                        'route' => 'style-qiban/index',
-                    ],
-                    [
-                        'title' => '无款起版',
+                        'title' => '起版列表',
                         'route' => 'qiban/index',
                     ],
 

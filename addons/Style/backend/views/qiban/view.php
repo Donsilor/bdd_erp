@@ -12,14 +12,17 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '款式详情';
+$this->title = '起版详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
     <div class="box-body nav-tabs-custom">
-        <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
-        <?php echo Html::menuTab($tabList,$tab)?>
+        <h2 class="page-header">起版详情- <?php echo $model->qiban_sn?></h2>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="<?=Url::to(['qiban/view','id'=>$model->id])?>" >基础信息</a></li>
+            <li class=""><a href="<?=Url::to(['qiban-attribute/index','qiban_id'=>$model->id])?>" >起版属性</a></li>
+        </ul>
     <div class="tab-content">
         <div class="row col-xs-12">
          <div class="box">
@@ -35,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $model->id ?>
                         </div>
                         <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_name') ?>：</label>
-                            <?= $model->style_name ?>
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('qiban_name') ?>：</label>
+                            <?= $model->qiban_name ?>
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('status') ?>：</label>
@@ -45,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sn') ?>：</label>
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('qiban_sn') ?>：</label>
                             <?= $model->style_sn ?>
                         </div>
                         <div class="col-lg-4">
@@ -107,10 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $model->remark ?>
                         </div>
                     
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('is_made') ?>：</label>
-                            <?= \common\enums\ConfirmEnum::getValue($model->is_made)?>
-                        </div>
+
         
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>

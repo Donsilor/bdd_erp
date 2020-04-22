@@ -7,7 +7,7 @@ use common\helpers\ImageHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '无款起版';
+$this->title = '起版列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -17,7 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
+                    <?= Html::create(['ajax-edit-style'], '有款起版', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]); ?>
+                    <?= Html::create(['ajax-edit'], '无款起版', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
