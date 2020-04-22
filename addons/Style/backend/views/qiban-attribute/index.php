@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">起版详情 - <?php echo $qiban->qiban_sn?></h2>
     <ul class="nav nav-tabs">
-        <li class=""><a href="<?=Url::to(['qiban/view','id'=>$qiban->id])?>" >基础信息</a></li>
-        <li class="active"><a href="<?=Url::to(['qiban-attribute/index','qiban_id'=>$qiban->id])?>" >起版属性</a></li>
+        <li class=""><a href="<?=Url::to(['qiban/view','id'=>$qiban->id ,'returnUrl'=>$returnUrl])?>" >基础信息</a></li>
+        <li class="active"><a href="<?=Url::to(['qiban-attribute/index','qiban_id'=>$qiban->id ,'returnUrl'=>$returnUrl])?>" >起版属性</a></li>
     </ul>
     <div class="tab-content">
         <div class="row col-xs-12">

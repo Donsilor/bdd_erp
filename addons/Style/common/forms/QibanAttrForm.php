@@ -31,10 +31,11 @@ class QibanAttrForm extends Model
     public function rules()
     {
         return [
-                [['qiban_id','style_cate_id','qiban_sn','is_combine'], 'required'],
+                [['qiban_id','style_cate_id'], 'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     return false;
                 }],
+                [['is_combine'], 'safe'],
                 [['attr_require','attr_custom'],'getPostAttrs'],
            ];
     }

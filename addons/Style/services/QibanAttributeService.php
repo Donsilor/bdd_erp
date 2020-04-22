@@ -27,7 +27,7 @@ class QibanAttributeService extends Service
      * @param unknown $qiban_id
      * @param array $attr_list
      */
-    public function createStyleAttribute($qiban_id,array $attr_list,$attr_type = null)
+    public function createQibanAttribute($qiban_id,array $attr_list,$attr_type = null)
     {
         $qiban = Qiban::find()->select(['id','style_cate_id'])->where(['id'=>$qiban_id])->one();
         
@@ -43,7 +43,7 @@ class QibanAttributeService extends Service
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$qiban->style_cate_id])->one();
             $model = QibanAttribute::find()->where(['qiban_id'=>$qiban_id,'attr_id'=>$attr_id])->one();
             if(!$model) {
-                $model = new StyleAttribute();
+                $model = new QibanAttribute();
                 $model->qiban_id = $qiban_id;
                 $model->attr_id  = $attr_id;
             }

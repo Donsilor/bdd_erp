@@ -39,7 +39,7 @@ class QibanAttributeController extends BaseController
     public function actionIndex()
     {
         $qiban_id = Yii::$app->request->get('qiban_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['qiban/index']));
         
         $qiban = Qiban::find()->where(['id'=>$qiban_id])->one();
         
@@ -80,8 +80,7 @@ class QibanAttributeController extends BaseController
     {
         
         $qiban_id = Yii::$app->request->get('qiban_id');
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['qiban/index']));
         
         $this->modelClass = Qiban::class;
         $qiban = $this->findModel($qiban_id);
@@ -90,7 +89,7 @@ class QibanAttributeController extends BaseController
         $model->qiban_id = $qiban->id;
         $model->style_cate_id = $qiban->style_cate_id;
         $model->qiban_sn = $qiban->qiban_sn;
-        $model->is_combine = $qiban->type->is_combine;
+        // $model->is_combine = $qiban->type->is_combine;
         // ajax 校验
         $this->activeFormValidate($model);
         
@@ -98,13 +97,14 @@ class QibanAttributeController extends BaseController
             $attr_list = $model->getPostAttrs();
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                Yii::$app->styleService->qibanAttribute->createStyleAttribute($qiban_id, $attr_list);
+                Yii::$app->styleService->qibanAttribute->createQibanAttribute($qiban_id, $attr_list);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'qiban_id'=>$qiban_id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'error');
+//                echo $e->getMessage();exit;
+                return $this->message("保存失败:". $e->getMessage(), $this->redirect([$this->action->id,'qiban_id'=>$qiban_id,'returnUrl'=>$returnUrl]), 'error');
             }
-            return $this->message("保存成功", $this->redirect(['index','qiban_id'=>$qiban_id,'tab'=>$tab,'returnUrl'=>$returnUrl]), 'success');
+            return $this->message("保存成功", $this->redirect(['index','qiban_id'=>$qiban_id,'returnUrl'=>$returnUrl]), 'success');
         }
         $model->initAttrs();
         return $this->renderAjax($this->action->id, [
