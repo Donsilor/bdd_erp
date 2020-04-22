@@ -3,6 +3,8 @@
 namespace addons\Purchase\common\models;
 
 use Yii;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 
 /**
  * This is the model class for table "purchase_goods".
@@ -12,6 +14,7 @@ use Yii;
  * @property int $purchase_type 采购类型 1有款采购 2起版采购
  * @property int $style_id 款号id
  * @property string $style_sn 款式编号
+ * @property int $goods_name  商品名称
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
@@ -22,14 +25,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class PurchaseGoods extends \yii\db\ActiveRecord
+class PurchaseGoods extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'purchase_goods';
+        return self::tableFullName('purchase_goods');
     }
 
     /**
@@ -42,6 +45,7 @@ class PurchaseGoods extends \yii\db\ActiveRecord
             [['purchase_id', 'purchase_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
+            [['goods_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,18 +57,44 @@ class PurchaseGoods extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'purchase_id' => '采购单ID',
-            'purchase_type' => '采购类型 1有款采购 2起版采购',
+            'purchase_type' => '采购类型',
             'style_id' => '款号id',
             'style_sn' => '款式编号',
+            'goods_name' => '商品名称',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
             'cost_price' => '成本价',
             'goods_num' => '商品数量',
             'produce_id' => '布产ID',
-            'status' => '状态： -1已删除 0禁用 1启用',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+    /**
+     * 采购单一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPurchase()
+    {
+        return $this->hasOne(Purchase::class, ['id'=>'style_id'])->alias('style');
     }
 }

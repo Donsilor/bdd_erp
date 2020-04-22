@@ -6,18 +6,16 @@ use common\components\Service;
 
 /**
  * Class Application
- *
+ * 
  * @package addons\Purchase\services
-
+ * @property \addons\Purchase\services\PurchaseService $purchase 采购订单
+ * @var array
  */
 class Application extends Service
 {
-    /**
-     * @property addons\Purchase\services\OrderService $order 采购订单
-     * @var array
-     */
+
     public $childService = [
             /*********采购单相关*********/
-            'order' => 'addons\Purchase\services\OrderService',           
+            'purchase' => 'addons\Purchase\services\PurchaseService',           
     ];
 }

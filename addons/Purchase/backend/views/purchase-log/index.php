@@ -3,27 +3,27 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('style_channel', '日志信息');
+$this->title = '采购日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式详情- <?php echo $style->style_sn?></h2>
+    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-
+                    <div class="box-tools">
+                        <?= Html::create(['ajax-edit', 'purchase_id' => $purchase->id,'returnUrl' => Url::getReturnUrl()], '创建', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModalLg',
+                        ]); ?>
+                    </div>
                 </div>
-                <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
-                    <?= GridView::widget([
+            <div class="box-body table-responsive">  
+                                       <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
@@ -46,9 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                'label' => '款式编号',
-                                'value' => function($model) use($style){
-                                    return $style->style_sn;
+                                'label' => '采购单号',
+                                'value' => function($model) use($purchase){
+                                    return $purchase->purchase_sn;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model){
                                     return \common\enums\LogTypeEnum::getValue($model->log_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'log_type',\addons\Style\common\enums\LogTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'log_type',\common\enums\LogTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
 
@@ -87,10 +87,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
 
                             ],
-
                             [
                                 'label' => '操作人',
-                                'attribute' => 'member.username',
+                                'attribute' => 'creator',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'creator', [
                                     'class' => 'form-control',
@@ -103,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
             </div>
-            <!-- box end -->
+        <!-- box end -->
         </div>
     </div>
 </div>

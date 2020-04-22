@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'RageFrame',
+    'name' => 'BDD ERP',
     'version' => '2.6.10',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -17,15 +17,15 @@ return [
     'components' => [
         'db' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=bdd_erp;',
-                'username' => 'root',
-                'password' => 'root',
+                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
                 'charset' => 'utf8',
         ],
         //款式库
         'styleDb' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=192.168.1.235;port=3306;dbname=bdd_erp_style;',
+                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
                 'username' => 'root',
                 'password' => 'root',
                 'charset' => 'utf8',
@@ -36,13 +36,14 @@ return [
         ],
         /** ------ 缓存 ------ **/
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
+            //'class' => 'yii\caching\FileCache',
             /**
              * 文件缓存一定要有，不然有可能会导致缓存数据获取失败的情况
              *
              * 注意如果要改成非文件缓存请删除，否则会报错
              */
-            'cachePath' => '@backend/runtime/cache'
+            //'cachePath' => '@backend/runtime/cache'
         ],
         /** ------ 格式化时间 ------ **/
         'formatter' => [
@@ -60,9 +61,11 @@ return [
         /** ------ redis配置 ------ **/
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '127.0.0.1',
+            'hostname' => '8.129.190.33',
+            'password' => '123456',
             'port' => 6379,
-            'database' => 3,
+            'database' => 3
+            
         ],
         /** ------ 网站碎片管理 ------ **/
         'debris' => [

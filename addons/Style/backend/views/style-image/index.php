@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchModel->type);
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">款式发布 - <?php echo $style->style_sn?></h2>
+    <h2 class="page-header">款式详情 - <?php echo $style->style_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">

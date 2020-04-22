@@ -24,11 +24,14 @@ return [
 
     'menu' => [
         [
-            'title' => '款式起版管理',
+            'title' => '采购管理',
             'route' => 'indexPurchase',
             'icon' => 'fa fa-superpowers',
             'child' => [
-
+                    [
+                            'title' => '采购列表',
+                            'route' => 'purchase/index',
+                    ],
             ],
 
         ],
