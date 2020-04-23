@@ -5,12 +5,15 @@ namespace addons\Purchase\common\models;
 use Yii;
 
 /**
- * This is the model class for table "purchase_goods_attribute".
+ * This is the model class for table "style_qiban_attribute".
  *
- * @property int $goods_id 采购商品ID
+ * @property int $qiban_id 款式id
  * @property int $attr_id 属性id
- * @property int $attr_value_id 属性值ID
- * @property string $attr_value 属性值
+ * @property int $input_type 属性显示方式
+ * @property int $is_require 是否必填 1必填 0选填
+ * @property int $attr_type 属性类型
+ * @property string $attr_values 属性值
+ * @property int $status 状态 1启用 0禁用 -1删除
  */
 class PurchaseGoodsAttribute extends BaseModel
 {
@@ -19,16 +22,14 @@ class PurchaseGoodsAttribute extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('purchase_goods_attribute');
+        return static::tableFullName("purchase_goods_attribute");
     }
-    /**
-     * 重置 behaviors
-     * {@inheritDoc}
-     * @see \yii\base\Component::behaviors()
-     */
+
     public function behaviors()
     {
-        return [];
+        return [
+                
+        ];
     }
     /**
      * {@inheritdoc}
@@ -37,9 +38,9 @@ class PurchaseGoodsAttribute extends BaseModel
     {
         return [
             [['id', 'attr_id'], 'required'],
-            [['goods_id', 'attr_id', 'attr_value_id'], 'integer'],
-            [['attr_value'], 'string', 'max' => 255],
-            [['goods_id', 'attr_id'], 'unique', 'targetAttribute' => ['goods_id', 'attr_id']],
+            [['id', 'attr_id', 'input_type', 'is_require', 'attr_type', 'status'], 'integer'],
+            [['attr_values'], 'string', 'max' => 255],
+            [['id', 'attr_id'], 'unique', 'targetAttribute' => ['id', 'attr_id']],
         ];
     }
 
@@ -49,10 +50,13 @@ class PurchaseGoodsAttribute extends BaseModel
     public function attributeLabels()
     {
         return [
-            'goods_id' => '采购商品ID',
+            'id' => '采购明细ID',
             'attr_id' => '属性id',
-            'attr_value_id' => '属性值ID',
-            'attr_value' => '属性值',
+            'input_type' => '属性显示方式',
+            'is_require' => '是否必填 1必填 0选填',
+            'attr_type' => '属性类型',
+            'attr_values' => '属性值',
+            'status' => '状态 1启用 0禁用 -1删除',
         ];
     }
 }

@@ -82,13 +82,11 @@ class PurchaseGoodsController extends BaseController
         $search = Yii::$app->request->get('search');
         
         $this->modelClass = PurchaseGoodsForm::class;
-        $_model = $this->findModel($id);     
-        if($_model->isNewRecord) {
-            $_model->purchase_id = $purchase_id;         
+        $model = $this->findModel($id);     
+        if($model->isNewRecord) {
+            $model->purchase_id = $purchase_id;         
         }
-        $model = new PurchaseGoodsForm();
-        $model->attributes = $_model->attributes;
-        $model->isNewRecord = $_model->isNewRecord;
+        $model = $model ?? new PurchaseGoodsForm();
         
         if($search && $style_sn) {   
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
@@ -114,7 +112,10 @@ class PurchaseGoodsController extends BaseController
                 }     
                 //创建属性关系表数据
                 $model->createAttrs();
+                
                 $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
