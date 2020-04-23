@@ -64,7 +64,7 @@ class Qiban extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => '款式ID',
+            'id' => 'ID',
             'merchant_id' => '商户ID',
             'qiban_name' => '起版名称',
             'qiban_sn' => '起版编号',
@@ -73,7 +73,7 @@ class Qiban extends BaseModel
             'product_type_id' => '产品线',
             'style_source_id' => '款式来源',
             'style_channel_id' => '款式渠道',
-            'style_sex' => '款式性别 1男 2女 3通用款',
+            'style_sex' => '款式性别',
             'style_image' => '商品主图',
             'sale_price' => '销售价',
             'market_price' => '市场价',
@@ -85,7 +85,7 @@ class Qiban extends BaseModel
             'auditor_id' => '审核人',
             'sort' => '排序',
             'remark' => '款式备注',
-            'status' => '款式状态 0下架，1正常，-1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

@@ -48,24 +48,6 @@ return [
                     
             ],
 
-            [
-                'title' => '起版管理',
-                'route' => 'indexQiban',
-                'icon' => 'fa fa-superpowers',
-                'child' => [
-
-                    [
-                        'title' => '有款起版',
-                        'route' => 'style-qiban/index',
-                    ],
-                    [
-                        'title' => '无款起版',
-                        'route' => 'qiban/index',
-                    ],
-
-                ],
-
-            ],
 
             [
                     'title' => '功能配置',

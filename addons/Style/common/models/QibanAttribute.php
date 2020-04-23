@@ -25,6 +25,11 @@ class QibanAttribute extends BaseModel
         return static::tableFullName("qiban_attribute");
     }
 
+    public function behaviors()
+    {
+        return [
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -44,7 +49,7 @@ class QibanAttribute extends BaseModel
     public function attributeLabels()
     {
         return [
-            'qiban_id' => '款式id',
+            'qiban_id' => '起版id',
             'attr_id' => '属性id',
             'input_type' => '属性显示方式',
             'is_require' => '是否必填 1必填 0选填',
@@ -52,5 +57,15 @@ class QibanAttribute extends BaseModel
             'attr_values' => '属性值',
             'status' => '状态 1启用 0禁用 -1删除',
         ];
+    }
+
+    /**
+     * 属性关系  一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttr()
+    {
+        $language = \Yii::$app->params['language'];
+        return $this->hasOne(AttributeLang::class, ['master_id'=>'attr_id'])->alias('attr')->where(['attr.language'=>$language]);
     }
 }
