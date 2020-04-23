@@ -16,6 +16,7 @@ use addons\Purchase\common\forms\PurchaseGoodsForm;
  * Attribute
  *
  * Class AttributeController
+ * @property PurchaseGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
 class PurchaseGoodsController extends BaseController
@@ -23,9 +24,9 @@ class PurchaseGoodsController extends BaseController
     use Curd;
     
     /**
-     * @var Attribute
+     * @var $modelClass PurchaseGoodsForm
      */
-    public $modelClass = PurchaseGoods::class;
+    public $modelClass = PurchaseGoodsForm::class;
     
     
     /**
@@ -77,15 +78,17 @@ class PurchaseGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');        
         $purchase_id = Yii::$app->request->get('purchase_id');
-        
-        $this->modelClass = PurchaseGoodsForm::class;
-        $model = $this->findModel($id);
-        if($model->isNewRecord) {
-            $model->purchase_id = $purchase_id;         
-        }
-        
         $style_sn = Yii::$app->request->get('style_sn');
         $search = Yii::$app->request->get('search');
+        
+        $this->modelClass = PurchaseGoodsForm::class;
+        $_model = $this->findModel($id);     
+        if($_model->isNewRecord) {
+            $_model->purchase_id = $purchase_id;         
+        }
+        $model = new PurchaseGoodsForm();
+        $model->attributes = $_model->attributes;
+        $model->isNewRecord = $_model->isNewRecord;
         
         if($search && $style_sn) {   
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
@@ -100,16 +103,17 @@ class PurchaseGoodsController extends BaseController
             $model->style_cate_id = $style->style_cate_id;
             $model->product_type_id = $style->product_type_id;
             $model->goods_type = 1;
+            $model->style_sex = $style->style_sex;
             $model->goods_name = $style->style_name;
         }        
-        if ($model->load(Yii::$app->request->post())) {              
+        if ($model->load(Yii::$app->request->post())) { 
             try{                
                 $trans = Yii::$app->trans->beginTransaction();  
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }     
                 //创建属性关系表数据
-                $model->createGoodsAttribute();
+                $model->createAttrs();
                 $trans->commit();
                 return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){

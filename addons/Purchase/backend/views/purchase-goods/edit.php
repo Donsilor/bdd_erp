@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 			<?= $form->field($model, 'style_sn')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-1">
-                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:25px;','onclick'=>"searchGoods()"]) ?>
+                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
         			     <?php }else{?>
         			     <div class="col-lg-4">         
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         			 <?php }?>        			 
     			 </div>
             	<?php               
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,null,1);
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,null,$model->is_combine);
                 foreach ($attr_list_all as $attr_type=>$attr_list){
                     if(in_array($attr_type ,[AttrTypeEnum::TYPE_SALE,AttrTypeEnum::TYPE_EXTEND])){
                         continue;
@@ -108,11 +108,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php 
                 }//end foreach $attr_list_all
                 ?> 
+                <?php if($model->style_id) {?>
                 <div class="row">
                     <div class="col-lg-8">
                 		<?= $form->field($model, 'remark')->textarea() ?>
                 	</div>
             	</div> 
+            	<?php }?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>

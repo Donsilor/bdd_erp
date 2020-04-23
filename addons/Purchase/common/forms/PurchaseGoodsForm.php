@@ -75,12 +75,13 @@ class PurchaseGoodsForm extends PurchaseGoods
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
+        $this->is_combine = 1;
     } 
     /**
      * 创建商品属性
      */
-    public function createGoodsAttribute()
-    {
+    public function createAttrs()
+    {  
         $attr_list = $this->getPostAttrs(); 
         PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);        
         foreach ($attr_list as $attr_id => $attr_value) {
