@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use backend\assets\AppAsset;
+use backend\widgets\Alert;
 
 /* @var $this yii\web\View */
 
@@ -21,6 +22,7 @@ AppAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <?= $content; ?>
+    <?= Alert::widget(); ?>
     <script>
         // 配置
         let config = {

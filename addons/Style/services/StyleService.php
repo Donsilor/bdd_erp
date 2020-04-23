@@ -33,6 +33,5 @@ class StyleService extends Service
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
     }
-    
 
 }

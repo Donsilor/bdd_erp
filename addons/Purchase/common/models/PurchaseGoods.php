@@ -11,7 +11,7 @@ use addons\Style\common\models\StyleCate;
  *
  * @property int $id ID
  * @property int $purchase_id 采购单ID
- * @property int $purchase_type 采购类型 1有款采购 2起版采购
+ * @property int $goods_type 商品类型 1款号 2起版号
  * @property int $style_id 款号id
  * @property string $style_sn 款式编号
  * @property int $goods_name  商品名称
@@ -41,8 +41,8 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id', 'purchase_type'], 'required'],
-            [['purchase_id', 'purchase_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_type'], 'required'],
+            [['purchase_id', 'goods_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
             [['goods_name'], 'string', 'max' => 255],
@@ -57,9 +57,9 @@ class PurchaseGoods extends BaseModel
         return [
             'id' => 'ID',
             'purchase_id' => '采购单ID',
-            'purchase_type' => '采购类型',
+            'goods_type' => '商品类型',
             'style_id' => '款号id',
-            'style_sn' => '款式编号',
+            'style_sn' => '款号/起版号',
             'goods_name' => '商品名称',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',

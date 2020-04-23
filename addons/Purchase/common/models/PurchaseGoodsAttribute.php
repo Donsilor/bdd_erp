@@ -36,7 +36,7 @@ class PurchaseGoodsAttribute extends BaseModel
     public function rules()
     {
         return [
-            [['goods_id', 'attr_id'], 'required'],
+            [['id', 'attr_id'], 'required'],
             [['goods_id', 'attr_id', 'attr_value_id'], 'integer'],
             [['attr_value'], 'string', 'max' => 255],
             [['goods_id', 'attr_id'], 'unique', 'targetAttribute' => ['goods_id', 'attr_id']],

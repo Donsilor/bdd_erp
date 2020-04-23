@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'purchase' => $purchase->id,'returnUrl' => Url::getReturnUrl()], '创建', [
+                        <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe'
                         ]); ?>
                     </div>
@@ -43,12 +44,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ],            
+                            ], 
                             [
                                     'attribute' => 'style_sn',
                                     'filter' => true,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],            ],
+                                    'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                    'label' => '商品类型',
+                                    'attribute' => 'goods_type',
+                                    'value' => function($model){
+                                            return PurchaseGoodsTypeEnum::getValue($model->goods_type);
+                                     },
+                                    'filter' => Html::activeDropDownList($searchModel, 'goods_type',PurchaseGoodsTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+
                             [
                                     'attribute'=>'goods_name',
                                     'filter' => Html::activeTextInput($searchModel, 'goods_name', [
@@ -59,17 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'headerOptions' => ['width'=>'300'],
                             ],
-                            [
-                                    'label' => '商品类型',
-                                    'attribute' => 'style_cate_id',
-                                    'value' => "cate.name",
-                                    'filter' => Html::activeDropDownList($searchModel, 'purchase_type',Yii::$app->styleService->styleCate->getDropDown(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                            
                             [
                                     'label' => '款式分类',
                                     'attribute' => 'style_cate_id',
@@ -119,12 +125,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => '操作',
                                 'template' => '{edit}',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key){
-                                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()]);
-                                    },
-                                    'status' => function($url, $model, $key){
-                                        return Html::status($model['status']);
-                                    },
+                                'edit' => function($url, $model, $key){
+                                     return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['class' => 'btn btn-primary btn-xs openIframe']);
+                                },
+                                'status' => function($url, $model, $key){
+                                     return Html::status($model['status']);
+                                },
                                 ]
                            ]
                       ]

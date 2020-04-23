@@ -10,6 +10,8 @@ use addons\Purchase\common\models\Purchase;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
 use common\helpers\ResultHelper;
+use addons\Style\common\models\Style;
+use addons\Purchase\common\forms\PurchaseGoodsForm;
 /**
  * Attribute
  *
@@ -100,23 +102,67 @@ class PurchaseGoodsController extends BaseController
     
     /**
      * 编辑/创建
-     *
+     * @property PurchaseGoodsForm $model
      * @return mixed
      */
     public function actionEdit()
     {
         $this->layout = '@backend/views/layouts/iframe';
         
-        $id = Yii::$app->request->get('id', null);
+        $id = Yii::$app->request->get('id');        
+        $purchase_id = Yii::$app->request->get('purchase_id');
+        
+        $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return ResultHelper::json(200, '保存成功');
-            }
-            
-            return ResultHelper::json(422, $this->getError($model));
+        if($model->isNewRecord) {
+            $model->purchase_id = $purchase_id;            
+        }else{
+            $purchase_id = $model->purchase_id;
         }
         
+        $style_sn = Yii::$app->request->get('style_sn');
+        $search = Yii::$app->request->get('search');
+        
+        if($search && $style_sn) {   
+            $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+            $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
+            if(!$style) {
+                return $this->message("无效的款号", $this->redirect($skiUrl), 'error');
+            }elseif($style->status != 1) {
+                return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
+            }
+            $model->style_id = $style->id;
+            $model->style_sn = $style_sn;
+            $model->style_cate_id = $style->style_cate_id;
+            $model->product_type_id = $style->product_type_id;
+            $model->goods_type = 1;
+            $model->goods_name = $style->style_name;
+        }
+        //$this->activeFormValidate($model);
+        
+        if ($model->load(Yii::$app->request->post())) {              
+            try{
+                
+                $trans = Yii::$app->trans->beginTransaction();  
+                
+                if($model->isNewRecord) {
+                    $model->purchase_id = $purchase_id;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }     
+                //创建属性关系表数据
+                //$model->createGoodsAttribute();
+                $trans->commit();
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        
+        $model->initAttrs();
+
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);

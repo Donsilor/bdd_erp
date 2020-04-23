@@ -29,5 +29,14 @@ class PurchaseService extends Service
         ];
     }
     
-    
+    /**
+     * 创建采购商品属性
+     * @param int $id  采购明细ID
+     * @param array $attr_list
+     */
+    public function createGoodsAttribute($id, $attr_list) 
+    {
+        
+    }
+ 
 }

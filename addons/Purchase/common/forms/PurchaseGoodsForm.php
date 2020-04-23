@@ -1,12 +1,11 @@
 <?php
 
-namespace addons\Style\common\forms;
+namespace addons\Purchase\common\forms;
 
 use Yii;
 
-use addons\Style\common\models\Style;
-use addons\Style\common\models\StyleAttribute;
-use yii\base\Model;
+use addons\Purchase\common\models\PurchaseGoods;
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
 
 /**
  * 款式编辑-款式属性 Form
@@ -14,19 +13,12 @@ use yii\base\Model;
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
-class StyleAttrForm extends Model
+class PurchaseGoodsForm extends PurchaseGoods
 {
     //属性必填字段
     public $attr_require;
     //属性非必填
     public $attr_custom;
-    
-    public $style_id;
-    
-    public $style_cate_id;
-    
-    public $style_sn;
-    
     public $is_combine;
     /**
      * {@inheritdoc}
@@ -34,25 +26,24 @@ class StyleAttrForm extends Model
     public function rules()
     {
         return [
-                [['style_id','style_cate_id','style_sn','is_combine'], 'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     return false;
                 }],
                 [['attr_require','attr_custom'],'getPostAttrs'],
-           ];
+                [['style_sn'], 'string', 'max' => 30],
+                [['goods_name'], 'string', 'max' => 255],
+         ];
     }
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
-    {
-        
-        return  [
-              'attr_require'=>'当前属性',
-              'attr_custom'=>'当前属性',
-              'style_id'=>'款号id',
-              'style_cate_id'=>'款式分类id'
-        ];
+    {   
+        //合并
+        return parent::attributeLabels() + [
+                'attr_require'=>'当前属性',
+                'attr_custom'=>'当前属性',                
+               ];
     }
     /**
      * 款式基础属性
@@ -73,11 +64,11 @@ class StyleAttrForm extends Model
      */
     public function initAttrs()
     {
-        $attr_list = StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id])->asArray()->all();
+        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value'])->where(['id'=>$this->id])->asArray()->all();
         if(empty($attr_list)) {
             return ;
         }
-        $attr_list = array_column($attr_list,'attr_values','attr_id');
+        $attr_list = array_column($attr_list,'attr_value','attr_id');
         foreach ($attr_list as $attr_id => & $attr_value) {
             $split_value = explode(",",$attr_value);
             if(count($split_value) > 1) {
@@ -86,6 +77,24 @@ class StyleAttrForm extends Model
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
+    } 
+    /**
+     * 创建商品属性
+     */
+    public function createGoodsAttribute()
+    {
+        $attr_list = $this->getPostAttrs(); 
+        PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);        
+        foreach ($attr_list as $attr_id => $attr_value) {
+            $model = PurchaseGoodsAttribute::find()->where(['id'=>$this->id,'attr_id'=>$attr_id])->one();
+            if(!$model) {
+                $model = new PurchaseGoodsAttribute();
+                $model->id = $this->id;
+                $model->attr_id  = $attr_id;
+            }
+            $model->attr_value = $attr_value;
+            $model->save();
+        }
     }
-    
+   
 }
