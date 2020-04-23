@@ -125,7 +125,6 @@ class PurchaseGoodsController extends BaseController
         }
         
         $model->initAttrs();
-
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);

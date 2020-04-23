@@ -4,7 +4,7 @@ namespace addons\Purchase\services;
 
 use Yii;
 use common\components\Service;
-use addons\Purchase\common\models\purchase;
+use addons\Purchase\common\models\Purchase;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
 use common\enums\StatusEnum;
