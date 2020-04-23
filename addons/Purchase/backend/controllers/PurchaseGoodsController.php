@@ -112,7 +112,8 @@ class PurchaseGoodsController extends BaseController
                 }     
                 //创建属性关系表数据
                 $model->createAttrs();
-                
+                //更新采购汇总：总金额和总数量
+                Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');

@@ -55,11 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div> 
             			               			 
         			 <?php }else{?>
-            			 <div class="col-lg-6">         
+            			 <div class="col-lg-4">         
                 			<?= $form->field($model, 'style_sn')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-1">
-                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:25px;','onclick'=>"searchGoods()"]) ?>
+                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
         			 <?php }?>        			 
     			 </div>

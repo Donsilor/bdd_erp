@@ -97,7 +97,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
-                            ],            
+                            ], 
+                            [
+                                    'attribute' => 'goods_num',
+                                    'value' => "goods_num",
+                                    'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                         'class' => 'form-control',
+                                    ]),
+                                    'value' => function ($model) {
+                                        return $model->goods_num ;
+                                    },
+                                        'headerOptions' => ['width'=>'120'],
+                                    ],
                             [
                                     'attribute'=>'成本价',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [

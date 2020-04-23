@@ -6,6 +6,8 @@ use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\purchase;
 use common\helpers\Url;
+use addons\Purchase\common\models\PurchaseGoods;
+use common\enums\StatusEnum;
 
 /**
  * Class TypeService
@@ -30,13 +32,18 @@ class PurchaseService extends Service
     }
     
     /**
-     * 创建采购商品属性
-     * @param int $id  采购明细ID
-     * @param array $attr_list
+     * 采购单汇总
+     * @param unknown $purchase_id
      */
-    public function createGoodsAttribute($id, $attr_list) 
+    public function purchaseSummary($purchase_id) 
     {
-        
+        $sum = PurchaseGoods::find()
+                    ->select(['sum(goods_num) as goods_count','sum(cost_price) as cost_total'])
+                    ->where(['purchase_id'=>$purchase_id,'status'=>StatusEnum::ENABLED])
+                    ->asArray()->one();
+        if($sum) {
+            Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'cost_total'=>$sum['cost_total']/1],['id'=>$purchase_id]);
+        }
     }
  
 }
