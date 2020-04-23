@@ -49,7 +49,8 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['qiban_sn','style_cate_id','product_type_id'],'required'],
+            [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
             [['qiban_name', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['qiban_sn'], 'string', 'max' => 50],
@@ -73,6 +74,7 @@ class Qiban extends BaseModel
             'product_type_id' => '产品线',
             'style_source_id' => '款式来源',
             'style_channel_id' => '款式渠道',
+            'qiban_type' => '起版类型',
             'style_sex' => '款式性别',
             'style_image' => '商品主图',
             'sale_price' => '销售价',
@@ -84,7 +86,7 @@ class Qiban extends BaseModel
             'audit_time' => '审核时间',
             'auditor_id' => '审核人',
             'sort' => '排序',
-            'remark' => '款式备注',
+            'remark' => '备注',
             'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',

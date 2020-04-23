@@ -52,6 +52,11 @@ class StyleAttributeService extends Service
             $model->status = StatusEnum::ENABLED;
             $model->save();
         }
+
+
+
     }
+
+
     
 }

@@ -2,8 +2,10 @@
 
 namespace addons\Style\common\forms;
 
+use addons\Style\common\models\Qiban;
+use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\models\QibanAttribute;
-use yii\base\Model;
+
 
 /**
  * 款式编辑-款式属性 Form
@@ -11,45 +13,36 @@ use yii\base\Model;
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
-class QibanAttrForm extends Model
+class QibanAttrForm extends Qiban
 {
     //属性必填字段
     public $attr_require;
     //属性非必填
     public $attr_custom;
-    
-    public $qiban_id;
-    
-    public $style_cate_id;
-    
-    public $qiban_sn;
-    
     public $is_combine;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        return [
-                [['qiban_id','style_cate_id'], 'required'],
-                [['attr_require'], 'required','isEmpty'=>function($value){
-                    return false;
-                }],
-                [['is_combine'], 'safe'],
-                [['attr_require','attr_custom'],'getPostAttrs'],
-           ];
+        $rules = [
+            [['attr_require'], 'required','isEmpty'=>function($value){
+                return false;
+            }],
+            [['attr_require','attr_custom'],'getPostAttrs'],
+        ];
+        return array_merge(parent::rules() , $rules);
     }
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
-        return [
-              'attr_require'=>'当前属性',
-              'attr_custom'=>'当前属性',
-              'qiban_id'=>'款号id',
-              'style_cate_id'=>'款式分类id'
-        ];
+        //合并
+        return parent::attributeLabels() + [
+                'attr_require'=>'当前属性',
+                'attr_custom'=>'当前属性',
+            ];
     }
     /**
      * 款式基础属性
@@ -70,8 +63,9 @@ class QibanAttrForm extends Model
      */
     public function initAttrs()
     {
-        $attr_list = QibanAttribute::find()->select(['attr_id','attr_values'])->where(['qiban_id'=>$this->qiban_id])->asArray()->all();
+        $attr_list = QibanAttribute::find()->select(['attr_id','attr_values'])->where(['qiban_id'=>$this->id])->asArray()->all();
         if(empty($attr_list)) {
+
             return ;
         }
         $attr_list = array_column($attr_list,'attr_values','attr_id');
@@ -83,6 +77,30 @@ class QibanAttrForm extends Model
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
+        $this->is_combine = 1;
     }
-    
+    /**
+     * 创建商品属性
+     */
+    public function createAttrs()
+    {
+        QibanAttribute::deleteAll(['qiban_id'=>$this->id]);
+        foreach ($this->getPostAttrs() as $attr_id => $attr_value) {
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
+            $model = QibanAttribute::find()->where(['qiban_id'=>$this->id,'attr_id'=>$attr_id])->one();
+            if(!$model) {
+                $model = new QibanAttribute();
+                $model->qiban_id = $this->id;
+                $model->attr_id  = $attr_id;
+            }
+            $model->is_require = $spec->is_require;
+            $model->input_type = $spec->input_type;
+            $model->attr_type  = $spec->attr_type;
+            $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
+            if(false === $model->save()) {
+                throw new \Exception($this->getErrors($model));
+            }
+        }
+    }
+
 }

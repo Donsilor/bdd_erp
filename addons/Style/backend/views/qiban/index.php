@@ -17,13 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit-style'], '有款起版', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                    <?= Html::create(['edit'], '有款起版', [
+                        'class' => 'btn btn-primary btn-xs openIframe'
                     ]); ?>
-                    <?= Html::create(['ajax-edit'], '无款起版', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                    <?= Html::create(['edit-no-style'], '无款起版', [
+                        'class' => 'btn btn-primary btn-xs openIframe'
                     ]); ?>
                 </div>
             </div>
@@ -147,10 +145,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {status}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModalLg',
-                        ]);
+                        if($model->style_sn){
+                            return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                'class' => 'btn btn-primary  openIframe',
+                            ]);
+                        }else{
+                            return Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                'class' => 'btn btn-primary  openIframe',
+                            ]);
+                        }
+
                     },
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){

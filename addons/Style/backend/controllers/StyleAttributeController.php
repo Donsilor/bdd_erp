@@ -93,7 +93,7 @@ class StyleAttributeController extends BaseController
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
-        $model->is_combine = $style->type->is_combine;
+//        $model->is_combine = $style->type->is_combine;
         // ajax 校验
         $this->activeFormValidate($model);
         
