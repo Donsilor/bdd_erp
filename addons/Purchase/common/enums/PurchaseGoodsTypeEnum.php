@@ -21,8 +21,8 @@ class PurchaseGoodsTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-                self::STYLE => "款式",
-                self::QIBAN => "起版",                
+                self::STYLE => "款式商品",
+                self::QIBAN => "起版商品",                
         ];
     }
     

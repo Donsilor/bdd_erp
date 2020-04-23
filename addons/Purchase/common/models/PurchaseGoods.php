@@ -41,11 +41,11 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id', 'goods_type'], 'required'],
+            [['purchase_id', 'goods_type','goods_name'], 'required'],
             [['purchase_id', 'goods_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
-            [['goods_name'], 'string', 'max' => 255],
+            [['goods_name','remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -67,6 +67,7 @@ class PurchaseGoods extends BaseModel
             'cost_price' => '成本价',
             'goods_num' => '商品数量',
             'produce_id' => '布产ID',
+            'remark' => '采购备注',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

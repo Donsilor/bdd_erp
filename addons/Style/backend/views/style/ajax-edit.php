@@ -47,7 +47,7 @@ $form = ActiveForm::begin([
             <div class="row">
                 <div class="col-lg-6">
                 <?= $form->field($model, 'style_source_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->styleService->styleSource->getdropDown(),
+                    'data' => \Yii::$app->styleService->styleSource->getGrpDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -56,7 +56,7 @@ $form = ActiveForm::begin([
                 </div>
                 <div class="col-lg-6">
                 <?= $form->field($model, 'style_channel_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->styleService->styleChannel->getdropDown(),
+                    'data' => \Yii::$app->styleService->styleChannel->getGrpDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true

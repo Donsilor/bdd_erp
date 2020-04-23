@@ -65,41 +65,7 @@ class PurchaseGoodsController extends BaseController
                 'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
-    }    
-    /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = Yii::$app->request->get('id');        
-        $purchase_id = Yii::$app->request->get('purchase_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index','purchase_id'=>$purchase_id]));
-        $model = $this->findModel($id);
-        
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model),423);
-                }
-                $trans->commit();
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(), $this->redirect(['index','purchase_id'=>$purchase_id,'returnUrl'=>$returnUrl]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect(['index','purchase_id'=>$purchase_id,'returnUrl'=>$returnUrl]), 'success');
-        }
-        
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,                
-        ]);
     }
-    
     /**
      * 编辑/创建
      * @property PurchaseGoodsForm $model
@@ -115,9 +81,7 @@ class PurchaseGoodsController extends BaseController
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         if($model->isNewRecord) {
-            $model->purchase_id = $purchase_id;            
-        }else{
-            $purchase_id = $model->purchase_id;
+            $model->purchase_id = $purchase_id;         
         }
         
         $style_sn = Yii::$app->request->get('style_sn');
@@ -137,22 +101,15 @@ class PurchaseGoodsController extends BaseController
             $model->product_type_id = $style->product_type_id;
             $model->goods_type = 1;
             $model->goods_name = $style->style_name;
-        }
-        //$this->activeFormValidate($model);
-        
+        }        
         if ($model->load(Yii::$app->request->post())) {              
-            try{
-                
+            try{                
                 $trans = Yii::$app->trans->beginTransaction();  
-                
-                if($model->isNewRecord) {
-                    $model->purchase_id = $purchase_id;
-                }
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }     
                 //创建属性关系表数据
-                //$model->createGoodsAttribute();
+                $model->createGoodsAttribute();
                 $trans->commit();
                 return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){

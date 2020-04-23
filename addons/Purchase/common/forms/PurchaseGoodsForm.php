@@ -24,14 +24,12 @@ class PurchaseGoodsForm extends PurchaseGoods
      * {@inheritdoc}
      */
     public function rules()
-    {
-        return [
-                [['attr_require'], 'required','isEmpty'=>function($value){
-                    return false;
-                }],
-                [['attr_require','attr_custom'],'getPostAttrs'],
-                [['style_sn'], 'string', 'max' => 30],
-                [['goods_name'], 'string', 'max' => 255],
+    {      
+         return parent::rules() + [
+            [['attr_require'], 'required','isEmpty'=>function($value){
+                return false;
+            }],
+            [['attr_require','attr_custom'],'getPostAttrs'],
          ];
     }
     /**
