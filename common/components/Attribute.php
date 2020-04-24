@@ -7,6 +7,7 @@ use common\enums\CacheEnum;
 use common\enums\StatusEnum;
 use addons\Style\common\models\AttributeValue;
 use addons\Style\common\models\AttributeValueLang;
+use addons\Style\common\models\AttributeLang;
 
 
 /**
@@ -23,7 +24,7 @@ class Attribute
      * @param bool $noCache true 不从缓存读取 false 从缓存读取
      * @return bool|string
      */
-    public function attrName($attr_id, $language = null,$noCache = true,$merchant_id = '')
+    public function attrName($attr_id, $language = null,$noCache = false,$merchant_id = '')
     {
         if($language == null) {
             $language = \Yii::$app->params['language'];
@@ -59,7 +60,7 @@ class Attribute
         if($language == null) {
             $language = \Yii::$app->params['language'];
         }
-        $result = $this->getAttrValue($value_id,$noCache);
+        $result = $this->getAttrValue($value_id,true);
         return $result[$language]['name']??'';
     }
     /**
@@ -72,16 +73,15 @@ class Attribute
     {
         $cacheKey = CacheEnum::getPrefix('goodsAttr',$merchant_id).':'.$attr_id;
         if (!($info = Yii::$app->cache->get($cacheKey)) || $noCache == true) {
-            $models = AttributeValue::find()->alias("val")
-                ->select(['lang.master_id',"lang.attr_value_name",'lang.language'])
-                ->leftJoin(AttributeValueLang::tableName()." lang","val.id=lang.master_id")
+            $models = AttributeLang::find()
+                ->select(['master_id','language','attr_name'])
                 ->where(['master_id'=>$attr_id])
                 ->asArray()->all();
             $info['info'] = [];
             foreach ($models as $row) {
                 $info['info'][$row['language']] = [
                         'id'=>$row['master_id'],
-                        'name'=>$row['attr_value_name']
+                        'name'=>$row['attr_name']
                 ];
             }
             $models = AttributeValue::find()->alias("val")
@@ -90,16 +90,16 @@ class Attribute
                 ->where(['val.attr_id'=>$attr_id,'val.status'=>StatusEnum::ENABLED])
                 ->orderBy('val.sort asc,val.id asc')
                 ->asArray()->all();
-
+            
             $value_list = [];
             foreach ($models as $row) {
                 $value_list[$row['language']][] = [
-                    'id'=>$row['master_id'],
-                    'name'=>$row['attr_value_name'],
+                        'id'=>$row['master_id'],
+                        'name'=>$row['attr_value_name'],
                 ];
             }
             $info['items'] = $value_list;
-
+            
             $duration = (int) rand(3600*24,3600*24+3600);//防止缓存穿透
             // 设置缓存
             Yii::$app->cache->set($cacheKey, $info,$duration);

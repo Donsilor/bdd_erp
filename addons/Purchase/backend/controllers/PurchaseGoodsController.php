@@ -88,7 +88,7 @@ class PurchaseGoodsController extends BaseController
         }
         $model = $model ?? new PurchaseGoodsForm();
         
-        if($search && $style_sn) {   
+        if($model->isNewRecord && $search && $style_sn) {   
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
             if(!$style) {
@@ -103,8 +103,12 @@ class PurchaseGoodsController extends BaseController
             $model->goods_type = 1;
             $model->style_sex = $style->style_sex;
             $model->goods_name = $style->style_name;
-        }        
-        if ($model->load(Yii::$app->request->post())) { 
+        }   
+        
+        if ($model->load(Yii::$app->request->post())) {  
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
             try{                
                 $trans = Yii::$app->trans->beginTransaction();  
                 if(false === $model->save()){

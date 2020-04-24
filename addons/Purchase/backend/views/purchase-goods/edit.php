@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         			     </div>
         			     <?php }else{?>
         			     <div class="col-lg-4">         
-                			<?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?> 
+                			<?= $form->field($model, 'style_sn')->textInput(['disabled'=>'disabled']) ?> 
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">
@@ -74,15 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                               case common\enums\InputTypeEnum::INPUT_TEXT :{
                                   $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
                                   break;
-                              }
-                              /* case common\enums\InputTypeEnum::INPUT_RADIO :{
-                                  $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
-                                  break;
-                              }
-                              case common\enums\InputTypeEnum::INPUT_MUlTI :{
-                                  $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-                                  break;
-                              } */
+                              }                              
                               default:{
                                   $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
                                   break;

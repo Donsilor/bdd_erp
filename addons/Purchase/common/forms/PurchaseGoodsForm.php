@@ -29,7 +29,13 @@ class PurchaseGoodsForm extends PurchaseGoods
     {      
          $rules = [
             [['attr_require'], 'required','isEmpty'=>function($value){
-                return false;
+                foreach ($value as $k=>$v) {
+                    if($v === "") {
+                        $name = Yii::$app->attr->attrName($k);
+                        $this->addError("attr_require[{$k}]","[{$name}]不能为空");
+                        return false;
+                    }
+                }
             }],
             [['attr_require','attr_custom'],'getPostAttrs'],
          ];
