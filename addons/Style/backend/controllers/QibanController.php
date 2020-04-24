@@ -15,6 +15,8 @@ use addons\Style\common\models\Qiban;
 use common\helpers\Url;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\SnHelper;
+use addons\Style\common\enums\QibanTypeEnum;
 
 
 /**
@@ -90,7 +92,7 @@ class QibanController extends BaseController
             $model->style_sn = $style_sn;
             $model->style_cate_id = $style->style_cate_id;
             $model->product_type_id = $style->product_type_id;
-            $model->qiban_type = 1;
+            $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
             $model->style_sex = $style->style_sex;
             $model->qiban_name = $style->style_name;
 
@@ -102,6 +104,9 @@ class QibanController extends BaseController
             $model->attr_require = $style_model->attr_require;
         }
         if ($model->load(Yii::$app->request->post())) {
+            if($model->isNewRecord) {
+                $model->qiban_sn = SnHelper::createQibanSn();
+            }            
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -109,7 +114,6 @@ class QibanController extends BaseController
                 }
                 //创建属性关系表数据
                 $model->createAttrs();
-
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -142,13 +146,16 @@ class QibanController extends BaseController
         $model = $model ?? new QibanAttrForm();
         $model->initAttrs();
         //无款起版
-        $model->qiban_type = 2;
+        $model->qiban_type = QibanTypeEnum::NO_STYLE;
         if($model->isNewRecord) {
             $model->style_cate_id = $style_cate_id;
         }
 
 
         if ($model->load(Yii::$app->request->post())) {
+            if($model->isNewRecord) {
+                $model->qiban_sn = SnHelper::createQibanSn();
+            }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){

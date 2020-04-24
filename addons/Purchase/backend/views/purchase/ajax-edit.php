@@ -18,7 +18,7 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
-            <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>'disabled', "placeholder"=>"系统自动生成"])?>
+            <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
 	    
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    

@@ -46,5 +46,14 @@ class SnHelper
     {
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),6,'1',STR_PAD_LEFT);
     }
+    /**
+     * 起版编号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createQibanSn($prefix = 'QB')
+    {
+        return $prefix.date('d').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
+    }
     
 }

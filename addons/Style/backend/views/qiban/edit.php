@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         <?php }?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_sn')->textInput() ?>
+                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
                         </div>
 
                         <div class="col-lg-4">
@@ -48,10 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_num')->textInput() ?>
-                        </div>
+                        </div>                       
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
@@ -66,13 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php }?>
                 </div>
                 <?php
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,null,$model->is_combine);
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2],$model->is_combine);
                 foreach ($attr_list_all as $attr_type=>$attr_list){
-                    if(in_array($attr_type ,[AttrTypeEnum::TYPE_SALE,AttrTypeEnum::TYPE_EXTEND])){
-                        continue;
-                    }
-                    ?>
-                    <?php
                     foreach ($attr_list as $k=>$attr){
                         $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
                         $attr_field_name = "{$attr_field}[{$attr['id']}]";

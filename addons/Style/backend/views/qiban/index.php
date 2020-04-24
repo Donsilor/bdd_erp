@@ -3,7 +3,6 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use common\helpers\ImageHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -54,34 +53,41 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
-            ], 
-            [
-                    'attribute' => 'style_image',
-                    'value' => function ($model) {
-                        return ImageHelper::fancyBox($model->style_image);
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],  
-            ],  
+            ],             
             [
                     'attribute' => 'qiban_sn',
-                    'value'=>function($model) {
-                         return Html::a($model->qiban_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                    },
                     'filter' => true,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'130'],
+                    'headerOptions' => ['width'=>'150'],
             ],
             [
-                    'headerOptions' => ['width'=>'400'],
+                    'headerOptions' => ['width'=>'300'],
                     'attribute' => 'qiban_name',
                     'value' => 'qiban_name',
                     'filter' => Html::activeTextInput($searchModel, 'qiban_name', [
                           'class' => 'form-control',
                     ]),
                     'format' => 'raw',   
-            ],            
+            ], 
+            [
+                    'attribute' => 'qiban_type',
+                    'value' => function($model){
+                          return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                     },
+                    'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                    'attribute' => 'style_sn',
+                    'value' => "style_sn",
+                    'filter' => true,
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ], 
             [
                     'label' => '款式分类',
                     'attribute' => 'cate.name',
@@ -91,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'form-control',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1','style'=>'width:150px;'],
+                    'headerOptions' => ['class' => 'col-md-1'],
             ], 
             [
                     'label' => '产品线',
@@ -102,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1','style'=>'width:130px;'],
+                    'headerOptions' => ['class' => 'col-md-1'],
             ],  
             [
                     'label' => '成本价',
@@ -113,14 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'goods_num',
-                    'value' => "goods_num",
-                    'filter' => true,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
+            ],            
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
@@ -132,7 +131,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-                    ], 
+            ],
+            
             [
                     'attribute' => 'status',                    
                     'value' => function ($model){

@@ -7,7 +7,6 @@ use Yii;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Style\common\models\AttributeSpec;
-use common\enums\InputTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -29,13 +28,17 @@ class PurchaseGoodsForm extends PurchaseGoods
     {      
          $rules = [
             [['attr_require'], 'required','isEmpty'=>function($value){
-                foreach ($value as $k=>$v) {
-                    if($v === "") {
-                        $name = Yii::$app->attr->attrName($k);
-                        $this->addError("attr_require[{$k}]","[{$name}]不能为空");
-                        return false;
+                if(!empty($value)) {
+                    foreach ($value as $k=>$v) {
+                        if($v === "") {
+                            $name = \Yii::$app->attr->attrName($k);
+                            $this->addError("attr_require[{$k}]","[{$name}]不能为空");
+                            return true;
+                        }
                     }
+                    return false;
                 }
+                return false;
             }],
             [['attr_require','attr_custom'],'getPostAttrs'],
          ];

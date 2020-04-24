@@ -15,9 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                 <div class="row">
-
+                    <?php if($model->style_cate_id) {?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_sn')->textInput() ?>
+                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
                         </div>
 
                         <div class="col-lg-4">
@@ -28,30 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
 
-
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择']) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getGrpDropDown(),['prompt'=>'请选择']) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['prompt'=>'请选择']) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_num')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
+                      <?php } else {?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择']) ?>
+                        </div>
+                      <?php }?>
 
                 </div>
                 <?php
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,null,$model->is_combine);
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2],$model->is_combine);
                 foreach ($attr_list_all as $attr_type=>$attr_list){
-                    if(in_array($attr_type ,[AttrTypeEnum::TYPE_SALE,AttrTypeEnum::TYPE_EXTEND])){
-                        continue;
-                    }
                     ?>
                     <?php
                     foreach ($attr_list as $k=>$attr){
@@ -91,13 +89,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                 }//end foreach $attr_list_all
                 ?>
-
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <?= $form->field($model, 'remark')->textarea() ?>
+                <?php if($model->style_cate_id) {?>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <?= $form->field($model, 'remark')->textarea() ?>
+                            </div>
                         </div>
-                    </div>
-
+                <?php }?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>
