@@ -64,14 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
                                 break;
                             }
-                            case common\enums\InputTypeEnum::INPUT_RADIO :{
-                                $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
-                                break;
-                            }
-                            case common\enums\InputTypeEnum::INPUT_MUlTI :{
-                                $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-                                break;
-                            }
+//                            case common\enums\InputTypeEnum::INPUT_RADIO :{
+//                                $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
+//                                break;
+//                            }
+//                            case common\enums\InputTypeEnum::INPUT_MUlTI :{
+//                                $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
+//                                break;
+//                            }
                             default:{
                                 $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
                                 break;
