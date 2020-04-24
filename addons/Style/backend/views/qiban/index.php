@@ -153,14 +153,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'edit' => function($url, $model, $key){
                         if($model->style_sn){
                             return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'class' => 'btn btn-primary btn-xs openIframe',
+                                'class' => 'btn btn-primary btn-sm openIframe',
                                 'data-width'=>'90%',
                                 'data-height'=>'90%',
                                 'data-offset'=>'20px',
                             ]);
                         }else{
                             return Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'class' => 'btn btn-primary btn-xs openIframe',
+                                'class' => 'btn btn-primary btn-sm openIframe',
                                 'data-width'=>'90%',
                                 'data-height'=>'90%',
                                 'data-offset'=>'20px',
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                    'class'=>'btn btn-success btn-xs',
+                                    'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
                              ]); 
