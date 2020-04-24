@@ -18,7 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                     <div class="box-tools">
                         <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
-                            'class' => 'btn btn-primary btn-xs openIframe'
+                            'class' => 'btn btn-primary btn-xs openIframe',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',                            
+                            'data-offset'=>'20px',
                         ]); ?>
                     </div>
                 </div>
@@ -137,7 +140,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit}',
                                 'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                     return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['class' => 'btn btn-primary btn-xs openIframe']);
+                                     return Html::edit([
+                                             'edit','id' => $model->id,
+                                             'returnUrl' => Url::getReturnUrl()],
+                                             '编辑',
+                                             ['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px',
+                                           ]);
                                 },
                                 'status' => function($url, $model, $key){
                                      return Html::status($model['status']);
