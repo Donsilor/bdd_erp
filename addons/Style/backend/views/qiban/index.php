@@ -18,10 +18,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?= Html::create(['edit'], '有款起版', [
-                        'class' => 'btn btn-primary btn-xs openIframe'
+                        'class' => 'btn btn-primary btn-xs openIframe',
+                        'data-width'=>'90%',
+                        'data-height'=>'90%',
+                        'data-offset'=>'20px',
                     ]); ?>
                     <?= Html::create(['edit-no-style'], '无款起版', [
-                        'class' => 'btn btn-primary btn-xs openIframe'
+                        'class' => 'btn btn-primary btn-xs openIframe',
+                        'data-width'=>'90%',
+                        'data-height'=>'90%',
+                        'data-offset'=>'20px',
                     ]); ?>
                 </div>
             </div>
@@ -148,10 +154,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model->style_sn){
                             return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'class' => 'btn btn-primary  openIframe',
+                                'data-width'=>'90%',
+                                'data-height'=>'90%',
+                                'data-offset'=>'20px',
                             ]);
                         }else{
                             return Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'class' => 'btn btn-primary  openIframe',
+                                'data-width'=>'90%',
+                                'data-height'=>'90%',
+                                'data-offset'=>'20px',
                             ]);
                         }
 

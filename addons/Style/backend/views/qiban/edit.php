@@ -40,7 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
 
-
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
                         </div>
@@ -84,14 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
                                 break;
                             }
-                            case common\enums\InputTypeEnum::INPUT_RADIO :{
-                                $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
-                                break;
-                            }
-                            case common\enums\InputTypeEnum::INPUT_MUlTI :{
-                                $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-                                break;
-                            }
+//                            case common\enums\InputTypeEnum::INPUT_RADIO :{
+//                                $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
+//                                break;
+//                            }
+//                            case common\enums\InputTypeEnum::INPUT_MUlTI :{
+//                                $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
+//                                break;
+//                            }
                             default:{
                                 $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
                                 break;
@@ -122,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php ActiveForm::end(); ?>
         </div>
     </div>
-</div>
+  </div>
 <script type="text/javascript">
 function searchGoods() {
    var style_sn = $.trim($("#qibanattrform-style_sn").val());
