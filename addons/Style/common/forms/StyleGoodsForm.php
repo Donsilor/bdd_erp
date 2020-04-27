@@ -145,13 +145,7 @@ class StyleGoodsForm extends Model
             return false;
         }
         //批量更新款式商品
-        $goods_update = [
-                'style_sn'=>$style->style_sn,
-                'goods_name'=>$style->style_name,
-                'goods_image'=>$style->style_image,
-                'status'=> StatusEnum::DISABLED,
-        ];
-        StyleGoods::updateAll($goods_update,['style_id'=>$this->style_id]);
+        StyleGoods::updateAll(['status'=> StatusEnum::DISABLED],['style_id'=>$this->style_id]);
         
         $cost_prices = array();
         $goods_num   = 0;
@@ -163,15 +157,17 @@ class StyleGoodsForm extends Model
             }
             $model->attributes = $goods;
             $model->style_id = $style->id;
+            $model->style_sn = $style->style_sn;
             $model->style_cate_id = $style->style_cate_id;
             $model->product_type_id = $style->product_type_id;
+            $model->goods_name  = $style->style_name;//商品名称
             $model->goods_image  = $style->style_image;//商品默认图片
-            $model->status  = $goods['status']? 1: 0;//商品状态
+            $model->status  = $goods['status']? StatusEnum::ENABLED : StatusEnum::DISABLED;//商品状态
             if(!$model->save()) {
                 throw new \Exception($this->getError($model));
             }
             $cost_prices[] = $model->cost_price;
-            $goods_num += $model->status == 1 ? 1 : 0;
+            $goods_num += ($model->status == StatusEnum::ENABLED) ? 1 : 0;
         }
         $cost_price_min = min($cost_prices);
         $cost_price_max = max($cost_prices);
