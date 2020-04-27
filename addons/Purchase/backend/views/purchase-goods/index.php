@@ -15,7 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                    <h3 class="box-title">
+                    <?= Html::encode($this->title) ?>
+                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
+                    </h3>
                     <div class="box-tools">
                         <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe',
@@ -24,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset'=>'20px',
                         ]); ?>
                     </div>
-                </div>
+               </div>
             <div class="box-body table-responsive">  
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -74,8 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                         return $model->goods_name;
+                                         $str = $model->goods_name;
+                                         //$str .= "<br/>颜色:FI, 净度：VSS, 石重:0.5CT, 证书类型:GIA";
+                                         return $str;
                                     },
+                                    'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
                             ],
                             
@@ -121,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->cost_price ;
                                     },
                                     'headerOptions' => ['width'=>'120'],
-                            ],
+                            ],        
                             [
                                 'attribute' => 'status',                
                                 'value' => function ($model){

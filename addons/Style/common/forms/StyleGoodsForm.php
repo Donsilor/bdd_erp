@@ -8,6 +8,9 @@ use addons\Style\common\models\Style;
 use yii\base\Model;
 use addons\Style\common\models\StyleGoods;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\models\StyleAttribute;
+use addons\Style\common\enums\AttrTypeEnum;
+use common\enums\StatusEnum;
 
 /**
  * 款式编辑-商品属性 Form
@@ -126,7 +129,64 @@ class StyleGoodsForm extends Model
                 'c'=>$spec_c                
         ];
     }
-    
+    /**
+     * 生成款式商品
+     * @param unknown $style_id
+     * @param unknown $goods_list
+     */
+    public function createGoods()
+    {
+        $goods_list = $this->getPostGoods();
+        $style = Style::find()->where(['id'=>$this->style_id])->one();
+        if(empty($style) || empty($goods_list)) {
+            return false;
+        }
+        //批量更新款式商品
+        $goods_update = [
+                'style_sn'=>$style->style_sn,
+                'goods_name'=>$style->style_name,
+                'goods_image'=>$style->style_image,
+                'status'=> StatusEnum::DISABLED,
+        ];
+        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]);
+        $cost_prices = array();
+        $goods_num   = 0;
+        foreach ($goods_list as $goods) {
+            $model = StyleGoods::find()->where(['style_id'=>$style_id,'spec_key'=>$goods['spec_key']])->one();
+            if(!$model) {
+                //新增
+                $model = new StyleGoods();
+            }
+            $model->attributes = $goods;
+            $model->style_id = $style->id;
+            $model->style_cate_id = $style->style_cate_id;
+            $model->product_type_id = $style->product_type_id;
+            $model->goods_image  = $style->style_image;//商品默认图片
+            $model->status  = $goods['status']? 1: 0;//商品状态
+            if(!$model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            $cost_prices[] = $model->cost_price;
+            $goods_num += $model->status == 1 ? 1 : 0;
+        }
+        $cost_price_min = min($cost_prices);
+        $cost_price_max = max($cost_prices);
+        
+        $style->goods_num = $goods_num;
+        $style->cost_price = $cost_price_min;
+        $style->cost_price_min = $cost_price_min;
+        $style->cost_price_max = $cost_price_max;
+        if(!$style->save(false)) {
+            throw new \Exception($this->getError($style));
+        }
+    } 
+    /**
+     * 获取销当前款的售属性列表
+     */
+    public function getSaleAttrList()
+    {
+        return StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id,'attr_type'=>AttrTypeEnum::TYPE_SALE])->asArray()->all();
+    }
     /**
      * 获取skuTable 扩展字段配置
      */
@@ -150,13 +210,9 @@ class StyleGoodsForm extends Model
         ];
         $maps = [
                 //女戒-镶嵌
-                '14-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                '2-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
                 //女戒-非镶嵌
-                '14-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
-                //男戒-镶嵌
-                '13-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
-                //男戒-非镶嵌
-                '13-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
+                '2-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
                 //项链-镶嵌
                 '4-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
                 //项链-非镶嵌

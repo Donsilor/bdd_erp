@@ -73,19 +73,15 @@ class StyleGoodsController extends BaseController
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
-        $model->is_combine = $style->type->is_combine;
+        $model->is_combine = 0;//$style->type->is_combine;
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {            
             try{
-                $trans = Yii::$app->trans->beginTransaction();
-                $goods_list = $model->getPostGoods();
-                $attr_list  = $model->getPostAttrs();
-                //更新商品属性
-                \Yii::$app->styleService->styleAttribute->createStyleAttribute($style_id, $attr_list,AttrTypeEnum::TYPE_SALE);
-                //更新款式商品
-                \Yii::$app->styleService->styleGoods->createStyleGoods($style_id, $goods_list);
                 
+                $trans = Yii::$app->trans->beginTransaction();
+                //更新款式商品
+                $model->createGoods();               
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();

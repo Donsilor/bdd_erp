@@ -25,24 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
      <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
      <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-body">
-       <?php   
-        $inputs = $model->getSKuTableInputs();
-        $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,AttrTypeEnum::TYPE_SALE);
-        foreach ($attr_list_all as $attr_type=>$attr_list){
-            ?>
             <div class="box-header with-border">
-                  <h3 class="box-title"><?= AttrTypeEnum::getValue($attr_type)?></h3>
+                  <h3 class="box-title"><?= AttrTypeEnum::getValue(AttrTypeEnum::TYPE_SALE)?></h3>
             </div>
             <div class="box-body">   
                 <?php 
+                  $inputs = $model->getSKuTableInputs();
                   $data = [];                          
-                  foreach ($attr_list as $k=>$attr){   
-                      $values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
+                  foreach ($model->getSaleAttrList() as $k=>$attr){   
                       $data[] = [
-                          'id'=>$attr['id'],
-                          'name'=>$attr['attr_name'],
-                          'value'=>Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']),
-                          'current'=>$model->style_spec['a'][$attr['id']]??[]
+                          'id'=>$attr['attr_id'],
+                          'name'=>Yii::$app->attr->attrName($attr['attr_id']),
+                          'value'=>Yii::$app->styleService->attribute->getValuesByValueIds($attr['attr_values']),
+                          'current'=>$model->style_spec['a'][$attr['attr_id']]??[]
                       ];   
                   }
                  
@@ -62,11 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
                      <?php 
                   }
                ?>
-            </div>
-            <!-- ./box-body -->
-            <?php 
-        }//end foreach $attr_list_all
-        ?>  
+          </div>
+         <!-- ./box-body -->
    </div>  
  <!-- ./box-body -->
 

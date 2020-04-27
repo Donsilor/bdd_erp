@@ -13,6 +13,7 @@ use common\helpers\Url;
 
 use addons\Style\common\models\StyleAttribute;
 use common\enums\StatusEnum;
+use common\helpers\ResultHelper;
 
 /**
  * Style
@@ -72,7 +73,45 @@ class StyleAttributeController extends BaseController
                 'style' => $style,
         ]);
     }
-
+    /**
+     * 款式属性维护
+     * @return mixed|string|string
+     */
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        
+        $style_id = Yii::$app->request->get('style_id');
+        
+        $this->modelClass = Style::class;
+        $style = $this->findModel($style_id);
+        
+        $model = new StyleAttrForm();
+        $model->style_id = $style->id;
+        $model->style_cate_id = $style->style_cate_id;
+        $model->style_sn = $style->style_sn;
+        $model->is_combine = 0;//$style->type->is_combine;
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->createAttrs();
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+            return ResultHelper::json(200, '保存成功');
+        }
+        
+        $model->initAttrs();        
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
 
     /**
      * 编辑-款式属性

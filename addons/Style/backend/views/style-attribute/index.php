@@ -20,9 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box-header" style="border-bottom:1px solid #eee">
                         <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                         <div class="box-tools">
-                            <?= Html::create(['ajax-edit', 'style_id' => $style->id,'returnUrl' => $returnUrl], '编辑属性',[
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModalLg',
+                            <?= Html::create(['edit', 'style_id' => $style->id], '编辑属性',[
+                                    'class' => 'btn btn-primary btn-xs openIframe',
+                                    'data-width'=>'90%',
+                                    'data-height'=>'90%',
+                                    'data-offset'=>'20px',
                                 ]); 
                             ?>
                         </div>

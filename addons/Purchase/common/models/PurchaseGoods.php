@@ -41,7 +41,7 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id', 'goods_type','goods_name','cost_price','style_sn','product_type_id','style_cate_id','goods_num'], 'required'],
+            [['style_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num'], 'required'],
             [['purchase_id', 'goods_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],

@@ -3,6 +3,7 @@
 namespace addons\Style\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "style_qiban".
@@ -81,7 +82,7 @@ class Qiban extends BaseModel
             'market_price' => '市场价',
             'cost_price' => '成本价',
             'goods_num' => '商品数量',
-            'audit_status' => '起版审核',
+            'audit_status' => '审核状态',
             'audit_remark' => '审核失败原因',
             'audit_time' => '审核时间',
             'auditor_id' => '审核人',

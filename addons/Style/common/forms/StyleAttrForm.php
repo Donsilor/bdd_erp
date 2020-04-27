@@ -7,6 +7,8 @@ use Yii;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleAttribute;
 use yii\base\Model;
+use addons\Style\common\models\AttributeSpec;
+use common\enums\StatusEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -86,6 +88,35 @@ class StyleAttrForm extends Model
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
+    }
+    
+    /**
+     * 创建 款式属性关联
+     * @param unknown $style_id
+     * @param array $attr_list
+     */
+    public function createAttrs()
+    {        
+        //批量删除
+        StyleAttribute::deleteAll(['style_id'=>$this->style_id]);
+        foreach ($this->getPostAttrs() as $attr_id => $attr_value) {
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
+            $model = StyleAttribute::find()->where(['style_id'=>$this->style_id,'attr_id'=>$attr_id])->one();
+            if(!$model) {
+                $model = new StyleAttribute();
+                $model->style_id = $this->style_id;
+                $model->attr_id  = $attr_id;
+            }
+            $model->is_require = $spec->is_require;
+            $model->input_type = $spec->input_type;
+            $model->attr_type = $spec->attr_type;
+            $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
+            $model->status = StatusEnum::ENABLED;
+            $model->save();
+        }
+        
+        
+        
     }
     
 }
