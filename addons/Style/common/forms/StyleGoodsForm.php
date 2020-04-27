@@ -148,11 +148,11 @@ class StyleGoodsForm extends Model
                 'goods_image'=>$style->style_image,
                 'status'=> StatusEnum::DISABLED,
         ];
-        StyleGoods::updateAll($goods_update,['style_id'=>$style_id]);
+        StyleGoods::updateAll($goods_update,['style_id'=>$this->style_id]);
         $cost_prices = array();
         $goods_num   = 0;
         foreach ($goods_list as $goods) {
-            $model = StyleGoods::find()->where(['style_id'=>$style_id,'spec_key'=>$goods['spec_key']])->one();
+            $model = StyleGoods::find()->where(['style_id'=>$this->style_id,'spec_key'=>$goods['spec_key']])->one();
             if(!$model) {
                 //新增
                 $model = new StyleGoods();
