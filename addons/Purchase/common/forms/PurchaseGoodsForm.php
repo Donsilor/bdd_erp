@@ -7,6 +7,7 @@ use Yii;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Style\common\models\AttributeSpec;
+use addons\Style\common\models\StyleAttribute;
 
 /**
  * 款式编辑-款式属性 Form
@@ -111,6 +112,14 @@ class PurchaseGoodsForm extends PurchaseGoods
                 throw new \Exception($this->getErrors($model));
             }
         }
+    }
+    /**
+     * 获取款式属性列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getAttrList()
+    {
+        return StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id])->asArray()->all();
     }
    
 }

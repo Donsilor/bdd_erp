@@ -6,6 +6,7 @@ use Yii;
 use common\components\Service;
 use addons\Style\common\models\Style;
 use common\helpers\Url;
+use addons\Style\common\models\StyleAttribute;
 
 /**
  * Class TypeService
@@ -32,6 +33,15 @@ class StyleService extends Service
                 7=>['name'=>'款式图片','url'=>Url::to(['style-image/index','style_id'=>$style_id,'tab'=>7,'returnUrl'=>$returnUrl])],
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
+    }
+    
+    /**
+     * 获取款式属性列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getStyleAttrList($style_id)
+    {
+        return StyleAttribute::find()->where(['style_id'=>$style_id])->asArray()->all();
     }
 
 }

@@ -56,4 +56,13 @@ class QibanAttributeService extends Service
         }
     }
     
+    /**
+     * 获取起版属性列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getQibanAttrList($qiban_id)
+    {
+        return QibanAttribute::find()->where(['qiban_id'=>$qiban_id])->asArray()->all();
+    }
+    
 }

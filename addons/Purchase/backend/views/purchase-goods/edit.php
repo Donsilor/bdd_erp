@@ -62,36 +62,42 @@ $this->params['breadcrumbs'][] = $this->title;
         			     </div>
         			 <?php }?>        			 
     			 </div>
-            	<?php               
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2],$model->is_combine);
-                foreach ($attr_list_all as $attr_type=>$attr_list){
-                      foreach ($attr_list as $k=>$attr){ 
-                          $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
-                          $attr_field_name = "{$attr_field}[{$attr['id']}]";                                  
-                          //通用属性值列表
-                          $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);                                  
-                          switch ($attr['input_type']){
-                              case common\enums\InputTypeEnum::INPUT_TEXT :{
-                                  $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
-                                  break;
-                              }                              
-                              default:{
-                                  $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
-                                  break;
+            	<?php   
+            	  if($model->goods_type == PurchaseGoodsTypeEnum::STYLE) {
+                        $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($model->style_id);
+            	  }else{
+            	        $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($model->style_id);
+            	  }
+                  foreach ($attr_list as $k=>$attr){ 
+                      $attr_id  = $attr['attr_id'];//属性ID
+                      $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+                      $attr_values = $attr['attr_values'];//属性值
+                      $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
+                      $attr_field_name = "{$attr_field}[{$attr_id}]";                      
+                      switch ($attr['input_type']){
+                          case common\enums\InputTypeEnum::INPUT_TEXT :{
+                              $input = $form->field($model,$attr_field_name)->textInput()->label($attr_name);
+                              break;
+                          }                              
+                          default:{
+                              if($attr['attr_values'] == '') {
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                              }else {
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
                               }
-                          }//end switch               
-                          $collLg = 4;
-                    ?>
-                    <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
-    						<div class="col-lg-<?=$collLg?>"><?= $input ?></div>
-                    <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
-                  <?php 
-                      }//end foreach $attr_list
-                   ?>            
-                   <!-- ./box-body -->
-                   <?php 
-                }//end foreach $attr_list_all
-                ?> 
+                              $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              break;
+                          }
+                      }//end switch               
+                      $collLg = 4;
+                ?>
+                <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
+						<div class="col-lg-<?=$collLg?>"><?= $input ?></div>
+                <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
+              <?php 
+                  }//end foreach $attr_list
+               ?>            
+               <!-- ./box-body -->
                 <?php if($model->style_id) {?>
                 <div class="row">
                     <div class="col-lg-8">
