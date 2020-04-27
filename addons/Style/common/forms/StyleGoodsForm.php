@@ -31,6 +31,8 @@ class StyleGoodsForm extends Model
     public $style_spec;
     //是否镶嵌
     public $is_combine;
+    
+    public $style;
     /**
      * {@inheritdoc}
      */
@@ -66,6 +68,7 @@ class StyleGoodsForm extends Model
         $spec_b = $this->style_spec['b'] ??[];
         $spec_c = $this->style_spec['c'] ??[];
         $goods_list = [];
+
         foreach ($spec_c as $spec_key =>$goods) {
             if(!$spec_b[$spec_key]) {
                 continue;
@@ -137,7 +140,7 @@ class StyleGoodsForm extends Model
     public function createGoods()
     {
         $goods_list = $this->getPostGoods();
-        $style = Style::find()->where(['id'=>$this->style_id])->one();
+        $style = $this->style ?? Style::find()->where(['id'=>$this->style_id])->one();
         if(empty($style) || empty($goods_list)) {
             return false;
         }
@@ -149,6 +152,7 @@ class StyleGoodsForm extends Model
                 'status'=> StatusEnum::DISABLED,
         ];
         StyleGoods::updateAll($goods_update,['style_id'=>$this->style_id]);
+        
         $cost_prices = array();
         $goods_num   = 0;
         foreach ($goods_list as $goods) {
