@@ -69,23 +69,26 @@ $this->params['breadcrumbs'][] = $this->title;
             	        $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($model->style_id);
             	  }
                   foreach ($attr_list as $k=>$attr){ 
-                      $attr_id  = $attr['attr_id'];//属性ID
-                      $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+                      $attr_id  = $attr['attr_id'];//属性ID                      
                       $attr_values = $attr['attr_values'];//属性值
-                      $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
-                      $attr_field_name = "{$attr_field}[{$attr_id}]";                      
+                      $is_require = $attr['is_require'];                     
+                      $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
                       switch ($attr['input_type']){
                           case common\enums\InputTypeEnum::INPUT_TEXT :{
-                              $input = $form->field($model,$attr_field_name)->textInput()->label($attr_name);
+                              $_field = $is_require == 1 ?'attr_require':'attr_custom';
+                              $field = "{$_field}[{$attr_id}]"; 
+                              $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
                           }                              
                           default:{
-                              if($attr['attr_values'] == '') {
+                              $_field = $is_require == 1 || $attr_values != '' ? 'attr_require':'attr_custom';
+                              $field = "{$_field}[{$attr_id}]"; 
+                              if($attr_values == '') {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }else {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
                               }
-                              $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                               break;
                           }
                       }//end switch               
