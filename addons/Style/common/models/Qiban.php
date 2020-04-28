@@ -51,7 +51,7 @@ class Qiban extends BaseModel
     {
         return [
             [['qiban_sn','style_cate_id','product_type_id'],'required'],
-            [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
             [['qiban_name', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['qiban_sn'], 'string', 'max' => 50],
@@ -81,6 +81,7 @@ class Qiban extends BaseModel
             'sale_price' => '销售价',
             'market_price' => '市场价',
             'cost_price' => '成本价',
+            'jintuo_type' => '金托类型',
             'goods_num' => '商品数量',
             'audit_status' => '审核状态',
             'audit_remark' => '审核失败原因',
