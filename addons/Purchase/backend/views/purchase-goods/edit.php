@@ -42,7 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div>
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
-            			 </div>            			 
+            			 </div> 
+            			 <div class="col-lg-4">
+            			 	<?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+            			 </div>           			 
         			 </div> 
         			 <div class="row">
             			 <div class="col-lg-4">
@@ -66,13 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
         			</div>
     			<?php }?>        			 
 
-            	<?php   
-            	  if($model->goods_type == PurchaseGoodsTypeEnum::STYLE) {
-                        $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($model->style_id);
-            	  }else{
-            	        $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($model->style_id);
-            	  }
-                  foreach ($attr_list as $k=>$attr){ 
+            	<?php
+            	//print_r($model->getAttrList());exit;
+            	  $attr_list = $model->getAttrList();
+            	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['attr_id'];//属性ID                      
                       $attr_values = $attr['attr_values'];//属性值
                       $is_require = $attr['is_require'];                     
@@ -119,11 +119,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
 function searchGoods() {
    var style_sn = $.trim($("#purchasegoodsform-style_sn").val());
+   var jintuo_type = $("#purchasegoodsform-jintuo_type").val();
    if(!style_sn) {
 	    rfMsg("请输入款号或起版号");
         return false;
    }
-   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_sn','search'])?>&search=1&style_sn="+style_sn;
+   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_sn','search','jintuo_type'])?>&search=1&style_sn="+style_sn+"&jintuo_type="+jintuo_type;
    window.location.href = url;
 }
 </script>

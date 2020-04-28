@@ -12,9 +12,18 @@ namespace addons\Style\common\enums;
 class AttrTypeEnum extends \common\enums\BaseEnum
 {
   const TYPE_BASE = 1;  
-  const TYPE_COMBINE = 2;
-  const TYPE_SALE = 3;
-    
+  const TYPE_COMBINE = 3;
+  const TYPE_SALE = 2;
+  
+  public static $ChenpinIds = [
+          self::TYPE_BASE,
+          self::TYPE_COMBINE,
+          self::TYPE_SALE,
+  ];
+  public static $KongtuoIds = [
+          self::TYPE_BASE,
+          self::TYPE_SALE,
+  ];
   /**
    * @return array
    */
@@ -27,13 +36,13 @@ class AttrTypeEnum extends \common\enums\BaseEnum
     ];
   }
    
-    public static function getRemarkMap(): array
-    {
+  public static function getRemarkMap(): array
+  {
         return [
             self::TYPE_BASE => '基础属性（商品基本参数--信息在商品详情编辑“基础属性”模块展示）',
             self::TYPE_SALE => '销售属性（跟商品sku价格相关的属性-eg:指圈号/金属材质等）',
             self::TYPE_COMBINE => '镶嵌属性（配件属性：如 石头,颜色/净度等）',
         ];
-    }
+  }
 
 }

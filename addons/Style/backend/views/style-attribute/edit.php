@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                  <?php               
-                    $attr_list_all = \Yii::$app->styleService->attribute->getAttrTypeListByCateId($model->style_cate_id,[1,2],$model->is_combine);
+                    $attr_list_all = $model->getAttrList();
                     foreach ($attr_list_all as $attr_type=>$attr_list){  
                         ?>
                         <div class="box-header with-border">

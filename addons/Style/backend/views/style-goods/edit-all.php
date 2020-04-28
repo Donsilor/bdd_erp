@@ -7,6 +7,7 @@ use yii\base\Widget;
 use common\helpers\Url;
 use addons\Style\common\models\Goods;
 use addons\Style\common\enums\AttrTypeEnum;
+use addons\Style\common\forms\StyleGoodsForm;
 
 /* @var $this yii\web\View */
 /* @var $model addons\Style\common\models\Style */
@@ -15,6 +16,7 @@ use addons\Style\common\enums\AttrTypeEnum;
 $this->title = "商品编辑";
 $this->params['breadcrumbs'][] = ['label' => Yii::t('goods', 'Styles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$model = $model ?? new StyleGoodsForm();
 ?>
 <?php $form = ActiveForm::begin([
         'id' => $model->formName(),
@@ -31,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">   
                 <?php 
                   $inputs = $model->getSKuTableInputs();
-                  $data = [];                          
+                  $data = array();                          
                   foreach ($model->getSaleAttrList() as $k=>$attr){   
                       $data[] = [
                           'id'=>$attr['attr_id'],

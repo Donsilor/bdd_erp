@@ -185,7 +185,7 @@ class StyleGoodsForm extends Model
      */
     public function getSaleAttrList()
     {
-        return StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id,'attr_type'=>AttrTypeEnum::TYPE_SALE])->asArray()->all();
+        return \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id,AttrTypeEnum::TYPE_SALE);
     }
     /**
      * 获取skuTable 扩展字段配置

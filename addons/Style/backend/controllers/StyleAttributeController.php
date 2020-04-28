@@ -90,7 +90,6 @@ class StyleAttributeController extends BaseController
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
-        $model->is_combine = 0;//$style->type->is_combine;
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {

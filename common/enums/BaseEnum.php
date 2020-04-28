@@ -30,10 +30,10 @@ abstract class BaseEnum
      * @param $key
      * @return string
      */
-    public static function getValue($key , $funcName = null): string
+    public static function getValue($key , $funcName = null)
     {
         $map = self::_getMap($funcName);
-        return $map[$key] ?? '';
+        return $map[$key] ?? null;
     }
     /**
      * @param array $keys

@@ -18,6 +18,7 @@ use addons\Style\common\models\StyleCate;
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
+ * @property int $jintuo_type 金托类型
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
  * @property int $produce_id 布产ID
@@ -41,8 +42,8 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['style_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num'], 'required'],
-            [['purchase_id', 'goods_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['style_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num','jintuo_type'], 'required'],
+            [['purchase_id', 'goods_type','jintuo_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
             [['goods_name','remark'], 'string', 'max' => 255],
@@ -64,6 +65,7 @@ class PurchaseGoods extends BaseModel
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
+            'jintuo_type' => '金托类型',
             'cost_price' => '成本价',
             'goods_num' => '商品数量',
             'produce_id' => '布产ID',

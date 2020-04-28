@@ -29,14 +29,14 @@ class StyleAttrForm extends Model
     
     public $style_sn;
     
-    public $is_combine;
+    public $tuo_type;//金托类型
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-                [['style_id','style_cate_id','style_sn','is_combine'], 'required'],
+                [['style_id','style_cate_id','style_sn'], 'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     if(!empty($value)) {
                         foreach ($value as $k=>$v) {
@@ -124,10 +124,16 @@ class StyleAttrForm extends Model
             $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
             $model->status = StatusEnum::ENABLED;
             $model->save();
-        }
-        
-        
-        
+        }        
+    }
+    
+    /**
+     * 获取款式属性列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getAttrList()
+    {   
+        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id);
     }
     
 }

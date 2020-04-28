@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                       <?php }?>
                 </div>
                 <?php
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2]);
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id);
                 foreach ($attr_list_all as $attr_type=>$attr_list){                    
                     foreach ($attr_list as $k=>$attr){
                         $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';

@@ -8,6 +8,9 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\models\StyleAttribute;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\AttrTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -21,7 +24,6 @@ class PurchaseGoodsForm extends PurchaseGoods
     public $attr_require;
     //属性非必填
     public $attr_custom;
-    public $is_combine;
     /**
      * {@inheritdoc}
      */
@@ -42,6 +44,7 @@ class PurchaseGoodsForm extends PurchaseGoods
                 return false;
             }],
             [['attr_require','attr_custom'],'getPostAttrs'],
+            [['jintuo_type'],'number'],
          ];
          return array_merge(parent::rules() , $rules);
     }
@@ -54,7 +57,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         return parent::attributeLabels() + [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',                
-               ];
+              ];
     }
     /**
      * 款式基础属性
@@ -88,7 +91,6 @@ class PurchaseGoodsForm extends PurchaseGoods
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
-        $this->is_combine = 1;
     } 
     /**
      * 创建商品属性
@@ -119,7 +121,13 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function getAttrList()
     {
-        return \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id);
+        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
+        if($this->goods_type == PurchaseGoodsTypeEnum::STYLE) {
+            $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
+        }else{
+            $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);
+        }
+        return $attr_list;
     }
    
 }
