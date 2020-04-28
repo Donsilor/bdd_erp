@@ -16,8 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>  
-                 <div class="row"> 
-    			     <?php if($model->style_id) {?> 
+
+			     <?php if($model->style_id) {?> 
+			         <div class="row">
     			         <?php if($model->isNewRecord) {?>      			    
             			 <div class="col-lg-3">         
                 			<?= $form->field($model, 'style_sn')->textInput() ?> 
@@ -31,20 +32,21 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">
-                                <?= $form->field($model, 'goods_type')->dropDownList(PurchaseGoodsTypeEnum::getMap(),['disabled'=>true]) ?> 
+            			 	<?= $form->field($model, 'style_sex')->dropDownList(StyleSexEnum::getMap(),['disabled'=>true]) ?>
             			 </div>
-            			 <div class="col-lg-4">
-                                <?= $form->field($model, 'goods_name')->textInput() ?> 
-            			 </div> 
-            			
+        			     <div class="col-lg-4">
+                                <?= $form->field($model, 'goods_type')->dropDownList(PurchaseGoodsTypeEnum::getMap(),['disabled'=>true]) ?> 
+            			 </div>            			
             			 <div class="col-lg-4">       			 
             			 	<?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
             			 </div>
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
-            			 </div> 
+            			 </div>            			 
+        			 </div> 
+        			 <div class="row">
             			 <div class="col-lg-4">
-            			 	<?= $form->field($model, 'style_sex')->dropDownList(StyleSexEnum::getMap(),['disabled'=>true]) ?>
+                                <?= $form->field($model, 'goods_name')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'goods_num')->textInput() ?>
@@ -52,16 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'cost_price')->textInput() ?>
             			 </div> 
-            			               			 
-        			 <?php }else{?>
+        			 </div>              			 
+    			<?php }else{?>
+        			<div class="row">
             			 <div class="col-lg-4">         
                 			<?= $form->field($model, 'style_sn')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
-        			 <?php }?>        			 
-    			 </div>
+        			</div>
+    			<?php }?>        			 
+
             	<?php   
             	  if($model->goods_type == PurchaseGoodsTypeEnum::STYLE) {
                         $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($model->style_id);
