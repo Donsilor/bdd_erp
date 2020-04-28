@@ -73,15 +73,16 @@ class QibanController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
-        $style_sn = Yii::$app->request->get('style_sn');
-        $search = Yii::$app->request->get('search');
-
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
         $model->initAttrs();
-
-        if($search && $style_sn) {
+        if($model->isNewRecord) {
+            $style_sn = Yii::$app->request->get('style_sn');
+        }else{
+            $style_sn = $model->style_sn;
+        }
+        if($style_sn) {
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
             if(!$style) {
@@ -100,8 +101,9 @@ class QibanController extends BaseController
             $style_model = new StyleAttrForm();
             $style_model->style_id = $style->id;
             $style_model->initAttrs();
-            $model->attr_custom = $style_model->attr_custom;
-            $model->attr_require = $style_model->attr_require;
+//            $model->attr_custom = $style_model->attr_custom;
+//            $model->attr_require = $style_model->attr_require;
+            $model->style_id = $style->id;
         }
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord) {
