@@ -38,6 +38,16 @@ class StyleAttrForm extends Model
         return [
                 [['style_id','style_cate_id','style_sn','is_combine'], 'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
+                    if(!empty($value)) {
+                        foreach ($value as $k=>$v) {
+                            if($v === "") {
+                                $name = \Yii::$app->attr->attrName($k);
+                                $this->addError("attr_require[{$k}]","[{$name}]不能为空");
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
                     return false;
                 }],
                 [['attr_require','attr_custom'],'getPostAttrs'],
