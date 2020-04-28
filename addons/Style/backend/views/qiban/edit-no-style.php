@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择']) ?>
                         </div>
                       <?php }?>
-
                 </div>
                 <?php
                 $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2]);

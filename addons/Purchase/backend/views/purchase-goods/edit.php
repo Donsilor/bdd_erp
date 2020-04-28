@@ -77,16 +77,15 @@ $this->params['breadcrumbs'][] = $this->title;
                       $attr_values = $attr['attr_values'];//属性值
                       $is_require = $attr['is_require'];                     
                       $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+                      
+                      $_field = $is_require == 1 ? 'attr_require':'attr_custom';
+                      $field = "{$_field}[{$attr_id}]";
                       switch ($attr['input_type']){
                           case common\enums\InputTypeEnum::INPUT_TEXT :{
-                              $_field = $is_require == 1 ?'attr_require':'attr_custom';
-                              $field = "{$_field}[{$attr_id}]"; 
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
                           }                              
-                          default:{
-                              $_field = $is_require == 1 || $attr_values != '' ? 'attr_require':'attr_custom';
-                              $field = "{$_field}[{$attr_id}]"; 
+                          default:{                               
                               if($attr_values == '') {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }else {

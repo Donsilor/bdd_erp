@@ -73,47 +73,15 @@ class AttributeService extends Service
         
         return ArrayHelper::map($models,'id','attr_name');
     }
-   
-    
     /**
-     * 根据产品线查询属性列表（数据行）
+     * 查询款式属性列表（不按照属性类型分组）
      * @param unknown $style_cate_id
+     * @param unknown $attr_type
      * @param number $status
      * @param unknown $language
-     * @return array
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public function getAttrListByTypeId($style_cate_id,$status = 1,$language = null)
-    {
-        if(empty($language)){
-            $language = Yii::$app->params['language'];
-        }
-        $query = AttributeSpec::find()->alias("spec")
-                    ->select(["attr.id","lang.attr_name",'spec.attr_type','spec.input_type','spec.is_require'])
-                    ->innerJoin(Attribute::tableName()." attr",'spec.attr_id=attr.id')
-                    ->innerJoin(AttributeLang::tableName().' lang',"attr.id=lang.master_id and lang.language='".$language."'")
-                    ->where(['spec.style_cate_id'=>$style_cate_id]);
-        if(is_numeric($status)){
-            $query->andWhere(['=','spec.status',$status]);
-        }
-        
-        $models = $query->orderBy("spec.sort asc")->asArray()->all();
-
-        $attr_list = [];
-        foreach ($models as $model){
-            $attr_list[$model['attr_type']][] = $model;
-        }
-        ksort($attr_list);
-        return $attr_list;        
-    }
-    /**
-     * 根据款式分类查询 属性列表
-     * @param int $style_cate_id
-     * @param int or array(int) $attr_type
-     * @param number $status
-     * @param string $language
-     * @return array
-     */
-    public function getAttrListByCateId($style_cate_id, $attr_type = null, $is_combine = null, $status = 1, $language = null)
+    public function getAttrListByCateId($style_cate_id, $attr_type = null, $status = 1, $language = null)
     {
         if(empty($language)){
             $language = Yii::$app->params['language'];
@@ -129,13 +97,21 @@ class AttributeService extends Service
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
         }
-        if($is_combine  !== null){
-            if($is_combine == 0) {
-                $query->andWhere(['spec.is_combine'=>0]);
-            }
-        }
-        $models = $query->orderBy("spec.sort asc")->asArray()->all();
         
+        $models = $query->orderBy("spec.sort asc")->asArray()->all();
+        return $models;
+    }
+    /**
+     * 根据款式分类查询 属性列表  按照属性类型分组
+     * @param int $style_cate_id
+     * @param int or array(int) $attr_type
+     * @param number $status
+     * @param string $language
+     * @return array
+     */
+    public function getAttrTypeListByCateId($style_cate_id, $attr_type = null,$status = 1, $language = null)
+    {
+        $models = $this->getAttrListByCateId($style_cate_id, $attr_type,$status, $language);
         $attr_list = [];
         foreach ($models as $model){
             $attr_list[$model['attr_type']][] = $model;
