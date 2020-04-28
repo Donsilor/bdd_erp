@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                <div class="row">
-                    <?php if($model->style_sn) {?>
+                <?php if($model->style_sn) {?>
+                   <div class="row">
                         <?php if($model->isNewRecord) {?>
                             <div class="col-lg-3">
                                 <?= $form->field($model, 'style_sn')->textInput() ?>
@@ -31,15 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
                         </div>
-
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_name')->textInput() ?>
-                        </div>
-
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
-
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
                         </div>
@@ -48,21 +42,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
-                        </div>                       
+                        </div> 
+                    </div>
+                    <div class="row">    
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_name')->textInput() ?>
+                        </div>                  
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
-
-                    <?php }else{?>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'style_sn')->textInput() ?>
-                        </div>
-                        <div class="col-lg-1">
-                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
-                        </div>
-                    <?php }?>
+                    </div>
+                <?php }else{?>
+                <div class="row"> 
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'style_sn')->textInput() ?>
+                    </div>
+                    <div class="col-lg-1">
+                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
+                    </div>
                 </div>
-                <?php
+          <?php }?>
+          <?php
             if($model->style_sn){
                 $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($model->style_id);
                 foreach ($attr_list as $k=>$attr){
@@ -70,16 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     $attr_values = $attr['attr_values'];//属性值
                     $is_require = $attr['is_require'];
                     $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+                    $_field = $is_require == 1 ?'attr_require':'attr_custom';
+                    $field = "{$_field}[{$attr_id}]";
                     switch ($attr['input_type']){
-                        case common\enums\InputTypeEnum::INPUT_TEXT :{
-                            $_field = $is_require == 1 ?'attr_require':'attr_custom';
-                            $field = "{$_field}[{$attr_id}]";
+                        case common\enums\InputTypeEnum::INPUT_TEXT :{                            
                             $input = $form->field($model,$field)->textInput()->label($attr_name);
                             break;
                         }
                         default:{
-                            $_field = $is_require == 1 || $attr_values != '' ? 'attr_require':'attr_custom';
-                            $field = "{$_field}[{$attr_id}]";
                             if($attr_values == '') {
                                 $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                             }else {
@@ -97,12 +95,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                 }//end foreach $attr_list
                 ?>
-
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <?= $form->field($model, 'remark')->textarea() ?>
-                        </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <?= $form->field($model, 'remark')->textarea() ?>
                     </div>
+                </div>
             <?php }?>
             </div>
             <?php ActiveForm::end(); ?>

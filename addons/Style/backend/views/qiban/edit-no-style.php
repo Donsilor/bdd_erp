@@ -48,10 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
                 <?php
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2],$model->is_combine);
-                foreach ($attr_list_all as $attr_type=>$attr_list){
-                    ?>
-                    <?php
+                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,[1,2]);
+                foreach ($attr_list_all as $attr_type=>$attr_list){                    
                     foreach ($attr_list as $k=>$attr){
                         $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
                         $attr_field_name = "{$attr_field}[{$attr['id']}]";
@@ -62,14 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
                                 break;
                             }
-//                            case common\enums\InputTypeEnum::INPUT_RADIO :{
-//                                $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
-//                                break;
-//                            }
-//                            case common\enums\InputTypeEnum::INPUT_MUlTI :{
-//                                $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-//                                break;
-//                            }
                             default:{
                                 $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
                                 break;
@@ -83,10 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
                         <?php
                     }//end foreach $attr_list
-                    ?>
-
-                    <!-- ./box-body -->
-                    <?php
                 }//end foreach $attr_list_all
                 ?>
                 <?php if($model->style_cate_id) {?>
