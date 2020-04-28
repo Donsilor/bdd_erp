@@ -24,7 +24,7 @@ class StyleAttributeService extends Service
      */
     public function getStyleAttrList($style_id)
     {
-        return StyleAttribute::find()->where(['style_id'=>$style_id])->asArray()->all();
+        return StyleAttribute::find()->where(['style_id'=>$style_id])->orderBy(['sort asc'])->asArray()->all();
     }
     
 }

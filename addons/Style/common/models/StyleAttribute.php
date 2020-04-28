@@ -12,6 +12,7 @@ use Yii;
  * @property int $input_type 属性显示方式
  * @property int $attr_type 属性类型
  * @property int $is_require 是否必填
+ * @property int $sort 排序
  * @property string $attr_values 属性值
  */
 class StyleAttribute extends BaseModel
@@ -38,7 +39,7 @@ class StyleAttribute extends BaseModel
     {
         return [
             [['style_id', 'attr_id'], 'required'],
-            [['style_id', 'attr_id', 'input_type', 'attr_type','is_require'], 'integer'],
+            [['style_id', 'attr_id', 'input_type', 'attr_type','is_require','sort'], 'integer'],
             [['attr_values'], 'string', 'max' => 2000],
             [['style_id', 'attr_id'], 'unique', 'targetAttribute' => ['style_id', 'attr_id']],
         ];
@@ -55,7 +56,8 @@ class StyleAttribute extends BaseModel
             'input_type' => '显示方式',
             'attr_type' => '属性类型',
             'attr_values' => '属性值',
-            'is_require' =>'必填项'    
+            'is_require' =>'必填项',
+            'sort' =>'排序' 
         ];
     }
     /**

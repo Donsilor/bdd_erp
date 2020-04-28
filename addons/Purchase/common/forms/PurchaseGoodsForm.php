@@ -119,7 +119,7 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function getAttrList()
     {
-        return StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id])->asArray()->all();
+        return \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id);
     }
    
 }

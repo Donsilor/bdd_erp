@@ -120,6 +120,7 @@ class StyleAttrForm extends Model
             $model->is_require = $spec->is_require;
             $model->input_type = $spec->input_type;
             $model->attr_type = $spec->attr_type;
+            $model->sort = $spec->sort;
             $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
             $model->status = StatusEnum::ENABLED;
             $model->save();
