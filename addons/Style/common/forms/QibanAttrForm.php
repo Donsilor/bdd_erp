@@ -20,6 +20,7 @@ class QibanAttrForm extends Qiban
     //属性非必填
     public $attr_custom;
     public $is_combine;
+    public $style_id;
     /**
      * {@inheritdoc}
      */
