@@ -1,142 +1,98 @@
 <?php
-
-use common\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
+use common\helpers\Html;
 use common\helpers\Url;
-use common\enums\AuditStatusEnum;
+use addons\Style\common\enums\AttrTypeEnum;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\order\order */
-/* @var $form yii\widgets\ActiveForm */
-
-$this->title = '起版详情';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->title = $model->isNewRecord ? '创建' : '编辑';
+$this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-//
 ?>
-    <div class="box-body nav-tabs-custom">
-        <h2 class="page-header">起版详情- <?php echo $model->qiban_sn?></h2>
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="<?=Url::to(['qiban/view','id'=>$model->id ,'returnUrl'=>$returnUrl])?>" >基础信息</a></li>
-            <li class=""><a href="<?=Url::to(['qiban-attribute/index','qiban_id'=>$model->id ,'returnUrl'=>$returnUrl])?>" >起版属性</a></li>
-        </ul>
-    <div class="tab-content">
-        <div class="row col-xs-12">
-         <div class="box">
-            <div class="box-header">
-                <h3 class="box-title">基本信息</h3>
-                <div class="box-tools" >
-                </div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <?php $form = ActiveForm::begin([]); ?>
+            <div class="box-body" style="padding:20px 50px">
+
+                    <div class="row">
+                        <?php if($model->style_sn) {?>
+                            <div class="col-lg-4">
+                                <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
+                            </div>
+                        <?php }?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_name')->textInput(['disabled'=>true]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
+                        </div>
+                    </div>
+
+
+                <?php
+                //print_r($model->getAttrList());exit;
+                $attr_list = $model->getAttrList();
+
+                foreach ($attr_list as $k=>$attr){
+                    $attr_id  = $attr['attr_id'];//属性ID
+                    $attr_values = $attr['attr_values'];//属性值
+                    $is_require = $attr['is_require'];
+                    $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+
+                    $_field = $is_require == 1 ? 'attr_require':'attr_custom';
+                    $field = "{$_field}[{$attr_id}]";
+                    switch ($attr['input_type']){
+                        case common\enums\InputTypeEnum::INPUT_TEXT :{
+                            $input = $form->field($model,$field)->textInput()->label($attr_name);
+                            break;
+                        }
+                        default:{
+                            if($attr_values == '') {
+                                $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                            }else {
+                                $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
+                            }
+                            $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                            break;
+                        }
+                    }//end switch
+                    $collLg = 4;
+                    ?>
+                    <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
+                    <div class="col-lg-<?=$collLg?>"><?= $input ?></div>
+                    <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
+                    <?php
+                }//end foreach $attr_list
+                ?>
+                <!-- ./box-body -->
+                <?php if($model->style_sn) {?>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <?= $form->field($model, 'remark')->textarea() ?>
+                        </div>
+                    </div>
+                <?php }?>
             </div>
-            <div class="box-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('id') ?> ：</label>                        
-                            <?= $model->id ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('qiban_name') ?>：</label>
-                            <?= $model->qiban_name ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('status') ?>：</label>
-                            <?= \common\enums\StatusEnum::getValue($model->status)?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('qiban_sn') ?>：</label>
-                            <?= $model->style_sn ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sex') ?>：</label>
-                            <?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex)?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('creator_id') ?>：</label>
-                            <?= $model->creator->username??'' ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                         <div class="col-lg-4">
-                        	<label class="text-right col-lg-4"><?= $model->getAttributeLabel('product_type_id') ?>：</label>
-                            <?= $model->type->name ??'' ?>
-                         </div>
-
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_source_id') ?>：</label>
-                            <?= $model->source->name ??'' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('created_at') ?>：</label>
-                            <?= \Yii::$app->formatter->asDatetime($model->created_at) ?>
-                        </div>                        
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_cate_id') ?>：</label>
-                            <?= $model->cate->name ?? '' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4">默认工厂：</label>
-                            <?= $model->factory->factory_name ?? '';?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_status') ?>：</label>
-                            <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_channel_id') ?> ：</label>
-                            <?= $model->channel->name ?? '' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4">工厂模号：</label>
-                           	<?= $model->factory_mo ?? ''?>
-                        </div>
-                        
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_time') ?>：</label>
-                            <?= \Yii::$app->formatter->asDatetime($model->audit_time) ?>
-                        </div>
-                    </div>                    
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('remark') ?>：</label>
-                            <?= $model->remark ?>
-                        </div>
-                    
-
-        
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>
-                            <?= $model->audit_remark ?>
-                        </div>
-                    </div>            
+            <?php ActiveForm::end(); ?>
         </div>
-        <div class="box-footer">
-            <div class="text-center">
-                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
-                 ]); ?>   
-                 <?php 
-                 if($model->audit_status != AuditStatusEnum::PASS){
-                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                             'class'=>'btn btn-success btn-sm',
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
-                     ]);
-                 }
-                 ?>             
-                <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
-            </div>
-      </div>
     </div>
-    <!-- box end -->
 </div>
-</div>    
+

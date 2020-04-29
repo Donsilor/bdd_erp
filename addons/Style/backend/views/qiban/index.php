@@ -148,10 +148,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status}',
+                'template' => '{edit} {audit} {status} {view}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->style_sn){
+                        if($model->qiban_type == 1){
                             return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'class' => 'btn btn-primary btn-sm openIframe',
                                 'data-width'=>'90%',

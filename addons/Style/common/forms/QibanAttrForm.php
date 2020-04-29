@@ -41,6 +41,7 @@ class QibanAttrForm extends Qiban
                 }
                 return false;
             }],
+            [['style_sn'],'required'],
             [['attr_require','attr_custom'],'getPostAttrs'],
         ];
         return array_merge(parent::rules() , $rules);
@@ -106,6 +107,7 @@ class QibanAttrForm extends Qiban
             }
             $model->is_require = $spec->is_require;
             $model->input_type = $spec->input_type;
+            $model->sort = $spec->sort;
             $model->attr_type  = $spec->attr_type;
             $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
             if(false === $model->save()) {
