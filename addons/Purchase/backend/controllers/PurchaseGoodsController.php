@@ -97,7 +97,7 @@ class PurchaseGoodsController extends BaseController
             $model->purchase_id = $purchase_id;            
         }
         $model = $model ?? new PurchaseGoodsForm();
-        
+
         if($model->isNewRecord && $search && $style_sn) {   
             $model->style_sn = $style_sn;
             
@@ -117,7 +117,7 @@ class PurchaseGoodsController extends BaseController
                     $model->style_sex = $qiban->style_sex;
                     $model->goods_name = $qiban->qiban_name;
                     $model->cost_price  = $qiban->cost_price;
-                    
+                    $model->jintuo_type  = $qiban->jintuo_type;
                     $qibanForm = new QibanAttrForm();
                     $qibanForm->id = $qiban->id;
                     $qibanForm->initAttrs();
@@ -135,6 +135,7 @@ class PurchaseGoodsController extends BaseController
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;
+                $model->jintuo_type  = $qiban->jintuo_type;
             }            
         } 
 
