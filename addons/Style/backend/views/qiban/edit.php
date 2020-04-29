@@ -29,27 +29,32 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         <?php }?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
-                        </div>
-                        <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_name')->textInput() ?>
+                        </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
                         </div>
+                    <?php if($model->isNewRecord) {?>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
+                    <?php }else{ ?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
+                        </div>
+                    <?php } ?>
                     </div>
                     <div class="row">
+
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_name')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_num')->textInput() ?>
+                            <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
@@ -67,9 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php }?>
 
                 <?php
-                //print_r($model->getAttrList());exit;
                 $attr_list = $model->getAttrList();
-
                 foreach ($attr_list as $k=>$attr){
                     $attr_id  = $attr['attr_id'];//属性ID
                     $attr_values = $attr['attr_values'];//属性值
@@ -84,11 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             break;
                         }
                         default:{
-                            if($attr_values == '') {
-                                $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
-                            }else {
-                                $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
-                            }
+                            $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                             $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                             break;
                         }
@@ -117,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
 function searchGoods() {
    var style_sn = $.trim($("#qibanattrform-style_sn").val());
-    var jintuo_type = $("#qibanattrform-jintuo_type").val();
+   var jintuo_type = $("#qibanattrform-jintuo_type").val();
    if(!style_sn) {
         alert("请输入款号");
         return false;

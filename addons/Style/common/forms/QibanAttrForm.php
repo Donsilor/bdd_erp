@@ -41,6 +41,7 @@ class QibanAttrForm extends Qiban
                 }
                 return false;
             }],
+            [['style_sn'],'required'],
             [['attr_require','attr_custom'],'getPostAttrs'],
         ];
         return array_merge(parent::rules() , $rules);

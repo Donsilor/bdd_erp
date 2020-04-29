@@ -150,6 +150,7 @@ class QibanController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
         $style_cate_id = Yii::$app->request->get('style_cate_id');
+        $jintuo_type = Yii::$app->request->get('jintuo_type');
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
@@ -158,6 +159,7 @@ class QibanController extends BaseController
         $model->qiban_type = QibanTypeEnum::NO_STYLE;
         if($model->isNewRecord) {
             $model->style_cate_id = $style_cate_id;
+            $model->jintuo_type = $jintuo_type;
         }
 
 
