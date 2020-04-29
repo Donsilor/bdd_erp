@@ -60,9 +60,9 @@ class QibanAttributeService extends Service
      * 获取起版属性列表
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getQibanAttrList($qiban_id)
+    public function getQibanAttrList($qiban_id,$attr_type)
     {
-        return QibanAttribute::find()->where(['qiban_id'=>$qiban_id])->asArray()->all();
+        return QibanAttribute::find()->where(['qiban_id'=>$qiban_id,'attr_type'=>$attr_type])->asArray()->all();
     }
     
 }
