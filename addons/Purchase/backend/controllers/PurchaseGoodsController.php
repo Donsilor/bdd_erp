@@ -80,7 +80,7 @@ class PurchaseGoodsController extends BaseController
     public function actionEdit()
     {
         $this->layout = '@backend/views/layouts/iframe';
-        
+
         $id = Yii::$app->request->get('id');
         
         $this->modelClass = PurchaseGoodsForm::class;

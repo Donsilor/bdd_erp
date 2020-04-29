@@ -80,12 +80,12 @@ class StyleGoodsForm extends Model
                 $attr_value_id = $attr_vids[$k];
                 $goods_spec[$attr_id] = $attr_value_id;
                 $goods_sn .= '-'.$attr_value_id;
-                $attr_value = Yii::$app->attr->valueName($attr_value_id);
+                /* $attr_value = Yii::$app->attr->valueName($attr_value_id);
                 if($attr_id == AttrIdEnum::FINGER) {
                     $goods['finger'] = $attr_value;
                 }elseif($attr_id == AttrIdEnum::MATERIAL) {
                     $goods['material'] = $attr_value_id;
-                }
+                } */
             }
             $goods['spec_key'] =  $spec_key.'';
             $goods['goods_spec'] = json_encode($goods_spec,true); 
