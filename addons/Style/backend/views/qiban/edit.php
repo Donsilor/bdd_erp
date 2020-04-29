@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                 <?php if($model->style_sn) {?>
-                   <div class="row">
+                    <div class="row">
                         <?php if($model->isNewRecord) {?>
                             <div class="col-lg-3">
                                 <?= $form->field($model, 'style_sn')->textInput() ?>
@@ -25,11 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         <?php }else{?>
                             <div class="col-lg-4">
-                                <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
+                                <?= $form->field($model, 'style_sn')->textInput(['disabled'=>'disabled']) ?>
                             </div>
                         <?php }?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
+                            <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
@@ -41,39 +41,45 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
-                        </div> 
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+                        </div>
                     </div>
-                    <div class="row">    
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_name')->textInput() ?>
-                        </div>                  
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'goods_num')->textInput() ?>
+                        </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
                     </div>
                 <?php }else{?>
-                <div class="row"> 
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'style_sn')->textInput() ?>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_sn')->textInput() ?>
+                        </div>
+                        <div class="col-lg-1">
+                            <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
+                        </div>
                     </div>
-                    <div class="col-lg-1">
-                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
-                    </div>
-                </div>
-          <?php }?>
-          <?php
-            if($model->style_sn){
-                $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($model->style_id);
+                <?php }?>
+
+                <?php
+                //print_r($model->getAttrList());exit;
+                $attr_list = $model->getAttrList();
+
                 foreach ($attr_list as $k=>$attr){
                     $attr_id  = $attr['attr_id'];//属性ID
                     $attr_values = $attr['attr_values'];//属性值
                     $is_require = $attr['is_require'];
                     $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
-                    $_field = $is_require == 1 ?'attr_require':'attr_custom';
+
+                    $_field = $is_require == 1 ? 'attr_require':'attr_custom';
                     $field = "{$_field}[{$attr_id}]";
                     switch ($attr['input_type']){
-                        case common\enums\InputTypeEnum::INPUT_TEXT :{                            
+                        case common\enums\InputTypeEnum::INPUT_TEXT :{
                             $input = $form->field($model,$field)->textInput()->label($attr_name);
                             break;
                         }
@@ -95,25 +101,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                 }//end foreach $attr_list
                 ?>
-                <div class="row">
-                    <div class="col-lg-8">
-                        <?= $form->field($model, 'remark')->textarea() ?>
+                <!-- ./box-body -->
+                <?php if($model->style_sn) {?>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <?= $form->field($model, 'remark')->textarea() ?>
+                        </div>
                     </div>
-                </div>
-            <?php }?>
+                <?php }?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>
     </div>
-  </div>
+</div>
 <script type="text/javascript">
 function searchGoods() {
    var style_sn = $.trim($("#qibanattrform-style_sn").val());
+    var jintuo_type = $("#qibanattrform-jintuo_type").val();
    if(!style_sn) {
         alert("请输入款号");
         return false;
    }
-   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_sn'])?>?style_sn="+style_sn;
+   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_sn','search','jintuo_type'])?>&search=1&style_sn="+style_sn+"&jintuo_type="+jintuo_type;
    window.location.href = url;
 }
 </script>

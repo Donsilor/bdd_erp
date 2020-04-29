@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit'], '有款起版', [
+                    <?= Html::create(['edit','1'=>1], '有款起版', [
                         'class' => 'btn btn-primary btn-xs openIframe',
                         'data-width'=>'90%',
                         'data-height'=>'90%',
@@ -152,7 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->style_sn){
-                            return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                            return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'class' => 'btn btn-primary btn-sm openIframe',
                                 'data-width'=>'90%',
                                 'data-height'=>'90%',

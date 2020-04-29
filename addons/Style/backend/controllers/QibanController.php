@@ -73,16 +73,24 @@ class QibanController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
+
+        $search = Yii::$app->request->get('search');
+        $jintuo_type = Yii::$app->request->get('jintuo_type');
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
         $model->initAttrs();
         if($model->isNewRecord) {
             $style_sn = Yii::$app->request->get('style_sn');
+            $model->style_sn = $style_sn;
         }else{
             $style_sn = $model->style_sn;
         }
-        if($style_sn) {
+        if($jintuo_type) {
+            $model->jintuo_type = $jintuo_type;
+        }
+
+        if($style_sn && $search) {
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
             if(!$style) {
@@ -90,7 +98,6 @@ class QibanController extends BaseController
             }elseif($style->status != 1) {
                 return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
             }
-            $model->style_sn = $style_sn;
             $model->style_cate_id = $style->style_cate_id;
             $model->product_type_id = $style->product_type_id;
             $model->qiban_type = QibanTypeEnum::HAVE_STYLE;

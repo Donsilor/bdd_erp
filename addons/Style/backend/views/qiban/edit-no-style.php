@@ -47,32 +47,30 @@ $this->params['breadcrumbs'][] = $this->title;
                       <?php }?>
                 </div>
                 <?php
-                $attr_list_all = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id);
-                foreach ($attr_list_all as $attr_type=>$attr_list){                    
-                    foreach ($attr_list as $k=>$attr){
-                        $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
-                        $attr_field_name = "{$attr_field}[{$attr['id']}]";
-                        //通用属性值列表
-                        $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
-                        switch ($attr['input_type']){
-                            case common\enums\InputTypeEnum::INPUT_TEXT :{
-                                $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
-                                break;
-                            }
-                            default:{
-                                $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
-                                break;
-                            }
-                        }//end switch
+                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id);
+                foreach ($attr_list as $k=>$attr){
+                    $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
+                    $attr_field_name = "{$attr_field}[{$attr['id']}]";
+                    //通用属性值列表
+                    $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
+                    switch ($attr['input_type']){
+                        case common\enums\InputTypeEnum::INPUT_TEXT :{
+                            $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
+                            break;
+                        }
+                        default:{
+                            $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
+                            break;
+                        }
+                    }//end switch
 
-                        $collLg = 4;
-                        ?>
-                        <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
-                        <div class="col-lg-<?=$collLg?>"><?= $input ?></div>
-                        <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
-                        <?php
-                    }//end foreach $attr_list
-                }//end foreach $attr_list_all
+                    $collLg = 4;
+                    ?>
+                    <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
+                    <div class="col-lg-<?=$collLg?>"><?= $input ?></div>
+                    <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
+                    <?php
+                }//end foreach $attr_list
                 ?>
                 <?php if($model->style_cate_id) {?>
                         <div class="row">

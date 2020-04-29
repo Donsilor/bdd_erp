@@ -2,6 +2,8 @@
 
 namespace addons\Style\common\forms;
 
+use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\models\QibanAttribute;
@@ -19,7 +21,6 @@ class QibanAttrForm extends Qiban
     public $attr_require;
     //属性非必填
     public $attr_custom;
-    public $is_combine;
     public $style_id;
     /**
      * {@inheritdoc}
@@ -88,7 +89,6 @@ class QibanAttrForm extends Qiban
         }
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
-        $this->is_combine = 1;
     }
     /**
      * 创建商品属性
@@ -112,6 +112,18 @@ class QibanAttrForm extends Qiban
                 throw new \Exception($this->getErrors($model));
             }
         }
+    }
+
+
+    /**
+     * 获取款式属性列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getAttrList()
+    {
+        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
+        $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
+        return $attr_list;
     }
 
 }
