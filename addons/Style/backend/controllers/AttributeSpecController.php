@@ -198,7 +198,7 @@ class AttributeSpecController extends BaseController
             $checked_values = explode(",",trim($model->attr_values,','));
         }        
         $html = '';
-        $values = Yii::$app->services->goodsAttribute->getValuesByAttrId($attr_id);
+        $values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
         foreach ($values as $key=>$val) {
             $checked = $checked_values === false || in_array($key,$checked_values)?" checked":'';
             $html .= '<label style="color:#636f7a"><input type="checkbox" name="AttributeSpecValue[attr_values][]" value="'.$key.'"'.$checked.'>'.$val.'</label>&nbsp;';  
