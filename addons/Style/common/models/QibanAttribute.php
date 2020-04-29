@@ -37,7 +37,7 @@ class QibanAttribute extends BaseModel
     {
         return [
             [['qiban_id', 'attr_id'], 'required'],
-            [['qiban_id', 'attr_id', 'input_type', 'is_require', 'attr_type', 'status'], 'integer'],
+            [['qiban_id', 'attr_id', 'input_type', 'is_require', 'attr_type', 'status','sort'], 'integer'],
             [['attr_values'], 'string', 'max' => 2000],
             [['qiban_id', 'attr_id'], 'unique', 'targetAttribute' => ['qiban_id', 'attr_id']],
         ];
@@ -55,6 +55,7 @@ class QibanAttribute extends BaseModel
             'is_require' => '是否必填 1必填 0选填',
             'attr_type' => '属性类型',
             'attr_values' => '属性值',
+            'sort' => '排序',
             'status' => '状态 1启用 0禁用 -1删除',
         ];
     }
