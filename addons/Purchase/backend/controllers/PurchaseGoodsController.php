@@ -100,7 +100,6 @@ class PurchaseGoodsController extends BaseController
         
         if($model->isNewRecord && $search && $style_sn) {   
             $model->style_sn = $style_sn;
-            $model->jintuo_type = $jintuo_type;
             
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);            
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
