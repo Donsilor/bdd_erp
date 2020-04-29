@@ -17,7 +17,7 @@ class SnHelper
      */
     public static function createOrderSn($prefix = 'BDD')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),7,'0',STR_PAD_LEFT);
     }
     /**
      * 采购单号
@@ -26,7 +26,7 @@ class SnHelper
      */
     public static function createPurchaseSn($prefix = 'CG')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),7,'0',STR_PAD_LEFT);
     }
     /**
      * 布产单号
@@ -35,7 +35,7 @@ class SnHelper
      */
     public static function createProduceSn($prefix = 'BC')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),7,'0',STR_PAD_LEFT);
     }
     /**
      * 单据编号
@@ -44,7 +44,7 @@ class SnHelper
      */
     public static function createBillSn($prefix = 'B')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999999),9,'0',STR_PAD_LEFT);
     }
     /**
      * 起版编号
@@ -53,7 +53,7 @@ class SnHelper
      */
     public static function createQibanSn($prefix = 'QB')
     {
-        return $prefix.date('d').mt_rand(3,9).str_pad(mt_rand(1, 9999999),6,'1',STR_PAD_LEFT);
+        return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 999999),6,'0',STR_PAD_LEFT);
     }
     
 }
