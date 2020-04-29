@@ -81,24 +81,13 @@ class PurchaseGoodsController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
         
-        $id = Yii::$app->request->get('id');        
-        $purchase_id = Yii::$app->request->get('purchase_id');
-        
-        $style_sn = Yii::$app->request->get('style_sn');
-        $search = Yii::$app->request->get('search');
-        $jintuo_type = Yii::$app->request->get('jintuo_type');
+        $id = Yii::$app->request->get('id');
         
         $this->modelClass = PurchaseGoodsForm::class;
-        $model = $this->findModel($id);
-        if($jintuo_type) {
-            $model->jintuo_type = $jintuo_type;
-        }
-        if($model->isNewRecord) {
-            $model->purchase_id = $purchase_id;            
-        }
+        $model = $this->findModel($id);        
         $model = $model ?? new PurchaseGoodsForm();
 
-        if($model->isNewRecord && $search && $style_sn && ($return = $this->checkGoods($model, $style_sn)) !== true) {   
+        if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {   
             return $return;
         } 
 
@@ -136,51 +125,64 @@ class PurchaseGoodsController extends BaseController
      * @param unknown $style_sn
      * @return mixed|string
      */
-    private function checkGoods(& $model, $style_sn) 
+    private function checkGoods(& $model) 
     {
-        $model->style_sn = $style_sn;
         
-        $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-        $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
-        if(!$style) {
-            $qiban = Qiban::find()->where(['qiban_sn'=>$style_sn])->one();
-            if(!$qiban) {
-                return $this->message("[款号/起版号]不存在", $this->redirect($skiUrl), 'error');
-            }elseif($qiban->status != StatusEnum::ENABLED) {
-                return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
-            }else{
-                $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'style_sn'=>$style_sn,'status'=>StatusEnum::ENABLED])->count();
-                if($exist) {
-                    return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
+        $purchase_id = Yii::$app->request->get('purchase_id');        
+        $style_sn = Yii::$app->request->get('style_sn');
+        $search = Yii::$app->request->get('search');
+        $jintuo_type = Yii::$app->request->get('jintuo_type');
+        
+        if($jintuo_type) {
+            $model->jintuo_type = $jintuo_type;
+        }
+        if($model->isNewRecord) {
+            $model->purchase_id = $purchase_id;
+        }
+        if($model->isNewRecord && $search && $style_sn) {
+            
+            $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+            $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
+            if(!$style) {
+                $qiban = Qiban::find()->where(['qiban_sn'=>$style_sn])->one();
+                if(!$qiban) {
+                    return $this->message("[款号/起版号]不存在", $this->redirect($skiUrl), 'error');
+                }elseif($qiban->status != StatusEnum::ENABLED) {
+                    return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
+                }else{
+                    $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'style_sn'=>$style_sn,'status'=>StatusEnum::ENABLED])->count();
+                    if($exist) {
+                        return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
+                    }                    
+                    $model->style_id = $qiban->id;
+                    $model->style_sn = $style_sn;
+                    $model->style_cate_id = $qiban->style_cate_id;
+                    $model->product_type_id = $qiban->product_type_id;
+                    $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
+                    $model->style_sex = $qiban->style_sex;
+                    $model->goods_name = $qiban->qiban_name;
+                    $model->cost_price  = $qiban->cost_price;
+                    $model->jintuo_type = $qiban->jintuo_type;
+                    $qibanForm = new QibanAttrForm();
+                    $qibanForm->id = $qiban->id;
+                    $qibanForm->initAttrs();
+                    
+                    $model->attr_custom = $qibanForm->attr_custom;
+                    $model->attr_require = $qibanForm->attr_require;
                 }
-                
-                $model->style_id = $qiban->id;
-                $model->style_cate_id = $qiban->style_cate_id;
-                $model->product_type_id = $qiban->product_type_id;
-                $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
-                $model->style_sex = $qiban->style_sex;
-                $model->goods_name = $qiban->qiban_name;
-                $model->cost_price  = $qiban->cost_price;
-                $model->jintuo_type = $qiban->jintuo_type;
-                $qibanForm = new QibanAttrForm();
-                $qibanForm->id = $qiban->id;
-                $qibanForm->initAttrs();
-                
-                $model->attr_custom = $qibanForm->attr_custom;
-                $model->attr_require = $qibanForm->attr_require;
-            }
-        }elseif($style->status != StatusEnum::ENABLED) {
-            return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
-        }else{
-            $model->style_id = $style->id;
-            $model->style_cate_id = $style->style_cate_id;
-            $model->product_type_id = $style->product_type_id;
-            $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
-            $model->style_sex = $style->style_sex;
-            $model->goods_name = $style->style_name;
-            $model->cost_price = $style->cost_price;
-            $model->jintuo_type  = $qiban->jintuo_type;
-        } 
+            }elseif($style->status != StatusEnum::ENABLED) {
+                return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
+            }else{
+                $model->style_id = $style->id;
+                $model->style_sn = $style_sn;
+                $model->style_cate_id = $style->style_cate_id;
+                $model->product_type_id = $style->product_type_id;
+                $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
+                $model->style_sex = $style->style_sex;
+                $model->goods_name = $style->style_name;
+                $model->cost_price = $style->cost_price;
+            } 
+        }
         
         return true;
     }
