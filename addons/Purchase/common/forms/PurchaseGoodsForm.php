@@ -11,6 +11,7 @@ use addons\Style\common\models\StyleAttribute;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\AttrTypeEnum;
+use common\enums\InputTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -44,7 +45,6 @@ class PurchaseGoodsForm extends PurchaseGoods
                 return false;
             }],
             [['attr_require','attr_custom'],'getPostAttrs'],
-            [['jintuo_type'],'number'],
          ];
          return array_merge(parent::rules() , $rules);
     }
@@ -78,17 +78,11 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function initAttrs()
     {
-        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','attr_values'])->where(['id'=>$this->id])->asArray()->all();
+        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
         if(empty($attr_list)) {
             return ;
         }
-        $attr_list = array_column($attr_list,'attr_values','attr_id');
-        foreach ($attr_list as $attr_id => & $attr_value) {
-            $split_value = explode(",",$attr_value);
-            if(count($split_value) > 1) {
-                $attr_value = $split_value;
-            }
-        }
+        $attr_list = array_column($attr_list,'attr_value','attr_id');        
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
     } 
@@ -98,18 +92,28 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function createAttrs()
     {  
         PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);        
-        foreach ($this->getPostAttrs() as $attr_id => $attr_value) {            
+        foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {            
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
-            $model = PurchaseGoodsAttribute::find()->where(['id'=>$this->id,'attr_id'=>$attr_id])->one();
-            if(!$model) {
-                $model = new PurchaseGoodsAttribute();
-                $model->id = $this->id; 
-                $model->attr_id  = $attr_id;
-            }
-            $model->is_require = $spec->is_require;
-            $model->input_type = $spec->input_type;
-            $model->attr_type  = $spec->attr_type;
-            $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
+            $model = new PurchaseGoodsAttribute();
+            $model->id = $this->id;
+            $model->attr_id  = $attr_id; 
+            if(InputTypeEnum::isText($spec->input_type)) {
+                $model->attr_value_id  = 0;
+            }else if(is_numeric($attr_value_id)){
+                $attr_value = \Yii::$app->attr->valueName($attr_value_id);
+                $model->attr_value_id  = $attr_value_id; 
+                $model->attr_value = $attr_value;
+                $pices = explode('-',$attr_value);
+                if(count($pices)==2) {
+                    if(is_numeric($pices[0]) && is_numeric($pices[1])) {
+                        $model->attr_value_min = $pices[0];
+                        $model->attr_value_max = $pices[1];
+                    }
+                }
+            }else{
+                continue;
+            }   
+            $model->sort = $spec->sort;
             if(false === $model->save()) {
                 throw new \Exception($this->getErrors($model));
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\Purchase\common\models;
+namespace addons\Style\common\models;
 
 use Yii;
 
@@ -14,14 +14,14 @@ use Yii;
  * @property int $type_id 类型id
  * @property int $attr_id 属性id
  */
-class PurchaseGoodsAttribute extends BaseModel
+class StyleGoodsAttribute extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName("purchase_goods_attribute");
+        return self::tableFullName("style_goods_attribute");
     }
     /**
      * behaviors
@@ -38,8 +38,8 @@ class PurchaseGoodsAttribute extends BaseModel
     public function rules()
     {
         return [
-                [['id','attr_id','attr_value_id'], 'required'],
-                [['id','attr_id','attr_value_id'], 'integer'],
+                [['goods_id','attr_id','attr_value_id'], 'required'],
+                [['goods_id','attr_id','attr_value_id'], 'integer'],
                 [['attr_value_min', 'attr_value_max'], 'number'],
                 [['attr_value'], 'string','max'=>255]
         ];
@@ -51,7 +51,7 @@ class PurchaseGoodsAttribute extends BaseModel
     public function attributeLabels()
     {
         return [
-                'id' => '商品ID',
+                'goods_id' => '商品ID',
                 'attr_id' => "属性ID",
                 'attr_value_id' => "属性值ID",
                 'attr_value' => "属性值",

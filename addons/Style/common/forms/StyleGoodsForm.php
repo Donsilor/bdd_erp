@@ -11,6 +11,9 @@ use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\enums\StatusEnum;
+use addons\Style\common\models\StyleGoodsAttribute;
+use addons\Style\common\models\AttributeSpec;
+use common\enums\InputTypeEnum;
 
 /**
  * 款式编辑-商品属性 Form
@@ -79,13 +82,7 @@ class StyleGoodsForm extends Model
             foreach ($attr_ids as $k=>$attr_id){
                 $attr_value_id = $attr_vids[$k];
                 $goods_spec[$attr_id] = $attr_value_id;
-                $goods_sn .= '-'.$attr_value_id;
-                /* $attr_value = Yii::$app->attr->valueName($attr_value_id);
-                if($attr_id == AttrIdEnum::FINGER) {
-                    $goods['finger'] = $attr_value;
-                }elseif($attr_id == AttrIdEnum::MATERIAL) {
-                    $goods['material'] = $attr_value_id;
-                } */
+                $goods_sn .= '-'.$attr_value_id;                
             }
             $goods['spec_key'] =  $spec_key.'';
             $goods['goods_spec'] = json_encode($goods_spec,true); 
@@ -166,6 +163,11 @@ class StyleGoodsForm extends Model
             if(!$model->save()) {
                 throw new \Exception($this->getError($model));
             }
+            
+            $goods_id = $model->id;
+            $attr_list = json_decode($model->goods_spec,true) ?? [];
+            $this->createGoodsAttrs($goods_id, $attr_list);
+            
             $cost_prices[] = $model->cost_price;
             $goods_num += ($model->status == StatusEnum::ENABLED) ? 1 : 0;
         }
@@ -180,6 +182,41 @@ class StyleGoodsForm extends Model
             throw new \Exception($this->getError($style));
         }
     } 
+    /**
+     * 创建商品明细id
+     * @throws \Exception
+     */
+    public function createGoodsAttrs($goods_id, $attr_list)
+    {  
+        StyleGoodsAttribute::deleteAll(['goods_id'=>$goods_id]);
+        foreach ($attr_list as $attr_id => $attr_value_id) {
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
+            $model = new StyleGoodsAttribute();
+            $model->goods_id = $goods_id;
+            $model->attr_id  = $attr_id;
+            if(InputTypeEnum::isText($spec->input_type)) {
+                $model->attr_value_id  = 0;
+            }else if(is_numeric($attr_value_id)){
+                $attr_value = \Yii::$app->attr->valueName($attr_value_id);
+                $model->attr_value_id  = $attr_value_id;
+                $model->attr_value = $attr_value;
+                $pices = explode('-',$attr_value);
+                if(count($pices)==2) {
+                    if(is_numeric($pices[0]) && is_numeric($pices[1])) {
+                        $model->attr_value_min = $pices[0];
+                        $model->attr_value_max = $pices[1];
+                    }
+                }
+            }else{
+                continue;
+            }
+            $model->sort = $spec->sort;
+            if(false === $model->save()) {
+                throw new \Exception($this->getErrors($model));
+            }
+        }
+
+    }
     /**
      * 获取销当前款的售属性列表
      */
