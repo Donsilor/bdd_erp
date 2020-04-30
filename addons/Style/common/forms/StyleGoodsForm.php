@@ -200,10 +200,12 @@ class StyleGoodsForm extends Model
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
                 $model->attr_value_id  = $attr_value_id;
                 $model->attr_value = $attr_value;
-                list($min,$max) = explode('-',$attr_value);
-                if(is_numeric($min) && is_numeric($max)) {
-                    $model->attr_value_min = $min;
-                    $model->attr_value_max = $max;
+                $pices = explode('-',$attr_value);
+                if(count($pices)==2) {
+                    if(is_numeric($pices[0]) && is_numeric($pices[1])) {
+                        $model->attr_value_min = $pices[0];
+                        $model->attr_value_max = $pices[1];
+                    }
                 }
             }else{
                 continue;
