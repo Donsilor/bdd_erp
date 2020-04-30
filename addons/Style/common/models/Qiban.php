@@ -77,7 +77,7 @@ class Qiban extends BaseModel
             'style_channel_id' => '款式渠道',
             'qiban_type' => '起版类型',
             'style_sex' => '款式性别',
-            'style_image' => '商品主图',
+            'style_image' => '起版主图',
             'sale_price' => '销售价',
             'market_price' => '市场价',
             'cost_price' => '成本价',

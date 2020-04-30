@@ -98,11 +98,14 @@ class QibanController extends BaseController
             }elseif($style->status != 1) {
                 return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
             }
-            $model->style_cate_id = $style->style_cate_id;
-            $model->product_type_id = $style->product_type_id;
-            $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
-            $model->style_sex = $style->style_sex;
-            $model->qiban_name = $style->style_name;
+            if($model->isNewRecord) {
+                $model->style_cate_id = $style->style_cate_id;
+                $model->product_type_id = $style->product_type_id;
+                $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
+                $model->style_sex = $style->style_sex;
+                $model->qiban_name = $style->style_name;
+                $model->style_image = $style->style_image;
+            }
 
             //根据款号获取属性值
             $style_model = new StyleAttrForm();

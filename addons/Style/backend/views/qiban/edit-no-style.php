@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
+
                       <?php } else {?>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
@@ -87,6 +88,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'remark')->textarea() ?>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <?= $form->field($model, 'style_image')->widget(common\widgets\webuploader\Files::class, [
+                                    'config' => [
+                                        'pick' => [
+                                            'multiple' => false,
+                                            'height'=> '50'
+                                        ],
+                                        'options'=>[
+                                            'height'=>'50'
+                                        ]
+
+                                    ],
+
+                                ]); ?>
+                            </div>
+                        </div>
+
                 <?php }?>
             </div>
             <?php ActiveForm::end(); ?>

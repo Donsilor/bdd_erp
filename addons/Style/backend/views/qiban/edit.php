@@ -59,7 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
+
                     </div>
+
                 <?php }else{?>
                     <div class="row">
                         <div class="col-lg-4">
@@ -70,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                 <?php }?>
+
 
                 <?php
                 $attr_list = $model->getAttrList();
@@ -105,6 +108,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="row">
                         <div class="col-lg-8">
                             <?= $form->field($model, 'remark')->textarea() ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_image')->widget(common\widgets\webuploader\Files::class, [
+                                'config' => [
+                                    'pick' => [
+                                        'multiple' => false,
+                                        'height'=> '50'
+                                    ],
+
+                                ]
+                            ]); ?>
                         </div>
                     </div>
                 <?php }?>
