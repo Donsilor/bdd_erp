@@ -186,7 +186,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model->audit_status == 0){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
-                    },                    
+                    },
+                    'view'=> function($url, $model, $key){
+                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                            'class' => 'btn btn-info btn-sm',
+                        ]);
+
+                    },
                 ]
             ]
         ]

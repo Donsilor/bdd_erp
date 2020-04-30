@@ -50,7 +50,7 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price'],'required'],
+            [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price','qiban_name'],'required'],
             [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
             [['qiban_name', 'audit_remark', 'remark'], 'string', 'max' => 255],

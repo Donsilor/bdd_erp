@@ -141,7 +141,7 @@ class QibanController extends BaseController
     }
 
     /**
-     * 编辑/创建
+     * 无款起版编辑/创建
      * @property PurchaseGoodsForm $model
      * @return mixed
      */
@@ -154,6 +154,7 @@ class QibanController extends BaseController
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
+//        $model->style_sn = "QIBAN";
         $model->initAttrs();
         //无款起版
         $model->qiban_type = QibanTypeEnum::NO_STYLE;
@@ -198,19 +199,12 @@ class QibanController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
-        
+        $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
-        
-        $dataProvider = null;      
-        
+        $model = $model ?? new QibanAttrForm();
+        $model->initAttrs();
         return $this->render($this->action->id, [
-                'model' => $model,
-                'dataProvider' => $dataProvider,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->menuTabList($id,$returnUrl),
-                'returnUrl'=>$returnUrl,
+            'model' => $model,
         ]);
     }    
     /**

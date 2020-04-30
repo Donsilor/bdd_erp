@@ -13,6 +13,7 @@ use Yii;
  * @property int $is_require 是否必填 1必填 0选填
  * @property int $attr_type 属性类型
  * @property string $attr_values 属性值
+ * @property string $sort 排序
  * @property int $status 状态 1启用 0禁用 -1删除
  */
 class QibanAttribute extends BaseModel
