@@ -31,6 +31,7 @@ class ProduceService extends Service
         $produce->produce_sn = SnHelper::createProduceSn();
         $produce->from_type = $from_type;
         if(!$produce->save()){
+            print_r($this->getError($produce));;exit;
             throw new \Exception($this->getError($produce));
         }
         $produce_id = $produce->id;
