@@ -14,7 +14,8 @@ class InputTypeEnum extends BaseEnum
     const INPUT_TEXT = 1;//文本框
     const INPUT_SELECT = 2;//下拉框
     const INPUT_RADIO = 3;//单选框
-    const INPUT_MUlTI = 4;//多选    
+    const INPUT_MUlTI = 4;//多选
+    const INPUT_MUlTI_RANGE = 5;//多选范围
     
     /**
      * @return array
@@ -26,6 +27,7 @@ class InputTypeEnum extends BaseEnum
                 self::INPUT_SELECT => "下拉框",
                 self::INPUT_RADIO => "单选框",
                 self::INPUT_MUlTI => "多选框",
+                self::INPUT_MUlTI_RANGE => "多选范围",
         ];
     }   
     /**
