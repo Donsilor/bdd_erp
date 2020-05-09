@@ -39,7 +39,8 @@ class ProduceService extends Service
             $produce_attr->attributes = $attr;
             $produce_attr->produce_id = $produce_id;
             if($produce_attr->validate() == false || $produce_attr->save() == false){
-                throw new  \Exception($this->getError($produce_attr));
+                 print_r($this->getError($produce_attr));exit;
+                throw new \Exception($this->getError($produce_attr));
             }
         }
 
