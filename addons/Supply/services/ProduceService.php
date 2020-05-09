@@ -16,37 +16,42 @@ use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
 use yii\base\Exception;
+use addons\Purchase\common\models\PurchaseGoods;
 
 
 class ProduceService extends Service
 {
+    public $switchQueue = false;
+    
+    public function queue($switchQueue = true)
+    {
+        $this->switchQueue = $switchQueue;
+        return $this;
+    }
     /**
-     *
+     * 创建布产单
      * @return array
      */
-    public function createProduce($goods, $attrs ,$from_type ){
+    public function createProduce($goods, $attr_list){
+        
         $produce = new Produce();
         $produce->attributes = $goods;
-        $produce->merchant_id = 1;
         $produce->produce_sn = SnHelper::createProduceSn();
-        $produce->from_type = $from_type;
-        if(!$produce->save()){
-            print_r($this->getError($produce));;exit;
+        if(false === $produce->save()){
             throw new \Exception($this->getError($produce));
-        }
+        }        
         $produce_id = $produce->id;
-        foreach ($attrs as $attr){
-            $produce_attr = new ProduceAttribute();
-            $produce_attr->attributes = $attr;
-            $produce_attr->produce_id = $produce_id;
-            if($produce_attr->validate() == false || $produce_attr->save() == false){
-                 print_r($this->getError($produce_attr));exit;
-                throw new \Exception($this->getError($produce_attr));
+        foreach ($attr_list as $attr){
+            $produceAttr = new ProduceAttribute();
+            $produceAttr->attributes = $attr;
+            $produceAttr->produce_id = $produce_id;
+            if(false === $produceAttr->save()){
+                throw new \Exception($this->getError($produceAttr));
             }
-        }
-
-
+        }        
+        return $produce ;
     }
+    
 
 
 }

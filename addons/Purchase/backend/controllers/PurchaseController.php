@@ -128,7 +128,7 @@ class PurchaseController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->purchase->syncPurchaseBC($id);
+                    Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
                     $model->status = StatusEnum::ENABLED;
                 }else{
                     $model->status = StatusEnum::DISABLED;
@@ -136,15 +136,12 @@ class PurchaseController extends BaseController
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
-                $trans->commit();
+                $trans->commit();                
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
-                $error = $e->getMessage();
-                \Yii::error($error);
-                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
+                return $this->message($e->getMessage(), $this->redirect(['index']), 'error');
             }
-
 
         }
 

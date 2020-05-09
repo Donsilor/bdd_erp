@@ -61,8 +61,8 @@ return [
         /** ------ redis配置 ------ **/
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '8.129.190.33',
-            'password' => '123456',
+            'hostname' => '127.0.0.1',
+            //'password' => '123456',
             'port' => 6379,
             'database' => 3
             

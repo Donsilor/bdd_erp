@@ -22,7 +22,15 @@ class ProduceAttribute extends BaseModel
     {
         return self::tableFullName('produce_attribute');
     }
-
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \common\models\base\BaseModel::behaviors()
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
