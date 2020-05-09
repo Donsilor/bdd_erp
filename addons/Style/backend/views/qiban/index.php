@@ -151,20 +151,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {status} {view}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->qiban_type == 1){
-                            return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'class' => 'btn btn-primary btn-sm openIframe',
-                                'data-width'=>'90%',
-                                'data-height'=>'90%',
-                                'data-offset'=>'20px',
-                            ]);
-                        }else{
-                            return Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'class' => 'btn btn-primary btn-sm openIframe',
-                                'data-width'=>'90%',
-                                'data-height'=>'90%',
-                                'data-offset'=>'20px',
-                            ]);
+                        //审核后不能编辑
+                        if($model->audit_status == 0 ){
+                            if($model->qiban_type == 1){
+                                return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                    'class' => 'btn btn-primary btn-sm openIframe',
+                                    'data-width'=>'90%',
+                                    'data-height'=>'90%',
+                                    'data-offset'=>'20px',
+                                ]);
+                            }else{
+                                return Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                    'class' => 'btn btn-primary btn-sm openIframe',
+                                    'data-width'=>'90%',
+                                    'data-height'=>'90%',
+                                    'data-offset'=>'20px',
+                                ]);
+                            }
                         }
 
                     },

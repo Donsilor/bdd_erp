@@ -9,6 +9,7 @@ use common\components\Service;
  *
  * @package addons\Supply\services
  * @property \addons\Supply\services\FactoryService $factory 商品分类
+ * @property \addons\Supply\services\ProduceService $produce 商品分类
  *
  */
 class Application extends Service
@@ -19,5 +20,6 @@ class Application extends Service
     public $childService = [       
         /*********供应商相关*********/
         'factory' => 'addons\Supply\services\FactoryService',
+        'produce' => 'addons\Supply\services\ProduceService',
     ];
 }

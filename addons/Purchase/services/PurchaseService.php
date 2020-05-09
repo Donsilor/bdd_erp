@@ -2,12 +2,15 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
 use common\enums\StatusEnum;
+use yii\db\Exception;
 
 /**
  * Class TypeService
@@ -45,5 +48,28 @@ class PurchaseService extends Service
             Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'cost_total'=>$sum['cost_total']/1],['id'=>$purchase_id]);
         }
     }
+
+
+    /**
+     * 审核后同步到布产
+     */
+    public function syncPurchaseBC($purchase_id){
+        $purchase_goods = PurchaseGoods::find()
+            ->where(['purchase_id'=>$purchase_id])
+            ->asArray()
+            ->all();
+        foreach ($purchase_goods as &$goods){
+            $goods_attr = PurchaseGoodsAttribute::find()->where(['id'=>$goods['id']])->asArray()->all();
+            Yii::$app->supplyService->produce->createProduce($goods ,$goods_attr,2);
+        }
+
+
+    }
+
+
+
+
+
+
  
 }
