@@ -111,6 +111,7 @@ class PurchaseGoodsForm extends PurchaseGoods
                     }
                 }
             }else{
+                throw new \Exception("不允许有多选属性");
                 continue;
             }   
             $model->sort = $spec->sort;

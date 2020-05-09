@@ -141,7 +141,7 @@ class AttributeSpecController extends BaseController
             } 
             $model->status = StatusEnum::ENABLED;
             if(false === $model->save()){
-                throw new Exception($this->getError($model));
+                throw new \Exception($this->getError($model));
             }
         }
     }

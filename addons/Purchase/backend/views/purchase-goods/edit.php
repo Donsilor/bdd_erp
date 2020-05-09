@@ -84,7 +84,11 @@ $this->params['breadcrumbs'][] = $this->title;
                           case common\enums\InputTypeEnum::INPUT_TEXT :{
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
-                          }                              
+                          }  
+                          case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE: {
+                              $input = $form->field($model,$field)->textInput()->label($attr_name);
+                              break;
+                          }
                           default:{                               
                               if($attr_values == '') {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
