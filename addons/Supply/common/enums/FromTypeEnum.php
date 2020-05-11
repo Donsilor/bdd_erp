@@ -5,7 +5,7 @@ namespace addons\Supply\common\enums;
 use common\enums\BaseEnum;
 
 /**
- * 表面工艺  枚举
+ * 订单来源  枚举
  * @package common\enums
  */
 class FromTypeEnum extends BaseEnum

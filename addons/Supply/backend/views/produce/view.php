@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type) ?>
                         </div>
                         <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('status') ?>：</label>
-                            <?= \addons\Supply\common\enums\ProduceStatusEnum::getValue($model->status)?>
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('bc_status') ?>：</label>
+                            <?= \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status)?>
                         </div>
                     </div>
                     <div class="row">
@@ -96,13 +96,48 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= \Yii::$app->formatter->asDatetime($model->updated_at) ?>
                         </div>
                     </div>
-
+                    <?php
+                    $attr_list = \addons\Supply\common\models\ProduceAttribute::find()->where(['produce_id'=>$model->id])->all();
+                    $collLg = 4;
+                    foreach ($attr_list as $k=>$attr){
+                        ?>
+                        <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
+                        <div class="col-lg-<?=$collLg?>">
+                            <label class="text-right col-lg-<?=$collLg?>">
+                                <?= Yii::$app->styleService->attribute->getAttrNameByAttrId($attr['attr_id'])?>：</label>
+                            <?= $attr['attr_value'] ?>
+                        </div>
+                        <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
+                    <?php } ?>
             </div>
+             <div class="box-header">
+                 <h3 class="box-title">属性信息</h3>
+                 <div class="box-tools" >
+                 </div>
+             </div>
+            <div class="box-body">
+                <?php
+                $attr_list = \addons\Supply\common\models\ProduceAttribute::find()->where(['produce_id'=>$model->id])->all();
+                $collLg = 4;
+                foreach ($attr_list as $k=>$attr){
+                ?>
+                <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
+                    <div class="col-lg-<?=$collLg?>">
+                        <label class="text-right col-lg-<?=$collLg?>">
+                            <?= Yii::$app->styleService->attribute->getAttrNameByAttrId($attr['attr_id'])?>：</label>
+                            <?= $attr['attr_value'] ?>
+                    </div>
+                    <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
+                 <?php } ?>
+            </div>
+
+
+
             <div class="box-footer text-center">
 
                  <?php 
-                 if($model->status != AuditStatusEnum::PASS){
-                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                 if($model->bc_status == \addons\Supply\common\enums\BuChanEnum::INITIALIZATION){
+                     echo Html::edit(['to-factory','id'=>$model->id], '分配工厂', [
                              'class'=>'btn btn-success btn-sm',
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModal',

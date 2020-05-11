@@ -73,6 +73,27 @@ class AttributeService extends Service
         
         return ArrayHelper::map($models,'id','attr_name');
     }
+
+
+    /**
+     * 根据属性ID查询属性名称
+     * @param unknown $attr_id
+     * @param unknown $language
+     */
+    public function getAttrNameByAttrId($attr_id,$language = null)
+    {
+        if(empty($language)){
+            $language = Yii::$app->params['language'];
+        }
+        $model = Attribute::find()->alias("val")
+            ->leftJoin(AttributeLang::tableName()." lang","val.id=lang.master_id and lang.language='".$language."'")
+            ->select(['val.id',"lang.attr_name"])
+            ->where(['val.id'=>$attr_id])
+            ->one();
+        return $model ? $model->attr_name : '';
+    }
+
+
     /**
      * 查询款式属性列表（不按照属性类型分组）
      * @param unknown $style_cate_id

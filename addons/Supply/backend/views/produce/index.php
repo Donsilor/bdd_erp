@@ -77,11 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'150'],
             ],
             [
-                'attribute' => 'status',
+                'attribute' => 'bc_status',
                 'value' => function ($model){
-                    return \addons\Supply\common\enums\ProduceStatusEnum::getValue($model->status);
+                    return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'produce_status',\addons\Supply\common\enums\ProduceStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'bc_status',\addons\Supply\common\enums\BuChanEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),

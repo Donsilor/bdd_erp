@@ -57,4 +57,6 @@ class ProduceAttribute extends BaseModel
             'attr_value' => '属性值',
         ];
     }
+
+
 }

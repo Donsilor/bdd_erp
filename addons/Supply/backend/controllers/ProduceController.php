@@ -3,6 +3,7 @@
 namespace addons\Supply\backend\controllers;
 
 use addons\Supply\common\models\Produce;
+use addons\Supply\common\models\ProduceAttribute;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -64,12 +65,18 @@ class ProduceController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
 
+        $produce_attr = ProduceAttribute::find()->where(['produce_id'=>$id])->all();
+
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
+            'produce_attr' => $produce_attr,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->supplyService->produce->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
+
+
+
 }
