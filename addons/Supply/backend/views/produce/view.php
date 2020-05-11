@@ -96,19 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= \Yii::$app->formatter->asDatetime($model->updated_at) ?>
                         </div>
                     </div>
-                    <?php
-                    $attr_list = \addons\Supply\common\models\ProduceAttribute::find()->where(['produce_id'=>$model->id])->all();
-                    $collLg = 4;
-                    foreach ($attr_list as $k=>$attr){
-                        ?>
-                        <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
-                        <div class="col-lg-<?=$collLg?>">
-                            <label class="text-right col-lg-<?=$collLg?>">
-                                <?= Yii::$app->styleService->attribute->getAttrNameByAttrId($attr['attr_id'])?>：</label>
-                            <?= $attr['attr_value'] ?>
-                        </div>
-                        <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
-                    <?php } ?>
+
             </div>
              <div class="box-header">
                  <h3 class="box-title">属性信息</h3>
