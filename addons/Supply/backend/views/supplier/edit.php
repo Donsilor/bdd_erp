@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($model, 'business_scope')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'bank_name')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'bank_account_name')->textInput(['maxlength' => true]) ?>
-                    <?= $form->field($model, 'business_no')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'tax_no')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'business_address')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'contract_no')->textInput(['maxlength' => true]) ?>
@@ -41,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($model, 'bdd_mobile')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'bdd_telephone')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'remark')->textArea(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'balance_type')->dropDownList(\common\enums\BalanceTypeEnum::getMap()) ?>
 
                 </div>
                 <div class="form-group">

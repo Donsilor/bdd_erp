@@ -40,6 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'supplier_code')->textInput(['maxlength' => true]) ?>
                     </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'balance_type')->dropDownList(\common\enums\BalanceTypeEnum::getMap()) ?>
+                    </div>
                 </div>
                 <?php $model->business_scope = !empty($model->business_scope)?explode(',', $model->business_scope):null;?>
                 <?= $form->field($model, 'business_scope')->checkboxList(common\enums\BusinessScopeEnum::getMap()) ?>
@@ -71,9 +74,8 @@ $this->params['breadcrumbs'][] = $this->title;
                   <div class="col-lg-4">
                       <?= $form->field($model, 'business_address')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <div class="col-lg-4">
-                      <?= $form->field($model, 'contract_no')->textInput(['maxlength' => true]) ?>
-                  </div>
+                  <?php $model->pay_type = !empty($model->pay_type)?explode(',', $model->pay_type):null;?>
+                  <?= $form->field($model, 'pay_type')->checkboxList(common\enums\SettlementWayEnum::getMap()) ?>
               </div>
 
           </div>

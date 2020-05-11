@@ -11,12 +11,13 @@ use Yii;
  * @property int $merchant_id 商户ID
  * @property string $supplier_code 供应商编码
  * @property string $supplier_name 供应商名称
- * @property string $contract_no 合同编号
  * @property string $business_no 营业执照号码
  * @property string $business_address 营业执照地址
  * @property string $business_scope 经营范围(逗号隔开的id)
  * @property string $contract_file 合同文件
  * @property string $business_file 营业执照文件
+ * @property string $pay_type 结算方式
+ * @property int $balance_type 付款周期
  * @property string $tax_file 税务登记文件
  * @property string $tax_no 税务登记证号
  * @property string $bank_name 开户行
@@ -55,12 +56,13 @@ class Supplier extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_name', 'contract_no', 'business_no'], 'required'],
+            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_name', 'business_no'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
-            [['contract_no', 'business_no', 'tax_no'], 'string', 'max' => 50],
+            [['business_no', 'tax_no'], 'string', 'max' => 50],
             [['business_scope'], 'parseBusinessScope'],
+            [['pay_type'], 'PayTypeScope'],
             [['contract_file', 'business_file', 'tax_file', 'bank_name'], 'string', 'max' => 100],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];
@@ -76,20 +78,21 @@ class Supplier extends BaseModel
             'merchant_id' => '商户ID',
             'supplier_code' => '供应商编码',
             'supplier_name' => '供应商名称',
-            'contract_no' => '合同编号',
             'business_no' => '营业执照号码',
             'business_address' => '营业执照地址',
             'business_scope' => '经营范围',
             'contract_file' => '合同文件',
             'business_file' => '营业执照文件',
+            'pay_type' => '结算方式',
+            'balance_type' => '付款周期',
             'tax_file' => '税务登记文件',
             'tax_no' => '税务登记证号',
             'bank_name' => '开户行',
             'bank_account' => '银行账户',
             'bank_account_name' => '开户姓名',
-            'contactor' => '联系人',
-            'telephone' => '联系人电话',
-            'mobile' => '联系人手机',
+            'contactor' => '供应商联系人',
+            'telephone' => '供应商联系电话',
+            'mobile' => '供应商联系人手机',
             'address' => '供应商地址',
             'bdd_contactor' => 'BDD紧急联系人',
             'bdd_mobile' => 'BDD紧急联系人手机',
@@ -115,5 +118,16 @@ class Supplier extends BaseModel
             $this->business_scope = implode(',',$this->business_scope);
         }
         return $this->business_scope;
+    }
+
+    /**
+     * 结算方式
+     */
+    public function PayTypeScope()
+    {
+        if(is_array($this->pay_type)){
+            $this->pay_type = implode(',',$this->pay_type);
+        }
+        return $this->pay_type;
     }
 }

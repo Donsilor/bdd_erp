@@ -13,9 +13,7 @@ use common\controllers\AddonsController;
  */
 class BaseController extends AddonsController
 {
-    /**
-    * @var string
-    */
+
     // public $layout = "@addons/Supply/backend/views/layouts/main";
     /**
      * @var string
