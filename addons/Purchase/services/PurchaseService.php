@@ -57,10 +57,7 @@ class PurchaseService extends Service
         $purchase = Purchase::find()->where(['id'=>$purchase_id]);
         
         $models = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id])->all();
-        foreach ($models as $model){            
-            if($model->produce_id){
-                //
-            }
+        foreach ($models as $model){ 
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'from_order_id'=>$model->purchase_id,
