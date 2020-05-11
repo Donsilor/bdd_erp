@@ -79,25 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'200'],
             ],
-            [
-                'attribute' => 'produce_sn',
-                'value' => "produce_sn",
-                'filter' => true,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
-            ],
-            [
-                'attribute' => 'produce_status',
-                'value' => function ($model){
-                    return \common\enums\AuditStatusEnum::getValue($model->produce_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'produce_status',\common\enums\AuditStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],  
+
             [
                 'attribute' => 'audit_status',
                 'value' => function ($model){

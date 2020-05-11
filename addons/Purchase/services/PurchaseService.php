@@ -54,10 +54,16 @@ class PurchaseService extends Service
      */
     public function syncPurchaseToProduce($purchase_id)
     {
-        $purchase = Purchase::find()->where(['id'=>$purchase_id]);
+        $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
+        if($purchase->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购单没有审核');
+        }
         
         $models = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id])->all();
-        foreach ($models as $model){ 
+        foreach ($models as $model){            
+            if($model->produce_id){
+                continue;
+            }
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'from_order_id'=>$model->purchase_id,
