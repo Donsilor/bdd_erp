@@ -15,6 +15,7 @@ use common\components\Service;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
+use common\helpers\Url;
 use yii\base\Exception;
 use addons\Purchase\common\models\PurchaseGoods;
 
@@ -27,6 +28,19 @@ class ProduceService extends Service
     {
         $this->switchQueue = $switchQueue;
         return $this;
+    }
+
+    /**
+     * 布产编辑 tab
+     * @param int $id 款式ID
+     * @return array
+     */
+    public function menuTabList($produce_id,$returnUrl = null)
+    {
+        return [
+            1=>['name'=>'基础信息','url'=>Url::to(['produce/view','id'=>$produce_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            5=>['name'=>'日志信息','url'=>Url::to(['produce-log/index','produce_id'=>$produce_id,'tab'=>5,'returnUrl'=>$returnUrl])]
+        ];
     }
     /**
      * 创建布产单

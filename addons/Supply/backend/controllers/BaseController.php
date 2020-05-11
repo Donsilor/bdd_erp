@@ -17,4 +17,5 @@ class BaseController extends AddonsController
     * @var string
     */
     // public $layout = "@addons/Supply/backend/views/layouts/main";
+    public $layout = "@backend/views/layouts/main";
 }
