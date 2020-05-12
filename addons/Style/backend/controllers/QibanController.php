@@ -164,6 +164,7 @@ class QibanController extends BaseController
         if($model->isNewRecord) {
             $model->style_cate_id = $style_cate_id;
             $model->jintuo_type = $jintuo_type;
+            $model->style_sn = 'QIBAN';
         }
 
 

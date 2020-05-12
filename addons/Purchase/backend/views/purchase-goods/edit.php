@@ -21,14 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			         <div class="row">
     			         <?php if($model->isNewRecord) {?>      			    
             			 <div class="col-lg-3">         
-                			<?= $form->field($model, 'style_sn')->textInput() ?> 
+                			<?= $form->field($model, 'goods_sn')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
         			     <?php }else{?>
         			     <div class="col-lg-4">         
-                			<?= $form->field($model, 'style_sn')->textInput(['disabled'=>'disabled']) ?> 
+                			<?= $form->field($model, 'goods_sn')->textInput(['disabled'=>'disabled']) ?> 
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }else{?>
         			<div class="row">
             			 <div class="col-lg-4">         
-                			<?= $form->field($model, 'style_sn')->textInput() ?> 
+                			<?= $form->field($model, 'goods_sn')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
@@ -122,13 +122,13 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
 function searchGoods() {
-   var style_sn = $.trim($("#purchasegoodsform-style_sn").val());
+   var goods_sn = $.trim($("#purchasegoodsform-goods_sn").val());
    var jintuo_type = $("#purchasegoodsform-jintuo_type").val();
-   if(!style_sn) {
+   if(!goods_sn) {
 	    rfMsg("请输入款号或起版号");
         return false;
    }
-   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_sn','search','jintuo_type'])?>&search=1&style_sn="+style_sn+"&jintuo_type="+jintuo_type;
+   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['goods_sn','search','jintuo_type'])?>&search=1&goods_sn="+goods_sn+"&jintuo_type="+jintuo_type;
    window.location.href = url;
 }
 </script>

@@ -4,6 +4,7 @@ namespace addons\Purchase\common\models;
 
 use Yii;
 use common\models\backend\Member;
+use addons\Supply\common\models\Supplier;
 
 /**
  * This is the model class for table "purchase".
@@ -11,6 +12,7 @@ use common\models\backend\Member;
  * @property int $id
  * @property string $title
  * @property string $purchase_sn 采购单号
+ * @property int $supplier_id 供应商
  * @property string $cost_total 总成本
  * @property int $goods_total 总数量
  * @property int $creator_id 创建人
@@ -39,9 +41,10 @@ class Purchase extends BaseModel
     {
         return [
             [['cost_total'], 'number'],
-            [['id','goods_count', 'creator_id', 'auditor_id', 'audit_status','produce_status', 'status','audit_time', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id'], 'required'],
+            [['id','supplier_id','goods_count', 'creator_id', 'auditor_id', 'audit_status', 'status','audit_time', 'created_at', 'updated_at'], 'integer'],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
-            [['purchase_sn','produce_sn'], 'string', 'max' => 30],
+            [['purchase_sn'], 'string', 'max' => 30],
         ];
     }
 
@@ -53,6 +56,7 @@ class Purchase extends BaseModel
         return [
             'id' => 'ID',
             'purchase_sn' => '采购单号',
+            'supplier_id' => '供应商',
             'cost_total' => '采购成本',
             'goods_count' => '商品数量',  
             'creator_id' => '创建人',
@@ -61,14 +65,19 @@ class Purchase extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '采购备注',
-            'produce_sn' => '布产单号',
-            'produce_status' => '布产状态',
             'status' => '状态 ',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }
-    
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
     /**
      * 创建人
      * @return \yii\db\ActiveQuery

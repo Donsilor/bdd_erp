@@ -129,7 +129,7 @@ class PurchaseGoodsController extends BaseController
     {
         
         $purchase_id = Yii::$app->request->get('purchase_id');        
-        $style_sn = Yii::$app->request->get('style_sn');
+        $goods_sn = Yii::$app->request->get('goods_sn');
         $search = Yii::$app->request->get('search');
         $jintuo_type = Yii::$app->request->get('jintuo_type');
         
@@ -139,23 +139,25 @@ class PurchaseGoodsController extends BaseController
         if($model->isNewRecord) {
             $model->purchase_id = $purchase_id;
         }
-        if($model->isNewRecord && $search && $style_sn) {
+        if($model->isNewRecord && $search && $goods_sn) {
             
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-            $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
+            $style  = Style::find()->where(['style_sn'=>$goods_sn])->one();
             if(!$style) {
-                $qiban = Qiban::find()->where(['qiban_sn'=>$style_sn])->one();
+                $qiban = Qiban::find()->where(['qiban_sn'=>$goods_sn])->one();
                 if(!$qiban) {
                     return $this->message("[款号/起版号]不存在", $this->redirect($skiUrl), 'error');
                 }elseif($qiban->status != StatusEnum::ENABLED) {
                     return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
                 }else{
-                    $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'style_sn'=>$style_sn,'status'=>StatusEnum::ENABLED])->count();
+                    $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'qiban_sn'=>$goods_sn,'status'=>StatusEnum::ENABLED])->count();
                     if($exist) {
                         return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
                     }                    
                     $model->style_id = $qiban->id;
-                    $model->style_sn = $style_sn;
+                    $model->goods_sn = $goods_sn;
+                    $model->qiban_sn = $goods_sn;
+                    $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
                     $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
@@ -174,7 +176,8 @@ class PurchaseGoodsController extends BaseController
                 return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
             }else{
                 $model->style_id = $style->id;
-                $model->style_sn = $style_sn;
+                $model->goods_sn = $goods_sn;
+                $model->style_sn = $goods_sn;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;
                 $model->goods_type = PurchaseGoodsTypeEnum::STYLE;

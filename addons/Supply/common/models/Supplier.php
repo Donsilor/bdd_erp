@@ -74,7 +74,7 @@ class Supplier extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => '供应商ID',
+            'id' => 'ID',
             'merchant_id' => '商户ID',
             'supplier_code' => '供应商编码',
             'supplier_name' => '供应商名称',
@@ -90,10 +90,10 @@ class Supplier extends BaseModel
             'bank_name' => '开户行',
             'bank_account' => '银行账户',
             'bank_account_name' => '开户姓名',
-            'contactor' => '供应商联系人',
-            'telephone' => '供应商联系电话',
-            'mobile' => '供应商联系人手机',
-            'address' => '供应商地址',
+            'contactor' => '联系人',
+            'telephone' => '联系人手机',
+            'mobile' => '联系电话',
+            'address' => '取货地址',
             'bdd_contactor' => 'BDD紧急联系人',
             'bdd_mobile' => 'BDD紧急联系人手机',
             'bdd_telephone' => 'BDD紧急联系人电话',

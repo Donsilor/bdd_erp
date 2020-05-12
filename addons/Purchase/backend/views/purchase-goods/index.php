@@ -50,12 +50,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ], 
+                            ],
+                            [
+                                    'attribute' => 'goods_sn',
+                                    'filter' => true,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'150'],
+                            ],                            
                             [
                                     'attribute' => 'style_sn',
                                     'filter' => true,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
+                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                     'label' => '商品类型',

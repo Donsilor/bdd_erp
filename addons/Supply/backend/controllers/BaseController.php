@@ -26,5 +26,4 @@ class BaseController extends AddonsController
      * @var string
      */
     protected $viewPrefix = '@backend/modules/common/views/';
-
 }

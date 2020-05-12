@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 供应商
  * User: BDD
  * Date: 2019/12/7
  * Time: 13:53
@@ -28,7 +28,6 @@ class SupplierService
             ->select(['id','supplier_name'])
             ->asArray()
             ->all();
-
         return ArrayHelper::map($model,'id', 'supplier_name');
     }
 

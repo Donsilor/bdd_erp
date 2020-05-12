@@ -41,13 +41,9 @@ return [
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
-                                    'title' => '供应商管理',
+                                    'title' => '供应商',
                                     'route' => 'supplier/index',
-                            ],
-                            [
-                                    'title' => '工厂管理',
-                                    'route' => 'factory/index',
-                            ],
+                            ], 
                     ],
                     
             ],

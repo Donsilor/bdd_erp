@@ -78,6 +78,7 @@ class PurchaseService extends Service
                     'jintuo_type'=>$model->jintuo_type,
                     'product_type_id'=>$model->product_type_id,
                     'style_cate_id'=>$model->style_cate_id,
+                    'supplier_id'=>$purchase->supplier_id,
             ];
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
             Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);

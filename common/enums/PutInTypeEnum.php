@@ -6,7 +6,7 @@ namespace common\enums;
  * 采购类型  枚举
  * @package common\enums
  */
-class PutInTypeTypeEnum extends BaseEnum
+class PutInTypeEnum extends BaseEnum
 {
     const Buy = 1;
     const W = 2;

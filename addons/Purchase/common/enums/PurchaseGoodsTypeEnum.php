@@ -12,7 +12,6 @@ class PurchaseGoodsTypeEnum extends BaseEnum
 {
     const STYLE = 1;
     const QIBAN = 2;
-
     
     /**
      *
@@ -22,7 +21,7 @@ class PurchaseGoodsTypeEnum extends BaseEnum
     {
         return [
                 self::STYLE => "款式商品",
-                self::QIBAN => "起版商品",                
+                self::QIBAN => "起版商品",  
         ];
     }
     
