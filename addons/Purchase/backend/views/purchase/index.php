@@ -4,6 +4,8 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
+use kartik\select2\Select2;
+use yii\base\Widget;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -55,6 +57,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'130'],
+            ],
+
+            [
+                    'attribute' => 'supplier_id',
+                    'value' =>"supplier.supplier_name",
+                    'filter'=>Select2::widget([
+                            'name'=>'SearchModel[supplier_id]',
+                            'value'=>$searchModel->supplier_id,
+                            'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                            'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                            'pluginOptions' => [
+                                    'allowClear' => true,                                          
+                            ],
+                     ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                     'attribute' => 'cost_total',
