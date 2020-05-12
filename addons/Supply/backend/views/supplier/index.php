@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'60'],
             ],
             [
                 'attribute' => 'supplier_name',
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['width'=>'180'],
             ],
             [
                 'attribute' => 'contactor',
@@ -75,16 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
-            ],
-            [
-                'attribute' => 'telephone',
-                'value' => 'telephone',
-                'filter' => Html::activeTextInput($searchModel, 'telephone', [
-                    'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'attribute' => 'mobile',
@@ -93,7 +84,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['width'=>'150'],
+            ],
+            [
+                'attribute' => 'telephone',
+                'value' => 'telephone',
+                'filter' => Html::activeTextInput($searchModel, 'telephone', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'attribute' => 'address',
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute' => 'audit_time',
@@ -127,12 +127,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->audit_time);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'160'],
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
                 'value' => function ($model){
                     return \common\enums\StatusEnum::getValue($model->status);
                 },

@@ -110,6 +110,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+                    </div>
                     <div class="col-lg-8">
                         <?= $form->field($model, 'remark')->textArea(['maxlength' => true]) ?>
                     </div>
