@@ -1,5 +1,6 @@
 <?php
 
+use common\enums\SettlementWayEnum;
 use common\helpers\Html;
 use common\widgets\webuploader\Files;
 use yii\widgets\ActiveForm;
@@ -60,27 +61,32 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[2]??''?></li>
             </ul>
-          <div class="box-body" style="margin-left:10px">
+          <div class="box-body col-lg-12">
               <div class="row">
-                  <div class="col-lg-4">
+                  <div class="col-lg-3">
                       <?= $form->field($model, 'bank_name')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <div class="col-lg-4">
+                  <div class="col-lg-3">
                       <?= $form->field($model, 'bank_account_name')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <div class="col-lg-4">
+                  <div class="col-lg-3">
+                      <?= $form->field($model, 'bank_account')->textInput(['maxlength' => true]) ?>
+                  </div>
+                  <div class="col-lg-3">
                       <?= $form->field($model, 'business_no')->textInput(['maxlength' => true]) ?>
                   </div>
               </div>
               <div class="row">
-                  <div class="col-lg-4">
-                      <?= $form->field($model, 'tax_no')->textInput(['maxlength' => true]) ?>
+                  <div class="col-lg-3">
+                        <?php $model->pay_type = !empty($model->pay_type)?explode(',', $model->pay_type):null;?>
+                        <?= $form->field($model, 'pay_type')->checkboxList(common\enums\SettlementWayEnum::getMap()) ?>
                   </div>
-                  <div class="col-lg-4">
-                      <?= $form->field($model, 'business_address')->textInput(['maxlength' => true]) ?>
+                  <div class="col-lg-3">
+                        <?= $form->field($model, 'tax_no')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <?php $model->pay_type = !empty($model->pay_type)?explode(',', $model->pay_type):null;?>
-                  <?= $form->field($model, 'pay_type')->checkboxList(common\enums\SettlementWayEnum::getMap()) ?>
+                  <div class="col-lg-6">
+                        <?= $form->field($model, 'business_address')->textInput(['maxlength' => true]) ?>
+                  </div>
               </div>
 
           </div>
@@ -91,34 +97,34 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[3]??''?></li>
             </ul>
-            <div class="box-body col-lg-9">
+            <div class="box-body col-lg-12">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'contactor')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'telephone')->textInput(['maxlength' => true]) ?>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'bdd_contactor')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-lg-4">
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'bdd_mobile')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <?= $form->field($model, 'bdd_telephone')->textInput(['maxlength' => true]) ?>
+                    </div>
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <?= $form->field($model, 'remark')->textArea(['maxlength' => true]) ?>
                     </div>
                 </div>
@@ -129,33 +135,43 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[4]??''?></li>
             </ul>
-            <?= $form->field($model, 'contract_file')->widget(common\widgets\webuploader\Files::class, [
-                'type' => 'files',
-                'config' => [
-                    'pick' => [
-                        'multiple' => false,
-                    ],
-                    'formData' => [
-//                        'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
-                    ],
-                ]
-            ]); ?>
-            <?= $form->field($model, 'business_file')->widget(common\widgets\webuploader\Files::class, [
-                'config' => [
-                    'pick' => [
-                        'multiple' => false,
-                    ],
+            <div class="box-body col-lg-12">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'contract_file')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'business_file')->widget(common\widgets\webuploader\Files::class, [
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
 
-                ]
-            ]); ?>
-            <?= $form->field($model, 'tax_file')->widget(common\widgets\webuploader\Files::class, [
-                'config' => [
-                    'pick' => [
-                        'multiple' => false,
-                    ],
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'tax_file')->widget(common\widgets\webuploader\Files::class, [
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
 
-                ]
-            ]); ?>
+                            ]
+                        ]); ?>
+                    </div>
+                </div>
+            </div>
         </div>
       <!-- ./row -->
     </div>
