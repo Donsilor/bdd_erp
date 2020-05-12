@@ -43,11 +43,7 @@ return [
                             [
                                     'title' => '供应商管理',
                                     'route' => 'supplier/index',
-                            ],
-                            [
-                                    'title' => '工厂管理',
-                                    'route' => 'factory/index',
-                            ],
+                            ], 
                     ],
                     
             ],
