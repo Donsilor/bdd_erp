@@ -24,7 +24,7 @@ class SnHelper
      * @param string $prefix
      * @return string
      */
-    public static function createPurchaseSn($prefix = 'CG3')
+    public static function createPurchaseSn($prefix = 'CG')
     {
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),6,'0',STR_PAD_LEFT);
     }
@@ -33,9 +33,9 @@ class SnHelper
      * @param string $prefix
      * @return string
      */
-    public static function createProduceSn($prefix = 'BC4')
+    public static function createProduceSn($prefix = 'BC')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),6,'0',STR_PAD_LEFT);
     }
     /**
      * 单据编号
@@ -51,9 +51,9 @@ class SnHelper
      * @param string $prefix
      * @return string
      */
-    public static function createQibanSn($prefix = 'QB5')
+    public static function createQibanSn($prefix = 'QB')
     {
-        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
+        return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
     }
     
 }
