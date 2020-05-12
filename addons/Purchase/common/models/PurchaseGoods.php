@@ -14,6 +14,8 @@ use addons\Style\common\models\StyleCate;
  * @property int $goods_type 商品类型 1款号 2起版号
  * @property int $style_id 款号id
  * @property string $style_sn 款式编号
+ * @property string $goods_sn 商品编号
+ * @property string $qiban_sn 起版编号
  * @property int $goods_name  商品名称
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
@@ -42,10 +44,10 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['style_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num','jintuo_type'], 'required'],
-            [['purchase_id', 'goods_type','jintuo_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['goods_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num','jintuo_type'], 'required'],
+            [['purchase_id', 'goods_type','qiban_type','jintuo_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
-            [['style_sn'], 'string', 'max' => 30],
+            [['style_sn','qiban_sn','goods_sn'], 'string', 'max' => 30],
             [['goods_name','remark'], 'string', 'max' => 255],
         ];
     }
@@ -60,7 +62,10 @@ class PurchaseGoods extends BaseModel
             'purchase_id' => '采购单ID',
             'goods_type' => '商品类型',
             'style_id' => '款号id',
-            'style_sn' => '款号/起版号',
+            'goods_sn' => '款号/起版号',
+            'style_sn' => '款号',
+            'qiban_sn' => '起版号',
+            'qiban_type' => '起版类型',
             'goods_name' => '商品名称',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',

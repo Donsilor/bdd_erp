@@ -91,7 +91,7 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function createAttrs()
     {  
-        PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);        
+        PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);    
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {            
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new PurchaseGoodsAttribute();
@@ -111,7 +111,6 @@ class PurchaseGoodsForm extends PurchaseGoods
                     }
                 }
             }else{
-                throw new \Exception("不允许有多选属性");
                 continue;
             }   
             $model->sort = $spec->sort;
