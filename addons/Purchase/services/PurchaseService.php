@@ -2,12 +2,15 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
 use common\enums\StatusEnum;
+use yii\db\Exception;
 
 /**
  * Class TypeService
@@ -45,5 +48,46 @@ class PurchaseService extends Service
             Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'cost_total'=>$sum['cost_total']/1],['id'=>$purchase_id]);
         }
     }
+    /**
+     * 同步采购单生成布产单
+     * @param unknown $purchase_id
+     */
+    public function syncPurchaseToProduce($purchase_id)
+    {
+        $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
+        if($purchase->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购单没有审核');
+        }
+        
+        $models = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id])->all();
+        foreach ($models as $model){            
+            if($model->produce_id){
+                continue;
+            }
+            $goods = [
+                    'goods_name' =>$model->goods_name,
+                    'from_order_id'=>$model->purchase_id,
+                    'from_detail_id' => $model->id, 
+                    'from_order_sn'=>$purchase->purchase_sn,
+                    'from_type' => 2,
+                    'style_sn' => $model->style_sn,
+                    'qiban_sn' => $model->qiban_sn,
+                    'qiban_type'=>$model->qiban_type, 
+                    'style_sex' =>$model->style_sex, 
+                    'goods_num' =>$model->goods_num,
+                    'jintuo_type'=>$model->jintuo_type,
+                    'product_type_id'=>$model->product_type_id,
+                    'style_cate_id'=>$model->style_cate_id,
+            ];
+            $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+            Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+        }
+    }
+
+
+
+
+
+
  
 }

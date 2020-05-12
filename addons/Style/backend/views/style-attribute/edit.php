@@ -40,6 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                       $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
                                       break;
                                   }
+                                  case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE :{
+                                      $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
+                                      break;
+                                  }
                                   default:{
                                       $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
                                       break;

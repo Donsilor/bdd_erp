@@ -43,10 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('produce_sn') ?>：</label>                        
-                            <?= $model->produce_sn ?>
-                        </div>
+
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('goods_count') ?>：</label>
                             <?= $model->goods_count ?>
@@ -57,10 +54,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('produce_status') ?>：</label>                        
-                            <?= $model->produce_status ?>
-                        </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('creator_id') ?>：</label>
                             <?= $model->creator ? $model->creator->username:''  ?>

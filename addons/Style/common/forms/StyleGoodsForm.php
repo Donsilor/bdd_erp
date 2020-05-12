@@ -183,7 +183,7 @@ class StyleGoodsForm extends Model
         }
     } 
     /**
-     * 创建商品明细id
+     * 创建商品属性表
      * @throws \Exception
      */
     public function createGoodsAttrs($goods_id, $attr_list)
@@ -208,7 +208,7 @@ class StyleGoodsForm extends Model
                     }
                 }
             }else{
-                continue;
+                throw new \Exception("不允许有多选属性");
             }
             $model->sort = $spec->sort;
             if(false === $model->save()) {

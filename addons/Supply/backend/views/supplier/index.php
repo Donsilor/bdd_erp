@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['edit-lang']) ?>
                 </div>
-
             </div>
             <div class="box-body table-responsive">
     <?php echo Html::batchButtons(false)?>         
