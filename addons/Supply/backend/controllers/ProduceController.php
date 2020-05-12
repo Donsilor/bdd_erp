@@ -78,5 +78,8 @@ class ProduceController extends BaseController
     }
 
 
+    //分配工厂
+    public function actionToFactory(){
 
+    }
 }
