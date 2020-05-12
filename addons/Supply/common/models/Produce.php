@@ -71,9 +71,9 @@ class Produce extends BaseModel
             'merchant_id' => '商户ID',
             'produce_sn' => '布产单编号',
             'from_type' => '订单来源',
-            'from_order_id' => '来源订单id',
+            'from_order_id' => '来源订单',
             'from_order_sn' => '来源订单编号',
-            'from_detail_id' => '订单明细ID',
+            'from_detail_id' => '商品名称',
             'qiban_sn' => '起版编号',
             'qiban_type' => '起版类型',
             'style_sn' => '款号',
@@ -86,10 +86,10 @@ class Produce extends BaseModel
             'style_cate_id' => '款式分类',
             'bc_status' => '布产状态',
             'prc_status' => '生产状态',
-            'follower_id' => '跟单人ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'supplier_id' => '供应商ID',
+            'follower_id' => '跟单人',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+            'supplier_id' => '供应商',
             'factory_order_time' => '工厂接单时间',
             'factory_distribute_time' => '分配工厂时间',
             'factory_delivery_time' => '工厂交货时间',
@@ -121,6 +121,15 @@ class Produce extends BaseModel
     public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+
+    /**
+     * 对应供应商模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id']);
     }
 
     /**

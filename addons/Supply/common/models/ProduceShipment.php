@@ -62,7 +62,7 @@ class ProduceShipment extends BaseModel
             'failed_reason' => '报废原因',
             'nopass_type' => '质检未过类型',
             'nopass_reason' => '未过原因',
-            'status' => '质检结果,1:通过，0：未通过',
+            'status' => '质检结果',
             'remark' => '备注',
             'creator_id' => '操作人ID',
             'creator' => '操作人姓名',

@@ -47,11 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $model->purchaseGoods->goods_name ?>
                         </div>
                         <div class="col-lg-4">
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('supplier_id') ?>：</label>
+                            <?= $model->supplier ?  $model->supplier->supplier_name : ''?>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('follower_id') ?>：</label>
                             <?= $model->follower ?  $model->follower->username : ''?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sn') ?>：</label>
                             <?= $model->style_sn ?>
@@ -60,12 +65,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('jintuo_type') ?>：</label>
                             <?= \common\enums\JinTuoEnum::getValue($model->jintuo_type) ?>
                         </div>
+
+                    </div>
+
+                    <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sex') ?>：</label>
                             <?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex)  ?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-4">
                              <label class="text-right col-lg-4"><?= $model->getAttributeLabel('qiban_sn') ?>：</label>
                              <?= $model->qiban_sn ?>
@@ -74,14 +81,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('product_type_id') ?>：</label>
                             <?= $model->type->name ?>
                         </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_cate_id') ?>：</label>
                             <?= $model->cate->name ?>
                         </div>
+                        <div class="col-lg-4">
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('factory_order_time') ?>：</label>
+                            <?= \Yii::$app->formatter->asDatetime($model->factory_order_time) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</label>
+                            <?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?>
+                        </div>
+
                     </div>
 
 
                     <div class="row">
+                        <div class="col-lg-4">
+                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</label>
+                            <?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?>
+                        </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('created_at') ?>：</label>
                             <?= \Yii::$app->formatter->asDatetime($model->created_at) ?>
@@ -150,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'class'=>'btn btn-success btn-sm',
                              'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
+                             'data-target' => '#ajaxModalLg',
                          ]);
                          break;
                      case BuChanEnum::PARTIALLY_SHIPPED :
@@ -160,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'class'=>'btn btn-success btn-sm',
                              'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
+                             'data-target' => '#ajaxModalLg',
                          ]);
                          break;
                      default:

@@ -3,12 +3,14 @@
 namespace addons\Supply\backend\controllers;
 
 use addons\Supply\common\enums\BuChanEnum;
-use addons\Supply\common\enums\LogTypeEnum;
+use addons\Supply\common\enums\LogModuleEnum;
 use addons\Supply\common\forms\ToFactoryForm;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
 use addons\Supply\common\models\Supplier;
 use addons\Supply\common\models\SupplierFollower;
+use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
@@ -95,7 +97,6 @@ class ProduceController extends BaseController
         $this->activeFormValidate($model);
         $supplier = Yii::$app->supplyService->supplier->getDropDown();
         if ($model->load(Yii::$app->request->post())) {
-            $model->attributes = Yii::$app->request->post();
             if($model->bc_status != BuChanEnum::INITIALIZATION){
                 return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::INITIALIZATION).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
             }
@@ -110,12 +111,12 @@ class ProduceController extends BaseController
             $log = [
                 'produce_id'=>$id,
                 'produce_sn'=>$model->produce_sn,
-                'log_type'=> LogTypeEnum::TO_FACTORY,
-                'log_module' => LogTypeEnum::getValue(LogTypeEnum::TO_FACTORY),
+                'log_type'=> LogTypeEnum::ARTIFICIAL,
+                'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_FACTORY),
                 'log_msg' => "采购单{$model->produce_sn}分配到供应商{$supplier[$model->supplier_id]}生产，跟单人是{$follower->member_name}"
             ];
             Yii::$app->supplyService->produce_log->createProduceLog($log);
-
+            Yii::$app->getSession()->setFlash('success','保存成功');
             return $this->redirect(Yii::$app->request->referrer);
 
 
@@ -147,12 +148,12 @@ class ProduceController extends BaseController
         $log = [
             'produce_id'=>$id,
             'produce_sn'=>$model->produce_sn,
-            'log_type'=> LogTypeEnum::TO_CONFIRMED,
-            'log_module' => LogTypeEnum::getValue(LogTypeEnum::TO_CONFIRMED),
+            'log_type'=> LogTypeEnum::ARTIFICIAL,
+            'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_CONFIRMED),
             'log_msg' => "确认分配"
         ];
         Yii::$app->supplyService->produce_log->createProduceLog($log);
-
+        Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
     }
 
@@ -175,12 +176,12 @@ class ProduceController extends BaseController
         $log = [
             'produce_id'=>$id,
             'produce_sn'=>$model->produce_sn,
-            'log_type'=> LogTypeEnum::TO_PRODUCE,
-            'log_module' => LogTypeEnum::getValue(LogTypeEnum::TO_PRODUCE),
+            'log_type'=> LogTypeEnum::ARTIFICIAL,
+            'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PRODUCE),
             'log_msg' => "开始生产"
         ];
         Yii::$app->supplyService->produce_log->createProduceLog($log);
-
+        Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
     }
 
@@ -190,6 +191,7 @@ class ProduceController extends BaseController
     public function actionLeaveFactory(){
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['produce/index']));
+        $this->modelClass = ProduceShipment::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);

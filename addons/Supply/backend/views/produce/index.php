@@ -68,13 +68,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
-
             [
-                'attribute' => '订单/采购单明细',
+                'attribute' => 'style_sn',
+                'value' => "style_sn",
+                'filter' => true,
+                'format' => 'raw',
+
+            ],
+            [
+                'attribute' => 'from_detail_id',
                 'value' => "purchaseGoods.goods_name",
                 'filter' => true,
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
+
             ],
             [
                 'attribute' => 'bc_status',
@@ -103,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'jintuo_type',
                 'value' => function ($model){
-                    return \common\enums\JinTuoEnum::getValue($model->jintuo_type);
+                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\common\enums\JinTuoEnum::getMap(), [
                     'prompt' => '全部',
