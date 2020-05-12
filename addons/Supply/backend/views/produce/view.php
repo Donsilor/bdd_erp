@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'class'=>'btn btn-success btn-sm',
                              'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
+                             'data-target' => '#ajaxModalLg',
                          ]);
                          break;
                      case BuChanEnum::PARTIALLY_SHIPPED :
@@ -183,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'class'=>'btn btn-success btn-sm',
                              'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
+                             'data-target' => '#ajaxModalLg',
                          ]);
                          break;
                      default:

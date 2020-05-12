@@ -7,6 +7,7 @@ use addons\Supply\common\enums\LogModuleEnum;
 use addons\Supply\common\forms\ToFactoryForm;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
 use addons\Supply\common\models\Supplier;
 use addons\Supply\common\models\SupplierFollower;
 use common\enums\LogTypeEnum;
@@ -190,6 +191,7 @@ class ProduceController extends BaseController
     public function actionLeaveFactory(){
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['produce/index']));
+        $this->modelClass = ProduceShipment::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
