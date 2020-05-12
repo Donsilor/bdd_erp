@@ -29,6 +29,7 @@ class ProduceLogService extends Service
         $produce_log = new ProduceLog();
         $produce_log->attributes = $log;
         $produce_log->log_time = time();
+        $produce_log->creator_id = \Yii::$app->user->id;
         $produce_log->creator = \Yii::$app->user->identity->username;
         if(false === $produce_log->save()){
             throw new \Exception($this->getError($produce_log));
