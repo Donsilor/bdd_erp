@@ -1,12 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
+use addons\Supply\common\enums\BuChanEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -123,14 +118,56 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="box-footer text-center">
 
-                 <?php 
-                 if($model->bc_status == \addons\Supply\common\enums\BuChanEnum::INITIALIZATION){
-                     echo Html::edit(['to-factory','id'=>$model->id], '分配工厂', [
+                 <?php
+                 $buttonHtml = '';
+                 switch ($model->bc_status){
+                     case BuChanEnum::INITIALIZATION:
+                         $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '分配工厂', [
                              'class'=>'btn btn-success btn-sm',
+                             'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModal',
-                     ]);
+                         ]);
+                         break;
+                     case BuChanEnum::TO_CONFIRMED:
+                         $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>$returnUrl], '确认分配', [
+                             'class'=>'btn btn-success btn-sm',
+                             'style'=>"margin-left:5px",
+                             'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
+
+                         ]);
+                         break;
+                     case BuChanEnum::ASSIGNED:
+                         $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
+                             'class'=>'btn btn-success btn-sm',
+                             'style'=>"margin-left:5px",
+                             'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',
+
+                         ]);
+                         break;
+                     case BuChanEnum::IN_PRODUCTION:
+                         $buttonHtml .= Html::edit(['leave-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
+                             'class'=>'btn btn-success btn-sm',
+                             'style'=>"margin-left:5px",
+                             'data-toggle' => 'modal',
+                             'data-target' => '#ajaxModal',
+                         ]);
+                         break;
+                     case BuChanEnum::PARTIALLY_SHIPPED :
+                         ;
+                     case BuChanEnum::FACTORY:
+                         $buttonHtml .= Html::edit(['qc-quality ','id'=>$model->id ,'returnUrl'=>$returnUrl], 'QC质检', [
+                             'class'=>'btn btn-success btn-sm',
+                             'style'=>"margin-left:5px",
+                             'data-toggle' => 'modal',
+                             'data-target' => '#ajaxModal',
+                         ]);
+                         break;
+                     default:
+                         $buttonHtml .= '';
+
                  }
+                 echo $buttonHtml;
                  ?>             
                 <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
           </div>
