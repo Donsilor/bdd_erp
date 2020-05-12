@@ -16,6 +16,7 @@ use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use common\enums\StatusEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 /**
  * Attribute
  *
@@ -157,6 +158,7 @@ class PurchaseGoodsController extends BaseController
                     $model->style_id = $qiban->id;
                     $model->goods_sn = $goods_sn;
                     $model->qiban_sn = $goods_sn;
+                    $model->qiban_type = $qiban->qiban_type;
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
