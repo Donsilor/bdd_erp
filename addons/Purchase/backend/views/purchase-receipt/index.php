@@ -4,15 +4,15 @@ use common\enums\BusinessScopeEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
 
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$id = $searchModel->id;
 
-$this->title = Yii::t('supply_supplier', '供应商管理');
+$this->title = Yii::t('purchase_receipt', '采购收货单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -22,11 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit-lang']) ?>
+                    <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
-    <?php echo Html::batchButtons(false)?>         
+    <?php echo Html::batchButtons(false)?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -52,65 +55,61 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'60'],
             ],
             [
-                'attribute' => 'supplier_name',
-                'value' => 'supplier_name',
-                'filter' => Html::activeTextInput($searchModel, 'supplier_name', [
+                'attribute' => 'receipt_no',
+                'value' => 'receipt_no',
+                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute'=>'business_scope',
-                'value' => function($model){
-                    $scope_key = explode(',', $model->business_scope);
-                    $scope_val = common\enums\BusinessScopeEnum::getValues($scope_key);
-                    return implode(",",$scope_val);
-                },
-                'filter' => false,
-                'contentOptions' => ['style' => 'word-break:break-all;'],
+                'attribute' => 'supplier_id',
+                'value' =>"supplier.supplier_name",
+                'filter'=>Select2::widget([
+                    'name'=>'SearchModel[supplier_id]',
+                    'value'=>$searchModel->supplier_id,
+                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'contactor',
-                'value' => 'contactor',
-                'filter' => Html::activeTextInput($searchModel, 'contactor', [
+                'attribute' => 'receipt_num',
+                'value' => 'receipt_num',
+                'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute' => 'mobile',
-                'value' => 'mobile',
-                'filter' => Html::activeTextInput($searchModel, 'mobile', [
+                'attribute' => 'total_cost',
+                'value' => 'total_cost',
+                'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
+                'headerOptions' => ['width'=>'160'],
             ],
             [
-                'attribute' => 'telephone',
-                'value' => 'telephone',
-                'filter' => Html::activeTextInput($searchModel, 'telephone', [
+                'attribute' => 'creator_id',
+                'value' => 'creator_id',
+                'filter' => Html::activeTextInput($searchModel, 'creator_id', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute' => 'address',
-                'value' => 'address',
-                'filter' => Html::activeTextInput($searchModel, 'address', [
-                    'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
-            ],
-            [
-                'attribute' => 'audit_time',
+                'attribute' => 'created_at',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'audit_time',
+                    'attribute' => 'created_at',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control',],
                     'pluginOptions' => [
@@ -126,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
+                    return Yii::$app->formatter->asDatetime($model->created_at);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'160'],
@@ -161,7 +160,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {status}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
-                        return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
                     },
                 'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
