@@ -312,6 +312,7 @@ function rfDelete(obj, text) {
     })
 }
 
+
 // 二次确认提示
 function rfTwiceAffirm(obj, title, text) {
     var dialogText = rfText(text);
@@ -352,5 +353,5 @@ function rfText(text) {
         return text;
     }
 
-    return '小手一抖就打开了一个框';
+    return '确定操作吗？';
 }

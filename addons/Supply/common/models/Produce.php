@@ -3,7 +3,6 @@
 namespace addons\Supply\common\models;
 
 use addons\Purchase\common\models\PurchaseGoods;
-use addons\Style\common\enums\BaseEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use Yii;
@@ -28,7 +27,7 @@ use Yii;
  * @property int $style_sex 款式性别
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
- * @property int $bc_status 布产状态 1待审核 2待分配 3待生产 4生产中 5待出厂 6部分出厂 7已出厂
+ * @property int $bc_status 布产状态 1初始化 2待确认 3待生产 4生产中 5待出厂 6部分出厂 7已出厂
  * @property int $prc_status 生产状态
  * @property int $follower_id 跟单人ID
  * @property int $created_at
@@ -85,11 +84,11 @@ class Produce extends BaseModel
             'style_sex' => '款式性别',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
-            'bc_status' => '布产状态 ',
+            'bc_status' => '布产状态',
             'prc_status' => '生产状态',
             'follower_id' => '跟单人ID',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'supplier_id' => '供应商ID',
             'factory_order_time' => '工厂接单时间',
             'factory_distribute_time' => '分配工厂时间',
