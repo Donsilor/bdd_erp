@@ -47,7 +47,6 @@ class AttributeService extends Service
             	attr_lang.master_id = t.attr_id
             AND attr_lang.`language` = t.`language`
             AND attr_lang.master_id = '.$attr_id.';';
-        
         return \Yii::$app->db->createCommand($sql)->execute();
     }
     /**

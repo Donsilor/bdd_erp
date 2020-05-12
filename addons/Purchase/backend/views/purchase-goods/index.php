@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'style_sn',
                                     'filter' => true,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'100'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                     'label' => '商品类型',
