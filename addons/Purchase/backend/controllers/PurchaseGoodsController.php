@@ -155,7 +155,8 @@ class PurchaseGoodsController extends BaseController
                         return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
                     }                    
                     $model->style_id = $qiban->id;
-                    $model->style_sn = $style_sn;
+                    $model->qiban_sn = $style_sn;
+                    $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
                     $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
