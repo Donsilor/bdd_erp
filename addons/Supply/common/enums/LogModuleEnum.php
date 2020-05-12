@@ -8,7 +8,7 @@ use common\enums\BaseEnum;
  * 货品类型  枚举
  * @package common\enums
  */
-class LogTypeEnum extends BaseEnum
+class LogModuleEnum extends BaseEnum
 {
     const TO_FACTORY = 1;
     const TO_CONFIRMED  = 2;

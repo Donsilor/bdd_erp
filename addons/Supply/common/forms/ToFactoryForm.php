@@ -15,12 +15,6 @@ use yii\base\Model;
  */
 class ToFactoryForm extends Produce
 {
-    public $id;
-    //属性必填字段
-    public $supplier_id;
-    //属性非必填
-    public $follower_id;
-
     /**
      * {@inheritdoc}
      */
@@ -31,17 +25,7 @@ class ToFactoryForm extends Produce
            ];
         return array_merge(parent::rules() , $rules);
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        
-        return  [
-              'supplier_id'=>'供应商',
-              'follower_id'=>'跟单人',
-        ];
-    }
+
 
     
 }
