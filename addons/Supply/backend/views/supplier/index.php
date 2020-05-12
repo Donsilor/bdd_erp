@@ -1,5 +1,6 @@
 <?php
 
+use common\enums\BusinessScopeEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
@@ -60,13 +61,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'200'],
             ],
             [
-                'attribute' => 'business_scope',
-                'value' => 'business_scope',
-                'filter' => Html::activeTextInput($searchModel, 'business_scope', [
-                    'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'180'],
+                'attribute'=>'business_scope',
+                'value' => function($model){
+                    $scope_key = explode(',', $model->business_scope);
+                    $scope_val = common\enums\BusinessScopeEnum::getValues($scope_key);
+                    return implode(",",$scope_val);
+                },
+                'filter' => false,
+                'contentOptions' => ['style' => 'word-break:break-all;'],
             ],
             [
                 'attribute' => 'contactor',
