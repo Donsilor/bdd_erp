@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
+use addons\Supply\common\enums\BuChanEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -133,35 +134,51 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->cost_price ;
                                     },
                                     'headerOptions' => ['width'=>'120'],
-                            ],        
+                            ],
                             [
-                                'attribute' => 'status',                
-                                'value' => function ($model){
-                                    return \common\enums\StatusEnum::getValue($model->status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                    'attribute' => '布产号',                                    
+                                    'value' => function ($model) {
+                                           if($model->produce_id) {
+                                               return $model->produce->produce_sn ;
+                                           }
+                                    },
+                                    'filter' => false,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width' => '150'],
+                            ],
+                            [
+                                    'attribute' => '布产状态',
+                                    'value' => function ($model) {
+                                        if($model->produce_id) {
+                                            return BuChanEnum::getValue($model->produce->bc_status);
+                                        }else{
+                                            return '未布产';
+                                        }
+                                    },
+                                    'filter' => false,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width' => '150'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit}',
+                                'template' => '{edit} {apply} {delete}',
                                 'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                     return Html::edit([
-                                             'edit','id' => $model->id,
-                                             'returnUrl' => Url::getReturnUrl()],
-                                             '编辑',
-                                             ['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px',
-                                           ]);
-                                },
-                                'status' => function($url, $model, $key){
-                                     return Html::status($model['status']);
-                                },
+                                    'edit' => function($url, $model, $key){
+                                         if(!$model->produce_id) {
+                                             return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                         }                                         
+                                    },
+                                    'apply' =>function($url, $model, $key){
+                                        if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
+                                            return Html::edit(['apply','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑布产',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($purchase){
+                                        if($purchase->status == 0) {
+                                            return Html::delete(['delete','id' => $model->id],'删除',['class' => 'btn btn-danger btn-xs']);
+                                        }
+                                    },
                                 ]
                            ]
                       ]
