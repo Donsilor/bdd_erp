@@ -1,15 +1,19 @@
 <?php
 
+use common\enums\AreaEnum;
+use common\enums\StatusEnum;
+use common\helpers\AmountHelper;
 use common\helpers\Html;
 use common\helpers\Url;
+use unclead\multipleinput\MultipleInput;
 use yii\grid\GridView;
 
 $this->title = '收货单详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no ?></h2>
-    <?php echo Html::menuTab($tabList,$tab)?>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receiptInfo->receipt_no ?></h2>
+    <?php echo Html::menuTab($tabList, $tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box">
@@ -18,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'purchase_id' => $receipt->id], '创建', [
+                        <?= Html::create(['edit', 'purchase_id' => $receiptInfo->id], '新增货品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            
@@ -27,295 +31,388 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                </div>
             <div class="box-body table-responsive">
-                    <?= GridView::widget([
-                        'dataProvider' => $dataProvider,
-                        'filterModel' => $searchModel,
-                        'tableOptions' => ['class' => 'table table-hover'],
-                        'showFooter' => true,//显示footer行
-                        'id'=>'grid',
-                        'columns' => [
-                            [
-                                'class' => 'yii\grid\SerialColumn',
-                                'visible' => false,
+                <div class="tab-content">
+                    <?php
+                    $receiptColomns = [
+                        [
+                            'name' => 'id',
+                            'title'=>"ID",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'readonly' =>'true',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' =>'purchase_sn',
+                            'title'=>"采购单号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' =>'produce_sn',
+                            'title'=>"布产单编号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' =>'style_sn',
+                            'title'=>"款号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "factory_mo",
+                            'title'=>"工厂模号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "style_cate_id",
+                            'title'=>"款式分类",
+                            'enableError'=>false,
+                            'type'  => 'dropDownList',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
                             ],
-                            [
-                                    'class'=>'yii\grid\CheckboxColumn',
-                                    'name'=>'id',  //设置每行数据的复选框属性
-                                    'headerOptions' => ['width'=>'30'],
+                            'items' => Yii::$app->styleService->styleCate->getDropDown()
+                        ],
+                        [
+                            'name' => "product_type_id",
+                            'title'=>"产品线",
+                            'enableError'=>false,
+                            'type'  => 'dropDownList',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
                             ],
-                            [
-                                    'attribute' => 'id',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'60'],
-                            ],
-                            [
-                                    'attribute' => 'purchase_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                    'attribute' => 'produce_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'style_sn',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'label' => '款式分类',
-                                'attribute' => 'style_cate_id',
-                                'value' => "cate.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '产品线',
-                                'attribute' => 'product_type_id',
-                                'value' => "type.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'factory_mo',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'finger',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'xiangkou',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'material',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'gold_weight',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'gold_price',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'gold_loss',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'jintuo_type',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'gross_weight',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'cert_id',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone_num',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone_weight',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone_color',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone_clarity',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'main_stone_price',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone1',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_num1',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_weight1',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_price1',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_weight1',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone2',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_num2',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_weight2',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_price2',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone3',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_num3',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_weight3',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'second_stone_price3',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'fee_price',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'parts_price',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'extra_stone_fee',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'tax_fee',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'other_fee',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'class' => 'yii\grid\ActionColumn',
-                                'header' => '操作',
-                                'template' => '{edit}',
-                                'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                     return Html::edit([
-                                             'edit','id' => $model->id,
-                                             'returnUrl' => Url::getReturnUrl()],
-                                             '编辑',
-                                             ['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px',
-                                           ]);
-                                },
-                                ]
-                           ]
-                      ]
-                    ]); ?>
+                            'items' => Yii::$app->styleService->productType->getDropDown()
+                        ],
+                        [
+                            'name' => "finger",
+                            'title'=>"指圈",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "xiangkou",
+                            'title'=>"镶口",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "material",
+                            'title'=>"主成色",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "gold_weight",
+                            'title'=>"主成色重",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "gold_price",
+                            'title'=>"主成色买入单价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "gold_loss",
+                            'title'=>"金损",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "jintuo_type",
+                            'title'=>"金托类型",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "gross_weight",
+                            'title'=>"毛重",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "cost_price",
+                            'title'=>"成本价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "cert_id",
+                            'title'=>"证书号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone",
+                            'title'=>"主石",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone_num",
+                            'title'=>"主石数量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone_weight",
+                            'title'=>"主石重",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone_color",
+                            'title'=>"主石颜色",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone_clarity",
+                            'title'=>"主石净度",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "main_stone_price",
+                            'title'=>"主石买入单价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone1",
+                            'title'=>"副石1",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_num1",
+                            'title'=>"副石1数量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_weight1",
+                            'title'=>"副石1重量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_price1",
+                            'title'=>"副石1买入单价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone2",
+                            'title'=>"副石2",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_num2",
+                            'title'=>"副石2数量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_weight2",
+                            'title'=>"副石2重量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_price2",
+                            'title'=>"副石2买入单价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone3",
+                            'title'=>"副石3",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_num3",
+                            'title'=>"副石3数量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_weight3",
+                            'title'=>"副石3重量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_stone_price3",
+                            'title'=>"副石3买入单价",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "fee_price",
+                            'title'=>"工费",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "parts_price",
+                            'title'=>"配件成本",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "extra_stone_fee",
+                            'title'=>"超石费",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "tax_fee",
+                            'title'=>"税费",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:60px'
+                            ]
+                        ],
+                        [
+                            'name' => "other_fee",
+                            'title'=>"其他费用",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
+                        ]
+                    ];
+                    ?>
+                    <?= unclead\multipleinput\MultipleInput::widget([
+                        'name' => "采购收货单明细",
+                        'removeButtonOptions'=>['label'=>'','class'=>''],
+                        'value' => $receiptGoods,
+                        'columns' => $receiptColomns
+                    ]) ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary" type="submit">保存</button>
+                    <span class="btn btn-white" onclick="history.go(-1)">返回</span>
                 </div>
             </div>
         <!-- box end -->

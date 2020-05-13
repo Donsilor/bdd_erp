@@ -54,14 +54,16 @@ class PurchaseReceiptGoodsController extends BaseController
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
         //$dataProvider->query->andWhere(['>','status',-1]);
 
-        $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
+        $receipt_goods = $dataProvider->getModels();
+        $receiptInfo = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
-                'receipt'=> $receipt,
+                'receiptInfo' => $receiptInfo,
+                'receiptGoods' => $receipt_goods,
+                'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
+                'returnUrl' => $returnUrl,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
-                'returnUrl'=>$returnUrl,
         ]);
     }
 
