@@ -82,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
 
             ],
+            'goods_num',
             [
                 'attribute' => 'bc_status',
                 'value' => function ($model){

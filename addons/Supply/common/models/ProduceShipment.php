@@ -39,12 +39,30 @@ class ProduceShipment extends BaseModel
     public function rules()
     {
         return [
-            [['produce_id', 'shipment_sn', 'shippent_num', 'remark', 'creator_id', 'creator', 'created_at'], 'required'],
+            [['produce_id','shippent_num','nopass_num'], 'required'],
             [['produce_id', 'shippent_num', 'failed_num', 'nopass_num', 'nopass_type', 'nopass_reason', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['shipment_sn'], 'string', 'max' => 20],
+            [['shippent_num'],'parseShippentNum'],
+            [['nopass_num'],'parseNopassNum'],
             [['failed_reason', 'remark'], 'string', 'max' => 255],
             [['creator'], 'string', 'max' => 30],
         ];
+    }
+
+    public function parseShippentNum($attribute, $params){
+        if($this->status == 1 && $this->shippent_num < 1){
+            $this->addError($attribute, "不能小于1.");
+        }elseif($this->status == 0 && $this->shippent_num != 0){
+            $this->addError($attribute, "必须是0");
+        }
+    }
+    public function parseNopassNum($attribute, $params){
+
+        if($this->status == 0 && $this->nopass_num < 1){
+            $this->addError($attribute, "不能小于1.");
+        }elseif($this->status == 1 && $this->nopass_num != 0){
+            $this->addError($attribute, "必须是0");
+        }
     }
 
     /**
@@ -69,5 +87,20 @@ class ProduceShipment extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+            $this->creator = Yii::$app->user->identity->username;
+        }
+
+        return parent::beforeSave($insert);
     }
 }

@@ -11,6 +11,7 @@ namespace addons\Supply\services;
 use addons\Supply\common\models\Factory;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
 use common\components\Service;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -39,6 +40,7 @@ class ProduceService extends Service
     {
         return [
             1=>['name'=>'基础信息','url'=>Url::to(['produce/view','id'=>$produce_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'出厂信息','url'=>Url::to(['produce-shipment/index','produce_id'=>$produce_id,'tab'=>2,'returnUrl'=>$returnUrl])],
             5=>['name'=>'日志信息','url'=>Url::to(['produce-log/index','produce_id'=>$produce_id,'tab'=>5,'returnUrl'=>$returnUrl])]
         ];
     }
@@ -64,6 +66,11 @@ class ProduceService extends Service
             }
         }        
         return $produce ;
+    }
+
+
+    public function getShippentNum($produce_id){
+        return ProduceShipment::find()->where(['produce_id'=>$produce_id])->sum('shippent_num');
     }
 
     

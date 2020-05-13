@@ -168,24 +168,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
                          ]);
                          break;
-                     case BuChanEnum::IN_PRODUCTION:
-                         $buttonHtml .= Html::edit(['leave-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
-                             'class'=>'btn btn-success btn-sm',
-                             'style'=>"margin-left:5px",
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModalLg',
-                         ]);
-                         break;
-                     case BuChanEnum::PARTIALLY_SHIPPED :
+                     case BuChanEnum::IN_PRODUCTION :
                          ;
-                     case BuChanEnum::FACTORY:
-                         $buttonHtml .= Html::edit(['qc-quality ','id'=>$model->id ,'returnUrl'=>$returnUrl], 'QC质检', [
+                     case BuChanEnum::PARTIALLY_SHIPPED:
+                         $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
                              'class'=>'btn btn-success btn-sm',
                              'style'=>"margin-left:5px",
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModalLg',
                          ]);
                          break;
+//                     case BuChanEnum::FACTORY:
+//                         $buttonHtml .= Html::edit(['produce-oqc','id'=>$model->id ,'returnUrl'=>$returnUrl], 'QC质检', [
+//                             'class'=>'btn btn-success btn-sm',
+//                             'style'=>"margin-left:5px",
+//                             'data-toggle' => 'modal',
+//                             'data-target' => '#ajaxModalLg',
+//                         ]);
+//                         break;
                      default:
                          $buttonHtml .= '';
 

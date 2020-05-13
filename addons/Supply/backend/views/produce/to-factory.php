@@ -34,6 +34,7 @@ $form = ActiveForm::begin([
     </div>
 <?php ActiveForm::end(); ?>
 <script>
+    getFollower()
     function getFollower() {
         var supplier_id = $("#tofactoryform-supplier_id").val();
         var html = '<option>请选择</option>';
