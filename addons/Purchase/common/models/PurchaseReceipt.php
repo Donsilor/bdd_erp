@@ -61,7 +61,7 @@ class PurchaseReceipt extends BaseModel
             'supplier_id' => '供应商',
             'receipt_no' => '出货单号',
             'receipt_num' => '出货数量',
-            'total_cost' => '总金额（总成本）',
+            'total_cost' => '总金额',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
