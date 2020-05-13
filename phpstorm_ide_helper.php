@@ -28,7 +28,6 @@ class Yii
  * @property \addons\Style\services\Application $styleService
  * @property \addons\Supply\services\Application $supplyService
  * @property \addons\Purchase\services\Application $purchaseService
- * @property \addons\Purchase\services\Application $purchaseReceiptService
  * @property \addons\RfOnlineDoc\services\Application $rfOnlineDocService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat

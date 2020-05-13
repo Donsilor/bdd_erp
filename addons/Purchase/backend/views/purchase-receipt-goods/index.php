@@ -3,24 +3,22 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
-$this->title = '单据明细';
+$this->title = '收货单详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">单据明细 - <?php echo $purchase->receipt_sn?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no ?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">
-                    <?= Html::encode($this->title) ?>
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
+                        <?= Html::create(['edit', 'purchase_id' => $receipt->id], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            
@@ -28,13 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]); ?>
                     </div>
                </div>
-            <div class="box-body table-responsive">  
+            <div class="box-body table-responsive">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         'showFooter' => true,//显示footer行
-                        'id'=>'grid', 
+                        'id'=>'grid',
                         'columns' => [
                             [
                                 'class' => 'yii\grid\SerialColumn',
@@ -49,102 +47,257 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'id',
                                     'filter' => true,
                                     'format' => 'raw',
+                                    'headerOptions' => ['width'=>'60'],
+                            ],
+                            [
+                                    'attribute' => 'purchase_sn',
+                                    'filter' => true,
+                                    'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                    'attribute' => 'goods_sn',
+                                    'attribute' => 'produce_sn',
                                     'filter' => true,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                            
-                            [
-                                    'attribute' => 'style_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
+                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                    'label' => '商品类型',
-                                    'attribute' => 'goods_type',
-                                    'value' => function($model){
-                                            return PurchaseGoodsTypeEnum::getValue($model->goods_type);
-                                     },
-                                    'filter' => Html::activeDropDownList($searchModel, 'goods_type',PurchaseGoodsTypeEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-
-                            [
-                                    'attribute'=>'goods_name',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         //$str .= "<br/>颜色:FI, 净度：VSS, 石重:0.5CT, 证书类型:GIA";
-                                         return $str;
-                                    },
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
-                            ],
-                            
-                            [
-                                    'label' => '款式分类',
-                                    'attribute' => 'style_cate_id',
-                                    'value' => "cate.name",
-                                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
+                                'attribute' => 'style_sn',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                    'label' => '产品线',
-                                    'attribute' => 'product_type_id',
-                                    'value' => "type.name",
-                                    'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
-                            ], 
-                            [
-                                    'attribute' => 'goods_num',
-                                    'value' => "goods_num",
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                         'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->goods_num ;
-                                    },
-                                        'headerOptions' => ['width'=>'120'],
-                                    ],
-                            [
-                                    'attribute'=>'成本价',
-                                    'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->cost_price ;
-                                    },
-                                    'headerOptions' => ['width'=>'120'],
-                            ],        
-                            [
-                                'attribute' => 'status',                
-                                'value' => function ($model){
-                                    return \common\enums\StatusEnum::getValue($model->status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                                'label' => '款式分类',
+                                'attribute' => 'style_cate_id',
+                                'value' => "cate.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '产品线',
+                                'attribute' => 'product_type_id',
+                                'value' => "type.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'factory_mo',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'finger',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'xiangkou',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'material',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'gold_weight',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'gold_price',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'gold_loss',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'jintuo_type',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'gross_weight',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'cert_id',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_num',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_weight',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_color',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_clarity',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_price',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone1',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_num1',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_weight1',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_price1',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_weight1',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone2',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_num2',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_weight2',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_price2',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone3',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_num3',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_weight3',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_price3',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'fee_price',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'parts_price',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'extra_stone_fee',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'tax_fee',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'other_fee',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -158,9 +311,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                              '编辑',
                                              ['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px',
                                            ]);
-                                },
-                                'status' => function($url, $model, $key){
-                                     return Html::status($model['status']);
                                 },
                                 ]
                            ]

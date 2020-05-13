@@ -5,7 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Purchase\common\models\Purchase;
+use addons\Purchase\common\models\PurchaseReceipt;
 use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 /**
@@ -52,15 +52,15 @@ class PurchaseReceiptGoodsController extends BaseController
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        //$dataProvider->query->andWhere(['>','status',-1]);
 
-        $receipt = Purchase::find()->where(['id'=>$receipt_id])->one();
+        $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'receipt'=> $receipt,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->purchaseReceiptService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
+                'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }
