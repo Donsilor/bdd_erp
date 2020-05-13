@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -162,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -207,7 +207,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -225,7 +225,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -234,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -252,7 +252,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -261,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -270,7 +270,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -288,7 +288,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -297,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -306,7 +306,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -324,7 +324,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -333,7 +333,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -342,7 +342,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -360,7 +360,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -369,7 +369,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -378,7 +378,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -387,7 +387,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -396,7 +396,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:80px'
                             ]
                         ]
                     ];
