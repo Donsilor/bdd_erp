@@ -99,8 +99,8 @@ class ProduceController extends BaseController
         $this->activeFormValidate($model);
         $supplier = Yii::$app->supplyService->supplier->getDropDown();
         if ($model->load(Yii::$app->request->post())) {
-            if($model->bc_status != BuChanEnum::INITIALIZATION){
-                return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::INITIALIZATION).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
+            if($model->bc_status != BuChanEnum::INITIALIZATION && $model->bc_status != BuChanEnum::TO_CONFIRMED){
+                return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::INITIALIZATION).'/'.BuChanEnum::getValue(BuChanEnum::TO_CONFIRMED).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
             }
             $model->factory_distribute_time = time();
             $model->bc_status = BuChanEnum::TO_CONFIRMED;
@@ -118,7 +118,7 @@ class ProduceController extends BaseController
                 'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_FACTORY),
                 'log_msg' => "采购单{$model->produce_sn}分配到供应商{$supplier[$model->supplier_id]}生产，跟单人是{$follower->member_name}"
             ];
-            Yii::$app->supplyService->produce_log->createProduceLog($log);
+            Yii::$app->supplyService->produce->createProduceLog($log);
             Yii::$app->getSession()->setFlash('success','保存成功');
             return $this->redirect(Yii::$app->request->referrer);
 
@@ -156,7 +156,7 @@ class ProduceController extends BaseController
             'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_CONFIRMED),
             'log_msg' => "确认分配"
         ];
-        Yii::$app->supplyService->produce_log->createProduceLog($log);
+        Yii::$app->supplyService->produce->createProduceLog($log);
         Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -185,7 +185,7 @@ class ProduceController extends BaseController
             'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PRODUCE),
             'log_msg' => "开始生产"
         ];
-        Yii::$app->supplyService->produce_log->createProduceLog($log);
+        Yii::$app->supplyService->produce->createProduceLog($log);
         Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -241,7 +241,7 @@ class ProduceController extends BaseController
                     'log_module' => LogModuleEnum::getValue(LogModuleEnum::LEAVE_FACTORY),
                     'log_msg' => "生产出厂"
                 ];
-                Yii::$app->supplyService->produce_log->createProduceLog($log);
+                Yii::$app->supplyService->produce->createProduceLog($log);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -303,7 +303,7 @@ class ProduceController extends BaseController
                     'log_module' => LogModuleEnum::getValue(LogModuleEnum::QC_QUALITY),
                     'log_msg' => "QC质检"
                 ];
-                Yii::$app->supplyService->produce_log->createProduceLog($log);
+                Yii::$app->supplyService->produce->createProduceLog($log);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -324,12 +324,7 @@ class ProduceController extends BaseController
 
     public function actionGetFollower(){
         $supplier_id = Yii::$app->request->post('supplier_id');
-        $model = SupplierFollower::find()
-            ->where(['supplier_id'=>$supplier_id,'status' => StatusEnum::ENABLED])
-            ->select(['id','member_name'])
-            ->asArray()
-            ->all();
-        $model = ArrayHelper::map($model,'id', 'member_name');
+        $model = Yii::$app->supplyService->supplier->getFollower($supplier_id);
         return ResultHelper::json(200, 'ok',$model);
     }
 }

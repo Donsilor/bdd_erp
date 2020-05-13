@@ -3,6 +3,8 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use addons\Purchase\common\models\PurchaseLog;
+use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
 use Yii;
 use common\components\Service;
@@ -58,6 +60,9 @@ class PurchaseService extends Service
         if($purchase->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购单没有审核');
         }
+        if($purchase->follower_id == ''){
+            throw new \Exception('没有分配跟单人');
+        }
         
         $models = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id])->all();
         foreach ($models as $model){            
@@ -71,6 +76,7 @@ class PurchaseService extends Service
                     'from_order_sn'=>$purchase->purchase_sn,
                     'from_type' => 2,
                     'style_sn' => $model->style_sn,
+                    'bc_status' => BuChanEnum::ASSIGNED,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type, 
                     'style_sex' =>$model->style_sex, 
@@ -79,6 +85,7 @@ class PurchaseService extends Service
                     'product_type_id'=>$model->product_type_id,
                     'style_cate_id'=>$model->style_cate_id,
                     'supplier_id'=>$purchase->supplier_id,
+                    'follower_id'=>$purchase->follower_id,
             ];
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
             $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
@@ -93,7 +100,22 @@ class PurchaseService extends Service
 
 
 
+    /**
+     * 创建采购单日志
+     * @return array
+     */
+    public function createPurchaseLog($log){
 
+        $purchase_log = new PurchaseLog();
+        $purchase_log->attributes = $log;
+        $purchase_log->log_time = time();
+        $purchase_log->creator_id = \Yii::$app->user->id;
+        $purchase_log->creator = \Yii::$app->user->identity->username;
+        if(false === $purchase_log->save()){
+            throw new \Exception($this->getError($purchase_log));
+        }
+        return $purchase_log ;
+    }
 
 
  

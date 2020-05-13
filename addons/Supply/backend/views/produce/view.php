@@ -160,6 +160,16 @@ $this->params['breadcrumbs'][] = $this->title;
                  <?php
                  $buttonHtml = '';
                  switch ($model->bc_status){
+
+                     //确认分配
+                     case BuChanEnum::TO_CONFIRMED:
+                         $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>$returnUrl], '确认分配', [
+                             'class'=>'btn btn-info btn-sm',
+                             'style'=>"margin-left:5px",
+                             'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
+
+                         ]);
+                     //初始化
                      case BuChanEnum::INITIALIZATION:
                          $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '分配工厂', [
                              'class'=>'btn btn-primary btn-sm',
@@ -168,14 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'data-target' => '#ajaxModal',
                          ]);
                          break;
-                     case BuChanEnum::TO_CONFIRMED:
-                         $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>$returnUrl], '确认分配', [
-                             'class'=>'btn btn-info btn-sm',
-                             'style'=>"margin-left:5px",
-                             'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
-
-                         ]);
-                         break;
+                     //已分配
                      case BuChanEnum::ASSIGNED:
                          $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
                              'class'=>'btn btn-danger btn-sm',
@@ -184,8 +187,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                          ]);
                          break;
+                     //生产中
                      case BuChanEnum::IN_PRODUCTION :
                          ;
+                      //部分出厂
                      case BuChanEnum::PARTIALLY_SHIPPED:
                          $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
                              'class'=>'btn btn-success btn-sm',

@@ -11,6 +11,7 @@ namespace addons\Supply\services;
 use addons\Supply\common\models\Factory;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceLog;
 use addons\Supply\common\models\ProduceShipment;
 use common\components\Service;
 use common\enums\StatusEnum;
@@ -68,12 +69,34 @@ class ProduceService extends Service
         return $produce ;
     }
 
-
+    /**
+     * 统计布产单出货数量
+     * @param $produce_id
+     * @return mixed
+     */
     public function getShippentNum($produce_id){
         return ProduceShipment::find()->where(['produce_id'=>$produce_id])->sum('shippent_num');
     }
 
-    
+
+
+
+    /**
+     * 创建布产日志
+     * @return array
+     */
+    public function createProduceLog($log){
+
+        $produce_log = new ProduceLog();
+        $produce_log->attributes = $log;
+        $produce_log->log_time = time();
+        $produce_log->creator_id = \Yii::$app->user->id;
+        $produce_log->creator = \Yii::$app->user->identity->username;
+        if(false === $produce_log->save()){
+            throw new \Exception($this->getError($produce_log));
+        }
+        return $produce_log ;
+    }
 
 
 }
