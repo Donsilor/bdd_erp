@@ -56,10 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'receipt_no',
-                'value' => 'receipt_no',
-                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
-                    'class' => 'form-control',
-                ]),
+                'value'=>function($model) {
+                    return Html::a($model->receipt_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                },
+                'filter' => true,
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'120'],
             ],
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'attribute' => 'total_cost',
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
+                'headerOptions' => ['width'=>'150'],
             ],
             [
                 'label' => '制单人',
@@ -157,13 +157,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status}',
+                'template' => '{edit} {goods} {audit} {status}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
+                    },
+                'goods' => function($url, $model, $key){
+                    return Html::a('单据明细', ['purchase-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                 'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
