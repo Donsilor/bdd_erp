@@ -20,13 +20,19 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <div class="row"><?= $form->field($model, 'status')->radioList(\addons\Supply\common\enums\QcTypeEnum::getMap())?></div>
+            <div class="row"><div class="col-lg-12"><?= $form->field($model, 'status',['onchange'=>'getFollower()'])->radioList(\addons\Supply\common\enums\QcTypeEnum::getMap())?></div></div>
             <div class="row">
-                <div class="col-lg-6"><?= $form->field($model,'shippent_num')->textInput()->hint('不能超过布产单总数量')?></div>
-                <div class="col-lg-6"><?= $form->field($model,'failed_num')->textInput()->hint('不能超过布产单总数量')?></div>
+                <div class="col-lg-4"><?= $form->field($model,'shippent_num')->textInput()->hint('')?></div>
+                <div class="col-lg-4"><?= $form->field($model,'failed_num')->textInput()->hint('')?></div>
+                <div class="col-lg-4"><?= $form->field($model,'failed_reason')->textInput()->hint('')?></div>
             </div>
-            <div class="row"><div class="col-lg-6"><?= $form->field($model,'failed_reason')->textInput()->hint('报废数量大于0时，报废原因必填')?></div>
-            <!-- /.tab-pane -->
+            <div class="row">
+                <div class="col-lg-4"><?= $form->field($model,'nopass_num')->textInput()->hint('')?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'nopass_type')->dropDownList(\addons\Supply\common\enums\NopassTypeEnum::getMap(),['prompt'=>'请选择']);?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'nopass_reason')->dropDownList(\addons\Supply\common\enums\NopassReasonEnum::getMap(),['prompt'=>'请选择']);?></div>
+            </div>
+            <div class="row"><div class="col-lg-12"><?= $form->field($model,'remark')->textInput()->hint('')?></div></div>
+
         </div>
         <!-- /.tab-content -->
     </div>

@@ -3,6 +3,7 @@
 namespace addons\Purchase\common\models;
 
 use addons\Supply\common\models\Supplier;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -81,5 +82,31 @@ class PurchaseReceipt extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }
