@@ -7,10 +7,12 @@ use common\helpers\Html;
 use common\helpers\Url;
 use unclead\multipleinput\MultipleInput;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 $this->title = '收货单详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receiptInfo->receipt_no ?></h2>
     <?php echo Html::menuTab($tabList, $tab)?>
@@ -22,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'purchase_id' => $receiptInfo->id], '新增货品', [
+                        <?= Html::create(['edit', 'receipt_id' => $receiptInfo->id], '新增货品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            
@@ -402,7 +404,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ];
                     ?>
                     <?= unclead\multipleinput\MultipleInput::widget([
-                        'name' => "采购收货单明细",
+                        'name' => "receipt_goods_list",
                         'removeButtonOptions'=>['label'=>'','class'=>''],
                         'value' => $receiptGoods,
                         'columns' => $receiptColomns
@@ -419,3 +421,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php ActiveForm::end(); ?>
