@@ -71,7 +71,7 @@ class Produce extends BaseModel
             'merchant_id' => '商户ID',
             'produce_sn' => '布产单编号',
             'from_type' => '订单来源',
-            'from_order_id' => '来源订单',
+            'from_order_id' => '来源订单ID',
             'from_order_sn' => '来源订单编号',
             'from_detail_id' => '商品名称',
             'qiban_sn' => '起版编号',
