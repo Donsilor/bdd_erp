@@ -2,17 +2,17 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use common\helpers\SnHelper;
+
+use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
-use yii\base\Exception;
 use common\traits\Curd;
 /**
-* Supplier
+* PurchaseReceipt
 *
 * Class PurchaseReceiptController
 * @package addons\Purchase\Backend\controllers
@@ -42,7 +42,10 @@ class PurchaseReceiptController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'member' => ['username'],
+            ]
         ]);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
@@ -81,7 +84,7 @@ class PurchaseReceiptController extends BaseController
     }
 
     /**
-     * 审核-款号
+     * 审核-采购收货单
      *
      * @return mixed
      */
@@ -116,6 +119,26 @@ class PurchaseReceiptController extends BaseController
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }

@@ -81,7 +81,13 @@ class PurchaseService extends Service
                     'supplier_id'=>$purchase->supplier_id,
             ];
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
-            Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+            $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+            if($produce) {
+                $model->produce_id = $produce->id;
+            }
+            if(false === $model->save()) {
+                throw new \Exception($this->getError($model),422);
+            }
         }
     }
 

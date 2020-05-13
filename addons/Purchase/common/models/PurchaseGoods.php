@@ -5,6 +5,7 @@ namespace addons\Purchase\common\models;
 use Yii;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Supply\common\models\Produce;
 
 /**
  * This is the model class for table "purchase_goods".
@@ -104,5 +105,13 @@ class PurchaseGoods extends BaseModel
     public function getPurchase()
     {
         return $this->hasOne(Purchase::class, ['id'=>'style_id'])->alias('style');
+    }
+    /**
+     * 布产单 一对一
+     * @return \yii\db\ActiveQuery
+    */
+    public function getProduce()
+    {
+        return $this->hasOne(Produce::class, ['id'=>'produce_id'])->alias('produce');
     }
 }
