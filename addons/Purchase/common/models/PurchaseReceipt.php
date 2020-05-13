@@ -82,4 +82,13 @@ class PurchaseReceipt extends BaseModel
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+    }
 }

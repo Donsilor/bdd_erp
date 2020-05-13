@@ -42,7 +42,10 @@ class PurchaseReceiptController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'member' => ['username'],
+            ]
         ]);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);

@@ -97,13 +97,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'160'],
             ],
             [
-                'attribute' => 'creator_id',
-                'value' => 'creator_id',
-                'filter' => Html::activeTextInput($searchModel, 'creator_id', [
+                'label' => '制单人',
+                'attribute' => 'member.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'member.username', [
                     'class' => 'form-control',
                 ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+
             ],
             [
                 'attribute' => 'created_at',
