@@ -141,7 +141,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => '申请修改',
                                     'value' => function ($model) {
                                         if($model->is_apply == common\enums\ConfirmEnum::YES) {
-                                            return '<span class="label label-danger">已申请</span>';
+                                            return '已申请<br/>'.Html::edit(['apply-audit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
+                                                    'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }else{
                                             return '未申请';
                                         }
@@ -181,30 +183,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {apply-edit} {apply-audit} {delete}',
+                                'template' => '{view} {edit} {apply-edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
-                                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'商品详情',[
                                             'class' => 'btn btn-info btn-xs',
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->audit_status == AuditStatusEnum::PENDING) {
-                                             return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                             return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){
                                         if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply-edit','id' => $model->id],'申请',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
-                                    'apply-audit' =>function($url, $model, $key){
+                                    /*'apply-audit' =>function($url, $model, $key){
                                         if($model->is_apply) {
                                             return Html::edit(['apply-audit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'审批',[
                                                     'class' => 'btn btn-danger btn-xs',
                                             ]);
                                         }
-                                    },
+                                    },*/
                                     'delete' => function($url, $model, $key) use($purchase){
                                         if($purchase->audit_status == AuditStatusEnum::PENDING) {
                                             return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
