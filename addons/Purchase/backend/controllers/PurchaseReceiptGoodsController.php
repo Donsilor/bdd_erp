@@ -89,6 +89,7 @@ class PurchaseReceiptGoodsController extends BaseController
         $search = Yii::$app->request->get('search');
         $receipt_goods_list = Yii::$app->request->post('receipt_goods_list');
         $model = new PurchaseReceiptGoods();
+        $model->produce_sn = $produce_sns;
         $receiptModel = new PurchaseReceipt();
         $this->modelClass = PurchaseReceiptGoodsForm::class;
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
