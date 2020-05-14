@@ -7,6 +7,8 @@ use common\helpers\ImageHelper;
 use kartik\select2\Select2;
 use yii\base\Widget;
 
+use common\enums\AuditStatusEnum;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = '采购列表';
@@ -126,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {audit} {status}',
+                'template' => '{edit} {goods} {follower} {audit} {status} ',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
@@ -138,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'audit' => function($url, $model, $key){
-                        if($model->audit_status != 1){
+                        if($model->audit_status != AuditStatusEnum::PASS){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -146,13 +148,22 @@ $this->params['breadcrumbs'][] = $this->title;
                              ]); 
                         }
                     },
+                    'follower' => function($url, $model, $key){
+                        if($model->audit_status != AuditStatusEnum::PASS){
+                            return Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
+                                'class'=>'btn btn-info btn-sm',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
+                    },
                     'status' => function($url, $model, $key){
-                        if($model->audit_status == 1){
+                        if($model->audit_status == AuditStatusEnum::PASS){
                             return Html::status($model->status);
                         }                        
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->audit_status == 0){
+                        if($model->audit_status == AuditStatusEnum::PENDING){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    
