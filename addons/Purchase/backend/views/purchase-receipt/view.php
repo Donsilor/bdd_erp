@@ -12,12 +12,12 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\PurchaseReceipt */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '收货单详情';
+$this->title = '采购收货单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">收货单详情 - <?php echo $model->receipt_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
          <div class="box col-xs-12">
