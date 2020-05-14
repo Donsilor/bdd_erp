@@ -148,7 +148,7 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
                             $receipt_list['finger'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::FINGER])?$produce_attr_arr[ReceiptGoodsAttrEnum::FINGER]['attr_value']:'';
                             $receipt_list['xiangkou'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU])?$produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU]['attr_value']:'';
-                            $receipt_list['material'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL])?$produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL]['attr_value']:'';
+                            $receipt_list['material'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL])?$produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL]['attr_value_id']:'';
                             $receipt_goods[] = $receipt_list;
                         }
                     } else {
@@ -204,15 +204,9 @@ class PurchaseReceiptGoodsController extends BaseController
                     $model = $this->findModel($id);
                     // ajax 校验
                     $this->activeFormValidate($model);
-                    //if(!empty($id)){
-                        if (false === $model::updateAll($goods, ['id' => $id])) {
-                            throw new Exception($this->getError($model));
-                        }
-                    //}else{
-                    //    if(false === $model->save()){
-                    //        throw new Exception($this->getError($model));
-                    //    }
-                    //}
+                    if (false === $model::updateAll($goods, ['id' => $id])) {
+                        throw new Exception($this->getError($model));
+                    }
                 }
                 //更新采购收货单汇总：总金额和总数量
                 $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
