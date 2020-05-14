@@ -182,11 +182,11 @@ class PurchaseGoodsController extends BaseController
         }
     }
     /**
-     * 申请编辑布产单
+     * 申请编辑
      * @property PurchaseGoodsForm $model
      * @return mixed
      */
-    public function actionEditProduce()
+    public function actionApplyEdit()
     {
         $this->layout = '@backend/views/layouts/iframe';
         
@@ -202,9 +202,7 @@ class PurchaseGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                print_r($model->toArray());
-                $attr_list = $model->getPostAttrs();
-                print_r($attr_list);exit;
+                $model->createApply();
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -219,6 +217,15 @@ class PurchaseGoodsController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
+    }
+    /**
+     * 申请编辑-审核
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionApplyAudit()
+    {
+        
     }
     
     /**
