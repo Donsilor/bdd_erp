@@ -22,12 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
+                    <?php if($purchase->audit_status == AuditStatusEnum::PENDING) {?>
                         <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            
                             'data-offset'=>'20px',
                         ]); ?>
+                    <?php }?>    
                     </div>
                </div>
             <div class="box-body table-responsive">  
