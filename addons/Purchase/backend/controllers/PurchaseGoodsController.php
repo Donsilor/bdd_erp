@@ -122,6 +122,23 @@ class PurchaseGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseGoodsForm();
+        $model->initAttrs();
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
     /**
      * 删除
      *

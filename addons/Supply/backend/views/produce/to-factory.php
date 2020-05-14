@@ -20,7 +20,13 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?= $form->field($model, 'supplier_id')->dropDownList($supplier,['prompt'=>'请选择','onchange'=>'getFollower()']);?>
+            <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
+                'data' => $supplier,
+                'options' => ['placeholder' => '请选择'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);?>
             <?= $form->field($model, 'follower_id')->dropDownList(\Yii::$app->supplyService->supplier->getFollower($model->supplier_id),['prompt'=>'请选择']);?>
 
             <!-- /.tab-pane -->

@@ -164,8 +164,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {edit-produce} {delete}',
+                                'template' => '{view}{edit} {edit-produce} {delete}',
                                 'buttons' => [
+                                    'view'=> function($url, $model, $key){
+                                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                            'class' => 'btn btn-info btn-sm',
+                                        ]);
+                                    },
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->audit_status == AuditStatusEnum::PENDING) {
                                              return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
