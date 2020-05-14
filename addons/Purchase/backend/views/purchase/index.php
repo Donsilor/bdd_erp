@@ -9,7 +9,7 @@ use yii\base\Widget;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '采购列表';
+$this->title = '采购订单列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
