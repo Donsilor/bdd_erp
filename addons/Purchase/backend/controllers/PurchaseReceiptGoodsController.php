@@ -114,6 +114,9 @@ class PurchaseReceiptGoodsController extends BaseController
                         throw new Exception("布产单{$produce_sn}供应商不一致！");
                     }
                     $shippent_num = ProduceShipment::find()->where(['produce_id' => $produce_id])->sum('shippent_num');
+                    if(!$shippent_num){
+                        throw new Exception("布产单{$produce_sn}未出货！");
+                    }
                     $purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
                         ->select('supplier_id')
                         ->where(['produce_sn' => $produce_sn])
@@ -121,7 +124,7 @@ class PurchaseReceiptGoodsController extends BaseController
                         ->asArray()
                         ->all();
                     $receipt_num = count($purchase_receipt_info);
-                    $the_receipt_num = $shippent_num - $receipt_num;
+                    $the_receipt_num = bcsub($shippent_num, $receipt_num);
                     $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
                     $produce_attr_arr = [];
                     foreach ($produce_attr as $attr) {
@@ -160,6 +163,11 @@ class PurchaseReceiptGoodsController extends BaseController
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();
                         if(false === $res){
                             throw new Exception("保存失败！");
+                        }
+                        //更新采购收货单汇总：总金额和总数量
+                        $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
+                        if(false === $res){
+                            throw new Exception('更新收货单汇总失败！');
                         }
                         $trans->commit();
                         return $this->redirect(Yii::$app->request->referrer);
@@ -207,10 +215,10 @@ class PurchaseReceiptGoodsController extends BaseController
                     //}
                 }
                 //更新采购收货单汇总：总金额和总数量
-                //$res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
-                //if(false === $res){
-                //    throw new Exception('更新收货单汇总失败！');
-                //}
+                $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
+                if(false === $res){
+                    throw new Exception('更新收货单汇总失败！');
+                }
                 $trans->commit();
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
