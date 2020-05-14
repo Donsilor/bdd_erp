@@ -77,6 +77,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
+                    'attribute' => 'goods_count',
+                    'value' => "goods_count",
+                    'filter' => true,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'80'],
+            ],
+            [
                     'attribute' => 'cost_total',
                     'value' => function ($model){
                         return $model->cost_total;
@@ -84,14 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'goods_count',
-                    'value' => "goods_count",
-                    'filter' => true,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
+            ],            
             [
                     'attribute' => 'remark',
                     'value' => "remark",
@@ -140,17 +140,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {follower} {audit} {status} ',
+                'template' => '{edit} {audit} {goods} {follower}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
                         ]);
-                    },
-                    'goods' => function($url, $model, $key){
-                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                    },
+                    },                    
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
@@ -160,6 +157,9 @@ $this->params['breadcrumbs'][] = $this->title;
                              ]); 
                         }
                     },
+                    'goods' => function($url, $model, $key){
+                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    },
                     'follower' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
                             return Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
@@ -168,11 +168,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#ajaxModal',
                             ]);
                         }
-                    },
-                    'status' => function($url, $model, $key){
-                        if($model->audit_status == AuditStatusEnum::PASS){
-                            return Html::status($model->status);
-                        }                        
                     },
                     'delete' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::PENDING){
