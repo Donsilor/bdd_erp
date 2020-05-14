@@ -13,6 +13,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $title
  * @property string $purchase_sn 采购单号
  * @property int $supplier_id 供应商
+ * @property int $follower_id 跟单人
  * @property string $cost_total 总成本
  * @property int $goods_total 总数量
  * @property int $creator_id 创建人
@@ -57,6 +58,9 @@ class Purchase extends BaseModel
             'id' => 'ID',
             'purchase_sn' => '采购单号',
             'supplier_id' => '供应商',
+            'cost_total' => '总金额',
+            'goods_count' => '总数量',  
+            'follower_id' => '跟单人',
             'cost_total' => '总金额',
             'goods_count' => '总数量',  
             'creator_id' => '创建人',

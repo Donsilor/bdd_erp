@@ -8,7 +8,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '日志信息');
+$this->title = Yii::t('style_channel', '出厂信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
@@ -35,40 +35,49 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'visible' => false,
                             ],
 
-                            [
-                                'attribute' => 'produce_sn',
-                                'value' => function($model){
-                                    return $model->produce_sn;
-                                },
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute'=>'log_module',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute'=>'log_msg',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
 
                             [
-                                'attribute' => 'log_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                                'value' => function ($model){
-                                    return \common\enums\LogTypeEnum::getValue($model->log_type);
+                                'attribute' => 'status',
+                                'value' => function($model){
+                                    return \addons\Supply\common\enums\QcTypeEnum::getValue($model->status);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'log_type',\addons\Style\common\enums\LogTypeEnum::getMap(), [
+                                'filter' =>Html::activeDropDownList($searchModel, 'status',\addons\Supply\common\enums\QcTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-
                                 ]),
+
+                            ],
+
+                            [
+                                'attribute'=>'shippent_num',
+                                'filter' => false,
+
                             ],
                             [
-                                'label' => '创建时间',
+                                'attribute'=>'nopass_num',
+                                'filter' => false,
+
+                            ],
+                            [
+                                'attribute'=>'nopass_reason',
+                                'value' => function($model){
+                                    return \addons\Supply\common\enums\NopassReasonEnum::getValue($model->nopass_reason);
+                                },
+                                'filter' =>Html::activeDropDownList($searchModel, 'nopass_reason',\addons\Supply\common\enums\NopassReasonEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+
+
+                            ],
+
+                            [
+                                'attribute'=>'remark',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'created_at',
                                 'filter' => false,
                                 'value' => function($model){
                                     return Yii::$app->formatter->asDatetime($model->created_at);

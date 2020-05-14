@@ -2,8 +2,12 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\forms\PurchaseFollowerForm;
+use addons\Supply\common\models\SupplierFollower;
 use common\enums\AuditStatusEnum;
+use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
+use common\helpers\ResultHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -142,9 +146,38 @@ class PurchaseController extends BaseController
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(['index']), 'error');
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
 
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSetFollower(){
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseFollowerForm::class;
+        $model = $this->findModel($id);
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+            //日志
+            $follower = SupplierFollower::find()->where(['id'=>$model->follower_id])->one();
+            $log = [
+                'purchase_id' => $id,
+                'purchase_sn' => $model->purchase_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "分配跟单人",
+                'log_msg' => "分配到跟单人{$follower->member_name}"
+            ];
+            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         return $this->renderAjax($this->action->id, [

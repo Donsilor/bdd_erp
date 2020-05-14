@@ -13,6 +13,7 @@ use Yii;
  * @property int $nopass_num 质检未过数量
  * @property int $nopass_reason OQC未过原因
  * @property int $pass_result OQC结果
+ * @property int $nopass_type 质检未过类型
  * @property int $failed_num 质检报废数量
  * @property string $failed_reason 报废原因
  * @property string $remark 操作备注
@@ -37,9 +38,12 @@ class ProduceOqc extends BaseModel
     public function rules()
     {
         return [
-            [['produce_id', 'pass_result', 'remark', 'creator_id', 'creator'], 'required'],
-            [['produce_id', 'pass_num', 'nopass_num', 'nopass_reason', 'pass_result', 'failed_num', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['produce_id', 'pass_result','pass_num', 'remark'], 'required'],
+            [['produce_id', 'pass_num', 'nopass_num', 'nopass_reason', 'pass_result','nopass_type', 'failed_num', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['failed_reason'], 'string', 'max' => 255],
+            ['pass_num','compare','compareValue' => 0, 'operator' => '>='],
+            ['failed_num','compare','compareValue' => 0, 'operator' => '>='],
+            ['nopass_num','compare','compareValue' => 0, 'operator' => '>='],
             [['remark'], 'string', 'max' => 50],
             [['creator'], 'string', 'max' => 20],
         ];
@@ -57,6 +61,7 @@ class ProduceOqc extends BaseModel
             'nopass_num' => '质检未过数量',
             'nopass_reason' => 'OQC未过原因',
             'pass_result' => 'OQC结果',
+            'nopass_type' => '质检未过类型',
             'failed_num' => '质检报废数量',
             'failed_reason' => '报废原因',
             'remark' => '操作备注',
@@ -65,5 +70,20 @@ class ProduceOqc extends BaseModel
             'created_at' => '操作时间',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+            $this->creator = Yii::$app->user->identity->username;
+        }
+
+        return parent::beforeSave($insert);
     }
 }

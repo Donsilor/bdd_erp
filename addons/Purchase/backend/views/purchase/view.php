@@ -92,8 +92,17 @@ $this->params['breadcrumbs'][] = $this->title;
                  <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModalLg',
-                 ]); ?>   
-                 <?php 
+                 ]); ?>
+                <?php
+                if($model->audit_status != AuditStatusEnum::PASS){
+                    echo Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
+                        'class'=>'btn btn-success btn-sm',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]);
+                }
+                ?>
+                <?php
                  if($model->audit_status != AuditStatusEnum::PASS){
                      echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                              'class'=>'btn btn-success btn-sm',

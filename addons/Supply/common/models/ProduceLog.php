@@ -37,7 +37,7 @@ class ProduceLog extends BaseModel
     {
         return [
             [['produce_id', 'log_time', 'log_module', 'creator_id'], 'required'],
-            [['produce_id', 'log_type', 'log_time', 'creator_id', 'created_at'], 'integer'],
+            [['produce_id', 'log_type', 'log_time', 'creator_id','bc_status', 'created_at'], 'integer'],
             [['produce_sn', 'log_module', 'creator'], 'string', 'max' => 30],
             [['log_msg'], 'string', 'max' => 500],
         ];
@@ -53,6 +53,7 @@ class ProduceLog extends BaseModel
             'produce_id' => '布产Id',
             'produce_sn' => '布产编号',
             'log_type' => '操作类型',
+            'bc_status' => '布产状态',
             'log_msg' => '文字描述',
             'log_time' => '处理时间',
             'log_module' => '操作模块',

@@ -137,7 +137,7 @@ class PurchaseReceiptController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseReceiptService->purchaseReceipt->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

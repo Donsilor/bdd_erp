@@ -4,6 +4,8 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 
+use addons\Supply\common\enums\BuChanEnum;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = '布产列表';
@@ -56,9 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model){
                         return \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type);
                     },
-                    'filter' => function($model){
-                        return \addons\Supply\common\enums\FromTypeEnum::getMap();
-                    },
+                    'filter' =>Html::activeDropDownList($searchModel, 'from_type',\addons\Supply\common\enums\FromTypeEnum::getMap(), [
+                        'prompt' => '全部',
+                        'class' => 'form-control',
+                    ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
@@ -81,6 +84,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => true,
                 'format' => 'raw',
 
+            ],
+            [
+                'attribute' => 'goods_num',
+                'filter' => false
             ],
             [
                 'attribute' => 'bc_status',
@@ -153,24 +160,54 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {audit} {status}',
+                'template' => ' {action} {status}',
                 'buttons' => [
+                    'action' => function($url, $model, $key){
+                        $buttonHtml = '';
+                        switch ($model->bc_status){
+                            //确认分配
+                            case BuChanEnum::TO_CONFIRMED:
+                                $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '确认分配', [
+                                    'class'=>'btn btn-info btn-sm',
+                                    'style'=>"margin:2px",
+                                    'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
 
+                                ]);
+                            //初始化
+                            case BuChanEnum::INITIALIZATION:
+                                $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '分配工厂', [
+                                    'class'=>'btn btn-primary btn-sm',
+                                    'style'=>"margin:2px",
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModal',
+                                ]);
+                                break;
+                            //已分配
+                            case BuChanEnum::ASSIGNED:
+                                $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '开始生产', [
+                                    'class'=>'btn btn-danger btn-sm',
+                                    'style'=>"margin:2px",
+                                    'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',
 
-//                    'audit' => function($url, $model, $key){
-//                        if($model->audit_status != 1){
-//                            return Html::edit(['ajax-audit','id'=>$model->id], '质检', [
-//                                    'class'=>'btn btn-success btn-sm',
-//                                    'data-toggle' => 'modal',
-//                                    'data-target' => '#ajaxModal',
-//                             ]);
-//                        }
-//                    },
+                                ]);
+                                break;
+                            //生产中
+                            case BuChanEnum::IN_PRODUCTION :
+                                ;
+                            //部分出厂
+                            case BuChanEnum::PARTIALLY_SHIPPED:
+                                $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '生产出厂', [
+                                    'class'=>'btn btn-success btn-sm',
+                                    'style'=>"margin:2px",
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModalLg',
+                                ]);
+                                break;
 
-                    'delete' => function($url, $model, $key){
-                        if($model->audit_status == 0){
-                            return Html::delete(['delete', 'id' => $model->id]);
+                            default:
+                                $buttonHtml .= '';
                         }
+                        return $buttonHtml;
                     },                    
                 ]
             ]
