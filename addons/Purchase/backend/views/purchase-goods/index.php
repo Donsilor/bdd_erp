@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="row col-xs-15">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">
@@ -49,12 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'name'=>'id',  //设置每行数据的复选框属性
                                     'headerOptions' => ['width'=>'30'],
                             ],
-                            [
+                            /*[
                                     'attribute' => 'id',
                                     'filter' => true,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ],
+                            ],*/
                             [
                                     'attribute' => 'goods_sn',
                                     'filter' => true,
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'style_sn',
                                     'filter' => true,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
+                                    'headerOptions' => ['width'=>'120'],
                             ],
                             [
                                     'label' => '商品类型',
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'form-control',
                                     ]),
                                     'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
+                                    'headerOptions' => ['width'=>'100'],
                             ],
 
                             [
@@ -180,7 +180,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{view}{edit} {apply-edit} {delete}',
+                                //'headerOptions' => ['width' => '150'],
+                                'template' => '{view} {edit} {apply-edit} {apply-audit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -194,7 +195,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'apply-edit' =>function($url, $model, $key){
                                         if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                            return Html::edit(['apply-edit','id' => $model->id],'申请',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
+                                    },
+                                    'apply-audit' =>function($url, $model, $key){
+                                        if($model->is_apply) {
+                                            return Html::edit(['apply-audit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'审批',[
+                                                    'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($purchase){
