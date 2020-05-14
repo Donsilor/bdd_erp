@@ -10,8 +10,8 @@ use common\enums\BaseEnum;
  */
 class FromTypeEnum extends BaseEnum
 {
-    const ORDER_FROM = 1;
-    const PURCHASE_FROM = 2;
+    const ORDER = 1;
+    const PURCHASE = 2;
     
     /**
      * 
@@ -20,9 +20,8 @@ class FromTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::ORDER_FROM => "订单",
-            self::PURCHASE_FROM => "采购单",
-            
+            self::ORDER => "客订单",
+            self::PURCHASE => "采购单",            
         ];
     }
     

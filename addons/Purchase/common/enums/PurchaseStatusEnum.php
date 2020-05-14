@@ -3,15 +3,19 @@
 namespace addons\Style\common\enums;
 
 /**
- * 表面工艺  枚举
+ * 采购单状态
  * @package common\enums
  */
 class PurchaseStatusEnum extends BaseEnum
 {
-    const WAIT_AUDIT = 0;
-    const DATA_SYNCH = 2;
-    const SYSTEM = 3;
-    
+    const  SAVED = "待审核";
+    const  COMFIRM = "已审核";
+    const  BUCHAN = "已布产";
+    const  IN_PRODUCTION = "生产中";
+    const  PART_SHIPPED = "部分出厂";
+    const  All_SHIPPED = "已出厂";
+    const  FINISHED = "已完成";
+    const  CANCELED = "已取消";
     /**
      * 
      * @return array
@@ -19,10 +23,14 @@ class PurchaseStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::WAIT_AUDIT => "待审核",
-            self::DATA_SYNCH => "已审核",
-            self::SYSTEM => "不通过",
-            
+            self::SAVED => "待审核",
+            self::COMFIRMED => "已审核",
+            self::BUCHAN => "已布产",
+            self::IN_PRODUCTION => "生产中",
+            self::PART_SHIPPED => "部分出厂",
+            self::All_SHIPPED => "已出厂",
+            self::FINISHED => "已完成",
+            self::CANCELED => "已取消",
         ];
     }
     
