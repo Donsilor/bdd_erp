@@ -205,7 +205,7 @@ class PurchaseGoodsController extends BaseController
                 $model->createApply();
                 $trans->commit();
                 //前端提示
-                Yii::$app->getSession()->setFlash('success','保存成功');
+                Yii::$app->getSession()->setFlash('success','申请提交成功！审批通过后生效');
                 return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
@@ -219,13 +219,34 @@ class PurchaseGoodsController extends BaseController
         ]);
     }
     /**
+     * 查看审批
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionApplyView()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseGoodsForm();
+        $model->initAttrs();
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    /**
      * 申请编辑-审核
      * @property PurchaseGoodsForm $model
      * @return mixed
      */
     public function actionApplyAudit()
     {
-        
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
     }
     
     /**
