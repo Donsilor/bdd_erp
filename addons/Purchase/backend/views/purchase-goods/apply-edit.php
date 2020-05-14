@@ -6,7 +6,7 @@ use addons\Style\common\enums\AttrTypeEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
 
-$this->title = '申请编辑布产';
+$this->title = '申请编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

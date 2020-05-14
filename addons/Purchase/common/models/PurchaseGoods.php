@@ -25,6 +25,8 @@ use addons\Supply\common\models\Produce;
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
  * @property int $produce_id 布产ID
+ * @property int $is_apply 是否申请修改
+ * @property int $apply_info 申请修改数据
  * @property int $status 状态： -1已删除 0禁用 1启用
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -46,10 +48,11 @@ class PurchaseGoods extends BaseModel
     {
         return [
             [['goods_sn','purchase_id', 'goods_type','goods_name','cost_price','product_type_id','style_cate_id','goods_num','jintuo_type'], 'required'],
-            [['purchase_id', 'goods_type','qiban_type','jintuo_type', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_type','qiban_type','jintuo_type','is_apply', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'produce_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn','qiban_sn','goods_sn'], 'string', 'max' => 30],
             [['goods_name','remark'], 'string', 'max' => 255],
+            [['apply_info'], 'safe'],
         ];
     }
 

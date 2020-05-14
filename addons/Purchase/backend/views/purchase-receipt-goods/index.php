@@ -52,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'readonly' =>'true',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -61,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'readonly' =>'true',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -70,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'readonly' =>'true',
                                 'style'=>'width:100px'
                             ]
                         ],

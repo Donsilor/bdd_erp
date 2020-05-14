@@ -41,7 +41,7 @@ class PurchaseReceiptService extends Service
         $result = false;
         $sum = PurchaseReceiptGoods::find()
                     ->select(['sum(1) as receipt_num','sum(cost_price) as total_cost'])
-                    ->where(['receipt_id'=>$receipt_id,'status'=>StatusEnum::ENABLED])
+                    ->where(['receipt_id'=>$receipt_id])
                     ->asArray()->one();
         if($sum) {
             $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
