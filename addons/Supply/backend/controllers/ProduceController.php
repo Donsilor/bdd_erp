@@ -201,12 +201,12 @@ class ProduceController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            try{
+            try {
                 $trans = Yii::$app->trans->beginTransaction();
-                $produce = Produce::find()->where(['id'=>$produce_id])->one();
+                $produce = Produce::find()->where(['id' => $produce_id])->one();
 
-                if($produce->bc_status != BuChanEnum::PARTIALLY_SHIPPED && $produce->bc_status != BuChanEnum::IN_PRODUCTION){
-                    return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::PARTIALLY_SHIPPED).'/'.BuChanEnum::getValue(BuChanEnum::IN_PRODUCTION).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
+                if ($produce->bc_status != BuChanEnum::PARTIALLY_SHIPPED && $produce->bc_status != BuChanEnum::IN_PRODUCTION) {
+                    return $this->message('不是' . BuChanEnum::getValue(BuChanEnum::PARTIALLY_SHIPPED) . '/' . BuChanEnum::getValue(BuChanEnum::IN_PRODUCTION) . '，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
                 }
 
                 $produce->factory_delivery_time = time();
@@ -214,12 +214,16 @@ class ProduceController extends BaseController
 
 
                 //判断是全部出厂还是部分出厂
-                $shippent_num = Yii::$app->supplyService->produce->getShippentNum($produce_id);
-                $num = $model->shippent_num + $shippent_num;
-                $goods_num = $produce->goods_num;
-                if($num > $goods_num){
-                    return $this->message('出货数量大于商品数量', $this->redirect(Yii::$app->request->referrer), 'warning');
-                }elseif($num == $goods_num){
+                $shippent_count = Yii::$app->supplyService->produce->getShippentNum($produce_id);
+                $surplus_num = $produce->goods_num - $shippent_count;  //未出厂商品数量
+                $shippent_num = $model->shippent_num; //这次出厂数量
+                $nopass_num = $model->nopass_num; //这次质检不通过数量
+
+                if($nopass_num > $surplus_num){
+                    return $this->message('质检不通过数量大于未出厂数量', $this->redirect(Yii::$app->request->referrer), 'warning');
+                }elseif($shippent_num > $surplus_num){
+                    return $this->message('出厂数量大于未出厂数量', $this->redirect(Yii::$app->request->referrer), 'warning');
+                }elseif($shippent_num == $surplus_num){
                     $produce->bc_status = BuChanEnum::FACTORY;
                 }else{
                     $produce->bc_status = BuChanEnum::PARTIALLY_SHIPPED;
