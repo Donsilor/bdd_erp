@@ -113,7 +113,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -122,17 +123,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
                             'name' => "material",
                             'title'=>"主成色",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:100px'
-                            ]
+                            ],
+                            'defaultValue' => 0,
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
@@ -140,6 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -149,6 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -158,17 +165,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
                             'name' => "jintuo_type",
                             'title'=>"金托类型",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
                         ],
                         [
                             'name' => "gross_weight",
@@ -176,7 +186,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -185,7 +196,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -201,10 +213,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "main_stone",
                             'title'=>"主石",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:100px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
                         ],
                         [
                             'name' => "main_stone_num",
@@ -212,7 +226,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -221,26 +236,31 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
                             'name' => "main_stone_color",
                             'title'=>"主石颜色",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                         ],
                         [
                             'name' => "main_stone_clarity",
                             'title'=>"主石净度",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                         ],
                         [
                             'name' => "main_stone_price",
@@ -248,6 +268,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -255,10 +276,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "second_stone1",
                             'title'=>"副石1",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num1",
@@ -266,6 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -275,6 +300,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -284,6 +310,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -291,10 +318,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "second_stone2",
                             'title'=>"副石2",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num2",
@@ -302,6 +331,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -311,6 +341,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -320,6 +351,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -327,10 +359,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "second_stone3",
                             'title'=>"副石3",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num3",
@@ -338,6 +372,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -347,6 +382,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -356,6 +392,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -365,7 +402,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -374,6 +412,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -383,7 +422,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -392,7 +432,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:60px'
+                                'type' => 'number',
+                                'style'=>'width:80px'
                             ]
                         ],
                         [
@@ -401,6 +442,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ]

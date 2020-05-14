@@ -13,6 +13,8 @@ class ReceiptGoodsAttrEnum extends BaseEnum
     const MATERIAL = 10;
     const MAIN_STONE_COLOR = 7;
     const MAIN_STONE_CLARITY = 2;
+    const MAIN_STONE = 56;
+    const SECOND_STONE = 60;
     
     /**
      *
@@ -26,7 +28,8 @@ class ReceiptGoodsAttrEnum extends BaseEnum
                 self::MATERIAL => "主成色",
                 self::MAIN_STONE_COLOR =>"主石颜色",
                 self::MAIN_STONE_CLARITY =>"主石净度",
-                
+                self::MAIN_STONE =>"主石类型",
+                self::SECOND_STONE =>"副石类型",
         ];
     }
     
