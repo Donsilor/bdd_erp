@@ -194,7 +194,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         }
         $this->is_apply   = ConfirmEnum::YES;
         $this->apply_info = json_encode($apply_info);
-        if(false === $this->save()) {
+        if(false === $this->save(['is_apply','apply_info','updated_at'])) {
             throw new \Exception("保存失败",500);
         }
         
