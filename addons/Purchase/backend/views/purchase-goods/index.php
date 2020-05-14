@@ -138,6 +138,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
+                                    'attribute' => '申请修改',
+                                    'value' => function ($model) {
+                                        if($model->is_apply == common\enums\ConfirmEnum::YES) {
+                                            return '<span class="label label-danger">已申请</span>';
+                                        }else{
+                                            return '未申请';
+                                        }
+                                    },
+                                    'filter' => Html::activeDropDownList($searchModel, 'is_apply',common\enums\ConfirmEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width' => '100'],
+                            ],
+                            [
                                     'attribute' => '布产号',                                    
                                     'value' => function ($model) {
                                            if($model->produce_id) {

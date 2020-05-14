@@ -218,6 +218,15 @@ class PurchaseGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+    /**
+     * 申请编辑-审核
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionApplyAudit()
+    {
+        
+    }
     
     /**
      * 查询商品
