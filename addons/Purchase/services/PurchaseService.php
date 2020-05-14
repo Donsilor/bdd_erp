@@ -86,6 +86,7 @@ class PurchaseService extends Service
                     'style_cate_id'=>$model->style_cate_id,
                     'supplier_id'=>$purchase->supplier_id,
                     'follower_id'=>$purchase->follower_id,
+                    'factory_distribute_time' => time()
             ];
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
             $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);

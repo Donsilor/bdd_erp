@@ -20,12 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                 </div>
             </div>
-            <div class="box-body table-responsive">  
+            <div class="box-body table-responsive" style="white-space:nowrap;">
     <?php //echo Html::batchButtons()?>                  
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>'overflow-x: scroll;'],
         'showFooter' => true,//显示footer行
         'id'=>'grid',            
         'columns' => [
@@ -61,9 +62,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' =>Html::activeDropDownList($searchModel, 'from_type',\addons\Supply\common\enums\FromTypeEnum::getMap(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
+                        'style' => 'width:80px;',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
             ],
             [
                     'attribute' => 'from_order_sn',
@@ -97,9 +98,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'bc_status',\addons\Supply\common\enums\BuChanEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:100px;',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+
             ],
             [
                 'attribute' => 'qiban_type',
@@ -109,6 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:100px;',
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
@@ -121,6 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\common\enums\JinTuoEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:100px;',
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
@@ -131,6 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:100px;',
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
@@ -141,20 +146,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:100px;',
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
             ],
             [
+                'attribute' => 'supplier_id',
+                'value' =>"supplier.supplier_name",
+                'filter'=>\kartik\select2\Select2::widget([
+                    'name'=>'SearchModel[supplier_id]',
+                    'value'=>$searchModel->supplier_id,
+                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' =>'col-md-2'],
+            ],
+            [
                 'label' => '跟单人',
                 'filter' => Html::activeTextInput($searchModel, 'follower.username', [
                     'class' => 'form-control',
+                    'style' => 'width:80px;',
                 ]),
                 'value' => function ($model) {
                     return $model->follower ? $model->follower->username : null;
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
+                'headerOptions' => ['width'=>'80'],
             ],
 
             [
