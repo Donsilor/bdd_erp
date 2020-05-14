@@ -8,14 +8,14 @@ namespace addons\Style\common\enums;
  */
 class PurchaseStatusEnum extends BaseEnum
 {
-    const  SAVED = "待审核";
-    const  COMFIRM = "已审核";
-    const  BUCHAN = "已布产";
-    const  IN_PRODUCTION = "生产中";
-    const  PART_SHIPPED = "部分出厂";
-    const  All_SHIPPED = "已出厂";
-    const  FINISHED = "已完成";
-    const  CANCELED = "已取消";
+    const  SAVED = 1;
+    const  COMFIRM = 2;
+    const  BUCHAN = 3;
+    const  IN_PRODUCTION = 4;
+    const  PART_SHIPPED = 5;
+    const  All_SHIPPED = 6;
+    const  FINISHED = 7;
+    const  CANCELED = 99;
     /**
      * 
      * @return array
