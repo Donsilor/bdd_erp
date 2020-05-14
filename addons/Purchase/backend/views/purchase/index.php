@@ -3,7 +3,6 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use common\helpers\ImageHelper;
 use kartik\select2\Select2;
 use yii\base\Widget;
 
@@ -11,7 +10,7 @@ use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '采购订单列表';
+$this->title = '采购订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
