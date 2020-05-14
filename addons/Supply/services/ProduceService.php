@@ -8,6 +8,7 @@
 
 namespace addons\Supply\services;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\models\Factory;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
@@ -65,7 +66,18 @@ class ProduceService extends Service
             if(false === $produceAttr->save()){
                 throw new \Exception($this->getError($produceAttr));
             }
-        }        
+        }
+
+        $log = [
+            'produce_id' => $produce_id,
+            'produce_sn' => $produce->produce_sn,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'bc_status' => $produce->bc_status,
+            'log_module' => '布产单创建',
+            'log_msg' => "生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
+        ];
+        \Yii::$app->supplyService->produce->createProduceLog($log);
+
         return $produce ;
     }
 

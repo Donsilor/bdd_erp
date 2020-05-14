@@ -138,6 +138,6 @@ class Produce extends BaseModel
      */
     public function getFollower()
     {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'follower_id']);
+        return $this->hasOne(SupplierFollower::class, ['id'=>'follower_id']);
     }
 }

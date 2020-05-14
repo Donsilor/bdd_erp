@@ -142,7 +142,8 @@ class PurchaseController extends BaseController
                 if($model->audit_status == AuditStatusEnum::PASS){
                     Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
                 }
-                $trans->commit();                
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
