@@ -143,10 +143,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {goods} {follower}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                        ]);
+                        if($model->audit_status != AuditStatusEnum::PENDING){
+                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModal',
+                            ]);
+                        }
                     },                    
                     'audit' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
