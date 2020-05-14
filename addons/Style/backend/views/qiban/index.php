@@ -148,8 +148,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status} {view}',
+                'template' => '{view} {edit} {audit} {status}',
                 'buttons' => [
+                    'view'=> function($url, $model, $key){
+                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                'class' => 'btn btn-info btn-sm',
+                        ]);                        
+                    },
                     'edit' => function($url, $model, $key){
                         //审核后不能编辑
                         if($model->audit_status == 0 ){
@@ -190,12 +195,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },
-                    'view'=> function($url, $model, $key){
-                        return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
-                            'class' => 'btn btn-info btn-sm',
-                        ]);
-
-                    },
+                    
                 ]
             ]
         ]
