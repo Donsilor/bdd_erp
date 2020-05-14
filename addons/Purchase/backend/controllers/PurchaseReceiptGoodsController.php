@@ -136,7 +136,6 @@ class PurchaseReceiptGoodsController extends BaseController
                         }
                         for ($i = 1; $i <= $the_receipt_num; $i++) {
                             $receipt_list['id'] = null;
-                            $receipt_list['receipt_id'] = $receipt_id;
                             $receipt_list['produce_sn'] = $produce_sn;
                             $receipt_list['purchase_sn'] = $produce_info['from_order_sn'];
                             $receipt_list['style_sn'] = $produce_info['style_sn'] != "" ? $produce_info['style_sn'] : $produce_info['qiban_sn'];
@@ -160,9 +159,9 @@ class PurchaseReceiptGoodsController extends BaseController
                         if(false === $res){
                             throw new Exception("保存失败！");
                         }
+                        $trans->commit();
+                        return $this->redirect(Yii::$app->request->referrer);
                     }
-                    $trans->commit();
-                    return $this->redirect(Yii::$app->request->referrer);
                 }
             }catch (\Exception $e){
                 $trans->rollBack();
