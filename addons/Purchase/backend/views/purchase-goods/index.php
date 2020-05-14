@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Supply\common\enums\BuChanEnum;
+use common\enums\AuditStatusEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -85,7 +86,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'value' => function ($model) {
                                          $str = $model->goods_name;
-                                         //$str .= "<br/>颜色:FI, 净度：VSS, 石重:0.5CT, 证书类型:GIA";
                                          return $str;
                                     },
                                     'format' => 'raw',
@@ -123,8 +123,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->goods_num ;
                                     },
-                                        'headerOptions' => ['width'=>'120'],
-                                    ],
+                                   'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'attribute'=>'成本价',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
@@ -162,21 +162,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {apply} {delete}',
+                                'template' => '{edit} {edit-produce} {delete}',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key){
-                                         if(!$model->produce_id) {
-                                             return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                    'edit' => function($url, $model, $key) use($purchase){
+                                         if($purchase->audit_status == AuditStatusEnum::PENDING) {
+                                             return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
-                                    'apply' =>function($url, $model, $key){
+                                    'edit-produce' =>function($url, $model, $key){
                                         if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑布产',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                            return Html::edit(['edit-produce','id' => $model->id],'编辑布产',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($purchase){
-                                        if($purchase->status == 0) {
-                                            return Html::delete(['delete','id' => $model->id],'删除',['class' => 'btn btn-danger btn-xs']);
+                                        if($purchase->audit_status == AuditStatusEnum::PENDING) {
+                                            return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
                                         }
                                     },
                                 ]

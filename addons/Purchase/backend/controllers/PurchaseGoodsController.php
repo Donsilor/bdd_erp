@@ -17,6 +17,8 @@ use addons\Style\common\models\Qiban;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use common\enums\StatusEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use common\enums\AuditStatusEnum;
 /**
  * Attribute
  *
@@ -120,6 +122,88 @@ class PurchaseGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {  
+        $purchase_id = Yii::$app->request->get('purchase_id');
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index','purchase_id'=>$purchase_id]));        
+        
+        try{   
+            
+            $trans = Yii::$app->trans->beginTransaction();  
+            
+            $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
+            if($purchase->audit_status != AuditStatusEnum::PENDING) {
+                throw new \Exception("采购单已审核,不允许删除",422);
+            }
+            
+            $model = $this->findModel($id);            
+            if($model->produce_id) {
+                throw new \Exception("该商品已布产,不允许删除",422);
+            }
+            if (!$model->delete()) {
+                throw new \Exception("删除失败",422);
+            }
+            //删除商品属性
+            PurchaseGoodsAttribute::deleteAll(['id'=>$id]);
+            //更新单据汇总
+            Yii::$app->purchaseService->purchase->purchaseSummary($purchase_id);
+            $trans->commit();
+            
+            return $this->message("删除成功", $this->redirect($returnUrl));
+        }catch (\Exception $e) {
+            
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+        }
+    }
+    /**
+     * 申请编辑布产单
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionEditProduce()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        
+        $id = Yii::$app->request->get('id');
+        
+        $this->modelClass = PurchaseGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseGoodsForm();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                print_r($model->toArray());
+                $attr_list = $model->getPostAttrs();
+                print_r($attr_list);exit;
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        
+        $model->initAttrs();
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
     /**
      * 查询商品
      * @param unknown $model
