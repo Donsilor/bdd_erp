@@ -41,16 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => 'receipt_id',
-                                'title'=>"ID",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
-                                ]
-                            ],
-                            [
                                 'name' =>'purchase_sn',
                                 'title'=>"采购单号",
                                 'enableError'=>false,
