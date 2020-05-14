@@ -11,7 +11,7 @@ use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '采购列表';
+$this->title = '采购订单列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -93,26 +93,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'80'],
             ],
             [
-                'attribute' => 'remark',
-                'value' => "remark",
-                'filter' => true,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
-            ],
-
+                    'attribute' => 'remark',
+                    'value' => "remark",
+                    'filter' => true,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'200'],
+            ],               
             [
-                'attribute' => 'audit_status',
-                'value' => function ($model){
-                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                        'prompt' => '全部',
-                        'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],         
-           
+                    'attribute' => 'follower_id',
+                    'value' => "follower.username",
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute' => 'creator_id',
+                    'value' => "creator.username",
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute' => 'audit_status',
+                    'value' => function ($model){
+                        return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],      
             [
                 'attribute' => 'status',                    
                 'value' => function ($model){

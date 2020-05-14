@@ -58,9 +58,11 @@ class Purchase extends BaseModel
             'id' => 'ID',
             'purchase_sn' => '采购单号',
             'supplier_id' => '供应商',
+            'cost_total' => '总金额(RMB)',
+            'goods_count' => '总数量(件)',  
             'follower_id' => '跟单人',
-            'cost_total' => '采购成本',
-            'goods_count' => '商品数量',  
+            'cost_total' => '总金额',
+            'goods_count' => '总数量',  
             'creator_id' => '创建人',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
@@ -79,6 +81,14 @@ class Purchase extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 跟单人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFollower()
+    {
+        return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
     }
     /**
      * 创建人

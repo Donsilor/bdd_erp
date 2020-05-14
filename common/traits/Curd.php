@@ -236,7 +236,7 @@ trait Curd
             }
             $trans->commit();
             
-            return ResultHelper::json(200, '删除成功',[],true);
+            return ResultHelper::json(200, '删除成功');
         } catch (\Exception $e) {
             
             $trans->rollBack();

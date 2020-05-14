@@ -29,8 +29,12 @@ return [
             'icon' => 'fa fa-superpowers',
             'child' => [
                     [
-                            'title' => '采购列表',
+                            'title' => '采购订单',
                             'route' => 'purchase/index',
+                    ],
+                    [
+                            'title' => '采购收货单',
+                            'route' => 'purchase-receipt/index',
                     ],
             ],
 
