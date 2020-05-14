@@ -87,6 +87,36 @@ class PurchaseGoodsForm extends PurchaseGoods
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
     } 
+    
+    public function initApply()
+    {
+        if(!$this->apply_info) {
+            return ;
+        }
+        $_apply_info = array();
+        $apply_info  = json_decode($this->apply_info,true);
+        
+        $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value'])->where(['id'=>$this->id])->asArray()->all();
+        $attrs = array_column($attrs,'attr_value','attr_id');
+        
+        foreach ($apply_info as $k=>$item) {
+            $group = $item['group'];
+            $code  = $item['code'];
+            $value = $item['value'];
+            $label = $item['label'];
+            if($group == 'base') {
+                $org_value = $this->$code;                
+            }else if($group == 'attr'){
+                $attr_id = $item['attr_id'];
+                $org_value= $attrs[$attr_id] ?? '';
+            }else {
+                $org_value = '';
+            }
+            $_apply_info[] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
+        }
+        $this->apply_info = $_apply_info;
+        
+    }
     /**
      * 创建商品属性
      */

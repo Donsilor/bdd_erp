@@ -231,7 +231,7 @@ class PurchaseGoodsController extends BaseController
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
-        $model->initAttrs();
+        $model->initApply();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'returnUrl'=>$returnUrl

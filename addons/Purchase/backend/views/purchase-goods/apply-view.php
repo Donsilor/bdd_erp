@@ -42,30 +42,14 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
-                    <tr>
-                        <td class="col-xs-2 text-right">PHP版本：</td>
-                        <td>1111</td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">Mysql版本：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">解析引擎：</td>
-                        <td></td>
-                    </tr>                    
-                    <tr>
-                        <td class="col-xs-2 text-right">附件目录：</td>
-                        <td></td>
-                    </tr>                    
-                    <tr>
-                        <td class="col-xs-2 text-right">超时时间：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">客户端信息：</td>
-                        <td></td>
-                    </tr>
+                  <?php if($model->apply_info) { ?>
+                       <?php foreach ($model->apply_info as $info) {?>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?php echo $info['label']?>：</td>
+                            <td><?php echo $info['org_value']?></td>
+                        </tr>
+                       <?php }?>
+                  <?php }?>                   
                 </table>
             </div>
         </div>
@@ -77,30 +61,14 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
             </div>
             <div class="box-body table-responsive">
                  <table class="table table-hover">
-                    <tr>
-                        <td class="col-xs-2 text-right">PHP版本：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">Mysql版本：</td>
-                        <td class="red">123123</td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">解析引擎：</td>
-                        <td class="red"><?= $_SERVER['SERVER_SOFTWARE']; ?></td>
-                    </tr>                    
-                    <tr>
-                        <td class="col-xs-2 text-right">附件目录：</td>
-                        <td></td>
-                    </tr>                    
-                    <tr>
-                        <td class="col-xs-2 text-right">超时时间：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-2 text-right">客户端信息：</td>
-                        <td></td>
-                    </tr>
+                    <?php if($model->apply_info) {?>
+                       <?php foreach ($model->apply_info as $info) {?>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?php echo $info['label']?>：</td>
+                            <td<?php echo $info['changed'] ?' class="red"':'';?>><?php echo $info['value']?></td>
+                        </tr>
+                       <?php }?>
+                  <?php }?>
                 </table>
             </div>
         </div>
