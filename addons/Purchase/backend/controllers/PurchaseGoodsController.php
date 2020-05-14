@@ -225,6 +225,8 @@ class PurchaseGoodsController extends BaseController
      */
     public function actionApplyView()
     {
+        $returnUrl = Yii::$app->request->get('returnUrl'); 
+        
         $id = Yii::$app->request->get('id');
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
@@ -232,6 +234,7 @@ class PurchaseGoodsController extends BaseController
         $model->initAttrs();
         return $this->render($this->action->id, [
                 'model' => $model,
+                'returnUrl'=>$returnUrl
         ]);
     }
     /**

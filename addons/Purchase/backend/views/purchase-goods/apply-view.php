@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
 <div class="col-xs-12">
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title"><i class="fa fa-cog"></i> 采购布产编辑-审批</h3>                        
+            <h3 class="box-title"><i class="fa fa-cog"></i> 采购布产编辑-审批</h3>                         
         </div>
         <div class="box-body table-responsive">
              <table class="table table-hover">
@@ -27,7 +27,8 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                              'class'=>'btn btn-success btn-sm',
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModal',
-                        ]);?>
+                         ]);?>
+                         <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
                         </td>                       
                     </tr>
                 </table>
