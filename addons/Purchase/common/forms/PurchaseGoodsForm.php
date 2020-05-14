@@ -12,6 +12,7 @@ use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\enums\InputTypeEnum;
+use common\enums\ConfirmEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -120,6 +121,53 @@ class PurchaseGoodsForm extends PurchaseGoods
                 throw new \Exception($this->getErrors($model));
             }
         }
+    }
+    /**
+     * 采购商品申请编辑-创建
+     */
+    public function createApply()
+    {
+        
+        $fields = array('goods_name','cost_price','goods_num','remark');
+        $apply_info = array();
+        foreach ($fields as $field) {
+            $apply_info[] = array(
+                    'code'=>$field,
+                    'value'=>$this->$field,
+                    'label'=>$this->getAttributeLabel($field),
+                    'group'=>'base',
+                    'sort'=>0,
+            );
+        }
+        foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
+            
+            if(InputTypeEnum::isText($spec->input_type)) {
+                $value_id = 0;
+                $value = $attr_value_id;
+            }else if(is_numeric($attr_value_id)){
+                $value_id = $attr_value_id;
+                $value = Yii::$app->attr->valueName($attr_value_id);
+            }else{
+                $value_id = null;
+                $value = null;
+            }
+            $apply_info[] = array(
+                    'code' => 'attr_'.$attr_id,
+                    'value' => $value,
+                    'label' => Yii::$app->attr->attrName($attr_id),
+                    'group' =>'attr',
+                    'sort' =>$spec->sort,
+                    'attr_id' => $attr_id,
+                    'value_id' => $value_id,
+            );            
+        }
+        $this->is_apply   = ConfirmEnum::YES;
+        $this->apply_info = json_encode($apply_info);
+        if(false === $this->save()) {
+            throw new \Exception("保存失败",500);
+        }
+        
     }
     /**
      * 获取款式属性列表

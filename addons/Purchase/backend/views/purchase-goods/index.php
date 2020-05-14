@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{view}{edit} {edit-produce} {delete}',
+                                'template' => '{view}{edit} {apply-edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -176,9 +176,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                              return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
-                                    'edit-produce' =>function($url, $model, $key){
+                                    'apply-edit' =>function($url, $model, $key){
                                         if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['edit-produce','id' => $model->id],'编辑布产',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($purchase){
