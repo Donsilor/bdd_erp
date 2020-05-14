@@ -2,25 +2,19 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
-use addons\Purchase\common\forms\PurchaseGoodsForm;
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Style\common\forms\QibanAttrForm;
-use addons\Style\common\models\Qiban;
-use addons\Style\common\models\Style;
-use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
-use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
-use common\helpers\ResultHelper;
+
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use addons\Purchase\common\models\PurchaseReceipt;
 use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Supply\common\models\Produce;
+use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use yii\base\Exception;
 
 /**
@@ -183,78 +177,6 @@ class PurchaseReceiptGoodsController extends BaseController
         return $this->renderAjax('index', [
             'model' => $model
         ]);
-    }
-
-    /**
-     * 查询商品
-     * @param unknown $model
-     * @param unknown $style_sn
-     * @return mixed|string
-     */
-    private function checkGoods(& $model)
-    {
-
-        $purchase_id = Yii::$app->request->get('purchase_id');
-        $goods_sn = Yii::$app->request->get('goods_sn');
-        $search = Yii::$app->request->get('search');
-        $jintuo_type = Yii::$app->request->get('jintuo_type');
-
-        if($jintuo_type) {
-            $model->jintuo_type = $jintuo_type;
-        }
-        if($model->isNewRecord) {
-            $model->purchase_id = $purchase_id;
-        }
-        if($model->isNewRecord && $search && $goods_sn) {
-
-            $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-            $style  = Style::find()->where(['style_sn'=>$goods_sn])->one();
-            if(!$style) {
-                $qiban = Qiban::find()->where(['qiban_sn'=>$goods_sn])->one();
-                if(!$qiban) {
-                    return $this->message("[款号/起版号]不存在", $this->redirect($skiUrl), 'error');
-                }elseif($qiban->status != StatusEnum::ENABLED) {
-                    return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
-                }else{
-                    $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'qiban_sn'=>$goods_sn,'status'=>StatusEnum::ENABLED])->count();
-                    if($exist) {
-                        return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
-                    }
-                    $model->style_id = $qiban->id;
-                    $model->goods_sn = $goods_sn;
-                    $model->qiban_sn = $goods_sn;
-                    $model->qiban_type = $qiban->qiban_type;
-                    $model->style_sn = $qiban->style_sn;
-                    $model->style_cate_id = $qiban->style_cate_id;
-                    $model->product_type_id = $qiban->product_type_id;
-                    $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
-                    $model->style_sex = $qiban->style_sex;
-                    $model->goods_name = $qiban->qiban_name;
-                    $model->cost_price  = $qiban->cost_price;
-                    $model->jintuo_type = $qiban->jintuo_type;
-                    $qibanForm = new QibanAttrForm();
-                    $qibanForm->id = $qiban->id;
-                    $qibanForm->initAttrs();
-
-                    $model->attr_custom = $qibanForm->attr_custom;
-                    $model->attr_require = $qibanForm->attr_require;
-                }
-            }elseif($style->status != StatusEnum::ENABLED) {
-                return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
-            }else{
-                $model->style_id = $style->id;
-                $model->goods_sn = $goods_sn;
-                $model->style_sn = $goods_sn;
-                $model->style_cate_id = $style->style_cate_id;
-                $model->product_type_id = $style->product_type_id;
-                $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
-                $model->style_sex = $style->style_sex;
-                $model->goods_name = $style->style_name;
-                $model->cost_price = $style->cost_price;
-            }
-        }
-
-        return true;
     }
 
 }
