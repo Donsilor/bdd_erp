@@ -9,7 +9,7 @@ use unclead\multipleinput\MultipleInput;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 
-$this->title = '收货单详情';
+$this->title = '采购收货单详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
@@ -413,6 +413,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="modal-footer">
                 <div class="col-sm-12 text-center">
+                    <?= $form->field($receiptInfo, 'id')->hiddenInput()->label(false) ?>
                     <button class="btn btn-primary" type="submit">保存</button>
                     <span class="btn btn-white" onclick="history.go(-1)">返回</span>
                 </div>

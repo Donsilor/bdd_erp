@@ -123,4 +123,12 @@ class PurchaseReceiptGoods extends BaseModel
             'other_fee' => '其他费用',
         ];
     }
+
+    /**
+     * 关联采购收货单明细表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceipt(){
+        return $this->hasMany(PurchaseReceipt::class, ['id'=>'receipt_id']);
+    }
 }

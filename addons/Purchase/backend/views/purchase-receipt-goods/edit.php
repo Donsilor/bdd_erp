@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'produce_sn')->textInput() ?>
                      </div>
                      <div class="col-lg-1">
-                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
+                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchReceiptGoods()"]) ?>
                      </div>
                  </div>
                <!-- ./box-body -->
@@ -31,11 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-function searchGoods() {
-   var produce_sn = $.trim($("#purchasegoodsform-produce_sn").val());
-   if(!goods_sn) {
+function searchReceiptGoods() {
+   var produce_sns = $.trim($("#purchasereceiptgoodsform-produce_sn").val());
+   /*if(!produce_sns) {
 	    rfMsg("请输入布产单编号");
         return false;
-   }
+   }*/
+   produce_sns = 'BC20051259902542';
+    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['produce_sns','search',])?>&search=1&produce_sns="+produce_sns;
+    window.location.href = url;
 }
 </script>
