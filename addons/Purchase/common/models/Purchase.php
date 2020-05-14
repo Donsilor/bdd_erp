@@ -46,7 +46,16 @@ class Purchase extends BaseModel
             [['id','supplier_id','goods_count', 'creator_id', 'auditor_id', 'audit_status', 'status','audit_time', 'created_at', 'updated_at'], 'integer'],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['purchase_sn'], 'string', 'max' => 30],
+            [['audit_status'], 'parseAuditStatus']
         ];
+    }
+
+    public function parseAuditStatus($attribute, $params){
+        if($this->audit_status == 1 && $this->goods_count <= 0){
+            $this->addError("audit_status","采购单没有明细");
+        }else if($this->audit_status == 1 && $this->follower_id  == ''){
+            $this->addError("audit_status","没有分配跟单人");
+        }
     }
 
     /**

@@ -57,13 +57,20 @@ class ProduceShipment extends BaseModel
         }
     }
     public function parseNopassNum($attribute, $params){
-
         if($this->status == 0 && $this->nopass_num < 1){
             $this->addError($attribute, "不能小于1.");
         }elseif($this->status == 1 && $this->nopass_num != 0){
             $this->addError($attribute, "必须是0");
         }
+
+        if($this->status == 0 && empty($this->nopass_reason)){
+            $this->addError("nopass_reason","选择未过原因");
+        }
+
     }
+
+
+
 
     /**
      * {@inheritdoc}
