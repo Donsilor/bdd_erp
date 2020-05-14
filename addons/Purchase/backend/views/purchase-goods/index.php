@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
-                                            'class' => 'btn btn-info btn-sm',
+                                            'class' => 'btn btn-info btn-xs',
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){

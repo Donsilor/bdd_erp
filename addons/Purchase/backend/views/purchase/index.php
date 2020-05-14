@@ -146,6 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
+                                     'class'=>'btn btn-primary btn-sm',
                             ]);
                         }
                     },                    
