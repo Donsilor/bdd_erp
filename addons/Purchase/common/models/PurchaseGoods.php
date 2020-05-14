@@ -107,7 +107,7 @@ class PurchaseGoods extends BaseModel
      */
     public function getPurchase()
     {
-        return $this->hasOne(Purchase::class, ['id'=>'style_id'])->alias('style');
+        return $this->hasOne(Purchase::class, ['id'=>'purchase_id'])->alias('purchase');
     }
     /**
      * 布产单 一对一

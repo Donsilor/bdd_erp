@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
              <table class="table table-hover">
                     <tr>
                         <td class="col-xs-1 text-right">采购单号：</td>
-                        <td>1111</td>
+                        <td><?php echo $model->purchase->purchase_sn;?></td>
                         <td class="col-xs-1 text-right">布产单号：</td>
-                        <td>4234</td>
+                        <td><?php echo $model->produce->produce_sn;?></td>
                         <td class="col-xs-1 text-right">布产状态：</td>
-                        <td>423423</td>
+                        <td><?php echo addons\Supply\common\enums\BuChanEnum::getValue($model->produce->bc_status);?></td>
                     </tr>
                     <tr>
                         <td colspan="6" class="text-center">
