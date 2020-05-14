@@ -57,6 +57,9 @@ class PurchaseService extends Service
     public function syncPurchaseToProduce($purchase_id)
     {
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
+        if($purchase->goods_count <= 0 ){
+            throw new \Exception('采购单没有明细');
+        }
         if($purchase->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购单没有审核');
         }

@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style' => 'width:80px;',
                 ]),
                 'value' => function ($model) {
-                    return $model->follower ? $model->follower->username : null;
+                    return $model->follower ? $model->follower->member_name : null;
                 },
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'80'],

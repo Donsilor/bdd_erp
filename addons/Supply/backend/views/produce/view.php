@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('follower_id') ?>：</label>
-                            <?= $model->follower ?  $model->follower->username : ''?>
+                            <?= $model->follower ?  $model->follower->member_name : ''?>
                         </div>
                         <div class="col-lg-4">
                             <label class="text-right col-lg-4"><?= $model->getAttributeLabel('customer') ?>：</label>

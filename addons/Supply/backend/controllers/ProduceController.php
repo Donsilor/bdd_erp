@@ -116,7 +116,7 @@ class ProduceController extends BaseController
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'bc_status' => $model->bc_status,
                 'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_FACTORY),
-                'log_msg' => "采购单{$model->produce_sn}分配到供应商{$supplier[$model->supplier_id]}生产，跟单人是{$follower->member_name}"
+                'log_msg' => "布产单{$model->produce_sn}分配到供应商{$supplier[$model->supplier_id]}生产，跟单人是{$follower->member_name}"
             ];
             Yii::$app->supplyService->produce->createProduceLog($log);
             Yii::$app->getSession()->setFlash('success','保存成功');
