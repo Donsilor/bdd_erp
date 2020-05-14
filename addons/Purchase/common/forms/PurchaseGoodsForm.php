@@ -91,14 +91,16 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function createAttrs()
     {  
-        PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);    
+        PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);   
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {            
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new PurchaseGoodsAttribute();
             $model->id = $this->id;
             $model->attr_id  = $attr_id; 
+
             if(InputTypeEnum::isText($spec->input_type)) {
                 $model->attr_value_id  = 0;
+                $model->attr_value = $attr_value_id;
             }else if(is_numeric($attr_value_id)){
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
                 $model->attr_value_id  = $attr_value_id; 
