@@ -107,8 +107,7 @@ class PurchaseGoodsForm extends PurchaseGoods
             if($group == 'base') {
                 $org_value = $this->$code;                
             }else if($group == 'attr'){
-                $attr_id = $item['attr_id'];
-                $org_value= $attrs[$attr_id] ?? '';
+                $org_value= $attrs[$code] ?? '';
             }else {
                 $org_value = '';
             }
@@ -166,7 +165,6 @@ class PurchaseGoodsForm extends PurchaseGoods
                     'value'=>$this->$field,
                     'label'=>$this->getAttributeLabel($field),
                     'group'=>'base',
-                    'sort'=>0,
             );
         }
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
@@ -183,14 +181,11 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $value = null;
             }
             $apply_info[] = array(
-                    'code' => 'attr_'.$attr_id,
+                    'code' => $attr_id,
                     'value' => $value,
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
-                    'sort' =>$spec->sort,
-                    'attr_id' => $attr_id,
-                    'value_id' => $value_id,
-            );            
+             );            
         }
         $this->is_apply   = ConfirmEnum::YES;
         $this->apply_info = json_encode($apply_info);
