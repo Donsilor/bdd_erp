@@ -19,6 +19,7 @@ use common\enums\StatusEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
+use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 /**
  * Attribute
  *
@@ -244,11 +245,34 @@ class PurchaseGoodsController extends BaseController
      */
     public function actionApplyAudit()
     {
-        $id = Yii::$app->request->get('id');
+        
+        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->request->referrer);
+        
+        $id = Yii::$app->request->get('id');        
         $model = $this->findModel($id);
-
-        return $this->render($this->action->id, [
-                'model' => $model,
+        $form  = new PurchaseGoodsAuditForm();   
+        $form->id = $id;
+        $form->audit_status = AuditStatusEnum::PASS;        
+        // ajax 校验
+        $this->activeFormValidate($form);
+        if ($form->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->is_apply = 0;
+                if($form->audit_status == AuditStatusEnum::PASS){
+                    //
+                }
+                $model->save(false,['is_apply','apply_info','updated']);
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+            }
+            
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $form,
         ]);
     }
     

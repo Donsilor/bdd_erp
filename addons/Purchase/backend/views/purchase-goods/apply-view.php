@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                     </tr>
                     <tr>
                         <td colspan="6" class="text-center">
-                        <?= Html::edit(['ajax-audit','id'=>1], '审  批', [
+                        <?= Html::edit(['apply-audit','id'=>$model->id], '审  批', [
                              'class'=>'btn btn-success btn-sm',
                              'data-toggle' => 'modal',
                              'data-target' => '#ajaxModal',
