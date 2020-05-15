@@ -65,5 +65,16 @@ class SnHelper
     {
         return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
     }
+
+    /**
+     * 不良返厂单号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createDefectiveSn($prefix = 'FC')
+    {
+        return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
+    }
+
     
 }
