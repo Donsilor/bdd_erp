@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
         'options' => ['style'=>'overflow-x: scroll;'],
-        'showFooter' => true,//显示footer行
+        'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
             [
