@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'attribute' => '布产号',                                    
                                     'value' => function ($model) {
-                                           if($model->produce_id) {
+                                           if($model->produce_id && $model->produce) {
                                                return $model->produce->produce_sn ;
                                            }
                                     },
@@ -169,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'attribute' => '布产状态',
                                     'value' => function ($model) {
-                                        if($model->produce_id) {
+                                        if($model->produce_id && $model->produce) {
                                             return BuChanEnum::getValue($model->produce->bc_status);
                                         }else{
                                             return '未布产';
@@ -196,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){
-                                        if($model->produce_id && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
+                                        if($model->produce_id && $model->produce && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
                                             return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },                                    
