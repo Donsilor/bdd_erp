@@ -87,6 +87,35 @@ class PurchaseGoodsForm extends PurchaseGoods
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
     } 
+    
+    public function initApply()
+    {
+        if(!$this->apply_info) {
+            return ;
+        }
+        $_apply_info = array();
+        $apply_info  = json_decode($this->apply_info,true);
+        
+        $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value'])->where(['id'=>$this->id])->asArray()->all();
+        $attrs = array_column($attrs,'attr_value','attr_id');
+        
+        foreach ($apply_info as $k=>$item) {
+            $group = $item['group'];
+            $code  = $item['code'];
+            $value = $item['value'];
+            $label = $item['label'];
+            if($group == 'base') {
+                $org_value = $this->$code;                
+            }else if($group == 'attr'){
+                $org_value= $attrs[$code] ?? '';
+            }else {
+                $org_value = '';
+            }
+            $_apply_info[] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
+        }
+        $this->apply_info = $_apply_info;
+        
+    }
     /**
      * 创建商品属性
      */
@@ -136,7 +165,6 @@ class PurchaseGoodsForm extends PurchaseGoods
                     'value'=>$this->$field,
                     'label'=>$this->getAttributeLabel($field),
                     'group'=>'base',
-                    'sort'=>0,
             );
         }
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
@@ -153,18 +181,15 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $value = null;
             }
             $apply_info[] = array(
-                    'code' => 'attr_'.$attr_id,
+                    'code' => $attr_id,
                     'value' => $value,
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
-                    'sort' =>$spec->sort,
-                    'attr_id' => $attr_id,
-                    'value_id' => $value_id,
-            );            
+             );            
         }
         $this->is_apply   = ConfirmEnum::YES;
         $this->apply_info = json_encode($apply_info);
-        if(false === $this->save()) {
+        if(false === $this->save(true,['is_apply','apply_info','updated_at'])) {
             throw new \Exception("保存失败",500);
         }
         

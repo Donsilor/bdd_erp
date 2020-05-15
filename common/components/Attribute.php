@@ -137,5 +137,26 @@ class Attribute
        
         return $info;
     }
-    
+
+    /**
+     * 属性值键值对
+     * @param unknown $attr_id
+     * @param unknown $language
+     * @param string $noCache
+     * @return array
+     */
+    public function key_valueList($attr_id, $language = null, $noCache = false)
+    {
+        $result_data = [];
+        if($language == null) {
+            $language = \Yii::$app->params['language'];
+        }
+        $result = $this->getAttr($attr_id , $noCache);
+        $data = $result['items'][$language]??[];
+        if(!empty($data)){
+            $result_data = array_combine(array_column($data, 'id'),array_column($data, 'name'));
+        }
+        return $result_data;
+    }
+
 }
