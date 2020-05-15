@@ -4,6 +4,7 @@ namespace addons\Supply\backend\controllers;
 
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\LogModuleEnum;
+use addons\Supply\common\enums\NopassReasonEnum;
 use addons\Supply\common\forms\ToFactoryForm;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
@@ -243,8 +244,9 @@ class ProduceController extends BaseController
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'bc_status' => $produce->bc_status,
                     'log_module' => LogModuleEnum::getValue(LogModuleEnum::LEAVE_FACTORY),
-                    'log_msg' => "生产出厂"
+                    'log_msg' => $model->status == 1 ? "质检通过，出厂数量：{$model->shippent_num}" : "质检未通过，未通过数量：{$model->nopass_num},原因：".NopassReasonEnum::getValue($model->nopass_reason)
                 ];
+
                 Yii::$app->supplyService->produce->createProduceLog($log);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');

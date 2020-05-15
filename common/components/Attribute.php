@@ -154,6 +154,7 @@ class Attribute
         $result = $this->getAttr($attr_id , $noCache);
         $data = $result['items'][$language]??[];
         if(!empty($data)){
+            array_unshift($data, ['id' => 0, 'name' => '全部']);
             $result_data = array_combine(array_column($data, 'id'),array_column($data, 'name'));
         }
         return $result_data;

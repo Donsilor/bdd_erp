@@ -2,38 +2,40 @@
 
 namespace addons\Purchase\common\models;
 
+
+use Yii;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
-use Yii;
 
 /**
- * This is the model class for table "purchase_receipt".
+ * This is the model class for table "purchase_defective".
  *
  * @property int $id ID
  * @property int $merchant_id 商户ID
+ * @property string $defective_no 返厂单编号
  * @property int $supplier_id 供应商ID
  * @property string $receipt_no 工厂出货单号
- * @property int $receipt_num 出货数量
- * @property string $total_cost 总金额（总成本）
+ * @property int $defective_num 货品数量
+ * @property string $total_const 总金额
  * @property int $auditor_id 审核人
- * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
+ * @property int $audit_status 审核状态
  * @property string $audit_remark 审核备注
  * @property string $remark 单据备注
  * @property int $sort 排序
  * @property int $status 状态 1启用 0禁用 -1 删除
- * @property int $creator_id 创建人
+ * @property int $creator_id 制单人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class PurchaseReceipt extends BaseModel
+class PurchaseDefective extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('purchase_receipt');
+        return self::tableFullName('purchase_defective');
     }
 
     /**
@@ -42,11 +44,11 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'defective_num', 'auditor_id', 'audit_time', 'audit_status', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
-            [['receipt_no'], 'string', 'max' => 30],
-            [['remark', 'audit_remark'], 'string', 'max' => 255],
+            [['defective_no', 'receipt_no'], 'string', 'max' => 30],
+            [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -58,18 +60,19 @@ class PurchaseReceipt extends BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户ID',
+            'defective_no' => '返厂单编号',
             'supplier_id' => '供应商',
             'receipt_no' => '工厂出货单号',
-            'receipt_num' => '出货数量',
+            'defective_num' => '不良货品数量',
             'total_cost' => '总金额',
             'auditor_id' => '审核人',
-            'audit_status' => '审核状态',
             'audit_time' => '审核时间',
+            'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
             'remark' => '单据备注',
             'sort' => '排序',
             'status' => '状态',
-            'creator_id' => '创建人',
+            'creator_id' => '制单人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
