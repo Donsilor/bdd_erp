@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
+                            'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
                         ],
                         [
                             'name' => "goods_remark",
