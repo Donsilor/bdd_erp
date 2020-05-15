@@ -35,12 +35,12 @@ class PurchaseDefectiveGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'defective_id', 'receipt_goods_id', 'factory_no'], 'required'],
-            [['defective_id', 'receipt_goods_id', 'style_cate_id', 'product_type_id', 'oqc_reason'], 'integer'],
+            [['defective_id', 'receipt_goods_id'], 'required'],
+            [['id', 'defective_id', 'receipt_goods_id', 'style_cate_id', 'product_type_id', 'oqc_reason'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
-            [['factory_no', 'produce_sn'], 'string', 'max' => 30],
-            [['goods_remark'], 'string', 'max' => 100],
+            [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
+            [['goods_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,7 +52,7 @@ class PurchaseDefectiveGoods extends BaseModel
         return [
             'id' => 'ID',
             'defective_id' => '返厂单ID',
-            'receipt_goods_id' => '关联purchase_receipt_goods表ID',
+            'receipt_goods_id' => '采购收货单商品序号',
             'style_sn' => '款式编号',
             'factory_no' => '工厂模号',
             'produce_sn' => '布产单编号',

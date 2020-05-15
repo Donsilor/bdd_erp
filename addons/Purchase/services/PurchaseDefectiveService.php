@@ -41,7 +41,7 @@ class PurchaseDefectiveService extends Service
         $result = false;
         $sum = PurchaseDefectiveGoods::find()
                     ->select(['sum(1) as defective_num','sum(cost_price) as total_cost'])
-                    ->where(['receipt_id'=>$defective_id])
+                    ->where(['defective_id'=>$defective_id])
                     ->asArray()->one();
         if($sum) {
             $result = PurchaseDefective::updateAll(['defective_num'=>$sum['defective_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$defective_id]);
