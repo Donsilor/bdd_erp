@@ -135,13 +135,13 @@ class PurchaseDefectiveController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective/index']));
 
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->purchaseDefective->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
