@@ -71,10 +71,10 @@ class ProduceService extends Service
         $log = [
             'produce_id' => $produce_id,
             'produce_sn' => $produce->produce_sn,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_type' => LogTypeEnum::SYSTEM,
             'bc_status' => $produce->bc_status,
             'log_module' => '布产单创建',
-            'log_msg' => "生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
+            'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
         ];
         \Yii::$app->supplyService->produce->createProduceLog($log);
 
