@@ -76,6 +76,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
+                    'attribute' => 'follower_id',
+                    'value' => "follower.username",
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
                     'attribute' => 'goods_count',
                     'value' => "goods_count",
                     'filter' => true,
@@ -97,14 +104,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'200'],
-            ],               
+            ],              
             [
-                    'attribute' => 'follower_id',
-                    'value' => "follower.username",
+                    'attribute' => 'delivery_time',
+                    'value' => function($model){
+                        return $model->delivery_time ? Yii::$app->formatter->asDate($model->delivery_time):'';
+                    },
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
+            ], 
+            [
+                    'attribute' => 'created_at',
+                    'value' => function($model){
+                        return $model->created_at ? Yii::$app->formatter->asDate($model->created_at):'';
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+                    ], 
             [
                     'attribute' => 'creator_id',
                     'value' => "creator.username",
@@ -124,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],      
-            [
+            /*[
                 'attribute' => 'status',                    
                 'value' => function ($model){
                     return \common\enums\StatusEnum::getValue($model->status);
@@ -135,11 +153,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],            
+            ], */           
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {follower}',
+                'template' => '{edit} {audit} {goods} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::PENDING){

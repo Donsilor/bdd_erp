@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
+use kartik\date\DatePicker;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
@@ -25,7 +26,19 @@ $form = ActiveForm::begin([
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
-                ]);?>
+            ]);?>    
+            <?= $form->field($model, 'delivery_time')->widget(DatePicker::class, [
+                'language' => 'zh-CN',
+                'options' => [
+                     'value' => $model->delivery_time ? date('Y-m-d', $model->delivery_time) :'',
+                ],
+                'pluginOptions' => [
+                    'format' => 'yyyy-mm-dd',
+                    'todayHighlight' => true,//今日高亮
+                    'autoclose' => true,//选择后自动关闭
+                    'todayBtn' => true,//今日按钮显示
+                ]
+            ]);?>    
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    
