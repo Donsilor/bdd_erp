@@ -3,28 +3,29 @@
 namespace addons\Purchase\backend\controllers;
 
 
-use common\helpers\Url;
+use common\helpers\SnHelper;
 use Yii;
+use common\helpers\Url;
 use common\models\base\SearchModel;
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\forms\PurchaseReceiptForm;
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\forms\PurchaseDefectiveForm;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\traits\Curd;
 /**
-* PurchaseReceipt
+* PurchaseDefective
 *
-* Class PurchaseReceiptController
+* Class PurchaseDefectiveController
 * @package addons\Purchase\Backend\controllers
 */
-class PurchaseReceiptController extends BaseController
+class PurchaseDefectiveController extends BaseController
 {
     use Curd;
 
     /**
-    * @var PurchaseReceipt
+    * @var PurchaseDefective
     */
-    public $modelClass = PurchaseReceipt::class;
+    public $modelClass = PurchaseDefective::class;
 
 
     /**
@@ -72,6 +73,9 @@ class PurchaseReceiptController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            if($model->isNewRecord){
+                $model->defective_no = SnHelper::createDefectiveSn();
+            }
             $model->creator_id  = \Yii::$app->user->identity->id;
             return $model->save()
                 ? $this->redirect(Yii::$app->request->referrer)
@@ -92,7 +96,7 @@ class PurchaseReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
 
-        $this->modelClass = PurchaseReceiptForm::class;
+        $this->modelClass = PurchaseDefectiveForm::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
@@ -130,13 +134,9 @@ class PurchaseReceiptController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $receipt_no = Yii::$app->request->get('receipt_no');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
-        if(!$id){
-            $result = $this->modelClass::find()->where(['receipt_no'=>$receipt_no])->asArray()->one();
-            $id = !empty($result)?$result['id']:0;
-        }
+
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
