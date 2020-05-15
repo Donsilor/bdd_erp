@@ -23,11 +23,13 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                     </tr>
                     <tr>
                         <td colspan="6" class="text-center">
-                        <?= Html::edit(['apply-audit','id'=>$model->id], '审  批', [
-                             'class'=>'btn btn-success btn-sm',
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
-                         ]);?>
+                        <?php if($model->is_apply == \common\enums\ConfirmEnum::YES) {?>
+                            <?= Html::edit(['apply-audit','id'=>$model->id], '审  批', [
+                                 'class'=>'btn btn-success btn-sm',
+                                 'data-toggle' => 'modal',
+                                 'data-target' => '#ajaxModal',
+                             ]);?>
+                         <?php }?>
                          <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
                         </td>                       
                     </tr>

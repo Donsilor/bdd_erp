@@ -151,7 +151,7 @@ class PurchaseGoodsController extends BaseController
     public function actionDelete($id)
     {  
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index','purchase_id'=>$purchase_id]));        
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index','purchase_id'=>$purchase_id]));
         
         try{   
             
@@ -213,8 +213,7 @@ class PurchaseGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        
-        $model->initAttrs();
+        $model->initApplyEdit();
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
@@ -232,14 +231,14 @@ class PurchaseGoodsController extends BaseController
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
-        $model->initApply();
+        $model->initApplyView();
         return $this->render($this->action->id, [
                 'model' => $model,
                 'returnUrl'=>$returnUrl
         ]);
     }
     /**
-     * 申请编辑-审核
+     * 申请编辑-审核(ajax)
      * @property PurchaseGoodsForm $model
      * @return mixed
      */
@@ -249,7 +248,11 @@ class PurchaseGoodsController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->request->referrer);
         
         $id = Yii::$app->request->get('id');        
+        
+        $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseGoodsForm();
+        
         $form  = new PurchaseGoodsAuditForm();   
         $form->id = $id;
         $form->audit_status = AuditStatusEnum::PASS;        
@@ -257,12 +260,14 @@ class PurchaseGoodsController extends BaseController
         $this->activeFormValidate($form);
         if ($form->load(Yii::$app->request->post())) {
             try {
-                $trans = Yii::$app->trans->beginTransaction();
-                $model->is_apply = 0;
+                $trans = Yii::$app->trans->beginTransaction();                
                 if($form->audit_status == AuditStatusEnum::PASS){
-                    //
+                     $model->initApplyEdit();
+                     $model->createAttrs();
+                     $model->apply_info = json_encode($model->apply_info);
                 }
-                $model->save(false,['is_apply','apply_info','updated']);
+                $model->is_apply = 0;                
+                $model->save(false);                
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){

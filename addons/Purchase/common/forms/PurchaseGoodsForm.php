@@ -75,31 +75,68 @@ class PurchaseGoodsForm extends PurchaseGoods
         return $attr_list;
     }
     /**
-     * 自动填充已填写 表单属性
+     * 初始化 已填写属性数据
      */
     public function initAttrs()
     {
         $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
-        if(empty($attr_list)) {
-            return ;
+        if(!empty($attr_list)) {
+            $attr_list = array_column($attr_list,'attr_value','attr_id'); 
+        }               
+        $this->attr_custom  = $attr_list;
+        $this->attr_require = $attr_list; 
+    } 
+    /**
+     * 初始化 已填写属性数据
+     */
+    public function initApplyEdit()
+    {
+        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
+        if(!empty($attr_list)) {
+            $attr_list = array_column($attr_list,'attr_value','attr_id');
         }
-        $attr_list = array_column($attr_list,'attr_value','attr_id');        
+        if($this->is_apply == 0) {
+            $this->apply_info = [];
+        }else if(!is_array($this->apply_info)) {
+            $this->apply_info  = json_decode($this->apply_info,true) ?? [];
+        }
+
+        //$apply_info = [];
+        foreach ($this->apply_info as $k=>$item) {
+            $group = $item['group'];
+            $code  = $item['code'];            
+            $label = $item['label'];
+            $value = $item['value'];
+            if($group == 'base') {
+               // $org_value = $this->$code;
+                $this->$code = $value;               
+            }else if($group == 'attr'){
+                $value = $item['value_id'];
+                //$org_value = $attr_list[$code]??'';
+                $attr_list[$code] = $value;
+            }
+            //$apply_info[$code] = ['label'=>$label,'value'=>$value,'changed'=>($value != $org_value)];
+        }
+        //$this->apply_info = $apply_info;
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
+        
     } 
-    
-    public function initApply()
+    /**
+     * 初始化 申请表单数据
+     */
+    public function initApplyView()
     {
+        $apply_info = array();
         if(!$this->apply_info) {
             return ;
-        }
-        $_apply_info = array();
-        $apply_info  = json_decode($this->apply_info,true);
-        
-        $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value'])->where(['id'=>$this->id])->asArray()->all();
+        }        
+        $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value','if(attr_value_id=0,attr_value,attr_value_id) as attr_value2'])->where(['id'=>$this->id])->asArray()->all();
         $attrs = array_column($attrs,'attr_value','attr_id');
         
-        foreach ($apply_info as $k=>$item) {
+        $this->apply_info  = json_decode($this->apply_info,true) ?? [];
+
+        foreach ($this->apply_info as $k=>$item) {
             $group = $item['group'];
             $code  = $item['code'];
             $value = $item['value'];
@@ -111,9 +148,9 @@ class PurchaseGoodsForm extends PurchaseGoods
             }else {
                 $org_value = '';
             }
-            $_apply_info[] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
+            $apply_info[$code] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
         }
-        $this->apply_info = $_apply_info;
+        $this->apply_info = $apply_info;
         
     }
     /**
@@ -183,6 +220,7 @@ class PurchaseGoodsForm extends PurchaseGoods
             $apply_info[] = array(
                     'code' => $attr_id,
                     'value' => $value,
+                    'value_id'=>$attr_value_id,
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
              );            
