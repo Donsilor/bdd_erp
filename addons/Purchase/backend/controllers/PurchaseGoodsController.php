@@ -267,7 +267,8 @@ class PurchaseGoodsController extends BaseController
                      $model->apply_info = json_encode($model->apply_info);
                 }
                 $model->is_apply = 0;                
-                $model->save(false);                
+                $model->save(false);  
+                Yii::$app->purchaseService->purchase->syncPurchaseToProduce($model->purchase_id,$model->id);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){

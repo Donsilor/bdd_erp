@@ -51,32 +51,46 @@ class ProduceService extends Service
      * @return array
      */
     public function createProduce($goods, $attr_list){
+       
+        $produce_id = $goods['id'] ?? 0;
+        $is_new = true;
+        if($produce_id) {
+            $is_new = false;
+            $produce = Produce::findOne($goods['id']);
+            if(!$produce) {
+                throw new \Exception("[{$produce_id}]布产单查询失败");
+            }
+        }else {        
+            $produce = new Produce();
+            $produce->produce_sn = SnHelper::createProduceSn();
+        }
         
-        $produce = new Produce();
-        $produce->attributes = $goods;
-        $produce->produce_sn = SnHelper::createProduceSn();
+        $produce->attributes = $goods;        
         if(false === $produce->save()){
             throw new \Exception($this->getError($produce));
-        }        
-        $produce_id = $produce->id;
+        }
+        
+        ProduceAttribute::deleteAll(['produce_id'=>$produce_id]);
         foreach ($attr_list as $attr){
             $produceAttr = new ProduceAttribute();
             $produceAttr->attributes = $attr;
-            $produceAttr->produce_id = $produce_id;
+            $produceAttr->produce_id = $produce->id;
             if(false === $produceAttr->save()){
                 throw new \Exception($this->getError($produceAttr));
             }
         }
-
-        $log = [
-            'produce_id' => $produce_id,
-            'produce_sn' => $produce->produce_sn,
-            'log_type' => LogTypeEnum::SYSTEM,
-            'bc_status' => $produce->bc_status,
-            'log_module' => '布产单创建',
-            'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
-        ];
-        \Yii::$app->supplyService->produce->createProduceLog($log);
+        if($is_new === true) {
+            $log = [
+                'produce_id' => $produce_id,
+                'produce_sn' => $produce->produce_sn,
+                'log_type' => LogTypeEnum::SYSTEM,
+                'bc_status' => $produce->bc_status,
+                'log_module' => '布产单创建',
+                'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
+            ];
+            \Yii::$app->supplyService->produce->createProduceLog($log);
+        }
+        
 
         return $produce ;
     }
