@@ -50,11 +50,14 @@ class PurchaseService extends Service
             Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'cost_total'=>$sum['cost_total']/1],['id'=>$purchase_id]);
         }
     }
+    
     /**
-     * 同步采购单生成布产单
-     * @param unknown $purchase_id
-     */
-    public function syncPurchaseToProduce($purchase_id)
+    * 同步采购单生成布产单
+    * @param unknown $purchase_id
+    * @param unknown $detail_ids
+    * @throws \Exception
+    */
+    public function syncPurchaseToProduce($purchase_id, $detail_ids = null)
     {
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
         if($purchase->goods_count <= 0 ){
@@ -66,23 +69,24 @@ class PurchaseService extends Service
         if($purchase->follower_id == ''){
             throw new \Exception('没有分配跟单人');
         }
-        
-        $models = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id])->all();
-        foreach ($models as $model){            
-            if($model->produce_id){
-                continue;
-            }
+        $query = PurchaseGoods::find()->where(['purchase_id'=>$purchase_id]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        foreach ($models as $model){
+
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'from_order_id'=>$model->purchase_id,
-                    'from_detail_id' => $model->id, 
+                    'from_detail_id' => $model->id,
                     'from_order_sn'=>$purchase->purchase_sn,
                     'from_type' => 2,
                     'style_sn' => $model->style_sn,
                     'bc_status' => BuChanEnum::ASSIGNED,
                     'qiban_sn' => $model->qiban_sn,
-                    'qiban_type'=>$model->qiban_type, 
-                    'style_sex' =>$model->style_sex, 
+                    'qiban_type'=>$model->qiban_type,
+                    'style_sex' =>$model->style_sex,
                     'goods_num' =>$model->goods_num,
                     'jintuo_type'=>$model->jintuo_type,
                     'product_type_id'=>$model->product_type_id,
@@ -91,6 +95,16 @@ class PurchaseService extends Service
                     'follower_id'=>$purchase->follower_id,
                     'factory_distribute_time' => time()
             ];
+            if($model->produce_id && $model->produce){
+                if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
+                    //生产中之后的流程，禁止同步
+                    continue;
+                }else {
+                    $goods['id'] = $model->produce->id;
+                    $goods['bc_status'] = $model->produce->bc_status;
+                    $goods['factory_distribute_time'] = $model->produce->factory_distribute_time;
+                }
+            }
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
             $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
             if($produce) {
@@ -101,9 +115,6 @@ class PurchaseService extends Service
             }
         }
     }
-
-
-
     /**
      * 创建采购单日志
      * @return array

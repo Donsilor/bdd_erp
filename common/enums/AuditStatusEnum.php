@@ -21,10 +21,21 @@ class AuditStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-               // self::PENDING => '待审核',
+                self::PENDING => '待审核',
                 self::PASS => '审核通过',                
                 self::UNPASS => '不通过',
                 //self::CLOSE => '已关闭',
+        ];
+    }
+    /**
+     * 
+     * @return array
+     */
+    public static function getAuditMap(): array
+    {
+        return [
+                self::PASS => '通过',
+                self::UNPASS => '不通过',
         ];
     }
 }

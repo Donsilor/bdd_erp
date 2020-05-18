@@ -247,9 +247,9 @@ class StyleGoodsForm extends Model
         ];
         $maps = [
                 //女戒-镶嵌
-                '2-1'=>['gold_price','gold_weight','gold_weight_diff','finger_range','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
+                '2-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
                 //女戒-非镶嵌
-                '2-0'=>['gold_price','gold_weight','gold_weight_diff','finger_range','remark'],
+                '2-0'=>['gold_price','gold_weight','gold_weight_diff','remark'],
                 //项链-镶嵌
                 '4-1'=>['gold_price','gold_weight','gold_weight_diff','second_stone_weight1','second_stone_num1','second_stone_weight2','second_stone_num2','remark'],
                 //项链-非镶嵌

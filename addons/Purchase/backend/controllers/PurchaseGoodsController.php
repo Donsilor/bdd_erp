@@ -266,8 +266,12 @@ class PurchaseGoodsController extends BaseController
                      $model->createAttrs();
                      $model->apply_info = json_encode($model->apply_info);
                 }
-                $model->is_apply = 0;                
-                $model->save(false);                
+                $model->is_apply = 0;
+                $model->save(false);  
+                //金额汇总
+                Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
+                //同步布产单
+                Yii::$app->purchaseService->purchase->syncPurchaseToProduce($model->purchase_id,$model->id);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){
