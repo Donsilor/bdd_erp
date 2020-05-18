@@ -44,6 +44,9 @@ class ImageHelper
      */
     public static function fancyBox($imgSrc, $width = 45, $height = 45)
     {
+		if(empty($imgSrc)) {
+			return '';
+		}
         $thumb = $imgSrc."?x-oss-process=image/auto-orient,1/resize,m_lfit,w_{$width}/quality,q_90";
         $image = Html::img($thumb, [
                 'width' => $width,

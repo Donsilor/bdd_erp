@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $receiptColomns = [
                         [
                             'name' => 'id',
-                            'title'=>"ID",
+                            'title'=>"序号",
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',

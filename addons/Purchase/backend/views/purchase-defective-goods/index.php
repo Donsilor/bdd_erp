@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $defectiveInfo->receipt_no ?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $defectiveInfo->defective_no ?></h2>
     <?php echo Html::menuTab($tabList, $tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'receipt_id' => $defectiveInfo->id], '新增货品', [
+                        <?= Html::create(['edit', 'defective_id' => $defectiveInfo->id], '新增货品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            

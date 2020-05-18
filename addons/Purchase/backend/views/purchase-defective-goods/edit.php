@@ -17,19 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                 <?= $form->field($model, 'receipt_id')->hiddenInput()->label(false) ?>
+                 <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
                      <div class="col-lg-3">
-                        <?= $form->field($model, 'produce_sn')->textInput() ?>
+                        <?= $form->field($model, 'receipt_goods_id')->textInput() ?>
                      </div>
                      <div class="col-lg-1">
-                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchReceiptGoods()"]) ?>
+                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchDefectiveGoods()"]) ?>
                      </div>
                  </div>
                 <div class="box-body table-responsive">
                     <div class="tab-content">
                         <?php
-                        $receiptColomns = [
+                        $defectiveColomns = [
                             [
                                 'name' => 'id',
                                 'title'=>"ID",
@@ -41,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => 'receipt_id',
-                                'title'=>"收货单ID",
+                                'name' =>'defective_id',
+                                'title'=>"返厂单ID",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
@@ -51,8 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' =>'purchase_sn',
-                                'title'=>"采购单号",
+                                'name' =>'receipt_goods_id',
+                                'title'=>"收货单货品序号",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
@@ -112,96 +112,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'items' => Yii::$app->styleService->productType->getDropDown()
                             ],
                             [
-                                'name' => "finger",
-                                'title'=>"指圈",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "xiangkou",
-                                'title'=>"镶口",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "material",
-                                'title'=>"主成色",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:100px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
-                            ],
-                            [
-                                'name' => "gold_weight",
-                                'title'=>"主成色重",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "gold_price",
-                                'title'=>"主成色买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "gold_loss",
-                                'title'=>"金损",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "jintuo_type",
-                                'title'=>"金托类型",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
-                            ],
-                            [
-                                'name' => "gross_weight",
-                                'title'=>"毛重",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
                                 'name' => "cost_price",
-                                'title'=>"成本价",
+                                'title'=>"金额",
                                 'enableError'=>false,
                                 'defaultValue' => '0.00',
                                 'options' => [
@@ -211,274 +123,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => "cert_id",
-                                'title'=>"证书号",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "main_stone",
-                                'title'=>"主石",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:100px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
-                            ],
-                            [
-                                'name' => "main_stone_num",
-                                'title'=>"主石数量",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "main_stone_weight",
-                                'title'=>"主石重",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "main_stone_color",
-                                'title'=>"主石颜色",
+                                'name' => "oqc_reason",
+                                'title'=>"质检未过原因",
                                 'enableError'=>false,
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
                                     'style'=>'width:80px'
                                 ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
+                                'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
                             ],
                             [
-                                'name' => "main_stone_clarity",
-                                'title'=>"主石净度",
+                                'name' => "goods_remark",
+                                'title'=>"商品备注",
                                 'enableError'=>false,
-                                'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
-                            ],
-                            [
-                                'name' => "main_stone_price",
-                                'title'=>"主石买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone1",
-                                'title'=>"副石1",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                            ],
-                            [
-                                'name' => "second_stone_num1",
-                                'title'=>"副石1数量",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_weight1",
-                                'title'=>"副石1重量",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_price1",
-                                'title'=>"副石1买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone2",
-                                'title'=>"副石2",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                            ],
-                            [
-                                'name' => "second_stone_num2",
-                                'title'=>"副石2数量",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_weight2",
-                                'title'=>"副石2重量",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_price2",
-                                'title'=>"副石2买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone3",
-                                'title'=>"副石3",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                            ],
-                            [
-                                'name' => "second_stone_num3",
-                                'title'=>"副石3数量",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_weight3",
-                                'title'=>"副石3重量",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_price3",
-                                'title'=>"副石3买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "fee_price",
-                                'title'=>"工费",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "parts_price",
-                                'title'=>"配件成本",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "extra_stone_fee",
-                                'title'=>"超石费",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "tax_fee",
-                                'title'=>"税费",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "other_fee",
-                                'title'=>"其他费用",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
                             ]
                         ];
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
-                            'name' => "receipt_goods_list",
-                            'value' => $receipt_goods,
-                            'columns' => $receiptColomns,
+                            'name' => "defective_goods_list",
+                            'value' => $defectiveGoods,
+                            'columns' => $defectiveColomns,
                         ]) ?>
                     </div>
                 </div>
@@ -489,13 +158,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-function searchReceiptGoods() {
-   var produce_sns = $.trim($("#purchasereceiptgoods-produce_sn").val());
-   if(!produce_sns) {
-	    rfMsg("请输入布产单编号");
+function searchDefectiveGoods() {
+   var receipt_goods_ids = $.trim($("#purchasedefectivegoods-receipt_goods_id").val());
+   if(!receipt_goods_ids) {
+	    rfMsg("请输入采购收货单商品序号");
         return false;
    }
-    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['produce_sns','search',])?>&search=1&produce_sns="+produce_sns;
+    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['receipt_goods_id','search',])?>&search=1&receipt_goods_id="+receipt_goods_ids;
     window.location.href = url;
 }
 </script>
