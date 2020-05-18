@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>'overflow-x: scroll;'],
+        'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
             [

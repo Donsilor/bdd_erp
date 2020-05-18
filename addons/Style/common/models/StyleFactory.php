@@ -3,6 +3,7 @@
 namespace addons\Style\common\models;
 
 use addons\Supply\common\models\Factory;
+use addons\Supply\common\models\Supplier;
 use common\enums\ConfirmEnum;
 use common\helpers\StringHelper;
 use Yii;
@@ -123,5 +124,14 @@ class StyleFactory extends BaseModel
     public function getMember()
     {
         return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+    }
+
+    /**
+     * 关联供应商一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'factory_id'])->alias('supplier');
     }
 }

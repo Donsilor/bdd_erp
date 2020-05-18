@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
          'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit-lang', 'id' => $model['id']]),
+        'validationUrl' => Url::to(['edit-lang', 'id' => $model['id']]),
         'fieldConfig' => [
             'template' => "{label}{input}{hint}",
 
@@ -185,3 +185,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php ActiveForm::end(); ?>
 
+<script type="text/javascript">
+    $('#supplier-supplier_name').blur(function(){
+            var url = "/supply/supplier/auto-code";
+            var value = /^([0-9a-zA-Z]+)$/.test($(this).val())?'':$(this).val();
+            if (value){
+                var data = {'supplier_name':value};
+                $.post(url,data,function(e){
+                $('#supplier-supplier_code').val($.trim(e)).change();
+            });
+        }
+    });
+</script>
