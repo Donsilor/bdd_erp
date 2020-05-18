@@ -1,7 +1,8 @@
 <?php
 
-namespace app\models;
+namespace addons\Purchase\common\models;
 
+use Faker\Provider\Base;
 use Yii;
 
 /**
@@ -18,14 +19,14 @@ use Yii;
  * @property int $creator_id
  * @property int $created_at 创建时间
  */
-class PurchaseDefectiveLog extends \yii\db\ActiveRecord
+class PurchaseDefectiveLog extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'purchase_defective_log';
+        return self::tableFullName('purchase_defective_log');
     }
 
     /**
@@ -48,8 +49,8 @@ class PurchaseDefectiveLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'defective_id' => '采购收货单ID',
-            'defective_no' => '采购单收货单编号',
+            'defective_id' => '不良返厂单ID',
+            'defective_no' => '不良返厂单编号',
             'log_type' => '操作类型',
             'log_msg' => '文字描述',
             'log_time' => '处理时间',

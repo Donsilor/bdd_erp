@@ -41,6 +41,7 @@ class StyleFactoryController extends BaseController
                 'member' => ['username'],
                 'style' => ['style_sn'],
                 'factory' => ['factory_name'],
+                'supplier' => ['supplier_name']
             ]
         ]);
 

@@ -31,7 +31,25 @@ class SupplierService
         return ArrayHelper::map($model,'id', 'supplier_name');
     }
 
+    /**
+     * 下拉有效值
+     * @return array
+     */
+    public function getValidDropDown(){
 
+        $model = Supplier::find()
+            ->where(['status' => StatusEnum::ENABLED, 'audit_status' => AuditStatusEnum::PASS])
+            ->select(['id','supplier_name'])
+            ->asArray()
+            ->all();
+        return ArrayHelper::map($model,'id', 'supplier_name');
+    }
+
+
+    /**
+     * 工厂跟单人
+     * @return array
+     */
     public function getFollower($supplier_id){
         $model = SupplierFollower::find()
             ->where(['supplier_id'=>$supplier_id,'status' => StatusEnum::ENABLED])

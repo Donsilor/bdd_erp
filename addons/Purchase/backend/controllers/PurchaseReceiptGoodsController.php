@@ -170,6 +170,7 @@ class PurchaseReceiptGoodsController extends BaseController
                             throw new Exception('更新收货单汇总失败！');
                         }
                         $trans->commit();
+                        Yii::$app->getSession()->setFlash('success', '保存成功！');
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }
@@ -214,6 +215,7 @@ class PurchaseReceiptGoodsController extends BaseController
                     throw new Exception('更新收货单汇总失败！');
                 }
                 $trans->commit();
+                Yii::$app->getSession()->setFlash('success', '保存成功！');
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
