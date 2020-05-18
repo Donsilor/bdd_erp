@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 起版信息</h3>
+                <h3 class="box-title"><i class="fa fa-bars"></i> 基本信息</h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
@@ -51,6 +51,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= $model->cost_price ?></td>
                     </tr>
 
+
+
+                    <tr>
+                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                        <td><?= $model->remark ?></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
                     <?php
                     $attr_list = \addons\Style\common\models\QibanAttribute::find()->orderBy('sort asc')->where(['qiban_id'=>$model->id])->all();
                     foreach ($attr_list as $k=>$attr){
@@ -59,18 +79,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }else{
                             $attr_value = Yii::$app->attr->valueName($attr->attr_values);
                         }
-                    ?>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
-                        <td><?= $attr_value ?></td>
-                    </tr>
+                        if(empty($attr_value)) continue;
+                        ?>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                            <td><?= $attr_value ?></td>
+                        </tr>
                     <?php } ?>
-
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                        <td><?= $model->remark ?></td>
-                    </tr>
-
                 </table>
             </div>
         </div>

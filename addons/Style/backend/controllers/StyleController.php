@@ -144,7 +144,7 @@ class StyleController extends BaseController
             }
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
-
+        if ($model->audit_status == 0) $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);

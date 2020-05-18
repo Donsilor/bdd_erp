@@ -21,122 +21,114 @@ $this->params['breadcrumbs'][] = $this->title;
         <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
         <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12">
-         <div class="box">
-            <div class="box-header">
-                <h3 class="box-title">基本信息</h3>
-                <div class="box-tools" >
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">基本信息</h3>
+                    <div class="box-tools">
+                        <div class="text-center" >
+                            <?php if($model->audit_status != 1){?>
+                                <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                                    'class' => 'btn btn-primary btn-xs',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModalLg',
+                                ]); ?>
+
+                                <?php
+                                if($model->audit_status != AuditStatusEnum::PASS){
+                                    echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                        'class'=>'btn btn-success btn-xs',
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#ajaxModal',
+                                    ]);
+                                }
+                                ?>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('id') ?>：</td>
+                            <td><?= $model->id ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_name') ?>：</td>
+                            <td><?= $model->style_name ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
+                            <td><?= $model->style_sn ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
+                            <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                            <td><?= $model->creator->username??'' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                            <td><?= $model->id ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('id') ?>：</td>
+                            <td><?= $model->type->name ??'' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
+                            <td><?= $model->source->name ??'' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                            <td><?= $model->cate->name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right">默认工厂：</td>
+                            <td><?= $model->factory->factory_name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
+                            <td> <?= $model->channel->name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right">工厂模号：</td>
+                            <td><?= $model->factory_mo ?? ''?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td><?= $model->remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
+                            <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-            <div class="box-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('id') ?> ：</label>                        
-                            <?= $model->id ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_name') ?>：</label>
-                            <?= $model->style_name ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('status') ?>：</label>
-                            <?= \common\enums\StatusEnum::getValue($model->status)?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sn') ?>：</label>
-                            <?= $model->style_sn ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_sex') ?>：</label>
-                            <?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex)?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('creator_id') ?>：</label>
-                            <?= $model->creator->username??'' ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                         <div class="col-lg-4">
-                        	<label class="text-right col-lg-4"><?= $model->getAttributeLabel('product_type_id') ?>：</label>
-                            <?= $model->type->name ??'' ?>
-                         </div>
-
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_source_id') ?>：</label>
-                            <?= $model->source->name ??'' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('created_at') ?>：</label>
-                            <?= \Yii::$app->formatter->asDatetime($model->created_at) ?>
-                        </div>                        
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_cate_id') ?>：</label>
-                            <?= $model->cate->name ?? '' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4">默认工厂：</label>
-                            <?= $model->factory->factory_name ?? '';?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_status') ?>：</label>
-                            <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('style_channel_id') ?> ：</label>
-                            <?= $model->channel->name ?? '' ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4">工厂模号：</label>
-                           	<?= $model->factory_mo ?? ''?>
-                        </div>
-                        
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_time') ?>：</label>
-                            <?= \Yii::$app->formatter->asDatetime($model->audit_time) ?>
-                        </div>
-                    </div>                    
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('remark') ?>：</label>
-                            <?= $model->remark ?>
-                        </div>
-                    
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('is_made') ?>：</label>
-                            <?= \common\enums\ConfirmEnum::getValue($model->is_made)?>
-                        </div>
-        
-                        <div class="col-lg-4">
-                            <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>
-                            <?= $model->audit_remark ?>
-                        </div>
-                    </div>            
         </div>
-        <div class="box-footer">
-            <div class="text-center">
-                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
-                 ]); ?>   
-                 <?php 
-                 if($model->audit_status != AuditStatusEnum::PASS){
-                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                             'class'=>'btn btn-success btn-sm',
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModal',
-                     ]);
-                 }
-                 ?>             
-                <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
-            </div>
-      </div>
-    </div>
-    <!-- box end -->
-</div>
+
+
 </div>    
