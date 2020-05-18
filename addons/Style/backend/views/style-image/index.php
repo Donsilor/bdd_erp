@@ -51,22 +51,15 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'80'],
                             ],
-                            [
-                                'label' => '款式编号',
-                                'value' => function($model) use($style){
-                                    return $style->style_sn;
-                                },
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
+
                             [
                                 'attribute' => 'image',
                                 'value' => function ($model) {
-                                    return \common\helpers\ImageHelper::fancyBox($model->image);
+                                    return \common\helpers\ImageHelper::fancyBox($model->image,90,90);
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'80'],
+                                'headerOptions' => ['width'=>'90'],
                             ],
 
 

@@ -57,7 +57,7 @@ class StyleFactory extends BaseModel
         return [
             'id' => 'ID',
             'style_id' => '款号ID',
-            'factory_id' => '工厂ID',
+            'factory_id' => '工厂名称',
             'is_made' => '是否支持定制',
             'is_default' => '是否默认',
             'remark' => '备注(计费方式)',

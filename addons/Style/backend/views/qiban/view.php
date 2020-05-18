@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }else{
                             $attr_value = Yii::$app->attr->valueName($attr->attr_values);
                         }
-                        if(empty($attr_value)) continue;
+//                        if(empty($attr_value)) continue;
                         ?>
                         <tr>
                             <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>

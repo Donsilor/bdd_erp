@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 商品信息</h3>
+                <h3 class="box-title"><i class="fa fa-bars"></i> 商品信息</h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
@@ -61,6 +61,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                         <td><?= $model->cost_price ?></td>
                     </tr>
+
+                    <tr>
+                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                        <td><?= $model->remark ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
                     <?php
                     $attr_list = \addons\Purchase\common\models\PurchaseGoodsAttribute::find()->orderBy('sort asc')->where(['id'=>$model->id])->all();
                     foreach ($attr_list as $k=>$attr){
@@ -71,14 +88,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $attr->attr_value ?></td>
                         </tr>
                     <?php } ?>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                        <td><?= $model->remark ?></td>
-                    </tr>
                 </table>
             </div>
         </div>
     </div>
+
 </div>
 
 

@@ -20,81 +20,79 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-         <div class="box col-xs-12">
-             <div class="box-body">
-                 <div class="row">
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('receipt_no') ?>：</label>
-                         <?= $model->receipt_no ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('total_cost') ?>：</label>
-                         <?= $model->total_cost ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('status') ?>：</label>
-                         <?= \common\enums\StatusEnum::getValue($model->status)?>
-                     </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('receipt_num') ?>：</label>
-                         <?= $model->receipt_num ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_status') ?>：</label>
-                         <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('creator_id') ?>：</label>
-                         <?= $model->creator ? $model->creator->username:''  ?>
-                     </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('auditor_id') ?>：</label>
-                         <?= $model->auditor ? $model->auditor->username:''  ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_remark') ?>：</label>
-                         <?= $model->audit_remark ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('created_at') ?>：</label>
-                         <?= \Yii::$app->formatter->asDatetime($model->created_at) ?>
-                     </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('audit_time') ?>：</label>
-                         <?= \Yii::$app->formatter->asDatetime($model->audit_time) ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"><?= $model->getAttributeLabel('remark') ?>：</label>
-                         <?= $model->remark ?>
-                     </div>
-                     <div class="col-lg-4">
-                         <label class="text-right col-lg-4"></label>
-                     </div>
-                 </div>
-             </div>
-            <div class="box-footer text-center">
-                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"><i class="fa fa-bars"></i> 商品信息</h3>
+                    <div class="box-tools">
+                        <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                            'data-toggle' => 'modal',
+                            'class'=>'btn btn-primary btn-xs',
+                            'data-target' => '#ajaxModalLg',
+                        ]); ?>
+                        <?php
+                        if($model->audit_status != AuditStatusEnum::PASS){
+                            echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                'class'=>'btn btn-success btn-xs',
                                 'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModalLg',
-                     ]); ?>
-                     <?php
-                     if($model->audit_status != AuditStatusEnum::PASS){
-                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                 'class'=>'btn btn-success btn-sm',
-                                 'data-toggle' => 'modal',
-                                 'data-target' => '#ajaxModal',
-                         ]);
-                     }
-                 ?>
-                <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
-          </div>
-    </div>
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="box-body table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
+                            <td><?= $model->receipt_no ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
+                            <td><?= $model->total_cost ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_num') ?>：</td>
+                            <td><?= $model->receipt_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                            <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td><?= $model->remark ?></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
     <!-- box end -->
 </div>
 <!-- tab-content end -->
