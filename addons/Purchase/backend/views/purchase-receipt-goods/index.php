@@ -427,7 +427,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
-                            'name' => "parts_price",
+                            'name' => "parts_fee",
                             'title'=>"配件成本",
                             'enableError'=>false,
                             'defaultValue' => '0.00',
