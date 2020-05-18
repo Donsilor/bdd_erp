@@ -77,6 +77,7 @@ class SupplierController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                $model->status = StatusEnum::DISABLED;
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }

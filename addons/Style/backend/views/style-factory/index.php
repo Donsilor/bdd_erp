@@ -55,10 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             [
                                 'label' => '工厂名称',
-                                'attribute' => 'factory.factory_name',
+                                'attribute' => 'supplier.supplier_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => 'factory.factory_name',
+                                'value' => 'supplier.supplier_name',
                                 'filter' =>true,
                             ],
                             [

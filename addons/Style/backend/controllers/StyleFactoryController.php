@@ -32,7 +32,7 @@ class StyleFactoryController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['factory.factory_name'], // 模糊查询
+            'partialMatchAttributes' => ['supplier.supplier_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],

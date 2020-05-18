@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'factory_id')->widget(kartik\select2\Select2::class, [
-            'data' => Yii::$app->supplyService->factory->getDropDown(),
+            'data' => Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
                 'allowClear' => true
