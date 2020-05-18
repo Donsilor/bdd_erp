@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
      <div class="col-xs-12">
          <div class="box" style="margin: 0px;">
-            <div class="box-header" style="padding-top: 0px;padding-bottom: 0px;">
+            <div class="box-header" style="padding-top: 0px;">
                 <h3 class="box-title"><i class="fa fa-bars"></i> 基本信息</h3>
-                <div class="box-tools">
+                <div class="box-tools" style="top: 0px;">
                     <?php
                     $buttonHtml = '';
                     switch ($model->bc_status){

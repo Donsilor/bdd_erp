@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use common\traits\Tree;
 use Yii;
 
 /**
@@ -22,6 +23,7 @@ use Yii;
  */
 class PurchaseFqcConfig extends BaseModel
 {
+    use Tree;
     /**
      * {@inheritdoc}
      */
@@ -62,5 +64,13 @@ class PurchaseFqcConfig extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasOne(self::class, ['id' => 'pid']);
     }
 }

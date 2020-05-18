@@ -60,6 +60,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 $str = Html::tag('span', $model->name, [
                                     'class' => 'm-l-sm'
                                 ]);
+
                                 $str .= Html::a(' <i class="icon ion-android-add-circle"></i>', ['ajax-edit', 'pid' => $model['id']], [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
