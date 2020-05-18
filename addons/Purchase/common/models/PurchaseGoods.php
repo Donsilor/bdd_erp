@@ -98,7 +98,7 @@ class PurchaseGoods extends BaseModel
             'is_apply' => '是否申请修改',
             'apply_info' => 'Apply Info',
             'status' => '状态',
-            'remark' => '备注',
+            'remark' => '采购备注',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'main_stone_price' => '主石价格(元/颗)',

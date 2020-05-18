@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-bars"></i> 商品信息</h3>
-            </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <tr>
