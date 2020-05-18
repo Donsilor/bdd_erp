@@ -145,4 +145,27 @@ class PurchaseReceiptController extends BaseController
             'returnUrl'=>$returnUrl,
         ]);
     }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $id = Yii::$app->request->get('id');
+        $receipt_no = Yii::$app->request->get('receipt_no');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        if(!$id){
+            $result = $this->modelClass::find()->where(['receipt_no'=>$receipt_no])->asArray()->one();
+            $id = !empty($result)?$result['id']:0;
+        }
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
 }

@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::button('打印',['class'=>'btn btn-info btn-sm','onclick'=>"printDetail()"]) ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -197,3 +198,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script type="text/javascript">
+
+    function printDetail()
+    {
+        window.open('/purchase/purchase-receipt/print');
+    }
+</script>
