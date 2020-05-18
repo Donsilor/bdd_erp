@@ -2,10 +2,13 @@
 
 namespace addons\Supply\backend\controllers;
 
+use addons\Purchase\common\forms\PurchaseGoodsForm;
+use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Supply\common\models\Supplier;
 use addons\Supply\common\forms\SupplierAuditForm;
+use addons\Supply\common\forms\SupplierForm;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use yii\base\Exception;
@@ -65,7 +68,13 @@ class SupplierController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
 
         $model = $this->findModel($id);
+        $model = $model ?? new SupplierForm();
+
+        $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
             try{
                 $trans = Yii::$app->db->beginTransaction();
                 if(false === $model->save()){
@@ -124,5 +133,17 @@ class SupplierController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 生成Code
+     *
+     * @return mixed
+     */
+    public function actionAutoCode()
+    {
+        $supplier_name = Yii::$app->request->post('supplier_name');
+        $str = SupplierForm::getFirstCode($supplier_name);
+        return substr($str,0,31);
     }
 }
