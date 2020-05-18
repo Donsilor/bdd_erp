@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?= $form->field($model, 'audit_status')->radioList(\common\enums\AuditStatusEnum::getMap()); ?>
+            <?= $form->field($model, 'audit_status')->radioList(\common\enums\AuditStatusEnum::getAuditMap()); ?>
             <?= $form->field($model, 'audit_remark')->textArea(); ?>
             <!-- /.tab-pane -->
         </div>

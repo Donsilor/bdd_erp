@@ -31,7 +31,7 @@ class AuditStatusEnum extends BaseEnum
      * 
      * @return array
      */
-    public static function getSimpleMap(): array
+    public static function getAuditMap(): array
     {
         return [
                 self::PASS => '通过',
