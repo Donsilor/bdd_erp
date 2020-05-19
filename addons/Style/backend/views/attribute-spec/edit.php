@@ -69,7 +69,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
                         <?= $form->field($model, 'is_require')->radioList(common\enums\ConfirmEnum::getMap())?>
                     </div>
                     <div class="col-lg-3">
-                         <?= $form->field($model, 'is_combine')->radioList(addons\Style\common\enums\CombineEnum::getMap())?>
+                         <?= $form->field($model, 'is_inlay')->radioList(addons\Style\common\enums\InlayEnum::getMap())?>
                     </div>
 
                 </div>

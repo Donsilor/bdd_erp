@@ -14,13 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                <div class="row">
-                    <?php if($model->style_cate_id) {?>
+                
+                <?php if($model->style_cate_id && $model->product_type_id) {?>
+                    <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
+                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
+                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
                         <?php if($model->isNewRecord) {?>
                             <div class="col-lg-4">
@@ -31,17 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
                             </div>
                         <?php } ?>
+                     </div>
+                     <div class="row">   
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_name')->textInput() ?>
                         </div>
-
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getGrpDropDown(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
-                        
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['prompt'=>'请选择']) ?>
                         </div>
@@ -49,13 +52,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
-
-                      <?php } else {?>
+					</div>
+                  <?php } else {?>
+                  <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
-                      <?php }?>
-                </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getGrpDropDown(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+                        </div>
+                   </div>   
+                  <?php }?>
                 <?php
                 $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
                 $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type);
@@ -115,13 +125,15 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     function searchGoods() {
-        var style_cate_id = $.trim($("#qibanattrform-style_cate_id").val());
-        if(!style_cate_id) {
-            alert("请选择款式分类");
-            return false;
-        }
+        var style_cate_id = $("#qibanattrform-style_cate_id").val();
+        var product_type_id = $("#qibanattrform-product_type_id").val();
         var jintuo_type = $("#qibanattrform-jintuo_type").val();
-        var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_cate_id','jintuo_type'])?>?style_cate_id="+style_cate_id+"&jintuo_type="+jintuo_type;;
+ 
+        if(!style_cate_id || !product_type_id || !jintuo_type) {
+            return false;
+        }     
+        
+        var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_cate_id','jintuo_type','product_type_id'])?>?style_cate_id="+style_cate_id+"&product_type_id="+product_type_id+"&jintuo_type="+jintuo_type;
         window.location.href = url;
     }
 </script>

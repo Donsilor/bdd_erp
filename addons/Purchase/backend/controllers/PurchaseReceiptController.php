@@ -156,13 +156,15 @@ class PurchaseReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $id = 3;
-        $receipt_no = Yii::$app->request->get('receipt_no');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
         $model = $this->findModel($id);
         $goodsModel = new PurchaseReceiptGoods();
-        $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->all();
-
+        $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();
+        foreach ($goodsList as &$item) {
+            $item['stone_zhong'] = $item['main_stone_weight']+$item['second_stone_weight1']+$item['second_stone_weight2']+$item['second_stone_weight3'];
+            $item['han_tax_price'] = $item['cost_price'] + $item['tax_fee'];
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'goodsList' => $goodsList,

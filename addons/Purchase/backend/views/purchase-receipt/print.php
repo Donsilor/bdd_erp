@@ -20,6 +20,8 @@
 <?php
 $datetime = new \DateTime;
 $now_time = $datetime->format('Y-m-d H:i:s');
+$datetime->setTimestamp($model->created_at);
+$create_time = $datetime->format('Y-m-d H:i:s');
 ?>
 <body>
 <!--startprint-->
@@ -28,19 +30,19 @@ $now_time = $datetime->format('Y-m-d H:i:s');
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="65">加工商：</td>
-            <td  width="100"  class="tLeft"></td>
+            <td  width="100"  class="tLeft"><?= $model->supplier_id ?  $model->supplier->supplier_name : '' ?></td>
             <td width="65">流水号：</td>
-            <td   width="100" class="tLeft"></td>
+            <td   width="100" class="tLeft"><?= $model->id ?></td>
             <td width="65">出货单号:</td>
-            <td  width="100"  class="tLeft"></td>
+            <td  width="100"  class="tLeft"><?= $model->receipt_no ?></td>
             <td width="65">日期：</td>
-            <td  width="100" class="tLeft"></td>
+            <td  width="100" class="tLeft"><?= $create_time?></td>
             <td width="65">件数：</td>
-            <td  width="100" ></td>
+            <td  width="100" ><?= $model->receipt_num ?></td>
         </tr>
         <tr>
             <td>备注：</td>
-            <td colspan="8"></td>
+            <td colspan="8"><?= $model->remark ?></td>
         </tr>
     </table>
     <table cellpadding="0" cellspacing="0" border="0" class="list-ch">
@@ -71,57 +73,55 @@ $now_time = $datetime->format('Y-m-d H:i:s');
             <td>成本</td>
             <td>税费</td>
             <td>含税价</td>
-            <td>客户名</td>
             <td>布产号</td>
             <td>款号</td>
         </tr>
         </thead>
         <tbody>
         <?php foreach($goodsList as $goods_info): ?>
-        <tr>
-            <td nowrap=true><?= $goods_info->id ?></td>
-            <td nowrap=true></td>
-            <td nowrap=true><?= $goods_info->style_cate_id ?></td>
-            <td><?= $goods_info->factory_mo ?></td>
-            <td></td>
-            <td><?= $goods_info->xiangkou ?></td>
-            <td><?= $goods_info->finger ?></td>
-            <td><?= $goods_info->material ?></td>
-            <td><?= $goods_info->gross_weight ?></td>
-            <td><?= $goods_info->gold_weight ?></td>
-            <td><?= $goods_info->gold_loss ?></td>
-            <td><?= $goods_info->gold_price ?></td>
-            <td><?= $goods_info->main_stone ?>&nbsp;<?= $goods_info->main_stone_weight ?>/<?= $goods_info->main_stone_num ?></td>
-            <td><?= $goods_info->main_stone_price ?></td>
+            <tr>
+                <td nowrap=true><?= $goods_info['id'] ?></td>
+                <td nowrap=true></td>
+                <td nowrap=true><?= $goods_info['style_cate_id'] ?></td>
+                <td><?= $goods_info['factory_mo'] ?></td>
+                <td></td>
+                <td><?= $goods_info['xiangkou'] ?></td>
+                <td><?= $goods_info['finger'] ?></td>
+                <td><?= $goods_info['material'] ?></td>
+                <td><?= $goods_info['gross_weight'] ?></td>
+                <td><?= $goods_info['gold_weight'] ?></td>
+                <td><?= $goods_info['gold_loss'] ?></td>
+                <td><?= $goods_info['gold_price'] ?></td>
+                <td><?= $goods_info['main_stone'] ?>&nbsp;<?= $goods_info['main_stone_weight'] ?>/<?= $goods_info['main_stone_num'] ?></td>
+                <td><?= $goods_info['main_stone_price'] ?></td>
 
-            <td  width="85">
-					<span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone1 ?>&nbsp;<?= $goods_info->second_stone_weight1 ?>/<?= $goods_info->second_stone_num1 ?>
-					</span>
+                <td  width="85">
+                    <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone1'] ?>&nbsp;<?= $goods_info['second_stone_weight1'] ?>/<?= $goods_info['second_stone_num1'] ?>
+                    </span>
                 <span style="border-bottom:1px #000 solid;display:block;">
-						<?= $goods_info->second_stone2 ?>&nbsp;<?= $goods_info->second_stone_weight2 ?>/<?= $goods_info->second_stone_num2 ?>
-					</span>
-                <span style="display:block;"><?= $goods_info->second_stone3 ?>&nbsp;<?= $goods_info->second_stone_weight3 ?>/<?= $goods_info->second_stone_num3 ?></span>
+                        <?= $goods_info['second_stone2'] ?>&nbsp;<?= $goods_info['second_stone_weight2'] ?>/<?= $goods_info['second_stone_num2'] ?>
+                    </span>
+                    <span style="display:block;"><?= $goods_info['second_stone3'] ?>&nbsp;<?= $goods_info['second_stone_weight3'] ?>/<?= $goods_info['second_stone_num3'] ?></span>
             </td>
-            <td><span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone_price1 ?></span>
-                <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone_price2 ?></span>
-                <span style="display:block;"><?= $goods_info->second_stone_price3 ?></span>
-            </td>
-            <td><%$value.main_stone_weight+$value.fushizhong+$value.shi2zhong+$value.shi3zhong%></td>
-            <td><?= $goods_info->gong_fee ?></td>
-            <td><?= $goods_info->extra_stone_fee ?></td>
-            <td><?= $goods_info->other_fee ?></td>
-            <td><?= $goods_info->parts_fee ?></td>
-            <td><?= $goods_info->cost_price ?></td>
-            <td><?= $goods_info->tax_fee ?></td>
-            <td><%$value.chengbenjia+$value.tax_fee%></td>
-            <td nowrap=true><%$value.customer_name%></td>
-            <td><?= $goods_info->produce_sn ?></td>
-            <td><?= $goods_info->style_sn ?></td>
-        </tr>
+            <td><span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone_price1'] ?></span>
+                    <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone_price2'] ?></span>
+                <span style="display:block;"><?= $goods_info['second_stone_price3'] ?></span>
+                </td>
+                <td><?= $goods_info['stone_zhong'] ?></td>
+                <td><?= $goods_info['gong_fee'] ?></td>
+                <td><?= $goods_info['extra_stone_fee'] ?></td>
+                <td><?= $goods_info['other_fee'] ?></td>
+                <td><?= $goods_info['parts_fee'] ?></td>
+                <td><?= $goods_info['cost_price'] ?></td>
+                <td><?= $goods_info['tax_fee'] ?></td>
+                <td><?= $goods_info['han_tax_price'] ?></td>
+                <td><?= $goods_info['produce_sn'] ?></td>
+                <td><?= $goods_info['style_sn'] ?></td>
+            </tr>
         <?php endforeach; ?>
         <tr>
             <td>合计</td>
-            <td colspan="25" class="tLeft"><%$heji.hanshuijia_heji%></td>
+            <td colspan="25" class="tLeft">0</td>
         </tr>
         </tbody>
     </table>
@@ -140,17 +140,13 @@ $now_time = $datetime->format('Y-m-d H:i:s');
                     </tr>
                     </thead>
                     <tbody>
-                    <%foreach from=$heji.zuanshixinxi item=item key=key%>
-                    <%foreach from=$item key=danjia_key item=danjia_item%>
                     <tr>
-                        <td><%$key%></td>
-                        <td><%$danjia_key%></td>
-                        <td><%$danjia_item.shuliang%></td>
-                        <td><%$danjia_item.shizhong%></td>
-                        <td><%$danjia_key*$danjia_item.shizhong%></td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
                     </tr>
-                    <%/foreach%>
-                    <%/foreach%>
                     </tbody>
                 </table>
             </td>
@@ -166,14 +162,12 @@ $now_time = $datetime->format('Y-m-d H:i:s');
                     </tr>
                     </thead>
                     <tbody>
-                    <%foreach from=$heji.jinliaoxinxi item=item key=key%>
                     <tr>
-                        <td><%$key%></td>
-                        <td><%$item.zhongliang%></td>
-                        <td><%$item.pingjunjinjia%></td>
-                        <td><%$item.jinzhi%></td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
                     </tr>
-                    <%/foreach%>
                     </tbody>
                 </table>
             </td>
@@ -187,18 +181,15 @@ $now_time = $datetime->format('Y-m-d H:i:s');
                     </tr>
                     </thead>
                     <tbody>
-                    <%foreach from=$heji.feiyongtongji item=item key=key%>
                     <tr>
-                        <td><%$key%></td>
-                        <td><%$item%></td>
+                        <td>0</td>
+                        <td>0</td>
                     </tr>
-                    <%/foreach%>
                     </tbody>
                 </table>
             </td>
         </tr>
     </table>
-
     <!--endprint-->
     <br/><br/>
     <div style="text-align:center;">

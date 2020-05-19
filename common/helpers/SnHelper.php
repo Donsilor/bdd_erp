@@ -63,7 +63,7 @@ class SnHelper
      */
     public static function createShipmentSn($prefix = 'CH')
     {
-        return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
     }
 
     /**
@@ -73,7 +73,7 @@ class SnHelper
      */
     public static function createDefectiveSn($prefix = 'FC')
     {
-        return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
     }
     
     /**

@@ -76,9 +76,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
                         ],
                         [
-                            'attribute'=>'is_combine',
+                            'attribute'=>'is_inlay',
                             'value'=> function($model){
-                                return \addons\Style\common\enums\CombineEnum::getValue($model->is_combine);
+                                return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
                             },
                             'headerOptions'=>['style'=>'width:100px;'],
 
