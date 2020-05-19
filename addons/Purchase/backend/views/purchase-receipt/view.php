@@ -20,28 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="col-xs-12">
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><i class="fa fa-bars"></i> 商品信息</h3>
-                    <div class="box-tools">
-                        <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                            'data-toggle' => 'modal',
-                            'class'=>'btn btn-primary btn-xs',
-                            'data-target' => '#ajaxModalLg',
-                        ]); ?>
-                        <?php
-                        if($model->audit_status != AuditStatusEnum::PASS){
-                            echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                'class'=>'btn btn-success btn-xs',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                            ]);
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="box-body table-responsive">
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
@@ -91,6 +72,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     </table>
                 </div>
             </div>
+        </div>
+
+
+        <div class="box-footer text-center">
+            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                'data-toggle' => 'modal',
+                'class'=>'btn btn-primary btn-ms',
+                'data-target' => '#ajaxModalLg',
+            ]); ?>
+            <?php
+            if($model->audit_status != AuditStatusEnum::PASS){
+                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                    'class'=>'btn btn-success btn-ms',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModal',
+                ]);
+            }
+            ?>
         </div>
 
     <!-- box end -->
