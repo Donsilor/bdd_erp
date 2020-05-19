@@ -292,7 +292,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             case BuChanEnum::TO_CONFIRMED:
                                 $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '确认分配', [
                                     'class'=>'btn btn-info btn-sm',
-                                    'style'=>"margin:2px",
                                     'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
 
                                 ]);
@@ -300,7 +299,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             case BuChanEnum::INITIALIZATION:
                                 $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '分配工厂', [
                                     'class'=>'btn btn-primary btn-sm',
-                                    'style'=>"margin:2px",
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
                                 ]);
@@ -309,7 +307,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             case BuChanEnum::ASSIGNED:
                                 $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '开始生产', [
                                     'class'=>'btn btn-danger btn-sm',
-                                    'style'=>"margin:2px",
                                     'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',
 
                                 ]);
@@ -321,7 +318,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             case BuChanEnum::PARTIALLY_SHIPPED:
                                 $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '生产出厂', [
                                     'class'=>'btn btn-success btn-sm',
-                                    'style'=>"margin:2px",
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModalLg',
                                 ]);
