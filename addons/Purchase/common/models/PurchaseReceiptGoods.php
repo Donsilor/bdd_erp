@@ -60,7 +60,7 @@ use Yii;
  * @property int $biaomiangongyi 表面工艺
  * @property string $biaomiangongyi_fee 表面工艺工费
  * @property string $fense_fee 分色工艺工费
- * @property string $bukou_fee 补扣工费
+ * @property string $bukou_fee 补口工费
  * @property string $cert_fee 证书费
  * @property string $extra_stone_fee 超石费
  * @property string $tax_fee 税费
@@ -152,7 +152,7 @@ class PurchaseReceiptGoods extends BaseModel
             'biaomiangongyi' => '表面工艺',
             'biaomiangongyi_fee' => '表面工艺工费',
             'fense_fee' => '分色工艺工费',
-            'bukou_fee' => '补扣工费',
+            'bukou_fee' => '补口工费',
             'cert_fee' => '证书费',
             'extra_stone_fee' => '超石费',
             'tax_fee' => '税费',
