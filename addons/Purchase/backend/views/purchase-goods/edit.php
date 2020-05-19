@@ -162,13 +162,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_info')->textarea() ?>
-                    </div>
-                    <div class="col-lg-4">
-                		<?= $form->field($model, 'remark')->textarea() ?>
-                	</div>
+                    </div>                   
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_info')->textarea() ?>
                     </div>
+                     <div class="col-lg-4">
+                		<?= $form->field($model, 'remark')->textarea() ?>
+                	</div>
             	</div> 
             	<?php }?>
             </div>

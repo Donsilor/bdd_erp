@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jiagong_fee') ?>：</td>
                                     <td><?= $model->gong_fee ?></td>
                                 </tr>
                                 <tr>
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->xiangqian_fee ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('total_gong_fee') ?>：</td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
                                     <td><?= $model->total_gong_fee ?></td>
                                 </tr>
 
@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->penla_fee ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('danjian_cost') ?>：</td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('unit_cost_price') ?>：</td>
                                     <td><?= $model->danjian_cost ?></td>
                                 </tr>
                                 <tr>
