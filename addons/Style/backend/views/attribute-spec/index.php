@@ -78,13 +78,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
             ],
             [
-                    'attribute' => 'is_combine',
+                    'attribute' => 'is_inlay',
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
                     'value' => function ($model){
-                         return \addons\Style\common\enums\CombineEnum::getValue($model->is_combine);
+                        return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'is_combine',\addons\Style\common\enums\CombineEnum::getMap(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'is_inlay',\addons\Style\common\enums\InlayEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control'
                     ]),

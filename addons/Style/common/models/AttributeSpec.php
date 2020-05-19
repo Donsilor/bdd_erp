@@ -35,8 +35,8 @@ class AttributeSpec extends BaseModel
     public function rules()
     {
         return [
-            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_combine', 'status'], 'required'],
-            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_combine' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_inlay', 'status'], 'required'],
+            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_inlay' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             //[['attr_values'], 'string', 'max' => 500],
             [['attr_id'],'unique', 'targetAttribute'=>['style_cate_id','attr_id'],
               //'targetClass' => '\models\Dishes', // 模型，缺省时默认当前模型。
@@ -61,7 +61,7 @@ class AttributeSpec extends BaseModel
             'attr_values' => '属性值',
             'input_type' => '显示类型',
             'is_require' => '必填',
-            'is_combine' => '是否镶嵌',
+            'is_inlay' => '是否镶嵌',
             'status' => '状态',
             'sort' => '排序',
             'attr_name'=>  '属性名称',
