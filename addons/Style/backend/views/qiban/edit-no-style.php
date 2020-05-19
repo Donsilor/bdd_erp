@@ -32,19 +32,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
                             </div>
                         <?php } ?>
+                        
                      </div>
-                     <div class="row">   
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_name')->textInput() ?>
-                        </div>
+                     <div class="row">                        
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'is_inlay')->dropDownList(\addons\Style\common\enums\InlayEnum::getMap(),['prompt'=>'请选择','disabled'=>true]) ?>
+                            <?= $form->field($model, 'is_inlay')->hiddenInput()->label(false) ?>
+                        </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_name')->textInput() ?>
+                        </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['prompt'=>'请选择']) ?>
                         </div>
@@ -68,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <?php }?>
                 <?php
                 $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
-                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type);
+                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
                     $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
                     $attr_field_name = "{$attr_field}[{$attr['id']}]";

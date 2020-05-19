@@ -97,11 +97,12 @@ class AttributeService extends Service
      * 查询款式属性列表（不按照属性类型分组）
      * @param unknown $style_cate_id
      * @param unknown $attr_type
+     * @param unknown $is_inlay 是否镶嵌
      * @param number $status
      * @param unknown $language
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getAttrListByCateId($style_cate_id, $attr_type = null, $status = 1, $language = null)
+    public function getAttrListByCateId($style_cate_id, $attr_type = null,$is_inlay = null, $status = 1, $language = null)
     {
         if(empty($language)){
             $language = Yii::$app->params['language'];
@@ -117,7 +118,9 @@ class AttributeService extends Service
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
         }
-        
+        if($is_inlay == 0) {
+            $query->andWhere(['spec.is_inlay'=>$is_inlay]);
+        }
         $models = $query->orderBy("spec.sort asc")->asArray()->all();
         return $models;
     }
@@ -129,9 +132,9 @@ class AttributeService extends Service
      * @param string $language
      * @return array
      */
-    public function getAttrTypeListByCateId($style_cate_id, $attr_type = null,$status = 1, $language = null)
+    public function getAttrTypeListByCateId($style_cate_id, $attr_type = null,$is_inlay = null,$status = 1, $language = null)
     {
-        $models = $this->getAttrListByCateId($style_cate_id, $attr_type,$status, $language);
+        $models = $this->getAttrListByCateId($style_cate_id, $attr_type,$is_inlay = null,$status, $language);
         $attr_list = [];
         foreach ($models as $model){
             $attr_list[$model['attr_type']][] = $model;

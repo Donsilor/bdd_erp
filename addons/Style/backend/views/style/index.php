@@ -97,6 +97,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-1','style'=>'width:130px;'],
             ],
             [
+                    'attribute' => 'is_inlay',
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+                    'value' => function ($model){
+                    return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'is_inlay',\addons\Style\common\enums\InlayEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control'
+                    ]),
+            ], 
+            [
                     'label' => '成本价',
                     'attribute' => 'cost_price',
                     'value' => function ($model){

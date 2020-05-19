@@ -79,6 +79,10 @@ class StyleController extends BaseController
             if($model->isNewRecord){
                 $model->creator_id = \Yii::$app->user->id;
             }
+            if($model->type) {
+                $model->is_inlay = $model->type->is_inlay;
+            }
+
             return $model->save()
             ? $this->redirect(Yii::$app->request->referrer)
             : $this->message($this->getError($model), $this->redirect(['index']), 'error');

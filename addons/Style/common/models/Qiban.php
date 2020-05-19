@@ -23,6 +23,7 @@ use common\models\backend\Member;
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
+ * @property int $is_inlay 是否镶嵌
  * @property int $audit_status 款式审核 0待审核，1通过，2不通过
  * @property string $audit_remark 审核失败原因
  * @property int $audit_time 审核时间
@@ -51,7 +52,7 @@ class Qiban extends BaseModel
     {
         return [
             [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price','qiban_name'],'required'],
-            [['merchant_id', 'style_cate_id', 'product_type_id', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'style_cate_id', 'product_type_id','is_inlay', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
             [['qiban_name', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['qiban_sn'], 'string', 'max' => 50],
@@ -83,6 +84,7 @@ class Qiban extends BaseModel
             'cost_price' => '成本价',
             'jintuo_type' => '金托类型',
             'goods_num' => '商品数量',
+            'is_inlay' => '是否镶嵌',
             'audit_status' => '审核状态',
             'audit_remark' => '审核失败原因',
             'audit_time' => '审核时间',

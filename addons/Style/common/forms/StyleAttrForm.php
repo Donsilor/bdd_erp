@@ -30,6 +30,7 @@ class StyleAttrForm extends Model
     public $style_sn;
     
     public $tuo_type;//金托类型
+    public $is_inlay;//是否镶嵌
     /**
      * {@inheritdoc}
      */
@@ -133,7 +134,7 @@ class StyleAttrForm extends Model
      */
     public function getAttrList()
     {   
-        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id);
+        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id,null,$this->is_inlay);
     }
     
 }

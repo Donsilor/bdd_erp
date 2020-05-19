@@ -25,6 +25,7 @@ use addons\Supply\common\models\Produce;
  * @property int $jintuo_type 金托类型
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
+ * @property int $is_inlay 是否镶嵌
  * @property int $produce_id 布产ID
  * @property int $is_apply 是否申请修改
  * @property string $apply_info
@@ -64,7 +65,7 @@ class PurchaseGoods extends BaseModel
     {
         return [
             [['purchase_id', 'goods_type'], 'required'],
-            [['purchase_id', 'goods_type', 'style_id', 'qiban_type', 'product_type_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num', 'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_type', 'style_id', 'qiban_type', 'product_type_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price', 'main_stone_price', 'second_stone_price', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
@@ -94,6 +95,7 @@ class PurchaseGoods extends BaseModel
             'jintuo_type' => '金托类型',
             'cost_price' => '采购成本价',
             'goods_num' => '商品数量',
+            'is_inlay' => '是否镶嵌',
             'produce_id' => '布产ID',
             'is_apply' => '是否申请修改',
             'apply_info' => 'Apply Info',

@@ -105,14 +105,13 @@ class QibanController extends BaseController
                 $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
                 $model->style_image = $style->style_image;
+                $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
             }
 
             //根据款号获取属性值
             $style_model = new StyleAttrForm();
             $style_model->style_id = $style->id;
             $style_model->initAttrs();
-//            $model->attr_custom = $style_model->attr_custom;
-//            $model->attr_require = $style_model->attr_require;
             $model->style_id = $style->id;
         }
         if ($model->load(Yii::$app->request->post())) {
@@ -167,9 +166,9 @@ class QibanController extends BaseController
             $model->jintuo_type = $jintuo_type;
             $model->product_type_id = $product_type_id;
             $model->style_sn = 'QIBAN';
+            $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
         }
-
-
+        
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
