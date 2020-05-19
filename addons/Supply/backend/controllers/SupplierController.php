@@ -3,6 +3,7 @@
 namespace addons\Supply\backend\controllers;
 
 use addons\Purchase\common\forms\PurchaseGoodsForm;
+use addons\Supply\common\models\SupplierFollower;
 use common\helpers\ResultHelper;
 use common\helpers\Url;
 use Yii;
@@ -186,4 +187,5 @@ class SupplierController extends BaseController
         $str = SupplierForm::getFirstCode($supplier_name);
         return substr($str,0,31);
     }
+
 }

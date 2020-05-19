@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">供应商详情 - <?php echo $model->supplier_name?></h2>
     <ul class="nav nav-tabs">
         <li class="active"><a href="<?= \common\helpers\Url::to(['supplier/view','id'=>$model->id]) ?>" >布产详情</a></li>
-        <li class=""><a href="<?= \common\helpers\Url::to(['supplier/follower','supplier_id'=>$model->id]) ?>" >跟单人</a></li>
+        <li class=""><a href="<?= \common\helpers\Url::to(['follower/index','supplier_id'=>$model->id]) ?>" >跟单人</a></li>
     </ul>
 </div>
 

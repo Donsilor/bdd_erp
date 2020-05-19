@@ -141,7 +141,7 @@ trait Curd
         if ($model->load(Yii::$app->request->post())) {
             return $model->save()
                 ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
         }
 
         return $this->renderAjax($this->action->id, [
