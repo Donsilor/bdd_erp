@@ -149,7 +149,7 @@ class StyleGoodsForm extends Model
             return false;
         }
         //批量更新款式商品
-        StyleGoods::updateAll(['status'=> StatusEnum::DISABLED],['style_id'=>$this->style_id]);
+        StyleGoods::updateAll(['status'=> StatusEnum::DELETE],['style_id'=>$this->style_id]);
         
         $cost_prices = array();
         $goods_num   = 0;
