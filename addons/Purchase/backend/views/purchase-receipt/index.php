@@ -21,12 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <?= Html::button('打印工厂出货明细表',['class'=>'btn btn-info btn-sm','onclick'=>"printDetail()"]) ?>
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]) ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
