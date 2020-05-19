@@ -192,17 +192,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->audit_status == AuditStatusEnum::PENDING) {
-                                             return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                             return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px','style'=>'margin-top:2px;']);
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){
                                         if($model->produce_id && $model->produce && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px','style'=>'margin-top:2px;']);
                                         }
                                     },                                    
                                     'delete' => function($url, $model, $key) use($purchase){
                                         if($purchase->audit_status == AuditStatusEnum::PENDING) {
-                                            return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
+                                            return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs','style'=>'margin-top:2px;']);
                                         }
                                     },
                                 ]

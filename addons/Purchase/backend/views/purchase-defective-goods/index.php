@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
                         ],
                         [
-                            'name' => "goods_remark",
+                            'name' => "oqc_remark",
                             'title'=>"商品备注",
                             'enableError'=>false,
                             'options' => [

@@ -17,7 +17,7 @@ use Yii;
  * @property int $product_type_id 产品线
  * @property string $cost_price 金额
  * @property int $oqc_reason OQC质检未过原因
- * @property string $goods_remark 备注：IQC未过原因
+ * @property string $oqc_remark 备注：IQC未过原因
  */
 class PurchaseDefectiveGoods extends BaseModel
 {
@@ -40,7 +40,7 @@ class PurchaseDefectiveGoods extends BaseModel
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
-            [['goods_remark'], 'string', 'max' => 255],
+            [['oqc_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -60,7 +60,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'product_type_id' => '产品线',
             'cost_price' => '金额',
             'oqc_reason' => 'OQC质检未过原因',
-            'goods_remark' => '备注：IQC未过原因',
+            'oqc_remark' => '备注',
         ];
     }
 }

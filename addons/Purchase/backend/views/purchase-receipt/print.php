@@ -17,26 +17,30 @@
         {/literal}
     </style>
 </head>
+<?php
+$datetime = new \DateTime;
+$now_time = $datetime->format('Y-m-d H:i:s');
+?>
 <body>
 <!--startprint-->
 <div class="wrap">
-    <h1>出货明细表</h1>现在时间&nbsp;<%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%>
+    <h1>出货明细表</h1>现在时间&nbsp;<?php echo $now_time; ?>
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="65">加工商：</td>
-            <td  width="100"  class="tLeft"><%$view->get_prc_name()%></td>
+            <td  width="100"  class="tLeft"></td>
             <td width="65">流水号：</td>
-            <td   width="100" class="tLeft"><%$view->get_id()%></td>
+            <td   width="100" class="tLeft"></td>
             <td width="65">出货单号:</td>
-            <td  width="100"  class="tLeft"><%$view->get_ship_num()%></td>
+            <td  width="100"  class="tLeft"></td>
             <td width="65">日期：</td>
-            <td  width="100" class="tLeft"><%$view->get_create_time()%></td>
+            <td  width="100" class="tLeft"></td>
             <td width="65">件数：</td>
-            <td  width="100" ><%$view->get_num()%></td>
+            <td  width="100" ></td>
         </tr>
         <tr>
             <td>备注：</td>
-            <td colspan="8"><%$view->get_remark()%></td>
+            <td colspan="8"></td>
         </tr>
     </table>
     <table cellpadding="0" cellspacing="0" border="0" class="list-ch">
@@ -57,7 +61,7 @@
             <td>主石信息</td>
             <td>主石单价</td>
 
-            <td>副石品类</td>
+            <td>副石</td>
             <td>副石单价</td>
             <td>主副石总重量</td>
             <td>工费</td>
@@ -73,48 +77,48 @@
         </tr>
         </thead>
         <tbody>
-        <%foreach from=$order_goods item=value %>
+        <?php foreach($goodsList as $goods_info): ?>
         <tr>
-            <td nowrap=true><%$value.xuhao%></td>
-            <td nowrap=true><%$value.customer_info_stone%></td>
-            <td nowrap=true><%$value.cat_type%></td>
-            <td><%$value.factory_sn%></td>
-            <td><%$dd->getEnum('processor.is_alone',$value.is_alone)%></td>
-            <td><%$value.ring_mouth%></td>
-            <td><%$value.hand_inch%></td>
-            <td><%$value.material%></td>
-            <td><%$value.gross_weight%></td>
-            <td><%$value.net_gold_weight%></td>
-            <td><%$value.gold_loss%></td>
-            <td><%$value.gold_price%></td>
-            <td><%$value.main_stone%>&nbsp;<%$value.main_stone_weight%>/<%$value.main_stone_num%></td>
-            <td><%$value.zhushidanjia%></td>
+            <td nowrap=true><?= $goods_info->id ?></td>
+            <td nowrap=true></td>
+            <td nowrap=true><?= $goods_info->style_cate_id ?></td>
+            <td><?= $goods_info->factory_mo ?></td>
+            <td></td>
+            <td><?= $goods_info->xiangkou ?></td>
+            <td><?= $goods_info->finger ?></td>
+            <td><?= $goods_info->material ?></td>
+            <td><?= $goods_info->gross_weight ?></td>
+            <td><?= $goods_info->gold_weight ?></td>
+            <td><?= $goods_info->gold_loss ?></td>
+            <td><?= $goods_info->gold_price ?></td>
+            <td><?= $goods_info->main_stone ?>&nbsp;<?= $goods_info->main_stone_weight ?>/<?= $goods_info->main_stone_num ?></td>
+            <td><?= $goods_info->main_stone_price ?></td>
 
             <td  width="85">
-					<span style="border-bottom:1px #000 solid;display:block;"><%$value.fushi%>&nbsp;<%$value.fushizhong%>/<%$value.fushilishu%>
+					<span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone1 ?>&nbsp;<?= $goods_info->second_stone_weight1 ?>/<?= $goods_info->second_stone_num1 ?>
 					</span>
                 <span style="border-bottom:1px #000 solid;display:block;">
-						<%$value.shi2%>&nbsp;<%$value.shi2zhong%>/<%$value.shi2lishu%>
+						<?= $goods_info->second_stone2 ?>&nbsp;<?= $goods_info->second_stone_weight2 ?>/<?= $goods_info->second_stone_num2 ?>
 					</span>
-                <span style="display:block;"><%$value.shi3%>&nbsp;<%$value.shi3zhong%><%$value.shi3lishu%></span>
+                <span style="display:block;"><?= $goods_info->second_stone3 ?>&nbsp;<?= $goods_info->second_stone_weight3 ?>/<?= $goods_info->second_stone_num3 ?></span>
             </td>
-            <td><%if $value.fushidanjia%><span style="border-bottom:1px #000 solid;display:block;"><%$value.fushidanjia%></span><%/if%>
-                <%if $value.shi2danjia%><span style="border-bottom:1px #000 solid;display:block;"><%$value.shi2danjia%></span><%/if%>
-                <%if $value.shi3danjia%><span style="display:block;"><%$value.shi3danjia%></span><%/if%>
+            <td><span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone_price1 ?></span>
+                <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info->second_stone_price2 ?></span>
+                <span style="display:block;"><?= $goods_info->second_stone_price3 ?></span>
             </td>
             <td><%$value.main_stone_weight+$value.fushizhong+$value.shi2zhong+$value.shi3zhong%></td>
-            <td><%$value.work_fee%></td>
-            <td><%$value.extra_stone_fee%></td>
-            <td><%$value.other_fee%></td>
-            <td><%$value.fittings_cost_fee%></td>
-            <td><%$value.chengbenjia%></td>
-            <td><%$value.tax_fee%></td>
+            <td><?= $goods_info->fee_price ?></td>
+            <td><?= $goods_info->extra_stone_fee ?></td>
+            <td><?= $goods_info->other_fee ?></td>
+            <td><?= $goods_info->parts_fee ?></td>
+            <td><?= $goods_info->cost_price ?></td>
+            <td><?= $goods_info->tax_fee ?></td>
             <td><%$value.chengbenjia+$value.tax_fee%></td>
             <td nowrap=true><%$value.customer_name%></td>
-            <td><%$value.bc_sn%></td>
-            <td><%$value.style_sn%></td>
+            <td><?= $goods_info->produce_sn ?></td>
+            <td><?= $goods_info->style_sn ?></td>
         </tr>
-        <%/foreach%>
+        <?php endforeach; ?>
         <tr>
             <td>合计</td>
             <td colspan="25" class="tLeft"><%$heji.hanshuijia_heji%></td>
