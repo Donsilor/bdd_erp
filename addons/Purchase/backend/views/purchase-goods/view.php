@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->cost_price ?></td>
                                 </tr> 
                                 <tr>
-                                    <td class="col-xs-2 text-right">采购总金额：</td>
+                                    <td class="col-xs-2 text-right">采购总额：</td>
                                     <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
                                 </tr>                                
                                 <tr>
