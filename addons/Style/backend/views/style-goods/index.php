@@ -4,12 +4,14 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('goods', '商品列表');
 $this->params['breadcrumbs'][] = $this->title;
+$materialDropdownList = array_column(Yii::$app->attr->valueList(AttrIdEnum::MATERIAL),'name','id');
 ?>
 
 <div class="row">
@@ -110,9 +112,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Yii::$app->attr->valueName($model->material);
                         }
                     },
-                    'filter' => false,
+                    'filter' => Html::activeDropDownList($searchModel, 'material',$materialDropdownList, [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                    'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                     'attribute' => 'finger',

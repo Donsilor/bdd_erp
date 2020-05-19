@@ -11,7 +11,7 @@ class AttrIdEnum
 {
     const CLARITY = 2;//净度ID
     const CUT = 4;//切工ID
-    const WEIGHT = 5;//主石重量ID
+    const CARAT = 59;//主石重量ID
     const SHAPE = 6;//钻石形状 ID
     const COLOR = 7;//钻石颜色
     const FLUORESCENCE = 8;//荧光
@@ -45,7 +45,7 @@ class AttrIdEnum
 
     const FINGER = 38;//手寸（指圈）
     const MATERIAL = 10;//材质（成色）
-
+    const XIANGKOU = 49;//镶口
     const MOSAIC_METHOD = 58;//材质（成色）
 
 }

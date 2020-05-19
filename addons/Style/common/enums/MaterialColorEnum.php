@@ -26,7 +26,7 @@ class MaterialColorEnum extends BaseEnum
                 self::YELLOW => "黄",
                 self::ROSE_GOLD => "玫瑰黄",
                 self::ROSE_WHITE => "玫瑰白",
-                self::YELLOW_WHITE => "黄白 ",                
+                self::YELLOW_WHITE => "黄白",                
         ];
     }
     
