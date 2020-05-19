@@ -81,7 +81,7 @@ class StyleGoods extends BaseModel
                 'goods_name' => '商品名称',
                 'xiangkou' => '镶口',
                 'finger' => '指圈',
-                'material' => '材质',
+                'material' => '成色',
                 'main_stone_weight' => '主石大小',
                 'main_stone_num' => '主石数量',
                 'second_stone_weight1' => '副石1重量',

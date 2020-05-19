@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1','style'=>'width:130px;'],
-            ],  
+            ],
             [
                     'label' => '成本价',
                     'attribute' => 'cost_price',

@@ -6,17 +6,17 @@ namespace addons\Style\common\enums;
  * 材质 枚举
  * @package common\enums
  */
-class MaterialEnum extends BaseEnum
+class MaterialTypeEnum extends BaseEnum
 {
-    const MAT_18K = 1;
-    const MAT_PLATINUM = 2;
-    const MAT_GOLD = 3;
-    const MAT_SILVER = 4;
-    const MAT_ALLOY = 5;
-
+    const MAT_18K = '18K';
+    const MAT_PT = 'PT';
+    const MAT_GOLD = 'GOLD';
+    const MAT_SILVER = 'SILVER';
+    const MAT_ALLOY = 'ALLOY';
+    
     /**
      * @return array
-     * 
+     *
      */
     public static function getMap(): array
     {
@@ -26,7 +26,7 @@ class MaterialEnum extends BaseEnum
                 self::MAT_GOLD => "黄金",
                 self::MAT_SILVER => "银",
                 self::MAT_ALLOY => "合金 ",
-
+                
         ];
     }
     

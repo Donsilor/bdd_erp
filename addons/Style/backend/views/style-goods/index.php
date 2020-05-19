@@ -102,9 +102,35 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
-            ],            
+            ],  
             [
-                    'attribute'=>'成本价',
+                    'attribute' => 'material',
+                    'value' => function ($model){
+                        if($model->material){
+                            return Yii::$app->attr->valueName($model->material);
+                        }
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute' => 'finger',
+                    'value' => 'finger',
+                    'filter' => true,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'label' => '镶口',
+                    'attribute' => 'xiangkou',
+                    'value' => 'xiangkou',
+                    'filter' => true,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute'=>'cost_price',
                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                             'class' => 'form-control',
                     ]),
