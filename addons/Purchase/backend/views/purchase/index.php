@@ -178,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
+                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'follower' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
