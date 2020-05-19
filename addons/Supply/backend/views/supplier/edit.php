@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[1]??''?></li>
             </ul>
-            <div class="box-body col-lg-9" style="padding-left:20px">
+            <div class="box-body col-lg-9" style="padding-left:30px">
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'supplier_name')->textInput(['maxlength' => true]) ?>
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[2]??''?></li>
             </ul>
-          <div class="box-body col-lg-12" style="padding-left:20px">
+          <div class="box-body col-lg-12" style="padding-left:30px">
               <div class="row">
                   <div class="col-lg-3">
                       <?= $form->field($model, 'bank_name')->textInput(['maxlength' => true]) ?>
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[3]??''?></li>
             </ul>
-            <div class="box-body col-lg-12" style="padding-left:20px">
+            <div class="box-body col-lg-12" style="padding-left:30px">
                 <div class="row">
                     <div class="col-lg-3">
                         <?= $form->field($model, 'contactor')->textInput(['maxlength' => true]) ?>
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[4]??''?></li>
             </ul>
-            <div class="box-body col-lg-12" style="padding-left:20px">
+            <div class="box-body col-lg-12" style="padding-left:30px">
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'contract_file')->widget(common\widgets\webuploader\Files::class, [
