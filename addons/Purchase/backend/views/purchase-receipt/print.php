@@ -107,7 +107,7 @@ $now_time = $datetime->format('Y-m-d H:i:s');
                 <span style="display:block;"><?= $goods_info->second_stone_price3 ?></span>
             </td>
             <td><%$value.main_stone_weight+$value.fushizhong+$value.shi2zhong+$value.shi3zhong%></td>
-            <td><?= $goods_info->fee_price ?></td>
+            <td><?= $goods_info->gong_fee ?></td>
             <td><?= $goods_info->extra_stone_fee ?></td>
             <td><?= $goods_info->other_fee ?></td>
             <td><?= $goods_info->parts_fee ?></td>

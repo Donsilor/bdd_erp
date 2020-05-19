@@ -632,6 +632,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
+                            ],
+                            [
+                                'name' => "goods_remark",
+                                'title'=>"商品备注",
+                                'enableError'=>false,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'style'=>'width:80px'
+                                ]
                             ]
                         ];
                         ?>
