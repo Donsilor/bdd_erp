@@ -54,11 +54,31 @@ class ProduceController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'purchaseGoods' => ['goods_name'],
-                'follower' => ['username']
+                'follower' => ['username'],
+                'mosaic' => ['attr_value','attr_value_id']
             ]
         ]);
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['factory_distribute_time','factory_order_time','factory_delivery_time']);
+
+        $factory_distribute_time = $searchModel->factory_distribute_time;
+        if (!empty($factory_distribute_time)) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_distribute_time', strtotime(explode('/', $factory_distribute_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_distribute_time', (strtotime(explode('/', $factory_distribute_time)[1]) + 86400)] );//结束时间
+        }
+
+        $factory_order_time = $searchModel->factory_order_time;
+        if (!empty($factory_order_time)) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_order_time', strtotime(explode('/', $factory_order_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_order_time', (strtotime(explode('/', $factory_order_time)[1]) + 86400)] );//结束时间
+        }
+
+
+        $factory_delivery_time = $searchModel->factory_delivery_time;
+        if (!empty($factory_delivery_time)) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_delivery_time', strtotime(explode('/', $factory_delivery_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_delivery_time', (strtotime(explode('/', $factory_delivery_time)[1]) + 86400)] );//结束时间
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

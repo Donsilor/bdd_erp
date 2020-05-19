@@ -3,6 +3,7 @@
 namespace addons\Supply\common\models;
 
 use addons\Purchase\common\models\PurchaseGoods;
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use Yii;
@@ -139,5 +140,14 @@ class Produce extends BaseModel
     public function getFollower()
     {
         return $this->hasOne(SupplierFollower::class, ['id'=>'follower_id']);
+    }
+
+    /**
+     * 对应镶嵌方式
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMosaic()
+    {
+        return $this->hasOne(ProduceAttribute::class, ['produce_id'=>'id'])->where(['attr_id'=>AttrIdEnum::MOSAIC_METHOD])->distinct(true)->alias('mosaic');
     }
 }

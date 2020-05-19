@@ -110,4 +110,14 @@ class ProduceShipment extends BaseModel
 
         return parent::beforeSave($insert);
     }
+
+
+    /**
+     * 对应布产
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduce()
+    {
+        return $this->hasOne(Produce::class, ['id'=>'produce_id']);
+    }
 }

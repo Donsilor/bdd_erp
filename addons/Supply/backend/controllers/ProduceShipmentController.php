@@ -52,6 +52,9 @@ class ProduceShipmentController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
+            'relations' => [
+                'produce' => ['goods_num']
+            ],
             'pageSize' => $this->pageSize,
 
         ]);

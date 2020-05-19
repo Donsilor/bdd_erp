@@ -50,6 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td><?= $model->goods_num ?></td>
                              </tr>
                              <tr>
+                                 <td class="col-xs-2 text-right">出厂数量：</td>
+                                 <td><?= Yii::$app->supplyService->produce->getShippentNum($model->id) ?></td>
+                             </tr>
+                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
                                  <td><?= $model->supplier ?  $model->supplier->supplier_name : '' ?></td>
                              </tr>
