@@ -2,7 +2,6 @@
 
 namespace addons\Purchase\common\models;
 
-use addons\Supply\common\models\SupplierFollower;
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
@@ -117,7 +116,7 @@ class Purchase extends BaseModel
      */
     public function getFollower()
     {
-        return $this->hasOne(SupplierFollower::class, ['id'=>'follower_id'])->alias('follower');
+        return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
     }
     /**
      * 创建人

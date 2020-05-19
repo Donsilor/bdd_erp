@@ -33,11 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
                                     <td><?= $model->qiban_sn ?></td>
                                 </tr>
-                                <?php }?>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
-                                    <td><?= \addons\Purchase\common\enums\PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
-                                </tr>
+                                <?php }?>   
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                                     <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
@@ -72,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->cost_price ?></td>
                                 </tr> 
                                 <tr>
-                                    <td class="col-xs-2 text-right">采购总金额：</td>
+                                    <td class="col-xs-2 text-right">采购总额：</td>
                                     <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
                                 </tr>                                
                                 <tr>

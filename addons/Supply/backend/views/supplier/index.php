@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit-lang']) ?>
+                    <?= Html::create(['edit']) ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -163,8 +163,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {status}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
-                        return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
-                    },
+                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                 },
                 'audit' => function($url, $model, $key){
                         if($model->audit_status != 1){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
@@ -173,10 +173,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#ajaxModal',
                             ]);
                         }
-                    },
+                 },
                  'status' => function($url, $model, $key){
                         return Html::status($model['status']);
-                    },
+                  },
                 /*'delete' => function($url, $model, $key){
                         return Html::delete(['delete', 'id' => $model->id]);
                     },
