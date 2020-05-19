@@ -4,6 +4,7 @@ namespace addons\Supply\backend\controllers;
 
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use common\helpers\ResultHelper;
+use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Supply\common\models\Supplier;
@@ -96,6 +97,44 @@ class SupplierController extends BaseController
             'model' => $model,
         ]);
     }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
+
+        $model = $this->findModel($id);
+        if($model->business_scope){
+            $business_scope_arr = explode(',', $model->business_scope);
+            $business_scope_str = '';
+            foreach ($business_scope_arr as $business_scope){
+                $business_scope_str .= ','. Yii::$app->attr->valueName($business_scope);
+            }
+            $model->business_scope = trim( $business_scope_str,',' );
+        }
+
+        if($model->pay_type){
+            $pay_type_arr = explode(',', $model->pay_type);
+            $pay_type_str = '';
+            foreach ($pay_type_arr as $pay_type){
+                $pay_type_str .= ','. Yii::$app->attr->valueName($pay_type);
+            }
+            $model->pay_type = trim( $pay_type_str,',' );
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+
+
 
     /**
      * 审核-款号

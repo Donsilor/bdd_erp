@@ -53,10 +53,10 @@ class SupplierService
     public function getFollower($supplier_id){
         $model = SupplierFollower::find()
             ->where(['supplier_id'=>$supplier_id,'status' => StatusEnum::ENABLED])
-            ->select(['id','member_name'])
+            ->select(['member_id','member_name'])
             ->asArray()
             ->all();
-        $model = ArrayHelper::map($model,'id', 'member_name');
+        $model = ArrayHelper::map($model,'member_id', 'member_name');
         return $model;
     }
 

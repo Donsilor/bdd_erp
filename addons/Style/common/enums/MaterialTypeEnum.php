@@ -22,7 +22,7 @@ class MaterialTypeEnum extends BaseEnum
     {
         return [
                 self::MAT_18K => "18K",
-                self::MAT_PLATINUM => "铂金",
+                self::MAT_PT => "铂金",
                 self::MAT_GOLD => "黄金",
                 self::MAT_SILVER => "银",
                 self::MAT_ALLOY => "合金 ",

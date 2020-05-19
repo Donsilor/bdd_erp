@@ -6,6 +6,7 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use common\models\member\Member;
 use Yii;
 
 /**
@@ -139,7 +140,7 @@ class Produce extends BaseModel
      */
     public function getFollower()
     {
-        return $this->hasOne(SupplierFollower::class, ['id'=>'follower_id']);
+        return $this->hasOne(Member::class, ['id'=>'follower_id']);
     }
 
     /**

@@ -58,4 +58,11 @@ class MemberService extends Service
             ->with('assignment')
             ->one();
     }
+
+    public function getDropDown(){
+
+        $model = $this->findAll();
+        return ArrayHelper::map($model,'id', 'username');
+    }
+
 }
