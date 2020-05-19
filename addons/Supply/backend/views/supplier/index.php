@@ -56,7 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'supplier_name',
-                'value' => 'supplier_name',
+                'value'=>function($model) {
+                    return Html::a($model->supplier_name, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                },
                 'filter' => Html::activeTextInput($searchModel, 'supplier_name', [
                     'class' => 'form-control',
                 ]),

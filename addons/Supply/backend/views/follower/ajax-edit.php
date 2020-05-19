@@ -18,19 +18,25 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
+        <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
+            'data' => Yii::$app->supplyService->supplier->getDropDown(),
+            'options' => ['placeholder' => '请选择'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);?>
 
-            <?= $form->field($model, 'material_type')->widget(kartik\select2\Select2::class, [
-                    'data' => \addons\Style\common\enums\MaterialTypeEnum::getMap(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-            ]);?>
+        <?= $form->field($model, 'member_id')->widget(kartik\select2\Select2::class, [
+            'data' => Yii::$app->services->backendMember->getDropDown(),
+            'options' => ['placeholder' => '请选择'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);?>
 
-            <?= $form->field($model, 'tax_rate')->textInput() ?>
-            <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
 
+                   
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

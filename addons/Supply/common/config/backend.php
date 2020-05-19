@@ -43,7 +43,11 @@ return [
                             [
                                     'title' => '供应商',
                                     'route' => 'supplier/index',
-                            ], 
+                            ],
+                            [
+                                'title' => '跟单人',
+                                'route' => 'follower/index',
+                            ],
                     ],
                     
             ],

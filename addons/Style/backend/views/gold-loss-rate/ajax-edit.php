@@ -25,7 +25,7 @@ $form = ActiveForm::begin([
                         'allowClear' => true
                     ],
             ]);?>
-            <?= $form->field($model, 'material_id')->dropDownList(\addons\Style\common\enums\MaterialEnum::getMap(),['prompt'=>'请选择']);?>
+            <?= $form->field($model, 'material_type')->dropDownList(\addons\Style\common\enums\MaterialTypeEnum::getMap(),['prompt'=>'请选择']);?>
 
             <?= $form->field($model, 'loss_rate')->textInput() ?>
             <?= $form->field($model, 'sort')->textInput() ?>

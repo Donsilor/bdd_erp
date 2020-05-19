@@ -2,6 +2,7 @@
 
 namespace addons\Supply\common\models;
 
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -32,10 +33,10 @@ class SupplierFollower extends BaseModel
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['id', 'merchant_id', 'supplier_id', 'member_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id','member_id'], 'required'],
+            [['merchant_id', 'supplier_id', 'member_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['member_name'], 'string', 'max' => 30],
-            [['id'], 'unique'],
+            [['supplier_id','member_id'], 'unique','targetAttribute'=>['supplier_id','member_id']],
         ];
     }
 
@@ -47,12 +48,32 @@ class SupplierFollower extends BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户ID',
-            'supplier_id' => '供应商ID',
-            'member_id' => '跟单人ID',
+            'supplier_id' => '供应商',
+            'member_id' => '跟单人',
             'member_name' => '跟单人',
-            'status' => '状态 1启用 0禁用 -1删除',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'status' => '状态',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
+
+
+    /**
+     * 对应管理员模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'member_id']);
+    }
+
+    /**
+     * 对应管理员模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id']);
+    }
+
 }

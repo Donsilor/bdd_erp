@@ -56,13 +56,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'material_id',
+                            'attribute' => 'material_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \addons\Style\common\enums\MaterialEnum::getValue($model->material_id);
+                                return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'material_id',\addons\Style\common\enums\MaterialEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
 

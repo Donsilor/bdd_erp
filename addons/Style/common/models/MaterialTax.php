@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $style_cate_id 款式分类
- * @property int $material_id 材质ID
+ * @property int $material_type 材质ID
  * @property string $loss_rate 金损率(%)
  * @property int $creator_id 配置人ID
  * @property int $sort
@@ -35,10 +35,11 @@ class MaterialTax extends BaseModel
     public function rules()
     {
         return [
-            [['material_id'], 'required'],
-            [[ 'material_id', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['material_type'], 'required'],
+            [['creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['tax_rate'], 'number'],
-            ['material_id','unique'],
+            [['material_type'], 'string','max'=>10],
+            ['material_type','unique'],
 
         ];
     }
@@ -50,7 +51,7 @@ class MaterialTax extends BaseModel
     {
         return [
             'id' => 'ID',
-            'material_id' => '材质',
+            'material_type' => '材质',
             'tax_rate' => '税点(%)',
             'creator_id' => '配置人',
             'sort' => '排序',

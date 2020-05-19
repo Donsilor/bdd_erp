@@ -8,20 +8,25 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '材质税率信息');
+$this->title = Yii::t('style_channel', '款式渠道');
 $this->params['breadcrumbs'][] = $this->title;
+
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
+
 ?>
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools">
+                <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
                 </div>
+
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -48,19 +53,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute' => 'material_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialEnum::getMap(), [
-                                'prompt' => '全部',
+                            'attribute'=>'supplier.supplier_name',
+                            'filter' => Html::activeTextInput($searchModel, 'supplier.supplier_name', [
                                 'class' => 'form-control',
-
                             ]),
+                            'headerOptions' => [],
                         ],
-                        'tax_rate',
+                        [
+                            'label' => '跟单人',
+                            'attribute'=>'member.username',
+                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => [],
+                        ],
 
                         [
                             'attribute'=>'updated_at',
@@ -79,21 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
+
+
                                 ],
 
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-
-                        ],
-                        [
-                            'label' => '操作人',
-                            'attribute' => 'member.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                'class' => 'form-control',
-                            ]),
 
                         ],
 
@@ -111,14 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-                        [
-                            'attribute' => 'sort',
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column){
-                                return  Html::sort($model->sort,['data-url'=>Url::to(['ajax-update'])]);
-                            },
-                            'headerOptions' => ['width' => '80'],
-                        ],
+
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
@@ -127,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
+                                        'data-target' => '#ajaxModal',
                                     ]);
                                 },
 

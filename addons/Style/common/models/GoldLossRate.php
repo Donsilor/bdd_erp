@@ -36,9 +36,10 @@ class GoldLossRate extends BaseModel
     {
         return [
             [['style_cate_id'], 'required'],
-            [['style_cate_id', 'material_id', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['style_cate_id',  'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['loss_rate'], 'number'],
-            [['style_cate_id','material_id'],'unique','targetAttribute' => ['style_cate_id', 'material_id'],'comboNotUnique'=>'此产品分类和材质已经存在']
+            [['material_type'], 'string','max'=>10],
+            [['style_cate_id','material_type'],'unique','targetAttribute' => ['style_cate_id', 'material_type'],'comboNotUnique'=>'此产品分类和材质已经存在']
         ];
     }
 
@@ -50,7 +51,7 @@ class GoldLossRate extends BaseModel
         return [
             'id' => 'ID',
             'style_cate_id' => '款式分类',
-            'material_id' => '材质',
+            'material_type' => '材质',
             'loss_rate' => '金损率(%)',
             'creator_id' => '配置人',
             'sort' => '排序',
