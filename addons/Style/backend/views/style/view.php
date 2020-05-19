@@ -21,10 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <h2 class="page-header">款式详情 - <?php echo $model->style_sn?></h2>
         <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="col-xs-12">
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
 
-                <div class="box-body table-responsive">
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('id') ?>：</td>

@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">采购详情 - <?php echo $model->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="col-xs-12">
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-body table-responsive">
+                <div class=" table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
@@ -71,34 +71,35 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                     </table>
                 </div>
+                <div class="box-footer text-center">
+                    <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                        'data-toggle' => 'modal',
+                        'class'=>'btn btn-primary btn-ms',
+                        'data-target' => '#ajaxModalLg',
+                    ]); ?>
+                    <?php
+                    if($model->audit_status != AuditStatusEnum::PASS){
+                        echo Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
+                            'class'=>'btn btn-info btn-ms',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if($model->audit_status != AuditStatusEnum::PASS){
+                        echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+                    ?>
+
+                </div>
             </div>
         </div>
-        <div class="box-footer text-center">
-            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                'data-toggle' => 'modal',
-                'class'=>'btn btn-primary btn-ms',
-                'data-target' => '#ajaxModalLg',
-            ]); ?>
-            <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
-                echo Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
-                    'class'=>'btn btn-info btn-ms',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
-                ]);
-            }
-            ?>
-            <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                    'class'=>'btn btn-success btn-sm',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
-                ]);
-            }
-            ?>
 
-        </div>
 
 
     <!-- box end -->
