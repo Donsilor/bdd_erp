@@ -74,7 +74,7 @@ class AddonsController extends Controller
         }
 
         // 每页数量
-        $this->pageSize = Yii::$app->request->get('per-page', 10);
+        $this->pageSize = Yii::$app->request->get('per-page',$this->pageSize);
         $this->pageSize > 50 && $this->pageSize = 50;
 
         // 后台进行权限校验
