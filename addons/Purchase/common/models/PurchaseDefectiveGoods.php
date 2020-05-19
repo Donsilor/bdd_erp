@@ -35,8 +35,8 @@ class PurchaseDefectiveGoods extends BaseModel
     public function rules()
     {
         return [
-            [['defective_id', 'receipt_goods_id'], 'required'],
-            [['id', 'defective_id', 'style_cate_id', 'product_type_id', 'oqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'defective_id', 'receipt_goods_id'], 'required'],
+            [['defective_id', 'style_cate_id', 'product_type_id', 'oqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],

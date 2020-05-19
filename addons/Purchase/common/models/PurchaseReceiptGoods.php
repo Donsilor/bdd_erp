@@ -65,6 +65,10 @@ use Yii;
  * @property string $extra_stone_fee 超石费
  * @property string $tax_fee 税费
  * @property string $other_fee 其他费用
+ * @property int $sort 排序
+ * @property int $status 状态 1启用 0禁用 -1 删除
+ * @property int $created_at 创建时间
+ * @property int $updated_at 更新时间
  */
 class PurchaseReceiptGoods extends BaseModel
 {
@@ -83,7 +87,7 @@ class PurchaseReceiptGoods extends BaseModel
     {
         return [
             [['id', 'receipt_id', 'purchase_sn', 'factory_mo'], 'required'],
-            [['receipt_id', 'goods_num', 'style_cate_id', 'product_type_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi'], 'integer'],
+            [['receipt_id', 'goods_num', 'style_cate_id', 'product_type_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['finger', 'gold_weight', 'gold_price', 'gold_loss', 'gross_weight', 'suttle_weight', 'cost_price', 'market_price', 'sale_price', 'main_stone_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3', 'markup_rate', 'gong_fee', 'parts_weight', 'parts_price', 'parts_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'cert_fee', 'extra_stone_fee', 'tax_fee', 'other_fee'], 'number'],
             [['purchase_sn', 'produce_sn', 'factory_mo', 'cert_id', 'second_cert_id'], 'string', 'max' => 30],
             [['barcode'], 'string', 'max' => 100],
@@ -157,6 +161,10 @@ class PurchaseReceiptGoods extends BaseModel
             'extra_stone_fee' => '超石费',
             'tax_fee' => '税费',
             'other_fee' => '其他费用',
+            'sort' => '排序',
+            'status' => '状态',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

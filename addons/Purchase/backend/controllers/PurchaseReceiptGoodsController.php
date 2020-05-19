@@ -61,7 +61,7 @@ class PurchaseReceiptGoodsController extends BaseController
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>','status',-1]);
         $receipt_goods = $dataProvider->getModels();
         $receiptInfo = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
@@ -121,6 +121,7 @@ class PurchaseReceiptGoodsController extends BaseController
                         ->select('supplier_id')
                         ->where(['produce_sn' => $produce_sn])
                         ->andWhere(['<=', 'audit_status', AuditStatusEnum::PASS])
+                        ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
                         ->asArray()
                         ->all();
                     $receipt_num = count($purchase_receipt_info);
@@ -212,6 +213,19 @@ class PurchaseReceiptGoodsController extends BaseController
                         throw new Exception($this->getError($model));
                     }
                 }
+
+                //软删除
+                $old_list = $model::find()->where(['receipt_id' => $receipt_id])->asArray()->all();
+                $old_ids = array_column($old_list, 'id');
+                $new_ids = array_column($receipt_goods_list, 'id');
+                $del_ids = array_diff($old_ids, $new_ids);
+                if(!empty($del_ids)){
+                    $res = $model::updateAll(['status' => StatusEnum::DELETE], ['id' => $del_ids]);
+                    if(false === $res){
+                        throw new Exception('软删除失败');
+                    }
+                }
+
                 //更新采购收货单汇总：总金额和总数量
                 $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
                 if(false === $res){
