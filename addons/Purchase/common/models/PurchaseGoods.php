@@ -92,7 +92,7 @@ class PurchaseGoods extends BaseModel
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
             'jintuo_type' => '金托类型',
-            'cost_price' => '成本价',
+            'cost_price' => '采购成本价',
             'goods_num' => '商品数量',
             'produce_id' => '布产ID',
             'is_apply' => '是否申请修改',
