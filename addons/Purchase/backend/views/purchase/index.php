@@ -164,7 +164,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
-                                     'class'=>'btn btn-primary btn-sm',
+                                    'class'=>'btn btn-primary btn-sm',
+                                    'style'=>'margin-top:5px;'
                             ]);
                         }
                     },                    
@@ -174,24 +175,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
+                                    'style'=>'margin-top:5px;'
                              ]); 
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
+                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm','style'=>'margin-top:5px;']);
                     },
                     'follower' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
-                            return Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
+                            return Html::edit(['set-follower','id'=>$model->id], '跟单人', [
                                 'class'=>'btn btn-info btn-sm',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
+                                'style'=>'margin-top:5px;'
                             ]);
                         }
                     },
                     'delete' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::PENDING){
-                            return Html::delete(['delete', 'id' => $model->id]);
+                            return Html::delete(['delete', 'id' => $model->id],'删除',['style'=>'margin-top:5px;']);
                         }
                     },                    
                 ]

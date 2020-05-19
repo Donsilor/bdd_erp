@@ -80,12 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
-                'attribute' => 'from_detail_id',
-                'value' => "purchaseGoods.goods_name",
+                'attribute' => 'qiban_sn',
                 'filter' => true,
                 'format' => 'raw',
 
             ],
+
             [
                 'attribute' => 'goods_num',
                 'filter' => false
