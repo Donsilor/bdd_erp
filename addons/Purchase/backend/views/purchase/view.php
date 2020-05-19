@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('follower_id') ?>：</td>
-                            <td><?= $model->follower ? $model->follower->member_name : ''; ?></td>
+                            <td><?= $model->follower ? $model->follower->username : ''; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
