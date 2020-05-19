@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
                      <div class="col-lg-3">
-                        <?= $form->field($model, 'receipt_goods_id')->textInput() ?>
+                        <?= $form->field($model, 'receipt_goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchDefectiveGoods()"]) ?>
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'name' =>'receipt_goods_id',
-                                'title'=>"收货单货品序号",
+                                'title'=>"收货单商品序号",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
@@ -86,7 +86,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
+                                    'readonly' =>'true',
                                     'style'=>'width:100px'
+                                ]
+                            ],
+                            [
+                                'name' => "oqc_reason",
+                                'title'=>"质检未过原因",
+                                'enableError'=>false,
+                                'type'  => 'dropDownList',
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'style'=>'width:160px'
+                                ],
+                                'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
+                            ],
+                            [
+                                'name' => "oqc_remark",
+                                'title'=>"商品备注",
+                                'enableError'=>false,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'style'=>'width:120px'
                                 ]
                             ],
                             [
@@ -96,6 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
+                                    'readonly' =>'true',
                                     'style'=>'width:100px'
                                 ],
                                 'items' => Yii::$app->styleService->styleCate->getDropDown()
@@ -107,38 +129,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
+                                    'readonly' =>'true',
                                     'style'=>'width:100px'
                                 ],
                                 'items' => Yii::$app->styleService->productType->getDropDown()
                             ],
                             [
                                 'name' => "cost_price",
-                                'title'=>"金额",
+                                'title'=>"成本价",
                                 'enableError'=>false,
                                 'defaultValue' => '0.00',
                                 'options' => [
                                     'class' => 'input-priority',
+                                    'readonly' =>'true',
                                     'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "oqc_reason",
-                                'title'=>"质检未过原因",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
-                            ],
-                            [
-                                'name' => "oqc_remark",
-                                'title'=>"商品备注",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
                                     'style'=>'width:80px'
                                 ]
                             ]

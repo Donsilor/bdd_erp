@@ -36,11 +36,11 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             [['defective_id', 'receipt_goods_id'], 'required'],
-            [['id', 'defective_id', 'receipt_goods_id', 'style_cate_id', 'product_type_id', 'oqc_reason'], 'integer'],
+            [['id', 'defective_id', 'style_cate_id', 'product_type_id', 'oqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
-            [['oqc_remark'], 'string', 'max' => 255],
+            [['oqc_remark', 'receipt_goods_id'], 'string', 'max' => 255],
         ];
     }
 
@@ -61,6 +61,10 @@ class PurchaseDefectiveGoods extends BaseModel
             'cost_price' => '金额',
             'oqc_reason' => 'OQC质检未过原因',
             'oqc_remark' => '备注',
+            'sort' => '排序',
+            'status' => '状态',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 }

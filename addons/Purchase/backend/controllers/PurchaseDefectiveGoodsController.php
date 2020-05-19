@@ -63,7 +63,7 @@ class PurchaseDefectiveGoodsController extends BaseController
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>','status',-1]);
         $defective_goods = $dataProvider->getModels();
         $defectiveInfo = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render('index', [
@@ -110,12 +110,12 @@ class PurchaseDefectiveGoodsController extends BaseController
                 foreach ($receipt_goods_arr as $receipt_goods_id) {
                     $receipt_info = PurchaseReceipt::find()->where(['receipt_no' => $receipt_no])->one();
                     if(empty($receipt_info)){
-                        throw new Exception("采购收货单【{$receipt_no}】不存在！");
+                        throw new Exception("采购收货单【{$receipt_no}】不存在");
                     }
                     $receipt_goods = PurchaseReceiptGoods::find()->where(['id' => $receipt_goods_id, 'receipt_id' => $receipt_info['id']])->one();
 
                     if(empty($receipt_goods)){
-                        throw new Exception("采购收货单【{$receipt_no}】中序号【{$receipt_goods_id}】不存在！");
+                        throw new Exception("采购收货单【{$receipt_no}】中序号【{$receipt_goods_id}】不存在");
                     }
                     $defective_list = [];
                     $defective_list['id'] = null;
@@ -138,15 +138,15 @@ class PurchaseDefectiveGoodsController extends BaseController
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseDefectiveGoods::tableName(), $defective_key, $defective_val)->execute();
                         if(false === $res){
-                            throw new Exception("保存失败！");
+                            throw new Exception("保存失败");
                         }
                         //更新不良返厂单汇总：总金额和总数量
                         $res = Yii::$app->purchaseService->purchaseDefective->purchaseDefectiveSummary($defective_id);
                         if(false === $res){
-                            throw new Exception('更新不良返厂单汇总失败！');
+                            throw new Exception('更新不良返厂单汇总失败');
                         }
                         $trans->commit();
-                        Yii::$app->getSession()->setFlash('success', '保存成功！');
+                        Yii::$app->getSession()->setFlash('success', '保存成功');
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }
@@ -171,7 +171,7 @@ class PurchaseDefectiveGoodsController extends BaseController
     {
         $defective_goods_list = Yii::$app->request->post('receipt_goods_list');
         $prurchase_defective_info = Yii::$app->request->post('PurchaseDefective');
-        $model = new PurchaseReceiptGoods();
+        $model = new PurchaseDefectiveGoods();
         if(!empty($defective_goods_list)){
             try {
                 $trans = Yii::$app->db->beginTransaction();
@@ -185,13 +185,26 @@ class PurchaseDefectiveGoodsController extends BaseController
                         throw new Exception($this->getError($model));
                     }
                 }
+
+                //软删除
+                $old_list = $model::find()->where(['defective_id' => $defective_id])->asArray()->all();
+                $old_ids = array_column($old_list, 'id');
+                $new_ids = array_column($defective_goods_list, 'id');
+                $del_ids = array_diff($old_ids, $new_ids);
+                if(!empty($del_ids)){
+                    $res = $model::updateAll(['status' => StatusEnum::DELETE], ['id' => $del_ids]);
+                    if(false === $res){
+                        throw new Exception('软删除失败');
+                    }
+                }
+
                 //更新采购收货单汇总：总金额和总数量
                 $res = Yii::$app->purchaseService->purchaseDefective->purchaseDefectiveSummary($defective_id);
                 if(false === $res){
-                    throw new Exception('更新不良返厂单汇总失败！');
+                    throw new Exception('更新不良返厂单汇总失败');
                 }
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功！');
+                Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
