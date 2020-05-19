@@ -22,6 +22,7 @@ class FollowerController extends BaseController
      */
     public function actionIndex()
     {
+
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -48,17 +49,30 @@ class FollowerController extends BaseController
 
         $dataProvider->query->andWhere(['>',SupplierFollower::tableName().'.status',-1]);
 
-               //导出
+        //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);
         }
 
 
+        $supplier_id = Yii::$app->request->get('supplier_id');
+        if($supplier_id){
+            $supplier = \addons\Supply\common\models\Supplier::find()->where(['id'=>$supplier_id])->one();
+            $dataProvider->query->andWhere(['=',SupplierFollower::tableName().'.supplier_id',$supplier_id]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+            return $this->render('follower', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'supplier' => $supplier
+            ]);
+        }else{
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+            ]);
+        }
+
+
     }
 
 
