@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if($model->style_id) {?>
 
                     <div style="margin: 0px 0 20px 0;">
-                        <h3 class="box-title"><i class="fa fa-qrcode"></i> 其他信息</h3>
+                        <h3 class="box-title"> 其他信息</h3>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
@@ -134,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'gold_loss')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gong_fee')->textInput() ?>
+                            <?= $form->field($model, 'jiagong_fee')->textInput() ?>
                         </div>
                     </div>
                     <div class="row">
@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'total_gong_fee')->textInput() ?>
+                            <?= $form->field($model, 'gong_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gaitu_fee')->textInput() ?>
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'penla_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'danjian_cost')->textInput() ?>
+                            <?= $form->field($model, 'unit_cost_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
@@ -162,13 +162,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_info')->textarea() ?>
-                    </div>
-                    <div class="col-lg-4">
-                		<?= $form->field($model, 'remark')->textarea() ?>
-                	</div>
+                    </div>                   
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_info')->textarea() ?>
                     </div>
+                     <div class="col-lg-4">
+                		<?= $form->field($model, 'remark')->textarea() ?>
+                	</div>
             	</div> 
             	<?php }?>
             </div>

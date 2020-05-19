@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\models\PurchaseReceiptGoods;
 use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
@@ -154,16 +155,17 @@ class PurchaseReceiptController extends BaseController
     public function actionPrint()
     {
         $id = Yii::$app->request->get('id');
+        $id = 3;
         $receipt_no = Yii::$app->request->get('receipt_no');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
-        if(!$id){
-            $result = $this->modelClass::find()->where(['receipt_no'=>$receipt_no])->asArray()->one();
-            $id = !empty($result)?$result['id']:0;
-        }
         $model = $this->findModel($id);
+        $goodsModel = new PurchaseReceiptGoods();
+        $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->all();
+
         return $this->render($this->action->id, [
             'model' => $model,
+            'goodsList' => $goodsList,
             'tab'=>$tab,
             'returnUrl'=>$returnUrl,
         ]);

@@ -90,7 +90,7 @@ class PurchaseReceiptGoods extends BaseModel
             'factory_mo' => '工厂模号',
             'finger' => '指圈',
             'xiangkou' => '镶口',
-            'material' => '主成色',
+            'material' => '材质',
             'gold_weight' => '主成色重',
             'gold_price' => '主成色买入单价',
             'gold_loss' => '金损',
