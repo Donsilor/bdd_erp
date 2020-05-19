@@ -61,7 +61,7 @@ $materialDropdownList = array_column(Yii::$app->attr->valueList(AttrIdEnum::MATE
                     'attribute' => 'goods_sn',
                     'filter' => true,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'150'],
+                    'headerOptions' => ['width'=>'200'],
             ],
             [
                     'attribute'=>'style.style_name',
