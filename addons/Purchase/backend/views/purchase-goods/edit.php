@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'second_stone_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_cost_price')->textInput() ?>
+                            <?= $form->field($model, 'gold_cost')->textInput() ?>
                         </div>
                     </div>
                     <div class="row">
@@ -134,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'gold_loss')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gong_fee')->textInput() ?>
+                            <?= $form->field($model, 'jiagong_fee')->textInput() ?>
                         </div>
                     </div>
                     <div class="row">
@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'total_gong_fee')->textInput() ?>
+                            <?= $form->field($model, 'gong_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gaitu_fee')->textInput() ?>
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'penla_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'danjian_cost')->textInput() ?>
+                            <?= $form->field($model, 'unit_cost')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
