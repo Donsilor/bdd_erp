@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'second_stone_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_cost')->textInput() ?>
+                            <?= $form->field($model, 'gold_cost_price')->textInput() ?>
                         </div>
                     </div>
                     <div class="row">
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'penla_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'unit_cost')->textInput() ?>
+                            <?= $form->field($model, 'unit_cost_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
