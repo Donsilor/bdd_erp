@@ -3,6 +3,7 @@ use yii\widgets\ActiveForm;
 use common\helpers\Html;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
+use common\helpers\AmountHelper;
 
 $this->title =  '详情';
 $this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
@@ -69,6 +70,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                                     <td><?= $model->cost_price ?></td>
+                                </tr> 
+                                <tr>
+                                    <td class="col-xs-2 text-right">采购总金额：</td>
+                                    <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
                                 </tr>                                
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
