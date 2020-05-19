@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Supply\common\models\SupplierFollower;
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
@@ -96,7 +97,7 @@ class Purchase extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'delivery_time'=>'交货时间',    
-            'remark' => '采购备注',
+            'remark' => '备注',
             'status' => '状态 ',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -116,7 +117,7 @@ class Purchase extends BaseModel
      */
     public function getFollower()
     {
-        return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
+        return $this->hasOne(SupplierFollower::class, ['id'=>'follower_id'])->alias('follower');
     }
     /**
      * 创建人

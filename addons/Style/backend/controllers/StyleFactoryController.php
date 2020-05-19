@@ -46,10 +46,16 @@ class StyleFactoryController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams,['shipping_time']);
 
         $dataProvider->query->andWhere(['>',StyleFactory::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=',StyleFactory::tableName().'.style_id',$style_id]);
+
+        $shipping_time = $searchModel->shipping_time;
+        if (!empty($shipping_time)) {
+            $dataProvider->query->andFilterWhere(['>=',StyleFactory::tableName().'.shipping_time', strtotime(explode('/', $shipping_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StyleFactory::tableName().'.shipping_time', (strtotime(explode('/', $shipping_time)[1]) + 86400)] );//结束时间
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

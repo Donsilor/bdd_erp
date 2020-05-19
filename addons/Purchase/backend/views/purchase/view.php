@@ -42,6 +42,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->goods_count ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                            <td><?= $model->supplier ? $model->supplier->supplier_name : '';  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('follower_id') ?>：</td>
+                            <td><?= $model->follower ? $model->follower->member_name : ''; ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                             <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                         </tr>

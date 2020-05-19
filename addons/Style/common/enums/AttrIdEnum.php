@@ -45,4 +45,7 @@ class AttrIdEnum
 
     const FINGER = 38;//手寸（指圈）
     const MATERIAL = 10;//材质（成色）
+
+    const MOSAIC_METHOD = 58;//材质（成色）
+
 }

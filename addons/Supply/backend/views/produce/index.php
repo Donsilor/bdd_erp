@@ -91,6 +91,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false
             ],
             [
+                'label' => '出厂数量',
+                'value' => function($model){
+                    return Yii::$app->supplyService->produce->getShippentNum($model->id);
+                }
+            ],
+            [
                 'attribute' => 'bc_status',
                 'value' => function ($model){
                     return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status);
@@ -150,6 +156,101 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                'label' => '镶嵌方式',
+                'value' => function($model){
+                    if($model->mosaic){
+                        return $model->mosaic->attr_value;
+                    }else{
+                        return '';
+                    }
+
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'mosaic.attr_value_id',Yii::$app->styleService->attribute->getValuesByAttrId(\addons\Style\common\enums\AttrIdEnum::MOSAIC_METHOD), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' => 'width:100px;',
+                ]),
+
+            ],
+            [
+                'attribute' => 'factory_distribute_time',
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'factory_distribute_time',
+                    'value' => $searchModel->factory_distribute_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value' => function($model){
+                    return \Yii::$app->formatter->asDatetime($model->factory_distribute_time);
+                }
+            ],
+            [
+                'attribute' => 'factory_order_time',
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'factory_order_time',
+                    'value' => $searchModel->factory_order_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value' => function($model){
+                    return \Yii::$app->formatter->asDatetime($model->factory_order_time);
+                }
+            ],
+            [
+                'attribute' => 'factory_delivery_time',
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'factory_delivery_time',
+                    'value' => $searchModel->factory_delivery_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value' => function($model){
+                    return \Yii::$app->formatter->asDatetime($model->factory_delivery_time);
+                }
             ],
             [
                 'attribute' => 'supplier_id',

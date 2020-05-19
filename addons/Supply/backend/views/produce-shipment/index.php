@@ -47,6 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
 
                             ],
+                            [
+                                'label' => '总数量',
+                                'value' => 'produce.goods_num'
+
+                            ],
 
                             [
                                 'attribute'=>'shippent_num',
