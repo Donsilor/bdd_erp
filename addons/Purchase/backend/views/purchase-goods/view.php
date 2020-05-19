@@ -22,11 +22,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
+                                </tr>                                
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
+                                    <td><?= \addons\Purchase\common\enums\PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
                                 </tr>
+                                <?php if($model->qiban_sn) {?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
                                     <td><?= $model->qiban_sn ?></td>
                                 </tr>
+                                <?php }?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
                                     <td><?= \addons\Purchase\common\enums\PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
@@ -63,11 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                                     <td><?= $model->cost_price ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
-                                    <td><?= $model->main_stone_price ?></td>
-                                </tr>
+                                </tr>                                
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                                     <td><?= $model->remark ?></td>
@@ -81,7 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box">
                         <div class="table-responsive">
                             <table class="table table-hover">
-
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
+                                    <td><?= $model->main_stone_price ?></td>
+                                </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price') ?>：</td>
                                     <td><?= $model->second_stone_price ?></td>

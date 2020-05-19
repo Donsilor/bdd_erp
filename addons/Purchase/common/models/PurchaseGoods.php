@@ -85,7 +85,7 @@ class PurchaseGoods extends BaseModel
             'goods_name' => '商品名称',
             'goods_sn' => '款号/起版号',
             'style_id' => '商品id',
-            'style_sn' => '商品编号',
+            'style_sn' => '款号',
             'qiban_sn' => '起版号',
             'qiban_type' => '起版类型',
             'product_type_id' => '产品线',
