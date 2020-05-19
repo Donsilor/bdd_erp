@@ -6,6 +6,7 @@ use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
+use common\enums\AuditStatusEnum;
 
 
 /* @var $this yii\web\View */
@@ -166,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                  },
                 'audit' => function($url, $model, $key){
-                        if($model->audit_status != 1){
+                       if($model->audit_status == AuditStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -175,7 +176,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                  },
                  'status' => function($url, $model, $key){
-                        return Html::status($model['status']);
+                         if($model->audit_status == AuditStatusEnum::PASS) {
+                            return Html::status($model['status']);
+                         }
                   },
                 /*'delete' => function($url, $model, $key){
                         return Html::delete(['delete', 'id' => $model->id]);
