@@ -75,6 +75,16 @@ class SnHelper
     {
         return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
     }
+    
+    /**
+     * 库存货号生成
+     * @param string $prefix
+     * @return string
+     */
+    public static function createGoodsId($prefix = '9')
+    {
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),7,'0',STR_PAD_LEFT);
+    }
 
     
 }
