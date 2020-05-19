@@ -143,12 +143,15 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_list['receipt_id'] = $receipt_id;
                             $receipt_list['produce_sn'] = $produce_sn;
                             $receipt_list['purchase_sn'] = $produce_info['from_order_sn'];
+                            $receipt_list['goods_name'] = $produce_info['goods_name'];
+                            $receipt_list['goods_num'] = $produce_info['goods_num'];
                             $receipt_list['style_sn'] = $produce_info['style_sn'] != "" ? $produce_info['style_sn'] : $produce_info['qiban_sn'];
                             $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
                             $receipt_list['finger'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::FINGER])?$produce_attr_arr[ReceiptGoodsAttrEnum::FINGER]['attr_value']:'';
                             $receipt_list['xiangkou'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU])?$produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU]['attr_value']:'';
                             $receipt_list['material'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL])?$produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL]['attr_value_id']:'';
+                            $receipt_list['jintuo_type'] = $produce_info['jintuo_type'];
                             $receipt_goods[] = $receipt_list;
                         }
                     } else {

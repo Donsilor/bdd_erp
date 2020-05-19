@@ -15,7 +15,8 @@ class ReceiptGoodsAttrEnum extends BaseEnum
     const MAIN_STONE_CLARITY = 2;
     const MAIN_STONE = 56;
     const SECOND_STONE = 60;
-    
+    const BIAOMIANGONGYI = 57;
+
     /**
      *
      * @return array
@@ -30,6 +31,7 @@ class ReceiptGoodsAttrEnum extends BaseEnum
                 self::MAIN_STONE_CLARITY =>"主石净度",
                 self::MAIN_STONE =>"主石类型",
                 self::SECOND_STONE =>"副石类型",
+                self::BIAOMIANGONGYI =>"表面工艺",
         ];
     }
     

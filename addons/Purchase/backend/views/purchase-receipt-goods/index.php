@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'name' =>'purchase_sn',
-                            'title'=>"采购单号",
+                            'title'=>"采购单编号",
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
@@ -64,6 +64,34 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'readonly' =>'true',
                                 'style'=>'width:160px'
+                            ]
+                        ],
+                        [
+                            'name' =>'barcode',
+                            'title'=>"条形码编号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:120px'
+                            ]
+                        ],
+                        [
+                            'name' =>'goods_name',
+                            'title'=>"商品名称",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:120px'
+                            ]
+                        ],
+                        [
+                            'name' =>'goods_num',
+                            'title'=>"商品数量",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'readonly' =>'true',
+                                'style'=>'width:60px'
                             ]
                         ],
                         [
@@ -197,8 +225,41 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
+                            'name' => "suttle_weight",
+                            'title'=>"净重",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
                             'name' => "cost_price",
                             'title'=>"成本价",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "market_price",
+                            'title'=>"市场价",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "sale_price",
+                            'title'=>"销售价",
                             'enableError'=>false,
                             'defaultValue' => '0.00',
                             'options' => [
@@ -279,6 +340,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'options' => [
                                 'class' => 'input-priority',
                                 'type' => 'number',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "second_cert_id",
+                            'title'=>"副石证书号",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -416,7 +486,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
-                            'name' => "fee_price",
+                            'name' => "markup_rate",
+                            'title'=>"加价率",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "gong_fee",
                             'title'=>"工费",
                             'enableError'=>false,
                             'defaultValue' => '0.00',
@@ -427,8 +508,96 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
+                            'name' => "parts_weight",
+                            'title'=>"配件重量",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "parts_price",
+                            'title'=>"配件金额",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
                             'name' => "parts_fee",
-                            'title'=>"配件成本",
+                            'title'=>"配件工费",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "xianqian_fee",
+                            'title'=>"镶嵌工费",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "biaomiangongyi",
+                            'title'=>"表面工艺",
+                            'type' => 'dropDownList',
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
+                        ],
+                        [
+                            'name' => "biaomiangongyi_fee",
+                            'title'=>"表面工艺工费",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "fense_fee",
+                            'title'=>"分色工艺工费",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:100px'
+                            ]
+                        ],
+                        [
+                            'name' => "bukou_fee",
+                            'title'=>"补扣工费",
+                            'enableError'=>false,
+                            'defaultValue' => '0.00',
+                            'options' => [
+                                'class' => 'input-priority',
+                                'type' => 'number',
+                                'style'=>'width:80px'
+                            ]
+                        ],
+                        [
+                            'name' => "cert_fee",
+                            'title'=>"证书费",
                             'enableError'=>false,
                             'defaultValue' => '0.00',
                             'options' => [
@@ -469,7 +638,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type' => 'number',
                                 'style'=>'width:80px'
                             ]
+                        ],
+                        [
+                            'name' => "goods_remark",
+                            'title'=>"商品备注",
+                            'enableError'=>false,
+                            'options' => [
+                                'class' => 'input-priority',
+                                'style'=>'width:80px'
+                            ]
                         ]
+
                     ];
                     ?>
                     <?= unclead\multipleinput\MultipleInput::widget([
