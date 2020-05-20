@@ -4,10 +4,12 @@ namespace addons\Warehouse;
 
 use common\components\BaseAddonConfig;
 use addons\Warehouse\common\components\Bootstrap;
+use yii\base\Application;
 
 /**
  * Class Addon
- * @package addons\Warehouse */
+ * @package addons\Warehouse
+ */
 class AddonConfig extends BaseAddonConfig
 {
     /**
@@ -47,7 +49,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var Bootstrap
     */
-    public $bootstrap = '';
+    public $bootstrap = Bootstrap::class;
 
     /**
     * 服务层
@@ -64,7 +66,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var string
     */
-    public $service = '';
+    public $service = Application::class;
 
     /**
      * 参数配置开启

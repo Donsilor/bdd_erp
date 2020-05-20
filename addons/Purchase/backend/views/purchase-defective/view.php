@@ -29,16 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->defective_no ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                            <td><?= $model->supplier->supplier_name ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
+                            <td><?= Html::a($model->receipt_no, ['purchase-receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('defective_num') ?>：</td>
+                            <td><?= $model->defective_num ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
                             <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('defective_num') ?>：</td>
-                            <td><?= $model->defective_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>

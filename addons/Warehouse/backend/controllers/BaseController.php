@@ -17,4 +17,12 @@ class BaseController extends AddonsController
     * @var string
     */
     // public $layout = "@addons/Warehouse/backend/views/layouts/main";
+    public $layout = "@backend/views/layouts/main";
+
+    /**
+     * 视图文件前缀
+     *
+     * @var string
+     */
+    protected $viewPrefix = '@backend/modules/common/views/';
 }

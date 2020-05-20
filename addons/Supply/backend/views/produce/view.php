@@ -121,6 +121,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
                              </tr>
+                             <tr>
+                                 <td>&nbsp;</td>
+                                 <td>&nbsp;</td>
+                             </tr>
 
                          </table>
                      </div>

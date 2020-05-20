@@ -25,8 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                            <td><?= $model->supplier->supplier_name ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
                             <td><?= $model->receipt_no ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_num') ?>：</td>
+                            <td><?= $model->receipt_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
@@ -35,10 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
                             <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_num') ?>：</td>
-                            <td><?= $model->receipt_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
