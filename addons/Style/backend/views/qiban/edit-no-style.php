@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         <?php }else{ ?>
                             <div class="col-lg-4">
-                                <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
+                                <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                             </div>
                         <?php } ?>
                         
@@ -137,8 +137,11 @@ $this->params['breadcrumbs'][] = $this->title;
         if(!style_cate_id || !product_type_id || !jintuo_type) {
             return false;
         }     
-        
+        <?php if($model->id) {?>
+        var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_cate_id','jintuo_type','product_type_id'])?>&style_cate_id="+style_cate_id+"&product_type_id="+product_type_id+"&jintuo_type="+jintuo_type;
+        <?php } else {?>
         var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['style_cate_id','jintuo_type','product_type_id'])?>?style_cate_id="+style_cate_id+"&product_type_id="+product_type_id+"&jintuo_type="+jintuo_type;
+        <?php }?>
         window.location.href = url;
     }
 </script>

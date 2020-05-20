@@ -90,6 +90,7 @@ class StyleAttributeController extends BaseController
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
+        $model->is_inlay = $style->is_inlay;
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -114,7 +115,7 @@ class StyleAttributeController extends BaseController
 
     /**
      * 编辑-款式属性
-     *
+     * 作废
      * @return mixed
      */
     public function actionAjaxEdit()
@@ -131,7 +132,6 @@ class StyleAttributeController extends BaseController
         $model->style_id = $style->id;
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
-//        $model->is_combine = $style->type->is_combine;
         // ajax 校验
         $this->activeFormValidate($model);
         

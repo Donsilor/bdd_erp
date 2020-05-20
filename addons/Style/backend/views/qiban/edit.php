@@ -29,37 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         <?php }?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
-                        </div>
-                        <div class="col-lg-4">
                             <?= $form->field($model, 'qiban_name')->textInput() ?>
                         </div>
-
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
+                        </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
                         </div>
-                    <?php if($model->isNewRecord) {?>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
-                        </div>
-                    <?php }else{ ?>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>true]) ?>
-                        </div>
-                    <?php } ?>
-                    </div>
-                    <div class="row">
-
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">                        
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
                         </div>
-
                     </div>
 
                 <?php }else{?>

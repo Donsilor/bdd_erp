@@ -105,7 +105,7 @@ class QibanController extends BaseController
                 $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
                 $model->style_image = $style->style_image;
-                $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
+                $model->is_inlay  = $style->is_inlay;;
             }
 
             //根据款号获取属性值
@@ -151,23 +151,23 @@ class QibanController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
+        
         $style_cate_id = Yii::$app->request->get('style_cate_id');
         $product_type_id = Yii::$app->request->get('product_type_id');
         $jintuo_type = Yii::$app->request->get('jintuo_type');
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
-//        $model->style_sn = "QIBAN";
         $model->initAttrs();
+        
         //无款起版
-        $model->qiban_type = QibanTypeEnum::NO_STYLE;
-        if($model->isNewRecord) {
-            $model->style_cate_id = $style_cate_id;
-            $model->jintuo_type = $jintuo_type;
-            $model->product_type_id = $product_type_id;
-            $model->style_sn = 'QIBAN';
-            $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
-        }
+        $model->qiban_type = QibanTypeEnum::NO_STYLE;        
+        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;
+        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
+        $model->product_type_id = $product_type_id ?? $model->product_type_id;
+        $model->style_sn = 'QIBAN';
+        $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
+        
         
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord) {
