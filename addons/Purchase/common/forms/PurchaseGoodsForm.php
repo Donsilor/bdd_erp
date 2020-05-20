@@ -82,9 +82,9 @@ class PurchaseGoodsForm extends PurchaseGoods
         $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
         if(!empty($attr_list)) {
             $attr_list = array_column($attr_list,'attr_value','attr_id'); 
-        }               
-        $this->attr_custom  = $attr_list;
-        $this->attr_require = $attr_list; 
+            $this->attr_custom  = $attr_list;
+            $this->attr_require = $attr_list; 
+        }        
     } 
     /**
      * 初始化 已填写属性数据

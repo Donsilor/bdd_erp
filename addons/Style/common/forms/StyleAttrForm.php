@@ -121,6 +121,7 @@ class StyleAttrForm extends Model
             $model->is_require = $spec->is_require;
             $model->input_type = $spec->input_type;
             $model->attr_type = $spec->attr_type;
+            $model->is_inlay  = $spec->is_inlay;
             $model->sort = $spec->sort;
             $model->attr_values = is_array($attr_value) ? implode(',',$attr_value) : $attr_value;
             $model->status = StatusEnum::ENABLED;
@@ -134,7 +135,7 @@ class StyleAttrForm extends Model
      */
     public function getAttrList()
     {   
-        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id,null,$this->is_inlay);
+        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id);
     }
     
 }

@@ -89,12 +89,13 @@ class PurchaseService extends Service
                     'style_sex' =>$model->style_sex,
                     'goods_num' =>$model->goods_num,
                     'jintuo_type'=>$model->jintuo_type,
+                    'is_inlay' =>$model->is_inlay,
                     'product_type_id'=>$model->product_type_id,
                     'style_cate_id'=>$model->style_cate_id,
                     'supplier_id'=>$purchase->supplier_id,
                     'follower_id'=>$purchase->follower_id,
                     'factory_distribute_time' => time()
-            ];
+            ];            
             if($model->produce_id && $model->produce){
                 if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
                     //生产中之后的流程，禁止同步
@@ -109,7 +110,7 @@ class PurchaseService extends Service
             $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
             if($produce) {
                 $model->produce_id = $produce->id;
-            }
+            }            
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model),422);
             }

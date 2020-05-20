@@ -118,7 +118,7 @@ class AttributeService extends Service
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
         }
-        if($is_inlay == 0) {
+        if($is_inlay == 1) {
             $query->andWhere(['spec.is_inlay'=>$is_inlay]);
         }
         $models = $query->orderBy("spec.sort asc")->asArray()->all();
@@ -132,9 +132,9 @@ class AttributeService extends Service
      * @param string $language
      * @return array
      */
-    public function getAttrTypeListByCateId($style_cate_id, $attr_type = null,$is_inlay = null,$status = 1, $language = null)
+    public function getAttrTypeListByCateId($style_cate_id, $attr_type = null, $is_inlay = null,$status = 1, $language = null)
     {
-        $models = $this->getAttrListByCateId($style_cate_id, $attr_type,$is_inlay = null,$status, $language);
+        $models = $this->getAttrListByCateId($style_cate_id, $attr_type,$is_inlay ,$status, $language);
         $attr_list = [];
         foreach ($models as $model){
             $attr_list[$model['attr_type']][] = $model;
