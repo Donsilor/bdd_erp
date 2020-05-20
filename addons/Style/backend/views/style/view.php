@@ -33,11 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_name') ?>：</td>
                             <td><?= $model->style_name ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                             <td><?= $model->style_sn ?></td>
@@ -45,62 +41,70 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                             <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
+                        </tr>                        
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                            <td><?= $model->cate->name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                            <td><?= $model->type->name ??'' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
+                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
+                            <td><?= $model->source->name ??'' ?></td>
+                        </tr>                                               
+                        <tr>
+                            <td class="col-xs-1 text-right">默认工厂：</td>
+                            <td><?= $model->factory->factory_name ?? '' ?></td>
+                        </tr>    
+                        <tr>
+                            <td class="col-xs-1 text-right">工厂模号：</td>
+                            <td><?= $model->factory_mo ?? ''?></td>
+                        </tr>                     
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
+                            <td> <?= $model->channel->name ?? '' ?></td>
+                        </tr>                                                                      
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
+                            <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
                             <td><?= $model->creator->username??'' ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
-                            <td><?= $model->id ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('id') ?>：</td>
-                            <td><?= $model->type->name ??'' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
-                            <td><?= $model->source->name ??'' ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                        </tr>
+                        </tr> 
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
-                            <td><?= $model->cate->name ?? '' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right">默认工厂：</td>
-                            <td><?= $model->factory->factory_name ?? '' ?></td>
-                        </tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                        </tr> 
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                             <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
-                            <td> <?= $model->channel->name ?? '' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right">工厂模号：</td>
-                            <td><?= $model->factory_mo ?? ''?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                            <td><?= $model->remark ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
-                            <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                            <td><?= $model->auditor->username??'' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
                             <td><?= $model->audit_remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td><?= $model->remark ?></td>
                         </tr>
                     </table>
                 </div>

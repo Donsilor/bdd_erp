@@ -33,7 +33,7 @@ class StyleGoodsForm extends Model
     //款式规格属性
     public $style_spec;
     //是否镶嵌
-    public $is_combine;
+    public $is_inlay;
     
     public $style;
     /**
@@ -284,7 +284,7 @@ class StyleGoodsForm extends Model
                 
         ];
 
-        $key = $this->style_cate_id.'-'.$this->is_combine;
+        $key = $this->style_cate_id.'-'.$this->is_inlay;
         if(isset($maps[$key])){
             foreach ($maps[$key] as $field){
                 if(isset($config[$field])) {

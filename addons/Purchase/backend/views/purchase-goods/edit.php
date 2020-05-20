@@ -72,7 +72,6 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	//print_r($model->getAttrList());exit;
             	  $attr_list = $model->getAttrList();
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['attr_id'];//属性ID                      
@@ -91,7 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
                           }
-                          default:{                               
+                          default:{  
+                              
                               if($attr_values == '') {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }else {
