@@ -23,80 +23,79 @@ $this->params['breadcrumbs'][] = $this->title;
             ]); ?></div>
     </ul>
 
-</div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box" style="margin-top: 0">
+
+                <div class="box-body table-responsive">
+                    <?php echo Html::batchButtons(false)?>
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'tableOptions' => ['class' => 'table table-hover'],
+                        'showFooter' => false,//显示footer行
+                        'id'=>'grid',
+                        'columns' => [
+                            [
+                                'class' => 'yii\grid\SerialColumn',
+                                'visible' => false,
+                            ],
+
+                            [
+                                'attribute' => 'id',
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+
+                            [
+                                'label' => '跟单人',
+                                'attribute'=>'member.username',
+
+                                'headerOptions' => [],
+                            ],
+
+                            [
+                                'attribute'=>'updated_at',
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->updated_at);
+                                }
+
+                            ],
 
 
-<div class="row">
-    <div class="col-xs-12">
-        <div class="box" style="margin-top: 0">
-
-            <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false)?>
-                <?= GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'tableOptions' => ['class' => 'table table-hover'],
-                    'showFooter' => false,//显示footer行
-                    'id'=>'grid',
-                    'columns' => [
-                        [
-                            'class' => 'yii\grid\SerialColumn',
-                            'visible' => false,
-                        ],
-
-                        [
-                            'attribute' => 'id',
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-
-                        [
-                            'label' => '跟单人',
-                            'attribute'=>'member.username',
-
-                            'headerOptions' => [],
-                        ],
-
-                        [
-                            'attribute'=>'updated_at',
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
-                            }
-
-                        ],
-
-
-                        [
-                            'attribute' => 'status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\StatusEnum::getValue($model->status);
-                            },
-                        ],
-
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'header' => '操作',
-                            'template' => '{status} {delete}',
-                            'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
-                                },
-
-                                'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
-                                },
-                                'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                            [
+                                'attribute' => 'status',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \common\enums\StatusEnum::getValue($model->status);
                                 },
                             ],
 
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{status} {delete}',
+                                'buttons' => [
+                                    'edit' => function($url, $model, $key){
+                                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    },
+
+                                    'status' => function($url, $model, $key){
+                                        return Html::status($model->status);
+                                    },
+                                    'delete' => function($url, $model, $key){
+                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    },
+                                ],
+
+                            ]
                         ]
-                    ]
-                ]); ?>
+                    ]); ?>
+                </div>
             </div>
         </div>
     </div>

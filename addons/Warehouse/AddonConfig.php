@@ -89,7 +89,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var bool
     */
-    public $isMerchantRouteMap = true;
+    public $isMerchantRouteMap = false;
 
     /**
      * 类别

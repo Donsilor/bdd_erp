@@ -2,7 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\models\Warehouse;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ExcelHelper;
 use Yii;
 use common\traits\Curd;
@@ -12,10 +12,10 @@ use common\models\base\SearchModel;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class WarehouseController extends BaseController
+class WarehouseGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = Warehouse::class;
+    public $modelClass = WarehouseGoods::class;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -32,7 +32,8 @@ class WarehouseController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-//                'supplier' => ['supplier_name'],
+                'productType' => ['name'],
+                'styleCate' => ['name'],
                 'member' => ['username'],
 
             ]
@@ -43,11 +44,10 @@ class WarehouseController extends BaseController
 
         $updated_at = $searchModel->updated_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehouse::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehouse::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGoods::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGoods::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Warehouse::tableName().'.status',-1]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){

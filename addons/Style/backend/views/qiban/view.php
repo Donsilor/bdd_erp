@@ -16,49 +16,99 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><i class="fa fa-bars"></i> 基本信息</h3>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-hover">
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
-                        <td><?= $model->style_sn ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
-                        <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
-                        <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
-                        <td><?= $model->cate->name ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
-                        <td><?= $model->type->name ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
-                        <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
-                    </tr>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
+                            <td><?= $model->qiban_sn ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
+                            <td><?= $model->style_sn ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status) ?></td>
+                        </tr>
+                        <?php if($model->audit_status == \common\enums\AuditStatusEnum::UNPASS){ ?>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
+                        <?php } ?>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
+                            <td><?= $model->channel ? $model->channel->name : '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
+                            <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
+                            <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                            <td><?= $model->cate->name ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                            <td><?= $model->type->name ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
+                            <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
+                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
+                        </tr>
 
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('qiban_name') ?>：</td>
-                        <td><?= $model->qiban_name ?></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
-                        <td><?= $model->cost_price ?></td>
-                    </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_name') ?>：</td>
+                            <td><?= $model->qiban_name ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                            <td><?= $model->cost_price ?></td>
+                        </tr>
 
 
 
-                    <tr>
-                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                        <td><?= $model->remark ?></td>
-                    </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td><?= $model->remark ?></td>
+                        </tr>
 
-                </table>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= Yii::$app->formatter->asDatetime($model->created_at); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                            <td><?= $model->creator ? $model->creator->username : ''; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                            <td><?= Yii::$app->formatter->asDatetime($model->audit_time); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                            <td><?= $model->creator ? $model->auditor->username : ''; ?></td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <div class="margin-bottom">
+                        <?= \common\helpers\ImageHelper::fancyBox($model->style_image,400,400) ?>
+                    </div>
+
+                </div>
+
+
             </div>
             <div class="box-footer text-center">
                 <?php

@@ -8,24 +8,15 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse', '仓库管理');
+$this->title = Yii::t('warehouse_goods', '商品管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-
 
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools" style="right: 100px;">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
-                </div>
-
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -46,64 +37,53 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         [
-                            'attribute' => 'id',
+                            'attribute' => 'goods_id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
+
                         [
-                            'attribute'=>'name',
-                            'filter' => Html::activeTextInput($searchModel, 'name', [
+                            'attribute'=>'goods_name',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'type',
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute' => 'product_type_id',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\WarehouseTypeEnum::getValue($model->type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'type',\addons\Warehouse\common\enums\WarehouseTypeEnum::getMap(), [
+                            'value' => 'productType.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
 
                             ]),
                         ],
 
+
                         [
-                            'attribute' => 'sort',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model, $key, $index, $column){
-                                return  Html::sort($model->sort);
-                            }
-                            //'filter' => false,
-                        ],
-                        [
-                            'attribute' => 'status',
+                            'attribute' => 'goods_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \common\enums\StatusEnum::getValue($model->status);
+                                return \common\enums\StatusEnum::getValue($model->goods_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
 
                             ]),
                         ],
 
-                        [
-                            'label' => '操作人',
-                            'attribute' => 'member.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                'class' => 'form-control',
-                            ]),
-
-                        ],
 
                         [
                             'attribute'=>'updated_at',
