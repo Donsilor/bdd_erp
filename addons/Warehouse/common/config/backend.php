@@ -29,10 +29,6 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                        'title' => '仓库管理',
-                        'route' => 'warehouse/index',
-                    ],
-                    [
                             'title' => '商品列表',
                             'route' => 'warehouse-goods/index',
                     ],

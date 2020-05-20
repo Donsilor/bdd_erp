@@ -98,6 +98,19 @@ class Qiban extends BaseModel
         ];
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
+    }
+
 
     /**
      * 关联产品线分类一对一
