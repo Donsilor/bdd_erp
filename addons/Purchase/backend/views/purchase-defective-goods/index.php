@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
+                                'disabled' => 'true',
                                 'style'=>'width:100px'
                             ],
                             'items' => Yii::$app->styleService->styleCate->getDropDown()
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
+                                'disabled' => 'true',
                                 'style'=>'width:100px'
                             ],
                             'items' => Yii::$app->styleService->productType->getDropDown()

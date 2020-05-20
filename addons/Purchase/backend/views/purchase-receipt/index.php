@@ -199,9 +199,17 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-
     function printDetail()
     {
-        window.open('/purchase/purchase-receipt/print');
+        var valArr = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            valArr[i] = $(this).val();
+        });
+        if(valArr.length==0){
+            alert("你还没有选择任何内容");
+            return;
+        }
+        var vals = valArr.join(',');
+        window.open('/purchase/purchase-receipt/print?ids='+vals);
     }
 </script>

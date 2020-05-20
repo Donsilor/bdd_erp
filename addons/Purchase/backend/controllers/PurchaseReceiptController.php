@@ -154,8 +154,9 @@ class PurchaseReceiptController extends BaseController
      */
     public function actionPrint()
     {
-        $id = Yii::$app->request->get('id');
-        $id = 3;
+        $ids = Yii::$app->request->get('ids');
+        $id_arr = explode(',', $ids);
+        $id = $id_arr[0];//暂时打印一个
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
         $model = $this->findModel($id);

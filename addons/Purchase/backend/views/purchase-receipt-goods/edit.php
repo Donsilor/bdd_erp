@@ -580,7 +580,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'name' => "bukou_fee",
-                                'title'=>"补扣工费",
+                                'title'=>"补口工费",
                                 'enableError'=>false,
                                 'defaultValue' => '0.00',
                                 'options' => [
