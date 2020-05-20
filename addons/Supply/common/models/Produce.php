@@ -2,12 +2,11 @@
 
 namespace addons\Supply\common\models;
 
+use Yii;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use common\models\backend\Member;
-use Yii;
 use common\models\backend\Member;
 
 /**
