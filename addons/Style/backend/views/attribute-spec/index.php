@@ -176,5 +176,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
             </div>
         </div>
+        <p style="color:red;">
+         *注：1.是否镶嵌：镶嵌-为镶嵌类商品需要填写的属性：eg:主石和副石信息 &nbsp;  
+         2.属性：镶嵌属性，选择是否镶嵌才生效 【此属性应用于：所有商品相关，eg：添加无款起版/有款起版/有款采购】
+        </p>
     </div>
 </div>
