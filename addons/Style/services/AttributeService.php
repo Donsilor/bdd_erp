@@ -118,9 +118,10 @@ class AttributeService extends Service
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
         }
-        if($is_inlay == 1) {
+        if($is_inlay !== null) {
             $query->andWhere(['spec.is_inlay'=>$is_inlay]);
         }
+        
         $models = $query->orderBy("spec.sort asc")->asArray()->all();
         return $models;
     }
