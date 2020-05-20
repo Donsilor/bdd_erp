@@ -45,8 +45,8 @@ return [
                                     'route' => 'supplier/index',
                             ],
                             [
-                                'title' => '跟单人',
-                                'route' => 'follower/index',
+                                    'title' => '跟单人',
+                                    'route' => 'follower/index',
                             ],
                     ],
                     

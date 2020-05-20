@@ -36,6 +36,22 @@ return [
                             'title' => '采购收货单',
                             'route' => 'purchase-receipt/index',
                     ],
+                    [
+                            'title' => '不良返厂单',
+                            'route' => 'purchase-defective/index',
+                    ],
+            ],
+
+        ],
+        [
+            'title' => '功能配置',
+            'route' => 'indexPurchaseConfig',
+            'icon' => 'fa fa-superpowers',
+            'child' => [
+                    [
+                            'title' => '质检未过原因',
+                            'route' => 'purchase-fqc-config/index',
+                    ]
             ],
 
         ],
