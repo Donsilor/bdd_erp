@@ -160,14 +160,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => '镶嵌方式',
                 'value' => function($model){
-                    if($model->mosaic){
-                        return $model->mosaic->attr_value;
+                    if($model->inlay){
+                        return $model->inlay->attr_value;
                     }else{
                         return '';
                     }
 
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'mosaic.attr_value_id',Yii::$app->styleService->attribute->getValuesByAttrId(\addons\Style\common\enums\AttrIdEnum::MOSAIC_METHOD), [
+                'filter' => Html::activeDropDownList($searchModel, 'inlay.attr_value_id',Yii::$app->styleService->attribute->getValuesByAttrId(\addons\Style\common\enums\AttrIdEnum::INLAY_METHOD), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style' => 'width:100px;',
@@ -274,7 +274,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style' => 'width:80px;',
                 ]),
                 'value' => function ($model) {
-                    return $model->follower ? $model->follower->member_name : null;
+                    return $model->follower ? $model->follower->username : null;
                 },
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'80'],

@@ -55,7 +55,7 @@ class ProduceController extends BaseController
             'relations' => [
                 'purchaseGoods' => ['goods_name'],
                 'follower' => ['username'],
-                'mosaic' => ['attr_value','attr_value_id']
+                'inlay' => ['attr_value','attr_value_id']
             ]
         ]);
 
