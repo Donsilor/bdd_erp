@@ -56,7 +56,7 @@ class ProduceService extends Service
         $is_new = true;
         if($produce_id) {
             $is_new = false;
-            $produce = Produce::findOne($goods['id']);
+            $produce = Produce::findOne($produce_id);
             if(!$produce) {
                 throw new \Exception("[{$produce_id}]布产单查询失败");
             }
@@ -65,8 +65,9 @@ class ProduceService extends Service
             $produce->produce_sn = SnHelper::createProduceSn();
         }
         
-        $produce->attributes = $goods;        
-        if(false === $produce->save()){
+        $produce->attributes = $goods;   
+        
+        if(false === $produce->save()){            
             throw new \Exception($this->getError($produce));
         }
         
@@ -86,9 +87,9 @@ class ProduceService extends Service
                 'log_type' => LogTypeEnum::SYSTEM,
                 'bc_status' => $produce->bc_status,
                 'log_module' => '布产单创建',
-                'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->member_name}"
+                'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->username}"
             ];
-            \Yii::$app->supplyService->produce->createProduceLog($log);
+            \Yii::$app->supplyService->produce->createProduceLog($log);            
         }
         
 
