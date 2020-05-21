@@ -7,7 +7,7 @@ $supplier_id = Yii::$app->request->get('supplier_id');
 $disabled = false;
 if($supplier_id){
     $model->supplier_id = $supplier_id;
-    $disabled = true;
+    $disabled = 'readonly';
 }
 
 
@@ -28,7 +28,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
         <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
             'data' => Yii::$app->supplyService->supplier->getDropDown(),
-            'options' => ['placeholder' => '请选择','disabled'=>$disabled],
+            'options' => ['placeholder' => '请选择','readonly'=>$disabled],
             'pluginOptions' => [
                 'allowClear' => true
             ],
