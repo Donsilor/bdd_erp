@@ -34,7 +34,8 @@ use addons\Supply\common\models\Produce;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  * @property string $main_stone_price 主石价格/克拉
- * @property string $second_stone_price 副石单价/克拉
+ * @property string $second_stone_price1 副石1单价/克拉
+ * @property string $second_stone_price2 副石2单价/克拉
  * @property string $stone_info 石料信息
  * @property double $gold_loss 金损
  * @property string $gold_price 金价/克
@@ -66,7 +67,7 @@ class PurchaseGoods extends BaseModel
         return [
             [['purchase_id', 'goods_type'], 'required'],
             [['purchase_id', 'goods_type', 'style_id', 'qiban_type', 'product_type_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['cost_price', 'main_stone_price', 'second_stone_price', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
+            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
@@ -104,7 +105,8 @@ class PurchaseGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'main_stone_price' => '主石价格/克拉',
-            'second_stone_price' => '副石单价/克拉',
+            'second_stone_price1' => '副石1单价/克拉',
+            'second_stone_price2' => '副石2单价/克拉',
             'stone_info' => '石料信息',
             'gold_loss' => '金损/件',
             'gold_price' => '金价/克',

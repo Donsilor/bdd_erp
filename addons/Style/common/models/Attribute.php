@@ -48,15 +48,13 @@ class Attribute extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('common', 'ID'),     
-            'code' => Yii::t('common', '标识'),
-            'image' => Yii::t('common', '图标'),
-            'attr_name'=>Yii::t('attribute', '属性名称'),
-            'status' => Yii::t('common', '状态'),
-            'sort' => Yii::t('common', '排序'),    
-            'remark'=>Yii::t('common', '备注'),
-            'created_at' => Yii::t('common', '创建时间'),
-            'updated_at' => Yii::t('common', '更新时间'),
+            'id' => 'ID',     
+            'code' => '编码',
+            'image' => '图标',
+            'status' => '状态',
+            'sort' => '排序',    
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
     

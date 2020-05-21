@@ -27,6 +27,7 @@ $form = ActiveForm::begin([
                     'fields'=>
                     [    
                         'attr_name'=>['type'=>'textInput'],
+                        //'attr_label'=>['type'=>'textInput'],
                         'remark'=>['type'=>'textArea','options'=>[]] 
                     ]]);
     	    ?>

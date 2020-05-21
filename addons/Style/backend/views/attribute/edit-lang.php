@@ -32,20 +32,23 @@ $this->params['breadcrumbs'][] = $this->title;
                        <?= \common\widgets\langbox\LangBox::widget(['form'=>$form,'model'=>$model,'tab'=>'tab',
                                 'fields'=>
                                 [
-                                    'attr_name'=>['type'=>'textInput'],                                  
+                                    'attr_name'=>['type'=>'textInput'],     
+                                    //'attr_label'=>['type'=>'textInput'],
                                     'remark'=>['type'=>'textArea','options'=>[]]                            
                                 ]]);
                 	    ?>
-                	    <?php  /**$form->field($model, 'image')->widget(\common\widgets\webuploader\Files::class, [
-                            'config' => [
-                                'pick' => [
-                                    'multiple' => false,
-                                ],
-                            ]
-                        ]);*/ ?>
-                        <?= $form->field($model, 'code')->textInput()?>
-                        <?= $form->field($model, 'status')->radioList(\common\enums\StatusEnum::getMap())?>
-                        <?= $form->field($model, 'sort')->textInput() ?>                    
+                	    <div class="row">
+                            <div class="col-lg-4">
+                                <?= $form->field($model, 'code')->textInput()?>
+                            </div>
+                            <div class="col-lg-4">
+                                <?= $form->field($model, 'sort')->textInput() ?> 
+                            </div>
+                            <div class="col-lg-4">
+                               <?= $form->field($model, 'status')->radioList(\common\enums\StatusEnum::getMap())?>
+                            </div>
+                        </div>
+                                           
                     </div>  
                 </div>                
                 <div class="form-group">
@@ -82,7 +85,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn',
                 'visible' => false,
             ],
-            'id',            
+            'id', 
+            [
+                'attribute'=>'code',
+            ], 
             [
                 'attribute'=>'lang.attr_value_name',
             ], 
@@ -124,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::status($model->status,['data-url'=>Url::to(['attribute-value/ajax-update'])]);
                 },
                 'delete' => function($url, $model, $key){
-                        return Html::delete(['attribute-value/delete', 'id' => $model->id]);
+                    return Html::delete(['attribute-value/delete', 'id' => $model->id]);
                 },
                 ]
             ]

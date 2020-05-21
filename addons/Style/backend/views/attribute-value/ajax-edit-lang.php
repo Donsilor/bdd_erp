@@ -30,18 +30,9 @@ $form = ActiveForm::begin([
             ?>
             </div>
             <!-- /.tab-content -->
-             <?= $form->field($model, 'attr_id')->textInput()->hiddenInput(['value'=>$model->attr_id])->label(false) ?>
-             <?= $form->field($model, 'image')->widget(common\widgets\webuploader\Files::class, [
-                    'config' => [
-                        'pick' => [
-                            'multiple' => false,
-                        ],
-                    ]
-                ]); ?>
              <?= $form->field($model, 'code')->textInput() ?>
              <?= $form->field($model, 'sort')->textInput() ?>
-             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
-            
+             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>                      
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

@@ -7,6 +7,7 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use backend\controllers\BaseController;
 use addons\Style\common\models\AttributeValue;
+use common\helpers\Url;
 
 /**
  * Attribute
@@ -62,25 +63,36 @@ class AttributeValueController extends BaseController
   {
       $id = Yii::$app->request->get('id');
       $attr_id = Yii::$app->request->get('attr_id');
-      //$trans = Yii::$app->db->beginTransaction();
+
       $model = $this->findModel($id);
-      if(isset($attr_id)){
+      if(!empty($attr_id) && $model->isNewRecord){
           $model->attr_id = $attr_id;
       }
       // ajax 校验
       $this->activeFormValidate($model);
       if ($model->load(Yii::$app->request->post())) {
-        if($model->save()){
-            //多语言编辑
-            $this->editLang($model,true);
+          try{
+              $trans = Yii::$app->trans->beginTransaction();
+              if(false === $model->save()){
+                 throw new \Exception($this->getError($model));
+              }
+              if(!$model->code) {
+                  $model->code = $model->id;
+                  $model->save(false);
+              }              
+              //多语言编辑
+              $this->editLang($model,true);
+              
+              //更新属性值到attribute_lang.attr_values;
+              Yii::$app->styleService->attribute->updateAttrValues($model->attr_id);
+              $trans->commit();
+              
+              return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+          }catch (\Exception $e) {
+              $trans->rollback();
+              return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+          }
             
-            //更新属性值到attribute_lang.attr_values;
-            Yii::$app->styleService->attribute->updateAttrValues($model->attr_id);
-            
-            return $this->redirect(['attribute/edit-lang?id='.$model->attr_id]);
-        }else{
-            return $this->message($this->getError($model), $this->redirect(['index']), 'error');
-        }
       }
       
       return $this->renderAjax($this->action->id, [

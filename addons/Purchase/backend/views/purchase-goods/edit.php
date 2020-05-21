@@ -120,41 +120,47 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'main_stone_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'second_stone_price')->textInput() ?>
+                            <?= $form->field($model, 'second_stone_price1')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_cost_price')->textInput() ?>
-                        </div>
+                            <?= $form->field($model, 'second_stone_price2')->textInput() ?>
+                        </div>                        
                     </div>
-                    <div class="row">
+                    <div class="row">                        
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gold_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_cost_price')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'gold_loss')->textInput() ?>
                         </div>
+                        
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'jiagong_fee')->textInput() ?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gong_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gaitu_fee')->textInput() ?>
-                        </div>
+                        </div>                        
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'penla_fee')->textInput() ?>
+                            <?= $form->field($model, 'gaitu_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'penla_fee')->textInput() ?>
+                        </div>  
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'unit_cost_price')->textInput() ?>
-                        </div>
+                        </div>                      
+                    </div>
+                    <div class="row">                        
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
                         </div>
