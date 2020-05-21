@@ -2,9 +2,9 @@
 
 namespace addons\Warehouse;
 
+use addons\Warehouse\services\Application;
 use common\components\BaseAddonConfig;
 use addons\Warehouse\common\components\Bootstrap;
-use yii\base\Application;
 
 /**
  * Class Addon

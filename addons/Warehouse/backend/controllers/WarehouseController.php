@@ -4,6 +4,7 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\models\Warehouse;
 use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -26,7 +27,7 @@ class WarehouseController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['name'], // 模糊查询
+            'partialMatchAttributes' => ['name','code'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -73,6 +74,18 @@ class WarehouseController extends BaseController
         ];
         return ExcelHelper::exportData($list, $header, '数据导出_' . time());
 
+    }
+
+    /**
+     * 生成Code
+     *
+     * @return mixed
+     */
+    public function actionAutoCode()
+    {
+        $name = Yii::$app->request->post('name');
+        $str = StringHelper::getFirstCode($name);
+        return substr($str,0,31);
     }
 
 

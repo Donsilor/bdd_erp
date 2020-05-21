@@ -34,6 +34,9 @@ class WarehouseGoodsController extends BaseController
             'relations' => [
                 'productType' => ['name'],
                 'styleCate' => ['name'],
+                'supplier' => ['supplier_name'],
+                'warehouse' => ['name'],
+                'weixiuWarehouse' => ['name'],
                 'member' => ['username'],
 
             ]

@@ -27,6 +27,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'name')->textInput() ?>
+        <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'type')->dropDownList(\addons\Warehouse\common\enums\WarehouseTypeEnum::getMap(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'sort')->textInput() ?>
         <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
@@ -37,3 +38,13 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script type="text/javascript">
+    $('#warehouse-name').blur(function(){
+        var url = "<?=Url::to('auto-code') ?>";
+        var value = $(this).val();
+        var data = {'name':value};
+        $.post(url,data,function(e){
+            $('#warehouse-code').val($.trim(e)).change();
+        });
+    });
+</script>

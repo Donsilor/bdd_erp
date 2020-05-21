@@ -38,15 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'goods_id',
-                            'filter' => true,
+                            'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
                         ],
 
                         [
                             'attribute'=>'goods_name',
                             'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',
+                                'style'=> 'width:150px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -54,9 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
                         ],
+
+
                         [
                             'attribute' => 'product_type_id',
                             'format' => 'raw',
@@ -65,6 +71,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;'
+
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'style_cate_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'styleCate.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
 
                             ]),
                         ],
@@ -77,13 +96,421 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return \common\enums\StatusEnum::getValue($model->goods_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'goods_status',\common\enums\StatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+
+                            ]),
+                        ],
+
+                        [
+                            'attribute' => 'supplier_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'supplier.supplier_name',
+                            'filter' => Html::activeDropDownList($searchModel, 'supplier_id',Yii::$app->supplyService->supplier::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:200px;'
+
+                            ]),
+                        ],
+
+                        [
+                            'attribute' => 'put_in_type',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+
+                            ]),
+                        ],
+
+                        [
+                            'attribute'=>'company_id',
+                            'filter' => Html::activeTextInput($searchModel, 'company_id', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+
+                        [
+                            'attribute' => 'warehouse_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'warehouse.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'warehouse_id',Yii::$app->warehouseService->warehouse::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+
+                            ]),
+                        ],
+                        [
+                            'attribute'=>'gold_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+
+                        [
+                            'attribute'=>'gold_loss',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'gross_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'gross_weight', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'finger',
+                            'filter' => Html::activeTextInput($searchModel, 'finger', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'order_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'produce_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'cert_type',
+                            'filter' => Html::activeTextInput($searchModel, 'cert_type', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'cert_id',
+                            'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'material',
+                            'filter' => Html::activeTextInput($searchModel, 'material', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'material_type',
+                            'filter' => Html::activeTextInput($searchModel, 'material_type', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'material_color',
+                            'filter' => Html::activeTextInput($searchModel, 'material_color', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_carat',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_clarity',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_clarity', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_cut',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_cut', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_polish',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_polish', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_symmetry',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_symmetry', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_fluorescence',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_fluorescence', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_discount',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_discount', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_cert_type',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_cert_type', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_cert_id',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_cert_id', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute' => 'jintuo_type',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
 
                             ]),
                         ],
+                        [
+                            'attribute'=>'market_price',
+                            'filter' => Html::activeTextInput($searchModel, 'market_price', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'xiangkou',
+                            'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'length',
+                            'filter' => Html::activeTextInput($searchModel, 'length', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute' => 'weixiu_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\WeixiuStatusEnum::getValue($model->weixiu_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'weixiu_status',\addons\Warehouse\common\enums\WeixiuStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
 
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'weixiu_warehouse_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'weixiuWarehouse.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'weixiu_warehouse_id',Yii::$app->warehouseService->warehouse::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+
+                            ]),
+                        ],
+                        [
+                            'attribute'=>'parts_gold_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'parts_num',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'main_stone_type',
+                            'filter' => Html::activeTextInput($searchModel, 'main_stone_type', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'main_stone_num',
+                            'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_type1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_type1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_num1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_weight1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_price1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_color1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_color1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_clarity1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_clarity1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_shape1',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_shape1', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_type2',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_type2', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_num2',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_weight2',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_stone_price2',
+                            'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'member.username',
+                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
 
                         [
                             'attribute'=>'updated_at',

@@ -59,6 +59,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'code',
+                            'filter' => Html::activeTextInput($searchModel, 'code', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute' => 'type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],

@@ -12,9 +12,11 @@ use Yii;
  * @property int $id
  * @property int $type 仓库类型
  * @property string $name 仓库名
+ * @property string $code 编码
  * @property int $channel_id 渠道ID
  * @property int $status 状态
  * @property int $sort 排序
+ * @property int $goods_num 商品数量
  * @property int $creator_id 添加人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -36,9 +38,10 @@ class Warehouse extends BaseModel
     public function rules()
     {
         return [
-            [['type', 'channel_id', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['name','type'], 'required'],
+            [['type', 'channel_id', 'status', 'sort', 'goods_num','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['name','code','type'], 'required'],
             [['name'], 'string', 'max' => 200],
+            [['code'], 'string', 'max' => 50],
         ];
     }
 
@@ -51,7 +54,9 @@ class Warehouse extends BaseModel
             'id' => 'ID',
             'type' => '仓库类型',
             'name' => '仓库名',
+            'code' => '编码',
             'channel_id' => '渠道ID',
+            'goods_num' => '商品数量',
             'status' => '状态',
             'sort' => '排序',
             'creator_id' => '添加人',
@@ -74,7 +79,7 @@ class Warehouse extends BaseModel
     }
 
     /**
-     * 关联产品线分类一对一
+     * 关联管理员一对一
      * @return \yii\db\ActiveQuery
      */
     public function getMember()
