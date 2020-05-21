@@ -3,6 +3,8 @@ use yii\widgets\ActiveForm;
 use common\helpers\Html;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
+use addons\Style\common\enums\InlayEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -97,7 +99,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <!-- ./box-body -->
                 <?php if($model->style_sn) {?>
                     <div class="row">
-                        <div class="col-lg-8">
+                        <?php if($model->is_inlay == InlayEnum::Yes && $model->jintuo_type == JintuoTypeEnum::Chengpin) {?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'stone_info')->textarea() ?>
+                        </div>
+                        <?php }?>
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'remark')->textarea() ?>
                         </div>
                     </div>
