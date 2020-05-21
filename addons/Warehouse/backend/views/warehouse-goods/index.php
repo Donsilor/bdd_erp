@@ -38,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'goods_id',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                            'value'=>function($model) {
+                                return Html::a($model->goods_id, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
+                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
@@ -132,14 +135,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
 
-                        [
-                            'attribute'=>'company_id',
-                            'filter' => Html::activeTextInput($searchModel, 'company_id', [
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
-                            'headerOptions' => [],
-                        ],
+//                        [
+//                            'attribute'=>'company_id',
+//                            'filter' => Html::activeTextInput($searchModel, 'company_id', [
+//                                'class' => 'form-control',
+//                                'style'=> 'width:100px;'
+//                            ]),
+//                            'headerOptions' => [],
+//                        ],
 
                         [
                             'attribute' => 'warehouse_id',
@@ -543,7 +546,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit},{status} {delete}',
+                            'template' => '{edit} ',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -552,9 +555,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]);
                                 },
 
-                                'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
-                                },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },

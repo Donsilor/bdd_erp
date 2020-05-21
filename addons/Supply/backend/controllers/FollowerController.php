@@ -4,6 +4,7 @@ namespace addons\Supply\backend\controllers;
 
 use addons\Supply\common\models\SupplierFollower;
 use common\helpers\ExcelHelper;
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -22,7 +23,6 @@ class FollowerController extends BaseController
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -57,12 +57,16 @@ class FollowerController extends BaseController
 
         $supplier_id = Yii::$app->request->get('supplier_id');
         if($supplier_id){
+            $tab = Yii::$app->request->get('tab');
+            $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['follower/index']));
             $supplier = \addons\Supply\common\models\Supplier::find()->where(['id'=>$supplier_id])->one();
             $dataProvider->query->andWhere(['=',SupplierFollower::tableName().'.supplier_id',$supplier_id]);
 
             return $this->render('follower', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
+                'tab'=>$tab,
+                'tabList'=>\Yii::$app->supplyService->supplier->menuTabList($supplier_id,$returnUrl),
                 'supplier' => $supplier
             ]);
         }else{

@@ -55,6 +55,10 @@ return [
                     [
                             'title' => '仓库管理',
                             'route' => 'warehouse/index',
+                    ],
+                    [
+                        'title' => '柜位管理',
+                        'route' => 'warehouse-box/index',
                     ]
                 ],
 

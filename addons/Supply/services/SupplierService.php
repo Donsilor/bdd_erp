@@ -13,10 +13,24 @@ use addons\Supply\common\models\SupplierFollower;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
+use common\helpers\Url;
 
 
 class SupplierService
 {
+
+    /**
+     * 布产编辑 tab
+     * @param int $id 款式ID
+     * @return array
+     */
+    public function menuTabList($supplier_id,$returnUrl = null)
+    {
+        return [
+            1=>['name'=>'供应商','url'=>Url::to(['supplier/view','id'=>$supplier_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'跟单人','url'=>Url::to(['follower/index','supplier_id'=>$supplier_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+    }
     /**
      * 下拉
      * @return array
