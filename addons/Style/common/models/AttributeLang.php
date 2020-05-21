@@ -41,7 +41,7 @@ class AttributeLang extends BaseModel
             [['master_id'], 'integer'],
             [['attr_name'], 'required'],
             [['language'], 'string', 'max' => 5],
-            [['attr_name'], 'string', 'max' => 100],
+            [['attr_name','attr_label'], 'string', 'max' => 50],
             [['default_value'], 'string', 'max' => 20],
             [['attr_values','remark'], 'string', 'max' => 500],
             /* [['attr_name'],'unique', 'targetAttribute'=>['attr_name','language','remark'],
@@ -57,13 +57,14 @@ class AttributeLang extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('goods_attribute', 'ID'),
-            'language' => Yii::t('goods_attribute', '语言类别'),
-            'master_id' => Yii::t('goods_attribute', 'Attr ID'),
-            'attr_name' => Yii::t('goods_attribute', '属性名称'),
-            'attr_values' => Yii::t('goods_attribute', '属性值'),
-            'default_value' => Yii::t('goods_attribute', '默认值'),
-            'remark' => Yii::t('goods_attribute', '属性备注'),
+            'id' => 'ID',
+            'language' => '语言类别',
+            'master_id' => "属性",
+            'attr_name' => '属性名称',
+            'attr_label'=> '显示名称',
+            'attr_values' => '属性值',
+            'default_value' => '默认值',
+            'remark' => '属性备注',
         ];
     }
 }

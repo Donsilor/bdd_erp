@@ -74,7 +74,7 @@ class AttributeController extends BaseController
                     throw new Exception($this->getError($model));
                 }
                 $this->editLang($model);
-                
+                Yii::$app->styleService->attribute->updateAttrValues($id);
                 $trans->commit();
                 return $is_new ?
                     $this->message("添加成功", $this->redirect(['edit-lang','id'=>$model->id]), 'success'):
@@ -137,7 +137,8 @@ class AttributeController extends BaseController
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
-                $this->editLang($model);                
+                $this->editLang($model); 
+                Yii::$app->styleService->attribute->updateAttrValues($id);
                 $trans->commit();
                 
                 return $is_new ?

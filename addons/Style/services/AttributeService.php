@@ -26,8 +26,9 @@ class AttributeService extends Service
      */
     public static function updateAttrValues($attr_id)
     {
+        $sql1 = 'UPDATE '.AttributeLang::tableName().' set attr_values=null where master_id = '.$attr_id;
         
-        $sql = 'UPDATE '.AttributeLang::tableName().' attr_lang,
+        $sql2 = 'UPDATE '.AttributeLang::tableName().' attr_lang,
              (
             	SELECT
             		val.attr_id,
@@ -47,7 +48,8 @@ class AttributeService extends Service
             	attr_lang.master_id = t.attr_id
             AND attr_lang.`language` = t.`language`
             AND attr_lang.master_id = '.$attr_id.';';
-        return \Yii::$app->db->createCommand($sql)->execute();
+        
+        return \Yii::$app->db->createCommand($sql1)->execute() && \Yii::$app->db->createCommand($sql2)->execute();
     }
     /**
      * 基础属性下拉列表
