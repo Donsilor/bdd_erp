@@ -34,9 +34,8 @@ class AttributeValue extends BaseModel
             [['attr_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['code'], 'string','max'=>15],
             [['image'], 'string','max'=>100],
-            //[['id'],'defaultAttrValueCode'],
             [['code'],'unique', 'targetAttribute'=>['code','attr_id'],
-                   'comboNotUnique' => '属性标识重复' //错误信息
+                   'comboNotUnique' => '属性编码重复' //错误信息
             ],
         ];
     }
@@ -49,7 +48,7 @@ class AttributeValue extends BaseModel
         return [
             'id' => Yii::t('goods_attribute', 'ID'),
             'attr_id' => Yii::t('goods_attribute', 'Attr ID'),
-            'code' => Yii::t('goods_attribute', '标识'),
+            'code' => Yii::t('goods_attribute', '编码'),
             'image' => Yii::t('goods_attribute', '图标'),
             'sort' => Yii::t('common', '排序'),
             'status' => Yii::t('common', '状态'),

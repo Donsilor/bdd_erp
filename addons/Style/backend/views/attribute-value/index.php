@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                                 ],
                                 'id',
                                 [
-                                        'attribute'=>'attr_value_code',
+                                        'attribute'=>'code',
                                 ],
                                 [
                                     'attribute'=>'lang.attr_value_name',
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                                     'template' => '{edit} {status} {delete}',
                                     'buttons' => [
                                     'edit' => function($url, $model, $key){                
-                                        return Html::edit(['attribute-value/ajax-edit-lang','id' => $model->id], '编辑', [
+                                        return Html::edit(['attribute-value/ajax-edit-lang','id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                                             return Html::status($model->status,['data-url'=>Url::to(['attribute-value/ajax-update'])]);
                                     },
                                     'delete' => function($url, $model, $key){
-                                            return Html::delete(['attribute-value/delete', 'id' => $model->id]);
+                                            return Html::delete(['attribute-value/delete', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()]);
                                     },
                                     ]
                                 ]
