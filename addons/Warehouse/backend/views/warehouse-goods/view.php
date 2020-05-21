@@ -12,13 +12,17 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
+<div class="box-body nav-tabs-custom">
+    <h2 class="page-header">商品详情 - <?php echo $model->goods_id?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
+</div>
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-header" >
+            <div class="box-header" style="padding-top: 0px;">
                 <h3 class="box-title"><i class="fa fa-bars"></i> 基本信息</h3>
             </div>
-            <div class="box-body table-responsive">
+            <div class="box-body table-responsive" style="margin-top:0px; ">
                 <table class="table table-hover">
                     <tr>
                         <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_id') ?>：</td>

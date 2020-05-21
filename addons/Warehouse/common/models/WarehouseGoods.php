@@ -87,7 +87,7 @@ class WarehouseGoods extends BaseModel
     {
         return [
             [['goods_id', 'product_type_id', 'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['company_id', 'warehouse_id', 'jintuo_type'], 'required'],
+            [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price', 'xiangkou', 'parts_gold_weight', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
             [['style_sn'], 'string', 'max' => 30],

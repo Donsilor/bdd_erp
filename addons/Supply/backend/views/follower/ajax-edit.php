@@ -7,7 +7,7 @@ $supplier_id = Yii::$app->request->get('supplier_id');
 $disabled = false;
 if($supplier_id){
     $model->supplier_id = $supplier_id;
-    $disabled = 'readonly';
+    $disabled = true;
 }
 
 
@@ -26,13 +26,17 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
+
         <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
             'data' => Yii::$app->supplyService->supplier->getDropDown(),
-            'options' => ['placeholder' => '请选择','readonly'=>$disabled],
+            'options' => ['placeholder' => '请选择','disabled'=>$disabled],
             'pluginOptions' => [
                 'allowClear' => true
             ],
         ]);?>
+        <?php if($supplier_id){ ?>
+            <?= $form->field($model,'supplier_id')->hiddenInput()->label(false)->error(false)?>
+        <?php } ?>
 
         <?= $form->field($model, 'member_id')->widget(kartik\select2\Select2::class, [
             'data' => Yii::$app->services->backendMember->getDropDown(),
@@ -51,3 +55,8 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+    $('form#Follower').on('submit', function (e) {
+
+    })
+</script>

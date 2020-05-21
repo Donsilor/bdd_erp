@@ -75,10 +75,13 @@ class WarehouseGoodsController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-goods/index']));
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->warehouseGoods->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

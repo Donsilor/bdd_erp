@@ -520,7 +520,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'updated_at',
-                                'value' => $searchModel->created_at,
+                                'value' => $searchModel->updated_at,
                                 'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
@@ -549,9 +549,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} ',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
+                                    return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                        'class' => 'btn btn-primary btn-sm openIframe',
+                                        'data-width'=>'90%',
+                                        'data-height'=>'90%',
+                                        'data-offset'=>'20px',
                                     ]);
                                 },
 
