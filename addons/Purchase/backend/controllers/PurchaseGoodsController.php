@@ -334,6 +334,8 @@ class PurchaseGoodsController extends BaseController
                     $model->jintuo_type = $qiban->jintuo_type;
                     $model->is_inlay = $qiban->is_inlay;
                     $model->stone_info = $qiban->stone_info;
+                    $model->remark = $qiban->remark;
+                    
                     $qibanForm = new QibanAttrForm();
                     $qibanForm->id = $qiban->id;
                     $qibanForm->initAttrs();
