@@ -11,8 +11,16 @@ namespace addons\Warehouse\common\enums;
  */
 class WarehouseTypeEnum extends \common\enums\BaseEnum
 {
-    const ON_THE_WAY = 1;
-    const REPAIR = 2;
+    const GUI_MIAN = 1;
+    const HOU_KU = 2;
+    const DAI_QU = 3;
+    const DONG_JIE = 4;
+    const ZENG_PIN = 5;
+    const LUO_ZUAN = 6;
+    const CAI_HUO = 7;
+    const TUI_HUO = 8;
+    const JIE_HUO = 9;
+    const QI_TA = 10;
 
     /**
      * @return array
@@ -20,27 +28,16 @@ class WarehouseTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::ON_THE_WAY => '良品',
-            self::ON_THE_WAY => '在途',
-            self::REPAIR => '维修',
-        ];
-    }
-    /**
-     * 空托类型与属性类型关系映射
-     * @return array
-     */
-    public static function getAttrTypeMap(): array
-    {
-        return [
-            self::Chengpin => [
-                AttrTypeEnum::TYPE_BASE,
-                AttrTypeEnum::TYPE_COMBINE,
-                AttrTypeEnum::TYPE_SALE
-            ],
-            self::Kongtuo => [
-                AttrTypeEnum::TYPE_BASE,
-                AttrTypeEnum::TYPE_SALE
-            ],
+            self::GUI_MIAN => '柜面',
+            self::HOU_KU => '后库',
+            self::DAI_QU => '待取',
+            self::DONG_JIE => '冻结',
+            self::ZENG_PIN => '赠品',
+            self::LUO_ZUAN => '祼钻',
+            self::CAI_HUO => '拆货',
+            self::TUI_HUO => '退货',
+            self::JIE_HUO => '借货',
+            self::QI_TA => '其它',
         ];
     }
 

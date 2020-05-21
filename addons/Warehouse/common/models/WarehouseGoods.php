@@ -4,8 +4,8 @@ namespace addons\Warehouse\common\models;
 
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
-use common\models\base\BaseModel;
 use Yii;
 
 /**
@@ -69,14 +69,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class WarehouseGoods extends BaseModel
+class WarehouseGoods extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('warehouse_goods');
+        return 'warehouse_goods';
     }
 
     /**
@@ -111,9 +111,9 @@ class WarehouseGoods extends BaseModel
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'goods_status' => '商品状态',
-            'supplier_id' => '供应商ID',
+            'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
-            'company_id' => '公司ID',
+            'company_id' => '公司',
             'warehouse_id' => '仓库',
             'gold_weight' => '金重',
             'gold_loss' => '金损',
@@ -151,9 +151,9 @@ class WarehouseGoods extends BaseModel
             'second_stone_num1' => '副石1粒数',
             'second_stone_weight1' => '副石1重',
             'second_stone_price1' => '副石1总计价',
-            'second_stone_color1' => 'Second Stone Color1',
-            'second_stone_clarity1' => 'Second Stone Clarity1',
-            'second_stone_shape1' => 'Second Stone Shape1',
+            'second_stone_color1' => '副石2颜色',
+            'second_stone_clarity1' => '副石2净度',
+            'second_stone_shape1' => '副石2形状',
             'second_stone_type2' => '副石2类型',
             'second_stone_num2' => '副石2粒数',
             'second_stone_weight2' => '副石2重',
@@ -162,16 +162,6 @@ class WarehouseGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
-    }
-
-
-    /**
-     * 关联管理员一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
-        return $this->hasOne(Member::class, ['id'=>'creator_id']);
     }
 
     /**
@@ -192,5 +182,39 @@ class WarehouseGoods extends BaseModel
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }
 
+    /**
+     * 关联供应商一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id']);
+    }
 
+    /**
+     * 关联仓库一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id']);
+    }
+
+    /**
+     * 关联维修仓库一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWeixiuWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'weixiu_warehouse_id'])->alias('weixiuWarehouse');
+    }
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id']);
+    }
 }
