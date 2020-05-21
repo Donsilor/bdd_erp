@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">供应商详情 - <?php echo $supplier->supplier_name?></h2>
     <ul class="nav nav-tabs">
-        <li class=""><a href="<?= \common\helpers\Url::to(['supplier/view','id'=>$supplier->id]) ?>" >布产详情</a></li>
+        <li class=""><a href="<?= \common\helpers\Url::to(['supplier/view','id'=>$supplier->id]) ?>" >供应商</a></li>
         <li class="active"><a href="<?= \common\helpers\Url::to(['follower/index','supplier_id'=>$supplier->id]) ?>" >跟单人</a></li>
         <div style="float: right"><?= Html::create(['ajax-edit','supplier_id'=>$supplier->id], '创建', [
                 'data-toggle' => 'modal',

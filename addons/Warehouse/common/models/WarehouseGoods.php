@@ -6,6 +6,7 @@ use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
+use common\models\base\BaseModel;
 use Yii;
 
 /**
@@ -69,14 +70,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class WarehouseGoods extends \yii\db\ActiveRecord
+class WarehouseGoods extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'warehouse_goods';
+        return self::tableFullName('warehouse_goods');
     }
 
     /**

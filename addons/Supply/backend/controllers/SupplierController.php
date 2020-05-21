@@ -109,6 +109,7 @@ class SupplierController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
 
         $model = $this->findModel($id);
@@ -131,6 +132,8 @@ class SupplierController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->supplyService->supplier->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

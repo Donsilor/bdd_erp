@@ -7,7 +7,7 @@ $supplier_id = Yii::$app->request->get('supplier_id');
 $disabled = false;
 if($supplier_id){
     $model->supplier_id = $supplier_id;
-    $disabled = 'readonly';
+    $disabled = true;
 }
 
 
@@ -26,28 +26,30 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-        <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
-            'data' => Yii::$app->supplyService->supplier->getDropDown(),
-            'options' => ['placeholder' => '请选择','readonly'=>$disabled],
+        <?= $form->field($model, 'box_sn')->textInput() ?>
+        <?= $form->field($model, 'warehouse_id')->widget(kartik\select2\Select2::class, [
+            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+            'options' => ['placeholder' => '请选择','disabled'=>$disabled],
             'pluginOptions' => [
                 'allowClear' => true
             ],
         ]);?>
+        <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+        <?= $form->field($model, 'remark')->textarea() ?>
 
-        <?= $form->field($model, 'member_id')->widget(kartik\select2\Select2::class, [
-            'data' => Yii::$app->services->backendMember->getDropDown(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);?>
-
-            <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
-
-                   
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script type="text/javascript">
+    $('#warehouse-name').blur(function(){
+        var url = "<?=Url::to('auto-code') ?>";
+        var value = $(this).val();
+        var data = {'name':value};
+        $.post(url,data,function(e){
+            $('#warehouse-code').val($.trim(e)).change();
+        });
+    });
+</script>
