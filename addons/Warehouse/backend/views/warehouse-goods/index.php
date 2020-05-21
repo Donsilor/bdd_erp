@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => 'supplier.supplier_name',
-                            'filter' => Html::activeDropDownList($searchModel, 'supplier_id',Yii::$app->supplyService->supplier::getDropDown(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'supplier_id',Yii::$app->supplyService->supplier->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:200px;'
