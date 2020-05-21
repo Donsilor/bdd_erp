@@ -154,9 +154,9 @@ class Style extends BaseModel
      * 关联工厂一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getFactory()
+    public function getSupplier()
     {
-        return $this->hasOne(Supplier::class, ['id'=>'factory_id'])->alias('factory');
+        return $this->hasOne(Supplier::class, ['id'=>'factory_id'])->alias('supplier');
     }
     
 }
