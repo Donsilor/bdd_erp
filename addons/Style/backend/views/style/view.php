@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>                                               
                         <tr>
                             <td class="col-xs-1 text-right">默认工厂：</td>
-                            <td><?= $model->factory->factory_name ?? '' ?></td>
+                            <td><?= $model->supplier->supplier_name ?? '' ?></td>
                         </tr>    
                         <tr>
                             <td class="col-xs-1 text-right">工厂模号：</td>
