@@ -169,13 +169,13 @@ class AttributeSpecController extends BaseController
                 $this->editSpecValue($model);
                 $trans->commit();
                 return $is_new ?
-                $this->message("添加成功", $this->redirect(['edit','id'=>$model->id]), 'success'):
-                $this->message("保存成功", $this->redirect($returnUrl), 'success');
+                $this->message("添加成功", $this->redirect(Yii::$app->request->referrer), 'success'):
+                $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (Exception $e){
                 $trans->rollBack();
                 $error = $e->getMessage();
                 \Yii::error($error);
-                return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+                return $this->message("保存失败:".$error, $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
         return $this->renderAjax($this->action->id, [

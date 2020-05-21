@@ -10,6 +10,7 @@ use addons\Style\common\models\Attribute;
 use addons\Style\common\models\AttributeLang;
 use addons\Style\common\models\AttributeValue;
 use addons\Style\common\models\AttributeSpec;
+use addons\Style\common\enums\InlayEnum;
 
 
 /**
@@ -120,7 +121,7 @@ class AttributeService extends Service
         if(!empty($attr_type)) {
             $query->andWhere(['spec.attr_type'=>$attr_type]);
         }
-        if($is_inlay !== null) {
+        if($is_inlay !== null && $is_inlay == InlayEnum::No) {
             $query->andWhere(['spec.is_inlay'=>$is_inlay]);
         }
         
