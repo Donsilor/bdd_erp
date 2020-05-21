@@ -2,12 +2,12 @@
 
 namespace addons\Supply\common\models;
 
+use Yii;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use common\models\backend\Member;
-use Yii;
 
 /**
  * This is the model class for table "supply_produce".
@@ -146,7 +146,7 @@ class Produce extends BaseModel
     }
 
     /**
-     * 对应镶嵌方式
+     * 对应镶嵌方式 inlay
      * @return \yii\db\ActiveQuery
      */
     public function getInlay()

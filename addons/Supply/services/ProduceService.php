@@ -81,13 +81,15 @@ class ProduceService extends Service
             }
         }
         if($is_new === true) {
+            $follower_name = $produce->follower ? $produce->follower->username:'';
+            $supplier_name = $produce->supplier ? $produce->supplier->supplier_name:'';
             $log = [
                 'produce_id' => $produce_id,
                 'produce_sn' => $produce->produce_sn,
                 'log_type' => LogTypeEnum::SYSTEM,
                 'bc_status' => $produce->bc_status,
                 'log_module' => '布产单创建',
-                'log_msg' => "采购单审核生成布产单{$produce->produce_sn}，供应商是{$produce->supplier->supplier_name}，跟单人是{$produce->follower->username}"
+                'log_msg' => "采购单审核生成布产单{$produce->produce_sn},供应商:{$supplier_name},跟单人:{$follower_name}"
             ];
             \Yii::$app->supplyService->produce->createProduceLog($log);            
         }
