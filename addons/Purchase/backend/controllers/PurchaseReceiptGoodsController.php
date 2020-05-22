@@ -229,7 +229,7 @@ class PurchaseReceiptGoodsController extends BaseController
                 //更新采购收货单汇总：总金额和总数量
                 $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
                 if(false === $res){
-                    throw new Exception('更新收货单汇总失败！');
+                    throw new Exception('更新收货单汇总失败');
                 }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
