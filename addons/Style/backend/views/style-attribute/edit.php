@@ -2,10 +2,12 @@
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
+use addons\Style\common\forms\StyleAttrForm;
 
 $this->title = '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$model = $model ?? new StyleAttrForm();
 ?>
 
 <div class="row">
