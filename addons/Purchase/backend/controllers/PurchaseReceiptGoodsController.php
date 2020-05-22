@@ -99,7 +99,6 @@ class PurchaseReceiptGoodsController extends BaseController
             $produce_sns = str_replace('，',',',$produce_sns);
             $produce_sns = str_replace(array("\r\n", "\r", "\n"),',',$produce_sns);
             $produce_arr = explode(",", $produce_sns);
-
             $receiptInfo = $receiptModel::find()->where(['id'=>$receipt_id])->asArray()->one();
             $supplier_id = $receiptInfo['supplier_id'];
             try {
@@ -107,24 +106,25 @@ class PurchaseReceiptGoodsController extends BaseController
                 foreach ($produce_arr as $produce_sn) {
                     $produce_info = Produce::find()->where(['produce_sn' => $produce_sn])->one();
                     if(empty($produce_info)){
-                        throw new Exception("布产单{$produce_sn}单号不对！");
+                        throw new Exception("布产单{$produce_sn}单号不对");
                     }
                     $produce_id = $produce_info['id'];
                     if($supplier_id != $produce_info['supplier_id']){
-                        throw new Exception("布产单{$produce_sn}供应商不一致！");
+                        throw new Exception("布产单{$produce_sn}供应商不一致");
                     }
                     $shippent_num = ProduceShipment::find()->where(['produce_id' => $produce_id])->sum('shippent_num');
                     if(!$shippent_num){
-                        throw new Exception("布产单{$produce_sn}未出货！");
+                        throw new Exception("布产单{$produce_sn}未出货");
                     }
-                    $purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
+                    /*$purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
                         ->select('supplier_id')
                         ->where(['produce_sn' => $produce_sn])
                         ->andWhere(['<=', 'audit_status', AuditStatusEnum::PASS])
                         ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
                         ->asArray()
-                        ->all();
-                    $receipt_num = count($purchase_receipt_info);
+                        ->all();*/
+                    $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+                    //$receipt_num = count($purchase_receipt_info);
                     $the_receipt_num = bcsub($shippent_num, $receipt_num);
                     $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
                     $produce_attr_arr = [];
@@ -156,7 +156,7 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_goods[] = $receipt_list;
                         }
                     } else {
-                        throw new Exception("布产单{$produce_sn}没有可出货数量！");
+                        throw new Exception("布产单{$produce_sn}没有可出货数量");
                     }
                     if(!empty($receipt_goods_list)){
                         $receipt_val = [];
@@ -166,15 +166,15 @@ class PurchaseReceiptGoodsController extends BaseController
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();
                         if(false === $res){
-                            throw new Exception("保存失败！");
+                            throw new Exception("保存失败");
                         }
                         //更新采购收货单汇总：总金额和总数量
                         $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
                         if(false === $res){
-                            throw new Exception('更新收货单汇总失败！');
+                            throw new Exception('更新收货单汇总失败');
                         }
                         $trans->commit();
-                        Yii::$app->getSession()->setFlash('success', '保存成功！');
+                        Yii::$app->getSession()->setFlash('success', '保存成功');
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                 }
@@ -232,7 +232,7 @@ class PurchaseReceiptGoodsController extends BaseController
                     throw new Exception('更新收货单汇总失败！');
                 }
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功！');
+                Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();

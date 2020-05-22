@@ -76,6 +76,14 @@ class PurchaseReceipt extends BaseModel
     }
 
     /**
+     * 关联采购收货单明细表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceiptGoods(){
+        return $this->hasMany(PurchaseReceiptGoods::class, ['id'=>'receipt_id']);
+    }
+
+    /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
      */
