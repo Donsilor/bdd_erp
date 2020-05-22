@@ -37,6 +37,8 @@ use Yii;
  * @property string $material_type 材质
  * @property string $material_color 材质颜色
  * @property string $diamond_carat 钻石大小
+ * @property string $diamond_shape 钻石形状
+ * @property string $diamond_color 钻石颜色
  * @property string $diamond_clarity 钻石净度
  * @property string $diamond_cut 切工
  * @property string $diamond_polish 钻石抛光
@@ -92,7 +94,7 @@ class WarehouseGoods extends BaseModel
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
             [['style_sn'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id'], 'string', 'max' => 20],
-            [['finger', 'order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
+            [['finger', 'order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
             [['cert_type'], 'string', 'max' => 50],
             [['goods_id'], 'unique'],
@@ -131,7 +133,9 @@ class WarehouseGoods extends BaseModel
             'material_color' => '材质颜色',
             'diamond_carat' => '钻石大小',
             'diamond_clarity' => '钻石净度',
-            'diamond_cut' => '切工',
+            'diamond_cut' => '钻石切工',
+            'diamond_shape' => '钻石形状',
+            'diamond_color' => '钻石颜色',
             'diamond_polish' => '钻石抛光',
             'diamond_symmetry' => '钻石对称',
             'diamond_fluorescence' => '钻石荧光',

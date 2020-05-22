@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             [
                                 'attribute'=>'log_msg',
-                                'filter' => false,
+                                'filter' => true,
                                 'headerOptions' => [],
                             ],
 
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 ]),
                                 'value'=>function($model){
-                                    return Yii::$app->formatter->asDatetime($model->updated_at);
+                                    return Yii::$app->formatter->asDatetime($model->created_at);
                                 }
 
                             ],

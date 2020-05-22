@@ -262,6 +262,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'diamond_shape',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_shape', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'diamond_color',
+                            'filter' => Html::activeTextInput($searchModel, 'diamond_color', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'diamond_clarity',
                             'filter' => Html::activeTextInput($searchModel, 'diamond_clarity', [
                                 'class' => 'form-control',

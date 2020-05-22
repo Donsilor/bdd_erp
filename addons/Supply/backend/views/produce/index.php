@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model){
                     return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\common\enums\JinTuoEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style' => 'width:100px;',
