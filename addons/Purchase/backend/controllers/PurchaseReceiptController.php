@@ -92,7 +92,6 @@ class PurchaseReceiptController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-
         $this->modelClass = PurchaseReceiptForm::class;
         $model = $this->findModel($id);
         // ajax 校验
@@ -100,9 +99,9 @@ class PurchaseReceiptController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
                     $model->status = StatusEnum::ENABLED;
                 }else{
                     $model->status = StatusEnum::DISABLED;
@@ -110,12 +109,15 @@ class PurchaseReceiptController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
+                }
                 $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
 
         return $this->renderAjax($this->action->id, [

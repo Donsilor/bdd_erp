@@ -11,7 +11,7 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseService $purchase 采购订单
  * @property \addons\Purchase\services\PurchaseGoodsService $purchaseGoods 采购明细
  * @property \addons\Purchase\services\PurchaseReceiptService $purchaseReceipt 采购收货单
- * @property \addons\Purchase\services\PurchaseDefectiveService $purchaseDefective 采购收货单
+ * @property \addons\Purchase\services\PurchaseDefectiveService $purchaseDefective 不良返厂单
  * @property \addons\Purchase\services\PurchaseFqcConfigService $purchaseFqcConfig 质检未过原因
  * @var array
  */
