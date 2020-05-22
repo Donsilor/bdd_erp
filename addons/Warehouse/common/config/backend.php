@@ -57,8 +57,8 @@ return [
                             'route' => 'warehouse/index',
                     ],
                     [
-                        'title' => '柜位管理',
-                        'route' => 'warehouse-box/index',
+                            'title' => '柜位管理',
+                            'route' => 'warehouse-box/index',
                     ]
                 ],
 
