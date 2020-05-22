@@ -123,8 +123,8 @@ class PurchaseReceiptGoodsController extends BaseController
                         ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
                         ->asArray()
                         ->all();*/
-                    $purchase_receipt_info = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
-                    $receipt_num = count($purchase_receipt_info);
+                    $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+                    //$receipt_num = count($purchase_receipt_info);
                     $the_receipt_num = bcsub($shippent_num, $receipt_num);
                     $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
                     $produce_attr_arr = [];
