@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillLog;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -94,5 +95,17 @@ class WarehouseBillService extends Service
         if(false === $res){
             throw new \Exception("保存收货单据明细失败");
         }
+    }
+
+
+
+    public function createWarehouseBillLog($log){
+        $warehouse_goods_log = new WarehouseBillLog();
+        $warehouse_goods_log->attributes = $log;
+        if(false === $warehouse_goods_log->save()){
+            throw new \Exception($this->getError($warehouse_goods_log));
+        }
+        return $warehouse_goods_log ;
+
     }
 }

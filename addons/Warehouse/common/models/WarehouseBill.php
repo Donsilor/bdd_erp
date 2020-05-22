@@ -56,7 +56,6 @@ class WarehouseBill extends BaseModel
     {
         return [
             [['id', 'merchant_id', 'bill_status', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['bill_no'], 'required'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
             [['bill_no', 'order_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -98,6 +97,20 @@ class WarehouseBill extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
     }
 
     /**

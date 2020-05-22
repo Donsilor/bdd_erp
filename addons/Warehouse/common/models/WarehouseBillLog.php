@@ -2,7 +2,10 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\models\backend\Member;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "warehouse_bill_log".
@@ -56,5 +59,41 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
             'creator_id' => 'Creator ID',
             'created_at' => '创建时间',
         ];
+    }
+
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+            $this->creator = \Yii::$app->user->identity->username;
+        }
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id']);
     }
 }
