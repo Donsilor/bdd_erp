@@ -3,9 +3,8 @@
 namespace addons\Warehouse\services;
 
 
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use common\helpers\Url;
 use Yii;
+use common\helpers\Url;
 use common\components\Service;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
@@ -73,8 +72,11 @@ class WarehouseBillService extends Service
                 'sale_price' => 0,//$warehouseGoods->sale_price,
                 'market_price' => $warehouseGoods->market_price,
                 'markup_rate' => 0, //$warehouseGoods->markup_rate
+                'status' => 1,
+                'created_at' => time()
             ];
         }
+
         $goods_val = [];
         $goods_key = array_keys($goods_list[0]);
         foreach ($goods_list as $item) {
