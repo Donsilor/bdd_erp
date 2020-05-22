@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'goods_num',
                             'filter' => true,
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'order_type',
@@ -130,13 +130,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[from_warehouse_id]',
                                 'value'=>$searchModel->from_warehouse_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-3'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['style' => 'col-md-3'],
                         ],
                         [
                             'attribute' => 'to_company_id',

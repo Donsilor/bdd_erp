@@ -11,10 +11,10 @@ namespace addons\Warehouse\common\enums;
  */
 class PutInTypeEnum extends \common\enums\BaseEnum
 {
-    const GOU_MAI = 1;
-    const JIA_GONG = 2;
-    const DAI_XIAO = 3;
-    const JIE_RU = 4;
+    const PURCHASE = 1;
+    const PROXY_PRODUCE = 2;
+    const PROXY_SALE = 3;
+    const BORROW = 4;
 
     /**
      * @return array
@@ -22,10 +22,10 @@ class PutInTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GOU_MAI => '购买',
-            self::JIA_GONG => '委托加工',
-            self::DAI_XIAO => '代销',
-            self::JIE_RU => '借入',
+            self::PURCHASE => '购买',
+            self::PROXY_PRODUCE => '委托加工',
+            self::PROXY_SALE => '代销',
+            self::BORROW => '借入',
         ];
     }
 
