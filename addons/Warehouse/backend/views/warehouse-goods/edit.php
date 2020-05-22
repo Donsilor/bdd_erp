@@ -18,8 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'goods_id')->textInput(['disabled'=>true]) ?>
                         </div>
+
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_name')->textInput() ?>
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'goods_status')->dropDownList(\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(),['disabled'=>true]) ?>
@@ -37,6 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'goods_name')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_sn')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'produce_sn')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'finger')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
@@ -48,7 +58,42 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cert_id')->textInput() ?>
                         </div>
-                      
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_weight')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_loss')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_carat')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'xiangkou')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_shape')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_color')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_clarity')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_cut')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_polish')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_symmetry')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_fluorescence')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'market_price')->textInput() ?>
+                        </div>
                     </div>
 
 

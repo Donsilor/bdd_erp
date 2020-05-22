@@ -4,6 +4,7 @@ namespace addons\Warehouse\common\models;
 
 use common\models\backend\Member;
 use common\models\base\BaseModel;
+use function GuzzleHttp\Psr7\str;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -34,11 +35,17 @@ class WarehouseGoodsLog extends BaseModel
     public function rules()
     {
         return [
-            [['goods_id', 'log_msg', 'creator_id', 'created_at'], 'required'],
+            [['goods_id', 'log_msg'], 'required'],
             [['log_type', 'creator_id', 'created_at'], 'integer'],
-            [['goods_id'], 'string', 'max' => 30],
+            [['goods_id','creator'], 'string', 'max' => 30],
             [['log_msg'], 'string', 'max' => 255],
         ];
+    }
+
+    public function beforeValidate()
+    {
+        $this->goods_id = (string)$this->goods_id;
+        return parent::beforeValidate();
     }
 
     /**
@@ -52,6 +59,7 @@ class WarehouseGoodsLog extends BaseModel
             'log_type' => '操作类型',
             'log_msg' => '日志信息',
             'creator_id' => '操作人',
+            'creator' => '操作人',
             'created_at' => '操作时间',
         ];
     }
@@ -78,6 +86,7 @@ class WarehouseGoodsLog extends BaseModel
     {
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
+            $this->creator = \Yii::$app->user->identity->username;
         }
         return parent::beforeSave($insert);
     }

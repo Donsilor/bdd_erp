@@ -86,6 +86,42 @@ class WarehouseGoodsController extends BaseController
         ]);
     }
 
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id', null);
+        $model = $this->findModel($id);
+        $old_model = clone $model;
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $param = Yii::$app->request->post('WarehouseGoods');
+                foreach ($param as $key=>$new){
+                    $old = $old_model->$key;
+                    if($old != $new){
+                        $log_msg = "{$model->getAttributeLabel($key)} 由 ({$old}) 改成 ({$new})";
+                        $log = [
+                            'goods_id' => $model->id,
+                            'log_msg' => $log_msg
+                        ];
+                        Yii::$app->warehouseService->warehouseGoods->createWarehouseGoodsLog($log);
+                    }
+                }
+                $model->save();
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch(\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
 
     public function getExport($dataProvider)
     {

@@ -150,6 +150,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= $model->diamond_carat ?></td>
                     </tr>
                     <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_shape') ?>：</td>
+                        <td><?= $model->diamond_shape ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_color') ?>：</td>
+                        <td><?= $model->diamond_color ?></td>
+                    </tr>
+                    <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_clarity') ?>：</td>
                         <td><?= $model->diamond_clarity ?></td>
                     </tr>
