@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tr>
                     <tr>
                         <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('weixiu_warehouse_id') ?>：</td>
-                        <td><?= $model->weixiuWarehouse->name ?></td>
+                        <td><?= $model->weixiuWarehouse->name ?? '' ?></td>
                     </tr>
                     <tr>
                         <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tr>
                     <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_type') ?>：</td>
-                        <td><?= $model->cert_type ?></td>
+                        <td><?= Yii::$app->attr->valueName($model->cert_type) ?></td>
                     </tr>
                     <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_id') ?>：</td>
@@ -184,7 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tr>
                     <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_cert_type') ?>：</td>
-                        <td><?= $model->diamond_cert_type ?></td>
+                        <td><?= Yii::$app->attr->valueName($model->diamond_cert_type) ?></td>
                     </tr>
                     <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_cert_id') ?>：</td>

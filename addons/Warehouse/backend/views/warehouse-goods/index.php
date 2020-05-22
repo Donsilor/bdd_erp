@@ -207,9 +207,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'cert_type',
-                            'filter' => Html::activeTextInput($searchModel, 'cert_type', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->cert_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -327,9 +331,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'diamond_cert_type',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_cert_type', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_cert_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:120px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -351,6 +359,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;'
 
                             ]),
                         ],
@@ -388,6 +397,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'weixiu_status',\addons\Warehouse\common\enums\WeixiuStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;'
 
                             ]),
                         ],
@@ -399,6 +409,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'weixiu_warehouse_id',Yii::$app->warehouseService->warehouse::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:150px;'
 
                             ]),
                         ],

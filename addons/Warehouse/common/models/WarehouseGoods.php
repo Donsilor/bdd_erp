@@ -147,7 +147,7 @@ class WarehouseGoods extends BaseModel
             'xiangkou' => '戒托镶口',
             'length' => '长度',
             'weixiu_status' => '维修状态',
-            'weixiu_warehouse_id' => '维修入库仓库id',
+            'weixiu_warehouse_id' => '维修入库仓库',
             'parts_gold_weight' => '配件金重',
             'parts_num' => '配件数量',
             'main_stone_type' => '主石类型',

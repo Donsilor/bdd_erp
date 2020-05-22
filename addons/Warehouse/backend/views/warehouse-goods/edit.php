@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'length')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'cert_type')->dropDownList(\addons\Style\common\enums\CertTypeEnum::getMap()) ?>
+                            <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cert_id')->textInput() ?>

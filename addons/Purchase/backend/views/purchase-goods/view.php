@@ -91,10 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
                                     <td><?= $model->main_stone_price ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price') ?>：</td>
-                                    <td><?= $model->second_stone_price ?></td>
-                                </tr>
+
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
                                     <td><?= $model->gold_price ?></td>

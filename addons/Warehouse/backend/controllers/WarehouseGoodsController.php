@@ -31,7 +31,7 @@ class WarehouseGoodsController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize,
+            'pageSize' => 10,
             'relations' => [
                 'productType' => ['name'],
                 'styleCate' => ['name'],
