@@ -110,6 +110,24 @@ class WarehouseBill extends BaseModel
     }
 
     /**
+     * 出库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
+    }
+
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('ToWarehouse');
+    }
+
+    /**
      * 关联管理员一对一
      * @return \yii\db\ActiveQuery
      */
