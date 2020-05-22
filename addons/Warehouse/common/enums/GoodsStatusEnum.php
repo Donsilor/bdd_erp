@@ -11,7 +11,7 @@ namespace addons\Warehouse\common\enums;
  */
 class GoodsStatusEnum extends \common\enums\BaseEnum
 {
-    const STOCK = 1;
+    const IN_STOCK = 1;
     const IN_SALE = 2;
     const HAS_SOLD = 3;
     const IN_PANDIAN = 4;
@@ -27,7 +27,7 @@ class GoodsStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::STOCK => '库存',
+                self::IN_STOCK => '库存',
                 self::IN_SALE => '销售中',
                 self::HAS_SOLD => '已销售',
                 self::IN_PANDIAN => '盘点中',
