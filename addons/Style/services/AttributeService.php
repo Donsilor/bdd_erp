@@ -34,7 +34,7 @@ class AttributeService extends Service
             	SELECT
             		val.attr_id,
             		val_lang.`language`,
-            		GROUP_CONCAT(attr_value_name) AS attr_values
+            		GROUP_CONCAT(attr_value_name order by sort asc) AS attr_values
             	FROM
             		'.AttributeValueLang::tableName().' val_lang
             	INNER JOIN '.AttributeValue::tableName().' val ON val_lang.master_id = val.id
