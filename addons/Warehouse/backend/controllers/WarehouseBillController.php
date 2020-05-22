@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -62,6 +63,25 @@ class WarehouseBillController extends BaseController
         ]);
 
 
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill/index']));
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->warehouseBill->menuTabList($id,$returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
     }
 
 

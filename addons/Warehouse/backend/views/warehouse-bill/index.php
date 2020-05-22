@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>'overflow-x: scroll;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -44,11 +45,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute'=>'bill_no',
+                            'attribute' => 'bill_no',
+                            'value'=>function($model) {
+                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;'
                             ]),
-                            'headerOptions' => [],
+                            'format' => 'raw',
                         ],
                         [
                             'attribute' => 'bill_type',
@@ -60,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\BillTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
+                                'style' => 'width:80px;',
                             ]),
                         ],
                         [
@@ -73,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
+                                'style' => 'width:80px;',
                             ]),
                         ],
                         [
@@ -92,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Warehouse\common\enums\OrderTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
+                                'style' => 'width:80px;',
                             ]),
                         ],
                         [
@@ -109,7 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[from_company_id]',
                                 'value'=>$searchModel->from_company_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1',
+                                    'style' => 'width:160px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
@@ -197,6 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'member.username', [
                                 'class' => 'form-control',
+                                'style' => 'width:100px;',
                             ]),
 
                         ],
@@ -235,7 +242,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
+                                'style' => 'width:160px;',
                             ]),
                         ],
                         [

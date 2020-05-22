@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -19,6 +20,13 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 class WarehouseBillService extends Service
 {
 
+    public function menuTabList($bill_id,$returnUrl = null)
+    {
+        return [
+            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+    }
 
     /**
      * 创建单据
