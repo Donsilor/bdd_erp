@@ -51,7 +51,7 @@ class WarehouseBillLGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'billGoods' => $billGoods,
-            'tabList'=>\Yii::$app->warehouseService->warehouseBillL->menuTabList($bill_id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->billL->menuTabList($bill_id,$returnUrl),
             'tab' => $tab,
         ]);
     }
@@ -93,7 +93,7 @@ class WarehouseBillLGoodsController extends BaseController
                 }
 
                 //更新采购收货单汇总：总金额和总数量
-                $res = Yii::$app->warehouseService->warehouseBill->WarehouseBillSummary($bill_id);
+                $res = Yii::$app->warehouseService->bill->WarehouseBillSummary($bill_id);
                 if(false === $res){
                     throw new Exception('更新单据汇总失败');
                 }
