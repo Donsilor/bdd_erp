@@ -35,7 +35,7 @@ class WarehouseBillController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
 //                'supplier' => ['supplier_name'],
-                'member' => ['username'],
+//                'member' => ['username'],
                 'creator' => ['username'],
                 'auditor' => ['username'],
 
