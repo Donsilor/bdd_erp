@@ -75,7 +75,7 @@ class WarehouseBill extends BaseModel
             'merchant_id' => '商户ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
-            'bill_status' => '仓储单据状态',
+            'bill_status' => '单据状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
             'order_sn' => '订单号',

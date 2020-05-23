@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                        <?= Html::create(['edit', 'receipt_id' => $billInfo->id], '新增货品', [
+                        <?= Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width'=>'90%',
                             'data-height'=>'90%',                            
@@ -53,18 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
-                            'name' =>'bill_no',
-                            'title'=>"单据编号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_name',
-                            'title'=>"商品名称",
+                            'name' =>'style_sn',
+                            'title'=>"款号",
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
@@ -72,8 +62,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         [
-                            'name' =>'style_sn',
-                            'title'=>"款号",
+                            'name' =>'goods_name',
+                            'title'=>"商品名称",
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',

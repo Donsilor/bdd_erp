@@ -69,13 +69,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'attribute' => 'audit_status',
+                            'attribute' => 'bill_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->status);
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:80px;',
