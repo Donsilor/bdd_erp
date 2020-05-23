@@ -91,7 +91,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-        
+
+
+        <div class="box-footer text-center">
+            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                'data-toggle' => 'modal',
+                'class'=>'btn btn-primary btn-ms',
+                'data-target' => '#ajaxModalLg',
+            ]); ?>
+            <?php
+            if($model->audit_status != AuditStatusEnum::PASS){
+                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                    'class'=>'btn btn-success btn-ms',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModal',
+                ]);
+            }
+            ?>
+        </div>
 
         <!-- box end -->
     </div>
