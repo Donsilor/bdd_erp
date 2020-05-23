@@ -56,7 +56,7 @@ class WarehouseBillGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'bill_id', 'goods_id', 'goods_num', 'order_detail_id', 'put_in_type', 'warehouse_id', 'material', 'pandian_status', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'bill_id', 'goods_id', 'goods_num', 'order_detail_id', 'put_in_type', 'warehouse_id','from_warehouse_id','to_warehouse_id', 'material', 'pandian_status', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['bill_no', 'bill_type', 'goods_id', 'goods_name', 'style_sn'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
             [['bill_no', 'style_sn', 'diamond_cert_id', 'pandian_box_sn', 'pandian_user'], 'string', 'max' => 30],
@@ -84,6 +84,8 @@ class WarehouseBillGoods extends BaseModel
             'order_detail_id' => '订单商品明细ID',
             'put_in_type' => '入库方式',
             'warehouse_id' => '仓库ID',
+            'from_warehouse_id' => '来源仓库',
+            'to_warehouse_id' => '目标仓库',
             'material' => '主成色',
             'gold_weight' => '金重',
             'gold_loss' => '金损',
@@ -93,7 +95,7 @@ class WarehouseBillGoods extends BaseModel
             'diamond_cert_id' => '证书号',
             'cost_price' => '成本价',
             'sale_price' => '销售价',
-            'market_price' => '市场价（标签价）',
+            'market_price' => '市场价',
             'pandian_status' => '盘点状态',
             'box_sn' => '货品所在柜位号',
             'pandian_box_sn' => '盘点柜位',

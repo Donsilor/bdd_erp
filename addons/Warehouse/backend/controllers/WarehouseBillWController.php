@@ -10,6 +10,7 @@ use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillWForm;
 
 
 /**
@@ -87,13 +88,12 @@ class WarehouseBillWController extends BaseController
                 $model->creator_id  = \Yii::$app->user->identity->id;
             }
             try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }                
-                $trans->commit();
+                $trans = Yii::$app->trans->beginTransaction();               
+
+                Yii::$app->warehouseService->billW->createBill($model);
                 
-                return  $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+                $trans->commit();                
+                return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 
             }catch (\Exception $e) {                
                 $trans->rollback();
@@ -112,8 +112,15 @@ class WarehouseBillWController extends BaseController
     public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        
+        $this->modelClass = WarehouseBillWForm::class;
+        $model = $this->findModel($id);      
+        
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            //$model->va
+            
             return $this->redirect(['index']);
         }
         
@@ -121,6 +128,12 @@ class WarehouseBillWController extends BaseController
                 'model' => $model,
         ]);
     }
+    
+    /**
+     * 导出列表
+     * @param unknown $dataProvider
+     * @return boolean
+     */
     private function getExport($dataProvider)
     {
         $list = $dataProvider->models;

@@ -165,7 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }, 
                                     'pandian' => function($url, $model, $key){
-                                        return Html::edit(['pandian','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '盘点');
+                                        return Html::edit(['pandian','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '盘点',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->audit_status != AuditStatusEnum::PASS){

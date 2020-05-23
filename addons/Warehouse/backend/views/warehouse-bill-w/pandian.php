@@ -5,43 +5,37 @@ use common\helpers\Url;
 
 $form = ActiveForm::begin([
         'id' => $model->formName(),
-        'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['edit','id' => $model['id']]),
+        //'enableAjaxValidation' => true,
+        //'validationUrl' => Url::to(['pandian','id' => $model->id]),
         'fieldConfig' => [
-                //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
+                
         ]
 ]);
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">盘点 - <?php echo $model->bill_no?></h2>
-    <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
-            <div class="box">
-                <div class=" table-responsive" style="padding-left: 0px;padding-right: 0px;">
-                    <table class="table table-hover">
-                        <tr>
-                            <td class="col-xs-1 text-right">货号：</td>
-                            <td><?= $form->field($model, 'goods_id')->textArea()?></td>
-                        </tr>
-                        
-                        <tr>
-                            <td class="col-xs-1 text-right">应盘数量：</td>
-                            <td><?= $model->goods_num ?></td>
-                        </tr> 
-                        <tr>
-                            <td class="col-xs-1 text-right">实盘数量：</td>
-                            <td> 0 </td>
-                        </tr>                        
-                        <tr>
-                            <td class="col-xs-1 text-right">总金额：</td>
-                            <td><?= $model->total_cost ?></td>
-                        </tr>                        
-                    </table>
-                </div>                
-            </div>
-        </div>
-
-    <!-- box end -->
+    <h2 class="page-header">货品盘点 - <?php echo $model->bill_no?></h2>
+    <div class="box">
+        <div class=" table-responsive">
+            <table class="table table-hover">
+                <tr>
+                    <td class="col-xs-1 text-right no-border-top">货号：</td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'goods_ids')->textArea(['style'=>'height:200px;'])->label(false)?></td>
+                    <td class="text-left no-border-top"><button class="btn btn-primary" type="submit">盘点</button></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right">盘点仓库：</td>
+                    <td><?= $model->toWarehouse->name ??'' ?></td>
+                </tr>                         
+                <tr>
+                    <td class="col-xs-1 text-right">应盘数量：</td>
+                    <td><?= $model->goods_num ?></td>
+                </tr> 
+                <tr>
+                    <td class="col-xs-1 text-right">实盘数量：</td>
+                    <td> 0 </td>
+                </tr>                  
+            </table>
+        </div>                
+    </div>
 </div>
-<!-- tab-content end -->
-</div>
+<?php ActiveForm::end(); ?>

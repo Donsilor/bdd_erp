@@ -19,7 +19,6 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
  */
 class WarehouseBillService extends Service
 {
-
     /**
      * 仓储单据明细 tab
      * @param int $bill_id 单据ID
@@ -38,7 +37,7 @@ class WarehouseBillService extends Service
      * 仓储单据汇总
      * @param unknown $bill_id
      */
-    public function WarehouseBillSummary($bill_id)
+    public function warehouseBillSummary($bill_id)
     {
         $result = false;
         $sum = WarehouseBillGoods::find()
@@ -130,6 +129,7 @@ class WarehouseBillService extends Service
      * @return \addons\Warehouse\common\models\WarehouseBillLog
      */
     public function createWarehouseBillLog($log){
+        
         $model = new WarehouseBillLog();
         $model->attributes = $log;
         if(false === $model->save()){

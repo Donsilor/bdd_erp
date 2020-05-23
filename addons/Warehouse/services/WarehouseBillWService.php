@@ -1,0 +1,71 @@
+<?php
+
+namespace addons\Warehouse\services;
+
+
+use Yii;
+use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\enums\PandianStatusEnum;
+
+/**
+ * 盘点单
+ * @package services\common
+ * @author jianyan74 <751393839@qq.com>
+ */
+class WarehouseBillWService extends WarehouseBillService
+{
+    
+    public function createBill($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+                
+        $bill = new WarehouseBill();
+        $bill->attributes = $form->toArray();  
+        
+        if(false === $bill->save() ) {
+            throw new \Exception($this->getError($bill));
+        }  
+        //批量创建单据明细
+        $page_size = 100;
+        for($page = 1; $page <= 200 ; $page ++) {
+
+            $goods_list = WarehouseGoods::find()->select(['goods_id','style_sn','goods_name','warehouse_id'])->where(['warehouse_id'=>$bill->from_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
+            if(!empty($goods_list)) {
+                foreach ($goods_list as $goods) {
+                    $bill_goods = [
+                            'bill_id'=>$bill->id,
+                            'bill_type'=>$bill->bill_type,
+                            'bill_no'=>$bill->bill_no,
+                            'goods_id'=>$goods['goods_id'],
+                            'style_sn'=>$goods['style_sn'],
+                            'goods_name'=>$goods['goods_name'],
+                            'from_warehouse_id'=>$goods['warehouse_id'],
+                            'pandian_status'=>PandianStatusEnum::SAVE,
+                    ];
+                    $bill_goods_values[] = array_values($bill_goods);
+                }
+                if(empty($bill_goods_keys)) {
+                    $bill_goods_keys = array_keys($bill_goods);
+                }
+
+                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute(); 
+                if(!$result) {
+                    throw new \Exception('导入单据明细失败');
+                }
+            }            
+            if(count($goods_list) < $page_size) {
+                break;
+            } 
+        }
+        //更新应盘数量和总金额
+        $this->warehouseBillSummary($bill->id);
+        
+        //更新仓库所有货品 盘点中
+        WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_PANDIAN],['warehouse_id'=>$bill->from_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+    }
+}
