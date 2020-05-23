@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no ?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no ?></h2>
     <?php echo Html::menuTab($tabList, $tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
@@ -60,7 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:120px'
                             ]
                         ],
@@ -80,7 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:100px'
                             ]
                         ],
@@ -92,7 +90,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'options' => [
                                 'class' => 'input-priority',
                                 'readonly' =>'true',
-                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -104,7 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'options' => [
                                 'class' => 'input-priority',
                                 'readonly' =>'true',
-                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -114,7 +110,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -124,7 +119,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -134,7 +128,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -144,7 +137,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -155,7 +147,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'defaultValue' => 0,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'type' => 'number',
                                 'style'=>'width:80px'
                             ]
@@ -167,7 +158,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'defaultValue' => 0,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'type' => 'number',
                                 'style'=>'width:80px'
                             ]
@@ -179,7 +169,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'defaultValue' => 0,
                             'options' => [
                                 'class' => 'input-priority',
-                                'readonly' =>'true',
                                 'type' => 'number',
                                 'style'=>'width:80px'
                             ]
@@ -195,6 +184,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="modal-footer">
                 <div class="col-sm-12 text-center">
+                    <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
+                    <button class="btn btn-primary" type="submit">保存</button>
                     <span class="btn btn-white" onclick="history.go(-1)">返回</span>
                 </div>
             </div>

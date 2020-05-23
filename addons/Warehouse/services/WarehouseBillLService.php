@@ -2,8 +2,7 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\models\WarehouseBillLog;
-use common\helpers\Url;
+
 use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;
@@ -11,6 +10,7 @@ use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use common\helpers\Url;
 
 /**
  * Class TypeService
@@ -122,15 +122,4 @@ class WarehouseBillLService extends Service
         }
     }
 
-
-
-    public function createWarehouseBillLog($log){
-        $warehouse_goods_log = new WarehouseBillLog();
-        $warehouse_goods_log->attributes = $log;
-        if(false === $warehouse_goods_log->save()){
-            throw new \Exception($this->getError($warehouse_goods_log));
-        }
-        return $warehouse_goods_log ;
-
-    }
 }

@@ -44,11 +44,13 @@ class WarehouseBillLGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        $billGoods = $dataProvider->getModels();
         $model = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'billGoods' => $billGoods,
             'tabList'=>\Yii::$app->warehouseService->warehouseBillL->menuTabList($bill_id,$returnUrl),
             'tab' => $tab,
         ]);
