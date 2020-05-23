@@ -83,29 +83,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'goods_num',
-                            'filter' => true,
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'order_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\OrderTypeEnum::getValue($model->order_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Warehouse\common\enums\OrderTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
-                            'attribute'=>'order_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'from_company_id',
@@ -114,14 +97,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[from_company_id]',
                                 'value'=>$searchModel->from_company_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1',
-                                    'style' => 'width:160px;'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
                         [
                             'attribute' => 'from_warehouse_id',
@@ -130,13 +112,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[from_warehouse_id]',
                                 'value'=>$searchModel->from_warehouse_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-3'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-3', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['style' => 'col-md-3'],
+                            'headerOptions' => ['style' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
                         [
                             'attribute' => 'to_company_id',
@@ -145,13 +127,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[to_company_id]',
                                 'value'=>$searchModel->to_company_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
                         [
                             'attribute' => 'to_warehouse_id',
@@ -160,13 +142,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[to_warehouse_id]',
                                 'value'=>$searchModel->to_warehouse_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
                         [
                             'attribute' => 'supplier_id',
@@ -175,18 +157,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -194,14 +177,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'total_sale',
                             'filter' => Html::activeTextInput($searchModel, 'total_sale', [
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
-                            'label' => '制单人',
-                            'attribute' => 'member.username',
+                            'label' => '创建人',
+                            'attribute' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                                 'style' => 'width:100px;',
                             ]),
@@ -213,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -228,6 +212,54 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'value' => function ($model) {
                                 return Yii::$app->formatter->asDatetime($model->created_at);
+                            },
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
+                            ]),
+                        ],
+                        [
+                            'label' => '审核人',
+                            'attribute' => 'auditor.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                                'class' => 'form-control',
+                                'style' => 'width:100px;',
+                            ]),
+
+                        ],
+                        [
+                            'attribute' => 'audit_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'audit_time',
+                                'value' => '',
+                                'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->audit_time);
                             },
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'160'],

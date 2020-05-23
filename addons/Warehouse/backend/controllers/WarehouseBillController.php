@@ -36,6 +36,8 @@ class WarehouseBillController extends BaseController
             'relations' => [
 //                'supplier' => ['supplier_name'],
                 'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
 
             ]
         ]);
