@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \common\enums\StatusEnum::getValue($model->goods_status);
+                                return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods_status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
                                 'prompt' => '全部',
@@ -106,19 +106,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-
                         [
                             'attribute' => 'supplier_id',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => 'supplier.supplier_name',
-                            'filter' => Html::activeDropDownList($searchModel, 'supplier_id',Yii::$app->supplyService->supplier->getDropDown(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:200px;'
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>\kartik\select2\Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => 200
+                                ],
+                                'pluginLoading'=>false
+
 
                             ]),
+                            'headerOptions' => ['class' => 'col-md-2'],
+                            'format' => 'raw',
+
                         ],
+
 
                         [
                             'attribute' => 'put_in_type',
@@ -144,18 +152,28 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'headerOptions' => [],
 //                        ],
 
+
                         [
                             'attribute' => 'warehouse_id',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => 'warehouse.name',
-                            'filter' => Html::activeDropDownList($searchModel, 'warehouse_id',Yii::$app->warehouseService->warehouse::getDropDown(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;'
+                            'value' =>"warehouse.name",
+                            'filter'=>\kartik\select2\Select2::widget([
+                                'name'=>'SearchModel[warehouse_id]',
+                                'value'=>$searchModel->warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => 200
+                                ],
+                                'pluginLoading'=>false
+
 
                             ]),
+                            'headerOptions' => ['class' => 'col-md-2'],
+                            'format' => 'raw',
+
                         ],
+
                         [
                             'attribute'=>'gold_weight',
                             'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
@@ -366,6 +384,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute'=>'market_price',
                             'filter' => Html::activeTextInput($searchModel, 'market_price', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),

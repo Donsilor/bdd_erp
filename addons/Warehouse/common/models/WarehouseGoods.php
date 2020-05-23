@@ -49,6 +49,7 @@ use Yii;
  * @property string $diamond_cert_id 钻石证书号
  * @property int $jintuo_type 金托类型
  * @property string $market_price 市场价(标签价)
+ * @property string $cost_price 成本价(标签价)
  * @property string $xiangkou 戒托镶口
  * @property string $length 长度
  * @property int $weixiu_status 维修状态
@@ -90,7 +91,7 @@ class WarehouseGoods extends BaseModel
         return [
             [['goods_id', 'product_type_id', 'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
-            [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price', 'xiangkou', 'parts_gold_weight', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
+            [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'parts_gold_weight', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
             [['style_sn'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id'], 'string', 'max' => 20],
@@ -144,6 +145,7 @@ class WarehouseGoods extends BaseModel
             'diamond_cert_id' => '钻石证书号',
             'jintuo_type' => '金托类型',
             'market_price' => '市场价(标签价)',
+            'cost_price' => '成本价',
             'xiangkou' => '戒托镶口',
             'length' => '长度',
             'weixiu_status' => '维修状态',

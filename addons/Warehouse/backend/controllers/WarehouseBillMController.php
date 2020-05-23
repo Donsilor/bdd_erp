@@ -7,6 +7,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillMForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\SnHelper;
+use common\helpers\Url;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use yii\db\Exception;
@@ -22,6 +23,7 @@ class WarehouseBillMController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
+    public $billType = BillTypeEnum::BILL_TYPE_M;
 
     /**
      * 调拨单
@@ -37,7 +39,8 @@ class WarehouseBillMController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
 
             ]
         ]);
@@ -90,12 +93,11 @@ class WarehouseBillMController extends BaseController
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if($model->isNewRecord){
-                    $bill_type = BillTypeEnum::BILL_TYPE_L;
-                    $model->bill_no = SnHelper::createBillSn($bill_type);
-                    $model->bill_type = $bill_type;
-                    $log_msg = '';
+                    $model->bill_no = SnHelper::createBillSn($this->billType);
+                    $model->bill_type = $this->billType;
+                    $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->warehouse->name}";
                 }else{
-
+                    $log_msg = "修改调拨单{$model->bill_no}，入库仓库由{$model->fromWarehouse->name}改为{$model->ToWarehouse->name}";
                 }
                 $model->save();
 
@@ -103,8 +105,9 @@ class WarehouseBillMController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '调拨单',
-                    'log_msg' => '创建调拨单'
+                    'log_msg' => $log_msg
                 ];
+                \Yii::$app->warehouseService->warehouseBill->createWarehouseBillLog($log);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -116,6 +119,53 @@ class WarehouseBillMController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = \Yii::$app->request->get('id');
+        $tab = \Yii::$app->request->get('tab',1);
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-m/index']));
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->warehouseMBill->menuTabList($id,$returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $ids = Yii::$app->request->get('ids');
+        $id_arr = explode(',', $ids);
+        $id = $id_arr[0];//暂时打印一个
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $model = $this->findModel($id);
+        $goodsModel = new PurchaseReceiptGoods();
+        $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();
+        foreach ($goodsList as &$item) {
+            $item['stone_zhong'] = $item['main_stone_weight']+$item['second_stone_weight1']+$item['second_stone_weight2']+$item['second_stone_weight3'];
+            $item['han_tax_price'] = $item['cost_price'] + $item['tax_fee'];
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'goodsList' => $goodsList,
+            'tab'=>$tab,
+            'returnUrl'=>$returnUrl,
         ]);
     }
 

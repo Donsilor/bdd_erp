@@ -11,6 +11,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseService $warehouse 仓库
  * @property \addons\Warehouse\services\WarehouseGoodsService $warehouseGoods 商品
  * @property \addons\Warehouse\services\WarehouseBillService $warehouseBill 单据
+ * @property \addons\Warehouse\services\WarehouseBillMService $warehouseMBill 调拨单据
  */
 class Application extends Service
 {
@@ -22,5 +23,6 @@ class Application extends Service
 		'warehouse' => 'addons\Warehouse\services\WarehouseService',
 		'warehouseGoods' => 'addons\Warehouse\services\WarehouseGoodsService',
         'warehouseBill' => 'addons\Warehouse\services\WarehouseBillService',
+        'warehouseMBill' => 'addons\Warehouse\services\WarehouseBillMService',
     ];
 }

@@ -57,6 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
                     </tr>
                     <tr>
+                        <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                        <td><?= $model->cost_price ?></td>
+                    </tr>
+                    <tr>
                         <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('market_price') ?>：</td>
                         <td><?= $model->market_price ?></td>
                     </tr>
