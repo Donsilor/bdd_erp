@@ -56,7 +56,7 @@ class WarehouseBillPayController extends BaseController
             'searchModel' => $searchModel,
             'billInfo' => $billInfo,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->warehouseBillL->menuTabList($bill_id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->billL->menuTabList($bill_id,$returnUrl),
         ]);
     }
 
