@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'overflow-x: scroll;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -45,15 +44,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute' => 'bill_no',
-                            'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                            },
+                            'attribute'=>'bill_no',
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
-                            'format' => 'raw',
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'bill_type',
@@ -65,101 +60,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\BillTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:80px;',
+
                             ]),
-                        ],
+                        ],                        
                         [
-                            'attribute' => 'bill_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
+                            'label' => '盘点数量',
                             'attribute' => 'goods_num',
                             'filter' => true,
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                            'headerOptions' => ['width'=>'100'],
+                        ],                        
                         [
-                            'attribute' => 'order_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\OrderTypeEnum::getValue($model->order_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Warehouse\common\enums\OrderTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
-                            'attribute'=>'order_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'attribute' => 'from_company_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[from_company_id]',
-                                'value'=>$searchModel->from_company_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1',
-                                    'style' => 'width:160px;'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
-                        [
-                            'attribute' => 'from_warehouse_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[from_warehouse_id]',
-                                'value'=>$searchModel->from_warehouse_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-3'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['style' => 'col-md-3'],
-                        ],
-                        [
-                            'attribute' => 'to_company_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[to_company_id]',
-                                'value'=>$searchModel->to_company_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
-                        [
+                            'label' => '盘点仓库',    
                             'attribute' => 'to_warehouse_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
                                 'name'=>'SearchModel[to_warehouse_id]',
                                 'value'=>$searchModel->to_warehouse_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
                                 'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
@@ -203,7 +121,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'member.username', [
                                 'class' => 'form-control',
-                                'style' => 'width:100px;',
                             ]),
 
                         ],
@@ -233,6 +150,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'160'],
                         ],
                         [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    
+                            ]),
+                        ],
+                        [
                             'attribute' => 'status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -242,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:160px;',
+
                             ]),
                         ],
                         [
@@ -256,7 +186,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-target' => '#ajaxModalLg',
                                     ]);
                                 },
-
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },

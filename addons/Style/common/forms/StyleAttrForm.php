@@ -107,7 +107,7 @@ class StyleAttrForm extends Model
      * @param array $attr_list
      */
     public function createAttrs()
-    {        
+    {   
         //批量删除
         StyleAttribute::deleteAll(['style_id'=>$this->style_id]);
         foreach ($this->getPostAttrs() as $attr_id => $attr_value) {

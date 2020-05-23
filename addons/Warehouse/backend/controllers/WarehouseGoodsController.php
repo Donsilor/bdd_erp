@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ExcelHelper;
 use common\helpers\Url;
@@ -46,10 +47,10 @@ class WarehouseGoodsController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['updated_at']);
 
-        $updated_at = $searchModel->updated_at;
-        if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoods::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoods::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGoods::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGoods::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
 
@@ -102,6 +103,7 @@ class WarehouseGoodsController extends BaseController
                         $log_msg = "{$model->getAttributeLabel($key)} 由 ({$old}) 改成 ({$new})";
                         $log = [
                             'goods_id' => $model->id,
+                            'log_type' => LogTypeEnum::ARTIFICIAL,
                             'log_msg' => $log_msg
                         ];
                         Yii::$app->warehouseService->warehouseGoods->createWarehouseGoodsLog($log);

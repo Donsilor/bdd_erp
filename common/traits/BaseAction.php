@@ -21,7 +21,7 @@ trait BaseAction
      *
      * @var int
      */
-    protected $pageSize = 15;
+    protected $pageSize = 10;
     
     protected $noAuthOptional = [];
 

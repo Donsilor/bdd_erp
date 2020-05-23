@@ -543,11 +543,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
 
                         [
-                            'attribute'=>'updated_at',
+                            'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
-                                'attribute' => 'updated_at',
-                                'value' => $searchModel->updated_at,
+                                'attribute' => 'created_at',
+                                'value' => $searchModel->created_at,
                                 'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',

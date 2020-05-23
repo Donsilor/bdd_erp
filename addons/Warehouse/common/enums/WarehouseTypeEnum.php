@@ -11,16 +11,16 @@ namespace addons\Warehouse\common\enums;
  */
 class WarehouseTypeEnum extends \common\enums\BaseEnum
 {
-    const GUI_MIAN = 1;
-    const HOU_KU = 2;
-    const DAI_QU = 3;
-    const DONG_JIE = 4;
-    const ZENG_PIN = 5;
-    const LUO_ZUAN = 6;
-    const CAI_HUO = 7;
-    const TUI_HUO = 8;
-    const JIE_HUO = 9;
-    const QI_TA = 10;
+    const GuiMian = 1;
+    const Houku = 2;
+    const Daiqu = 3;
+    const DongJie = 4;
+    const ZengPin = 5;
+    const LuoZuan = 6;
+    const CaiHuo = 7;
+    const TuiHuo = 8;
+    const JieHuo = 9;
+    const QiTa = 10;
 
     /**
      * @return array
@@ -28,16 +28,16 @@ class WarehouseTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GUI_MIAN => '柜面',
-            self::HOU_KU => '后库',
-            self::DAI_QU => '待取',
-            self::DONG_JIE => '冻结',
-            self::ZENG_PIN => '赠品',
-            self::LUO_ZUAN => '祼钻',
-            self::CAI_HUO => '拆货',
-            self::TUI_HUO => '退货',
-            self::JIE_HUO => '借货',
-            self::QI_TA => '其它',
+            self::GuiMian => '柜面',
+            self::Houku => '后库',
+            self::Daiqu => '待取',
+            self::DongJie => '冻结',
+            self::ZengPin => '赠品',
+            self::LuoZuan => '祼钻',
+            self::CaiHuo => '拆货',
+            self::TuiHuo => '退货',
+            self::JieHuo => '借货',
+            self::QiTa => '其他',
         ];
     }
 
