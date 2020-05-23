@@ -16,9 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">
-                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
-                    </h3>
+                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                </div>
             <div class="box-body table-responsive">
                 <div class="tab-content">
