@@ -36,7 +36,7 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['bill_id', 'log_module', 'creator_id'], 'required'],
+            [['bill_id', 'log_module'], 'required'],
             [['bill_id', 'log_type', 'bill_status', 'creator_id', 'created_at'], 'integer'],
             [['log_msg'], 'string', 'max' => 500],
             [['log_module', 'creator'], 'string', 'max' => 30],
@@ -82,7 +82,7 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->id;
+            $this->creator_id = Yii::$app->user->identity->getId();
             $this->creator = \Yii::$app->user->identity->username;
         }
         return parent::beforeSave($insert);

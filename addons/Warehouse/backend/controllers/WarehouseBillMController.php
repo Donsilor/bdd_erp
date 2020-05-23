@@ -95,7 +95,7 @@ class WarehouseBillMController extends BaseController
                 if($model->isNewRecord){
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
-                    $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->warehouse->name}";
+                    $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
                 }else{
                     $log_msg = "修改调拨单{$model->bill_no}，入库仓库由{$model->fromWarehouse->name}改为{$model->ToWarehouse->name}";
                 }
