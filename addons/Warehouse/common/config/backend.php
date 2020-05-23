@@ -45,6 +45,10 @@ return [
                             'route' => 'warehouse-bill/index',
                     ],
                     [
+                            'title' => '收货单',
+                            'route' => 'warehouse-bill-l/index',
+                    ],
+                    [
                             'title' => '调拨单',
                             'route' => 'warehouse-bill-m/index',
                     ],

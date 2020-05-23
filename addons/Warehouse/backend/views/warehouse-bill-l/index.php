@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill', '单据列表');
+$this->title = Yii::t('warehouse_bill_l', '收货单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -254,7 +254,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{status}',//{edit} {audit}
+                            'template' => '{edit} {audit} {status}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [

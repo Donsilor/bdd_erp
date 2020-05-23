@@ -14,7 +14,7 @@ use addons\Warehouse\common\models\WarehouseBill;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillController extends BaseController
+class WarehouseBillLController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
@@ -58,6 +58,7 @@ class WarehouseBillController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type','L']);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){

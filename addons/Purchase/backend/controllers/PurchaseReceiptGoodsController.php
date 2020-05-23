@@ -161,7 +161,9 @@ class PurchaseReceiptGoodsController extends BaseController
                     if(!empty($receipt_goods_list)){
                         $receipt_val = [];
                         $receipt_key = array_keys($receipt_goods_list[0]);
+                        array_push($receipt_key, 'receipt_id');
                         foreach ($receipt_goods_list as $goods) {
+                            array_push($goods, $receipt_id);
                             $receipt_val[] = array_values($goods);
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();
