@@ -3,9 +3,9 @@
 namespace addons\Warehouse\common\models;
 
 
-use addons\Supply\common\models\Supplier;
 use Yii;
 use common\models\backend\Member;
+use addons\Supply\common\models\Supplier;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 
