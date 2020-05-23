@@ -89,9 +89,13 @@ class WarehouseBillWController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
-
-                Yii::$app->warehouseService->billW->createBill($model);
-                
+                if($model->isNewRecord) {
+                    Yii::$app->warehouseService->billW->createBill($model);
+                }else {
+                    if(false === $model->save()) {
+                        throw new \Exception($this->getError($model));
+                    }
+                }
                 $trans->commit();                
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 

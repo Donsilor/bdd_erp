@@ -68,15 +68,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                                 'label' => '盘点仓库',
-                                'attribute' => 'to_warehouse_id',
-                                'value' =>"toWarehouse.name",
+                                'attribute' => 'from_warehouse_id',
+                                'value' =>"fromWarehouse.name",
                                 'filter'=>Select2::widget([
-                                        'name'=>'SearchModel[to_warehouse_id]',
-                                        'value'=>$searchModel->to_warehouse_id,
+                                        'name'=>'SearchModel[from_warehouse_id]',
+                                        'value'=>$searchModel->from_warehouse_id,
                                         'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
                                         'options' => ['placeholder' =>"请选择"],
                                         'pluginOptions' => [
-                                                'allowClear' => true,
+                                             'allowClear' => true,
                                         ],
                                 ]),
                                 'format' => 'raw',
@@ -85,14 +85,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                                 'label' => '应盘数量',
                                 'attribute' => 'goods_num',
-                                'filter' => true,
+                                'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                                 'label' => '实盘数量',
                                 'attribute' => 'goods_num',
-                                'filter' => true,
+                                'filter' => false,
+                                'value' =>function($model){
+                                    return Yii::$app->warehouseService->billW->getPandianCount($model->id);
+                                },
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                         ], 
