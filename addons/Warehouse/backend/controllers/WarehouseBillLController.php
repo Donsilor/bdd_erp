@@ -83,12 +83,12 @@ class WarehouseBillLController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-l/index']));
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->warehouseBill->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->warehouseBillL->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
