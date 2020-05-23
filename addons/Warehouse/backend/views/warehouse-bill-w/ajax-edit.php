@@ -23,9 +23,10 @@ $form = ActiveForm::begin([
             <?= $form->field($model, 'bill_type')->dropDownList(BillTypeEnum::getMap(),['disabled'=>true])?>	        
 	        <?= $form->field($model, 'from_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
 	                'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
-                    'options' => ['placeholder' => '请选择','disabled'=>false],
+	                'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
-                        'allowClear' => false
+                        'allowClear' => false,
+                        'disabled'=>$model->isNewRecord ? null:'disabled'
                     ],
             ])
 	        ?>

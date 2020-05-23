@@ -9,6 +9,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\PandianStatusEnum;
+use common\enums\StatusEnum;
 
 /**
  * 盘点单
@@ -37,6 +38,7 @@ class WarehouseBillWService extends WarehouseBillService
             $goods_list = WarehouseGoods::find()->select(['goods_id','style_sn','goods_name','warehouse_id'])->where(['warehouse_id'=>$bill->from_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
             if(!empty($goods_list)) {
                 foreach ($goods_list as $goods) {
+                    $goods_ids[] = $goods['goods_id'];
                     $bill_goods = [
                             'bill_id'=>$bill->id,
                             'bill_type'=>$bill->bill_type,
@@ -52,11 +54,14 @@ class WarehouseBillWService extends WarehouseBillService
                 if(empty($bill_goods_keys)) {
                     $bill_goods_keys = array_keys($bill_goods);
                 }
-
+                //更新仓库所有货品 盘点中
+                WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_PANDIAN],['goods_id'=>$goods_ids,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+                //导入明细
                 $result = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute(); 
                 if(!$result) {
                     throw new \Exception('导入单据明细失败');
                 }
+                
             }            
             if(count($goods_list) < $page_size) {
                 break;
@@ -65,7 +70,15 @@ class WarehouseBillWService extends WarehouseBillService
         //更新应盘数量和总金额
         $this->warehouseBillSummary($bill->id);
         
-        //更新仓库所有货品 盘点中
-        WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_PANDIAN],['warehouse_id'=>$bill->from_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+        
+    }
+    /**
+     * 实际盘点总数
+     * @param unknown $bill_id
+     * @return number|string
+     */
+    public function getPandianCount($bill_id)
+    {
+        return WarehouseBillGoods::find()->where(['bill_id'=>$bill_id])->andWhere(['>','pandian_status',PandianStatusEnum::SAVE])->count();
     }
 }

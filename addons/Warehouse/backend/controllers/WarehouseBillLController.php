@@ -88,12 +88,43 @@ class WarehouseBillLController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->warehouseBillL->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->billL->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
 
+    /**
+     * ajax收货单审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $bill_id = Yii::$app->request->get('bill_id');
+        $model = $this->findModel($id);
+        $billModel = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->bill_id = $bill_id;
+            return $model->save()
+                ? $this->redirect(Yii::$app->request->referrer)
+                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'billModel' => $billModel,
+        ]);
+    }
 
+    /**
+     * 导出
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
     public function getExport($dataProvider)
     {
         $list = $dataProvider->models;
