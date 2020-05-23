@@ -123,14 +123,18 @@ class WarehouseBillService extends Service
     }
 
 
-
+    /**
+     * 单据日志
+     * @param array $log
+     * @throws \Exception
+     * @return \addons\Warehouse\common\models\WarehouseBillLog
+     */
     public function createWarehouseBillLog($log){
-        $warehouse_goods_log = new WarehouseBillLog();
-        $warehouse_goods_log->attributes = $log;
-        if(false === $warehouse_goods_log->save()){
-            throw new \Exception($this->getError($warehouse_goods_log));
+        $model = new WarehouseBillLog();
+        $model->attributes = $log;
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
         }
-        return $warehouse_goods_log ;
-
+        return $model;
     }
 }

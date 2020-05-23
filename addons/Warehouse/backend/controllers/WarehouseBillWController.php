@@ -86,16 +86,41 @@ class WarehouseBillWController extends BaseController
                 $model->bill_no   = SnHelper::createBillSn($this->billType);
                 $model->creator_id  = \Yii::$app->user->identity->id;
             }
-            return $model->save()
-            ? $this->redirect(Yii::$app->request->referrer)
-            : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }                
+                $trans->commit();
+                
+                return  $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+                
+            }catch (\Exception $e) {                
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
         }
         
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
     }
-    
+    /**
+     * 盘点
+     * @return mixed
+     */
+    public function actionPandian()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     private function getExport($dataProvider)
     {
         $list = $dataProvider->models;

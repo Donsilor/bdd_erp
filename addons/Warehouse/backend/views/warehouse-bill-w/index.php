@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                                 'attribute' => 'bill_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'80'],
+                                'headerOptions' => ['width'=>'100'],
                                 'value' => function ($model){
                                      return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
                                 },
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ],
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['width'=>'200'],
                         ],      
                         [
                                 'label' => '应盘数量',
@@ -156,13 +156,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {audit} {delete}',
+                                'template' => '{edit} {pandian} {audit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key){
                                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                         ]);
+                                    }, 
+                                    'pandian' => function($url, $model, $key){
+                                        return Html::edit(['pandian','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '盘点');
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->audit_status != AuditStatusEnum::PASS){
