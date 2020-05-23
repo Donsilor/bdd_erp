@@ -44,10 +44,13 @@ return [
                             'title' => '单据列表',
                             'route' => 'warehouse-bill/index',
                     ],
-
                     [
-                        'title' => '调拨单',
-                        'route' => 'warehouse-bill-m/index',
+                            'title' => '调拨单',
+                            'route' => 'warehouse-bill-m/index',
+                    ],
+                    [
+                            'title' => '盘点单',
+                            'route' => 'warehouse-bill-w/index',
                     ],
                 ],
 

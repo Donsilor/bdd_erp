@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                     <?php
                     if($model->audit_status != AuditStatusEnum::PASS){
-                        echo Html::edit(['set-follower','id'=>$model->id], '分配跟单人', [
+                        echo Html::edit(['ajax-follower','id'=>$model->id], '分配跟单人', [
                             'class'=>'btn btn-info btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',

@@ -98,9 +98,8 @@ class PurchaseController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord){
                $model->purchase_sn = SnHelper::createPurchaseSn();
-               
-            }
-            $model->creator_id  = \Yii::$app->user->identity->id;
+               $model->creator_id  = \Yii::$app->user->identity->id;               
+            }            
             return $model->save()
             ? $this->redirect(Yii::$app->request->referrer)
             : $this->message($this->getError($model), $this->redirect(['index']), 'error');
@@ -159,8 +158,10 @@ class PurchaseController extends BaseController
         ]);
     }
 
-    public function actionSetFollower(){
+    public function actionAjaxFollower(){
+        
         $id = Yii::$app->request->get('id');
+        
         $this->modelClass = PurchaseFollowerForm::class;
         $model = $this->findModel($id);
         $this->activeFormValidate($model);

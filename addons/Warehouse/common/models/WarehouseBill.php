@@ -55,6 +55,7 @@ class WarehouseBill extends BaseModel
     public function rules()
     {
         return [
+            //[['bill_status', 'audit_status','bill_no'], 'required'],
             [['id', 'merchant_id', 'bill_status', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
             [['bill_no', 'order_sn'], 'string', 'max' => 30],
@@ -137,18 +138,8 @@ class WarehouseBill extends BaseModel
      */
     public function getToWarehouse()
     {
-        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('ToWarehouse');
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
-
-    /**
-     * 关联管理员一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
-    }
-
     /**
      * 创建人
      * @return \yii\db\ActiveQuery
