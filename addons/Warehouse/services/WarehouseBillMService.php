@@ -29,7 +29,7 @@ class WarehouseBillMService extends Service
     public function menuTabList($bill_id,$returnUrl = null)
     {
         return [
-            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-m/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
             2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-m-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
             3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
         ];

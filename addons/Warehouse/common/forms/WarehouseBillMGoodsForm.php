@@ -16,7 +16,7 @@ class WarehouseBillMGoodsForm extends WarehouseBillGoods
     public function rules()
     {
         $rules = [
-            [[], 'required']
+
         ];
         return array_merge(parent::rules() , $rules);
     }

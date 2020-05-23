@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box-tools">
                         <?php
                             if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                echo Html::create(['edit', 'receipt_id' => $billInfo->id], '新增货品', [
+                                echo Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
                                     'class' => 'btn btn-primary btn-xs openIframe',
                                     'data-width'=>'90%',
                                     'data-height'=>'90%',

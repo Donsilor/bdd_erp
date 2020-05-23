@@ -56,14 +56,15 @@ class WarehouseBillGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'bill_id', 'goods_id', 'goods_num', 'order_detail_id', 'put_in_type', 'warehouse_id', 'material', 'pandian_status', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['bill_no', 'bill_type', 'goods_id', 'goods_name', 'style_sn'], 'required'],
+            [['id', 'bill_id', 'goods_num', 'order_detail_id', 'put_in_type', 'warehouse_id', 'material', 'pandian_status', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id','bill_no', 'bill_type', 'goods_id', 'goods_name', 'style_sn'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
             [['bill_no', 'style_sn', 'diamond_cert_id', 'pandian_box_sn', 'pandian_user'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name'], 'string', 'max' => 160],
             [['diamond_color', 'diamond_clarity', 'box_sn'], 'string', 'max' => 10],
             [['goods_remark'], 'string', 'max' => 255],
+            [['bill_id','goods_id'], 'unique','targetAttribute'=>['bill_id','goods_id']],
         ];
     }
 
