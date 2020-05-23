@@ -85,7 +85,6 @@ class WarehouseBillWController extends BaseController
         if ($model->load(Yii::$app->request->post())) {            
             if($model->isNewRecord){               
                 $model->bill_no   = SnHelper::createBillSn($this->billType);
-                $model->creator_id  = \Yii::$app->user->identity->id;
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
