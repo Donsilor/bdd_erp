@@ -131,7 +131,7 @@ class PurchaseReceiptService extends Service
 
         $bill = [
             'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
-            'bill_status' => AuditStatusEnum::PENDING,
+            'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $receipt->supplier_id,
             'put_in_type' => 1,
             'order_type' => OrderTypeEnum::ORDER_L,

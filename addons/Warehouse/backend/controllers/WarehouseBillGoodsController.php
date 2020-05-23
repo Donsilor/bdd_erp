@@ -2,14 +2,14 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\models\WarehouseBill;
-use common\enums\StatusEnum;
+
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
+use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use common\enums\StatusEnum;
 use yii\base\Exception;
 
 
@@ -44,13 +44,11 @@ class WarehouseBillGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
-        $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
-        $billGoods = $dataProvider->getModels();
+        $model = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'billInfo' => $billInfo,
-            'billGoods' => $billGoods,
             'tabList'=>\Yii::$app->warehouseService->warehouseBill->menuTabList($bill_id,$returnUrl),
             'tab' => $tab,
         ]);

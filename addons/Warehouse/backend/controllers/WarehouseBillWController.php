@@ -8,6 +8,8 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\SnHelper;
+use addons\Warehouse\common\enums\BillTypeEnum;
 
 
 /**
@@ -17,6 +19,7 @@ class WarehouseBillWController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
+    public $billType = BillTypeEnum::BILL_TYPE_W;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -45,7 +48,7 @@ class WarehouseBillWController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        
+        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type',$this->billType]);
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
         
         //导出
@@ -62,7 +65,62 @@ class WarehouseBillWController extends BaseController
         
     }
     
-    
+    /**
+     * ajax编辑/创建 盘点单
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        
+        if($model->isNewRecord){
+            $model->bill_type = $this->billType; 
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {            
+            if($model->isNewRecord){               
+                $model->bill_no   = SnHelper::createBillSn($this->billType);
+                $model->creator_id  = \Yii::$app->user->identity->id;
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }                
+                $trans->commit();
+                
+                return  $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+                
+            }catch (\Exception $e) {                
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    /**
+     * 盘点
+     * @return mixed
+     */
+    public function actionPandian()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     private function getExport($dataProvider)
     {
         $list = $dataProvider->models;

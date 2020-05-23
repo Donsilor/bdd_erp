@@ -1,213 +1,142 @@
 <?php
 
-
 use common\helpers\Html;
 use common\helpers\Url;
-use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
+use yii\grid\GridView;
+use kartik\daterange\DateRangePicker;
 
-$this->title = '单据明细';
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = Yii::t('warehouse_bill_goods', '单据详情');
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
+
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no ?></h2>
-    <?php echo Html::menuTab($tabList, $tab)?>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">
-                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
-                    </h3>
-                    <div class="box-tools">
-                        <?= Html::create(['edit', 'receipt_id' => $billInfo->id], '新增货品', [
-                            'class' => 'btn btn-primary btn-xs openIframe',
-                            'data-width'=>'90%',
-                            'data-height'=>'90%',                            
-                            'data-offset'=>'20px',
-                        ]); ?>
-                    </div>
-               </div>
-            <div class="box-body table-responsive">
-                <div class="tab-content">
-                    <?php
-                    $billgoodsColomns = [
-                        [
-                            'name' => 'id',
-                            'title'=>"序号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_id',
-                            'title'=>"货号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'bill_no',
-                            'title'=>"单据编号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_name',
-                            'title'=>"商品名称",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-                        [
-                            'name' =>'style_sn',
-                            'title'=>"款号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_num',
-                            'title'=>"商品数量",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-                        [
-                            'name' => "material",
-                            'title'=>"主成色",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_weight",
-                            'title'=>"金重",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_loss",
-                            'title'=>"金损",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_carat",
-                            'title'=>"钻石大小",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_color",
-                            'title'=>"钻石颜色",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_clarity",
-                            'title'=>"钻石净度",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_cert_id",
-                            'title'=>"证书号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "cost_price",
-                            'title'=>"成本价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "sale_price",
-                            'title'=>"销售价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "market_price",
-                            'title'=>"市场价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
+                <div class="box-body table-responsive">
+                    <?php echo Html::batchButtons(false)?>
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'overflow-x: scroll; width:100%;'],
+                        'showFooter' => false,//显示footer行
+                        'id'=>'grid',
+                        'columns' => [
+                            [
+                                'class' => 'yii\grid\SerialColumn',
+                                'visible' => false,
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width'=>'30'],
+                            ],
+                            [
+                                'attribute' => 'goods_id',
+                                'value'=>function($model) {
+                                    return Html::a($model->goods_id, ['warehouse-goods/view', 'goods_id' => $model->goods_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'material',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->material);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material',\addons\Warehouse\common\enums\BillTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;',
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'gold_weight',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'gold_loss',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'diamond_carat',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'diamond_color',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'diamond_clarity',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'diamond_cert_id',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute'=>'cost_price',
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'sale_price',
+                                'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'market_price',
+                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
                             ]
                         ]
-                    ];
-                    ?>
-                    <?= unclead\multipleinput\MultipleInput::widget([
-                        'name' => "bill_goods_list",
-                        'value' => $billGoods,
-                        'columns' => $billgoodsColomns,
-                    ]) ?>
+                    ]); ?>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 text-center">
-                    <?= $form->field($billInfo, 'id')->hiddenInput()->label(false) ?>
-                    <button class="btn btn-primary" type="submit">保存</button>
-                    <span class="btn btn-white" onclick="history.go(-1)">返回</span>
-                </div>
-            </div>
-        <!-- box end -->
         </div>
+        <!-- box end -->
     </div>
+    <!-- tab-content end -->
 </div>
-<?php ActiveForm::end(); ?>

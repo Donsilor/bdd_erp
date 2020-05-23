@@ -5,14 +5,16 @@ namespace addons\Warehouse\common\enums;
 
 /**
  *
- * 仓储单据类型
+ * 仓储单据状态
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
 class BillStatusEnum extends \common\enums\BaseEnum
 {
-    const BILL_TYPE_L = 'L';
-    const BILL_TYPE_S = 'S';
+    const SAVE     = 0;
+    const AUDIT    = 1;
+    const CANCEL   = 2;
+    const SIGN_FOR = 3;
 
     /**
      * @return array
@@ -20,8 +22,10 @@ class BillStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::BILL_TYPE_L => '收货单',
-            self::BILL_TYPE_S => '销售单',
+            self::SAVE      => '已保存',
+            self::AUDIT     => '已审核',
+            self::CANCEL    => '已取消',
+            self::SIGN_FOR  => '已签收',
         ];
     }
 

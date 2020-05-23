@@ -29,6 +29,8 @@ use addons\Style\common\models\StyleCate;
  * @property int $to_company_id 入库公司
  * @property int $from_company_id 出库公司
  * @property int $from_warehouse_id 出库仓库
+ * @property int $deliver_goods_no 送货单号
+ * @property int $is_settle_accounts 是否结价
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
@@ -55,9 +57,10 @@ class WarehouseBill extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'bill_status', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            //[['bill_status', 'audit_status','bill_no'], 'required'],
+            [['id', 'merchant_id', 'bill_status', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
-            [['bill_no', 'order_sn'], 'string', 'max' => 30],
+            [['bill_no', 'order_sn', 'deliver_goods_no'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['bill_no'], 'unique'],
@@ -74,7 +77,7 @@ class WarehouseBill extends BaseModel
             'merchant_id' => '商户ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
-            'bill_status' => '仓储单据状态',
+            'bill_status' => '单据状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
             'order_sn' => '订单号',
@@ -87,6 +90,8 @@ class WarehouseBill extends BaseModel
             'to_company_id' => '入库公司',
             'from_company_id' => '出库公司',
             'from_warehouse_id' => '出库仓库',
+            'deliver_goods_no' => '送货单号',
+            'is_settle_accounts' => '是否结价',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
@@ -137,18 +142,8 @@ class WarehouseBill extends BaseModel
      */
     public function getToWarehouse()
     {
-        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('ToWarehouse');
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
-
-    /**
-     * 关联管理员一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
-    }
-
     /**
      * 创建人
      * @return \yii\db\ActiveQuery

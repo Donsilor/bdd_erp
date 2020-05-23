@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
                             'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                            'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                            'options' => ['placeholder' =>"请选择"],
                             'pluginOptions' => [
                                     'allowClear' => true,                                          
                             ],
@@ -182,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'follower' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){
-                            return Html::edit(['set-follower','id'=>$model->id], '跟单人', [
+                            return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                                 'class'=>'btn btn-info btn-sm',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',

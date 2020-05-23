@@ -76,8 +76,13 @@ class WarehouseGoodsController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $goods_id = Yii::$app->request->get('goods_id');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-goods/index']));
+        if(empty($id) && !empty($goods_id)){
+            $goodsInfo = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->asArray()->one();
+            $id = $goodsInfo['id']??0;
+        }
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
