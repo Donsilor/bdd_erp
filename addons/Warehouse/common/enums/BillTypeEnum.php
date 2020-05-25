@@ -15,6 +15,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
     const BILL_TYPE_S = 'S';
     const BILL_TYPE_M = 'M';
     const BILL_TYPE_W = 'W';
+    const BILL_TYPE_B = 'B';
 
     /**
      * @return array
@@ -26,6 +27,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
             self::BILL_TYPE_S => '销售单',
             self::BILL_TYPE_M => '调拨单',
             self::BILL_TYPE_W => '盘点单',
+            self::BILL_TYPE_B => '退货返厂单',
         ];
     }
 

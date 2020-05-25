@@ -4,10 +4,10 @@ namespace addons\Warehouse\common\forms;
 
 use addons\Warehouse\common\models\WarehouseBill;
 /**
- * 收货单 Form
+ * 退货返厂单 Form
  *
  */
-class WarehouseBillLForm extends WarehouseBill
+class WarehouseBillBForm extends WarehouseBill
 {
     /**
      * {@inheritdoc}

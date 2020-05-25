@@ -3,16 +3,16 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillLForm;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
@@ -23,11 +23,11 @@ use common\helpers\Url;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillLController extends BaseController
+class WarehouseBillBController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
-    public $bill_type = BillTypeEnum::BILL_TYPE_M;
+    public $bill_type = BillTypeEnum::BILL_TYPE_B;
 
     /**
      * Lists all StyleChannel models.
@@ -68,7 +68,7 @@ class WarehouseBillLController extends BaseController
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status', -1]);
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->bill_type]);
 
         //导出
@@ -94,7 +94,7 @@ class WarehouseBillLController extends BaseController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillLForm::class;
+        $this->modelClass = WarehouseBillBForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         // ajax 校验
@@ -136,13 +136,13 @@ class WarehouseBillLController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->billL->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->billB->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
 
     /**
-     * ajax收货单审核
+     * ajax退货返厂单审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -150,7 +150,7 @@ class WarehouseBillLController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillLForm::class;
+        $this->modelClass = WarehouseBillBForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         $billGoodsModel = new WarehouseBillGoods();
