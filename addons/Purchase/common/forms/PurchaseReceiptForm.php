@@ -2,8 +2,10 @@
 
 namespace addons\Purchase\common\forms;
 
-use Yii;
 
+use Yii;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use addons\Purchase\common\models\PurchaseReceipt;
 /**
  * 采购收货单审核 Form
@@ -13,6 +15,7 @@ use addons\Purchase\common\models\PurchaseReceipt;
  */
 class PurchaseReceiptForm extends PurchaseReceipt
 {
+    public $produce_sns;
     /**
      * {@inheritdoc}
      */
@@ -23,6 +26,24 @@ class PurchaseReceiptForm extends PurchaseReceipt
                 [['audit_status'], 'required'],                
                 [['audit_remark'],'string','max'=>255],
         ];
-    }   
-    
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        //合并
+        return ArrayHelper::merge(parent::attributeLabels() , [
+            'produce_sns'=>'布产单号'
+        ]);
+    }
+
+    /**
+     * 批量获取布产单号
+     */
+    public function getProduceSns()
+    {
+        return StringHelper::explodeIds($this->produce_sns);
+    }
 }

@@ -3,16 +3,16 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillLForm;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
@@ -25,9 +25,11 @@ use common\helpers\Url;
  */
 class WarehouseBillLController extends BaseController
 {
+
     use Curd;
     public $modelClass  = WarehouseBill::class;
     public $billType    = BillTypeEnum::BILL_TYPE_L;
+
 
     /**
      * Lists all StyleChannel models.
@@ -45,45 +47,37 @@ class WarehouseBillLController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-//                'supplier' => ['supplier_name'],
-//                'member' => ['username'],
                 'creator' => ['username'],
                 'auditor' => ['username'],
 
             ]
         ]);
 
-        $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['updated_at']);
-
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams,['updated_at']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
-
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
-
         //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);
         }
-
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
 
-
     }
+
 
     /**
      * ajax编辑/创建
@@ -122,6 +116,7 @@ class WarehouseBillLController extends BaseController
         ]);
     }
 
+
     /**
      * 详情展示页
      * @return string
@@ -140,6 +135,7 @@ class WarehouseBillLController extends BaseController
             'returnUrl'=>$returnUrl,
         ]);
     }
+
 
     /**
      * ajax收货单审核
@@ -200,6 +196,7 @@ class WarehouseBillLController extends BaseController
             'model' => $model,
         ]);
     }
+
 
     /**
      * 列表导出

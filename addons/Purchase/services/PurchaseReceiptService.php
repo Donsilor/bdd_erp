@@ -133,16 +133,17 @@ class PurchaseReceiptService extends Service
             'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
             'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $receipt->supplier_id,
-            'put_in_type' => 1,
+            'put_in_type' => 0,
             'order_type' => OrderTypeEnum::ORDER_L,
             'goods_num' => count($goods),
             'total_cost' => $total_cost,
             'total_sale' => $sale_price,
             'total_market' => $market_price,
-            'to_warehouse_id' => 1,
+            'to_warehouse_id' => 0,
             'to_company_id' => 0,
             'from_company_id' => 0,
-            'from_warehouse_id' => 0
+            'from_warehouse_id' => 0,
+            'deliver_goods_no' => $receipt->receipt_no,
         ];
 
         Yii::$app->warehouseService->billL->createWarehouseBillL($bill, $goods);
