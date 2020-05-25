@@ -145,7 +145,7 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_list['produce_sn'] = $produce_sn;
                             $receipt_list['purchase_sn'] = $produce_info['from_order_sn'];
                             $receipt_list['goods_name'] = $produce_info['goods_name'];
-                            $receipt_list['goods_num'] = $produce_info['goods_num'];
+                            $receipt_list['goods_num'] = 1;
                             $receipt_list['style_sn'] = $produce_info['style_sn'] != "" ? $produce_info['style_sn'] : $produce_info['qiban_sn'];
                             $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
