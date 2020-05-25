@@ -42,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
-                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'id',
@@ -50,8 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
 
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'bill_no',
@@ -73,15 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
                             },
                             'filter' => false,
-                        ],
-                        [
-                            'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         //'to_company_id',
                         [
@@ -108,7 +96,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
+                        [
+                            'attribute' => 'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
 
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'bill_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+
+                            ]),
+                        ],
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
@@ -185,26 +195,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         ],
                         [
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-
-                            ]),
-                        ],
-                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'template' => '{edit} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
@@ -212,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -228,7 +224,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                    }
                                 },
                             ],
                             'headerOptions' => ['class' => 'col-md-3'],

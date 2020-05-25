@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillMForm;
@@ -26,7 +27,7 @@ use yii\db\Exception;
 class WarehouseBillMController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBill::class;
+    public $modelClass = WarehouseBillMForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_M;
 
     /**
@@ -87,7 +88,6 @@ class WarehouseBillMController extends BaseController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillMForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
 
@@ -101,9 +101,12 @@ class WarehouseBillMController extends BaseController
                     $model->bill_type = $this->billType;
                     $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
                 }else{
-                    $log_msg = "修改调拨单{$model->bill_no}，入库仓库由{$model->fromWarehouse->name}改为{$model->ToWarehouse->name}";
+                    $log_msg = "修改调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
                 }
-                $model->save();
+
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
 
                 $log = [
                     'bill_id' => $model->id,
@@ -169,6 +172,7 @@ class WarehouseBillMController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->bill_status = BillStatusEnum::AUDIT; //单据状态改成审核
                     //更新库存状态和仓库
                     $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
                     foreach ($billGoods as $goods){
@@ -178,25 +182,79 @@ class WarehouseBillMController extends BaseController
                         }
                     }
                 }
-                $model->save();
-                $trans->commit();
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
 
+                //日志
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '调拨单',
+                    'log_msg' => '单据审核：'.AuditStatusEnum::getValue($model->audit_status)
+                ];
+                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->getSession()->setFlash('success','保存成功');
+                $trans->commit();
+                return $this->redirect(\Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-
-
-
-
-            return $model->save()
-                ? $this->redirect(\Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
         }
 
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
+
+    /**
+     * 删除/关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->bill_status = BillStatusEnum::CANCEL;
+            //更新库存状态
+            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_TRANSFER]);
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不是调拨中或者不存在，请查看原因");
+                }
+            }
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '调拨单',
+                'log_msg' => '单据取消'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->getSession()->setFlash('success','删除成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+
+        return $this->message("删除失败", $this->redirect(['index']), 'error');
+    }
+
 
     /**
      * 单据打印
@@ -224,6 +282,9 @@ class WarehouseBillMController extends BaseController
             'returnUrl'=>$returnUrl,
         ]);
     }
+
+
+
 
 
 }

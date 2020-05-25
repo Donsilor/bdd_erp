@@ -33,59 +33,40 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= AuditStatusEnum::getValue($model->audit_status) ?></td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
-                            <td><?= $model->goods_num ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\OrderTypeEnum::getValue($model->order_type)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('from_warehouse_id') ?>：</td>
-                            <td><?= $model->fromWarehouse->name ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('to_warehouse_id') ?>：</td>
                             <td><?= $model->toWarehouse->name ?? '' ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                            <td><?= $model->supplier->supplier_name ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
+                            <td><?= $model->goods_num ?></td>
                         </tr>
-
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
-                            <td><?= $model->total_sale ?></td>
-                        </tr>
-
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
                             <td><?= $model->creator->username ?? ''  ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->auditor->username ?? '' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                            <td><?= $model->audit_remark ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                            <td><?= $model->auditor->username ?? '' ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -101,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
 
             <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
+            if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                 echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class'=>'btn btn-primary btn-ms',
@@ -113,6 +94,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
+                echo '&nbsp;';
+                echo Html::delete(['delete', 'id' => $model->id], '关闭');
             }
             ?>
         </div>

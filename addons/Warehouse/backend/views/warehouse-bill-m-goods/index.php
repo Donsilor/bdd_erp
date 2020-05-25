@@ -70,9 +70,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'goods_num',
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'attribute' => 'goods.style_cate_id',
+                                'value' => 'goods.styleCate.name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute' => 'put_in_type',
@@ -87,7 +88,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label'=>'出库仓库',
                                 'attribute' => 'from_warehouse_id',
                                 'value' =>"fromWarehouse.name",
                                 'filter'=>Select2::widget([
@@ -103,7 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label'=>'入库仓库',
                                 'attribute' => 'to_warehouse_id',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -178,8 +177,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => '操作',
                                 'template' => '{delete}',
                                 'buttons' => [
-                                    'delete' => function($url, $model, $key){
-                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    'delete' => function($url, $model, $key) use($billInfo){
+                                        if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-3'],

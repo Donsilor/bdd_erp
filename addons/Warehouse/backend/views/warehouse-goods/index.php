@@ -252,10 +252,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'material',
-                            'filter' => Html::activeTextInput($searchModel, 'material', [
+                            'attribute' => 'material',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->material);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MATERIAL), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
+
                             ]),
                             'headerOptions' => [],
                         ],

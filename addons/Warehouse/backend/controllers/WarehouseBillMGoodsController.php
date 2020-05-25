@@ -171,14 +171,15 @@ class WarehouseBillMGoodsController extends BaseController
                         throw new Exception("货品改变状态数量与明细数量不一致");
                     }
                     //更新单据数量、价格
-                    $billInfo->save();
-
+                    if(false === $billInfo->save()){
+                        throw new \Exception($this->getError($billInfo));
+                    }
                     $trans->commit();
                     Yii::$app->getSession()->setFlash('success', '保存成功');
                     return $this->redirect(Yii::$app->request->referrer);
                 }catch (\Exception $e){
                     $trans->rollBack();
-                    return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
+                    return $this->message($e->getMessage(), $this->redirect(['index','bill_id'=>$bill_id]), 'error');
                 }
 
             }

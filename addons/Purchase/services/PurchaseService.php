@@ -75,7 +75,6 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
-
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'from_order_id'=>$model->purchase_id,
