@@ -3,6 +3,10 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -10,6 +14,8 @@ use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\forms\WarehouseBillLForm;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 
@@ -144,20 +150,51 @@ class WarehouseBillLController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $bill_id = Yii::$app->request->get('bill_id');
+        $this->modelClass = WarehouseBillLForm::class;
         $model = $this->findModel($id);
-        $billModel = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $model = $model ?? new WarehouseBill();
+        $billGoodsModel = new WarehouseBillGoods();
+        $goodsModel = new WarehouseGoods();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->bill_id = $bill_id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = Yii::$app->user->identity->getId();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->status = StatusEnum::ENABLED;
+                    $model->bill_status = BillStatusEnum::AUDIT;
+                }else{
+                    $model->status = StatusEnum::DISABLED;
+                    $model->bill_status = BillStatusEnum::CANCEL;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $billGoods = $billGoodsModel::find()->select('goods_id')->where(['bill_id' => $id])->asArray()->all();
+                $goods_ids = array_column($billGoods, 'goods_id');
+                $condition = ['goods_status' => GoodsStatusEnum::RECEIVING, 'goods_id' => $goods_ids];
+                $goods_status = $model->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_STOCK : GoodsStatusEnum::CANCEL;
+                $res = $goodsModel::updateAll([
+                    'goods_status' => $goods_status,
+                    'put_in_type' => $model->put_in_type,
+                    'warehouse_id' => $model->to_warehouse_id],
+                    $condition
+                );
+                if(false === $res) {
+                    throw new \Exception($this->getError($goodsModel));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
         }
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'billModel' => $billModel,
         ]);
     }
 
