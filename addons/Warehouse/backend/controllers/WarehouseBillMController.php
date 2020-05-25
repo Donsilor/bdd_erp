@@ -141,7 +141,7 @@ class WarehouseBillMController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$returnUrl,$this->billType),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

@@ -65,7 +65,7 @@ class WarehouseBillLogController extends BaseController
             'bill_id' => $bill_id,
             'billInfo' => $billInfo,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id,$returnUrl, $billInfo->bill_type),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id,$billInfo->bill_type,$returnUrl),
         ]);
     }
 

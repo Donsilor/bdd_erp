@@ -74,7 +74,7 @@ class WarehouseBillMGoodsController extends BaseController
             'searchModel' => $searchModel,
             'billInfo' => $billInfo,
             'billGoods' => $bill_goods,
-            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id,$returnUrl,BillTypeEnum::BILL_TYPE_M),
+            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id,BillTypeEnum::BILL_TYPE_M,$returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
