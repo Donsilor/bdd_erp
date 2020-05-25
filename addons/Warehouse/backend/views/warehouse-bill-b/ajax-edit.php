@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 $form = ActiveForm::begin([
@@ -17,6 +18,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
+        <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
         <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
             'data' => \Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],

@@ -173,15 +173,13 @@ class WarehouseBillBController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 $billGoods = $billGoodsModel::find()->select('goods_id')->where(['bill_id' => $id])->asArray()->all();
+                if(empty($billGoods)){
+                    throw new \Exception("单据明细不能为空");
+                }
                 $goods_ids = array_column($billGoods, 'goods_id');
-                $condition = ['goods_status' => GoodsStatusEnum::RECEIVING, 'goods_id' => $goods_ids];
-                $goods_status = $model->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_STOCK : GoodsStatusEnum::CANCEL;
-                $res = $goodsModel::updateAll([
-                    'goods_status' => $goods_status,
-                    'put_in_type' => $model->put_in_type,
-                    'warehouse_id' => $model->to_warehouse_id],
-                    $condition
-                );
+                $condition = ['goods_status' => GoodsStatusEnum::IN_RETURN_FACTORY, 'goods_id' => $goods_ids];
+                $goods_status = $model->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_RETURN_FACTORY : GoodsStatusEnum::IN_STOCK;
+                $res = $goodsModel::updateAll(['goods_status' => $goods_status], $condition);
                 if(false === $res) {
                     throw new \Exception($this->getError($goodsModel));
                 }

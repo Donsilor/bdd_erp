@@ -17,6 +17,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                    <div class="box-tools">
+                        <?php
+                        if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                            echo Html::create(['edit', 'bill_id' => $model->id], '新增货品', [
+                                'class' => 'btn btn-primary btn-xs openIframe',
+                                'data-width'=>'90%',
+                                'data-height'=>'90%',
+                                'data-offset'=>'20px',
+                            ]);
+                        }
+                        ?>
+                    </div>
                </div>
             <div class="box-body table-responsive">
                 <div class="tab-content">
