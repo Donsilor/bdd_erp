@@ -56,7 +56,7 @@ class WarehouseBillBGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'billGoods' => $billGoods,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id,$this->billType,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
     }

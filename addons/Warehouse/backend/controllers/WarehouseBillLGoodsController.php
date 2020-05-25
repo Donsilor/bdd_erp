@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -10,6 +11,7 @@ use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use common\enums\StatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
 use yii\base\Exception;
 
 
@@ -20,6 +22,7 @@ class WarehouseBillLGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
+    public $bill_type = BillTypeEnum::BILL_TYPE_L;
     /**
      * Lists all WarehouseBillGoods models.
      * @return mixed
@@ -51,7 +54,7 @@ class WarehouseBillLGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'billGoods' => $billGoods,
-            'tabList'=>\Yii::$app->warehouseService->billL->menuTabList($bill_id,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->bill_type, $returnUrl),
             'tab' => $tab,
         ]);
     }
