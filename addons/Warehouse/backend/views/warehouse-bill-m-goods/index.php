@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods.style_cate_id',
                                 'value' => 'goods.styleCate.name',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'put_in_type',
