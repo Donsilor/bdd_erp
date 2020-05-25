@@ -90,6 +90,7 @@ class WarehouseBillMController extends BaseController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
+        $to_warehouse_id = $model->to_warehouse_id;
 
         // ajax 校验
         $this->activeFormValidate($model);
@@ -107,6 +108,14 @@ class WarehouseBillMController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+
+                if(!($model->isNewRecord) && $model->to_warehouse_id != $to_warehouse_id){
+                    //编辑单据明细所有入库仓库
+                    WarehouseBillGoods::updateAll(['to_warehouse_id' => $model->to_warehouse_id],['bill_id' => $model->id]);
+                }
+
+
+
 
                 $log = [
                     'bill_id' => $model->id,

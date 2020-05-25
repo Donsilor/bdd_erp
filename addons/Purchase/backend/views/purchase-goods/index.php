@@ -13,31 +13,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
+        <?php if($purchase->audit_status == AuditStatusEnum::PENDING) {?>
+            <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]); ?>
+        <?php }?>
+    </div>
     <div class="tab-content">
-        <div class="row col-xs-15">
+        <div class="row col-xs-15" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">
-                    <?= Html::encode($this->title) ?>
-                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
-                    </h3>
-                    <div class="box-tools">
-                    <?php if($purchase->audit_status == AuditStatusEnum::PENDING) {?>
-                        <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
-                            'class' => 'btn btn-primary btn-xs openIframe',
-                            'data-width'=>'90%',
-                            'data-height'=>'90%',                            
-                            'data-offset'=>'20px',
-                        ]); ?>
-                    <?php }?>    
-                    </div>
-               </div>
-            <div class="box-body table-responsive">  
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         'showFooter' => true,//显示footer行
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'id'=>'grid', 
                         'columns' => [
                             [

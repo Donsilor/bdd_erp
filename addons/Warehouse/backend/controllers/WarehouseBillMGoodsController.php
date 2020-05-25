@@ -153,7 +153,9 @@ class WarehouseBillMGoodsController extends BaseController
                         $goods['bill_id'] = $bill_id;
                         $goods['bill_no'] = $billInfo['bill_no'];
                         $goods['bill_type'] = $billInfo['bill_type'];
+                        $goods['from_warehouse_id'] = $goods_info['warehouse_id'];
                         $goods['warehouse_id'] = $billInfo['to_warehouse_id'];
+                        $goods['to_warehouse_id'] = $billInfo['to_warehouse_id'];
                         $goods['put_in_type'] = $goods_info['put_in_type'];
                         $warehouse_goods_val[] = array_values($goods);
                         $goods_id_arr[] = $goods['goods_id'];

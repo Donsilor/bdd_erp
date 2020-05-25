@@ -15,10 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">单据日志 - <?php echo $billInfo->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
 
-                <div class="box-body table-responsive">
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
