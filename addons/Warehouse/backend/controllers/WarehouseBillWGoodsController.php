@@ -8,9 +8,8 @@ use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\forms\WarehouseBillWForm;
 
 
 /**
@@ -31,7 +30,7 @@ class WarehouseBillWGoodsController extends BaseController
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-w/index']));
         
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        $bill = WarehouseBillWForm::find()->where(['id'=>$bill_id])->one();
         
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
@@ -58,7 +57,7 @@ class WarehouseBillWGoodsController extends BaseController
                 'searchModel' => $searchModel,
                 'bill'=>$bill,
                 'tab' =>$tab,
-                'tabList'=>\Yii::$app->warehouseService->billW->menuTabList($bill_id,$returnUrl),
+                'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id,$this->billType,$returnUrl),
                 'returnUrl'=>$returnUrl
         ]);        
         
