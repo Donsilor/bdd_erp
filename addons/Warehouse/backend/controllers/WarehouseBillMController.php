@@ -4,8 +4,12 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillMForm;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
+use common\enums\AuditStatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use common\models\base\SearchModel;
@@ -137,8 +141,60 @@ class WarehouseBillMController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$returnUrl,$this->billType),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+
+    /**
+     * ajax 审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    //更新库存状态和仓库
+                    $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
+                    foreach ($billGoods as $goods){
+                        $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK, 'warehouse_id' => $model->to_warehouse_id],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_TRANSFER]);
+                        if(!$res){
+                            throw new Exception("商品{$goods->goods_id}不是调拨中或者不存在，请查看原因");
+                        }
+                    }
+                }
+                $model->save();
+                $trans->commit();
+
+            }catch (\Exception $e){
+                $trans->rollBack();
+            }
+
+
+
+
+            return $model->save()
+                ? $this->redirect(\Yii::$app->request->referrer)
+                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 

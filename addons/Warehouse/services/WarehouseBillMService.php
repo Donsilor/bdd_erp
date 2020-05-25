@@ -1,9 +1,7 @@
 <?php
 namespace addons\Warehouse\services;
-    
 
 use Yii;
-
 
 /**
  *  调拨单
@@ -11,7 +9,7 @@ use Yii;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillMService extends Service
+class WarehouseBillMService extends WarehouseService
 {
     
 }

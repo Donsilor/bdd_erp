@@ -182,7 +182,7 @@ class WarehouseBillService extends Service
 
     //统计单据明细数量
     public function sumGoodsNum($bill_id){
-        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->count();
+        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->sum('goods_num');
     }
 
     //统计单据明细成本价

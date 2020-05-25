@@ -74,7 +74,7 @@ class WarehouseBillMGoodsController extends BaseController
             'searchModel' => $searchModel,
             'billInfo' => $billInfo,
             'billGoods' => $bill_goods,
-            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id,$returnUrl,BillTypeEnum::BILL_TYPE_M),
+            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id,BillTypeEnum::BILL_TYPE_M,$returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
@@ -102,7 +102,7 @@ class WarehouseBillMGoodsController extends BaseController
             $goods_ids = str_replace('，',',',$goods_ids);
             $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
             $goods_id_arr = explode(",", $goods_ids);
-            $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->asArray()->one();
+            $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
             try {
                 foreach ($goods_id_arr as $goods_id) {
                     $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
@@ -113,13 +113,13 @@ class WarehouseBillMGoodsController extends BaseController
                     $goods['id'] = null;
                     $goods['goods_id'] = $goods_id;
                     $goods['bill_id'] = $bill_id;
-                    $goods['bill_no'] = $billInfo['bill_no'];
-                    $goods['bill_type'] = $billInfo['bill_type'];
+                    $goods['bill_no'] = $billInfo->bill_no;
+                    $goods['bill_type'] = $billInfo->bill_type;
                     $goods['style_sn'] = $goods_info['style_sn'];
                     $goods['goods_name'] = $goods_info['goods_name'];
                     $goods['goods_num'] = $goods_info['goods_num'];
                     $goods['put_in_type'] = $goods_info['put_in_type'];
-                    $goods['warehouse_id'] = $billInfo['to_warehouse_id'];
+                    $goods['warehouse_id'] = $billInfo->to_warehouse_id;
                     $goods['material'] = $goods_info['material'];
                     $goods['gold_weight'] = $goods_info['gold_weight'];
                     $goods['gold_loss'] = $goods_info['gold_loss'];
@@ -141,10 +141,6 @@ class WarehouseBillMGoodsController extends BaseController
                     $trans = Yii::$app->db->beginTransaction();
 
                     $warehouse_goods_val = [];
-                    $warehouse_bill_update = [
-                        'goods_num' => 0,
-                        'total_cost' => 0,
-                    ];
                     $goods_id_arr = [];
 
                     foreach ($warehouse_goods_list as &$goods) {
@@ -161,8 +157,8 @@ class WarehouseBillMGoodsController extends BaseController
                         $goods['put_in_type'] = $goods_info['put_in_type'];
                         $warehouse_goods_val[] = array_values($goods);
                         $goods_id_arr[] = $goods['goods_id'];
-                        $warehouse_bill_update['goods_num'] += $goods['goods_num'];
-                        $warehouse_bill_update['total_cost'] += $goods['cost_price'];
+                        $billInfo->goods_num += $goods['goods_num'];
+                        $billInfo->total_cost += $goods['cost_price'];
                     }
                     $warehouse_goods_key = array_keys($warehouse_goods_list[0]);
 
@@ -175,7 +171,7 @@ class WarehouseBillMGoodsController extends BaseController
                         throw new Exception("货品改变状态数量与明细数量不一致");
                     }
                     //更新单据数量、价格
-                    WarehouseBill::updateAll($warehouse_bill_update,['id'=>$bill_id]);
+                    $billInfo->save();
 
                     $trans->commit();
                     Yii::$app->getSession()->setFlash('success', '保存成功');
@@ -204,30 +200,34 @@ class WarehouseBillMGoodsController extends BaseController
      */
     public function actionDelete($id)
     {
-        $bill_id = Yii::$app->request->get('bill_id');
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         $billGoods = $this->findModel($id);
-        $goods_id = $billGoods->goods_id;
-        
+        $bill_id = $billGoods->bill_id;
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         try{
             $trans = Yii::$app->db->beginTransaction();
             //删除
-            $this->findModel($id)->delete();
+            $billGoods->delete();
             //更新单据数量和金额
             $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
             $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
             $bill->save();
 
-            //更新库存表商品状态
-
-
+            //更新库存表商品状态为库存
+            $res = WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_TRANSFER]);
+            if($res == 0){
+                throw new Exception("商品不是调拨中或者不存在，请查看原因");
+            }
             $trans->commit();
             return $this->message("删除成功", $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message("删除失败", $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
+
+
+
+
 
 
 
