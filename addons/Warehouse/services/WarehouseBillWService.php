@@ -42,7 +42,7 @@ class WarehouseBillWService extends WarehouseBillService
         $page_size = 100;
         for($page = 1; $page <= 200 ; $page ++) {
 
-            $goods_list = WarehouseGoods::find()->select(['goods_id','style_sn','goods_name','warehouse_id'])->where(['warehouse_id'=>$bill->from_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
+            $goods_list = WarehouseGoods::find()->select(['goods_id','style_sn','goods_name','warehouse_id'])->where(['warehouse_id'=>$bill->to_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
             if(!empty($goods_list)) {
                 foreach ($goods_list as $goods) {
                     $goods_ids[] = $goods['goods_id'];
@@ -54,7 +54,7 @@ class WarehouseBillWService extends WarehouseBillService
                             'style_sn'=>$goods['style_sn'],
                             'goods_name'=>$goods['goods_name'],
                             'to_warehouse_id'=>$goods['warehouse_id'],
-                            'status'=>PandianStatusEnum::SAVE,
+                            'status'=> PandianStatusEnum::SAVE,
                     ];
                     $bill_goods_values[] = array_values($bill_goods);
                 }
@@ -104,21 +104,22 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
             }else {
                 if($billGoods->from_warehouse_id == $goods->warehouse_id) {
-                    $billGoods->status = PandianStatusEnum::NORMAL;//正常
+                    if($goods->goods_status != GoodsStatusEnum::IN_PANDIAN) {
+                        $billGoods->status = PandianStatusEnum::WRONG;//异常
+                    }else {
+                        $billGoods->status = PandianStatusEnum::NORMAL;//正常
+                    }                    
                 }else if($form->from_warehouse_id != $goods->warehouse_id){
                     $billGoods->status = PandianStatusEnum::LOSS;//盘亏
                 }
             }
             $billGoods->goods_name = $goods->goods_name;            
             $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
+            //更多商品属性
+            //............
             
-            
-            if($billGoods->from_warehouse_id == $goods->warehouse_id) {
-                $billGoods->status = PandianStatusEnum::NORMAL;
-            }else if($form->from_warehouse_id != $goods->warehouse_id){
-                $billGoods->status = PandianStatusEnum::LOSS;
-            }else {
-                $billGoods['status'] = PandianStatusEnum::PROFIT;
+            if(false === $billGoods->save()) {
+                throw new \Exception($this->getError($billGoods));
             }
             
         }

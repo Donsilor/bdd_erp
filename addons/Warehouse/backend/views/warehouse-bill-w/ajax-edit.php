@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
             <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
             <?= $form->field($model, 'bill_type')->dropDownList(BillTypeEnum::getMap(),['disabled'=>true])?>	        
-	        <?= $form->field($model, 'from_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
+	        <?= $form->field($model, 'to_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
 	                'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
 	                'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [

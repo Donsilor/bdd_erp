@@ -73,11 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                                 'label' => '盘点仓库',
-                                'attribute' => 'from_warehouse_id',
-                                'value' =>"fromWarehouse.name",
+                                'attribute' => 'to_warehouse_id',
+                                'value' =>"toWarehouse.name",
                                 'filter'=>Select2::widget([
-                                        'name'=>'SearchModel[from_warehouse_id]',
-                                        'value'=>$searchModel->from_warehouse_id,
+                                        'name'=>'SearchModel[to_warehouse_id]',
+                                        'value'=>$searchModel->to_warehouse_id,
                                         'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
                                         'options' => ['placeholder' =>"请选择"],
                                         'pluginOptions' => [

@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">盘点仓库：</td>
-                            <td><?= $model->fromWarehouse->name ??'' ?></td>
+                            <td><?= $model->toWarehouse->name ??'' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">应盘数量：</td>

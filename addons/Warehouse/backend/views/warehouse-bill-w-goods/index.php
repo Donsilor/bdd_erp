@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'showFooter' => true,//显示footer行
+                        'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
                             [
@@ -63,27 +63,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                     'label' => '盘点仓库',
-                                    'attribute' => 'from_warehouse_id',
-                                    'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[from_warehouse_id]',
-                                            'value'=>$searchModel->from_warehouse_id,
-                                            'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择"],
-                                            'pluginOptions' => [
-                                                    'allowClear' => true,
-                                            ],
-                                    ]),
+                                    'attribute' => 'to_warehouse_id',
+                                    'value' =>"toWarehouse.name",
+                                    'filter'=> false,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'200'],
                             ],                             
                             [
                                     'label' => '归属仓库',
-                                    'attribute' => 'to_warehouse_id',
-                                    'value' =>"toWarehouse.name",
+                                    'attribute' => 'from_warehouse_id',
+                                    'value' =>"fromWarehouse.name",
                                     'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[to_warehouse_id]',
-                                            'value'=>$searchModel->to_warehouse_id,
+                                            'name'=>'SearchModel[from_warehouse_id]',
+                                            'value'=>$searchModel->from_warehouse_id,
                                             'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
                                             'options' => ['placeholder' =>"请选择"],
                                             'pluginOptions' => [
@@ -95,23 +87,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             ], 
                             [
                                     'label' => '盘点状态',
-                                    'attribute' => 'pandian_status',
+                                    'attribute' => 'status',
                                     'value' =>function($model){
-                                        return \addons\Warehouse\common\enums\PandianStatusEnum::getValue($model->pandian_status);
+                                        return \addons\Warehouse\common\enums\PandianStatusEnum::getValue($model->status);
                                     },
-                                    'filter'=> \addons\Warehouse\common\enums\PandianStatusEnum::getMap(),
+                                    'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',                                            
+                                    ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{view} {edit} {apply-edit} {delete}',
+                                'template' => '{edit}',
                                 'buttons' => [                                                                   
-                                    'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->audit_status == AuditStatusEnum::PENDING) {
-                                            return Html::delete(['delete','id' => $model->id,'bill_id'=>$bill->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
-                                        }
+                                    'edit' => function($url, $model, $key) use($bill){
+                                        
                                     },
                                 ]
                            ]
