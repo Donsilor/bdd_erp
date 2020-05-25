@@ -74,7 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                         ],
-
                         [
                             'attribute' => 'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
@@ -84,9 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-
-
-
                         //'to_company_id',
                         [
                             'attribute' => 'to_warehouse_id',
@@ -104,7 +100,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [

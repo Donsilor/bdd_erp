@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillMGoodsForm;
 use addons\Warehouse\common\models\WarehouseBill;
@@ -61,12 +62,11 @@ class WarehouseBillMGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'fromWarehouse' => ['name']
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','bill_id',$bill_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
         $bill_goods = $dataProvider->getModels();
         $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render('index', [
@@ -74,7 +74,7 @@ class WarehouseBillMGoodsController extends BaseController
             'searchModel' => $searchModel,
             'billInfo' => $billInfo,
             'billGoods' => $bill_goods,
-            'tabList' => \Yii::$app->warehouseService->billM->menuTabList($bill_id,$returnUrl),
+            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id,$returnUrl,BillTypeEnum::BILL_TYPE_M),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
@@ -128,8 +128,6 @@ class WarehouseBillMGoodsController extends BaseController
                     $goods['diamond_clarity'] = $goods_info['diamond_clarity'];
                     $goods['diamond_cert_id'] = $goods_info['diamond_cert_id'];
                     $goods['cost_price'] = $goods_info['cost_price'];
-                    $goods['sale_price'] = $goods_info['market_price'];
-                    $goods['market_price'] = $goods_info['market_price'];
                     $warehouse_goods[] = $goods;
                 }
 
@@ -139,7 +137,6 @@ class WarehouseBillMGoodsController extends BaseController
 
             $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
             if(!empty($warehouse_goods_list)){
-
                 try {
                     $trans = Yii::$app->db->beginTransaction();
 
@@ -147,8 +144,6 @@ class WarehouseBillMGoodsController extends BaseController
                     $warehouse_bill_update = [
                         'goods_num' => 0,
                         'total_cost' => 0,
-                        'total_sale' => 0,
-                        'total_market' => 0
                     ];
                     $goods_id_arr = [];
 
@@ -168,8 +163,6 @@ class WarehouseBillMGoodsController extends BaseController
                         $goods_id_arr[] = $goods['goods_id'];
                         $warehouse_bill_update['goods_num'] += $goods['goods_num'];
                         $warehouse_bill_update['total_cost'] += $goods['cost_price'];
-                        $warehouse_bill_update['total_sale'] += $goods['sale_price'];
-                        $warehouse_bill_update['total_market'] += $goods['market_price'];
                     }
                     $warehouse_goods_key = array_keys($warehouse_goods_list[0]);
 
@@ -192,7 +185,6 @@ class WarehouseBillMGoodsController extends BaseController
                     return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
                 }
 
-
             }
         }
         return $this->render($this->action->id, [
@@ -201,67 +193,42 @@ class WarehouseBillMGoodsController extends BaseController
         ]);
     }
 
+
     /**
-     * ajax编辑/创建
+     * 删除
      *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionAjaxEdit()
+    public function actionDelete($id)
     {
+        $bill_id = Yii::$app->request->get('bill_id');
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        $billGoods = $this->findModel($id);
+        $goods_id = $billGoods->goods_id;
+        
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            //删除
+            $this->findModel($id)->delete();
+            //更新单据数量和金额
+            $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
+            $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
+            $bill->save();
 
-        $bill_goods_list = Yii::$app->request->post('bill_goods_list');
-        $warehouse_bill = Yii::$app->request->post('WarehouseBill');
-        $model = new WarehouseBillGoods();
-        if(!empty($bill_goods_list)){
+            //更新库存表商品状态
 
-            try {
-                $trans = Yii::$app->db->beginTransaction();
-                $bill_id = $warehouse_bill['id'];
-                $warehouse_bill_update = [
-                    'goods_num' => 0,
-                    'total_cost' => 0,
-                    'total_sale' => 0,
-                    'total_market' => 0
-                ];
-                foreach ($bill_goods_list as $key => $goods) {
-                    $id = isset($goods['id']) ? $goods['id'] : '';
-                    if($id == ''){
-                        continue;
-                    }
-                    $model = $this->findModel($id);
-                    // ajax 校验
-                    $this->activeFormValidate($model);
-                    $model::updateAll($goods, ['id' => $id]);
 
-                    $warehouse_bill_update['goods_num'] += $goods['goods_num'];
-                    $warehouse_bill_update['total_cost'] += $goods['cost_price'];
-                    $warehouse_bill_update['total_sale'] += $goods['sale_price'];
-                    $warehouse_bill_update['total_market'] += $goods['market_price'];
-                }
-
-                //删除
-                $old_list = $model::find()->where(['bill_id' => $bill_id])->asArray()->all();
-                $old_ids = array_column($old_list, 'goods_id');
-                $new_ids = array_column($bill_goods_list, 'goods_id');
-                $del_ids = array_diff($old_ids, $new_ids);
-                if(!empty($del_ids)){
-                    WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id' => $del_ids, 'goods_status' => GoodsStatusEnum::IN_TRANSFER]);
-                    $model::deleteAll(['id' => $del_ids]);
-                }
-
-                //更新单据数量、价格
-                WarehouseBill::updateAll($warehouse_bill_update,['id'=>$bill_id]);
-
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(['index']), 'error');
-            }
+            $trans->commit();
+            return $this->message("删除成功", $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]));
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("删除失败", $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
         }
-
     }
+
+
 
 }

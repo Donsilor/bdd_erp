@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\models\WarehouseBillLog;
 use common\helpers\Url;
 use Yii;
@@ -25,12 +26,23 @@ class WarehouseBillService extends Service
      * @param $returnUrl URL
      * @return array
      */
-    public function menuTabList($bill_id,$returnUrl = null)
+    public function menuTabList($bill_id,$returnUrl = null, $billType = null)
     {
-        return [
-            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-        ];
+        switch ($billType){
+            case BillTypeEnum::BILL_TYPE_M:
+                $tab = [
+                    1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-m/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-m-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                    3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                ];
+                break;
+
+            default: $tab = [
+                    1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                ];
+        }
+        return $tab;
     }
 
     /**
@@ -136,5 +148,27 @@ class WarehouseBillService extends Service
             throw new \Exception($this->getError($model));
         }
         return $model;
+    }
+
+
+
+    //统计单据明细数量
+    public function sumGoodsNum($bill_id){
+        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->count();
+    }
+
+    //统计单据明细成本价
+    public function sumCostPrice($bill_id){
+        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->sum('cost_price');
+    }
+
+    //统计单据明细销售价
+    public function sumSalePrice($bill_id){
+        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->sum('sale_price');
+    }
+
+    //统计单据明细市场价
+    public function sumMarketPrice($bill_id){
+        return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->sum('market_price');
     }
 }
