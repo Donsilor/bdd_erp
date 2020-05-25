@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:110%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -53,10 +53,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                                 'attribute'=>'bill_no',
+                                'value'=>function ($model){
+                                    return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                     'class' => 'form-control',
                                 ]),
-                                'headerOptions' => [],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'180'],
                         ],
                         [
                                 'attribute' => 'bill_type',

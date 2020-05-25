@@ -10,6 +10,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * 盘点单
@@ -18,7 +19,26 @@ use common\enums\StatusEnum;
  */
 class WarehouseBillWService extends WarehouseBillService
 {
+    /**
+     * 仓储单据明细 tab
+     * @param int $bill_id 单据ID
+     * @param $returnUrl URL
+     * @return array
+     */
+    public function menuTabList($bill_id, $returnUrl = null)
+    {
+        return [
+                1=>['name'=>'盘点详情','url'=>Url::to(['warehouse-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                2=>['name'=>'盘点商品','url'=>Url::to(['warehouse-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'盘点日志','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+        ];
+    }
     
+    /**
+     * 创建盘点单
+     * @param unknown $form
+     * @throws \Exception
+     */
     public function createBill($form)
     {
         if(false === $form->validate()) {
