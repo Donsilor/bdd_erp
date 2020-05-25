@@ -145,10 +145,6 @@ class WarehouseBillBGoodsController extends BaseController
                         $goods['put_in_type'] = $goods_info['put_in_type'];
                         $warehouse_goods_val[] = array_values($goods);
                         $goods_id_arr[] = $goods['goods_id'];
-                        $warehouse_bill_update['goods_num'] += $goods['goods_num'];
-                        $warehouse_bill_update['total_cost'] += $goods['cost_price'];
-                        $warehouse_bill_update['total_sale'] += $goods['sale_price'];
-                        $warehouse_bill_update['total_market'] += $goods['market_price'];
                     }
                     $warehouse_goods_key = array_keys($warehouse_goods_list[0]);
 
@@ -156,19 +152,22 @@ class WarehouseBillBGoodsController extends BaseController
                     \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $warehouse_goods_key, $warehouse_goods_val)->execute();
 
                     //更新商品库存状态
-                    $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_TRANSFER],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+                    $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_RETURN_FACTORY],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
                     if($execute_num <> count($warehouse_goods_list)){
                         throw new Exception("货品改变状态数量与明细数量不一致");
                     }
-                    //更新单据数量、价格
-                    WarehouseBill::updateAll($warehouse_bill_update,['id'=>$bill_id]);
+                    //更新收货单汇总：总金额和总数量
+                    $res = Yii::$app->warehouseService->bill->WarehouseBillSummary($bill_id);
+                    if(false === $res){
+                        throw new Exception('更新单据汇总失败');
+                    }
 
                     $trans->commit();
                     Yii::$app->getSession()->setFlash('success', '保存成功');
                     return $this->redirect(Yii::$app->request->referrer);
                 }catch (\Exception $e){
                     $trans->rollBack();
-                    return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
+                    return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]), 'error');
                 }
 
 
