@@ -491,15 +491,18 @@ class StringHelper extends BaseStringHelper
         if($asc>=-11055&&$asc<=-10247) return 'Z';
         return null;
     }
-
-
     /**
-     * 生成订单号
-     * @param unknown $order_id
-     * @param string $prefix
+     * 
+     * @param unknown $string
+     * @param string $delimiter
+     * @param string $trim
+     * @param string $skipEmpty
+     * @return array
      */
-    public static function createOrderSn($prefix = 'BDD')
+    public static function explode($string, $delimiter = ',', $trim = true, $skipEmpty = false)
     {
-        return $prefix.date('Ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),6,'1',STR_PAD_LEFT);
+        $string = preg_replace("/\s+/is", ' ', trim($string));
+        $string = preg_replace("/(，| )/is", $delimiter, $string);
+        return parent::explode($string, $delimiter, $trim, $skipEmpty);
     }
 }
