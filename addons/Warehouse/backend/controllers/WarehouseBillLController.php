@@ -27,7 +27,7 @@ class WarehouseBillLController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
-    public $bill_type = BillTypeEnum::BILL_TYPE_M;
+    public $bill_type = BillTypeEnum::BILL_TYPE_L;
 
     /**
      * Lists all StyleChannel models.

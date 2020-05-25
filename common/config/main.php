@@ -76,10 +76,12 @@ return [
         ],
         /** ------ 队列设置 ------ **/
         'queue' => [
-            'class' => 'yii\queue\redis\Queue',
-            'redis' => 'redis', // 连接组件或它的配置
-            'channel' => 'queue', // Queue channel key
-            'as log' => 'yii\queue\LogBehavior',// 日志
+                'class' => yii\queue\redis\Queue::class,
+                'as log' => yii\queue\LogBehavior::class,
+                'redis' => 'redis', // 连接组件或它的配置
+                'channel' => 'queue', // Queue channel key
+                'ttr' => 1200, // Max time for job execution
+                'attempts' => 3,  // Max number of attempts
         ],
         /** ------ 公用支付 ------ **/
         'pay' => [

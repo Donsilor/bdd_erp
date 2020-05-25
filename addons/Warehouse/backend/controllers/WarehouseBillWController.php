@@ -11,6 +11,7 @@ use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
+use common\helpers\Url;
 
 
 /**
@@ -19,7 +20,7 @@ use addons\Warehouse\common\forms\WarehouseBillWForm;
 class WarehouseBillWController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBill::class;
+    public $modelClass = WarehouseBillWForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_W;
     /**
      * Lists all StyleChannel models.
@@ -108,6 +109,25 @@ class WarehouseBillWController extends BaseController
                 'model' => $model,
         ]);
     }
+    
+    /**
+     * 详情
+     * @return unknown
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
+        
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+                'model' => $model,
+                'tab'=>$tab,
+                'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$returnUrl),
+                'returnUrl'=>$returnUrl,
+        ]);
+    }
     /**
      * 盘点
      * @return mixed
@@ -116,13 +136,11 @@ class WarehouseBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         
-        $this->modelClass = WarehouseBillWForm::class;
         $model = $this->findModel($id);      
         
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            
-            //$model->va
+                        
             
             return $this->redirect(['index']);
         }

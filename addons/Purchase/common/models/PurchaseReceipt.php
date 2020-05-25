@@ -47,6 +47,7 @@ class PurchaseReceipt extends BaseModel
             [['total_cost'], 'number'],
             [['receipt_no'], 'string', 'max' => 30],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
+            ['receipt_no', 'unique'],
         ];
     }
 

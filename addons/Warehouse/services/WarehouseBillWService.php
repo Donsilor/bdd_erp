@@ -10,6 +10,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * 盘点单
@@ -19,6 +20,11 @@ use common\enums\StatusEnum;
 class WarehouseBillWService extends WarehouseBillService
 {
     
+    /**
+     * 创建盘点单
+     * @param unknown $form
+     * @throws \Exception
+     */
     public function createBill($form)
     {
         if(false === $form->validate()) {

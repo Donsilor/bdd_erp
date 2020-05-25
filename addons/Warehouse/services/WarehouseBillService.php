@@ -26,21 +26,49 @@ class WarehouseBillService extends Service
      * @param $returnUrl URL
      * @return array
      */
-    public function menuTabList($bill_id,$returnUrl = null, $billType = null)
-    {
-        switch ($billType){
-            case BillTypeEnum::BILL_TYPE_M:
-                $tab = [
-                    1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-m/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                    2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-m-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                    3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-                ];
-                break;
+    public function menuTabList($bill_id, $bill_type, $returnUrl = null)
+    {   
 
-            default: $tab = [
-                    1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                    2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                ];
+        switch ($bill_type){
+            
+            case BillTypeEnum::BILL_TYPE_M:
+                {
+                    $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-m/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-m-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    ];
+                    break;
+                }               
+            case BillTypeEnum::BILL_TYPE_W:
+                {
+                    $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    ];
+                    break;
+                }            
+            case BillTypeEnum::BILL_TYPE_L:
+                {
+                    $tab = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                    ];
+                    break;
+                }
+            case BillTypeEnum::BILL_TYPE_B :
+                {
+                    $tab = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-b/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-b-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                    ];
+                    break;
+                }
+            
         }
         return $tab;
     }

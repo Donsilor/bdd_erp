@@ -92,7 +92,7 @@ class WarehouseBillLGoodsController extends BaseController
                     }
                 }
 
-                //更新采购收货单汇总：总金额和总数量
+                //更新收货单汇总：总金额和总数量
                 $res = Yii::$app->warehouseService->bill->WarehouseBillSummary($bill_id);
                 if(false === $res){
                     throw new Exception('更新单据汇总失败');

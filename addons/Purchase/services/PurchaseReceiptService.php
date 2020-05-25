@@ -91,7 +91,7 @@ class PurchaseReceiptService extends Service
                 'style_sn' => $model->style_sn,
                 'product_type_id'=>$model->product_type_id,
                 'style_cate_id'=>$model->style_cate_id,
-                'goods_status'=>GoodsStatusEnum::SHOU_HUO_ZHONG,
+                'goods_status'=>GoodsStatusEnum::RECEIVING,
                 'supplier_id'=>$receipt->supplier_id,
                 'company_id'=> 1,//暂时为0
                 'warehouse_id' => 1,//暂时为0
