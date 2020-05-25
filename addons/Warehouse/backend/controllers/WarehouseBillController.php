@@ -92,7 +92,12 @@ class WarehouseBillController extends BaseController
         ]);
     }
 
-
+    /**
+     * 导出
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
     public function getExport($dataProvider)
     {
         $list = $dataProvider->models;

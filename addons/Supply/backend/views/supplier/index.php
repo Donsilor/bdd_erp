@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>'overflow-x: scroll;'],
+        'options' => ['style'=>'width:120%'],
         'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'300'],
             ],
             [
                 'attribute'=>'business_scope',
@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => false,
                 'contentOptions' => ['style' => 'word-break:break-all;'],
+                'headerOptions' => ['width'=>'300'],
             ],
             [
                 'attribute' => 'contactor',
@@ -109,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'300'],
             ],
             [
                 'attribute' => 'audit_time',
