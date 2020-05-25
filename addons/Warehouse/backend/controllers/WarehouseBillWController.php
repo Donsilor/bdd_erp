@@ -90,7 +90,7 @@ class WarehouseBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
                 if($model->isNewRecord) {
-                    Yii::$app->warehouseService->billW->createBill($model);
+                    Yii::$app->warehouseService->billW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -136,13 +136,22 @@ class WarehouseBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         
-        $model = $this->findModel($id);      
+        $model = $this->findModel($id) ?? new WarehouseBillWForm();      
         
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            print_r($model->getGoodsIds());            
-            exit;
-            return $this->redirect(['index']);
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                
+                Yii::$app->warehouseService->billW->createBillGoodsW($model);
+                
+                $trans->commit();
+                
+                $this->message("保存成功",$this->redirect(Yii::$app->request->referrer));
+            }catch(\Exception $e) {
+                $trans->rollback();
+                $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer));
+            }
         }
         
         return $this->render($this->action->id, [
