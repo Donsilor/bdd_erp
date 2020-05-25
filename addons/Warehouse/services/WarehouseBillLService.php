@@ -5,12 +5,10 @@ namespace addons\Warehouse\services;
 
 use Yii;
 use common\components\Service;
-use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
-use common\helpers\Url;
 
 /**
  * Class TypeService
@@ -19,6 +17,75 @@ use common\helpers\Url;
  */
 class WarehouseBillLService extends Service
 {
-    
+
+    /**
+     * 创建收货单据
+     * @param array $bill
+     * @param array $goods
+     * @return array
+     */
+    public function createWarehouseBillL($bill, $goods){
+        $warehouseBill = new WarehouseBill();
+        $warehouseBill->bill_no = SnHelper::createBillSn($bill['bill_type']);
+        $warehouseBill->attributes = $bill;
+        if(false === $warehouseBill->save()){
+            throw new \Exception($this->getError($warehouseBill));
+        }
+        $bill_id = $warehouseBill->attributes['id'];
+        $warehouseGoods = new WarehouseGoods();
+        $goods_list = [];
+        $bill_goods = [];
+        foreach ($goods as $item){
+            $item['goods_id'] = SnHelper::createGoodsId();
+            $warehouseGoods->setAttributes($item);
+            if(!$warehouseGoods->validate()){
+                throw new \Exception($this->getError($warehouseGoods));
+            }
+            $goods_list[] = $item;
+            $bill_goods[] = [
+                'bill_id' => $bill_id,
+                'bill_no' => $warehouseBill->bill_no,
+                'bill_type' => $warehouseBill->bill_type,
+                'goods_id' => $warehouseGoods->goods_id,
+                'goods_name' => $warehouseGoods->goods_name,
+                'style_sn' => $warehouseGoods->style_sn,
+                'goods_num' => $warehouseGoods->goods_num,
+                'put_in_type' => $warehouseBill->put_in_type,
+                'material' => $warehouseGoods->material,
+                'gold_weight' => $warehouseGoods->gold_weight,
+                'gold_loss' => $warehouseGoods->gold_loss,
+                'diamond_carat' =>$warehouseGoods->diamond_carat,
+                'diamond_color' =>'', //$warehouseGoods->diamond_color,
+                'diamond_clarity' => $warehouseGoods->diamond_clarity,
+                'diamond_cert_id' => $warehouseGoods->diamond_cert_id,
+                'cost_price' => 0,//$warehouseGoods->cost_price,
+                'sale_price' => 0,//$warehouseGoods->sale_price,
+                'market_price' => $warehouseGoods->market_price,
+                'markup_rate' => 0, //$warehouseGoods->markup_rate
+                'status' => 1,
+                'created_at' => time()
+            ];
+        }
+
+        $goods_val = [];
+        $goods_key = array_keys($goods_list[0]);
+        foreach ($goods_list as $item) {
+            $goods_val[] = array_values($item);
+        }
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $goods_key, $goods_val)->execute();
+        if(false === $res){
+            throw new \Exception("保存商品信息失败");
+        }
+
+        $bill_goods_val = [];
+        $bill_goods_key = array_keys($bill_goods[0]);
+        foreach ($bill_goods as $item) {
+            $bill_goods_val[] = array_values($item);
+        }
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_key, $bill_goods_val)->execute();
+        if(false === $res){
+            throw new \Exception("保存收货单据明细失败");
+        }
+    }
 
 }
