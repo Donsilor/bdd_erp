@@ -225,7 +225,7 @@ $this->params['breadcrumbs'][] = $this->title;
 function searchWarehouseGoods() {
    var goods_ids = $.trim($("#warehousebillgoods-goods_id").val());
    if(!goods_ids) {
-	    rfMsg("请输入货品号");
+	    rfMsg("请输入货号");
         return false;
    }
     var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['goods_ids','search',])?>&search=1&goods_ids="+goods_ids;

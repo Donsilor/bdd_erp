@@ -51,13 +51,13 @@ class WarehouseBillService extends Service
     }
 
     /**
-     * 创建单据
+     * 创建收货单据
      *
      * @param array $bill 单头
      * @param array $goods 单身
      * @return array
      */
-    public function createWarehouseBill($bill, $goods){
+    public function createWarehouseBillL($bill, $goods){
         $warehouseBill = new WarehouseBill();
         $warehouseBill->bill_no = SnHelper::createBillSn($bill['bill_type']);
         $warehouseBill->attributes = $bill;
