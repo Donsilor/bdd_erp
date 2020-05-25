@@ -17,10 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                 <?= $form->field($model, 'bill_id')->hiddenInput()->label(false) ?>
+                 <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                  <div class="row">
                      <div class="col-lg-3">
-                        <?= $form->field($model, 'goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
+                        <?= $form->field($model, 'goods_ids')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchWarehouseGoods()"]) ?>
@@ -223,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     function searchWarehouseGoods() {
-        var goods_ids = $.trim($("#warehousebillgoods-goods_id").val());
+        var goods_ids = $.trim($("#warehousebillbform-goods_ids").val());
         if(!goods_ids) {
             rfMsg("请输入货号");
             return false;

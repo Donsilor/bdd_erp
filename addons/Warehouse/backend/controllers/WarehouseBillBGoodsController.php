@@ -3,9 +3,6 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -15,6 +12,9 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use common\enums\StatusEnum;
 use yii\base\Exception;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseGoods;
 
 
 /**
@@ -63,7 +63,7 @@ class WarehouseBillBGoodsController extends BaseController
 
     /**
      * 编辑/创建
-     * @property PurchaseReceiptGoodsForm $model
+     * @property WarehouseBillBForm $model
      * @return mixed
      */
     public function actionEdit()
@@ -73,16 +73,14 @@ class WarehouseBillBGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $goods_ids = Yii::$app->request->get('goods_ids');
         $search = Yii::$app->request->get('search');
-        $model = new WarehouseBillGoods();
-        $model->goods_id = $goods_ids;
-        $model->bill_id = $bill_id;
+        $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
+        $model = new WarehouseBillBForm();
+        $model->goods_ids = $goods_ids;
+        $model->id = $bill_id;
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
         $warehouse_goods = [];
         if($search == 1 && !empty($goods_ids)){
-            $goods_ids = str_replace(' ',',',$goods_ids);
-            $goods_ids = str_replace('，',',',$goods_ids);
-            $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
-            $goods_id_arr = explode(",", $goods_ids);
+            $goods_id_arr = $model->getGoodsIds($goods_ids);
             $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->asArray()->one();
             try {
                 foreach ($goods_id_arr as $goods_id) {
@@ -117,22 +115,11 @@ class WarehouseBillBGoodsController extends BaseController
             }catch (\Exception $e){
                 return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
             }
-
-            $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
             if(!empty($warehouse_goods_list)){
-
                 try {
                     $trans = Yii::$app->db->beginTransaction();
-
+                    //批量添加单据明细
                     $warehouse_goods_val = [];
-                    $warehouse_bill_update = [
-                        'goods_num' => 0,
-                        'total_cost' => 0,
-                        'total_sale' => 0,
-                        'total_market' => 0
-                    ];
-                    $goods_id_arr = [];
-
                     foreach ($warehouse_goods_list as &$goods) {
                         $goods_id = $goods['goods_id'];
                         $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
@@ -146,11 +133,8 @@ class WarehouseBillBGoodsController extends BaseController
                         $goods['warehouse_id'] = $billInfo['to_warehouse_id'];
                         $goods['put_in_type'] = $goods_info['put_in_type'];
                         $warehouse_goods_val[] = array_values($goods);
-                        $goods_id_arr[] = $goods['goods_id'];
                     }
                     $warehouse_goods_key = array_keys($warehouse_goods_list[0]);
-
-                    //批量添加单据明细
                     \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $warehouse_goods_key, $warehouse_goods_val)->execute();
 
                     //更新商品库存状态
@@ -171,10 +155,9 @@ class WarehouseBillBGoodsController extends BaseController
                     $trans->rollBack();
                     return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]), 'error');
                 }
-
-
             }
         }
+
         return $this->render($this->action->id, [
             'model' => $model,
             'warehouse_goods' => $warehouse_goods
