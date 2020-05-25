@@ -22,7 +22,7 @@ class WarehouseBillLGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
-    public $bill_type = BillTypeEnum::BILL_TYPE_L;
+    public $billType = BillTypeEnum::BILL_TYPE_L;
     /**
      * Lists all WarehouseBillGoods models.
      * @return mixed
@@ -54,7 +54,7 @@ class WarehouseBillLGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'billGoods' => $billGoods,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->bill_type, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
     }
