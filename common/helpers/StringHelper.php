@@ -499,18 +499,18 @@ class StringHelper extends BaseStringHelper
      * @param string $skipEmpty
      * @return array
      */
-    public static function explodeIds($string, $delimiter = ',', $otherDelimiters = ['，'])
+    public static function explodeIds($string, $delimiters = [',','，'])
     {        
         $string = preg_replace("/\s+/is", ' ', trim($string));
         
         if($string == '') return [];
-        
-        if(!empty($otherDelimiters)) {
-            foreach ($otherDelimiters as $d) {
-                $string = str_replace($d, $delimiter, $string);
+
+        if(!empty($delimiters)) {
+            foreach ($delimiters as $d) {
+                $string = str_replace($d, ' ', $string);
             } 
-        }        
-        $array = parent::explode($string, $delimiter, true, true);
+        }
+        $array = parent::explode($string, ' ', true, true);
         return array_unique($array);
     }
 }

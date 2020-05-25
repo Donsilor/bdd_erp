@@ -36,7 +36,7 @@ class WarehouseBillWForm extends WarehouseBill
      */
     public function getGoodsIds()
     {
-        return StringHelper::explode($this->goods_ids);
+        return StringHelper::explodeIds($this->goods_ids);
     }
     
     

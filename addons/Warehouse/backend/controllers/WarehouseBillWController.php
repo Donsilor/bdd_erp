@@ -140,8 +140,8 @@ class WarehouseBillWController extends BaseController
         
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-                        
-            
+            print_r($model->getGoodsIds());            
+            exit;
             return $this->redirect(['index']);
         }
         
