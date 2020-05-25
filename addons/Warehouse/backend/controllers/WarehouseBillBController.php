@@ -103,7 +103,7 @@ class WarehouseBillBController extends BaseController
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if($model->isNewRecord){
-                    $model->bill_no = SnHelper::createBillSn($this->billType);
+                    $model->bill_no = SnHelper::createBillSn($this->bill_type);
                     $model->bill_type = $this->bill_type;
                 }
                 if(false === $model->save()) {
