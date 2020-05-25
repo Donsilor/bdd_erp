@@ -26,8 +26,8 @@ use common\helpers\Url;
 class WarehouseBillLController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBill::class;
-    public $bill_type = BillTypeEnum::BILL_TYPE_L;
+    public $modelClass  = WarehouseBill::class;
+    public $billType    = BillTypeEnum::BILL_TYPE_L;
 
     /**
      * Lists all StyleChannel models.
@@ -69,7 +69,7 @@ class WarehouseBillLController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
-        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->bill_type]);
+        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -104,7 +104,7 @@ class WarehouseBillLController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 if($model->isNewRecord){
                     $model->bill_no = SnHelper::createBillSn($this->billType);
-                    $model->bill_type = $this->bill_type;
+                    $model->bill_type = $this->billType;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
@@ -136,7 +136,7 @@ class WarehouseBillLController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id, $this->bill_type, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id, $this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
