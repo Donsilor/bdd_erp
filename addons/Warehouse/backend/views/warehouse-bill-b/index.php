@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_m', '收货单列表');
+$this->title = Yii::t('warehouse_bill_b', '退货返厂单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -95,23 +95,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        //'to_company_id',
-                        [
-                            'attribute' => 'to_warehouse_id',
-                            'value' =>"toWarehouse.name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[to_warehouse_id]',
-                                'value'=>$searchModel->to_warehouse_id,
-                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
-
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
@@ -126,7 +109,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
-
                         ],
                         [
                             'attribute'=>'created_at',
@@ -221,7 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('单据明细', ['warehouse-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('单据明细', ['warehouse-bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);

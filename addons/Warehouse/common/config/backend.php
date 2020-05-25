@@ -56,6 +56,10 @@ return [
                             'title' => '盘点单',
                             'route' => 'warehouse-bill-w/index',
                     ],
+                    [
+                        'title' => '退货返厂单',
+                        'route' => 'warehouse-bill-b/index',
+                    ],
                 ],
 
             ],

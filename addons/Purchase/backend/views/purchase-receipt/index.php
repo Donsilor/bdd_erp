@@ -206,8 +206,8 @@ $this->params['breadcrumbs'][] = $this->title;
             valArr[i] = $(this).val();
         });
         if(valArr.length==0){
-            alert("你还没有选择任何内容");
-            return;
+            rfMsg("您还没有选择任何内容");
+            return false;
         }
         var vals = valArr.join(',');
         window.open('/purchase/purchase-receipt/print?ids='+vals);
