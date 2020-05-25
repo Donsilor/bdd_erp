@@ -3,13 +3,15 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
+use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_m', '调拨单列表');
+$this->title = Yii::t('warehouse_bill_b', '退货返厂单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -48,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'id',
                             'filter' => Html::activeTextInput($searchModel, 'id', [
                                 'class' => 'form-control',
-
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -60,7 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
-
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -75,49 +75,40 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                         ],
                         [
+                            'attribute' => 'bill_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
+                            ]),
+                        ],
+                        [
                             'attribute' => 'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                 'class' => 'form-control',
-
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        //'to_company_id',
-                        [
-                            'attribute' => 'to_warehouse_id',
-                            'value' =>"toWarehouse.name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[to_warehouse_id]',
-                                'value'=>$searchModel->to_warehouse_id,
-                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
-
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
-
                             ]),
-
                         ],
                         [
                             'attribute'=>'created_at',
@@ -136,15 +127,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
-
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-
                         ],
 
                         [
@@ -155,7 +142,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
-
                         ],
                         [
                             'attribute'=>'audit_time',
@@ -174,15 +160,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
-
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-
                         ],
                         [
                             'attribute' => 'audit_status',
@@ -221,9 +203,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['warehouse-bill-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('单据明细', ['warehouse-bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
-
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },

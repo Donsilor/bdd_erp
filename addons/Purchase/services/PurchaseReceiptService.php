@@ -145,6 +145,6 @@ class PurchaseReceiptService extends Service
             'from_warehouse_id' => 0
         ];
 
-        Yii::$app->warehouseService->warehouseBill->createWarehouseBill($bill, $goods);
+        Yii::$app->warehouseService->bill->createWarehouseBillL($bill, $goods);
     }
 }

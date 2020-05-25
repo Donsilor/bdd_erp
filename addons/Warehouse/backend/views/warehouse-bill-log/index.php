@@ -12,7 +12,7 @@ $this->title = Yii::t('style_channel', '日志信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">商品日志 - <?php echo $goods->goods_id?></h2>
+    <h2 class="page-header">单据日志 - <?php echo $billInfo->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">

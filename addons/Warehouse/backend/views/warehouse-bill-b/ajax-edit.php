@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 $form = ActiveForm::begin([
@@ -17,7 +18,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'deliver_goods_no')->textInput() ?>
+        <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
         <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
             'data' => \Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],
@@ -32,14 +33,7 @@ $form = ActiveForm::begin([
                 'allowClear' => false
             ],
         ]);?>
-        <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false
-            ],
-        ]);?>
-        <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap())?>
+        <?= $form->field($model, 'order_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
 </div>

@@ -1,235 +1,193 @@
 <?php
 
-
 use common\helpers\Html;
 use common\helpers\Url;
-use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
+use yii\grid\GridView;
+use kartik\daterange\DateRangePicker;
 
-$this->title = '调拨单明细';
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = Yii::t('warehouse_bill_m', '调拨单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
+
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no ?></h2>
-    <?php echo Html::menuTab($tabList, $tab)?>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
+    <div style="float:right;margin-top:-40px">
+        <?php
+        if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
+            echo Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]);
+        }
+        ?>
+    </div>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">
-                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
-                    </h3>
-                    <div class="box-tools">
-                        <?php
-                            if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                echo Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
-                                    'class' => 'btn btn-primary btn-xs openIframe',
-                                    'data-width'=>'90%',
-                                    'data-height'=>'90%',
-                                    'data-offset'=>'20px',
-                                ]);
-                            }
-                         ?>
-                    </div>
-               </div>
-            <div class="box-body table-responsive">
-                <div class="tab-content">
-                    <?php
-                    $billgoodsColomns = [
-                        [
-                            'name' => 'id',
-                            'title'=>"序号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_id',
-                            'title'=>"货号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'style_sn',
-                            'title'=>"款号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-
-                        [
-                            'name' =>'goods_name',
-                            'title'=>"商品名称",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-
-                        [
-                            'name' =>'goods_num',
-                            'title'=>"商品数量",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-
-                        [
-                            'name' => "put_in_type",
-                            'title'=>"入库方式",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'disabled' =>'true',
-                                'style'=>'width:100px'
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                    <?php echo Html::batchButtons(false)?>
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>' width:140%;white-space:nowrap;'],
+                        'showFooter' => false,//显示footer行
+                        'id'=>'grid',
+                        'columns' => [
+                            [
+                                'class' => 'yii\grid\SerialColumn',
+                                'visible' => false,
                             ],
-                            'items' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap()
-                        ],
-                        [
-                            'name' => "warehouse_id",
-                            'title'=>"仓库",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'disabled' =>'true',
-                                'style'=>'width:100px'
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
-                            'items' => Yii::$app->warehouseService->warehouse::getDropDown()
-                        ],
-                        [
-                            'name' => "material",
-                            'title'=>"主成色",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_weight",
-                            'title'=>"金重",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_loss",
-                            'title'=>"金损",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_carat",
-                            'title'=>"钻石大小",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_color",
-                            'title'=>"钻石颜色",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_clarity",
-                            'title'=>"钻石净度",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "diamond_cert_id",
-                            'title'=>"证书号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "cost_price",
-                            'title'=>"成本价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "sale_price",
-                            'title'=>"销售价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "market_price",
-                            'title'=>"市场价",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
+                            [
+                                'attribute' => 'id',
+                                'filter' => false,
+                                'format' => 'raw',
+                            ],
+                            [
+                                'attribute'=>'goods_id',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'style_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => true,
+                            ],
+                            [
+                                'attribute' => 'goods_name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute' => 'goods_num',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'put_in_type',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+
+                                ]),
+                            ],
+                            [
+                                'label'=>'出库仓库',
+                                'attribute' => 'from_warehouse_id',
+                                'value' =>"fromWarehouse.name",
+                                'filter'=>Select2::widget([
+                                    'name'=>'SearchModel[from_warehouse_id]',
+                                    'value'=>$searchModel->to_warehouse_id,
+                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                    'options' => ['placeholder' =>"请选择"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+
+                                    ],
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'label'=>'入库仓库',
+                                'attribute' => 'to_warehouse_id',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'material',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'gold_weight',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'gold_loss',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'diamond_carat',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'diamond_color',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'diamond_clarity',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'diamond_cert_id',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'market_price',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute'=>'created_at',
+                                'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'created_at',
+                                    'value' => $searchModel->created_at,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+
+
+                                    ],
+
+                                ]),
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->updated_at);
+                                }
+
+                            ],
+
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($billInfo){
+                                        return Html::delete(['delete', 'id' => $model->id, 'bill_id'=>$billInfo->id]);
+                                    },
+                                ],
+                                'headerOptions' => ['class' => 'col-md-3'],
                             ]
                         ]
-                    ];
-                    ?>
-                    <?= unclead\multipleinput\MultipleInput::widget([
-                        'name' => "bill_goods_list",
-                        'value' => $billGoods,
-                        'columns' => $billgoodsColomns,
-                    ]) ?>
+                    ]); ?>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 text-center">
-                    <?= $form->field($billInfo, 'id')->hiddenInput()->label(false) ?>
-                    <button class="btn btn-primary" type="submit">保存</button>
-                    <span class="btn btn-white" onclick="history.go(-1)">返回</span>
-                </div>
-            </div>
-        <!-- box end -->
         </div>
     </div>
 </div>
-<?php ActiveForm::end(); ?>

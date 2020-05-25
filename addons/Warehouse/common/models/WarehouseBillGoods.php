@@ -110,4 +110,22 @@ class WarehouseBillGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+
+    /**
+     * 出库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
+    }
+
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
+    }
 }
