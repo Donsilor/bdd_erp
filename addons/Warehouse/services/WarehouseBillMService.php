@@ -4,13 +4,6 @@ namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\models\WarehouseBillLog;
 use common\helpers\Url;
-use Yii;
-use common\components\Service;
-use common\enums\StatusEnum;
-use common\helpers\SnHelper;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 
 /**
  *  调拨单
@@ -18,7 +11,7 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillMService extends Service
+class WarehouseBillMService extends WarehouseService
 {
 
     /**

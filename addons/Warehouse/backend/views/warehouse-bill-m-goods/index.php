@@ -178,8 +178,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => '操作',
                                 'template' => '{delete}',
                                 'buttons' => [
-                                    'delete' => function($url, $model, $key) use($billInfo){
-                                        return Html::delete(['delete', 'id' => $model->id, 'bill_id'=>$billInfo->id]);
+                                    'delete' => function($url, $model, $key){
+                                        return Html::delete(['delete', 'id' => $model->id]);
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-3'],
