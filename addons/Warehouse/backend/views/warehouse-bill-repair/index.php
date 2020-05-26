@@ -189,10 +189,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'orders_at',
+                'attribute' => 'orders_time',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'orders_at',
+                    'attribute' => 'orders_time',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
@@ -208,16 +208,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->orders_at);
+                    return Yii::$app->formatter->asDatetime($model->orders_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'predict_at',
+                'attribute' => 'predict_time',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'predict_at',
+                    'attribute' => 'predict_time',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
@@ -233,16 +233,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->predict_at);
+                    return Yii::$app->formatter->asDatetime($model->predict_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'end_at',
+                'attribute' => 'end_time',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'end_at',
+                    'attribute' => 'end_time',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
@@ -258,16 +258,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->end_at);
+                    return Yii::$app->formatter->asDatetime($model->end_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'receiving_at',
+                'attribute' => 'receiving_time',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'receiving_at',
+                    'attribute' => 'receiving_time',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
@@ -283,16 +283,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->receiving_at);
+                    return Yii::$app->formatter->asDatetime($model->receiving_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'qc_nopass_at',
+                'attribute' => 'qc_nopass_time',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
-                    'attribute' => 'qc_nopass_at',
+                    'attribute' => 'qc_nopass_time',
                     'value' => '',
                     'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:140px;'],
                     'pluginOptions' => [
@@ -308,7 +308,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->qc_nopass_at);
+                    return Yii::$app->formatter->asDatetime($model->qc_nopass_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-2'],
