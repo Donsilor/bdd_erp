@@ -166,6 +166,8 @@ class WarehouseBillWService extends WarehouseBillService
         if($form->audit_status == AuditStatusEnum::PASS) {
             $form->bill_status = BillStatusEnum::CONFIRM;            
             WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+            //解锁仓库
+            \Yii::$app->warehouseService->warehouse->unlockWarehouse($form->to_warehouse_id);
         }else {
             $form->bill_status = BillStatusEnum::CANCEL;
             WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
