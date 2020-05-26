@@ -12,9 +12,9 @@ namespace common\enums;
 class StatusEnum extends BaseEnum
 {
     const ENABLED = 1;
-    const DISABLED = 0;
+    const DISABLED = 0;    
+    const LOCKED = 2;
     const DELETE = -1;
-
     /**
      * @return array
      */
@@ -23,6 +23,7 @@ class StatusEnum extends BaseEnum
         return [
             self::ENABLED => '启用',
             self::DISABLED => '禁用',
+            self::LOCKED => '锁定',
             // self::DELETE => '已删除',
         ];
     }
