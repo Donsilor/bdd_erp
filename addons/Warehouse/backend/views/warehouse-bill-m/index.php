@@ -197,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {audit} {goods} {delete}',
+                            'template' => '{edit} {goods} {apply} {audit} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
@@ -207,8 +207,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                 },
-                                'audit' => function($url, $model, $key){
+                                'apply' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+                                        return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    }
+                                },
+
+                                'audit' => function($url, $model, $key){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -220,11 +230,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::a('明细', ['warehouse-bill-m-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
 
-                                'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
-                                },
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+                                    if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
                                         return Html::delete(['delete', 'id' => $model->id], '关闭');
                                     }
                                 },

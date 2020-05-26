@@ -158,6 +158,20 @@ class WarehouseBillMController extends BaseController
         ]);
     }
 
+    public function actionApplyAudit(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->bill_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->bill_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
 
     /**
      * ajax 审核
@@ -181,7 +195,7 @@ class WarehouseBillMController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->bill_status = BillStatusEnum::AUDIT; //单据状态改成审核
+                    $model->bill_status = BillStatusEnum::CONFIRM; //单据状态改成审核
                     //更新库存状态和仓库
                     $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
                     foreach ($billGoods as $goods){
