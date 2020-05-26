@@ -62,7 +62,8 @@ class WarehouseBillRepair extends BaseModel
             [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'sale_weixiu', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['repair_price'], 'number'],
             [['repair_no', 'order_sn', 'produce_sn', 'consignee', 'bill_m_no'], 'string', 'max' => 30],
-            [['repair_act'], 'string', 'max' => 100],
+            //[['repair_act'], 'string', 'max' => 100],
+            [['repair_act'], 'RepairActScope'],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
     }
@@ -139,5 +140,15 @@ class WarehouseBillRepair extends BaseModel
     public function getFollower()
     {
         return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
+    }
+    /**
+     * 维修动作
+     */
+    public function RepairActScope()
+    {
+        if(is_array($this->repair_act)){
+            $this->repair_act = implode(',',$this->repair_act);
+        }
+        return $this->repair_act;
     }
 }

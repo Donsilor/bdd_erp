@@ -376,7 +376,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status}',
+                'template' => '{edit} {audit} {status} {delete} ',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                         return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
@@ -395,9 +395,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::status($model['status']);
                          }
                   },
-                /*'delete' => function($url, $model, $key){
-                        return Html::delete(['delete', 'id' => $model->id]);
-                    },
+                 'delete' => function($url, $model, $key){
+                    return Html::delete(['delete', 'id' => $model->id]);
+                 },
+                /*
                 'view'=> function($url, $model, $key){
                     return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
                     },
