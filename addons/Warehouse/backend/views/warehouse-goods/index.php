@@ -260,7 +260,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
-
                             ]),
                             'headerOptions' => [],
                         ],
@@ -290,57 +289,85 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'diamond_shape',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_shape', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_shape);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_shape',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_color',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_color', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_color);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_clarity',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_clarity', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_clarity);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_cut',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_cut', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_cut);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cut',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_polish',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_polish', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_polish);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_polish',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_symmetry',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_symmetry', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_symmetry);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'diamond_fluorescence',
-                            'filter' => Html::activeTextInput($searchModel, 'diamond_fluorescence', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->diamond_fluorescence);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -383,7 +410,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
-
                             ]),
                         ],
                         [
@@ -429,7 +455,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
-
                             ]),
                         ],
                         [
@@ -441,7 +466,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:150px;'
-
                             ]),
                         ],
                         [
@@ -462,9 +486,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'main_stone_type',
-                            'filter' => Html::activeTextInput($searchModel, 'main_stone_type', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->main_stone_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'main_stone_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -478,9 +506,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'second_stone_type1',
-                            'filter' => Html::activeTextInput($searchModel, 'second_stone_type1', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->second_stone_type1);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -510,17 +542,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'second_stone_color1',
-                            'filter' => Html::activeTextInput($searchModel, 'second_stone_color1', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->second_stone_color1);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'second_stone_clarity1',
-                            'filter' => Html::activeTextInput($searchModel, 'second_stone_clarity1', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->second_stone_clarity1);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -534,9 +574,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'second_stone_type2',
-                            'filter' => Html::activeTextInput($searchModel, 'second_stone_type2', [
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->second_stone_type2);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],

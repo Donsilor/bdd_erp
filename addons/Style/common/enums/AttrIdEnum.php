@@ -38,6 +38,9 @@ class AttrIdEnum
     const DIA_STONE_FLOOR = 37;//石底层
     const DIA_POLISH = 28;//抛光
     const DIA_SYMMETRY = 29;//对称
+
+    //主石信息
+    const MAIN_STONE_TYPE = 56;//副石1类型
     
     //副石1信息
     const SIDE_STONE1_TYPE = 60;//副石1类型
