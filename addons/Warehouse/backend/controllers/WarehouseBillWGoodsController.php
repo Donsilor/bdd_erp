@@ -31,7 +31,7 @@ class WarehouseBillWGoodsController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-w/index']));
         
         $bill = WarehouseBillWForm::find()->where(['id'=>$bill_id])->one();
-        
+        $this->pageSize = 25;
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -49,7 +49,6 @@ class WarehouseBillWGoodsController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         $dataProvider->query->andWhere(['=',WarehousebillGoods::tableName().'.bill_id',$bill_id]);
-        //$dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
                 
         
         return $this->render($this->action->id, [

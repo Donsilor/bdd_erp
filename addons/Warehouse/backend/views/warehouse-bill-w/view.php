@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\WarehouseBill */
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?php echo BillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
@@ -103,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box-footer text-center">
             
-            <?php if($model->audit_status == AuditStatusEnum::PENDING) {?>
+            <?php if($model->bill_status == BillStatusEnum::SAVE) {?>
                 <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class'=>'btn btn-primary btn-ms',
@@ -112,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::edit(['warehouse-bill-w/pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
             <?php }?>
             <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
+            if($model->bill_status == BillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',

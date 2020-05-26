@@ -3,13 +3,13 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use common\enums\AuditStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 $this->title = '盘点单明细';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                    <?php if($bill->audit_status == AuditStatusEnum::PENDING) {?>
+                    <?php if($bill->bill_status == BillStatusEnum::SAVE) {?>
                         <?= Html::create(['warehouse-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>    
                     </div>

@@ -99,7 +99,12 @@ class WarehouseBillWService extends WarehouseBillService
      * @param WarehouseBillWForm $form
      */
     public function createBillGoodsW($form)
-    {
+    {   
+        //校验单据状态
+        if ($form->bill_status != BillStatusEnum::SAVE) {
+            throw new \Exception("单据已盘点结束");
+        }
+        
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
@@ -160,9 +165,17 @@ class WarehouseBillWService extends WarehouseBillService
                     'sum(sale_price) as total_sale',
                     'sum(market_price) as total_market'
             ])->where(['bill_id'=>$bill_id])->asArray()->one();
+        
         if($sum) {
-            $res1 = WarehouseBill::updateAll(['goods_num'=>$sum['actual_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1],['id'=>$bill_id]);
-            $res2 = WarehouseBillW::updateAll(['actual_num'=>$sum['actual_num']/1, 'loss_num'=>$sum['loss_num']/1, 'normal_num'=>$sum['normal_num']/1, 'wrong_num'=>$sum['wrong_num']/1],['bill_id'=>$bill_id]);
+            
+            $billUpdate = ['goods_num'=>$sum['actual_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1];
+            $billWUpdate = ['actual_num'=>$sum['actual_num']/1, 'loss_num'=>$sum['loss_num']/1, 'normal_num'=>$sum['normal_num']/1, 'wrong_num'=>$sum['wrong_num']/1];
+            if($sum['actual_num'] > 0 && $sum['actual_num'] == $sum['normal_num']) {
+                //盘点结束(待审核)
+                $billUpdate['bill_status'] = BillStatusEnum::PENDING;
+            } 
+            $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
+            $res2 = WarehouseBillW::updateAll($billWUpdate,['bill_id'=>$bill_id]);
             return $res1 && $res2;
         }
         return false;

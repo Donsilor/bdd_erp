@@ -50,6 +50,7 @@ class WarehouseBillWController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
+
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type',$this->billType]);
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
         
