@@ -112,15 +112,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]); ?>
                 <?= Html::edit(['warehouse-bill-w/pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
             <?php }?>
-            <?php
-            if($model->bill_status == BillStatusEnum::PENDING){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+            <?php if($model->bill_status == BillStatusEnum::PENDING){?>
+                <?php echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
-                ]);
-            }
-            ?>
+                ]);?>
+            <?php }?>
         </div>
 
         <!-- box end -->

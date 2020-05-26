@@ -3,6 +3,7 @@
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillWForm;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
@@ -11,6 +12,7 @@ $form = ActiveForm::begin([
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
 ]);
+$model = $model ?? new WarehouseBillWForm();
 ?>
 
 <div class="modal-header">
@@ -22,7 +24,7 @@ $form = ActiveForm::begin([
             <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
             <?= $form->field($model, 'bill_type')->dropDownList(BillTypeEnum::getMap(),['disabled'=>true])?>	        
 	        <?= $form->field($model, 'to_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
-	                'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
+	                'data' => $model->getWarehouseDropdown(),
 	                'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => false,
