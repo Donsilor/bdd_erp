@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
-        if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
+        if($billInfo->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
             echo Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',

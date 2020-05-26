@@ -103,15 +103,20 @@ class WarehouseBillMGoodsController extends BaseController
             $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
             $goods_id_arr = explode(",", $goods_ids);
             $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
-
-            foreach ($goods_id_arr as $goods_id) {
-                $select = ['goods_id','style_sn','goods_name','goods_num','put_in_type','material','gold_weight','gold_weight','gold_loss'
+            $goods_select = ['goods_id','style_sn','goods_name','goods_num','warehouse_id','put_in_type','material','gold_weight','gold_weight','gold_loss'
                 ,'diamond_carat','diamond_color','diamond_clarity','diamond_cert_id','cost_price'];
-                $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->select($select)->one();
-                if(empty($goods_info)){
+            foreach ($goods_id_arr as $goods_id) {
+                $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->select($goods_select)->one();
+                if(empty($goods)){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect($skiUrl), 'error');
                 }
-                $warehouse_goods[] = $goods_info;
+                $goods->put_in_type = \addons\Warehouse\common\enums\PutInTypeEnum::getValue($goods->put_in_type);
+                $goods->warehouse_id = $goods->warehouse->name ?? '';
+                $goods->material = Yii::$app->attr->valueName($goods->material);
+                $goods->diamond_color = Yii::$app->attr->valueName($goods->diamond_color);
+                $goods->diamond_clarity = Yii::$app->attr->valueName($goods->diamond_clarity);
+
+                $warehouse_goods[] = $goods;
             }
 
             $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
@@ -122,24 +127,35 @@ class WarehouseBillMGoodsController extends BaseController
                     $warehouse_goods_val = [];
                     $goods_id_arr = [];
 
-                    foreach ($warehouse_goods_list as &$goods) {
-                        $goods_id = $goods['goods_id'];
-                        $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
+                    foreach ($warehouse_goods_list as &$warehouse_goods) {
+                        $goods_id = $warehouse_goods['goods_id'];
+                        $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->select($goods_select)->one();
                         //保存时再次判断是否在库存中
-                        if(empty($goods_info)){
+                        if(empty($goods)){
                             throw new Exception("货号{$goods_id}不存在或者不是库存中");
                         }
-                        $goods['bill_id'] = $bill_id;
-                        $goods['bill_no'] = $billInfo['bill_no'];
-                        $goods['bill_type'] = $billInfo['bill_type'];
-                        $goods['from_warehouse_id'] = $goods_info['warehouse_id'];
-                        $goods['warehouse_id'] = $billInfo['to_warehouse_id'];
-                        $goods['to_warehouse_id'] = $billInfo['to_warehouse_id'];
-                        $goods['put_in_type'] = $goods_info['put_in_type'];
-                        $warehouse_goods_val[] = array_values($goods);
-                        $goods_id_arr[] = $goods['goods_id'];
-                        $billInfo->goods_num += $goods['goods_num'];
-                        $billInfo->total_cost += $goods['cost_price'];
+                        $warehouse_goods['bill_id'] = $bill_id;
+                        $warehouse_goods['bill_no'] = $billInfo['bill_no'];
+                        $warehouse_goods['bill_type'] = $billInfo['bill_type'];
+                        $warehouse_goods['warehouse_id'] = $billInfo['to_warehouse_id'];
+                        $warehouse_goods['to_warehouse_id'] = $billInfo['to_warehouse_id'];
+                        $warehouse_goods['from_warehouse_id'] = $goods->warehouse_id;
+                        $warehouse_goods['style_sn'] = $goods->style_sn;
+                        $warehouse_goods['goods_name'] = $goods->goods_name;
+                        $warehouse_goods['goods_num'] = $goods->goods_num;
+                        $warehouse_goods['put_in_type'] = $goods->put_in_type;
+                        $warehouse_goods['material'] = $goods->material;
+                        $warehouse_goods['gold_weight'] = $goods->gold_weight;
+                        $warehouse_goods['gold_loss'] = $goods->gold_loss;
+                        $warehouse_goods['diamond_carat'] = $goods->diamond_carat;
+                        $warehouse_goods['diamond_color'] = $goods->diamond_color;
+                        $warehouse_goods['diamond_cert_id'] = $goods->diamond_cert_id;
+                        $warehouse_goods['cost_price'] = $goods->cost_price;
+
+                        $warehouse_goods_val[] = array_values($warehouse_goods);
+                        $goods_id_arr[] = $warehouse_goods['goods_id'];
+                        $billInfo->goods_num += $warehouse_goods['goods_num'];
+                        $billInfo->total_cost += $warehouse_goods['cost_price'];
                     }
                     $warehouse_goods_key = array_keys($warehouse_goods_list[0]);
 

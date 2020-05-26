@@ -45,9 +45,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'goods_name')->textInput() ?>
                         </div>
-
                         <div class="col-lg-4">
                             <?= $form->field($model, 'produce_sn')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'material')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MATERIAL)) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_weight')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'parts_gold_weight')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_loss')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'finger')->textInput() ?>
@@ -62,41 +73,43 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'cert_id')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_weight')->textInput() ?>
+                            <?= $form->field($model, 'xiangkou')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_loss')->textInput() ?>
+                            <?= $form->field($model, 'main_stone_type')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE)) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'diamond_shape')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'diamond_carat')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'xiangkou')->textInput() ?>
+                            <?= $form->field($model, 'main_stone_num')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_shape')->textInput() ?>
+                            <?= $form->field($model, 'diamond_color')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_color')->textInput() ?>
+                            <?= $form->field($model, 'diamond_clarity')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_clarity')->textInput() ?>
+                            <?= $form->field($model, 'diamond_cut')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CUT)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_cut')->textInput() ?>
+                            <?= $form->field($model, 'diamond_polish')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_polish')->textInput() ?>
+                            <?= $form->field($model, 'diamond_symmetry')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_symmetry')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_fluorescence')->textInput() ?>
+                            <?= $form->field($model, 'diamond_fluorescence')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'market_price')->textInput() ?>
                         </div>
+
+
                     </div>
 
 

@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:60px'
                                 ]
                             ],
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:160px'
                                 ]
                             ],
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:120px'
                                 ]
                             ],
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:60px'
                                 ]
                             ],
@@ -87,25 +87,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name' => "put_in_type",
                                 'title'=>"入库方式",
                                 'enableError'=>false,
-                                'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
                                     'style'=>'width:100px'
                                 ],
-                                'items' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap()
                             ],
                             [
                                 'name' => "warehouse_id",
                                 'title'=>"仓库",
                                 'enableError'=>false,
-                                'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
                                     'style'=>'width:100px'
-                                ],
-                                'items' => Yii::$app->warehouseService->warehouse::getDropDown()
+                                ]
                             ],
                             [
                                 'name' => "material",
@@ -113,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:100px'
                                 ]
                             ],
@@ -124,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'defaultValue' => 0,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
@@ -136,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'defaultValue' => 0,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
@@ -147,7 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -157,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -167,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -177,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -189,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'type' => 'number',
-                                    'readonly' =>'true',
+                                    'disabled' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
