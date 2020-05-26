@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:150px;'
                             ]),
                             'format' => 'raw',
                         ],
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'goods_name',
                             'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',
-                                'style'=> 'width:150px;'
+                                'style'=> 'width:200px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:150px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:80px;'
+                                'style'=> 'width:120px;'
 
                             ]),
                         ],
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:80px;'
+                                'style'=> 'width:120px;'
 
                             ]),
                         ],
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:80px;'
+                                'style'=> 'width:100px;'
 
                             ]),
                         ],
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:80px;'
+                                'style'=> 'width:100px;'
 
                             ]),
                         ],
@@ -572,7 +572,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
                         [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
@@ -590,8 +589,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
 
                             ]),
