@@ -160,7 +160,7 @@ class WarehouseBillLController extends BaseController
                 $model->auditor_id = Yii::$app->user->identity->getId();
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->status = StatusEnum::ENABLED;
-                    $model->bill_status = BillStatusEnum::AUDIT;
+                    $model->bill_status = BillStatusEnum::CONFIRM;
                 }else{
                     $model->status = StatusEnum::DISABLED;
                     $model->bill_status = BillStatusEnum::CANCEL;

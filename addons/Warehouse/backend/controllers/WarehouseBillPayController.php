@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use Yii;
 use common\helpers\Url;
 use common\models\base\SearchModel;
@@ -23,6 +24,7 @@ class WarehouseBillPayController extends BaseController
      * @var Attribute
      */
     public $modelClass = WarehouseBillPay::class;
+    public $billType   = BillTypeEnum::BILL_TYPE_L;
     /**
     * 首页
     *
@@ -33,7 +35,7 @@ class WarehouseBillPayController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-l/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-pay/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -56,7 +58,7 @@ class WarehouseBillPayController extends BaseController
             'searchModel' => $searchModel,
             'billInfo' => $billInfo,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $billInfo['bill_type'], $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
     }
 

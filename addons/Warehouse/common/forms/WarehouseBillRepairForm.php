@@ -16,7 +16,9 @@ class WarehouseBillRepairForm extends WarehouseBillRepair
      */
     public function rules()
     {      
-         $rules = [];
+         $rules = [
+             [['supplier_id'], 'required']
+         ];
          return array_merge(parent::rules() , $rules);
     }
 }
