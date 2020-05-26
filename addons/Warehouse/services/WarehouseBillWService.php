@@ -188,6 +188,7 @@ class WarehouseBillWService extends WarehouseBillService
                     'sum(if(status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
                     'sum(if(status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
                     'sum(if(status='.PandianStatusEnum::WRONG.',1,0)) as wrong_num',
+                    'sum(1) as goods_num',//明细总数量
                     'sum(cost_price) as total_cost',
                     'sum(sale_price) as total_sale',
                     'sum(market_price) as total_market'
@@ -195,9 +196,9 @@ class WarehouseBillWService extends WarehouseBillService
         
         if($sum) {
             
-            $billUpdate = ['goods_num'=>$sum['actual_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1];
+            $billUpdate = ['goods_num'=>$sum['goods_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1];
             $billWUpdate = ['actual_num'=>$sum['actual_num']/1, 'loss_num'=>$sum['loss_num']/1, 'normal_num'=>$sum['normal_num']/1, 'wrong_num'=>$sum['wrong_num']/1];
-            if($sum['actual_num'] > 0 && $sum['actual_num'] == $sum['normal_num']) {
+            if($sum['goods_num'] > 0 && $sum['goods_num'] == $sum['normal_num']) {
                 //盘点结束(待审核)
                 $billUpdate['bill_status'] = BillStatusEnum::PENDING;
             } 
