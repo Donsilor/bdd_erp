@@ -85,7 +85,7 @@ class WarehouseBillRepair extends BaseModel
             'supplier_id' => '维修工厂',
             'repair_times' => '维修次数',
             'sale_weixiu' => '售后维修',
-            'repair_status' => '状态',
+            'repair_status' => '维修状态',
             'bill_m_no' => '调拨单号',
             'follower_id' => '跟单人',
             'qc_status' => '质检状态',
@@ -103,7 +103,7 @@ class WarehouseBillRepair extends BaseModel
             'audit_remark' => '审核备注',
             'status' => '状态',
             'creator_id' => '创建人',
-            'created_at' => '创建时间',
+            'created_at' => '制单时间',
             'updated_at' => '更新时间',
         ];
     }

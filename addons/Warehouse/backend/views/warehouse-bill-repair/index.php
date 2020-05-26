@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>'width:120%'],
+        'options' => ['style'=>'width:200%'],
         'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
@@ -121,6 +121,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
             ],
             [
+                'attribute' => 'repair_status',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \addons\Warehouse\common\enums\RepairStatusEnum::getValue($model->repair_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'repair_status',\addons\Warehouse\common\enums\RepairStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
                 'attribute' => 'supplier_id',
                 'value' =>"supplier.supplier_name",
                 'filter'=>Select2::widget([
@@ -157,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -182,7 +194,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'orders_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -199,7 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->orders_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'predict_at',
@@ -207,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'predict_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -224,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->predict_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'end_at',
@@ -249,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->end_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'receiving_at',
@@ -274,7 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->receiving_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'qc_nopass_at',
@@ -282,7 +294,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'qc_nopass_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:140px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -299,7 +311,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->qc_nopass_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'audit_status',
@@ -311,7 +323,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style' => 'width:80px;',
+                    'style'=> 'width:120px;',
                 ]),
             ],
             [
@@ -320,6 +332,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
                     'class' => 'form-control',
+                    'style'=> 'width:120px;',
                 ]),
             ],
             [
@@ -391,7 +404,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'show_log' => function($url, $model, $key){
                     return Html::linkButton(['goods-log/index','id' => $model->id, 'type_id' => $model->type_id, 'returnUrl' => Url::getReturnUrl()], '日志');
                     },*/
-                ]
+                ],
             ]
     ]
     ]); ?>
