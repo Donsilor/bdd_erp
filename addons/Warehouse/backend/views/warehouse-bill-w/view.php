@@ -43,13 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->billW->should_num ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right">正常数量：</td>
-                            <td><?= $model->billW->normal_num ?? 0; ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right">实盘数量：</td>
                             <td><?= $model->billW->actual_num ?? 0; ?></td>
-                        </tr>                        
+                        </tr>  
+                        <tr>
+                            <td class="col-xs-1 text-right">正常数量：</td>
+                            <td><?= $model->billW->normal_num ?? 0; ?></td>
+                        </tr>                                              
  						<tr>
                             <td class="col-xs-1 text-right">盘盈数量：</td>
                             <td><?= $model->billW->profit_num ?? 0; ?></td>
