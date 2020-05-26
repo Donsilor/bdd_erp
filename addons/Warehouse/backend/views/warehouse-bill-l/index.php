@@ -111,7 +111,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
@@ -227,7 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                                 },
                             ],
                             'headerOptions' => ['class' => 'col-md-3'],

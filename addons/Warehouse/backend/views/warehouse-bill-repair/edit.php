@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'repair_type')->dropDownList(addons\Warehouse\common\enums\RepairTypeEnum::getMap()) ?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'goods_id')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
                 <!-- ./nav-tabs-custom -->
@@ -67,10 +67,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'produce_sn')->textInput(['maxlength' => true]) ?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'goods_id')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'bill_m_no')->textInput(['maxlength' => true]) ?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'bill_m_no')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true]) ?>
                     </div>
                     <div class="col-lg-3">
                         <?= $form->field($model, 'consignee')->textInput(['maxlength' => true]) ?>

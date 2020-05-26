@@ -75,10 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "material",
                             'title'=>"主成色",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:100px'
-                            ]
+                            ],
+                            'defaultValue' => 0,
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
@@ -108,6 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'enableError'=>false,
                             'options' => [
                                 'class' => 'input-priority',
+                                'type' => 'number',
                                 'style'=>'width:80px'
                             ]
                         ],
@@ -115,19 +119,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => "diamond_color",
                             'title'=>"钻石颜色",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                         ],
                         [
                             'name' => "diamond_clarity",
                             'title'=>"钻石净度",
                             'enableError'=>false,
+                            'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
-                            ]
+                            ],
+                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                         ],
                         [
                             'name' => "diamond_cert_id",

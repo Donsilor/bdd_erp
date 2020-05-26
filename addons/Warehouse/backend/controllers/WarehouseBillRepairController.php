@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
@@ -29,7 +30,7 @@ class WarehouseBillRepairController extends BaseController
     * @var WarehouseBillRepair
     */
     public $modelClass = WarehouseBillRepair::class;
-
+    public $billType = BillTypeEnum::BILL_TYPE_WX;
 
     /**
     * 首页
@@ -86,7 +87,9 @@ class WarehouseBillRepairController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->repair_no = SnHelper::createBillSn('WX');
+                if($model->isNewRecord) {
+                    $model->repair_no = SnHelper::createBillSn($this->billType);
+                }
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
@@ -108,47 +111,7 @@ class WarehouseBillRepairController extends BaseController
 
 
     /**
-     * 详情展示页
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionView()
-    {
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
-
-        $model = $this->findModel($id);
-        if($model->business_scope){
-            $business_scope_arr = explode(',', $model->business_scope);
-            $business_scope_str = '';
-            foreach ($business_scope_arr as $business_scope){
-                $business_scope_str .= ','. Yii::$app->attr->valueName($business_scope);
-            }
-            $model->business_scope = trim( $business_scope_str,',' );
-        }
-
-        if($model->pay_type){
-            $pay_type_arr = explode(',', $model->pay_type);
-            $pay_type_str = '';
-            foreach ($pay_type_arr as $pay_type){
-                $pay_type_str .= ','. Yii::$app->attr->valueName($pay_type);
-            }
-            $model->pay_type = trim( $pay_type_str,',' );
-        }
-        return $this->render($this->action->id, [
-            'model' => $model,
-            'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$returnUrl),
-            'returnUrl'=>$returnUrl,
-        ]);
-    }
-
-
-
-
-    /**
-     * 审核-款号
+     * 审核
      *
      * @return mixed
      */
@@ -184,18 +147,6 @@ class WarehouseBillRepairController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * 生成Code
-     *
-     * @return mixed
-     */
-    public function actionAutoCode()
-    {
-        $supplier_name = Yii::$app->request->post('supplier_name');
-        $str = StringHelper::getFirstCode($supplier_name);
-        return substr($str,0,31);
     }
 
 }
