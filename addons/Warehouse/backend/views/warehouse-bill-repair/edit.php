@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\RepairActEnum;
 use addons\Warehouse\common\enums\RepairTypeEnum;
 use common\enums\BusinessScopeEnum;
 use common\enums\SettlementWayEnum;
@@ -76,9 +77,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-9">
                         <?php $model->repair_act = !empty($model->repair_act)?explode(',', $model->repair_act):null;?>
                         <?= $form->field($model, 'repair_act')->checkboxList(addons\Warehouse\common\enums\RepairActEnum::getMap()) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?= $form->field($model, 'repair_price')->textInput(['maxlength' => true]) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?= $form->field($model, 'remark')->textArea(['maxlength' => true]) ?>
                     </div>
                 </div>
                 <!-- ./nav-tabs-custom -->
