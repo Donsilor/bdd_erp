@@ -89,18 +89,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],      
                         [
                                 'label' => '应盘数量',
-                                'attribute' => 'goods_num',
+                                'value' => 'billW.should_num',
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                                 'label' => '实盘数量',
-                                'attribute' => 'goods_num',
-                                'filter' => false,
-                                'value' =>function($model){
-                                    return Yii::$app->warehouseService->billW->getPandianCount($model->id);
-                                },
+                                'value' => 'billW.actual_num',
+                                'filter' => false,                                
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                         ], 

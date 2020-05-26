@@ -5,8 +5,8 @@ use common\helpers\Url;
 
 $form = ActiveForm::begin([
         'id' => $model->formName(),
-        //'enableAjaxValidation' => true,
-        //'validationUrl' => Url::to(['pandian','id' => $model->id]),
+        'enableAjaxValidation' => true,
+        'validationUrl' => Url::to(['pandian','id' => $model->id]),
         'fieldConfig' => [
                 
         ]
@@ -28,11 +28,11 @@ $form = ActiveForm::begin([
                 </tr>                         
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>
-                    <td><?= $model->goods_num ?></td>
+                    <td><?= $model->billW->should_num ?? 0;?></td>
                 </tr> 
                 <tr>
                     <td class="col-xs-1 text-right">实盘数量：</td>
-                    <td> 0 </td>
+                    <td> <?= $model->billW->actual_num ?? 0;?> </td>
                 </tr>                  
             </table>
         </div>                

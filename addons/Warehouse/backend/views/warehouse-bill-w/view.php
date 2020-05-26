@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_no') ?>：</td>
-                            <td><?= $model->bill_no ?></td>
+                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('bill_no') ?>：</td>
+                            <td class="no-border-top"><?= $model->bill_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
@@ -37,23 +37,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">应盘数量：</td>
-                            <td><?= $model->goods_num ?></td>
+                            <td><?= $model->billW->should_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">实盘数量：</td>
-                            <td><?= Yii::$app->warehouseService->billW->getPandianCount($model->id) ?></td>
+                            <td><?= $model->billW->actual_num ?? 0; ?></td>
                         </tr>                        
  						<tr>
                             <td class="col-xs-1 text-right">盘盈：</td>
-                            <td>0</td>
+                            <td><?= $model->billW->profit_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">盘亏：</td>
-                            <td>0</td>
+                            <td><?= $model->billW->loss_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">正常：</td>
-                            <td>0</td>
+                            <td><?= $model->billW->normal_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                            <td><?= $model->creator->username ?? ''  ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>

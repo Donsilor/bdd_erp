@@ -82,14 +82,6 @@ class StyleImages extends BaseModel
             self::updateAll(['is_default'=>ConfirmEnum::NO],['style_id'=>$this->style_id]);
             Style::updateAll(['style_image'=>$this->image],['id'=>$this->style_id]);
         }
-
-
-
-
-
-
-
-
         return parent::beforeSave($insert);
     }
 

@@ -34,8 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'id'=>'grid', 
                         'columns' => [
                             [
-                                'class' => 'yii\grid\SerialColumn',
-                                'visible' => false,
+                                    'class' => 'yii\grid\SerialColumn',
+                                    'visible' => false,
+                            ],
+                            [
+                                    'attribute' => 'id',
+                                    'filter' => false,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'80'],
                             ],
                             [
                                     'attribute' => 'goods_id',
@@ -67,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' =>"toWarehouse.name",
                                     'filter'=> false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'200'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],                             
                             [
                                     'label' => '归属仓库',
@@ -83,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ],
                                     ]),
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'200'],
+                                    'headerOptions' => ['width'=>'180'],
                             ], 
                             [
                                     'label' => '盘点状态',
@@ -96,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'form-control',                                            
                                     ]),
                                     'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
+                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

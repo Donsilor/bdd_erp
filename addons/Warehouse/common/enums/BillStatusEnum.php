@@ -11,21 +11,26 @@ namespace addons\Warehouse\common\enums;
  */
 class BillStatusEnum extends \common\enums\BaseEnum
 {
-    const SAVE     = 0;
-    const AUDIT    = 1;
-    const CANCEL   = 2;
-    const SIGN_FOR = 3;
-
+    
+    const SAVE     = 1;
+    const PENDING    = 2;
+    const CONFIRM   = 3;
+    const SIGN = 4;
+    
+    const CANCEL = 9;    
+    
     /**
+     * 单据通用状态
      * @return array
      */
     public static function getMap(): array
     {
         return [
-            self::SAVE      => '已保存',
-            self::AUDIT     => '已审核',
-            self::CANCEL    => '已取消',
-            self::SIGN_FOR  => '已签收',
+            self::SAVE    => '已保存',
+            self::PENDING => '待审核',
+            self::CONFIRM => '已审核',
+            self::SIGN  => '已签收',
+            self::CANCEL => '已取消',
         ];
     }
 
