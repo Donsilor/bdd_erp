@@ -36,7 +36,7 @@ class Warehouse extends BaseModel
     public function rules()
     {
         return [
-            [['type', 'channel_id', 'status', 'sort', 'is_lock','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'status', 'sort', 'is_lock','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['name','code','type'], 'required'],
             [['name'], 'string', 'max' => 200],
             [['code'], 'string', 'max' => 50],

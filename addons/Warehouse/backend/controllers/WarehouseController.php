@@ -76,6 +76,7 @@ class WarehouseController extends BaseController
 
     }
 
+
     /**
      * 生成Code
      *
