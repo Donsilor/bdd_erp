@@ -36,10 +36,11 @@ class Warehouse extends BaseModel
     public function rules()
     {
         return [
-            [['type', 'status', 'sort', 'is_lock','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'status', 'audit_status','sort','creator_id', 'created_at','auditor_id', 'audit_time', 'updated_at'], 'integer'],
             [['name','code','type'], 'required'],
             [['name'], 'string', 'max' => 200],
             [['code'], 'string', 'max' => 50],
+            [['audit_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,6 +55,10 @@ class Warehouse extends BaseModel
             'name' => '仓库名',
             'code' => '编码',
             'status' => '状态',
+            'audit_status' => '审核状态',
+            'audit_remark' => '审核备注',
+            'audit_time' => '审核时间',
+            'auditor_id' => '审核人',
             'sort' => '排序',
             'creator_id' => '添加人',
             'created_at' => '创建时间',
@@ -83,6 +88,22 @@ class Warehouse extends BaseModel
         return $this->hasOne(Member::class, ['id'=>'creator_id']);
     }
 
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
 
 
 }

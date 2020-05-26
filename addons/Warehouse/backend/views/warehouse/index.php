@@ -101,14 +101,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
+                        [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
 
+                            ]),
+                        ],
+                        'audit_time:date',
+                        [
+                            'label' => '审核人',
+                            'attribute' => 'auditor.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => false,
+
+                        ],
                         [
                             'label' => '操作人',
-                            'attribute' => 'member.username',
+                            'attribute' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' =>false,
 
                         ],
 
@@ -146,10 +164,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
-                                    ]);
+                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
                                 },
                                 'audit' => function($url, $model, $key){
                                     if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
@@ -162,10 +182,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                                 'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
+                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PASS ])) {
+                                        return Html::status($model->status);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->audit_status != \common\enums\AuditStatusEnum::PASS) {
+                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    }
                                 },
                             ],
 

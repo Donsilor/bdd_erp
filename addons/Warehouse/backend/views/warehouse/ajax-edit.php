@@ -30,7 +30,7 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'type')->dropDownList(\addons\Warehouse\common\enums\WarehouseTypeEnum::getMap(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'sort')->textInput() ?>
-        <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+<!--        --><?//= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
 
     </div>
     <div class="modal-footer">
