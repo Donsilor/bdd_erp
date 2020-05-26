@@ -14,6 +14,7 @@ use common\helpers\Url;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use common\enums\AuditStatusEnum;
 
 /**
  * 盘点单
@@ -33,7 +34,9 @@ class WarehouseBillWService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-                
+        //锁定仓库
+        \Yii::$app->warehouseService->warehouse->lockWarehouse($form->to_warehouse_id);
+
         $bill = new WarehouseBill();
         $bill->attributes = $form->toArray(); 
         $bill->bill_status = BillStatusEnum::SAVE;  
@@ -82,6 +85,7 @@ class WarehouseBillWService extends WarehouseBillService
                 break;
             } 
         }
+        
         //盘点单附属表
         $billW = new WarehouseBillW();
         $billW->bill_id = $bill->id;
@@ -149,6 +153,27 @@ class WarehouseBillWService extends WarehouseBillService
         
     }
     
+    /**
+     * 盘点审核
+     * @param WarehouseBillWForm $form
+     */
+    public function auditBillW($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $subQuery = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id'=>$form->id]);
+        if($form->audit_status == AuditStatusEnum::PASS) {
+            $form->bill_status = BillStatusEnum::CONFIRM;            
+            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+        }else {
+            $form->bill_status = BillStatusEnum::CANCEL;
+            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+        }
+        if(false === $form->save() ){
+            throw new \Exception($this->getError($form));
+        }
+    }
     /**
      * 仓储单据汇总
      * @param unknown $bill_id
