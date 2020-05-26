@@ -91,6 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo '&nbsp;';
                 echo Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
                     'class'=>'btn btn-success btn-ms',
+                    'onclick' => 'rfTwiceAffirm(this,"申请审核","确定操作吗？");return false;',
                 ]);
                 echo '&nbsp;';
                 echo Html::delete(['delete', 'id' => $model->id], '关闭',[

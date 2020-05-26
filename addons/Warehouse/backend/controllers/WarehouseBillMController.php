@@ -204,6 +204,8 @@ class WarehouseBillMController extends BaseController
                             throw new Exception("商品{$goods->goods_id}不是调拨中或者不存在，请查看原因");
                         }
                     }
+                }else{
+                    $model->bill_status = BillStatusEnum::SAVE;
                 }
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));

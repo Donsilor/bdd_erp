@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:120%;'],
+                    'options' => ['style'=>' width:120%;white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -187,7 +187,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                                 ],
-
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
@@ -211,8 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                         return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
                                             'class'=>'btn btn-success btn-sm',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
+                                            'onclick' => 'rfTwiceAffirm(this,"申请审核", "确定操作吗？");return false;',
                                         ]);
                                     }
                                 },

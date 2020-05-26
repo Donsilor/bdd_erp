@@ -18,7 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'goods_id')->textInput(['disabled'=>true]) ?>
                         </div>
-
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
+                        </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
@@ -38,11 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_name')->textInput() ?>
+                            <?= $form->field($model, 'supplier_id')->dropDownList(Yii::$app->supplyService->supplier->getDropDown(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_sn')->textInput() ?>
+                            <?= $form->field($model, 'goods_name')->textInput() ?>
                         </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'produce_sn')->textInput() ?>
                         </div>
