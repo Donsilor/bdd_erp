@@ -7,10 +7,10 @@ use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 
 /**
- * 退货返厂单 Form
+ * 维修退货单 Form
  *
  */
-class WarehouseBillBForm extends WarehouseBill
+class WarehouseBillRForm extends WarehouseBill
 {
     public $goods_ids;
 
@@ -20,7 +20,7 @@ class WarehouseBillBForm extends WarehouseBill
     public function rules()
     {      
          $rules = [
-            [['put_in_type', 'supplier_id'], 'required']
+            [['from_warehouse_id'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }
@@ -32,7 +32,6 @@ class WarehouseBillBForm extends WarehouseBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'order_sn'=>'参考编号',
             'goods_ids'=>'货号'
         ]);
     }
