@@ -95,7 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModal',
                 ]);
                 echo '&nbsp;';
-                echo Html::delete(['delete', 'id' => $model->id], '关闭');
+                echo Html::delete(['delete', 'id' => $model->id], '关闭',[
+                    'class'=>'btn btn-danger btn-ms',
+                ]);
             }
             ?>
         </div>

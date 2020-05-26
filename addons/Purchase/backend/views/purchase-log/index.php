@@ -11,18 +11,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                    <div class="box-tools">
-                        <?= Html::create(['ajax-edit', 'purchase_id' => $purchase->id,'returnUrl' => Url::getReturnUrl()], '创建', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
-                        ]); ?>
-                    </div>
-                </div>
-            <div class="box-body table-responsive">  
+                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                   <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\forms\PurchaseReceiptForm;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -88,17 +89,15 @@ class PurchaseReceiptGoodsController extends BaseController
         $produce_sns = Yii::$app->request->get('produce_sns');
         $search = Yii::$app->request->get('search');
         $receipt_goods_list = Yii::$app->request->post('receipt_goods_list');
-        $model = new PurchaseReceiptGoods();
-        $model->produce_sn = $produce_sns;
+        $model = new PurchaseReceiptForm();
+        $model->produce_sns = $produce_sns;
         $receiptModel = new PurchaseReceipt();
+        $receiptGoods = new PurchaseReceiptGoods();
         $this->modelClass = PurchaseReceiptGoodsForm::class;
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
         $receipt_goods = [];
         if($search == 1 && !empty($produce_sns)){
-            $produce_sns = str_replace(' ',',',$produce_sns);
-            $produce_sns = str_replace('，',',',$produce_sns);
-            $produce_sns = str_replace(array("\r\n", "\r", "\n"),',',$produce_sns);
-            $produce_arr = explode(",", $produce_sns);
+            $produce_arr = $model->getProduceSns($produce_sns);
             $receiptInfo = $receiptModel::find()->where(['id'=>$receipt_id])->asArray()->one();
             $supplier_id = $receiptInfo['supplier_id'];
             try {
@@ -136,7 +135,7 @@ class PurchaseReceiptGoodsController extends BaseController
                     }
                     if ($the_receipt_num >= 1) {
                         $receipt_list = [];
-                        foreach ($model->attributeLabels() as $k => $item) {
+                        foreach ($receiptGoods->attributeLabels() as $k => $item) {
                             $receipt_list[$k] = '';
                         }
                         for ($i = 1; $i <= $the_receipt_num; $i++) {

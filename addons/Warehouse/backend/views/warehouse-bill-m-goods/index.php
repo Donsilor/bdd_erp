@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div style="float:right;margin-top:-40px">
+    <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($billInfo->audit_status == \common\enums\AuditStatusEnum::PENDING){
             echo Html::create(['edit', 'bill_id' => $billInfo->id], '新增货品', [
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         ?>
     </div>
-    <div class="tab-content">
+    <div class="tab-content" style="padding-right: 10px;">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
@@ -76,6 +76,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute' => 'goods.product_type_id',
+                                'value' => 'goods.productType.name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'put_in_type',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model){
@@ -92,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' =>"fromWarehouse.name",
                                 'filter'=>Select2::widget([
                                     'name'=>'SearchModel[from_warehouse_id]',
-                                    'value'=>$searchModel->to_warehouse_id,
+                                    'value'=>$searchModel->from_warehouse_id,
                                     'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
                                     'options' => ['placeholder' =>"请选择"],
                                     'pluginOptions' => [
@@ -104,11 +110,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'to_warehouse_id',
+                                'value' =>"toWarehouse.name",
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'material',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->material);
+                                },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
@@ -126,10 +136,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'diamond_color',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->diamond_color);
+                                },
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'diamond_clarity',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->diamond_clarity);
+                                },
                                 'filter' => false,
                             ],
                             [

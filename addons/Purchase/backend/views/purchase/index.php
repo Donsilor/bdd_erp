@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>'white-space:nowrap;'],
         'showFooter' => true,//显示footer行
         'id'=>'grid',            
         'columns' => [
@@ -178,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('采购商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'follower' => function($url, $model, $key){
                         if($model->audit_status != AuditStatusEnum::PASS){

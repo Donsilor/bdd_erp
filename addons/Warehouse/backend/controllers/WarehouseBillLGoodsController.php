@@ -100,6 +100,7 @@ class WarehouseBillLGoodsController extends BaseController
                 if(false === $res){
                     throw new Exception('更新单据汇总失败');
                 }
+
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(Yii::$app->request->referrer);

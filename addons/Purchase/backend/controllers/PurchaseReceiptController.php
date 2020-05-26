@@ -119,7 +119,7 @@ class PurchaseReceiptController extends BaseController
                 return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
