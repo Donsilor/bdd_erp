@@ -145,7 +145,7 @@ class WarehouseBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->billW->createBillGoodsW($model);
+                Yii::$app->warehouseService->billW->pandianGoods($model);
                 
                 $trans->commit();
                 

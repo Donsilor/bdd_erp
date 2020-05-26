@@ -99,10 +99,10 @@ class WarehouseBillWService extends WarehouseBillService
     }
     
     /**
-     * 盘点操作
+     * 盘点商品操作
      * @param WarehouseBillWForm $form
      */
-    public function createBillGoodsW($form)
+    public function pandianGoods($form)
     {   
         //校验单据状态
         if ($form->bill_status != BillStatusEnum::SAVE) {
@@ -152,7 +152,14 @@ class WarehouseBillWService extends WarehouseBillService
         $this->warehouseBillSummary($form->id);
         
     }
-    
+    /**
+     * 盘点结束
+     * @param WarehouseBillWForm $form
+     */
+    public function finishBillW($bill_id)
+    {
+        
+    }
     /**
      * 盘点审核
      * @param WarehouseBillWForm $form
@@ -176,6 +183,7 @@ class WarehouseBillWService extends WarehouseBillService
             throw new \Exception($this->getError($form));
         }
     }
+    
     /**
      * 仓储单据汇总
      * @param unknown $bill_id
@@ -198,10 +206,7 @@ class WarehouseBillWService extends WarehouseBillService
             
             $billUpdate = ['goods_num'=>$sum['goods_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1];
             $billWUpdate = ['actual_num'=>$sum['actual_num']/1, 'loss_num'=>$sum['loss_num']/1, 'normal_num'=>$sum['normal_num']/1, 'wrong_num'=>$sum['wrong_num']/1];
-            if($sum['goods_num'] > 0 && $sum['goods_num'] == $sum['normal_num']) {
-                //盘点结束(待审核)
-                $billUpdate['bill_status'] = BillStatusEnum::PENDING;
-            } 
+            
             $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
             $res2 = WarehouseBillW::updateAll($billWUpdate,['bill_id'=>$bill_id]);
             return $res1 && $res2;
