@@ -50,6 +50,7 @@ class WarehouseBillWController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
+
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type',$this->billType]);
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
         
@@ -99,7 +100,7 @@ class WarehouseBillWController extends BaseController
                 $trans->commit();                
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 
-            }catch (\Exception $e) {                
+            }catch (\Exception $e) {   
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
@@ -118,7 +119,7 @@ class WarehouseBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
         
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
@@ -147,10 +148,12 @@ class WarehouseBillWController extends BaseController
                 
                 $trans->commit();
                 
-                $this->message("保存成功",$this->redirect(Yii::$app->request->referrer));
+                return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
             }catch(\Exception $e) {
+                
                 $trans->rollback();
-                $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer));
+
+                return $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer),'error');
             }
         }
         

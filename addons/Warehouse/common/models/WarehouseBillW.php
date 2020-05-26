@@ -13,7 +13,7 @@ use Yii;
  * @property int $profit_num 盘盈数量
  * @property int $loss_num 盘亏数量
  * @property int $wrong_num 异常数量
- * @property int $normal_num 正常
+ * @property int $normal_num 正常数量
  */
 class WarehouseBillW extends \common\models\base\BaseModel
 {
@@ -24,7 +24,13 @@ class WarehouseBillW extends \common\models\base\BaseModel
     {
         return self::tableFullName('warehouse_bill_w');
     }
-
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
@@ -49,7 +55,7 @@ class WarehouseBillW extends \common\models\base\BaseModel
             'profit_num' => '盘盈数量',
             'loss_num' => '盘亏数量',
             'wrong_num' => '异常数量',
-            'normal_num' => '正常',
+            'normal_num' => '正常数量',
         ];
     }
 }

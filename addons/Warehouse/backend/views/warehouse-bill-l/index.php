@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'id',
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'bill_no',

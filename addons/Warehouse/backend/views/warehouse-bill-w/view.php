@@ -2,6 +2,8 @@
 
 use common\helpers\Html;
 use common\enums\AuditStatusEnum;
+use common\helpers\Url;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\WarehouseBill */
@@ -12,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?php echo BillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
@@ -20,8 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_no') ?>：</td>
-                            <td><?= $model->bill_no ?></td>
+                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('bill_no') ?>：</td>
+                            <td class="no-border-top"><?= $model->bill_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
@@ -29,7 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td></td>
+                            <td>
+                            <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?>                            
+                            </td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">盘点仓库：</td>
@@ -37,23 +41,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">应盘数量：</td>
-                            <td><?= $model->goods_num ?></td>
+                            <td><?= $model->billW->should_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">实盘数量：</td>
-                            <td><?= Yii::$app->warehouseService->billW->getPandianCount($model->id) ?></td>
-                        </tr>                        
+                            <td><?= $model->billW->actual_num ?? 0; ?></td>
+                        </tr>  
+                        <tr>
+                            <td class="col-xs-1 text-right">正常数量：</td>
+                            <td><?= $model->billW->normal_num ?? 0; ?></td>
+                        </tr>                                              
  						<tr>
-                            <td class="col-xs-1 text-right">盘盈：</td>
-                            <td>0</td>
+                            <td class="col-xs-1 text-right">盘盈数量：</td>
+                            <td><?= $model->billW->profit_num ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right">盘亏：</td>
-                            <td>0</td>
+                            <td class="col-xs-1 text-right">盘亏数量：</td>
+                            <td><?= $model->billW->loss_num ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right">正常：</td>
-                            <td>0</td>
+                            <td class="col-xs-1 text-right">异常数量：</td>
+                            <td><?= $model->billW->wrong_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
@@ -61,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                            <td><?= $model->creator->username ?? ''  ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
@@ -95,13 +103,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="box-footer text-center">
-            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                'data-toggle' => 'modal',
-                'class'=>'btn btn-primary btn-ms',
-                'data-target' => '#ajaxModalLg',
-            ]); ?>
+            
+            <?php if($model->bill_status == BillStatusEnum::SAVE) {?>
+                <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                    'data-toggle' => 'modal',
+                    'class'=>'btn btn-primary btn-ms',
+                    'data-target' => '#ajaxModalLg',
+                ]); ?>
+                <?= Html::edit(['warehouse-bill-w/pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
+            <?php }?>
             <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
+            if($model->bill_status == BillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
