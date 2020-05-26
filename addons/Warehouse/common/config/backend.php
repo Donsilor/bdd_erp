@@ -74,7 +74,7 @@ return [
                     ],
                     [
                             'title' => '维修单',
-                            'route' => 'repair-bill/index',
+                            'route' => 'warehouse-bill-repair/index',
                     ],
                 ],
 
