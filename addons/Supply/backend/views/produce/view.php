@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box-body table-responsive" style="padding-top: 0px;padding-bottom: 0px;">
                          <table class="table table-hover">
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('produce_sn') ?>：</td>
-                                 <td><?= $model->produce_sn ?></td>
+                                 <td class="col-xs-2 text-right no-border-top"><?= $model->getAttributeLabel('produce_sn') ?>：</td>
+                                 <td class="no-border-top"><?= $model->produce_sn ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_type') ?>：</td>
@@ -80,8 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box-body table-responsive" style="padding-top: 0px;padding-bottom: 0px;">
                          <table class="table table-hover">
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
-                                 <td><?= $model->style_sn ?></td>
+                                 <td class="col-xs-2 text-right no-border-top"><?= $model->getAttributeLabel('style_sn') ?>：</td>
+                                 <td class="no-border-top"><?= $model->style_sn ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
@@ -124,10 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
-                             </tr>
-                             <tr>
-                                 <td>&nbsp;</td>
-                                 <td>&nbsp;</td>
                              </tr>
 
                          </table>
