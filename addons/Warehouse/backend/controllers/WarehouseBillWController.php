@@ -118,7 +118,7 @@ class WarehouseBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
         
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
@@ -147,7 +147,7 @@ class WarehouseBillWController extends BaseController
                 
                 $trans->commit();
                 
-                return $this->message("保存成功",$this->redirect(Yii::$app->request->referrer),'success');
+                return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
             }catch(\Exception $e) {
                 
                 $trans->rollback();

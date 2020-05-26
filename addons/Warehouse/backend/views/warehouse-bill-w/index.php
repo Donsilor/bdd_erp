@@ -6,6 +6,7 @@ use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 use common\enums\AuditStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -32,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:110%;'],
+                    'options' => ['style'=>'width:125%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -92,23 +93,48 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'billW.should_num',
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '实盘数量',
                                 'value' => 'billW.actual_num',
                                 'filter' => false,                                
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width' => '100'],
                         ], 
-                                          
+                        [
+                                'label' => '正常数量',
+                                'value' => 'billW.normal_num',
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                                'label' => '盘盈数量',
+                                'value' => 'billW.profit_num',
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                                'label' => '盘亏数量',
+                                'value' => 'billW.loss_num',
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                        ],                        
+                        [
+                                'label' => '异常数量',
+                                'value' => 'billW.wrong_num',
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                        ],
                         [
                                 'label' => '总金额',                                
                                 'attribute'=>'total_cost',
-                                'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                    'class' => 'form-control',
-                                ]),
-                                'headerOptions' =>['class' => 'col-md-1'],
+                                'filter' => false,
+                                'headerOptions' => ['width' => '120'],
                         ],
                         [
                                 'label' => '制单人',
@@ -116,8 +142,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                      return $model->creator->username ??'';
                                  },
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => false,
+                                 'headerOptions' => ['width' => '150'],
+                                 'filter' => false,
 
                         ],
                         [
@@ -148,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                                 'attribute' => 'audit_status',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width' => '120'],
                                 'value' => function ($model){
                                     return AuditStatusEnum::getValue($model->audit_status);
                                 },
@@ -157,23 +183,39 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         
                                 ]),
-                        ],                        
+                        ], 
+                        [
+                                'attribute' => 'bill_status',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '120'],
+                                'value' => function ($model){
+                                    return BillStatusEnum::getValue($model->bill_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'bill_status',BillStatusEnum::getMap(), [
+                                        'prompt' => '全部',
+                                        'class' => 'form-control',
+                                        
+                                ]),
+                                ],      
                         [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {pandian} {audit} {delete}',
+                                'headerOptions' => ['width'=>'200'],
+                                'template' => '{edit} {goods} {audit} {delete}',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key){
-                                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
-                                        ]);
+                                   'edit' => function($url, $model, $key){
+                                        if($model->bill_status == BillStatusEnum::SAVE){
+                                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
+                                            ]);
+                                        }
                                     }, 
-                                    'pandian' => function($url, $model, $key){
-                                        return Html::edit(['pandian','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '盘点',['class'=>'btn btn-warning btn-sm']);
+                                    'goods' => function($url, $model, $key){
+                                        return Html::edit(['warehouse-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '盘点明细',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
-                                        if($model->audit_status != AuditStatusEnum::PASS){
+                                        if($model->bill_status == BillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                                     'class'=>'btn btn-success btn-sm',
                                                     'data-toggle' => 'modal',
@@ -182,7 +224,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'delete' => function($url, $model, $key){
-                                        return Html::delete(['delete', 'id' => $model->id]);
+                                        if($model->bill_status == BillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }                                        
                                     },
                                 ],
                         ]

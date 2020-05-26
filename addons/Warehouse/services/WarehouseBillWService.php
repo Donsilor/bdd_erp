@@ -13,6 +13,7 @@ use common\enums\StatusEnum;
 use common\helpers\Url;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /**
  * 盘点单
@@ -35,7 +36,7 @@ class WarehouseBillWService extends WarehouseBillService
                 
         $bill = new WarehouseBill();
         $bill->attributes = $form->toArray(); 
-
+        $bill->bill_status = BillStatusEnum::SAVE;  
         if(false === $bill->save() ) {
             throw new \Exception($this->getError($bill));
         } 
@@ -45,7 +46,7 @@ class WarehouseBillWService extends WarehouseBillService
         $should_num = 0;
         for($page = 1; $page <= 200 ; $page ++) {
 
-            $goods_list = WarehouseGoods::find()->select(['goods_id','style_sn','goods_name','warehouse_id'])->where(['warehouse_id'=>$bill->to_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
+            $goods_list = WarehouseGoods::find()->where(['warehouse_id'=>$bill->to_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
             if(!empty($goods_list)) {
                 foreach ($goods_list as $goods) {
                     $goods_ids[] = $goods['goods_id'];
@@ -57,6 +58,8 @@ class WarehouseBillWService extends WarehouseBillService
                             'style_sn'=>$goods['style_sn'],
                             'goods_name'=>$goods['goods_name'],
                             'goods_num'=>1,
+                            'cost_price'=>$goods['cost_price'],
+                            'market_price'=>$goods['market_price'],
                             'to_warehouse_id'=>$goods['warehouse_id'],
                             'status'=> PandianStatusEnum::SAVE,
                     ];

@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use common\enums\AuditStatusEnum;
+use common\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\WarehouseBill */
@@ -29,7 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td></td>
+                            <td>
+                            <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?>                            
+                            </td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">盘点仓库：</td>
@@ -95,11 +98,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="box-footer text-center">
-            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                'data-toggle' => 'modal',
-                'class'=>'btn btn-primary btn-ms',
-                'data-target' => '#ajaxModalLg',
-            ]); ?>
+            
+            <?php if($model->audit_status == AuditStatusEnum::PENDING) {?>
+                <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                    'data-toggle' => 'modal',
+                    'class'=>'btn btn-primary btn-ms',
+                    'data-target' => '#ajaxModalLg',
+                ]); ?>
+                <?= Html::edit(['warehouse-bill-w/pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
+            <?php }?>
             <?php
             if($model->audit_status != AuditStatusEnum::PASS){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [

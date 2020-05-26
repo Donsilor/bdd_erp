@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </h3>
                     <div class="box-tools">
                     <?php if($bill->audit_status == AuditStatusEnum::PENDING) {?>
-                        <?= Html::create(['warehouse-bill-w/pandian', 'id' => $bill->id], '盘点', []); ?>
+                        <?= Html::create(['warehouse-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>    
                     </div>
                </div>
