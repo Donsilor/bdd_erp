@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBillRepair;
@@ -85,7 +86,7 @@ class WarehouseBillRepairController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->status = StatusEnum::DISABLED;
+                $model->repair_no = SnHelper::createBillSn('WX');
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
@@ -179,7 +180,7 @@ class WarehouseBillRepairController extends BaseController
             }
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
-
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
