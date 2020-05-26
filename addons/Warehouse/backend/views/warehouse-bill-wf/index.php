@@ -3,15 +3,13 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
-use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_b', '维修退货单列表');
+$this->title = Yii::t('warehouse_bill_wf', '维修调拨单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -44,15 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
-                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'id',
                             'filter' => Html::activeTextInput($searchModel, 'id', [
                                 'class' => 'form-control',
+
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'bill_no',
@@ -61,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
+
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -74,6 +71,40 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                         ],
+                        //'to_company_id',
+                        [
+                            'attribute' => 'to_warehouse_id',
+                            'value' =>"toWarehouse.name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[to_warehouse_id]',
+                                'value'=>$searchModel->to_warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-2'],
+                        ],
+                        [
+                            'attribute'=>'total_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
+                                'class' => 'form-control',
+
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute' => 'bill_status',
                             'format' => 'raw',
@@ -84,23 +115,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:80px;',
+                                'style'=> 'width:100px;'
+
                             ]),
-                        ],
-                        [
-                            'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'creator_id',
@@ -108,7 +125,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
+
                             ]),
+
                         ],
                         [
                             'attribute'=>'created_at',
@@ -127,11 +146,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
+
+
                                 ],
+
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
+
                         ],
 
                         [
@@ -142,6 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
+
                         ],
                         [
                             'attribute'=>'audit_time',
@@ -160,25 +184,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
+
+
                                 ],
+
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-                        ],
-                        [
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
 
-                            ]),
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
@@ -186,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
@@ -194,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -203,13 +217,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('单据明细', ['warehouse-bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['warehouse-bill-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
+
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                    }
                                 },
                             ],
                             'headerOptions' => ['class' => 'col-md-3'],

@@ -5,7 +5,7 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\forms\WarehouseBillMGoodsForm;
+use addons\Warehouse\common\forms\WarehouseBillWfGoodsForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -28,17 +28,17 @@ use yii\base\Exception;
  * WarehouseBillMGoods
  *
  * Class WarehouseBillMGoodsController
- * @property WarehouseBillBGoodsForm $modelClass
+ * @property WarehouseBillWfGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
-class WarehouseBillMGoodsController extends BaseController
+class WarehouseBillWfGoodsController extends BaseController
 {
     use Curd;
 
     /**
-     * @var $modelClass WarehouseBillBGoodsForm
+     * @var $modelClass WarehouseBillWfGoodsForm
      */
-    public $modelClass = WarehouseBillMGoodsForm::class;
+    public $modelClass = WarehouseBillWfGoodsForm::class;
 
 
     /**
@@ -51,7 +51,7 @@ class WarehouseBillMGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-m/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-wf/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -103,15 +103,36 @@ class WarehouseBillMGoodsController extends BaseController
             $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
             $goods_id_arr = explode(",", $goods_ids);
             $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
-
-            foreach ($goods_id_arr as $goods_id) {
-                $select = ['goods_id','style_sn','goods_name','goods_num','put_in_type','material','gold_weight','gold_weight','gold_loss'
-                ,'diamond_carat','diamond_color','diamond_clarity','diamond_cert_id','cost_price'];
-                $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->select($select)->one();
-                if(empty($goods_info)){
-                    return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect($skiUrl), 'error');
+            try {
+                foreach ($goods_id_arr as $goods_id) {
+                    $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
+                    if(empty($goods_info)){
+                        throw new Exception("货号{$goods_id}不存在或者不是库存中");
+                    }
+                    $goods = [];
+                    $goods['id'] = null;
+                    $goods['goods_id'] = $goods_id;
+                    $goods['bill_id'] = $bill_id;
+                    $goods['bill_no'] = $billInfo->bill_no;
+                    $goods['bill_type'] = $billInfo->bill_type;
+                    $goods['style_sn'] = $goods_info['style_sn'];
+                    $goods['goods_name'] = $goods_info['goods_name'];
+                    $goods['goods_num'] = $goods_info['goods_num'];
+                    $goods['put_in_type'] = $goods_info['put_in_type'];
+                    $goods['warehouse_id'] = $billInfo->to_warehouse_id;
+                    $goods['material'] = $goods_info['material'];
+                    $goods['gold_weight'] = $goods_info['gold_weight'];
+                    $goods['gold_loss'] = $goods_info['gold_loss'];
+                    $goods['diamond_carat'] = $goods_info['diamond_carat'];
+                    $goods['diamond_color'] = $goods_info['diamond_color'];
+                    $goods['diamond_clarity'] = $goods_info['diamond_clarity'];
+                    $goods['diamond_cert_id'] = $goods_info['diamond_cert_id'];
+                    $goods['cost_price'] = $goods_info['cost_price'];
+                    $warehouse_goods[] = $goods;
                 }
-                $warehouse_goods[] = $goods_info;
+
+            }catch (\Exception $e){
+                return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
             }
 
             $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
@@ -200,10 +221,10 @@ class WarehouseBillMGoodsController extends BaseController
                 throw new Exception("商品不是调拨中或者不存在，请查看原因");
             }
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['warehouse-bill-wf-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-m-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-wf-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
 

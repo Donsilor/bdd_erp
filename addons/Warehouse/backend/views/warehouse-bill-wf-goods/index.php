@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_m', '调拨单列表');
+$this->title = Yii::t('warehouse_bill_wf', '维修调拨单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -68,14 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'attribute'=>'goods.goods_status',
-                                'value' => function($model){
-                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
-                                },
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'goods.style_cate_id',

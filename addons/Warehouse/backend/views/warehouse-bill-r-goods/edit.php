@@ -17,10 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                 <?= $form->field($model, 'bill_id')->hiddenInput()->label(false) ?>
+                 <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                  <div class="row">
                      <div class="col-lg-3">
-                        <?= $form->field($model, 'goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
+                        <?= $form->field($model, 'goods_ids')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchWarehouseGoods()"]) ?>
@@ -67,7 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:120px'
                                 ]
                             ],
@@ -113,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:100px'
                                 ]
                             ],
@@ -124,7 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'defaultValue' => 0,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
@@ -136,7 +133,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'defaultValue' => 0,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'type' => 'number',
                                     'style'=>'width:80px'
                                 ]
@@ -147,7 +143,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -157,7 +152,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -167,7 +161,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -177,7 +170,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'readonly' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
@@ -189,11 +181,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'type' => 'number',
-                                    'readonly' =>'true',
                                     'style'=>'width:80px'
                                 ]
                             ],
-
+                            [
+                                'name' => "sale_price",
+                                'title'=>"销售价",
+                                'enableError'=>false,
+                                'defaultValue' => 0,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'type' => 'number',
+                                    'style'=>'width:80px'
+                                ]
+                            ],
+                            [
+                                'name' => "market_price",
+                                'title'=>"市场价",
+                                'enableError'=>false,
+                                'defaultValue' => 0,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'type' => 'number',
+                                    'style'=>'width:80px'
+                                ]
+                            ]
                         ];
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
@@ -210,13 +222,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-function searchWarehouseGoods() {
-   var goods_ids = $.trim($("#warehousebillgoods-goods_id").val());
-   if(!goods_ids) {
-	    rfMsg("请输入货号");
-        return false;
-   }
-    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['goods_ids','search',])?>&search=1&goods_ids="+goods_ids;
-    window.location.href = url;
-}
+    function searchWarehouseGoods() {
+        var goods_ids = $.trim($("#warehousebillbform-goods_ids").val());
+        if(!goods_ids) {
+            rfMsg("请输入货号");
+            return false;
+        }
+        var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['goods_ids','search',])?>&search=1&goods_ids="+goods_ids;
+        window.location.href = url;
+    }
 </script>
