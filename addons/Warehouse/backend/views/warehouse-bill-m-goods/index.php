@@ -70,6 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'attribute'=>'goods.goods_status',
+                                'value' => function($model){
+                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                },
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'goods.style_cate_id',
                                 'value' => 'goods.styleCate.name',
                                 'filter' => true,

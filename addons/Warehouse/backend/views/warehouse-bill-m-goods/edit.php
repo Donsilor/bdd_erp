@@ -193,30 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=>'width:80px'
                                 ]
                             ],
-                            [
-                                'name' => "sale_price",
-                                'title'=>"销售价",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' =>'true',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "market_price",
-                                'title'=>"市场价",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' =>'true',
-                                    'style'=>'width:80px'
-                                ]
-                            ]
+
                         ];
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
