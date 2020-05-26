@@ -45,7 +45,14 @@ class WarehouseBillRepairController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+//          'supplier' => ['supplier_name'],
+            'creator' => ['username'],
+            'auditor' => ['username'],
+            'follower' => ['username'],
+
+    ]
         ]);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);

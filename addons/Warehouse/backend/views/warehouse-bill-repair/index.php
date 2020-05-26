@@ -1,9 +1,10 @@
 <?php
 
-use common\enums\BusinessScopeEnum;
+
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
 use common\enums\AuditStatusEnum;
@@ -11,7 +12,6 @@ use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$id = $searchModel->id;
 
 $this->title = Yii::t('warehouse_bill_repair', '维修单');
 $this->params['breadcrumbs'][] = $this->title;
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'yii\grid\CheckboxColumn',
                 'name'=>'id',  //设置每行数据的复选框属性
-                'headerOptions' => ['width'=>'30'],
+                'headerOptions' => [],
             ],
             [
                 'attribute' => 'id',
@@ -52,65 +52,275 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'60'],
+                'headerOptions' => [],
             ],
             [
-                'attribute' => 'supplier_name',
-                'value'=>function($model) {
-                    return Html::a($model->supplier_name, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                'attribute' => 'repair_no',
+                'value' => 'repair_no',
+                'filter' => Html::activeTextInput($searchModel, 'repair_no', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'order_sn',
+                'value' => 'order_sn',
+                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'produce_sn',
+                'value' => 'produce_sn',
+                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'bill_m_no',
+                'value' => 'bill_m_no',
+                'filter' => Html::activeTextInput($searchModel, 'bill_m_no', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'goods_id',
+                'value' => 'goods_id',
+                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'consignee',
+                'value' => 'consignee',
+                'filter' => Html::activeTextInput($searchModel, 'consignee', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'repair_type',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \addons\Warehouse\common\enums\RepairTypeEnum::getValue($model->repair_type);
                 },
-                'filter' => Html::activeTextInput($searchModel, 'supplier_name', [
+                'filter' => Html::activeDropDownList($searchModel, 'repair_type',\addons\Warehouse\common\enums\RepairTypeEnum::getMap(), [
+                    'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'300'],
             ],
             [
-                'attribute'=>'business_scope',
-                'value' => function($model){
-                    $scope_key = explode(',', $model->business_scope);
-                    $scope_val = common\enums\BusinessScopeEnum::getValues($scope_key);
-                    return implode(",",$scope_val);
+                'attribute' => 'supplier_id',
+                'value' =>"supplier.supplier_name",
+                'filter'=>Select2::widget([
+                    'name'=>'SearchModel[supplier_id]',
+                    'value'=>$searchModel->supplier_id,
+                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-2'],
+            ],
+            [
+                'label' => '跟单人',
+                'attribute' => 'follower.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'follower.username', [
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'label' => '制单人',
+                'attribute' => 'creator.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'created_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'created_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
+                ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->created_at);
                 },
-                'filter' => false,
-                'contentOptions' => ['style' => 'word-break:break-all;'],
-                'headerOptions' => ['width'=>'300'],
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'contactor',
-                'value' => 'contactor',
-                'filter' => Html::activeTextInput($searchModel, 'contactor', [
-                    'class' => 'form-control',
+                'attribute' => 'orders_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'orders_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
                 ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->orders_at);
+                },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'mobile',
-                'value' => 'mobile',
-                'filter' => Html::activeTextInput($searchModel, 'mobile', [
-                    'class' => 'form-control',
+                'attribute' => 'predict_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'predict_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
                 ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->predict_at);
+                },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'telephone',
-                'value' => 'telephone',
-                'filter' => Html::activeTextInput($searchModel, 'telephone', [
-                    'class' => 'form-control',
+                'attribute' => 'end_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'end_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
                 ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->end_at);
+                },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'address',
-                'value' => 'address',
-                'filter' => Html::activeTextInput($searchModel, 'address', [
+                'attribute' => 'receiving_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'receiving_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
+                ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->receiving_at);
+                },
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'qc_nopass_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'qc_nopass_at',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
+                ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->qc_nopass_at);
+                },
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'audit_status',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' => 'width:80px;',
+                ]),
+            ],
+            [
+                'label' => '审核人',
+                'attribute' => 'auditor.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
                     'class' => 'form-control',
                 ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'300'],
             ],
             [
                 'attribute' => 'audit_time',
@@ -118,7 +328,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'audit_time',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -135,30 +345,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->audit_time);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
-            ],
-            [
-                'attribute' => 'audit_status',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
-                'value' => function ($model){
-                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
+                'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
                     return \common\enums\StatusEnum::getValue($model->status);
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:80px;',
                 ]),
             ],
             [
