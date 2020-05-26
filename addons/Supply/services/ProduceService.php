@@ -84,7 +84,7 @@ class ProduceService extends Service
             $follower_name = $produce->follower ? $produce->follower->username:'';
             $supplier_name = $produce->supplier ? $produce->supplier->supplier_name:'';
             $log = [
-                'produce_id' => $produce_id,
+                'produce_id' => $produce->id,
                 'produce_sn' => $produce->produce_sn,
                 'log_type' => LogTypeEnum::SYSTEM,
                 'bc_status' => $produce->bc_status,

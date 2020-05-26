@@ -89,6 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModalLg',
                 ]);
                 echo '&nbsp;';
+                echo Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                    'class'=>'btn btn-success btn-ms',
+                ]);
+                echo '&nbsp;';
+                echo Html::delete(['delete', 'id' => $model->id], '关闭',[
+                    'class'=>'btn btn-danger btn-ms',
+                ]);
+            }elseif ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',

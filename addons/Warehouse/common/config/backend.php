@@ -72,6 +72,10 @@ return [
                             'title' => '维修发货单',
                             'route' => 'warehouse-bill-r/index',
                     ],
+                    [
+                            'title' => '维修单',
+                            'route' => 'warehouse-bill-repair/index',
+                    ],
                 ],
 
             ],
