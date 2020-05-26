@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                      return $model->creator->username ??'';
                                  },
-                                 'headerOptions' => ['width' => '150'],
+                                 'headerOptions' => ['width' => '100'],
                                  'filter' => false,
 
                         ],
