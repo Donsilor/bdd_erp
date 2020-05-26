@@ -82,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'sort',
                             'format' => 'raw',
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model, $key, $index, $column){
                                 return  Html::sort($model->sort);
@@ -101,42 +102,52 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-
                         [
-                            'label' => '操作人',
-                            'attribute' => 'member.username',
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
+
                             ]),
+                        ],
+                        [
+                            'label' => '审核人',
+                            'attribute' => 'auditor.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => false,
+
+                        ],
+                        [
+                            'attribute'=>'audit_time',
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDate($model->audit_time);
+                            }
 
                         ],
 
                         [
-                            'attribute'=>'updated_at',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'updated_at',
-                                'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
+                            'label' => '操作人',
+                            'attribute' => 'creator.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' =>false,
 
+                        ],
 
-                                ],
-
-                            ]),
+                        [
+                            'attribute'=>'created_at',
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
+
 
                         ],
 
@@ -146,10 +157,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
-                                    ]);
+                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
                                 },
                                 'audit' => function($url, $model, $key){
                                     if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
@@ -162,10 +175,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                                 'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
+                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PASS ])) {
+                                        return Html::status($model->status);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->audit_status != \common\enums\AuditStatusEnum::PASS) {
+                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    }
                                 },
                             ],
 
