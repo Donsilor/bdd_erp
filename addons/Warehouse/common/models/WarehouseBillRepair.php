@@ -28,11 +28,11 @@ use Yii;
  * @property int $qc_status 质检状态：1，质检通过；2，质检未过；3，未质检；
  * @property string $repair_price 维修费用
  * @property int $qc_times 质检次数
- * @property int $orders_at 下单时间
- * @property int $predict_at 预计出厂时间
- * @property int $end_at 完成时间
- * @property int $receiving_at 收货时间
- * @property int $qc_nopass_at 最新质检未通过时间
+ * @property int $orders_time 下单时间
+ * @property int $predict_time 预计出厂时间
+ * @property int $end_time 完成时间
+ * @property int $receiving_time 收货时间
+ * @property int $qc_nopass_time 最新质检未通过时间
  * @property string $remark 备注
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -59,7 +59,7 @@ class WarehouseBillRepair extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'sale_weixiu', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_at', 'predict_at', 'end_at', 'receiving_at', 'qc_nopass_at', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'sale_weixiu', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['repair_price'], 'number'],
             [['repair_no', 'order_sn', 'produce_sn', 'consignee', 'bill_m_no'], 'string', 'max' => 30],
             [['repair_act'], 'string', 'max' => 100],
@@ -85,17 +85,17 @@ class WarehouseBillRepair extends BaseModel
             'supplier_id' => '维修工厂',
             'repair_times' => '维修次数',
             'sale_weixiu' => '售后维修',
-            'repair_status' => '状态',
+            'repair_status' => '维修状态',
             'bill_m_no' => '调拨单号',
             'follower_id' => '跟单人',
             'qc_status' => '质检状态',
             'repair_price' => '维修费用',
             'qc_times' => '质检次数',
-            'orders_at' => '下单时间',
-            'predict_at' => '预计出厂时间',
-            'end_at' => '完成时间',
-            'receiving_at' => '收货时间',
-            'qc_nopass_at' => '最新质检未通过时间',
+            'orders_time' => '下单时间',
+            'predict_time' => '预计出厂时间',
+            'end_time' => '完成时间',
+            'receiving_time' => '收货时间',
+            'qc_nopass_time' => '最新质检未通过时间',
             'remark' => '备注',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
@@ -103,7 +103,7 @@ class WarehouseBillRepair extends BaseModel
             'audit_remark' => '审核备注',
             'status' => '状态',
             'creator_id' => '创建人',
-            'created_at' => '创建时间',
+            'created_at' => '制单时间',
             'updated_at' => '更新时间',
         ];
     }
