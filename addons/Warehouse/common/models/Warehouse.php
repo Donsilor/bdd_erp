@@ -78,16 +78,7 @@ class Warehouse extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-
-    /**
-     * 关联管理员一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
-        return $this->hasOne(Member::class, ['id'=>'creator_id']);
-    }
-
+    
     /**
      * 创建人
      * @return \yii\db\ActiveQuery
