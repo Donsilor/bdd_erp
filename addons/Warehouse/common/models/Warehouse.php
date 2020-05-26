@@ -78,7 +78,7 @@ class Warehouse extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-    
+
     /**
      * 创建人
      * @return \yii\db\ActiveQuery

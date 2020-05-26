@@ -33,8 +33,6 @@ class WarehouseController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-//                'supplier' => ['supplier_name'],
-                'member' => ['username'],
 
             ]
         ]);
