@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_b', '维修退货单列表');
+$this->title = Yii::t('warehouse_bill_r', '维修发货单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

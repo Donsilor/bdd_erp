@@ -80,7 +80,7 @@ class WarehouseBill extends BaseModel
             'bill_status' => '单据状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
-            'order_sn' => '参考编号',
+            'order_sn' => '订单号',
             'order_type' => '订单类型',
             'goods_num' => '货品数量',
             'total_cost' => '总成本',
