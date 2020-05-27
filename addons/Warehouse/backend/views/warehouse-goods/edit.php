@@ -1,8 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
-use common\helpers\Html;
 use common\helpers\Url;
-use addons\Style\common\enums\AttrTypeEnum;
+use addons\Style\common\enums\AttrIdEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -49,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'produce_sn')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'material')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MATERIAL)) ?>
+                            <?= $form->field($model, 'material')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gold_weight')->textInput() ?>
@@ -67,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'length')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE)) ?>
+                            <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cert_id')->textInput() ?>
@@ -76,10 +75,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'xiangkou')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'main_stone_type')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE)) ?>
+                            <?= $form->field($model, 'main_stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_shape')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE)) ?>
+                            <?= $form->field($model, 'diamond_shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'diamond_carat')->textInput() ?>
@@ -88,22 +87,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'main_stone_num')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_color')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR)) ?>
+                            <?= $form->field($model, 'diamond_color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_clarity')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY)) ?>
+                            <?= $form->field($model, 'diamond_clarity')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_cut')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CUT)) ?>
+                            <?= $form->field($model, 'diamond_cut')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_polish')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH)) ?>
+                            <?= $form->field($model, 'diamond_polish')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_symmetry')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY)) ?>
+                            <?= $form->field($model, 'diamond_symmetry')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY)) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'diamond_fluorescence')->dropDownList(Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE)) ?>
+                            <?= $form->field($model, 'diamond_fluorescence')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE)) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'market_price')->textInput() ?>

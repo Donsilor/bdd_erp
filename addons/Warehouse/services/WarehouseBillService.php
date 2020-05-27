@@ -36,7 +36,7 @@ class WarehouseBillService extends Service
                     $tab = [
                             1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-m/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-m-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                            3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
                     ];
                     break;
                 }               
@@ -45,7 +45,7 @@ class WarehouseBillService extends Service
                     $tab = [
                             1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                            3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
                     ];
                     break;
                 }            
@@ -55,7 +55,7 @@ class WarehouseBillService extends Service
                         1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                         2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                         3=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                        4=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
                     ];
                     break;
                 }
@@ -64,7 +64,7 @@ class WarehouseBillService extends Service
                     $tab = [
                         1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-b/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                         2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-b-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                     ];
                     break;
                 }
@@ -73,7 +73,7 @@ class WarehouseBillService extends Service
                     $tab = [
                         1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-o/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                         2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-o-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                     ];
                     break;
                 }
@@ -82,7 +82,7 @@ class WarehouseBillService extends Service
                     $tab = [
                         1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-wf/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                         2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-wf-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                     ];
                     break;
                 }
@@ -91,7 +91,7 @@ class WarehouseBillService extends Service
                     $tab = [
                         1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-r/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                         2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-r-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志信息','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                     ];
                     break;
                 }

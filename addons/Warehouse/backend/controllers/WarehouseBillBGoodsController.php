@@ -25,16 +25,16 @@ class WarehouseBillBGoodsController extends BaseController
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
     public $billType = BillTypeEnum::BILL_TYPE_B;
+
     /**
      * Lists all WarehouseBillGoods models.
      * @return mixed
      */
     public function actionIndex()
     {
-
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-b/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -49,13 +49,13 @@ class WarehouseBillBGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
-        $billGoods = $dataProvider->getModels();
-        $model = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        $model = $dataProvider->getModels();
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
-            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'billGoods' => $billGoods,
+            'model' => $model,
+            'bill' => $bill,
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);

@@ -12,7 +12,7 @@ $this->title = Yii::t('warehouse_bill_pay', '结算商信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">单据详情 - <?php echo $billInfo->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">

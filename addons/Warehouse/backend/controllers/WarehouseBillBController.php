@@ -35,7 +35,6 @@ class WarehouseBillBController extends BaseController
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -45,11 +44,8 @@ class WarehouseBillBController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-//                'supplier' => ['supplier_name'],
-//                'member' => ['username'],
                 'creator' => ['username'],
                 'auditor' => ['username'],
-
             ]
         ]);
 
@@ -81,8 +77,6 @@ class WarehouseBillBController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-
-
     }
 
     /**
@@ -195,23 +189,5 @@ class WarehouseBillBController extends BaseController
             'model' => $model,
         ]);
     }
-
-    /**
-     * 列表导出
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
-        $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
-        ];
-        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
-
-    }
-
 
 }
