@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit']) ?>
+                    <?= Html::create(['edit-lang']) ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -314,19 +314,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'audit_status',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
-                'value' => function ($model){
-                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style'=> 'width:120px;',
-                ]),
-            ],
-            [
                 'label' => '审核人',
                 'attribute' => 'auditor.username',
                 'headerOptions' => ['class' => 'col-md-1'],
@@ -361,28 +348,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'status',
+                'attribute' => 'audit_status',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
+                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style' => 'width:80px;',
+                    'style'=> 'width:120px;',
                 ]),
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {status} {delete} ',
+                'template' => '{edit} {apply} {audit} {status} {delete} ',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
-                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                  },
+                'apply' => function($url, $model, $key){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::SAVE){
+                        return Html::edit(['ajax-apply','id'=>$model->id], '申请审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交申请", "确定操作吗？");return false;',
+                        ]);
+                    }
+                },
                 'audit' => function($url, $model, $key){
-                       if($model->audit_status == AuditStatusEnum::PENDING){
+                       if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::APPLY && $model->audit_status == AuditStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',

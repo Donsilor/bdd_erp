@@ -26,10 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
          'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['edit-lang', 'id' => $model['id']]),
+        'validationUrl' => Url::to(['edit-lang', 'id' => $model->id]),
         'fieldConfig' => [
             'template' => "{label}{input}{hint}",
-
         ],
 ]); ?>
 <div class="box-body nav-tabs-custom">
@@ -55,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'repair_type')->dropDownList(addons\Warehouse\common\enums\RepairTypeEnum::getMap()) ?>
+                        <?= $form->field($model, 'repair_type')->dropDownList(\addons\Warehouse\common\enums\RepairTypeEnum::getMap(), ['prompt'=>'请选择'])?>
                     </div>
                     <div class="col-lg-3">
                         <?= $form->field($model, 'goods_id')->textInput(['maxlength' => true]) ?>

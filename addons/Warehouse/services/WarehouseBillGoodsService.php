@@ -14,7 +14,7 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillService extends Service
+class WarehouseBillGoodsService extends Service
 {
 
 }

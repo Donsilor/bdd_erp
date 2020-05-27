@@ -11,7 +11,8 @@ namespace addons\Warehouse\common\enums;
  */
 class RepairStatusEnum extends \common\enums\BaseEnum
 {
-    const SAVE      = 1;
+    const SAVE      = 0;
+    const APPLY     = 1;
     const AFFIRM    = 2;
     const AWAIT     = 3;
     const ORDERS    = 4;
@@ -26,6 +27,7 @@ class RepairStatusEnum extends \common\enums\BaseEnum
     {
         return [
             self::SAVE      => '保存',
+            self::APPLY     => '申请',
             self::AFFIRM    => '确认',
             self::AWAIT     => '等待',
             self::ORDERS    => '下单',

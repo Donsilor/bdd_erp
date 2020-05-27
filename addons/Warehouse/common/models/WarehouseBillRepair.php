@@ -21,11 +21,10 @@ use Yii;
  * @property string $repair_act 维修动作
  * @property int $supplier_id 工厂
  * @property int $repair_times 维修次数
- * @property int $sale_weixiu 售后维修
  * @property int $repair_status 状态
  * @property string $bill_m_no 转仓单号
  * @property int $follower_id 跟单人
- * @property int $qc_status 质检状态：1，质检通过；2，质检未过；3，未质检；
+ * @property int $qc_status 质检状态：0，未质检；1，质检通过；2，质检未过；
  * @property string $repair_price 维修费用
  * @property int $qc_times 质检次数
  * @property int $orders_time 下单时间
@@ -59,7 +58,7 @@ class WarehouseBillRepair extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'sale_weixiu', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['repair_price'], 'number'],
             [['repair_no', 'order_sn', 'produce_sn', 'consignee', 'bill_m_no'], 'string', 'max' => 30],
             //[['repair_act'], 'string', 'max' => 100],
@@ -85,7 +84,6 @@ class WarehouseBillRepair extends BaseModel
             'repair_act' => '维修动作',
             'supplier_id' => '维修工厂',
             'repair_times' => '维修次数',
-            'sale_weixiu' => '售后维修',
             'repair_status' => '维修状态',
             'bill_m_no' => '调拨单号',
             'follower_id' => '跟单人',

@@ -3,17 +3,17 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Warehouse\common\enums\BillTypeEnum;
-use common\helpers\SnHelper;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\RepairStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBillRepair;
 use addons\Warehouse\common\forms\WarehouseBillRepairForm;
+use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ResultHelper;
-use common\helpers\StringHelper;
-use common\helpers\Url;
+use common\helpers\SnHelper;
 use yii\base\Exception;
 use common\traits\Curd;
 /**
@@ -29,7 +29,7 @@ class WarehouseBillRepairController extends BaseController
     /**
     * @var WarehouseBillRepair
     */
-    public $modelClass = WarehouseBillRepair::class;
+    public $modelClass = WarehouseBillRepairForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_WX;
 
     /**
@@ -49,17 +49,15 @@ class WarehouseBillRepairController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-//          'supplier' => ['supplier_name'],
-            'creator' => ['username'],
-            'auditor' => ['username'],
-            'follower' => ['username'],
-
-    ]
+                'creator' => ['username'],
+                'auditor' => ['username'],
+                'follower' => ['username'],
+            ]
         ]);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseBillRepairForm::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -76,9 +74,8 @@ class WarehouseBillRepairController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillRepairForm();
+        $model = $model ??new WarehouseBillRepair();
 
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -90,9 +87,9 @@ class WarehouseBillRepairController extends BaseController
                 if($model->isNewRecord) {
                     $model->repair_no = SnHelper::createBillSn($this->billType);
                 }
-                if(false === $model->save()){
-                    throw new Exception($this->getError($model));
-                }
+
+                \Yii::$app->warehouseService->repair->createRepairBill($model);
+
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
@@ -100,13 +97,32 @@ class WarehouseBillRepairController extends BaseController
                 \Yii::error($error);
                 return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
-
             return $this->message("保存成功", $this->redirect($returnUrl), 'success');
         }
-
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+
+    /**
+     * ajax 退货返厂单-申请审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->bill_status != RepairStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->repair_status = RepairStatusEnum::APPLY;
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
     }
 
 
@@ -119,7 +135,6 @@ class WarehouseBillRepairController extends BaseController
     {
         $id = Yii::$app->request->get('id');
 
-        $this->modelClass = WarehouseBillRepairForm::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
