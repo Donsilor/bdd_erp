@@ -132,6 +132,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'100'],
             ],
             [
+                'attribute' => 'audit_time',
+                'value' => function($model){
+                    return $model->audit_time ? Yii::$app->formatter->asDate($model->audit_time):'';
+                },
+                'filter' => false,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
                         return \common\enums\AuditStatusEnum::getValue($model->audit_status);
@@ -142,7 +151,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],      
+            ],
+            [
+                'attribute' => 'auditor_id',
+                'value' => "auditor.username",
+                'filter' => false,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
             [
                 'attribute' => 'purchase_status',                    
                 'value' => function ($model){

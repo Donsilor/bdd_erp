@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDatetime($model->created_at);
                             }
 
                         ],
@@ -190,7 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDatetime($model->audit_time);
                             }
 
                         ],
