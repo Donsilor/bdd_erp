@@ -44,7 +44,7 @@ class PurchaseDefective extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'defective_num', 'auditor_id', 'audit_time', 'audit_status', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'defective_num','defective_status', 'auditor_id', 'audit_time', 'audit_status', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
             [['defective_no', 'receipt_no'], 'string', 'max' => 30],
@@ -69,6 +69,7 @@ class PurchaseDefective extends BaseModel
             'audit_time' => '审核时间',
             'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
+            'defective_status' => '单据状态',
             'remark' => '单据备注',
             'sort' => '排序',
             'status' => '状态',

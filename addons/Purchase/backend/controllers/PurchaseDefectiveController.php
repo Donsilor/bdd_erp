@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\SnHelper;
 use Yii;
 use common\helpers\Url;
@@ -87,6 +88,25 @@ class PurchaseDefectiveController extends BaseController
         ]);
     }
 
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->defective_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->defective_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
     /**
      * 审核-采购收货单
      *
@@ -106,9 +126,9 @@ class PurchaseDefectiveController extends BaseController
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->auditor_id = \Yii::$app->user->id;
                     $model->audit_time = time();
-                    $model->status = StatusEnum::ENABLED;
+                    $model->defective_status = BillStatusEnum::CONFIRM;
                 }else{
-                    $model->status = StatusEnum::DISABLED;
+                    $model->defective_status = BillStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));

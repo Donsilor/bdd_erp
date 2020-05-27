@@ -1,7 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use addons\Purchase\common\enums\PurchaseStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
@@ -16,10 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">采购详情 - <?php echo $model->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="tab-content" >
+        <div class="col-xs-12">
             <div class="box">
-                <div class=" table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class=" table-responsive" >
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="box-footer text-center">
                     <?php
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE) {
+                        if($model->purchase_status == BillStatusEnum::SAVE) {
                             echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                                 'data-toggle' => 'modal',
                                 'class' => 'btn btn-primary btn-ms',
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ?>
                     <?php
-                    if($model->purchase_status <= PurchaseStatusEnum::PENDING){
+                    if($model->purchase_status <= BillStatusEnum::PENDING){
                         echo Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                             'class'=>'btn btn-info btn-ms',
                             'data-toggle' => 'modal',
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                    if($model->purchase_status == BillStatusEnum::SAVE){
                         echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                             'class'=>'btn btn-success btn-sm',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if($model->purchase_status == PurchaseStatusEnum::PENDING){
+                    if($model->purchase_status == BillStatusEnum::PENDING){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',

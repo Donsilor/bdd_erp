@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
@@ -85,6 +86,25 @@ class PurchaseReceiptController extends BaseController
     }
 
     /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->receipt_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->receipt_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
+
+    /**
      * 审核-采购收货单
      *
      * @return mixed
@@ -102,9 +122,9 @@ class PurchaseReceiptController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->status = StatusEnum::ENABLED;
+                    $model->receipt_status = BillStatusEnum::CONFIRM;
                 }else{
-                    $model->status = StatusEnum::DISABLED;
+                    $model->receipt_status = BillStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));

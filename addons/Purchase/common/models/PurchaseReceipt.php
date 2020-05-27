@@ -42,7 +42,7 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'auditor_id', 'receipt_status','audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
             [['receipt_no'], 'string', 'max' => 30],
@@ -65,6 +65,7 @@ class PurchaseReceipt extends BaseModel
             'total_cost' => '总金额',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
+            'receipt_status' => '单据状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '单据备注',

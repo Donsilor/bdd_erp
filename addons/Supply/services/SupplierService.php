@@ -14,6 +14,7 @@ use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\Url;
+use common\models\backend\Member;
 
 
 class SupplierService
@@ -65,9 +66,10 @@ class SupplierService
      * @return array
      */
     public function getFollower($supplier_id){
-        $model = SupplierFollower::find()
-            ->where(['supplier_id'=>$supplier_id,'status' => StatusEnum::ENABLED])
-            ->select(['member_id','member_name'])
+        $model = SupplierFollower::find()->alias('a')
+            ->leftJoin(Member::tableName().' m','m.id = a.member_id')
+            ->where(['a.supplier_id'=>$supplier_id,'a.status' => StatusEnum::ENABLED])
+            ->select(['a.member_id','m.username as member_name'])
             ->asArray()
             ->all();
         $model = ArrayHelper::map($model,'member_id', 'member_name');

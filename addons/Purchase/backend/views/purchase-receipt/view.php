@@ -1,12 +1,9 @@
 <?php
 
 use common\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
-use common\helpers\Url;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
+
 
 /* @var $this yii\web\View */
 /* @var $model common\models\PurchaseReceipt */
@@ -80,17 +77,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="box-footer text-center">
-            <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                'data-toggle' => 'modal',
-                'class'=>'btn btn-primary btn-ms',
-                'data-target' => '#ajaxModalLg',
-            ]); ?>
             <?php
-            if($model->audit_status != AuditStatusEnum::PASS){
+            if($model->receipt_status == BillStatusEnum::SAVE) {
+                echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                    'data-toggle' => 'modal',
+                    'class' => 'btn btn-primary btn-ms',
+                    'data-target' => '#ajaxModalLg',
+                ]);
+            }
+            ?>
+            <?php
+            if($model->receipt_status == BillStatusEnum::PENDING) {
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
+                ]);
+            }
+            ?>
+            <?php
+            if($model->receipt_status == BillStatusEnum::SAVE) {
+                echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                    'class'=>'btn btn-success btn-sm',
+                    'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                 ]);
             }
             ?>

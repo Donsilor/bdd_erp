@@ -6,7 +6,7 @@ use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-use common\helpers\ImageHelper;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 
 /* @var $this yii\web\View */
@@ -154,34 +154,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'100'],
             ],
             [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
+                'attribute' => 'defective_status',
                 'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
+                    return BillStatusEnum::getValue($model->defective_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'defective_status',BillStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'80'],
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {audit} {status}',
+                'template' => '{edit} {goods} {audit} {ajax-apply} {delete}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
-                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                    if($model->defective_status == BillStatusEnum::SAVE) {
+                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
+                    }
                     },
                 'goods' => function($url, $model, $key){
                     return Html::a('单据明细', ['purchase-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
+
                 'audit' => function($url, $model, $key){
-                        if($model->audit_status != 1){
+                    if($model->defective_status == BillStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -189,9 +191,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
                     },
+
+                'ajax-apply' => function($url, $model, $key){
+                    if($model->defective_status == BillStatusEnum::SAVE){
+                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
+                },
                  'status' => function($url, $model, $key){
                         return Html::status($model['status']);
                     },
+
+                'delete' => function($url, $model, $key){
+                    if($model->defective_status != BillStatusEnum::CONFIRM) {
+                        return Html::delete(['delete', 'id' => $model->id]);
+                    }
+                }
                 /*'delete' => function($url, $model, $key){
                         return Html::delete(['delete', 'id' => $model->id]);
                     },

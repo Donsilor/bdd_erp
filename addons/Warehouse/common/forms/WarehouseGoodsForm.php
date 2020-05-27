@@ -36,8 +36,11 @@ class WarehouseGoodsForm extends WarehouseGoods
     }
 
     public function createApply(){
-        $attr = $this->activeAttributes();
-        print_r($attr);
+        $attr_fields = $this->activeAttributes();
+
+        foreach ($attr_fields as $attr){
+            echo  $attr."<br/>";
+        }
     }
 
 }

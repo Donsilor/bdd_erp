@@ -16,22 +16,21 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receiptInfo->receipt_no ?></h2>
     <?php echo Html::menuTab($tabList, $tab)?>
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
+        <?php
+        if($receiptInfo->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::create(['edit', 'receipt_id' => $receiptInfo->id], '新增货品', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]);
+        }
+        ?>
+    </div>
     <div class="tab-content">
-        <div class="row col-xs-12">
+        <div class="row col-xs-12" >
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">
-                    <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
-                    </h3>
-                    <div class="box-tools">
-                        <?= Html::create(['edit', 'receipt_id' => $receiptInfo->id], '新增货品', [
-                            'class' => 'btn btn-primary btn-xs openIframe',
-                            'data-width'=>'90%',
-                            'data-height'=>'90%',                            
-                            'data-offset'=>'20px',
-                        ]); ?>
-                    </div>
-               </div>
             <div class="box-body table-responsive">
                 <div class="tab-content">
                     <?php

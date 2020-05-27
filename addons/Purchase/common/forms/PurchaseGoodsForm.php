@@ -156,7 +156,8 @@ class PurchaseGoodsForm extends PurchaseGoods
     /**
      * 创建商品属性
      */
-    public function createAttrs()
+    public function
+    createAttrs()
     {  
         PurchaseGoodsAttribute::deleteAll(['id'=>$this->id]);   
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {            

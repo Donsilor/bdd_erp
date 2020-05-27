@@ -1,10 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Url;
 use common\enums\AuditStatusEnum;
 
@@ -80,13 +77,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     </table>
                 </div>
                 <div class="box-footer text-center"">
-                    <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                        'data-toggle' => 'modal',
-                        'class'=>'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
                     <?php
-                    if($model->audit_status != AuditStatusEnum::PASS){
+                    if($model->defective_status == BillStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                            'data-toggle' => 'modal',
+                            'class' => 'btn btn-primary btn-ms',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+                <?php
+                if($model->defective_status == BillStatusEnum::SAVE){
+                    echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                        'class'=>'btn btn-success btn-ms',
+                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                    ]);
+                }
+                ?>
+                    <?php
+                    if($model->defective_status != BillStatusEnum::PENDING){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',

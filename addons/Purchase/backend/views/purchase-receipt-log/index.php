@@ -13,16 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                    <div class="box-tools">
-                        <?= Html::create(['ajax-edit', 'purchase_id' => $purchase_receipt->id,'returnUrl' => Url::getReturnUrl()], '创建', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
-                        ]); ?>
-                    </div>
-                </div>
-            <div class="box-body table-responsive">  
+                <div class="box-body table-responsive" >
                   <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

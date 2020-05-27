@@ -2,14 +2,11 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\enums\PurchaseStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\forms\PurchaseFollowerForm;
 use addons\Supply\common\models\SupplierFollower;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
-use common\enums\StatusEnum;
-use common\helpers\ResultHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -119,10 +116,10 @@ class PurchaseController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if($model->purchase_status != PurchaseStatusEnum::SAVE){
+        if($model->purchase_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->purchase_status = PurchaseStatusEnum::PENDING;
+        $model->purchase_status = BillStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -152,9 +149,9 @@ class PurchaseController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->purchase_status = PurchaseStatusEnum::COMFIRMED;
+                    $model->purchase_status = BillStatusEnum::CONFIRM;
                 }else{
-                    $model->purchase_status = PurchaseStatusEnum::SAVE;
+                    $model->purchase_status = BillStatusEnum::SAVE;
                 }
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));

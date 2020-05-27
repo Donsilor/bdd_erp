@@ -646,7 +646,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} ',
+                            'template' => '{edit} {apply-edit}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
