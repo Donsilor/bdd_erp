@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=>'width:100px'
                             ],
                             'defaultValue' => 0,
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
+                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
