@@ -3,8 +3,10 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Warehouse\common\forms\WarehouseGoodsForm;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ExcelHelper;
+use common\helpers\ResultHelper;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
@@ -28,7 +30,7 @@ class WarehouseGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['name'], // 模糊查询
+            'partialMatchAttributes' => ['goods_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -89,6 +91,27 @@ class WarehouseGoodsController extends BaseController
             'tab'=>$tab,
             'tabList'=>\Yii::$app->warehouseService->warehouseGoods->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * @return array|mixed|string
+     * WarehouseGoodsForm $model
+     */
+    public function actionApplyEdit(){
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id', null);
+        $this->modelClass = WarehouseGoodsForm::class;
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            $model->createApply();
+
+        }
+        return $this->render('edit', [
+            'model' => $model,
         ]);
     }
 
