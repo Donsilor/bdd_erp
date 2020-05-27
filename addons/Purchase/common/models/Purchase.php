@@ -43,7 +43,7 @@ class Purchase extends BaseModel
         return [
             [['total_cost'], 'number'],
             [['supplier_id'], 'required'],
-            [['id','supplier_id','goods_count', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'status','audit_time','created_at', 'updated_at'], 'integer'],
+            [['id','supplier_id','goods_count', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['purchase_sn'], 'string', 'max' => 30],                
             [['audit_status'], 'checkAuditStatus'],
@@ -94,9 +94,9 @@ class Purchase extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
-            'delivery_time'=>'交货时间',    
-            'remark' => '备注',
-            'status' => '状态 ',
+            'delivery_time'=>'交货时间', 
+            'purchase_status' => '采购状态 ',
+            'remark' => '采购备注',            
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

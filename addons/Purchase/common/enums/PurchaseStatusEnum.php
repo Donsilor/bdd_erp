@@ -19,7 +19,7 @@ class PurchaseStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::SAVED => "保存",
+            self::SAVED => "已保存",
             self::PENDING => "待审核",
             self::COMFIRMED => "已审核",                
             self::CANCELED => "已取消",
