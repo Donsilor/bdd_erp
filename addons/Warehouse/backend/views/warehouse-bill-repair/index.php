@@ -385,13 +385,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
                  },
-                 'status' => function($url, $model, $key){
+                 /*'status' => function($url, $model, $key){
                          if($model->audit_status == AuditStatusEnum::PASS) {
                             return Html::status($model['status']);
                          }
-                  },
+                  },*/
                  'delete' => function($url, $model, $key){
-                    return Html::delete(['delete', 'id' => $model->id]);
+                    return Html::delete(['delete', 'id' => $model->id], '关闭');
                  },
                 /*
                 'view'=> function($url, $model, $key){

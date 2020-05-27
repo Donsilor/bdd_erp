@@ -3,7 +3,6 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\RepairStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
@@ -106,7 +105,7 @@ class WarehouseBillRepairController extends BaseController
 
 
     /**
-     * ajax 退货返厂单-申请审核
+     * ajax 维修单-申请
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -114,43 +113,46 @@ class WarehouseBillRepairController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if($model->bill_status != RepairStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->warehouseService->repair->applyRepair($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("申请失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        $model->repair_status = RepairStatusEnum::APPLY;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        return $this->message("申请成功", $this->redirect(Yii::$app->request->referrer), 'success');
+
     }
 
 
     /**
-     * 审核
+     * 维修单-审核
      *
      * @return mixed
      */
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-
         $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
-                    $model->status = StatusEnum::ENABLED;
-                }else{
-                    $model->status = StatusEnum::DISABLED;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+
+                \Yii::$app->warehouseService->repair->auditRepair($model);
+
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
@@ -158,7 +160,7 @@ class WarehouseBillRepairController extends BaseController
             }
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
-        $model->audit_status = AuditStatusEnum::PASS;
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
