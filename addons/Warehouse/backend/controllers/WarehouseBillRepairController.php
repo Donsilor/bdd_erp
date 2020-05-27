@@ -166,4 +166,73 @@ class WarehouseBillRepairController extends BaseController
         ]);
     }
 
+    /**
+     * ajax 维修单-下单
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxOrders(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->warehouseService->repair->ordersRepair($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("下单失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("下单成功", $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
+
+    /**
+     * ajax 维修单-完毕
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxFinish(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->warehouseService->repair->finishRepair($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("操作成功", $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
+
+    /**
+     * ajax 维修单-收货
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxReceiving(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->warehouseService->repair->receivingRepair($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("收货失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("收货成功", $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
+
 }

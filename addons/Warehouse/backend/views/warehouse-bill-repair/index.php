@@ -64,9 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'order_sn',
-                'value' => 'order_sn',
-                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                'attribute' => 'goods_id',
+                'value' => 'goods_id',
+                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
@@ -91,9 +91,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'goods_id',
-                'value' => 'goods_id',
-                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                'attribute' => 'order_sn',
+                'value' => 'order_sn',
+                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
@@ -363,10 +363,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {apply} {audit} {status} {delete} ',
+                'template' => '{edit} {apply} {audit} {orders} {finish} {receiving} {status} {delete} ',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::SAVE) {
                         return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                    }
                  },
                 'apply' => function($url, $model, $key){
                     if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::SAVE){
@@ -377,23 +379,48 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'audit' => function($url, $model, $key){
-                       if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::APPLY && $model->audit_status == AuditStatusEnum::PENDING){
-                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                'class'=>'btn btn-success btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                            ]);
-                        }
-                 },
-                 /*'status' => function($url, $model, $key){
-                         if($model->audit_status == AuditStatusEnum::PASS) {
-                            return Html::status($model['status']);
-                         }
-                  },*/
-                 'delete' => function($url, $model, $key){
-                    return Html::delete(['delete', 'id' => $model->id], '关闭');
-                 },
-                /*
+                   if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::APPLY && $model->audit_status == AuditStatusEnum::PENDING){
+                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+                },
+                'orders' => function($url, $model, $key){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::AFFIRM){
+                        return Html::edit(['ajax-orders','id'=>$model->id], '下单', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交下单", "确定操作吗？");return false;',
+                        ]);
+                    }
+                },
+                'finish' => function($url, $model, $key){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::ORDERS){
+                        return Html::edit(['ajax-finish','id'=>$model->id], '完毕', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交完毕", "确定操作吗？");return false;',
+                        ]);
+                    }
+                },
+                'receiving' => function($url, $model, $key){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::FINISH){
+                        return Html::edit(['ajax-receiving','id'=>$model->id], '收货', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交收货", "确定操作吗？");return false;',
+                        ]);
+                    }
+                },
+                'delete' => function($url, $model, $key){
+                     if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::SAVE) {
+                         return Html::delete(['delete', 'id' => $model->id], '关闭');
+                    }
+                },
+                /*'status' => function($url, $model, $key){
+                    if($model->audit_status == AuditStatusEnum::PASS) {
+                       return Html::status($model['status']);
+                    }
+                },
                 'view'=> function($url, $model, $key){
                     return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
                     },

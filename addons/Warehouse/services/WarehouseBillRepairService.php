@@ -44,6 +44,7 @@ class WarehouseBillRepairService extends Service
         $form->repair_times = 1;
         $form->repair_status = RepairStatusEnum::SAVE;
         $form->qc_status = QcStatusEnum::SAVE;
+        $form->predict_time = $this->getEndDay(time(), 3);
         if(false === $form->save()){
             throw new Exception($this->getError($form));
         }
@@ -102,5 +103,83 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+    }
+
+    /**
+     * 下单申请
+     * @param WarehouseBillRepairForm $form
+     */
+    public function ordersRepair($form)
+    {
+        if (false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->repair_status != RepairStatusEnum::AFFIRM){
+            throw new Exception("单据不是确认状态");
+        }
+        $form->repair_status = RepairStatusEnum::ORDERS;
+        $form->orders_time = time();//下单时间
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 维修完毕
+     * @param WarehouseBillRepairForm $form
+     */
+    public function finishRepair($form)
+    {
+        if (false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->repair_status != RepairStatusEnum::ORDERS){
+            throw new Exception("单据不是下单状态");
+        }
+        $form->repair_status = RepairStatusEnum::FINISH;
+        $form->end_time = time();//完成时间
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 收货
+     * @param WarehouseBillRepairForm $form
+     */
+    public function receivingRepair($form)
+    {
+        if (false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->repair_status != RepairStatusEnum::FINISH){
+            throw new Exception("单据不是完毕状态");
+        }
+        $form->repair_status = RepairStatusEnum::RECEIVING;
+        $form->receiving_time = time();//收货时间
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 求取从某日起经过一定天数后的日期,
+     * 排除周日
+     * @param $start       开始日期
+     * @param $offset      经过天数
+     * @return
+     *  examples:输入(2010-06-25,5),得到2010-07-02
+     */
+    public function getEndDay( $start='now', $offset=0){
+        $tmptime = $start + 24*3600;
+        while( $offset > 0 ){
+            $weekday = date('w', $tmptime);
+            $tmpday = date('Y-m-d', $tmptime);
+            if($weekday != 0){//不是周末
+                $offset--;
+            }
+            $tmptime += 24*3600;
+        }
+        return $tmpday;
     }
 }
