@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
-                            'name' => "warehouse_goods_list",
+                            'name' => "bill_goods",
                             'value' => $warehouse_goods,
                             'columns' => $warehouseColomns,
                         ]) ?>

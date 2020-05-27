@@ -3,24 +3,17 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Style\common\enums\LogTypeEnum;
 use Yii;
 use common\traits\Curd;
-use common\models\base\SearchModel;
+use common\helpers\Url;
+use common\helpers\SnHelper;
 use common\helpers\ExcelHelper;
-use addons\Warehouse\common\models\WarehouseGoods;
+use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
-use common\helpers\SnHelper;
-use common\helpers\Url;
-use yii\db\Exception;
-
 
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
@@ -30,6 +23,7 @@ class WarehouseBillBController extends BaseController
     use Curd;
     public $modelClass = WarehouseBillBForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_B;
+
     /**
      * Lists all WarehouseBill models.
      * @return mixed
@@ -144,13 +138,14 @@ class WarehouseBillBController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionApplyAudit(){
+    public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $model->bill_status = BillStatusEnum::PENDING;
+        $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
         }

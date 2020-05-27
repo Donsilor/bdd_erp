@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_m', '退货返厂单列表');
+$this->title = Yii::t('warehouse_bill_b_goods', '退货返厂单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -33,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content" style="padding-right: 10px;">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                </div>
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
@@ -203,7 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
 
