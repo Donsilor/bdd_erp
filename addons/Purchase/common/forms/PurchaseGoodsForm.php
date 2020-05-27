@@ -193,7 +193,7 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function createApply()
     {
-        
+        //主要信息
         $fields = array('goods_name','cost_price','goods_num','remark');
         $apply_info = array();
         foreach ($fields as $field) {
@@ -204,6 +204,7 @@ class PurchaseGoodsForm extends PurchaseGoods
                     'group'=>'base',
             );
         }
+        //属性信息
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             
@@ -224,6 +225,19 @@ class PurchaseGoodsForm extends PurchaseGoods
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
              );            
+        }
+        //其他信息
+        $fields = array(
+                'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_loss','jiagong_fee',
+                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','factory_cost_price','stone_info','parts_info'
+        );
+        foreach ($fields as $field) {
+            $apply_info[] = array(
+                    'code'=>$field,
+                    'value'=>$this->$field,
+                    'label'=>$this->getAttributeLabel($field),
+                    'group'=>'base',
+            );
         }
         $this->is_apply   = ConfirmEnum::YES;
         $this->apply_info = json_encode($apply_info);

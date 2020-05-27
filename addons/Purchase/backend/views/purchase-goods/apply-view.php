@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                   <?php if($model->apply_info) { ?>
                        <?php foreach ($model->apply_info as $info) {?>
                         <tr>
-                            <td class="col-xs-2 text-right"><?php echo $info['label']?>：</td>
+                            <td class="col-xs-2 nowrap text-right"><?php echo $info['label']?>：</td>
                             <td><?php echo $info['org_value']?></td>
                         </tr>
                        <?php }?>
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
                     <?php if($model->apply_info) {?>
                        <?php foreach ($model->apply_info as $info) {?>
                         <tr>
-                            <td class="col-xs-2 text-right<?php echo $info['changed'] ?' red':'';?>"><?php echo $info['label']?>：</td>
+                            <td class="col-xs-2 nowrap text-right<?php echo $info['changed'] ?' red':'';?>" style="white-space:nowrap;"><?php echo $info['label']?>：</td>
                             <td<?php echo $info['changed'] ?' class="red"':'';?>><?php echo $info['value']?></td>
                         </tr>
                        <?php }?>
