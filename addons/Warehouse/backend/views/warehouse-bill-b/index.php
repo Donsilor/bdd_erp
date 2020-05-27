@@ -133,7 +133,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
                         ],
-
                         [
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
@@ -167,34 +166,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-
-                            ]),
-                        ],
-                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {audit} {goods} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                         ]);
                                     }
                                 },
+                                'apply' => function($url, $model, $key){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+                                        return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"申请审核", "确定操作吗？");return false;',
+                                        ]);
+                                    }
+                                },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -205,11 +198,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'goods' => function($url, $model, $key){
                                     return Html::a('单据明细', ['warehouse-bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
-                                'status' => function($url, $model, $key){
+                                /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);
-                                },
+                                },*/
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                    }
                                 },
                             ],
                             'headerOptions' => ['class' => 'col-md-3'],

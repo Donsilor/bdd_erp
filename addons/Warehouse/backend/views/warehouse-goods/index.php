@@ -638,7 +638,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
 
                         ],
@@ -657,6 +657,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]);
                                 },
 
+                                'apply-edit' =>function($url, $model, $key){
+                                    return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
