@@ -145,19 +145,14 @@ class Attribute
      * @param string $noCache
      * @return array
      */
-    public function key_valueList($attr_id, $language = null, $noCache = false)
+    public function valuesDropdown($attr_id, $language = null, $noCache = false)
     {
-        $result_data = [];
-        if($language == null) {
-            $language = \Yii::$app->params['language'];
-        }
-        $result = $this->getAttr($attr_id , $noCache);
-        $data = $result['items'][$language]??[];
+        $result = [];
+        $data = $this->valueList($attr_id, $language, $noCache);
         if(!empty($data)){
-            array_unshift($data, ['id' => 0, 'name' => '全部']);
-            $result_data = array_combine(array_column($data, 'id'),array_column($data, 'name'));
+            $result = ['' => '请选择'] + array_column($data, 'name','id');
         }
-        return $result_data;
+        return $result;
     }
 
 }
