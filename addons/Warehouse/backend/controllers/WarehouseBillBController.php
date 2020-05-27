@@ -28,7 +28,6 @@ class WarehouseBillBController extends BaseController
     use Curd;
     public $modelClass = WarehouseBill::class;
     public $billType = BillTypeEnum::BILL_TYPE_B;
-
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -125,7 +124,7 @@ class WarehouseBillBController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-l/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-b/index']));
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
