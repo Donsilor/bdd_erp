@@ -14,14 +14,14 @@ use addons\Supply\common\models\Supplier;
  * @property string $purchase_sn 采购单号
  * @property int $supplier_id 供应商
  * @property int $follower_id 跟单人
- * @property string $cost_total 总成本
+ * @property string $total_cost 总成本
  * @property int $goods_total 总数量
  * @property int $creator_id 创建人
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property string $audit_remark 审核备注
  * @property string $remark 采购备注
- * @property int $status 状态 1已布产 0待布产  -1删除
+ * @property int $purchase_status 采购状态
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -41,7 +41,7 @@ class Purchase extends BaseModel
     public function rules()
     {
         return [
-            [['cost_total'], 'number'],
+            [['total_cost'], 'number'],
             [['supplier_id'], 'required'],
             [['id','supplier_id','goods_count', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'status','audit_time','created_at', 'updated_at'], 'integer'],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
@@ -85,7 +85,7 @@ class Purchase extends BaseModel
             'id' => 'ID',
             'purchase_sn' => '采购单号',
             'supplier_id' => '供应商',
-            'cost_total' => '总金额(RMB)',
+            'total_cost' => '总金额(RMB)',
             'goods_count' => '总数量(件)',  
             'follower_id' => '跟单人',
             'goods_count' => '总数量',  

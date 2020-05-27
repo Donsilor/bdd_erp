@@ -43,11 +43,11 @@ class PurchaseService extends Service
     public function purchaseSummary($purchase_id) 
     {
         $sum = PurchaseGoods::find()
-                    ->select(['sum(goods_num) as goods_count','sum(cost_price*goods_num) as cost_total'])
+                    ->select(['sum(goods_num) as goods_count','sum(cost_price*goods_num) as total_cost'])
                     ->where(['purchase_id'=>$purchase_id,'status'=>StatusEnum::ENABLED])
                     ->asArray()->one();
         if($sum) {
-            Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'cost_total'=>$sum['cost_total']/1],['id'=>$purchase_id]);
+            Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$purchase_id]);
         }
     }
     

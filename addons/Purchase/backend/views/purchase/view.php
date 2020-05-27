@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->purchase_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('cost_total') ?>：</td>
-                            <td><?= $model->cost_total ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
+                            <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>

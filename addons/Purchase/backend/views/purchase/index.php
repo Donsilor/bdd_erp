@@ -91,9 +91,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'80'],
             ],
             [
-                    'attribute' => 'cost_total',
+                    'attribute' => 'total_cost',
                     'value' => function ($model){
-                        return $model->cost_total;
+                        return $model->total_cost;
                     },
                     'filter' => true,
                     'format' => 'raw',
@@ -143,18 +143,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],      
-            /*[
-                'attribute' => 'status',                    
+            [
+                'attribute' => 'purchase_status',                    
                 'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
+                    return \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',\addons\Purchase\common\enums\PurchaseStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',                        
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ], */           
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
