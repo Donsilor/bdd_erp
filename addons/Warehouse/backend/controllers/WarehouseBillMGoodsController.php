@@ -13,16 +13,9 @@ use common\helpers\StringHelper;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Purchase\common\models\PurchaseReceipt;
 use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
-use addons\Purchase\common\enums\ReceiptGoodsAttrEnum;
-use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
+
 use yii\base\Exception;
 
 /**

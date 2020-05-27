@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=>'width:100px'
                             ],
                             'defaultValue' => 0,
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
@@ -287,7 +287,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:100px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
                         ],
                         [
                             'name' => "main_stone_num",
@@ -320,7 +320,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                         ],
                         [
                             'name' => "main_stone_clarity",
@@ -331,7 +331,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                         ],
                         [
                             'name' => "main_stone_price",
@@ -363,7 +363,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type' => 'number',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num1",
@@ -407,7 +407,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num2",
@@ -451,7 +451,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                         ],
                         [
                             'name' => "second_stone_num3",
@@ -561,7 +561,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
                         ],
                         [
                             'name' => "biaomiangongyi_fee",

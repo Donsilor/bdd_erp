@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -228,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->cert_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -256,7 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->material);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MATERIAL), [
+                            'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -292,7 +293,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_shape);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_shape',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -304,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_color);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -316,7 +317,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_clarity);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -328,7 +329,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_cut);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cut',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cut',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -340,7 +341,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_polish);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_polish',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -352,7 +353,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_symmetry);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -364,7 +365,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_fluorescence);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -384,7 +385,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->diamond_cert_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:120px;'
@@ -489,7 +490,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->main_stone_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'main_stone_type',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'main_stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -509,7 +510,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->second_stone_type1);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -545,7 +546,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->second_stone_color1);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -557,7 +558,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->second_stone_clarity1);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -577,7 +578,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->second_stone_type2);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2',Yii::$app->attr->key_valueList(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
