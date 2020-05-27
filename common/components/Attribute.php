@@ -47,6 +47,22 @@ class Attribute
         $result = $this->getAttr($attr_id , $noCache);
         return $result['items'][$language]??[];
     }   
+    /**
+     * 属性值键值对 映射
+     * @param unknown $attr_id
+     * @param unknown $language
+     * @param string $noCache
+     * @return array
+     */
+    public function valueMap($attr_id, $key = 'id', $value = "name", $language = null, $noCache = false)
+    {
+        $result = [];
+        $data = $this->valueList($attr_id, $language, $noCache);
+        if(!empty($data)){
+            $result = array_column($data, $value,$key);
+        }
+        return $result;
+    }
     
     /**
      * 返回属性值名称
@@ -136,23 +152,6 @@ class Attribute
         }
        
         return $info;
-    }
-
-    /**
-     * 属性值键值对
-     * @param unknown $attr_id
-     * @param unknown $language
-     * @param string $noCache
-     * @return array
-     */
-    public function valuesDropdown($attr_id, $language = null, $noCache = false)
-    {
-        $result = [];
-        $data = $this->valueList($attr_id, $language, $noCache);
-        if(!empty($data)){
-            $result = ['' => '请选择'] + array_column($data, 'name','id');
-        }
-        return $result;
     }
 
 }
