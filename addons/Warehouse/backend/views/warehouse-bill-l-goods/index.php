@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=>'width:100px'
                             ],
                             'defaultValue' => 0,
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
+                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
+                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                         ],
                         [
                             'name' => "diamond_clarity",
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'input-priority',
                                 'style'=>'width:80px'
                             ],
-                            'items' => \Yii::$app->attr->key_valueList(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
+                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                         ],
                         [
                             'name' => "diamond_cert_id",

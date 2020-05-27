@@ -47,6 +47,22 @@ class Attribute
         $result = $this->getAttr($attr_id , $noCache);
         return $result['items'][$language]??[];
     }   
+    /**
+     * 属性值键值对 映射
+     * @param unknown $attr_id
+     * @param unknown $language
+     * @param string $noCache
+     * @return array
+     */
+    public function valueMap($attr_id, $key = 'id', $value = "name", $language = null, $noCache = false)
+    {
+        $result = [];
+        $data = $this->valueList($attr_id, $language, $noCache);
+        if(!empty($data)){
+            $result = array_column($data, $value,$key);
+        }
+        return $result;
+    }
     
     /**
      * 返回属性值名称
@@ -136,28 +152,6 @@ class Attribute
         }
        
         return $info;
-    }
-
-    /**
-     * 属性值键值对
-     * @param unknown $attr_id
-     * @param unknown $language
-     * @param string $noCache
-     * @return array
-     */
-    public function key_valueList($attr_id, $language = null, $noCache = false)
-    {
-        $result_data = [];
-        if($language == null) {
-            $language = \Yii::$app->params['language'];
-        }
-        $result = $this->getAttr($attr_id , $noCache);
-        $data = $result['items'][$language]??[];
-        if(!empty($data)){
-            array_unshift($data, ['id' => 0, 'name' => '全部']);
-            $result_data = array_combine(array_column($data, 'id'),array_column($data, 'name'));
-        }
-        return $result_data;
     }
 
 }
