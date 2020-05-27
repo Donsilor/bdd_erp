@@ -131,6 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
+                                'prompt' => '请选择',
                                 'style'=>'width:100px'
                             ],
                             'items' => Yii::$app->styleService->productType->getDropDown()

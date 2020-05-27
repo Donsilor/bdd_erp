@@ -9,6 +9,7 @@ use addons\Warehouse\common\forms\WarehouseBillMGoodsForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\helpers\StringHelper;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -98,10 +99,7 @@ class WarehouseBillMGoodsController extends BaseController
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
         $warehouse_goods = [];
         if($search == 1 && !empty($goods_ids)){
-            $goods_ids = str_replace(' ',',',$goods_ids);
-            $goods_ids = str_replace('，',',',$goods_ids);
-            $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
-            $goods_id_arr = explode(",", $goods_ids);
+            $goods_id_arr = StringHelper::explodeIds($goods_ids);
             $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
             $goods_select = ['goods_id','style_sn','goods_name','goods_num','warehouse_id','put_in_type','material','gold_weight','gold_weight','gold_loss'
                 ,'diamond_carat','diamond_color','diamond_clarity','diamond_cert_id','cost_price'];
