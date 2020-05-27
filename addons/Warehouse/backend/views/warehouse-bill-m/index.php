@@ -5,6 +5,7 @@ use common\helpers\Url;
 use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -110,9 +111,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                                return BillStatusEnum::getValue($model->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
@@ -196,27 +197,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {goods} {apply-audit} {audit} {delete}',
+                            'template' => '{edit} {goods} {ajax-apply} {audit} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                         ]);
                                     }
                                 },
-                                'apply-audit' => function($url, $model, $key){
-                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-                                        return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                                'ajax-apply' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                             'class'=>'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"申请审核", "确定操作吗？");return false;',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);
                                     }
                                 },
 
                                 'audit' => function($url, $model, $key){
-                                    if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
+                                    if($model->bill_status == BillStatusEnum::PENDING){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',

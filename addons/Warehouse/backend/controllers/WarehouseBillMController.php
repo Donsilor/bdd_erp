@@ -162,7 +162,7 @@ class WarehouseBillMController extends BaseController
      * @return mixed
      * 申请审核
      */
-    public function actionApplyAudit(){
+    public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         if($model->bill_status != BillStatusEnum::SAVE){

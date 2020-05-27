@@ -89,9 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModalLg',
                 ]);
                 echo '&nbsp;';
-                echo Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                     'class'=>'btn btn-success btn-ms',
-                    'onclick' => 'rfTwiceAffirm(this,"申请审核","确定操作吗？");return false;',
+                    'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                 ]);
                 echo '&nbsp;';
                 echo Html::delete(['delete', 'id' => $model->id], '关闭',[
