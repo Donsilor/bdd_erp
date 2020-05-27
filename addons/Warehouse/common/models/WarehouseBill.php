@@ -178,4 +178,12 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }
+    /**
+     * 盘点单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBillW()
+    {
+        return $this->hasOne(WarehouseBillW::class, ['id'=>'bill_id']);
+    }
 }

@@ -11,10 +11,8 @@ namespace addons\Warehouse\common\enums;
  */
 class BillWStatusEnum extends \common\enums\BaseEnum
 {
-    const SAVE     = 1;
-    const PENDING    = 2;
-    const CONFIRM   = 3;
-    const CANCEL = 4;
+    const DOING     = 1;
+    const FINISHED   = 2;
     
     /**
      * @return array
@@ -22,10 +20,8 @@ class BillWStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::SAVE      => '保存',
-                self::PENDING     => '待审核',
-                self::CONFIRM    => '已审核',
-                self::CANCEL  => '已取消',
+                self::DOING    => '盘点中',
+                self::FINISHED   => '盘点结束',                
         ];
     }
     

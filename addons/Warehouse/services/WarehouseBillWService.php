@@ -15,6 +15,10 @@ use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
+use addons\Warehouse\common\enums\BillWStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\PandianAdjustEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsW;
 
 /**
  * 盘点单
@@ -86,6 +90,13 @@ class WarehouseBillWService extends WarehouseBillService
             } 
         }
         
+        //同步盘点明细关系表
+        $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,adjust_status) select id,0 from '.WarehouseBillGoods::tableName()." where bill_id=".$bill->id;
+        $result = Yii::$app->db->createCommand($sql)->execute();
+        if(!$result) {
+            throw new \Exception('导入单据明细失败2');
+        }
+        
         //盘点单附属表
         $billW = new WarehouseBillW();
         $billW->bill_id = $bill->id;
@@ -129,11 +140,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
             }else {
                 if($billGoods->to_warehouse_id == $goods->warehouse_id) {
-                    if($goods->goods_status != GoodsStatusEnum::IN_PANDIAN) {
-                        $billGoods->status = PandianStatusEnum::WRONG;//异常
-                    }else {
-                        $billGoods->status = PandianStatusEnum::NORMAL;//正常
-                    }                    
+                    $billGoods->status = PandianStatusEnum::NORMAL;//正常
                 }elseif($billGoods->to_warehouse_id != $goods->warehouse_id){
                     $billGoods->status = PandianStatusEnum::LOSS;//盘亏
                 }
@@ -154,11 +161,72 @@ class WarehouseBillWService extends WarehouseBillService
     }
     /**
      * 盘点结束
-     * @param WarehouseBillWForm $form
+     * @param WarehouseBillW $bill
      */
     public function finishBillW($bill_id)
     {
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        if(!$bill || $bill->bill_status == BillWStatusEnum::FINISHED) {
+             throw new \Exception("盘点已结束");
+        }
+        $bill->status = BillWStatusEnum::FINISHED;
+        if(false === $bill->save(false,['id','status'])) {
+            throw new \Exception($this->getError($bill));
+        }
+        //1.未盘点设为盘亏
+        WarehouseBillGoods::updateAll(['status'=>PandianStatusEnum::LOSS],['bill_id'=>$bill_id,'status'=>PandianStatusEnum::SAVE]);
         
+        //2.解锁商品
+        $subQuery = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id'=>$bill->id]);
+        WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+        
+        //3.解锁仓库
+        \Yii::$app->warehouseService->warehouse->unlockWarehouse($bill->to_warehouse_id);
+        
+        //4.自动调整盘亏盘盈数据
+        //$this->adjustGoods($bill_id);
+    }
+    
+    /**
+     * 盘点商品矫正
+     * @param unknown $bill_id
+     */
+    public function adjustGoods($bill_id){        
+            
+        $pandianStatusArray = [PandianStatusEnum::LOSS,PandianStatusEnum::PROFIT];
+        $goodsStatusArray1  = [GoodsStatusEnum::HAS_SOLD];
+        $goodsStatusArray2  = [GoodsStatusEnum::IN_TRANSFER,GoodsStatusEnum::IN_RETURN_FACTORY,GoodsStatusEnum::IN_SALE,GoodsStatusEnum::IN_REFUND];
+        
+        $bill_goods_list = WarehouseBillGoods::find()->select(['id','goods_id','status'])->where(['bill_id'=>$bill_id,'bill_type'=>BillTypeEnum::BILL_TYPE_W,'status'=>$pandianStatusArray])->limit(99999)->all();
+        if(empty($bill_goods_list)) {
+            return true;
+        }        
+        foreach ($bill_goods_list as $billGoods){                
+
+            $goods = WarehouseGoods::find()->select(['id','goods_id','goods_status','warehouse_id'])->where(['goods_id'=>$billGoods->goods_id])->one();
+            if(empty($goods)){
+                continue;
+            }
+            $billGoods->from_warehouse_id = $goods->warehouse_id;
+            if($billGoods->pandian_status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
+                //如果盘亏-货品状态【已销售】 调整状态：【已销售】                
+                $billGoods->goodsW->ajust_status = PandianAdjustEnum::HAS_SOLD;
+            }else if($billGoods->pandian_status == PandianStatusEnum::PROFIT && in_array($goods->goods_status,$goodsStatusArray2)){
+                //如果盘盈-货品状态【收货中、调拨中、报损中,返厂中、销售中、退货中】  调整状态：【在途】
+                $billGoods->status = PandianStatusEnum::NORMAL;
+                $billGoods->goodsW->ajust_status = PandianAdjustEnum::ON_WAY;
+            } else {
+                continue;
+            }
+            if(false === $billGoods->save(true,['id','status','from_warehouse_id'])) {
+                throw new \Exception($this->getError($billGoods));
+            }else if($billGoods->goodsW->save(true,['id','adjust_status'])) {
+                throw new \Exception($this->getError($billGoods->billW));
+            } 
+
+        }
+        return true;
+
     }
     /**
      * 盘点审核
