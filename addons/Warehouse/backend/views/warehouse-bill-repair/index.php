@@ -56,12 +56,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'repair_no',
-                'value' => 'repair_no',
+                'value'=>function($model) {
+                    return Html::a($model->repair_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                },
                 'filter' => Html::activeTextInput($searchModel, 'repair_no', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['width'=>'300'],
             ],
             [
                 'attribute' => 'goods_id',

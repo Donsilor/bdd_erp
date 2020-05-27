@@ -7,16 +7,14 @@ use addons\Supply\common\enums\BuChanEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '供应商详情';
+$this->title = '维修单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">供应商详情 - <?php echo $model->supplier_name?></h2>
-    <?php echo Html::menuTab($tabList,$tab)?>
-
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->repair_no?></h2>
     <div class="row">
          <div class="col-xs-12">
              <div class="box">
@@ -25,51 +23,53 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive">
                              <table class="table table-hover">
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_name') ?>：</td>
-                                     <td><?= $model->supplier_name ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('repair_no') ?>：</td>
+                                     <td><?= $model->repair_no ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_code') ?>：</td>
-                                     <td><?= $model->supplier_code ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_id') ?>：</td>
+                                     <td><?= $model->goods_id ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('balance_type') ?>：</td>
-                                     <td><?= \common\enums\BalanceTypeEnum::getValue($model->balance_type) ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('business_scope') ?>：</td>
-                                     <td><?= $model->business_scope ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bank_name') ?>：</td>
-                                     <td><?= $model->bank_name ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bank_account_name') ?>：</td>
-                                     <td><?= $model->bank_account_name ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bank_account') ?>：</td>
-                                     <td><?= $model->bank_account ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
+                                     <td><?= $model->order_sn ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('business_no') ?>：</td>
-                                     <td><?= $model->business_no ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('tax_no') ?>：</td>
-                                     <td><?= $model->tax_no ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('produce_sn') ?>：</td>
+                                     <td><?= $model->produce_sn ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('business_address') ?>：</td>
-                                     <td><?= $model->business_address ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bill_m_no') ?>：</td>
+                                     <td><?= $model->bill_m_no ?></td>
                                  </tr>
-
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('consignee') ?>：</td>
+                                     <td><?= $model->consignee ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('repair_price') ?>：</td>
+                                     <td><?= $model->repair_price ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('orders_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->orders_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('predict_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->predict_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('end_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->end_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receiving_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->receiving_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
+                                 </tr>
                              </table>
                          </div>
                      </div>
@@ -80,60 +80,52 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('contactor') ?>：</td>
-                                     <td><?= $model->contactor ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('repair_type') ?>：</td>
+                                     <td><?= \addons\Warehouse\common\enums\RepairTypeEnum::getValue($model->repair_type) ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('mobile') ?>：</td>
-                                     <td><?= $model->mobile ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('repair_status') ?>：</td>
+                                     <td><?= \addons\Warehouse\common\enums\RepairStatusEnum::getValue($model->repair_status) ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('telephone') ?>：</td>
-                                     <td><?= $model->telephone ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qc_status') ?>：</td>
+                                     <td><?= \addons\Warehouse\common\enums\QcStatusEnum::getValue($model->qc_status) ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bdd_contactor') ?>：</td>
-                                     <td><?= $model->bdd_contactor ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qc_nopass_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->qc_nopass_time) ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bdd_mobile') ?>：</td>
-                                     <td><?= $model->bdd_mobile ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qc_times') ?>：</td>
+                                     <td><?= $model->qc_times ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('bdd_telephone') ?>：</td>
-                                     <td><?= $model->bdd_telephone ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                     <td><?= $model->creator->username ?? ''  ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
-                                     <td><?= $model->address ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                     <td><?= $model->remark ?></td>
-                                 </tr>
-
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
-                                     <td><?= $model->pay_type ?></td>
-                                 </tr>
-                                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-xs-12" style="padding: 0px;">
-                     <div class="box">
-                         <div class="box-body table-responsive" >
-                             <table class="table table-hover">
-                                 <tr>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->contract_file,90,90) ?></td>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->business_file,90,90) ?></td>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->tax_file,90,90) ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                                     <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('contract_file') ?>：</td>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('business_file') ?>：</td>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('tax_file') ?>：</td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                                     <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                     <td><?= $model->audit_remark ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
                                  </tr>
                              </table>
                          </div>
