@@ -5,7 +5,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '单据明细';
+$this->title = '收货单明细';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
@@ -78,10 +78,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:100px'
+                                'style'=>'width:100px',
+                                'prompt'=>'请选择'
                             ],
                             'defaultValue' => 0,
-                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
+                            'items' => Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
                         ],
                         [
                             'name' => "gold_weight",
@@ -122,9 +123,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:80px'
+                                'style'=>'width:80px',
+                                'prompt'=>'请选择'
                             ],
-                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                         ],
                         [
                             'name' => "diamond_clarity",
@@ -133,9 +135,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'type'  => 'dropDownList',
                             'options' => [
                                 'class' => 'input-priority',
-                                'style'=>'width:80px'
+                                'style'=>'width:80px',
+                                'prompt'=>'请选择'
                             ],
-                            'items' => \Yii::$app->attr->valuesDropdown(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
+                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                         ],
                         [
                             'name' => "diamond_cert_id",

@@ -8,16 +8,18 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '日志信息');
+$this->title = Yii::t('warehouse_bill_log', '日志列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">单据日志 - <?php echo $billInfo->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-
+                <div class="box-header">
+                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                </div>
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
