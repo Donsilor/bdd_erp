@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\enums\LogTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -18,26 +19,28 @@ use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
+use yii\db\Exception;
 
 
 /**
- * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
+ * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
  */
 class WarehouseBillBController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBill::class;
+    public $modelClass = WarehouseBillBForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_B;
     /**
-     * Lists all StyleChannel models.
+     * Lists all WarehouseBill models.
      * @return mixed
      */
     public function actionIndex()
     {
+
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['name'], // 模糊查询
+            'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -49,7 +52,7 @@ class WarehouseBillBController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['updated_at']);
+            ->search(\Yii::$app->request->queryParams,['created_at', 'audit_time']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
@@ -79,7 +82,7 @@ class WarehouseBillBController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
+     * ajax编辑/创建 退货返厂单
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -87,24 +90,25 @@ class WarehouseBillBController extends BaseController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillBForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
+
+        if($model->isNewRecord){
+            $model->bill_type = $this->billType;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
+            if($model->isNewRecord){
+                $model->bill_no = SnHelper::createBillSn($this->billType);
+            }
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if($model->isNewRecord){
-                    $model->bill_no = SnHelper::createBillSn($this->billType);
-                    $model->bill_type = $this->billType;
-                }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+                return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -135,7 +139,26 @@ class WarehouseBillBController extends BaseController
     }
 
     /**
-     * ajax退货返厂单审核
+     * ajax 退货返厂单-申请审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionApplyAudit(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->bill_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->bill_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+    }
+
+    /**
+     * ajax 退货返厂单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -143,50 +166,75 @@ class WarehouseBillBController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillBForm::class;
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
-        $billGoodsModel = new WarehouseBillGoods();
-        $goodsModel = new WarehouseGoods();
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+
             try{
-                $trans = Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
+
                 $model->audit_time = time();
-                $model->auditor_id = Yii::$app->user->identity->getId();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->status = StatusEnum::ENABLED;
-                    $model->bill_status = BillStatusEnum::CONFIRM;
-                }else{
-                    $model->status = StatusEnum::DISABLED;
-                    $model->bill_status = BillStatusEnum::CANCEL;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $billGoods = $billGoodsModel::find()->select('goods_id')->where(['bill_id' => $id])->asArray()->all();
-                if(empty($billGoods)){
-                    throw new \Exception("单据明细不能为空");
-                }
-                $goods_ids = array_column($billGoods, 'goods_id');
-                $condition = ['goods_status' => GoodsStatusEnum::IN_RETURN_FACTORY, 'goods_id' => $goods_ids];
-                $goods_status = $model->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_RETURN_FACTORY : GoodsStatusEnum::IN_STOCK;
-                $res = $goodsModel::updateAll(['goods_status' => $goods_status], $condition);
-                if(false === $res) {
-                    throw new \Exception($this->getError($goodsModel));
-                }
+                $model->auditor_id = \Yii::$app->user->identity->id;
+
+                \Yii::$app->warehouseService->billB->auditBillB($model);
+
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+
+                $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch(\Exception $e){
+                $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        $model->audit_status = AuditStatusEnum::PASS;
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 退货返厂单关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->bill_status = BillStatusEnum::CANCEL;
+
+            \Yii::$app->warehouseService->billB->closeBillB($model);
+
+            $trans->commit();
+            $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     * 导出列表
+     * @param unknown $dataProvider
+     * @return boolean
+     */
+    private function getExport($dataProvider)
+    {
+        $list = $dataProvider->models;
+        $header = [
+            ['ID', 'id'],
+            ['渠道名称', 'name', 'text'],
+        ];
+        return ExcelHelper::exportData($list, $header, '盘点数据导出_' . time());
+
     }
 
 }
