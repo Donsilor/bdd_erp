@@ -194,7 +194,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function createApply()
     {
         //主要信息
-        $fields = array('goods_name','cost_price','goods_num','remark');
+        $fields = array('goods_name','cost_price','goods_num');
         $apply_info = array();
         foreach ($fields as $field) {
             $apply_info[] = array(
@@ -229,7 +229,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         //其他信息
         $fields = array(
                 'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_loss','jiagong_fee',
-                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','factory_cost_price','stone_info','parts_info'
+                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','factory_cost_price','stone_info','parts_info','remark'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(
