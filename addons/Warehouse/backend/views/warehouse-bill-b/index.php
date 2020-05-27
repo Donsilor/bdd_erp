@@ -166,6 +166,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'template' => '{edit} {apply} {audit} {goods} {delete}',
@@ -180,9 +194,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'apply' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-                                        return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '申请审核', [
                                             'class'=>'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"申请审核", "确定操作吗？");return false;',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交申请", "确定操作吗？");return false;',
                                         ]);
                                     }
                                 },

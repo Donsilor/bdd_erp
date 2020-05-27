@@ -15,9 +15,9 @@ class WarehouseBillRepairForm extends WarehouseBillRepair
      * {@inheritdoc}
      */
     public function rules()
-    {      
+    {
          $rules = [
-             [['supplier_id'], 'required']
+             [['supplier_id', 'repair_type', 'goods_id', 'repair_act'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }
