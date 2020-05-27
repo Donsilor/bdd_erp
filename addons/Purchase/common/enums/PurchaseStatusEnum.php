@@ -8,7 +8,7 @@ namespace addons\Purchase\common\enums;
  */
 class PurchaseStatusEnum extends BaseEnum
 {
-    const  SAVED = 1;
+    const  SAVE = 1;
     const  PENDING = 2;
     const  COMFIRMED = 3;
     const  CANCELED = 9;
@@ -19,7 +19,7 @@ class PurchaseStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::SAVED => "已保存",
+            self::SAVE => "已保存",
             self::PENDING => "待审核",
             self::COMFIRMED => "已审核",                
             self::CANCELED => "已取消",

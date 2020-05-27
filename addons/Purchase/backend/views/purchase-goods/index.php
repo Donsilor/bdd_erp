@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?php if($purchase->audit_status == AuditStatusEnum::PENDING) {?>
+        <?php if($purchase->purchase_status == \addons\Purchase\common\enums\PurchaseStatusEnum::SAVE) {?>
             <?= Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',

@@ -158,6 +158,10 @@ class WarehouseBillMController extends BaseController
         ]);
     }
 
+    /**
+     * @return mixed
+     * 申请审核
+     */
     public function actionApplyAudit(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);

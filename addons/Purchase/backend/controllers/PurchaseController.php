@@ -2,8 +2,10 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\forms\PurchaseFollowerForm;
 use addons\Supply\common\models\SupplierFollower;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
@@ -110,6 +112,23 @@ class PurchaseController extends BaseController
         ]);
     }
 
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->purchase_status != PurchaseStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->purchase_status = PurchaseStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
 
 
     /**
@@ -133,9 +152,9 @@ class PurchaseController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->status = StatusEnum::ENABLED;
+                    $model->purchase_status = PurchaseStatusEnum::COMFIRMED;
                 }else{
-                    $model->status = StatusEnum::DISABLED;
+                    $model->purchase_status = PurchaseStatusEnum::SAVE;
                 }
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));

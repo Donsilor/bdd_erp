@@ -88,7 +88,6 @@ class Purchase extends BaseModel
             'total_cost' => '总金额(RMB)',
             'goods_count' => '总数量(件)',  
             'follower_id' => '跟单人',
-            'goods_count' => '总数量',  
             'creator_id' => '创建人',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',

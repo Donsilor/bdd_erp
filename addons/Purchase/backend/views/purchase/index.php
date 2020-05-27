@@ -4,7 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
-use yii\base\Widget;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 use common\enums\AuditStatusEnum;
 
@@ -158,10 +158,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {follower} {delete}',
+                'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->audit_status == AuditStatusEnum::PENDING){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
@@ -170,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },                    
                     'audit' => function($url, $model, $key){
-                        if($model->audit_status != AuditStatusEnum::PASS){
+                        if($model->purchase_status == PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -181,8 +181,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     'goods' => function($url, $model, $key){
                         return Html::a('商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
+
+                    'ajax-apply' => function($url, $model, $key){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
                     'follower' => function($url, $model, $key){
-                        if($model->audit_status != AuditStatusEnum::PASS){
+                        if($model->purchase_status <= PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                                 'class'=>'btn btn-info btn-sm',
                                 'data-toggle' => 'modal',
@@ -191,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->audit_status == AuditStatusEnum::PENDING){
+                        if($model->purchase_status != PurchaseStatusEnum::COMFIRMED){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

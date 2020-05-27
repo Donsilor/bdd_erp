@@ -196,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {goods} {apply} {audit} {delete}',
+                            'template' => '{edit} {goods} {apply-audit} {audit} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
@@ -206,7 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                 },
-                                'apply' => function($url, $model, $key){
+                                'apply-audit' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                         return Html::edit(['apply-audit','id'=>$model->id], '申请审核', [
                                             'class'=>'btn btn-success btn-sm',

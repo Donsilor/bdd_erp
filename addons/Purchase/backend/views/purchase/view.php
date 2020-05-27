@@ -1,11 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
-use common\helpers\Url;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
@@ -80,14 +76,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     </table>
                 </div>
                 <div class="box-footer text-center">
-                    <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                        'data-toggle' => 'modal',
-                        'class'=>'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
                     <?php
-                    if($model->audit_status != AuditStatusEnum::PASS){
-                        echo Html::edit(['ajax-follower','id'=>$model->id], '分配跟单人', [
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE) {
+                            echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                                'data-toggle' => 'modal',
+                                'class' => 'btn btn-primary btn-ms',
+                                'data-target' => '#ajaxModalLg',
+                            ]);
+                        }
+                    ?>
+                    <?php
+                    if($model->purchase_status <= PurchaseStatusEnum::PENDING){
+                        echo Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                             'class'=>'btn btn-info btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
@@ -95,7 +95,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if($model->audit_status != AuditStatusEnum::PASS){
+                    if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                        echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if($model->purchase_status == PurchaseStatusEnum::PENDING){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',
