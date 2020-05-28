@@ -54,7 +54,7 @@ class WarehouseBillService extends Service
                     if($tag==3){
                         $tab = [
                             1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['warehouse-bill-l-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
                             5=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>5,'returnUrl'=>$returnUrl])],
                         ];
