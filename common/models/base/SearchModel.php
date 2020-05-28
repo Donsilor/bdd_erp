@@ -227,7 +227,7 @@ class SearchModel extends Model
                 'query' => $query,
                 'pagination' => new Pagination(
                     [
-                        'forcePageParam' => true,
+                        'forcePageParam' => false,
                         'pageSize' => $this->pageSize,
                     ]
                 ),
