@@ -4,6 +4,8 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\forms\PurchaseReceiptForm;
+use common\helpers\ArrayHelper;
+use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -47,7 +49,6 @@ class PurchaseReceiptGoodsController extends BaseController
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -63,16 +64,14 @@ class PurchaseReceiptGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
-        $receipt_goods = $dataProvider->getModels();
-        $receiptInfo = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
+        $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-                'receiptInfo' => $receiptInfo,
-                'receiptGoods' => $receipt_goods,
-                'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
-                'returnUrl' => $returnUrl,
-                'tab'=>$tab,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
+            'receipt' => $receipt,
         ]);
     }
 
@@ -189,60 +188,4 @@ class PurchaseReceiptGoodsController extends BaseController
             'receipt_goods' => $receipt_goods
         ]);
     }
-
-    /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $receipt_goods_list = Yii::$app->request->post('receipt_goods_list');
-        $rurchase_receipt_info = Yii::$app->request->post('PurchaseReceipt');
-        $model = new PurchaseReceiptGoods();
-        if(!empty($receipt_goods_list)){
-            try {
-                $trans = Yii::$app->db->beginTransaction();
-                $receipt_id = $rurchase_receipt_info['id'];
-                foreach ($receipt_goods_list as $key => $goods) {
-                    $id = isset($goods['id']) ? $goods['id'] : '';
-                    $model = $this->findModel($id);
-                    // ajax 校验
-                    $this->activeFormValidate($model);
-                    if (false === $model::updateAll($goods, ['id' => $id])) {
-                        throw new Exception($this->getError($model));
-                    }
-                }
-
-                //软删除
-                $old_list = $model::find()->where(['receipt_id' => $receipt_id])->asArray()->all();
-                $old_ids = array_column($old_list, 'id');
-                $new_ids = array_column($receipt_goods_list, 'id');
-                $del_ids = array_diff($old_ids, $new_ids);
-                if(!empty($del_ids)){
-                    $res = $model::updateAll(['status' => StatusEnum::DELETE], ['id' => $del_ids]);
-                    if(false === $res){
-                        throw new Exception('软删除失败');
-                    }
-                }
-
-                //更新采购收货单汇总：总金额和总数量
-                $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
-                if(false === $res){
-                    throw new Exception('更新收货单汇总失败');
-                }
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(['index']), 'error');
-            }
-        }
-        return $this->renderAjax('index', [
-            'model' => $model
-        ]);
-    }
-
 }

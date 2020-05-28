@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'goods_name',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column){
-                                return  Html::ajaxUpdate('goods_name',$model->goods_name);
+                                return  Html::ajaxUpdate('goods_name',$model->goods_name,['data-id'=>$model->id]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',

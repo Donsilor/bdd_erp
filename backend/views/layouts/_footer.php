@@ -313,6 +313,7 @@ $this->registerJs($script);
     function rfAjaxUpdate(obj) {
         let id = $(obj).attr('data-id');
         let url = $(obj).attr('data-url');
+        let type = $(obj).attr('data-type');
 
         if (!id) {
             id = $(obj).parent().parent().attr('id');
@@ -324,10 +325,16 @@ $this->registerJs($script);
         if(!url){
             url = "<?= Url::to(['ajax-update'])?>";
         }
+
         var val = $(obj).val();
         var name = $(obj).attr('name')
         var data = {'id':id}
         data[name] = val;
+
+        if(type == 'number' && isNaN(val)){
+            rfAffirm('只能为数字');
+            return false;
+        }
         $.ajax({
             type: "get",
             url: url,
