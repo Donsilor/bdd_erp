@@ -75,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'product_type_id',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => 'productType.name',
+                            'value' => function($model){
+                                return $model->productType->name ?? '';
+                            },
                             'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
