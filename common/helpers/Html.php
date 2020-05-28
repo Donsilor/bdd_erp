@@ -159,6 +159,29 @@ class Html extends BaseHtml
         return self::input('text', 'sort', $value, $options);
     }
 
+
+    /**
+     * 列表更新字段
+     *
+     * @param $value
+     * @return string
+     */
+    public static function ajaxUpdate($name,$value, $options = [])
+    {
+        $url = isset($options['ajax-update']) ?? 'ajax-update';
+        // 权限校验
+        if (!self::beforVerify($url)) {
+            return $value;
+        }
+        $options = ArrayHelper::merge([
+            'ajax-update' => $url,
+            'class' => 'form-control',
+            'onblur' => 'rfAjaxUpdate(this)',
+        ], $options);
+
+        return self::input('text', $name, $value, $options);
+    }
+
     /**
      * 是否标签
      *
