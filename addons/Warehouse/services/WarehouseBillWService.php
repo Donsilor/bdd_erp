@@ -123,12 +123,17 @@ class WarehouseBillWService extends WarehouseBillService
             throw new \Exception($this->getError($form));
         }
         
-        foreach ($form->getGoodsIds() as $goods_id) {
+        foreach ($form->getGoodsIds() as $goods_id) {            
+           
+            $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$form->id])->one();
+            if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
+                //已盘点且正常的忽略
+                continue;
+            }
             $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
             if(empty($goods)) {
                 throw new \Exception("[{$goods_id}]货号不存在");
             }
-            $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$form->id])->one();
             if(!$billGoods) {
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $form->id;
@@ -155,7 +160,7 @@ class WarehouseBillWService extends WarehouseBillService
             
         }
         
-        //$this->billWSummary($form->id);
+        $this->billWSummary($form->id);
         
     }
     /**
