@@ -53,7 +53,7 @@ class WarehouseBillLController extends BaseController
             ]
         ]);
 
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams,['updated_at']);
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams,['created_at', 'audit_time']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -66,6 +66,7 @@ class WarehouseBillLController extends BaseController
         }
         $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
+
         //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);

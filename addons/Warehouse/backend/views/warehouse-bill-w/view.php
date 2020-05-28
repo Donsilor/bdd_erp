@@ -126,7 +126,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
                 ]);?>
            <?php }?>
-           <?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms']);?>
+           <?php if($model->bill_status < BillStatusEnum::CONFIRM) {?>
+           		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms']);?>
+           <?php }?>
            <?php if($model->bill_status == BillStatusEnum::PENDING){?>
                 <?php echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',

@@ -38,7 +38,7 @@ class PurchaseReceiptService extends Service
         if($tab==3){
             $tablist = [
                 1=>['name'=>'基础信息','url'=>Url::to(['purchase-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['purchase-receipt-goods/edit','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['purchase-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                 4=>['name'=>'日志信息','url'=>Url::to(['purchase-receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
             ];
         }else{
@@ -102,8 +102,9 @@ class PurchaseReceiptService extends Service
                 'style_cate_id'=>$model->style_cate_id,
                 'goods_status'=>GoodsStatusEnum::RECEIVING,
                 'supplier_id'=>$receipt->supplier_id,
-                'company_id'=> 1,//暂时为0
-                'warehouse_id' => 1,//暂时为0
+                'put_in_type'=>$receipt->put_in_type,
+                'company_id'=> 1,//暂时为1
+                'warehouse_id' => $receipt->to_warehouse_id,
                 'gold_weight' => $model->gold_weight,
                 'gold_loss' => $model->gold_loss,
                 'gross_weight' => (String) $model->gross_weight,
@@ -142,19 +143,19 @@ class PurchaseReceiptService extends Service
             'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
             'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $receipt->supplier_id,
-            'put_in_type' => 0,
+            'put_in_type' => $receipt->put_in_type,
             'order_type' => OrderTypeEnum::ORDER_L,
             'goods_num' => count($goods),
             'total_cost' => $total_cost,
             'total_sale' => $sale_price,
             'total_market' => $market_price,
-            'to_warehouse_id' => 0,
+            'to_warehouse_id' => $receipt->to_warehouse_id,
             'to_company_id' => 0,
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
             'deliver_goods_no' => $receipt->receipt_no,
         ];
 
-        Yii::$app->warehouseService->billL->createWarehouseBillL($bill, $goods);
+        Yii::$app->warehouseService->billL->createBillL($bill, $goods);
     }
 }

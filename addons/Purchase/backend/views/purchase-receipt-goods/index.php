@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::edit(['edit', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
