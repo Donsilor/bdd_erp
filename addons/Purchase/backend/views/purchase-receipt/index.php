@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
-                    <?= Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]) ?>
+                    <!--Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]) -->
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -141,8 +141,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
                     'attribute' => 'created_at',
-                    'value' => $searchModel->created_at,
-                    'options' => ['readonly' => false, 'class' => 'form-control',],
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -158,6 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 },
+                'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [

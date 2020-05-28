@@ -194,7 +194,7 @@ class PurchaseReceiptGoodsController extends BaseController
      * @return string
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionEdit()
+    public function actionEditAll()
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
@@ -215,7 +215,7 @@ class PurchaseReceiptGoodsController extends BaseController
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
-        return $this->render('edit', [
+        return $this->render('edit-all', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl,$tab),

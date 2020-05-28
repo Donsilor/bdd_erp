@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     if($model->purchase_status == BillStatusEnum::SAVE){
                         echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
-                            'class'=>'btn btn-success btn-sm',
+                            'class'=>'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                         ]);
                     }
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     if($model->purchase_status == BillStatusEnum::PENDING){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                            'class'=>'btn btn-success btn-sm',
+                            'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
