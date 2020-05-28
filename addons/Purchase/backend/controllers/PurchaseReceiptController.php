@@ -45,7 +45,8 @@ class PurchaseReceiptController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
         $dataProvider = $searchModel
