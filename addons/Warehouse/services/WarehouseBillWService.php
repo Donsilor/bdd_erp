@@ -190,6 +190,8 @@ class WarehouseBillWService extends WarehouseBillService
         
         //4.自动调整盘亏盘盈数据
         //$this->adjustGoods($bill_id);
+        //5.盘点单汇总
+        $this->billWSummary($bill_id);
     }
     
     /**
