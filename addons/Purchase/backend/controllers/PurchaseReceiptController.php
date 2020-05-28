@@ -3,15 +3,14 @@
 namespace addons\Purchase\backend\controllers;
 
 
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
+use common\helpers\Url;
 use common\traits\Curd;
 /**
 * PurchaseReceipt
@@ -26,7 +25,7 @@ class PurchaseReceiptController extends BaseController
     /**
     * @var PurchaseReceipt
     */
-    public $modelClass = PurchaseReceipt::class;
+    public $modelClass = PurchaseReceiptForm::class;
 
 
     /**
@@ -46,13 +45,14 @@ class PurchaseReceiptController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
