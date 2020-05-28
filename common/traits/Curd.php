@@ -117,7 +117,9 @@ trait Curd
             return ResultHelper::json(404, '找不到数据');
         }
 
-        $model->attributes = ArrayHelper::filter(Yii::$app->request->get(), $model->attributes());
+        $keys_arr = array_keys(Yii::$app->request->get());  //$model->attributes();
+        $model->attributes = ArrayHelper::filter(Yii::$app->request->get(), $keys_arr);
+
         if (!$model->save()) {
             return ResultHelper::json(422, $this->getError($model));
         }
