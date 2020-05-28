@@ -23,6 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo "<span class=\"btn btn-white btn-xs\" onclick=\"history.go(-1)\">返回</span>";
         }
         ?>
     </div>
