@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Warehouse\common\models\WarehouseBill;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -49,10 +50,27 @@ class PurchaseReceiptController extends BaseController
                 'auditor' => ['username'],
             ]
         ]);
+
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams, ['created_at', 'audit_time']);
+
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',PurchaseReceipt::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',PurchaseReceipt::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+        $audit_time = $searchModel->audit_time;
+        if (!empty($audit_time)) {
+            $dataProvider->query->andFilterWhere(['>=',PurchaseReceipt::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',PurchaseReceipt::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        }
 
         $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
+
+        //导出
+        if(Yii::$app->request->get('action') === 'export'){
+            $this->getExport($dataProvider);
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
