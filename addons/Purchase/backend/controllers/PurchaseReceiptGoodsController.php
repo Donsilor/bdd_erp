@@ -76,11 +76,11 @@ class PurchaseReceiptGoodsController extends BaseController
     }
 
     /**
-     * 编辑/创建
+     * 创建
      * @property PurchaseReceiptGoodsForm $model
      * @return mixed
      */
-    public function actionEdit()
+    public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
@@ -186,6 +186,42 @@ class PurchaseReceiptGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'receipt_goods' => $receipt_goods
+        ]);
+    }
+
+    /**
+     * 编辑
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionEdit()
+    {
+        $receipt_id = Yii::$app->request->get('receipt_id');
+        $tab = Yii::$app->request->get('tab',3);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => ['purchase_sn'], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+
+            ]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
+        $dataProvider->query->andWhere(['>','status',-1]);
+        $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
+        return $this->render('edit', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl,$tab),
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
+            'receipt' => $receipt,
         ]);
     }
 }

@@ -148,6 +148,7 @@ class WarehouseBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             \Yii::$app->warehouseService->billW->adjustBillW($id);
+            \Yii::$app->warehouseService->billW->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');

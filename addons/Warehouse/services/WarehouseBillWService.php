@@ -19,6 +19,7 @@ use addons\Warehouse\common\enums\BillWStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
+use common\enums\ConfirmEnum;
 
 /**
  * 盘点单
@@ -90,7 +91,7 @@ class WarehouseBillWService extends WarehouseBillService
         }
         
         //同步盘点明细关系表
-        $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,adjust_status) select id,0 from '.WarehouseBillGoods::tableName()." where bill_id=".$bill->id;
+        $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseBillGoods::tableName()." where bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
         if(false === $should_num) {
             throw new \Exception('导入单据明细失败2');
@@ -122,7 +123,7 @@ class WarehouseBillWService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        
+        $bill_detail_ids = [];
         foreach ($form->getGoodsIds() as $goods_id) {            
            
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$form->id])->one();
@@ -157,9 +158,12 @@ class WarehouseBillWService extends WarehouseBillService
             if(false === $billGoods->save()) {
                 throw new \Exception($this->getError($billGoods));
             }
-            
+            $bill_detail_ids[] = $billGoods->id;            
         }
-        
+        //更新【是否盘点】状态
+        if(!empty($bill_detail_ids)) {
+            WarehouseBillGoodsW::updateAll(['status'=>ConfirmEnum::YES],['id'=>$bill_detail_ids]);
+        }
         $this->billWSummary($form->id);
         
     }
@@ -215,10 +219,10 @@ class WarehouseBillWService extends WarehouseBillService
                 continue;
             }
             $billGoods->from_warehouse_id = $goods->warehouse_id;
-            if($billGoods->pandian_status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
+            if($billGoods->status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
                 //如果盘亏-货品状态【已销售】 调整状态：【已销售】                
                 $billGoods->goodsW->ajust_status = PandianAdjustEnum::HAS_SOLD;
-            }else if($billGoods->pandian_status == PandianStatusEnum::PROFIT && in_array($goods->goods_status,$goodsStatusArray2)){
+            }else if($billGoods->status == PandianStatusEnum::PROFIT && in_array($goods->goods_status,$goodsStatusArray2)){
                 //如果盘盈-货品状态【收货中、调拨中、报损中,返厂中、销售中、退货中】  调整状态：【在途】
                 $billGoods->status = PandianStatusEnum::NORMAL;
                 $billGoods->goodsW->ajust_status = PandianAdjustEnum::ON_WAY;
@@ -227,11 +231,13 @@ class WarehouseBillWService extends WarehouseBillService
             }
             if(false === $billGoods->save(true,['id','status','from_warehouse_id'])) {
                 throw new \Exception($this->getError($billGoods));
-            }else if($billGoods->goodsW->save(true,['id','adjust_status'])) {
+            }
+            if($billGoods->goodsW->save(true,['id','adjust_status'])) {
                 throw new \Exception($this->getError($billGoods->billW));
             } 
 
         }
+        
         return true;
 
     }
@@ -266,7 +272,7 @@ class WarehouseBillWService extends WarehouseBillService
     public function billWSummary($bill_id)
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().' gw','g.id=gw.id')
-            ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
+            ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
                     'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                     'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
                     'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
