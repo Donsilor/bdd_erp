@@ -1,12 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\widgets\langbox\LangBox;
-use yii\base\Widget;
-use common\widgets\skutable\SkuTable;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\PurchaseReceipt */
@@ -82,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
 
             <?php
-            if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+            if($model->bill_status == BillStatusEnum::SAVE){
                 echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class'=>'btn btn-primary btn-ms',
@@ -97,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::delete(['delete', 'id' => $model->id], '关闭',[
                     'class'=>'btn btn-danger btn-ms',
                 ]);
-            }elseif ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
+            }elseif ($model->bill_status == BillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',

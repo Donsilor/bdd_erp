@@ -3,10 +3,9 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
-use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -200,18 +199,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {audit} {goods} {delete}',
+                            'template' => '{edit} {audit} {goods} {ajax-apply} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                         ]);
                                     }
                                 },
+                                'ajax-apply' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                                        ]);
+                                    }
+                                },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                    if($model->bill_status == BillStatusEnum::PENDING){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -226,7 +233,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                    if($model->bill_status <= BillStatusEnum::PENDING) {
+                                        return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                    }
                                 },
                             ],
                             'headerOptions' => ['class' => 'col-md-3'],
