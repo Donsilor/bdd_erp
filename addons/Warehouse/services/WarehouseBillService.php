@@ -26,7 +26,7 @@ class WarehouseBillService extends Service
      * @param $returnUrl URL
      * @return array
      */
-    public function menuTabList($bill_id, $bill_type, $returnUrl = null)
+    public function menuTabList($bill_id, $bill_type, $returnUrl = null, $tag = null)
     {   
 
         switch ($bill_type){
@@ -51,12 +51,21 @@ class WarehouseBillService extends Service
                 }            
             case BillTypeEnum::BILL_TYPE_L:
                 {
-                    $tab = [
-                        1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                        4=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
-                    ];
+                    if($tag==3){
+                        $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                            5=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>5,'returnUrl'=>$returnUrl])],
+                        ];
+                    }else{
+                        $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['warehouse-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['warehouse-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'结算商信息','url'=>Url::to(['warehouse-bill-pay/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                            5=>['name'=>'日志列表','url'=>Url::to(['warehouse-bill-log/index','bill_id'=>$bill_id,'tab'=>5,'returnUrl'=>$returnUrl])],
+                        ];
+                    }
                     break;
                 }
             case BillTypeEnum::BILL_TYPE_B :
