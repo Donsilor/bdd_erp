@@ -115,32 +115,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'class'=>'btn btn-primary btn-ms',
                         'data-target' => '#ajaxModalLg',
-                    ]);
-                    echo '&nbsp;';
-                    echo Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']);
-                    echo '&nbsp;';
-                    echo Html::edit(['ajax-finish','id'=>$model->id], '盘点结束', [
-                        'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
-                    ]);
+                    ]);                   
                 }
             ?>
-
- 
-           <?php
-               echo Html::edit(['ajax-adjust', 'id' => $model->id], '刷新', [
-                    'class'=>'btn btn-primary btn-ms'
-                    ]);
-            ?>
-
-
-            <?php if($model->bill_status == BillStatusEnum::PENDING){?>
+                       
+            <?php if($model->status == BillWStatusEnum::SAVE) {?>
+                <?= Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']);?>
+                <?= Html::edit(['ajax-finish','id'=>$model->id], '盘点结束', [
+                        'class'=>'btn btn-success btn-ms',
+                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
+                ]);?>
+           <?php }?>
+           <?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms']);?>
+           <?php if($model->bill_status == BillStatusEnum::PENDING){?>
                 <?php echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);?>
-            <?php }?>
+           <?php }?>
         </div>
 
         <!-- box end -->
