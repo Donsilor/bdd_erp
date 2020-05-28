@@ -4,6 +4,7 @@ namespace addons\Warehouse\backend\controllers;
 
 
 use addons\Warehouse\common\enums\RepairStatusEnum;
+use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBillRepair;
@@ -103,6 +104,27 @@ class WarehouseBillRepairController extends BaseController
         ]);
     }
 
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->repair_act){
+            $repair_act_arr = explode(',', $model->repair_act);
+            $repair_act_str = '';
+            foreach ($repair_act_arr as $repair_act){
+                $repair_act_str .= ','. Yii::$app->attr->valueName($repair_act);
+            }
+            $model->repair_act = trim($repair_act_str,',' );
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * ajax 维修单-申请

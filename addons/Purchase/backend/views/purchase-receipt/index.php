@@ -1,13 +1,11 @@
 <?php
 
-use common\enums\BusinessScopeEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
 use addons\Warehouse\common\enums\BillStatusEnum;
-
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>' width:120%;'],
+        'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
             [
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'yii\grid\CheckboxColumn',
                 'name'=>'id',  //设置每行数据的复选框属性
-                'headerOptions' => ['width'=>'30'],
+                'headerOptions' => [],
             ],
             [
                 'attribute' => 'id',
@@ -53,16 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'60'],
+                'headerOptions' => [],
             ],
             [
                 'attribute' => 'receipt_no',
                 'value'=>function($model) {
                     return Html::a($model->receipt_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
-                'filter' => true,
+                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
+                    'class' => 'form-control',
+                ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'supplier_id',
@@ -80,39 +82,67 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
+                'attribute' => 'put_in_type',
+                'format' => 'raw',
+                'value' => function ($model){
+                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'to_warehouse_id',
+                'value' =>"toWarehouse.name",
+                'filter'=>Select2::widget([
+                    'name'=>'SearchModel[to_warehouse_id]',
+                    'value'=>$searchModel->to_warehouse_id,
+                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-2'],
+            ],
+            [
                 'attribute' => 'receipt_num',
                 'value' => 'receipt_num',
                 'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
                     'class' => 'form-control',
+                    'style'=> 'width:60px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
+                'headerOptions' => [],
             ],
             [
                 'attribute' => 'total_cost',
                 'value' => 'total_cost',
                 'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                     'class' => 'form-control',
+                    'style'=> 'width:60px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'150'],
+                'headerOptions' => [],
             ],
             [
                 'attribute' => 'creator_id',
                 'value' => "creator.username",
                 'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                     'class' => 'form-control',
                 ]),
-
             ],
             [
                 'attribute' => 'created_at',
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
                     'attribute' => 'created_at',
-                    'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'value' => $searchModel->created_at,
+                    'options' => ['readonly' => false, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -128,26 +158,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 },
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'auditor_id',
-                'value' => "auditor.username",
-                'filter' => false,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'value' => 'auditor.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
             ],
             [
                 'attribute' => 'audit_status',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
+                'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
                     return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style'=> 'width:100px;'
                 ]),
             ],
             [
@@ -173,19 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->audit_time);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
-            ],
-            [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
-                'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'receipt_status',
@@ -197,7 +217,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -211,20 +231,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#ajaxModal',
                         ]);
                     }
-                    },
-                'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['purchase-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                    },
-                'audit' => function($url, $model, $key){
-                      if($model->receipt_status == BillStatusEnum::PENDING) {
-                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                'class'=>'btn btn-success btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                            ]);
-                        }
-                    },
-
+                },
                 'ajax-apply' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::SAVE){
                         return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
@@ -233,25 +240,37 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                 },
-                 'status' => function($url, $model, $key){
-                        return Html::status($model['status']);
-                    },
-
+                'audit' => function($url, $model, $key){
+                    if($model->receipt_status == BillStatusEnum::PENDING) {
+                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+                },
+                'goods' => function($url, $model, $key){
+                    return Html::a('单据明细', ['purchase-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                },
                 'delete' => function($url, $model, $key){
                     if($model->receipt_status != BillStatusEnum::CONFIRM) {
                         return Html::delete(['delete', 'id' => $model->id]);
                     }
                 },
-                /*'delete' => function($url, $model, $key){
-                        return Html::delete(['delete', 'id' => $model->id]);
-                    },
-                'view'=> function($url, $model, $key){
-                    return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
-                    },
-                'show_log' => function($url, $model, $key){
-                    return Html::linkButton(['goods-log/index','id' => $model->id, 'type_id' => $model->type_id, 'returnUrl' => Url::getReturnUrl()], '日志');
-                    },*/
-                ]
+                /* 'status' => function($url, $model, $key){
+                       return Html::status($model['status']);
+                   },
+               'delete' => function($url, $model, $key){
+                       return Html::delete(['delete', 'id' => $model->id]);
+                   },
+               'view'=> function($url, $model, $key){
+                   return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
+                   },
+               'show_log' => function($url, $model, $key){
+                   return Html::linkButton(['goods-log/index','id' => $model->id, 'type_id' => $model->type_id, 'returnUrl' => Url::getReturnUrl()], '日志');
+                   },*/
+                ],
+                'headerOptions' => ['class' => 'col-md-2'],
             ]
     ]
     ]); ?>

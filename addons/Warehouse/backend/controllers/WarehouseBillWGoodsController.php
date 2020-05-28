@@ -41,7 +41,7 @@ class WarehouseBillWGoodsController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                        
+                     "goodsW"=> ["adjust_status"]
                 ]
         ]);
         

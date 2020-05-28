@@ -127,4 +127,13 @@ class WarehouseBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseGoods::class, ['goods_id'=>'goods_id'])->alias('goods');
     }
+    
+    /**
+     * 盘点单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsW()
+    {
+        return $this->hasOne(WarehouseBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
 }

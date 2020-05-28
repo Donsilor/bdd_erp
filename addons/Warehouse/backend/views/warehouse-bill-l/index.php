@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_m', '收货单列表');
+$this->title = Yii::t('warehouse_bill_l', '收货单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -124,7 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
-
                         ],
                         [
                             'attribute'=>'created_at',
@@ -147,9 +146,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
+                            },
                         ],
-
                         [
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
@@ -193,7 +191,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
-
                             ]),
                         ],
                         [

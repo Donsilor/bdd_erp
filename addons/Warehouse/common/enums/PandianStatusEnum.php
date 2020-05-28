@@ -30,4 +30,9 @@ class PandianStatusEnum extends \common\enums\BaseEnum
         ];
     }
     
+    public static function getLossProfixIds()
+    {
+        return [self::LOSS,self::PROFIT];
+    }
+    
 }
