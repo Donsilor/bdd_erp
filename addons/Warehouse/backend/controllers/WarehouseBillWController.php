@@ -113,6 +113,63 @@ class WarehouseBillWController extends BaseController
     }
     
     /**
+     * ajax 盘点结束
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxFinish()
+    {
+        $id = Yii::$app->request->get('id');
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            
+            \Yii::$app->warehouseService->billW->finishBillW($id); 
+            
+            $trans->commit();
+            return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+            
+        }catch (\Exception $e) {
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
+    /**
+     * ajax 盘点自动校正
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAdjust()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {            
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                \Yii::$app->warehouseService->billW->adjustBillW($id);
+                $trans->commit();
+                
+                return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
+                
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    /**
      * 详情
      * @return unknown
      */

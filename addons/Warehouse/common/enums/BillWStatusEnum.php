@@ -11,7 +11,7 @@ namespace addons\Warehouse\common\enums;
  */
 class BillWStatusEnum extends \common\enums\BaseEnum
 {
-    const DOING     = 1;
+    const SAVE     = 1;
     const FINISHED   = 2;
     
     /**
@@ -20,7 +20,7 @@ class BillWStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::DOING    => '盘点中',
+                self::SAVE    => '盘点中',
                 self::FINISHED   => '盘点结束',                
         ];
     }

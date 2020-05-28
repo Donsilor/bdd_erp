@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\BillWStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\WarehouseBill */
@@ -110,9 +111,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'=>'btn btn-primary btn-ms',
                     'data-target' => '#ajaxModalLg',
                 ]); ?>
-                <?= Html::edit(['warehouse-bill-w/pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
             <?php }?>
-            <?php if($model->bill_status == BillStatusEnum::PENDING){?>
+
+           <?= Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
+ 
+           <?= Html::edit(['ajax-adjust', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '刷新', ['class'=>'btn btn-primary btn-ms']); ?>
+           <?php if($model->bill_status == BillWStatusEnum::FINISHED){?>
                 <?php echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',

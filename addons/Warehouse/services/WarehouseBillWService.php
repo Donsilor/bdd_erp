@@ -195,7 +195,7 @@ class WarehouseBillWService extends WarehouseBillService
      * 盘点商品矫正
      * @param unknown $bill_id
      */
-    public function adjustGoods($bill_id){        
+    public function adjustBillW($bill_id){        
             
         $pandianStatusArray = [PandianStatusEnum::LOSS,PandianStatusEnum::PROFIT];
         $goodsStatusArray1  = [GoodsStatusEnum::HAS_SOLD];
