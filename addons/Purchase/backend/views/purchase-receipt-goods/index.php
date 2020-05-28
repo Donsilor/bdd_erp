@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'id', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -132,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:150px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -144,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:150px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -181,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:150px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -206,7 +207,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -229,7 +230,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -313,7 +314,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -349,7 +350,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -361,7 +362,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -374,7 +375,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -385,7 +386,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone1',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -398,7 +399,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -410,7 +411,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -421,7 +422,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone2',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -434,7 +435,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -446,7 +447,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -529,7 +530,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -542,7 +543,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -554,7 +555,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
