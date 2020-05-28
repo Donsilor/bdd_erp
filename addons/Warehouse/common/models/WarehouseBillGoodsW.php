@@ -30,7 +30,13 @@ class WarehouseBillGoodsW extends BaseModel
             [['id','adjust_status','status'], 'integer'],
         ];
     }
-
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
