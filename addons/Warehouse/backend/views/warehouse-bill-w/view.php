@@ -105,18 +105,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box-footer text-center">
             
-            <?php if($model->bill_status == BillStatusEnum::SAVE) {?>
-                <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                    'data-toggle' => 'modal',
-                    'class'=>'btn btn-primary btn-ms',
-                    'data-target' => '#ajaxModalLg',
-                ]); ?>
-            <?php }?>
+            <?php
+                if($model->bill_status == BillStatusEnum::SAVE){
+                    echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
+                        'data-toggle' => 'modal',
+                        'class'=>'btn btn-primary btn-ms',
+                        'data-target' => '#ajaxModalLg',
+                    ]);
+                    echo '&nbsp;';
+                    echo Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']);
+                    echo '&nbsp;';
+                    echo Html::edit(['ajax-finish','id'=>$model->id], '盘点结束', [
+                        'class'=>'btn btn-success btn-ms',
+                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
+                    ]);
+                }
+            ?>
 
-           <?= Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']); ?>
  
-           <?= Html::edit(['ajax-adjust', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '刷新', ['class'=>'btn btn-primary btn-ms']); ?>
-           <?php if($model->bill_status == BillWStatusEnum::FINISHED){?>
+           <?php
+               echo Html::edit(['ajax-adjust', 'id' => $model->id], '刷新', [
+                    'class'=>'btn btn-primary btn-ms'
+                    ]);
+            ?>
+
+
+            <?php if($model->bill_status == BillStatusEnum::PENDING){?>
                 <?php echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
