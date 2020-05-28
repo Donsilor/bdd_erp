@@ -181,29 +181,28 @@ class Html extends BaseHtml
 
         return self::input('text', $name, $value, $options);
     }
-
-
-
+    
     /**
      * 列表select更新字段
      *
      * @param $value
      * @return string
      */
-    public static function ajaxSelect($name,$value, $options = [])
+    public static function ajaxSelect($model, $name, $items, $options = [])
     {
         $url = isset($options['ajax-update']) ?? 'ajax-update';
         // 权限校验
         if (!self::beforVerify($url)) {
-            return $value;
+            return $model->$name;
         }
         $options = ArrayHelper::merge([
             'ajax-update' => $url,
+            'name' => $name,
             'class' => 'form-control',
-            'onblur' => 'rfAjaxUpdate(this)',
+            'onchange' => 'rfAjaxUpdate(this)',
         ], $options);
 
-        return self::input('text', $name, $value, $options);
+        return self::activeDropDownList($model, $name, $items, $options);
     }
 
     /**

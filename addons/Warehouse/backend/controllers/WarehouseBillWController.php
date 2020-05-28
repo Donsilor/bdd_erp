@@ -133,10 +133,7 @@ class WarehouseBillWController extends BaseController
             $trans->rollback();
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        
-        return $this->renderAjax($this->action->id, [
-                'model' => $model,
-        ]);
+
     }
     
     /**
@@ -148,26 +145,17 @@ class WarehouseBillWController extends BaseController
     public function actionAjaxAdjust()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {            
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                \Yii::$app->warehouseService->billW->adjustBillW($id);
-                $trans->commit();
-                
-                return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
-                
-            }catch (\Exception $e) {
-                $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-            }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            \Yii::$app->warehouseService->billW->adjustBillW($id);
+            $trans->commit();
+
+            return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
+
+        }catch (\Exception $e) {
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        
-        return $this->renderAjax($this->action->id, [
-                'model' => $model,
-        ]);
     }
     /**
      * 详情

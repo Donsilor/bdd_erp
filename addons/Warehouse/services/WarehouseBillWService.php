@@ -174,7 +174,8 @@ class WarehouseBillWService extends WarehouseBillService
              throw new \Exception("盘点已结束");
         }
         $bill->status = BillWStatusEnum::FINISHED;
-        if(false === $bill->save(false,['id','status'])) {
+        $bill->bill_status = BillStatusEnum::PENDING; //待审核
+        if(false === $bill->save(false,['id','status', 'bill_status'])) {
             throw new \Exception($this->getError($bill));
         }
         //1.未盘点设为盘亏

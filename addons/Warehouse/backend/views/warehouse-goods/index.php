@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'goods_name',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column){
-                                return  Html::ajaxUpdate('goods_name',$model->goods_name,['data-id'=>$model->id]);
+                                return  Html::ajaxInput('goods_name',$model->goods_name,['data-id'=>$model->id]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',
@@ -75,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'product_type_id',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => 'productType.name',
+                            'value' => function($model){
+                                return $model->productType->name ?? '';
+                            },
                             'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
