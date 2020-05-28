@@ -53,7 +53,7 @@ use common\helpers\StringHelper;
 list($fullUrl, $pageConnector) = DebrisHelper::getPageSkipUrl();
 
 $page = (int)Yii::$app->request->get('page', 1);
-$perPage = (int)Yii::$app->request->get('per-page', 10);
+$perPage = (int)Yii::$app->request->get('per-page', 15);
 
 $perPageSelect = Html::dropDownList('rf-per-page', $perPage, [
     10 => '10条/页',
