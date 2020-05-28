@@ -38,7 +38,7 @@ class WarehouseBillW extends \common\models\base\BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'should_num', 'actual_num', 'profit_num', 'loss_num', 'wrong_num', 'normal_num'], 'integer'],
+            [['id', 'should_num', 'actual_num', 'profit_num', 'loss_num', 'adjust_num', 'normal_num'], 'integer'],
             [['id'], 'unique'],
         ];
     }
@@ -54,7 +54,7 @@ class WarehouseBillW extends \common\models\base\BaseModel
             'actual_num' => '实盘数量',
             'profit_num' => '盘盈数量',
             'loss_num' => '盘亏数量',
-            'wrong_num' => '异常数量',
+            'adjust_num' => '调整数量',
             'normal_num' => '正常数量',
         ];
     }

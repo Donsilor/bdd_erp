@@ -258,25 +258,25 @@ class WarehouseBillWService extends WarehouseBillService
      */
     public function warehouseBillSummary($bill_id)
     {
-        $sum = WarehouseBillGoods::find()
-            ->select(['sum(if(status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
-                    'sum(if(status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
-                    'sum(if(status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
-                    'sum(if(status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
-                    'sum(if(status='.PandianStatusEnum::WRONG.',1,0)) as wrong_num',
+        $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().'gw','g.id=gw.id')
+            ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
+                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
+                    'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
+                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
+                    'sum(if(gw.adjust_status<>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
-                    'sum(cost_price) as total_cost',
-                    'sum(sale_price) as total_sale',
-                    'sum(market_price) as total_market'
+                    'sum(g.cost_price) as total_cost',
+                    'sum(g.sale_price) as total_sale',
+                    'sum(g.market_price) as total_market'
             ])->where(['bill_id'=>$bill_id])->asArray()->one();
         
         if($sum) {
             
-            $billUpdate = ['goods_num'=>$sum['goods_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_sale'=>$sum['total_sale']/1, 'total_market'=>$sum['total_market']/1];
-            $billWUpdate = ['actual_num'=>$sum['actual_num']/1, 'loss_num'=>$sum['loss_num']/1, 'normal_num'=>$sum['normal_num']/1, 'wrong_num'=>$sum['wrong_num']/1];
-            
+            $billUpdate = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];
+            $billWUpdate = ['actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
+
             $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
-            $res2 = WarehouseBillW::updateAll($billWUpdate,['bill_id'=>$bill_id]);
+            $res2 = WarehouseBillW::updateAll($billWUpdate,['id'=>$bill_id]);
             return $res1 && $res2;
         }
         return false;
