@@ -60,8 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->billW->loss_num ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right">异常数量：</td>
-                            <td><?= $model->billW->wrong_num ?? 0; ?></td>
+                            <td class="col-xs-1 text-right">调整数量：</td>
+                            <td><?= $model->billW->adjust_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>

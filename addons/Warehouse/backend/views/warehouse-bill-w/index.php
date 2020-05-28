@@ -124,8 +124,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width' => '100'],
                         ],                        
                         [
-                                'label' => '异常数量',
-                                'value' => 'billW.wrong_num',
+                                'label' => '调整数量',
+                                'value' => 'billW.adjust_num',
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
