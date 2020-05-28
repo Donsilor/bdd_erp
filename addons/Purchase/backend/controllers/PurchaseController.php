@@ -47,7 +47,7 @@ class PurchaseController extends BaseController
                 'defaultOrder' => [
                      'id' => SORT_DESC
                 ],
-                'pageSize' => $this->pageSize,
+                'pageSize' => $this->getPageSize(),
                 'relations' => [
                      
                 ]

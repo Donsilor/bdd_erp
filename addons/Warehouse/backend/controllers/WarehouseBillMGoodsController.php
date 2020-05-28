@@ -46,7 +46,6 @@ class WarehouseBillMGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-m/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -54,7 +53,7 @@ class WarehouseBillMGoodsController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize,
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'fromWarehouse' => ['name']
             ]

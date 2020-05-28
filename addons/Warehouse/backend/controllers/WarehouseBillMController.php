@@ -42,7 +42,7 @@ class WarehouseBillMController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize,
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
