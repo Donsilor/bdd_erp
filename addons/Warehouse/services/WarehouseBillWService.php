@@ -269,6 +269,7 @@ class WarehouseBillWService extends WarehouseBillService
             ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
                     'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                     'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
+                    'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
                     'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
                     'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
@@ -280,7 +281,7 @@ class WarehouseBillWService extends WarehouseBillService
         if($sum) {
             
             $billUpdate = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];
-            $billWUpdate = ['actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
+            $billWUpdate = ['save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
 
             $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
             $res2 = WarehouseBillW::updateAll($billWUpdate,['id'=>$bill_id]);

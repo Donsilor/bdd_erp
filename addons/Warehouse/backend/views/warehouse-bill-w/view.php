@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right">应盘数量：</td>
                             <td><?= $model->billW->should_num ?? 0; ?></td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right">实盘数量：</td>
                             <td><?= $model->billW->actual_num ?? 0; ?></td>
@@ -59,6 +59,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right">盘亏数量：</td>
                             <td><?= $model->billW->loss_num ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right">待盘数量：</td>
+                            <td><?= $model->billW->save_num ?? 0; ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right">调整数量：</td>

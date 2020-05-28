@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "warehouse_bill_w".
  *
  * @property int $id 单据ID
+ * @property int $save_num 待盘数量
  * @property int $should_num 应盘数量
  * @property int $actual_num 实盘数量
  * @property int $profit_num 盘盈数量
@@ -38,7 +39,7 @@ class WarehouseBillW extends \common\models\base\BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'should_num', 'actual_num', 'profit_num', 'loss_num', 'adjust_num', 'normal_num'], 'integer'],
+            [['id', 'save_num','should_num', 'actual_num', 'profit_num', 'loss_num', 'adjust_num', 'normal_num'], 'integer'],
             [['id'], 'unique'],
         ];
     }
@@ -50,6 +51,7 @@ class WarehouseBillW extends \common\models\base\BaseModel
     {
         return [
             'id' => '单据ID',
+            'save_num' => '待盘数量',
             'should_num' => '应盘数量',
             'actual_num' => '实盘数量',
             'profit_num' => '盘盈数量',
