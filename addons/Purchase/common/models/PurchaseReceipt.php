@@ -2,9 +2,10 @@
 
 namespace addons\Purchase\common\models;
 
+
+use Yii;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
-use Yii;
 
 /**
  * This is the model class for table "purchase_receipt".
@@ -84,7 +85,6 @@ class PurchaseReceipt extends BaseModel
     public function getReceiptGoods(){
         return $this->hasMany(PurchaseReceiptGoods::class, ['id'=>'receipt_id']);
     }
-
     /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
@@ -93,7 +93,6 @@ class PurchaseReceipt extends BaseModel
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
-
     /**
      * 关联管理员一对一
      * @return \yii\db\ActiveQuery
@@ -102,7 +101,6 @@ class PurchaseReceipt extends BaseModel
     {
         return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
     }
-
     /**
      * 创建人
      * @return \yii\db\ActiveQuery
