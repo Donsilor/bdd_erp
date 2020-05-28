@@ -102,8 +102,9 @@ class PurchaseReceiptService extends Service
                 'style_cate_id'=>$model->style_cate_id,
                 'goods_status'=>GoodsStatusEnum::RECEIVING,
                 'supplier_id'=>$receipt->supplier_id,
-                'company_id'=> 1,//暂时为0
-                'warehouse_id' => 1,//暂时为0
+                'put_in_type'=>$receipt->put_in_type,
+                'company_id'=> 1,//暂时为1
+                'warehouse_id' => $receipt->to_warehouse_id,
                 'gold_weight' => $model->gold_weight,
                 'gold_loss' => $model->gold_loss,
                 'gross_weight' => (String) $model->gross_weight,
