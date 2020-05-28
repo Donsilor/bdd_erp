@@ -1,672 +1,442 @@
 <?php
 
-use common\enums\AreaEnum;
-use common\enums\StatusEnum;
-use common\helpers\AmountHelper;
 use common\helpers\Html;
 use common\helpers\Url;
-use unclead\multipleinput\MultipleInput;
+use kartik\select2\Select2;
 use yii\grid\GridView;
-use yii\widgets\ActiveForm;
+use kartik\daterange\DateRangePicker;
 
-$this->title = '采购收货单详情';
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = Yii::t('purchase_receipt_goods', '采购收货单详情');
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin(['action' => Url::to(['ajax-edit'])]); ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receiptInfo->receipt_no ?></h2>
-    <?php echo Html::menuTab($tabList, $tab)?>
-    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?php
-        if($receiptInfo->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['edit', 'receipt_id' => $receiptInfo->id], '新增货品', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width'=>'90%',
-                'data-height'=>'90%',
-                'data-offset'=>'20px',
-            ]);
-        }
-        ?>
-    </div>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12" >
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-            <div class="box-body table-responsive">
-                <div class="tab-content">
-                    <?php
-                    $receiptColomns = [
-                        [
-                            'name' => 'id',
-                            'title'=>"序号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-                        [
-                            'name' =>'purchase_sn',
-                            'title'=>"采购单编号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'produce_sn',
-                            'title'=>"布产单编号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:160px'
-                            ]
-                        ],
-                        [
-                            'name' =>'barcode',
-                            'title'=>"条形码编号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_name',
-                            'title'=>"商品名称",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-                        [
-                            'name' =>'goods_num',
-                            'title'=>"商品数量",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:60px'
-                            ]
-                        ],
-                        [
-                            'name' =>'style_sn',
-                            'title'=>"款号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'readonly' =>'true',
-                                'style'=>'width:120px'
-                            ]
-                        ],
-                        [
-                            'name' => "factory_mo",
-                            'title'=>"工厂模号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "style_cate_id",
-                            'title'=>"款式分类",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
+                <div class="box-body table-responsive">
+                    <?php echo Html::batchButtons(false)?>
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'width:200%;'],
+                        'showFooter' => false,//显示footer行
+                        'id'=>'grid',
+                        'columns' => [
+                            [
+                                'class' => 'yii\grid\SerialColumn',
+                                'visible' => false,
                             ],
-                            'items' => Yii::$app->styleService->styleCate->getDropDown()
-                        ],
-                        [
-                            'name' => "product_type_id",
-                            'title'=>"产品线",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'prompt' => '请选择',
-                                'style'=>'width:100px'
-                            ],
-                            'items' => Yii::$app->styleService->productType->getDropDown()
-                        ],
-                        [
-                            'name' => "finger",
-                            'title'=>"指圈",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "xiangkou",
-                            'title'=>"镶口",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "material",
-                            'title'=>"主成色",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ],
-                            'defaultValue' => 0,
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
-                        ],
-                        [
-                            'name' => "gold_weight",
-                            'title'=>"主成色重",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_price",
-                            'title'=>"主成色买入单价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "gold_loss",
-                            'title'=>"金损",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "jintuo_type",
-                            'title'=>"金托类型",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
-                        ],
-                        [
-                            'name' => "gross_weight",
-                            'title'=>"毛重",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "suttle_weight",
-                            'title'=>"净重",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "cost_price",
-                            'title'=>"成本价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "market_price",
-                            'title'=>"市场价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "sale_price",
-                            'title'=>"销售价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "cert_id",
-                            'title'=>"证书号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "main_stone",
-                            'title'=>"主石",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
-                        ],
-                        [
-                            'name' => "main_stone_num",
-                            'title'=>"主石数量",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "main_stone_weight",
-                            'title'=>"主石重",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "main_stone_color",
-                            'title'=>"主石颜色",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
-                        ],
-                        [
-                            'name' => "main_stone_clarity",
-                            'title'=>"主石净度",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
-                        ],
-                        [
-                            'name' => "main_stone_price",
-                            'title'=>"主石买入单价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_cert_id",
-                            'title'=>"副石证书号",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone1",
-                            'title'=>"副石1",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                        ],
-                        [
-                            'name' => "second_stone_num1",
-                            'title'=>"副石1数量",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_weight1",
-                            'title'=>"副石1重量",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_price1",
-                            'title'=>"副石1买入单价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone2",
-                            'title'=>"副石2",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                        ],
-                        [
-                            'name' => "second_stone_num2",
-                            'title'=>"副石2数量",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_weight2",
-                            'title'=>"副石2重量",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_price2",
-                            'title'=>"副石2买入单价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone3",
-                            'title'=>"副石3",
-                            'enableError'=>false,
-                            'type'  => 'dropDownList',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                        ],
-                        [
-                            'name' => "second_stone_num3",
-                            'title'=>"副石3数量",
-                            'enableError'=>false,
-                            'defaultValue' => 0,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_weight3",
-                            'title'=>"副石3重量",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "second_stone_price3",
-                            'title'=>"副石3买入单价",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "markup_rate",
-                            'title'=>"加价率",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "gong_fee",
-                            'title'=>"工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "parts_weight",
-                            'title'=>"配件重量",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "parts_price",
-                            'title'=>"配件金额",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "parts_fee",
-                            'title'=>"配件工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "xianqian_fee",
-                            'title'=>"镶嵌工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "biaomiangongyi",
-                            'title'=>"表面工艺",
-                            'type' => 'dropDownList',
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ],
-                            'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
-                        ],
-                        [
-                            'name' => "biaomiangongyi_fee",
-                            'title'=>"表面工艺工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "fense_fee",
-                            'title'=>"分色工艺工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:100px'
-                            ]
-                        ],
-                        [
-                            'name' => "bukou_fee",
-                            'title'=>"补口工费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "cert_fee",
-                            'title'=>"证书费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "extra_stone_fee",
-                            'title'=>"超石费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "tax_fee",
-                            'title'=>"税费",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "other_fee",
-                            'title'=>"其他费用",
-                            'enableError'=>false,
-                            'defaultValue' => '0.00',
-                            'options' => [
-                                'class' => 'input-priority',
-                                'type' => 'number',
-                                'style'=>'width:80px'
-                            ]
-                        ],
-                        [
-                            'name' => "goods_remark",
-                            'title'=>"商品备注",
-                            'enableError'=>false,
-                            'options' => [
-                                'class' => 'input-priority',
-                                'style'=>'width:80px'
-                            ]
-                        ]
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
 
-                    ];
-                    ?>
-                    <?= unclead\multipleinput\MultipleInput::widget([
-                        'name' => "receipt_goods_list",
-                        'value' => $receiptGoods,
-                        'columns' => $receiptColomns,
-                    ]) ?>
+                            ],
+                            [
+                                'attribute'=>'id',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'id', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'purchase_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'produce_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'barcode',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxUpdate('barcode', $model->barcode);
+                                },
+                            ],
+                            [
+                                'attribute'=>'goods_name',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxUpdate('goods_name', $model->goods_name);
+                                },
+                            ],
+                            [
+                                'attribute'=>'goods_num',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'factory_mo',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxUpdate('factory_mo', $model->factory_mo);
+                                },
+                            ],
+                            [
+                                'label' => '款式分类',
+                                'attribute' => 'cate.name',
+                                'value' => "cate.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '产品线',
+                                'attribute' => 'type.name',
+                                'value' => "type.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'finger',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'finger', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xiangkou',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '主成色',
+                                'attribute' => 'material',
+                                'value' => "material",
+                                'filter' => Html::activeDropDownList($searchModel, 'material',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'gold_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gold_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gold_loss',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '金托类型',
+                                'attribute' => 'jintuo_type',
+                                'value' => "jintuo_type",
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'gross_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gross_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'suttle_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cost_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'market_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'sale_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cert_id',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '主石',
+                                'attribute' => 'main_stone',
+                                'value' => "main_stone",
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'main_stone_num',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'main_stone_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '主石颜色',
+                                'attribute' => 'main_stone_color',
+                                'value' => "main_stone_color",
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '主石净度',
+                                'attribute' => 'main_stone_clarity',
+                                'value' => "main_stone_clarity",
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'main_stone_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '副石1',
+                                'attribute' => 'second_stone1',
+                                'value' => "second_stone1",
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone1',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'second_stone_weight1',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_price1',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '副石2',
+                                'attribute' => 'second_stone2',
+                                'value' => "second_stone2",
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone2',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'second_stone_weight2',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_price2',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'markup_rate',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gong_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'parts_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'parts_price',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'parts_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xianqian_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'label' => '表面工艺',
+                                'attribute' => 'biaomiangongyi',
+                                'value' => "biaomiangongyi",
+                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',\Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'biaomiangongyi_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'fense_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'bukou_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cert_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'extra_stone_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'extra_stone_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'tax_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'tax_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'other_fee',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'goods_remark',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_remark', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                        ]
+                    ]); ?>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 text-center">
-                    <?= $form->field($receiptInfo, 'id')->hiddenInput()->label(false) ?>
-                    <button class="btn btn-primary" type="submit">保存</button>
-                    <span class="btn btn-white" onclick="history.go(-1)">返回</span>
-                </div>
-            </div>
-        <!-- box end -->
         </div>
+        <!-- box end -->
     </div>
+    <!-- tab-content end -->
 </div>
-<?php ActiveForm::end(); ?>

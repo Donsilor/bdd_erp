@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use Yii;
 
 /**
@@ -86,7 +88,7 @@ class PurchaseReceiptGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'receipt_id', 'purchase_sn', 'factory_mo'], 'required'],
+            [['id', 'receipt_id', 'purchase_sn'], 'required'],
             [['receipt_id', 'goods_num', 'style_cate_id', 'product_type_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['finger', 'gold_weight', 'gold_price', 'gold_loss', 'gross_weight', 'suttle_weight', 'cost_price', 'market_price', 'sale_price', 'main_stone_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3', 'markup_rate', 'gong_fee', 'parts_weight', 'parts_price', 'parts_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'cert_fee', 'extra_stone_fee', 'tax_fee', 'other_fee'], 'number'],
             [['purchase_sn', 'produce_sn', 'factory_mo', 'cert_id', 'second_cert_id'], 'string', 'max' => 30],
@@ -174,5 +176,21 @@ class PurchaseReceiptGoods extends BaseModel
      */
     public function getReceipt(){
         return $this->hasMany(PurchaseReceipt::class, ['id'=>'receipt_id']);
+    }
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
 }
