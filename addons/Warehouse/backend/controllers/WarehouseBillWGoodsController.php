@@ -10,6 +10,7 @@ use common\models\base\SearchModel;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Warehouse\common\enums\PandianStatusEnum;
 
 
 /**
@@ -48,7 +49,7 @@ class WarehouseBillWGoodsController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         $dataProvider->query->andWhere(['=',WarehousebillGoods::tableName().'.bill_id',$bill_id]);
-                
+        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',PandianStatusEnum::SAVE]);
         
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
