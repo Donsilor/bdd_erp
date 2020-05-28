@@ -152,4 +152,14 @@ trait BaseAction
         
         return true;
     }
+    
+    /**
+     * 获取分页大小
+     * @param number $default
+     * @return array|mixed
+     */
+    public function getPageSize($default = 10)
+    {
+        return Yii::$app->request->get('per-page', $default);
+    }
 }

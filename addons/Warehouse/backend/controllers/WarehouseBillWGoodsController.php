@@ -29,9 +29,8 @@ class WarehouseBillWGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-w/index']));
-        
         $bill = WarehouseBillWForm::find()->where(['id'=>$bill_id])->one();
-        $this->pageSize = 25;
+        
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -39,7 +38,7 @@ class WarehouseBillWGoodsController extends BaseController
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ],
-                'pageSize' => $this->pageSize,
+                'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
                      "goodsW"=> ["adjust_status"]
                 ]
