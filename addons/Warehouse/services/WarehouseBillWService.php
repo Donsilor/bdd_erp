@@ -106,7 +106,7 @@ class WarehouseBillWService extends WarehouseBillService
         }
         
         //更新应盘数量和总金额   
-        $this->warehouseBillSummary($bill->id);
+        $this->billWSummary($bill->id);
     }
     
     /**
@@ -256,7 +256,7 @@ class WarehouseBillWService extends WarehouseBillService
      * 仓储单据汇总
      * @param unknown $bill_id
      */
-    public function billSummary($bill_id)
+    public function billWSummary($bill_id)
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().'gw','g.id=gw.id')
             ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
