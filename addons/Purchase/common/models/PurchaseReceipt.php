@@ -5,6 +5,7 @@ namespace addons\Purchase\common\models;
 
 use Yii;
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\models\Warehouse;
 use common\models\backend\Member;
 
 /**
@@ -116,5 +117,13 @@ class PurchaseReceipt extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
 }

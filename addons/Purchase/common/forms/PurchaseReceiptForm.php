@@ -20,7 +20,7 @@ class PurchaseReceiptForm extends PurchaseReceipt
     public function rules()
     {
         $rules = [
-
+            [['put_in_type', 'to_warehouse_id'], 'required'],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -34,6 +34,8 @@ class PurchaseReceiptForm extends PurchaseReceipt
         return ArrayHelper::merge(parent::attributeLabels() , [
             'produce_sns'=>'布产单号',
             'receipt_num'=>'数量',
+            'put_in_type'=>'采购方式',
+            'to_warehouse_id'=>'入库仓库',
         ]);
     }
 

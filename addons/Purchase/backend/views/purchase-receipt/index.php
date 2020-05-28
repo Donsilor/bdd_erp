@@ -82,6 +82,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
+                'attribute' => 'put_in_type',
+                'format' => 'raw',
+                'value' => function ($model){
+                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'to_warehouse_id',
+                'value' =>"toWarehouse.name",
+                'filter'=>Select2::widget([
+                    'name'=>'SearchModel[to_warehouse_id]',
+                    'value'=>$searchModel->to_warehouse_id,
+                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-2'],
+            ],
+            [
                 'attribute' => 'receipt_num',
                 'value' => 'receipt_num',
                 'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
