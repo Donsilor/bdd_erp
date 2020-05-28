@@ -50,11 +50,10 @@ class WarehouseBillWService extends WarehouseBillService
         
         //批量创建单据明细
         $page_size = 100;
-        $should_num = 0;
         for($page = 1; $page <= 200 ; $page ++) {
-
             $goods_list = WarehouseGoods::find()->where(['warehouse_id'=>$bill->to_warehouse_id,'goods_status'=>GoodsStatusEnum::IN_STOCK])->limit($page_size)->asArray()->all();
             if(!empty($goods_list)) {
+                $bill_goods_values = [];
                 foreach ($goods_list as $goods) {
                     $goods_ids[] = $goods['goods_id'];
                     $bill_goods = [
@@ -71,7 +70,6 @@ class WarehouseBillWService extends WarehouseBillService
                             'status'=> PandianStatusEnum::SAVE,
                     ];
                     $bill_goods_values[] = array_values($bill_goods);
-                    $should_num ++;
                 }
                 if(empty($bill_goods_keys)) {
                     $bill_goods_keys = array_keys($bill_goods);
@@ -84,7 +82,8 @@ class WarehouseBillWService extends WarehouseBillService
                     throw new \Exception('导入单据明细失败');
                 }
                 
-            }            
+            }
+            
             if(count($goods_list) < $page_size) {
                 break;
             } 
@@ -92,15 +91,15 @@ class WarehouseBillWService extends WarehouseBillService
         
         //同步盘点明细关系表
         $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,adjust_status) select id,0 from '.WarehouseBillGoods::tableName()." where bill_id=".$bill->id;
-        $result = Yii::$app->db->createCommand($sql)->execute();
-        if(!$result) {
+        $should_num = Yii::$app->db->createCommand($sql)->execute();
+        if(false === $should_num) {
             throw new \Exception('导入单据明细失败2');
         }
-        
         //盘点单附属表
         $billW = new WarehouseBillW();
         $billW->id = $bill->id;
         $billW->should_num = $should_num;
+
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
         }
@@ -156,7 +155,7 @@ class WarehouseBillWService extends WarehouseBillService
             
         }
         
-        $this->billSummary($form->id);
+        $this->billWSummary($form->id);
         
     }
     /**
@@ -258,18 +257,18 @@ class WarehouseBillWService extends WarehouseBillService
      */
     public function billWSummary($bill_id)
     {
-        $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().'gw','g.id=gw.id')
+        $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
                     'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                     'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
                     'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
-                    'sum(if(gw.adjust_status<>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
+                    'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
                     'sum(g.cost_price) as total_cost',
                     'sum(g.sale_price) as total_sale',
                     'sum(g.market_price) as total_market'
-            ])->where(['bill_id'=>$bill_id])->asArray()->one();
-        
+            ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
+
         if($sum) {
             
             $billUpdate = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];

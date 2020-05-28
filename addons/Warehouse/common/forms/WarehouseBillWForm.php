@@ -37,14 +37,6 @@ class WarehouseBillWForm extends WarehouseBill
                 'goods_ids'=>'货号',
                 'to_warehouse_id'=>'盘点仓库'
         ]);
-    }    
-    /**
-     * 盘点单关联表
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBillW()
-    {        
-        return $this->hasOne(WarehouseBillW::class, ['bill_id'=>'id'])->alias('billW');
     }
     /**
      * 字符串转换成数组

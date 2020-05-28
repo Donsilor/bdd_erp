@@ -90,42 +90,54 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],      
                         [
                                 'label' => '应盘数量',
-                                'value' => 'billW.should_num',
+                                'value' => function($model){
+                                    return $model->billW->should_num ?? 0;
+                                },
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '实盘数量',
-                                'value' => 'billW.actual_num',
+                                'value' => function($model){
+                                    return $model->billW->actual_num ?? 0;
+                                },
                                 'filter' => false,                                
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                         ], 
                         [
                                 'label' => '正常数量',
-                                'value' => 'billW.normal_num',
+                                'value' => function($model){
+                                    return $model->billW->normal_num ?? 0;
+                                 },
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '盘盈数量',
-                                'value' => 'billW.profit_num',
+                                 'value' => function($model){
+                                    return $model->billW->profit_num ?? 0;
+                                 },
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '盘亏数量',
-                                'value' => 'billW.loss_num',
+                                'value' => function($model){
+                                      return $model->billW->loss_num ?? 0;
+                                 },
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                         ],                        
                         [
                                 'label' => '调整数量',
-                                'value' => 'billW.adjust_num',
+                                'value' => function($model){
+                                    return $model->billW->adjust_num ?? 0;
+                                },
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],

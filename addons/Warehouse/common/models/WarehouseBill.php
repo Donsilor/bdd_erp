@@ -167,7 +167,7 @@ class WarehouseBill extends BaseModel
      */
     public function getProductType()
     {
-        return $this->hasOne(ProductType::class, ['id'=>'product_type_id']);
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias("productType");
     }
 
     /**
@@ -176,7 +176,7 @@ class WarehouseBill extends BaseModel
      */
     public function getStyleCate()
     {
-        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias("styleCate");
     }
     /**
      * 盘点单附属表
@@ -184,6 +184,6 @@ class WarehouseBill extends BaseModel
      */
     public function getBillW()
     {
-        return $this->hasOne(WarehouseBillW::class, ['id'=>'id']);
+        return $this->hasOne(WarehouseBillW::class, ['id'=>'id'])->alias('billW');
     }
 }

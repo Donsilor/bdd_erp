@@ -26,7 +26,7 @@ class WarehouseBillGoodsW extends BaseModel
     public function rules()
     {
         return [
-            [['adjust_status'], 'integer'],
+            [['id','adjust_status'], 'integer'],
         ];
     }
 
