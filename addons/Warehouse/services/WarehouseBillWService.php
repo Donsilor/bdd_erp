@@ -123,6 +123,7 @@ class WarehouseBillWService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        $bill_detail_ids = [];
         foreach ($form->getGoodsIds() as $goods_id) {            
            
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$form->id])->one();
@@ -157,13 +158,12 @@ class WarehouseBillWService extends WarehouseBillService
             if(false === $billGoods->save()) {
                 throw new \Exception($this->getError($billGoods));
             }
-            
-            $billGoods->goodsW->status = ConfirmEnum::YES;//已盘点
-            if($billGoods->goodsW->save(true,['id','status'])) {
-                throw new \Exception($this->getError($billGoods->billW));
-            } 
+            $bill_detail_ids[] = $billGoods->id;            
         }
-        
+        //更新【是否盘点】状态
+        if(!empty($bill_detail_ids)) {
+            WarehouseBillGoodsW::updateAll(['status'=>ConfirmEnum::YES],['id'=>$bill_detail_ids]);
+        }
         $this->billWSummary($form->id);
         
     }
