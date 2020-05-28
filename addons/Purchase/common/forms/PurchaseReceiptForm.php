@@ -32,7 +32,8 @@ class PurchaseReceiptForm extends PurchaseReceipt
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'produce_sns'=>'布产单号'
+            'produce_sns'=>'布产单号',
+            'receipt_num'=>'数量',
         ]);
     }
 

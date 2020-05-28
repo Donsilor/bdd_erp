@@ -51,7 +51,7 @@ class PurchaseReceiptController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
