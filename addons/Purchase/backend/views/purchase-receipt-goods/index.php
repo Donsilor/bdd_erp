@@ -17,6 +17,18 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
+        <?php
+        if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::create(['edit', 'receipt_id' => $receipt->id], '新增货品', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]);
+        }
+        ?>
+    </div>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
@@ -120,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -132,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -617,6 +629,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:150px;'
                                 ]),
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($receipt){
+                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ]
                         ]
                     ]); ?>
                 </div>
