@@ -184,6 +184,6 @@ class WarehouseBill extends BaseModel
      */
     public function getBillW()
     {
-        return $this->hasOne(WarehouseBillW::class, ['id'=>'bill_id']);
+        return $this->hasOne(WarehouseBillW::class, ['id'=>'id']);
     }
 }
