@@ -114,7 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->styleCate->getDropDown()
                             ],
@@ -125,7 +126,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->productType->getDropDown()
                             ],
@@ -158,7 +160,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'defaultValue' => 0,
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
@@ -203,7 +206,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
                             ],
@@ -278,7 +282,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE)
                             ],
@@ -311,7 +316,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                             ],
@@ -322,7 +328,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                             ],
@@ -353,8 +360,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                             ],
@@ -398,7 +405,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
                             ],
@@ -427,50 +435,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'name' => "second_stone_price2",
                                 'title'=>"副石2买入单价",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:100px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone3",
-                                'title'=>"副石3",
-                                'enableError'=>false,
-                                'type'  => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:80px'
-                                ],
-                                'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
-                            ],
-                            [
-                                'name' => "second_stone_num3",
-                                'title'=>"副石3数量",
-                                'enableError'=>false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_weight3",
-                                'title'=>"副石3重量",
-                                'enableError'=>false,
-                                'defaultValue' => '0.00',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'style'=>'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "second_stone_price3",
-                                'title'=>"副石3买入单价",
                                 'enableError'=>false,
                                 'defaultValue' => '0.00',
                                 'options' => [
@@ -552,7 +516,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:80px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
                             ],
