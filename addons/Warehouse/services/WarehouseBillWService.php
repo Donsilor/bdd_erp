@@ -269,9 +269,9 @@ class WarehouseBillWService extends WarehouseBillService
                     'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
                     'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
-                    'sum(g.cost_price) as total_cost',
-                    'sum(g.sale_price) as total_sale',
-                    'sum(g.market_price) as total_market'
+                    'sum(ifnull(g.cost_price,0)) as total_cost',
+                    'sum(ifnull(g.sale_price)) as total_sale',
+                    'sum(ifnull(g.market_price)) as total_market'
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
 
         if($sum) {
