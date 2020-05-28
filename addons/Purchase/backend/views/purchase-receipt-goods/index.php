@@ -23,7 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
-            echo Html::edit(['edit', 'receipt_id' => $receipt->id], '编辑货品');
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo Html::edit(['edit', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
