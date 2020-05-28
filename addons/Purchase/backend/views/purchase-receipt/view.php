@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
             if($model->receipt_status == BillStatusEnum::SAVE) {
                 echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
-                    'class'=>'btn btn-success btn-sm',
+                    'class'=>'btn btn-success btn-ms',
                     'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                 ]);
             }
