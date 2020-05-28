@@ -128,7 +128,7 @@ class WarehouseBillWService extends WarehouseBillService
             if(empty($goods)) {
                 throw new \Exception("[{$goods_id}]货号不存在");
             }
-            $billGoods = WarehouseBillGoods::find()->where(['bill_id'=>$form->id,'goods_id'=>$goods_id])->one();
+            $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$form->id])->one();
             if(!$billGoods) {
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $form->id;
@@ -155,7 +155,7 @@ class WarehouseBillWService extends WarehouseBillService
             
         }
         
-        $this->billWSummary($form->id);
+        //$this->billWSummary($form->id);
         
     }
     /**
@@ -252,7 +252,7 @@ class WarehouseBillWService extends WarehouseBillService
     }
     
     /**
-     * 仓储单据汇总
+     * 盘点单汇总
      * @param unknown $bill_id
      */
     public function billWSummary($bill_id)
