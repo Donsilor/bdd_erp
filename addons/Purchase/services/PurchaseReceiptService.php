@@ -33,13 +33,22 @@ class PurchaseReceiptService extends Service
      * @param int $id 采购单ID
      * @return array
      */
-    public function menuTabList($receipt_id,$returnUrl = null)
+    public function menuTabList($receipt_id,$returnUrl = null,$tab = null)
     {
-        return [
+        if($tab==3){
+            $tablist = [
+                1=>['name'=>'基础信息','url'=>Url::to(['purchase-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['purchase-receipt-goods/edit','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                4=>['name'=>'日志信息','url'=>Url::to(['purchase-receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+            ];
+        }else{
+            $tablist = [
                 1=>['name'=>'基础信息','url'=>Url::to(['purchase-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                 2=>['name'=>'单据明细','url'=>Url::to(['purchase-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'日志信息','url'=>Url::to(['purchase-receipt-log/index','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-        ];
+                4=>['name'=>'日志信息','url'=>Url::to(['purchase-receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+            ];
+        }
+        return $tablist;
     }
     
     /**
