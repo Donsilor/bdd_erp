@@ -99,7 +99,7 @@ class WarehouseBillWService extends WarehouseBillService
         
         //盘点单附属表
         $billW = new WarehouseBillW();
-        $billW->bill_id = $bill->id;
+        $billW->id = $bill->id;
         $billW->should_num = $should_num;
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
@@ -156,7 +156,7 @@ class WarehouseBillWService extends WarehouseBillService
             
         }
         
-        $this->warehouseBillSummary($form->id);
+        $this->billSummary($form->id);
         
     }
     /**
@@ -256,7 +256,7 @@ class WarehouseBillWService extends WarehouseBillService
      * 仓储单据汇总
      * @param unknown $bill_id
      */
-    public function warehouseBillSummary($bill_id)
+    public function billSummary($bill_id)
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().'gw','g.id=gw.id')
             ->select(['sum(if(g.status>'.PandianStatusEnum::SAVE.',1,0)) as actual_num',
