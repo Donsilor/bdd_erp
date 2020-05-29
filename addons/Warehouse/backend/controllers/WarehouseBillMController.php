@@ -114,9 +114,6 @@ class WarehouseBillMController extends BaseController
                     WarehouseBillGoods::updateAll(['to_warehouse_id' => $model->to_warehouse_id],['bill_id' => $model->id]);
                 }
 
-
-
-
                 $log = [
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,

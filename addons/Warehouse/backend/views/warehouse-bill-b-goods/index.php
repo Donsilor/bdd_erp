@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+//            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
