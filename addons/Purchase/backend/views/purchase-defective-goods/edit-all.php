@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::a('返回列表', ['purchase-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['purchase_defective_goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -78,7 +78,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'oqc_reason',
-                                'value' => "oqc_reason",
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeDropDownList($searchModel, 'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
