@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use common\helpers\ArrayHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 /**
@@ -19,6 +20,6 @@ class PurchaseDefectiveGoodsForm extends PurchaseDefectiveGoods
 
         ];
         return array_merge(parent::rules() , $rules);
-    }   
-    
+    }
+
 }

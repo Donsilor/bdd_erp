@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::edit(['edit-all', 'defective_id' => $defective->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['purchase-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -77,9 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '质检未过原因',
-                                'attribute' => 'fqc.name',
-                                'value' => "fqc.name",
+                                'attribute' => 'oqc_reason',
+                                'value' => "oqc_reason",
                                 'filter' => Html::activeDropDownList($searchModel, 'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
@@ -92,6 +91,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'oqc_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('oqc_remark', $model->oqc_remark, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'oqc_remark', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
@@ -121,6 +123,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($defective){
+                                        if($defective->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ]
                         ]
                     ]); ?>
                 </div>

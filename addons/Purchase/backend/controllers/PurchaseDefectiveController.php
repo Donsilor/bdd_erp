@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\SnHelper;
 use Yii;
@@ -50,9 +51,15 @@ class PurchaseDefectiveController extends BaseController
             ]
         ]);
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams, ['created_at']);
 
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',PurchaseDefective::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',PurchaseDefective::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+
+        $dataProvider->query->andWhere(['>',PurchaseDefective::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -108,7 +115,7 @@ class PurchaseDefectiveController extends BaseController
     }
 
     /**
-     * 审核-采购收货单
+     * 审核-不良返厂单
      *
      * @return mixed
      */
