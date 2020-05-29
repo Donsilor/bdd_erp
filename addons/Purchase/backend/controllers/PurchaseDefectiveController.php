@@ -125,6 +125,11 @@ class PurchaseDefectiveController extends BaseController
 
         $this->modelClass = PurchaseDefectiveForm::class;
         $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {

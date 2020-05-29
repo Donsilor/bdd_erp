@@ -17,7 +17,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'deliver_goods_no')->textInput() ?>
+        <?= $form->field($model, 'send_goods_sn')->textInput() ?>
         <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
             'data' => \Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],

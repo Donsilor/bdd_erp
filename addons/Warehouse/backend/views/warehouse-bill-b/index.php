@@ -64,6 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'bill_no',
+                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'bill_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -215,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },*/
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                        return Html::delete(['delete', 'id' => $model->id], '取消');
                                     }
                                 },
                             ],

@@ -20,10 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
-                    ]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -32,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:120%;'],
+                    'options' => ['style'=>' width:140%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -59,6 +55,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'send_goods_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
@@ -231,7 +235,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status <= BillStatusEnum::PENDING) {
-                                        return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                        return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '取消');
                                     }
                                 },
                             ],

@@ -153,7 +153,7 @@ class PurchaseReceiptService extends Service
             'to_company_id' => 0,
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
-            'deliver_goods_no' => $receipt->receipt_no,
+            'send_goods_sn' => $receipt->receipt_no,
         ];
 
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            //echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -190,6 +190,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($bill){
+                                        if($bill->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ]
                         ]
                     ]); ?>
                 </div>
