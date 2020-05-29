@@ -1,12 +1,8 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
+
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            //echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['warehouse-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -93,13 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'material',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'material', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:150px;'
+                                    'style'=> 'width:150px;',
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -107,6 +104,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'gold_weight',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
@@ -116,6 +116,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'gold_loss',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('gold_loss', $model->gold_loss, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
@@ -125,6 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -133,6 +139,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'market_price',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('market_price', $model->market_price, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'market_price', [
                                     'class' => 'form-control',
@@ -142,6 +151,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'sale_price',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('sale_price', $model->sale_price, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'sale_price', [
                                     'class' => 'form-control',
@@ -152,6 +164,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'diamond_cert_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('diamond_cert_id', $model->diamond_cert_id, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'diamond_cert_id', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -161,6 +176,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'diamond_carat',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('diamond_carat', $model->diamond_carat, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
@@ -168,8 +186,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'diamond_color',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_color);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'diamond_color', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
                                     'prompt' => '全部',
@@ -180,8 +199,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'diamond_clarity',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_clarity);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'diamond_clarity', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
                                     'prompt' => '全部',

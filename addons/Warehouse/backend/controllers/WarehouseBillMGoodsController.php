@@ -46,7 +46,6 @@ class WarehouseBillMGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-m/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -54,7 +53,7 @@ class WarehouseBillMGoodsController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize,
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'fromWarehouse' => ['name']
             ]
@@ -199,6 +198,8 @@ class WarehouseBillMGoodsController extends BaseController
             //更新单据数量和金额
             $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
             $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
+            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
+            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
             $bill->save();
 
             //更新库存表商品状态为库存

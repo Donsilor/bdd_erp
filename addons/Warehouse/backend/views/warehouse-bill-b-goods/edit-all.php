@@ -1,12 +1,9 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
+
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            //echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]);
+            echo '&nbsp;';
+            echo Html::a('返回列表', ['warehouse-bill-b-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -38,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>' width:120%;white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -84,111 +89,145 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'attribute'=>'goods.goods_status',
+                                'value' => function($model){
+                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                },
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods.style_cate_id',
+                                'value' => 'goods.styleCate.name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods.product_type_id',
+                                'value' => 'goods.productType.name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'put_in_type',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'from_warehouse_id',
+                                'value' =>"fromWarehouse.name",
+                                'filter'=>Select2::widget([
+                                    'name'=>'SearchModel[from_warehouse_id]',
+                                    'value'=>$searchModel->from_warehouse_id,
+                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                    'options' => ['placeholder' =>"请选择"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+
+                                    ],
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute' => 'to_warehouse_id',
+                                'value' =>"toWarehouse.name",
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'material',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->material);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'headerOptions' => [],
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'gold_weight',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
+                                'attribute' => 'gold_weight',
+                                'filter' => false,
                             ],
                             [
-                                'attribute'=>'gold_loss',
+                                'attribute' => 'gold_loss',
+                                'value' => function($model){
+                                    return $model->gold_loss;
+                                },
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
+                                'filter' => false,
                             ],
                             [
-                                'attribute'=>'cost_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'market_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'sale_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'sale_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'diamond_cert_id',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'diamond_cert_id', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'diamond_carat',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
+                                'attribute' => 'diamond_carat',
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'diamond_color',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->diamond_color);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => [],
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'diamond_clarity',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->diamond_clarity);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'diamond_cert_id',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'value' => function($model){
+                                    return Html::ajaxInput('cost_price',$model->cost_price);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+
+                            ],
+                            [
+                                'attribute' => 'market_price',
+                                'value' => function($model){
+                                    return Html::ajaxInput('cost_price',$model->cost_price);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'created_at',
+                                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'created_at',
+                                    'value' => $searchModel->created_at,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+
+
+                                    ],
+
                                 ]),
-                                'headerOptions' => [],
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->updated_at);
+                                }
+
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

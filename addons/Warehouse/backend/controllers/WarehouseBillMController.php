@@ -42,7 +42,7 @@ class WarehouseBillMController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize,
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
@@ -113,9 +113,6 @@ class WarehouseBillMController extends BaseController
                     //编辑单据明细所有入库仓库
                     WarehouseBillGoods::updateAll(['to_warehouse_id' => $model->to_warehouse_id],['bill_id' => $model->id]);
                 }
-
-
-
 
                 $log = [
                     'bill_id' => $model->id,

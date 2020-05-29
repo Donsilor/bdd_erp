@@ -1,28 +1,33 @@
 <?php
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
+use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $bill yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('warehouse_bill_pay', '结算商信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $billInfo->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit', 'bill_id' => $billInfo->id,'returnUrl' => Url::getReturnUrl()], '创建', [
+                    <?php if($bill->bill_status == BillStatusEnum::SAVE){ ?>
+                    <?= Html::create(['ajax-edit', 'bill_id' => $bill->id,'returnUrl' => Url::getReturnUrl()], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?php }?>
                 </div>
             </div>
             <div class="box">
@@ -102,19 +107,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => ' {edit} {status} {delete} ',
+                                'template' => ' {edit} {delete} ',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key){
-                                        return Html::edit(['ajax-edit','id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
-                                        ]);
+                                    'edit' => function($url, $model, $key) use($bill) {
+                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
+                                            ]);
+                                        }
                                     },
                                     'status' => function($url, $model, $key){
                                         return Html::status($model->status);
                                     },
-                                    'delete' => function($url, $model, $key){
-                                        return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                    'delete' => function($url, $model, $key) use($bill) {
+                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                            return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                        }
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-2','style'=>'width:100px;'],

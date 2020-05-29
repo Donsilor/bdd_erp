@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-3">
+                     <div class="col-lg-6">
                         <?= $form->field($model, 'receipt_goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
@@ -97,9 +97,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:160px'
+                                    'style'=>'width:160px',
+                                    'prompt'=>'请选择',
                                 ],
-                                'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
+                                'items' => Yii::$app->purchaseService->fqc->getDropDown()
                             ],
                             [
                                 'name' => "oqc_remark",
@@ -118,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' => 'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->styleCate->getDropDown()
                             ],
@@ -130,7 +132,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' => 'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->productType->getDropDown()
                             ],

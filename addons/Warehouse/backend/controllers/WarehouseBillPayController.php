@@ -3,13 +3,22 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\enums\LogTypeEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PayMethodEnum;
+use addons\Warehouse\common\enums\PayTaxEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillPay;
+use yii\db\Exception;
+
 /**
  * 默认控制器
  *
@@ -33,7 +42,6 @@ class WarehouseBillPayController extends BaseController
     public function actionIndex()
     {
         $bill_id = Yii::$app->request->get('bill_id');
-        $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         $tab = Yii::$app->request->get('tab');
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-pay/index']));
         $searchModel = new SearchModel([
@@ -53,12 +61,13 @@ class WarehouseBillPayController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','bill_id', $bill_id]);
 
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'billInfo' => $billInfo,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'bill' => $bill,
         ]);
     }
 
@@ -73,19 +82,45 @@ class WarehouseBillPayController extends BaseController
         $id = Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $billModel = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+
             $model->bill_id = $bill_id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            \Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
         }
+        $model->pay_method = PayMethodEnum::TALLY;
+        $model->pay_tax = PayTaxEnum::NO_TAX;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'billModel' => $billModel,
+            'bill' => $bill,
         ]);
     }
 
+    /**
+     * 删除/关闭/取消
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+
+        $model = WarehouseBillPay::find()->where(['id' => $id])->one();
+        if(false === $model->delete()){
+            return $this->message("删除失败", $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+        \Yii::$app->getSession()->setFlash('success','删除成功');
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
 }

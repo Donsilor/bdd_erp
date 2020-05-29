@@ -33,9 +33,9 @@ class PurchaseReceiptService extends Service
      * @param int $id 采购单ID
      * @return array
      */
-    public function menuTabList($receipt_id,$returnUrl = null,$tab = null)
+    public function menuTabList($receipt_id,$returnUrl = null,$tag = null)
     {
-        if($tab==3){
+        if($tag==3){
             $tablist = [
                 1=>['name'=>'基础信息','url'=>Url::to(['purchase-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                 3=>['name'=>'单据明细(编辑)','url'=>Url::to(['purchase-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
@@ -153,7 +153,7 @@ class PurchaseReceiptService extends Service
             'to_company_id' => 0,
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
-            'deliver_goods_no' => $receipt->receipt_no,
+            'send_goods_sn' => $receipt->receipt_no,
         ];
 
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
