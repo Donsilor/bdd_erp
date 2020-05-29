@@ -61,7 +61,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
             'cost_price' => '金额',
-            'oqc_reason' => 'OQC质检未过原因',
+            'oqc_reason' => '质检未过原因',
             'oqc_remark' => '备注',
             'sort' => '排序',
             'status' => '状态',

@@ -88,39 +88,37 @@ class PurchaseDefectiveGoodsController extends BaseController
 
         $defective_id = Yii::$app->request->get('defective_id');
 
-        $xuhaos = Yii::$app->request->get('xuhao');
+        $xuhaos = Yii::$app->request->get('xuhaos');
         $model = new PurchaseDefectiveGoods();
+        $form = new PurchaseDefectiveGoodsForm();
         $model->xuhao = $xuhaos;
 
         $defective = PurchaseDefective::find()->where(['id' => $defective_id])->one();
 
         $defective_goods_list = Yii::$app->request->post('defective_goods_list');
-        $receiptModel = new PurchaseDefective();
-        $model = new PurchaseDefectiveGoods();
 
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-
         $defectiveGoods = [];
         if(Yii::$app->request->get('search') == 1 && !empty($xuhaos)){
-            $xuhao_arr = $model->getXuhaos($xuhaos);
-            $receiptInfo = $receiptModel::find()->where(['id'=>$defective_id])->asArray()->one();
-            $receipt_no = $receiptInfo['receipt_no'];
+            $form->xuhaos = $xuhaos;
+            $xuhao_arr = $form->getXuhaos();
+            $receipt_no = $defective->receipt_no;
             try {
                 $trans = Yii::$app->db->beginTransaction();
-                foreach ($xuhao_arr as $receipt_goods_id) {
+                foreach ($xuhao_arr as $xuhao) {
                     $receipt_info = PurchaseReceipt::find()->where(['receipt_no' => $receipt_no])->one();
                     if(empty($receipt_info)){
                         throw new Exception("采购收货单【{$receipt_no}】不存在");
                     }
-                    $receipt_goods = PurchaseReceiptGoods::find()->where(['id' => $receipt_goods_id, 'receipt_id' => $receipt_info['id']])->one();
+                    $receipt_goods = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_info['id'], 'xuhao' => $xuhao])->one();
 
                     if(empty($receipt_goods)){
-                        throw new Exception("采购收货单【{$receipt_no}】中序号【{$receipt_goods_id}】不存在");
+                        throw new Exception("采购收货单【{$receipt_no}】中序号【{$xuhao}】不存在");
                     }
                     $defective_list = [];
                     $defective_list['id'] = null;
                     $defective_list['defective_id'] = $defective_id;
-                    $defective_list['receipt_goods_id'] = $receipt_goods_id;
+                    $defective_list['xuhao'] = $xuhao;
                     $defective_list['produce_sn'] = $receipt_goods['produce_sn'];
                     $defective_list['style_sn'] = $receipt_goods['style_sn'];
                     $defective_list['factory_mo'] = $receipt_goods['factory_mo'];
@@ -133,7 +131,9 @@ class PurchaseDefectiveGoodsController extends BaseController
                     if(!empty($defective_goods_list)){
                         $defective_val = [];
                         $defective_key = array_keys($defective_goods_list[0]);
+                        array_push($defective_key, 'id', 'defective_id');
                         foreach ($defective_goods_list as $goods) {
+                            array_push($goods, null, $defective_id);
                             $defective_val[] = array_values($goods);
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseDefectiveGoods::tableName(), $defective_key, $defective_val)->execute();

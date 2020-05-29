@@ -121,6 +121,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($defective){
+                                        if($defective->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ]
                         ]
                     ]); ?>
                 </div>

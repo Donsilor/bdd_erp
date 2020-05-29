@@ -31,27 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                         $defectiveColomns = [
                             [
-                                'name' => 'id',
-                                'title'=>"ID",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
-                                ]
-                            ],
-                            [
-                                'name' =>'defective_id',
-                                'title'=>"返厂单ID",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
-                                ]
-                            ],
-                            [
-                                'name' =>'receipt_goods_id',
+                                'name' =>'xuhao',
                                 'title'=>"收货单商品序号",
                                 'enableError'=>false,
                                 'options' => [
@@ -166,12 +146,12 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
 function searchDefectiveGoods() {
-   var receipt_goods_ids = $.trim($("#purchasedefectivegoods-receipt_goods_id").val());
-   if(!receipt_goods_ids) {
+   var xuhaos = $.trim($("#purchasedefectivegoods-xuhao").val());
+   if(!xuhaos) {
 	    rfMsg("请输入采购收货单商品序号");
         return false;
    }
-    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['receipt_goods_id','search',])?>&search=1&receipt_goods_id="+receipt_goods_ids;
+    var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['receipt_goods_id','search',])?>&search=1&xuhaos="+xuhaos;
     window.location.href = url;
 }
 </script>
