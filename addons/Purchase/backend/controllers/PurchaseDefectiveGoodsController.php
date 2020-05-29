@@ -47,7 +47,7 @@ class PurchaseDefectiveGoodsController extends BaseController
     {
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective-goods/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
@@ -61,19 +61,20 @@ class PurchaseDefectiveGoodsController extends BaseController
                      
                 ]
         ]);
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
-        $defective_goods = $dataProvider->getModels();
-        $defectiveInfo = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
+
+        $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-                'defectiveInfo' => $defectiveInfo,
-                'defectiveGoods' => $defective_goods,
-                'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl),
-                'returnUrl' => $returnUrl,
-                'tab'=>$tab,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'defective' => $defective,
+            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl),
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
         ]);
     }
 
@@ -82,7 +83,7 @@ class PurchaseDefectiveGoodsController extends BaseController
      * @property PurchaseReceiptGoodsForm $model
      * @return mixed
      */
-    public function actionEdit()
+    public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
@@ -162,58 +163,43 @@ class PurchaseDefectiveGoodsController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
+     * 编辑明细
      *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function actionAjaxEdit()
+    public function actionEditAll()
     {
-        $defective_goods_list = Yii::$app->request->post('receipt_goods_list');
-        $prurchase_defective_info = Yii::$app->request->post('PurchaseDefective');
-        $model = new PurchaseDefectiveGoods();
-        if(!empty($defective_goods_list)){
-            try {
-                $trans = Yii::$app->db->beginTransaction();
-                $defective_id = $prurchase_defective_info['id'];
-                foreach ($defective_goods_list as $key => $goods) {
-                    $id = isset($goods['id']) ? $goods['id'] : '';
-                    $model = $this->findModel($id);
-                    // ajax 校验
-                    $this->activeFormValidate($model);
-                    if (false === $model::updateAll($goods, ['id' => $id])) {
-                        throw new Exception($this->getError($model));
-                    }
-                }
+        $defective_id = Yii::$app->request->get('defective_id');
+        $tab = Yii::$app->request->get('tab',3);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective-goods/index']));
+        $this->pageSize = 1000;
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => ['purchase_sn'], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
 
-                //软删除
-                $old_list = $model::find()->where(['defective_id' => $defective_id])->asArray()->all();
-                $old_ids = array_column($old_list, 'id');
-                $new_ids = array_column($defective_goods_list, 'id');
-                $del_ids = array_diff($old_ids, $new_ids);
-                if(!empty($del_ids)){
-                    $res = $model::updateAll(['status' => StatusEnum::DELETE], ['id' => $del_ids]);
-                    if(false === $res){
-                        throw new Exception('软删除失败');
-                    }
-                }
+            ]
+        ]);
 
-                //更新采购收货单汇总：总金额和总数量
-                $res = Yii::$app->purchaseService->purchaseDefective->purchaseDefectiveSummary($defective_id);
-                if(false === $res){
-                    throw new Exception('更新不良返厂单汇总失败');
-                }
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(['index']), 'error');
-            }
-        }
-        return $this->renderAjax('index', [
-            'model' => $model
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
+        $dataProvider->query->andWhere(['>','status',-1]);
+
+        $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'defective' => $defective,
+            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl,$tab),
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
         ]);
     }
-
 }

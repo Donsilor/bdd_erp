@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-3">
+                     <div class="col-lg-6">
                         <?= $form->field($model, 'receipt_goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'input-priority',
                                     'style'=>'width:160px'
                                 ],
-                                'items' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDown()
+                                'items' => Yii::$app->purchaseService->fqc->getDropDown()
                             ],
                             [
                                 'name' => "oqc_remark",

@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use Yii;
 
 /**
@@ -40,7 +42,7 @@ class PurchaseDefectiveGoods extends BaseModel
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
-            [['oqc_remark', 'receipt_goods_id'], 'string', 'max' => 255],
+            [['oqc_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,7 +56,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'defective_id' => '返厂单ID',
             'receipt_goods_id' => '采购收货单商品序号',
             'style_sn' => '款式编号',
-            'factory_no' => '工厂模号',
+            'factory_mo' => '工厂模号',
             'produce_sn' => '布产单编号',
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
@@ -67,4 +69,30 @@ class PurchaseDefectiveGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+
+    /**
+    * 关联产品线分类一对一
+    * @return \yii\db\ActiveQuery
+    */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'oqc_reason'])->alias('fqc');
+    }
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+
 }
