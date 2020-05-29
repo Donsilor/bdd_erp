@@ -4,11 +4,16 @@ use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
+use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel yii\data\ActiveDataProvider */
+/* @var $tabList yii\data\ActiveDataProvider */
+/* @var $tab yii\data\ActiveDataProvider */
+/* @var $bill yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('warehouse_bill_l_goods', '收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
@@ -84,14 +89,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [

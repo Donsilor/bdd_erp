@@ -60,7 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=>'width:160px'
                                 ]
                             ],
-
                             [
                                 'name' =>'goods_name',
                                 'title'=>"商品名称",
@@ -82,7 +81,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=>'width:60px'
                                 ]
                             ],
-
                             [
                                 'name' => "put_in_type",
                                 'title'=>"入库方式",
