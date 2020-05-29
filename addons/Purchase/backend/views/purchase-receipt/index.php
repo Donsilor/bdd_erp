@@ -1,5 +1,6 @@
 <?php
 
+use common\enums\WhetherEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
@@ -223,7 +224,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {ajax-apply} {audit} {delete}',
+                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::SAVE) {
@@ -244,6 +245,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'audit' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::PENDING) {
                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+                },
+                'ajax-warehouse' => function($url, $model, $key){
+                    if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
+                        return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',

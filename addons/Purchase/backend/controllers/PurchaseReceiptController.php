@@ -11,6 +11,7 @@ use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
+use common\enums\WhetherEnum;
 use common\helpers\Url;
 use common\traits\Curd;
 /**
@@ -147,9 +148,6 @@ class PurchaseReceiptController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
-                }
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -158,6 +156,41 @@ class PurchaseReceiptController extends BaseController
             }
         }
         $model->audit_status = AuditStatusEnum::PASS;
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 申请入库-采购收货单
+     *
+     * @return mixed
+     */
+    public function actionAjaxWarehouse()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseReceiptForm::class;
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                $model->is_to_warehouse = WhetherEnum::ENABLED;
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //同步采购收货单至L单
+                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
+
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
