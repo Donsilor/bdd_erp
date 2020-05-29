@@ -86,6 +86,12 @@ class WarehouseBillBGoodsController extends BaseController
                 if(empty($goods_info)){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
+                if($goods_info->supplier_id != $bill->supplier_id){
+                    return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                }
+                if($goods_info->put_in_type != $bill->put_in_type){
+                    return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                }
                 $goods = [];
                 $goods['id'] = null;
                 $goods['goods_id'] = $goods_id;
@@ -219,4 +225,42 @@ class WarehouseBillBGoodsController extends BaseController
             'tab' => $tab,
         ]);
     }
+
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        $billGoods = $this->findModel($id);
+        $bill_id = $billGoods->bill_id;
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            //删除
+            $billGoods->delete();
+            //更新单据数量和金额
+            $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
+            $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
+            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
+            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
+            $bill->save();
+
+            //更新库存表商品状态为库存
+            $res = WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_RETURN_FACTORY]);
+            if($res == 0){
+                throw new Exception("商品不是返厂中或者不存在，请查看原因");
+            }
+            $trans->commit();
+            return $this->message("删除成功", $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]));
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]), 'error');
+        }
+    }
+
 }

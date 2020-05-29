@@ -198,6 +198,8 @@ class WarehouseBillMGoodsController extends BaseController
             //更新单据数量和金额
             $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
             $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
+            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
+            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
             $bill->save();
 
             //更新库存表商品状态为库存
