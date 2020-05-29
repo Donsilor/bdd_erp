@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-3">
+                     <div class="col-lg-4">
                         <?= $form->field($model, 'produce_sns')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
@@ -30,16 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="tab-content">
                         <?php
                         $receiptColomns = [
-                            [
-                                'name' => 'id',
-                                'title'=>"序号",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
-                                ]
-                            ],
                             [
                                 'name' =>'purchase_sn',
                                 'title'=>"采购单编号",
@@ -61,31 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' =>'barcode',
-                                'title'=>"条形码编号",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'style'=>'width:120px'
-                                ]
-                            ],
-                            [
                                 'name' =>'goods_name',
                                 'title'=>"商品名称",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:120px'
-                                ]
-                            ],
-                            [
-                                'name' =>'goods_num',
-                                'title'=>"商品数量",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
+                                    'style'=>'width:260px'
                                 ]
                             ],
                             [
@@ -108,13 +79,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
+                                'name' =>'goods_num',
+                                'title'=>"数量",
+                                'enableError'=>false,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'readonly' =>'true',
+                                    'style'=>'width:60px'
+                                ]
+                            ],
+                            [
                                 'name' => "style_cate_id",
                                 'title'=>"款式分类",
                                 'enableError'=>false,
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px',
+                                    'style'=>'width:120px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->styleCate->getDropDown()
@@ -126,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:100px',
+                                    'style'=>'width:120px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->productType->getDropDown()
@@ -316,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
@@ -328,7 +309,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
@@ -360,7 +341,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
@@ -405,7 +386,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE)
@@ -516,7 +497,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:80px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI)
@@ -596,6 +577,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'input-priority',
                                     'type' => 'number',
                                     'style'=>'width:80px'
+                                ]
+                            ],
+                            [
+                                'name' =>'barcode',
+                                'title'=>"条形码编号",
+                                'enableError'=>false,
+                                'options' => [
+                                    'class' => 'input-priority',
+                                    'style'=>'width:120px'
                                 ]
                             ],
                             [

@@ -50,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                'attribute'=>'id',
+                                'attribute'=>'xuhao',
                                 'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'id', [
+                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
@@ -74,29 +74,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'barcode',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
                                     'style'=> 'width:280px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -114,6 +97,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'goods_num',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -516,6 +507,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'barcode',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -524,6 +524,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:150px;'
                                 ]),
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($receipt){
+                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ]
                         ]
                     ]); ?>
                 </div>

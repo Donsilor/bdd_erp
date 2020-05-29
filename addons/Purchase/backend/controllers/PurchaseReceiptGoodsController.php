@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\forms\PurchaseReceiptForm;
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use Yii;
@@ -147,9 +148,9 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_list['style_sn'] = $produce_info['style_sn'] != "" ? $produce_info['style_sn'] : $produce_info['qiban_sn'];
                             $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
-                            $receipt_list['finger'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::FINGER])?$produce_attr_arr[ReceiptGoodsAttrEnum::FINGER]['attr_value']:'';
-                            $receipt_list['xiangkou'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU])?$produce_attr_arr[ReceiptGoodsAttrEnum::XIANGKOU]['attr_value']:'';
-                            $receipt_list['material'] = isset($produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL])?$produce_attr_arr[ReceiptGoodsAttrEnum::MATERIAL]['attr_value_id']:'';
+                            $receipt_list['finger'] = $produce_attr_arr[AttrIdEnum::FINGER]??'';
+                            $receipt_list['xiangkou'] = $produce_attr_arr[AttrIdEnum::XIANGKOU]??'';
+                            $receipt_list['material'] = $produce_attr_arr[AttrIdEnum::MATERIAL]??'';
                             $receipt_list['jintuo_type'] = $produce_info['jintuo_type'];
                             $receipt_goods[] = $receipt_list;
                         }
@@ -159,9 +160,12 @@ class PurchaseReceiptGoodsController extends BaseController
                     if(!empty($receipt_goods_list)){
                         $receipt_val = [];
                         $receipt_key = array_keys($receipt_goods_list[0]);
-                        array_push($receipt_key, 'receipt_id');
+                        array_push($receipt_key, 'id', 'receipt_id', 'xuhao');
+                        $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
+                        $xuhao = $xuhaoMax->xuhao??1;
                         foreach ($receipt_goods_list as $goods) {
-                            array_push($goods, $receipt_id);
+                            $xuhao++;
+                            array_push($goods, null, $receipt_id, $xuhao);
                             $receipt_val[] = array_values($goods);
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();

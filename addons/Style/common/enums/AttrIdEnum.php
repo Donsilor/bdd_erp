@@ -19,6 +19,7 @@ class AttrIdEnum
     const CHAIN_TYPE = 43;//链类型    
     const CHIAN_BUCKLE = 42;//链扣环
     const HEIGHT = 41;//高度（mm）
+    const FACEWORK = 57;//表面工艺
     
     
     //钻石信息

@@ -50,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                'attribute'=>'id',
+                                'attribute'=>'xuhao',
                                 'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'id', [
+                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
@@ -74,18 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'barcode',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('barcode', $model->barcode, ['data-id'=>$model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -94,15 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:260px;'
                                 ]),
                             ],
                             [
@@ -123,6 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'goods_num',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -627,6 +615,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'other_fee', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'barcode',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('barcode', $model->barcode, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
