@@ -63,8 +63,10 @@ class WarehouseBillController extends BaseController
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);
         }
-
-
+        //echo $this->action->id;
+        if($searchModel->bill_type) {
+            $this->action->id = '../warehouse-bill-'.strtolower($searchModel->bill_type).'/index';
+        }       
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
