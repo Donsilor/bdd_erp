@@ -185,7 +185,7 @@ class WarehouseBillLController extends BaseController
                     $model->bill_status = BillStatusEnum::CONFIRM;
                 }else{
                     $model->status = StatusEnum::DISABLED;
-                    $model->bill_status = BillStatusEnum::CANCEL;
+                    $model->bill_status = BillStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
