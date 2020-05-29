@@ -68,7 +68,7 @@ class WarehouseBillBGoodsController extends BaseController
      * @property WarehouseBillBForm $model
      * @return mixed
      */
-    public function actionEdit()
+    public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
@@ -182,6 +182,41 @@ class WarehouseBillBGoodsController extends BaseController
         }
         return $this->renderAjax('index', [
             'model' => $model
+        ]);
+    }
+
+
+    /**
+     * 退货返厂单-编辑
+     * @return mixed
+     */
+    public function actionEditAll()
+    {
+
+        $bill_id = Yii::$app->request->get('bill_id');
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-b-goods/index']));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => []
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
+        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'bill' => $bill,
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
+            'tab' => $tab,
         ]);
     }
 }

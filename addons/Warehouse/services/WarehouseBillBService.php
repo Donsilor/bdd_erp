@@ -84,7 +84,7 @@ class WarehouseBillBService extends WarehouseBillService
             throw new \Exception($this->getError($form));
         }
         $billGoods = WarehouseBillGoods::find()->select('goods_id')->where(['bill_id' => $form->id])->asArray()->all();
-        if(empty($billGoods)){
+        if(empty($billGoods) && $form->audit_status == AuditStatusEnum::PASS){
             throw new \Exception("单据明细不能为空");
         }
         $goods_ids = array_column($billGoods, 'goods_id');
