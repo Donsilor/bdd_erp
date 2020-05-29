@@ -64,6 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'bill_no',
+                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'bill_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],

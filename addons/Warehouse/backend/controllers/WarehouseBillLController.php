@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\enums\LogTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -18,6 +19,7 @@ use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
+use yii\db\Exception;
 
 
 /**
@@ -215,6 +217,44 @@ class WarehouseBillLController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+
+    /**
+     * 删除/关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            //$model->bill_status = BillStatusEnum::CANCEL;
+
+            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::CANCEL],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::CANCEL]);
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不是收货中或者不存在，请查看原因");
+                }
+            }
+            if(false === $model->delete()){
+                throw new \Exception($this->getError($model));
+            }
+            \Yii::$app->getSession()->setFlash('success','删除成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+        return $this->message("删除失败", $this->redirect(['index']), 'error');
     }
 
 
