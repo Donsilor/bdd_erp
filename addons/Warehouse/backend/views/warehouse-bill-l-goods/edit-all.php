@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo "<span class=\"btn btn-white btn-xs\" onclick=\"history.go(-1)\">返回</span>";
+            echo Html::a('返回列表', ['warehouse-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -89,13 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'material',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'material', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:150px;'
+                                    'style'=> 'width:150px;',
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -185,8 +186,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'diamond_color',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_color);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'diamond_color', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'diamond_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
                                     'prompt' => '全部',
@@ -197,8 +199,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'diamond_clarity',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_clarity);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'diamond_clarity', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
                                     'prompt' => '全部',

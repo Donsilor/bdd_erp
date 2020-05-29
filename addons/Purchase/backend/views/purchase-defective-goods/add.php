@@ -97,7 +97,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'  => 'dropDownList',
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:160px'
+                                    'style'=>'width:160px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->purchaseService->fqc->getDropDown()
                             ],
@@ -118,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' => 'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->styleCate->getDropDown()
                             ],
@@ -130,7 +132,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' => 'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->styleService->productType->getDropDown()
                             ],
