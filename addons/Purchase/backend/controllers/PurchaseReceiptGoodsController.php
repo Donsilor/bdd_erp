@@ -5,6 +5,8 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use Yii;
@@ -227,5 +229,42 @@ class PurchaseReceiptGoodsController extends BaseController
             'tab'=>$tab,
             'receipt' => $receipt,
         ]);
+    }
+
+    /**
+     * 删除/关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+
+            $model = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
+
+            if(false === $model->delete()){
+                throw new \Exception($this->getError($model));
+            }
+
+            //更新收货单汇总：总金额和总数量
+            $res = \Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($model->receipt_id);
+            if(false === $res){
+                throw new \yii\db\Exception('更新单据汇总失败');
+            }
+
+            \Yii::$app->getSession()->setFlash('success','删除成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("删除失败", $this->redirect(\Yii::$app->request->referrer), 'error');
     }
 }

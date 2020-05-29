@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:120px;'
                                 ]),
                             ],
                             [
