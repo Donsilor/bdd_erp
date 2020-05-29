@@ -48,7 +48,6 @@ class PurchaseDefectiveGoodsController extends BaseController
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective-goods/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -88,27 +87,27 @@ class PurchaseDefectiveGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $defective_id = Yii::$app->request->get('defective_id');
-        $receipt_goods_ids = Yii::$app->request->get('receipt_goods_id');
-        $search = Yii::$app->request->get('search');
+
+        $xuhaos = Yii::$app->request->get('xuhao');
+        $model = new PurchaseDefectiveGoods();
+        $model->xuhao = $xuhaos;
+
+        $defective = PurchaseDefective::find()->where(['id' => $defective_id])->one();
+
         $defective_goods_list = Yii::$app->request->post('defective_goods_list');
         $receiptModel = new PurchaseDefective();
         $model = new PurchaseDefectiveGoods();
-        $model->receipt_goods_id = $receipt_goods_ids;
 
-        $this->modelClass = PurchaseDefectiveGoodsForm::class;
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
 
         $defectiveGoods = [];
-        if($search == 1 && !empty($receipt_goods_ids)){
-            $receipt_goods_ids = str_replace(' ',',',$receipt_goods_ids);
-            $receipt_goods_ids = str_replace('，',',',$receipt_goods_ids);
-            $receipt_goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$receipt_goods_ids);
-            $receipt_goods_arr = explode(",", $receipt_goods_ids);
+        if(Yii::$app->request->get('search') == 1 && !empty($xuhaos)){
+            $xuhao_arr = $model->getXuhaos($xuhaos);
             $receiptInfo = $receiptModel::find()->where(['id'=>$defective_id])->asArray()->one();
             $receipt_no = $receiptInfo['receipt_no'];
             try {
                 $trans = Yii::$app->db->beginTransaction();
-                foreach ($receipt_goods_arr as $receipt_goods_id) {
+                foreach ($xuhao_arr as $receipt_goods_id) {
                     $receipt_info = PurchaseReceipt::find()->where(['receipt_no' => $receipt_no])->one();
                     if(empty($receipt_info)){
                         throw new Exception("采购收货单【{$receipt_no}】不存在");

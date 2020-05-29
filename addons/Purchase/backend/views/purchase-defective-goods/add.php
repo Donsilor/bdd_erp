@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
                      <div class="col-lg-6">
-                        <?= $form->field($model, 'receipt_goods_id')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
+                        <?= $form->field($model, 'xuhao')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchDefectiveGoods()"]) ?>

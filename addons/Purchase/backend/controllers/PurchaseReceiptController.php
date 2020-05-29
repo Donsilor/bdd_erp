@@ -131,7 +131,6 @@ class PurchaseReceiptController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = PurchaseReceiptForm::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
@@ -169,7 +168,6 @@ class PurchaseReceiptController extends BaseController
     public function actionAjaxWarehouse()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = PurchaseReceiptForm::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);

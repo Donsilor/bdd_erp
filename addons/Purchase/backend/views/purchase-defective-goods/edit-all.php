@@ -61,9 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'receipt_goods_id',
+                                'attribute'=>'xuhao',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'receipt_goods_id', [
+                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
                                     'style'=> 'width:140px;'
                                 ]),

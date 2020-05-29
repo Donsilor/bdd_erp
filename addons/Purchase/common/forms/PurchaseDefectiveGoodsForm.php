@@ -3,6 +3,7 @@
 namespace addons\Purchase\common\forms;
 
 use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 /**
@@ -11,6 +12,7 @@ use addons\Purchase\common\models\PurchaseDefectiveGoods;
  */
 class PurchaseDefectiveGoodsForm extends PurchaseDefectiveGoods
 {
+    public $xuhaos;
     /**
      * {@inheritdoc}
      */
@@ -22,4 +24,11 @@ class PurchaseDefectiveGoodsForm extends PurchaseDefectiveGoods
         return array_merge(parent::rules() , $rules);
     }
 
+    /**
+     * 批量获取序号
+     */
+    public function getXuhaos()
+    {
+        return StringHelper::explodeIds($this->xuhaos);
+    }
 }
