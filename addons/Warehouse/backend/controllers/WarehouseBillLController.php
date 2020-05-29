@@ -221,7 +221,7 @@ class WarehouseBillLController extends BaseController
 
 
     /**
-     * 删除/关闭
+     * 删除/关闭/取消
      *
      * @param $id
      * @return mixed
@@ -234,19 +234,28 @@ class WarehouseBillLController extends BaseController
 
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            //$model->bill_status = BillStatusEnum::CANCEL;
-
+            $model->bill_status = BillStatusEnum::CANCEL;
+            //更新库存状态
             $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
             foreach ($billGoods as $goods){
-                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::CANCEL],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::CANCEL]);
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::CANCEL],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::RECEIVING]);
                 if(!$res){
                     throw new Exception("商品{$goods->goods_id}不是收货中或者不存在，请查看原因");
                 }
             }
-            if(false === $model->delete()){
+            if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
-            \Yii::$app->getSession()->setFlash('success','删除成功');
+
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '收货单',
+                'log_msg' => '取消单据'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->getSession()->setFlash('success','取消成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
         }catch (\Exception $e){
@@ -254,7 +263,7 @@ class WarehouseBillLController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
-        return $this->message("删除失败", $this->redirect(['index']), 'error');
+        return $this->message("取消失败", $this->redirect(['index']), 'error');
     }
 
 

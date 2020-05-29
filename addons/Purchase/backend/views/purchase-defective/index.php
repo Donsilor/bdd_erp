@@ -206,7 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'delete' => function($url, $model, $key){
                     if($model->defective_status != BillStatusEnum::CONFIRM) {
-                        return Html::delete(['delete', 'id' => $model->id]);
+                        return Html::delete(['delete', 'id' => $model->id], '取消');
                     }
                 }
                 /*'delete' => function($url, $model, $key){

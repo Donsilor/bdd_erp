@@ -223,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },*/
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                        return Html::delete(['delete', 'id' => $model->id], '取消');
                                     }
                                 },
                             ],
