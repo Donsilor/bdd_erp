@@ -77,6 +77,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'factory_mo',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'oqc_reason',
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), ['data-id'=>$model->id]);

@@ -77,6 +77,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'factory_mo',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
                                 'label' => '质检未过原因',
                                 'attribute' => 'fqc.name',
                                 'value' => "fqc.name",
