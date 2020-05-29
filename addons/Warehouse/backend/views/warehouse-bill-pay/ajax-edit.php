@@ -8,7 +8,7 @@ $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
     'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
     'fieldConfig' => [
-        'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
+        //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]
 ]);
 ?>
@@ -36,7 +36,7 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'pay_amount')->textInput() ?>
     </div>
     <div class="modal-footer">
-        <?= $form->field($billModel, 'id')->hiddenInput()->label(false) ?>
+        <?= $form->field($bill, 'id')->hiddenInput()->label(false) ?>
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
