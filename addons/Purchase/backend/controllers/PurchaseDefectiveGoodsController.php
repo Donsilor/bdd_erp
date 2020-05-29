@@ -171,7 +171,7 @@ class PurchaseDefectiveGoodsController extends BaseController
     public function actionEditAll()
     {
         $defective_id = Yii::$app->request->get('defective_id');
-        $tab = Yii::$app->request->get('tab',2);
+        $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective-goods/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([

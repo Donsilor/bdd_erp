@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::a('返回列表', ['purchase_defective_goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['purchase-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
