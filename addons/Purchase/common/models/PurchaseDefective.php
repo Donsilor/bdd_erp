@@ -61,9 +61,9 @@ class PurchaseDefective extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'defective_no' => '返厂单编号',
-            'supplier_id' => '供应商',
+            'supplier_id' => '工厂名称',
             'receipt_no' => '工厂出货单号',
-            'defective_num' => '不良货品数量',
+            'defective_num' => '数量',
             'total_cost' => '总金额',
             'auditor_id' => '审核人',
             'audit_time' => '审核时间',
@@ -74,7 +74,7 @@ class PurchaseDefective extends BaseModel
             'sort' => '排序',
             'status' => '状态',
             'creator_id' => '制单人',
-            'created_at' => '创建时间',
+            'created_at' => '制单时间',
             'updated_at' => '更新时间',
         ];
     }
@@ -86,15 +86,6 @@ class PurchaseDefective extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
-    }
-
-    /**
-     * 关联管理员一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
     }
 
     /**

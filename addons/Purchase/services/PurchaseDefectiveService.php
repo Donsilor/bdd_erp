@@ -27,15 +27,15 @@ class PurchaseDefectiveService extends Service
     {
         if($tag==3){
             $tabList = [
-                1=>['name'=>'基础信息','url'=>Url::to(['purchase-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['purchase-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                4=>['name'=>'日志信息','url'=>Url::to(['purchase-defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
             ];
         }else{
             $tabList = [
-                1=>['name'=>'基础信息','url'=>Url::to(['purchase-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                2=>['name'=>'单据明细','url'=>Url::to(['purchase-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                4=>['name'=>'日志信息','url'=>Url::to(['purchase-defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                2=>['name'=>'单据明细','url'=>Url::to(['defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
             ];
         }
         return $tabList;

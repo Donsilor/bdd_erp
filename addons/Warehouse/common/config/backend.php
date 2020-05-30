@@ -42,11 +42,11 @@ return [
                 'child' => [
                     [
                             'title' => '单据列表',
-                            'route' => 'warehouse-bill/index',
+                            'route' => 'bill/index',
                     ],
                     [
                             'title' => '收货单',
-                            'route' => 'warehouse-bill-l/index',
+                            'route' => 'bill-l/index',
                     ],
                     [
                             'title' => '调拨单',
@@ -70,11 +70,11 @@ return [
                     ],*/
                     [
                             'title' => '维修单',
-                            'route' => 'warehouse-bill-repair/index',
+                            'route' => 'bill-repair/index',
                     ],
                     [
                             'title' => '退货返厂单',
-                            'route' => 'warehouse-bill-b/index',
+                            'route' => 'bill-b/index',
                     ],
                 ],
 
