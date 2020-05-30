@@ -256,10 +256,10 @@ class BillBGoodsController extends BaseController
                 throw new Exception("商品不是返厂中或者不存在，请查看原因");
             }
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['bill-b-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['bill-b-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
 
