@@ -86,7 +86,7 @@ class FqcConfigController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'cateDropDownList' => Yii::$app->purchaseService->purchaseFqcConfig->getDropDownForEdit($id),
+            'cateDropDownList' => Yii::$app->purchaseService->fqc->getDropDownForEdit($id),
 
         ]);
     }

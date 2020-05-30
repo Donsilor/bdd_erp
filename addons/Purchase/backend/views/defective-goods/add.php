@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $defectiveColomns = [
                             [
                                 'name' =>'xuhao',
-                                'title'=>"收货单商品序号",
+                                'title'=>"收货单货品序号",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
@@ -74,11 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'name' => "oqc_remark",
-                                'title'=>"商品备注",
+                                'title'=>"货品备注",
                                 'enableError'=>false,
                                 'options' => [
                                     'class' => 'input-priority',
-                                    'style'=>'width:120px'
+                                    'style'=>'width:200px'
                                 ]
                             ],
                             [
@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
 function searchDefectiveGoods() {
    var xuhaos = $.trim($("#purchasedefectivegoods-xuhao").val());
    if(!xuhaos) {
-	    rfMsg("请输入采购收货单商品序号");
+	    rfMsg("请输入采购收货单货品序号");
         return false;
    }
     var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['receipt_goods_id','search',])?>&search=1&xuhaos="+xuhaos;

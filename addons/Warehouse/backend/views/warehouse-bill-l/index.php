@@ -78,19 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                         ],
                         [
-                            'attribute' => 'bill_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
                             'attribute' => 'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                 'class' => 'form-control',
@@ -183,6 +170,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->audit_time);
                             }
+                        ],
+                        [
+                            'attribute' => 'bill_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
+                            ]),
                         ],
                         [
                             'attribute' => 'audit_status',

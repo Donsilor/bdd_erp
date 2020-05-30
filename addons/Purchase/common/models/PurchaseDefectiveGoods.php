@@ -54,7 +54,7 @@ class PurchaseDefectiveGoods extends BaseModel
         return [
             'id' => 'ID',
             'defective_id' => '返厂单ID',
-            'xuhao' => '采购收货单商品序号',
+            'xuhao' => '采购收货单货品序号',
             'style_sn' => '款式编号',
             'factory_mo' => '工厂模号',
             'produce_sn' => '布产单编号',
@@ -62,7 +62,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'product_type_id' => '产品线',
             'cost_price' => '金额',
             'oqc_reason' => '质检未过原因',
-            'oqc_remark' => '备注',
+            'oqc_remark' => '货品备注',
             'sort' => '排序',
             'status' => '状态',
             'created_at' => '创建时间',
