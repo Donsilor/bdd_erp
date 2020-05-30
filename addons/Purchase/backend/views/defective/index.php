@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>' width:120%;'],
         'id'=>'grid',
         'columns' => [
             [
@@ -103,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'label' => '制单人',
@@ -138,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'label' => '审核人',
@@ -147,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'80'],
+                'headerOptions' => ['width'=>'100'],
 
             ],
             [
@@ -173,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->audit_time);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'160'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute' => 'audit_status',
@@ -186,7 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute' => 'defective_status',
@@ -198,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
