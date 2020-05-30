@@ -49,15 +49,15 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                         [
-                                'title' => '采购订单',
+                                'title' => '物料采购单',
                                 'route' => 'material/index',
                         ],
                         [
-                                'title' => '采购收货单',
+                                'title' => '物料收货单',
                                 'route' => 'material-receipt/index',
                         ],
                         [
-                                'title' => '不良返厂单',
+                                'title' => '物料返厂单',
                                 'route' => 'material-defective/index',
                         ],
                 ],

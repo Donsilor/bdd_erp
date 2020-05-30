@@ -11,7 +11,7 @@ $this->title = '物料商品';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php

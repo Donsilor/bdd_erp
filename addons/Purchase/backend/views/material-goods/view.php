@@ -5,8 +5,8 @@ use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\AmountHelper;
 
-$this->title =  '详情';
-$this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
+$this->title =  '物料详情';
+$this->params['breadcrumbs'][] = ['label' => '物料详情', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">

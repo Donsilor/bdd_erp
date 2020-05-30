@@ -8,13 +8,13 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '采购单详情';
+$this->title = '物料采购详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $model->purchase_sn?></h2>
+    <h2 class="page-header">物料订单详情 - <?php echo $model->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content" >
         <div class="col-xs-12">
