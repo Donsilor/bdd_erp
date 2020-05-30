@@ -17,6 +17,5 @@ class MaterialController extends PurchaseController
      */
     public $purchaseType = PurchaseTypeEnum::MATERIAL;
     
-    
-    
+        
 }
