@@ -204,6 +204,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{edit} {goods} {audit} {ajax-apply} {delete}',
+                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                     if($model->defective_status == BillStatusEnum::SAVE) {
