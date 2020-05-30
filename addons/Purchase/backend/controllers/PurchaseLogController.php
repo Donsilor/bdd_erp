@@ -2,32 +2,33 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\models\PurchaseLog;
-use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-
-
+use addons\Purchase\common\models\Purchase;
+use addons\Purchase\common\models\PurchaseLog;
 
 /**
- * PurchaseChannelController implements the CRUD actions for PurchaseChannel model.
+ * 采购日志
+ * 
+ * Class PurchaseLogController
+ * @package addons\Purchase\backend\controllers
  */
 class PurchaseLogController extends BaseController
 {
     use Curd;
-    
+    /**
+     * @var PurchaseLog
+     */
     public $modelClass = PurchaseLog::class;
+
     /**
      * Lists all PurchaseChannel models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $purchase_id = Yii::$app->request->get('purchase_id');
-        $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
+        $purchase_id = Yii::$app->request->get('purchase_id');     
         
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
         $searchModel = new SearchModel([
@@ -42,7 +43,7 @@ class PurchaseLogController extends BaseController
         ]);
         
         $dataProvider = $searchModel
-        ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams);
         
         $dataProvider->query->andWhere(['=',PurchaseLog::tableName().'.purchase_id',$purchase_id]);
         
@@ -50,8 +51,8 @@ class PurchaseLogController extends BaseController
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'purchase' => $purchase,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$returnUrl),                
+                'tab'=>Yii::$app->request->get('tab',3),
+                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$purchase->purchase_type,$this->returnUrl),                
         ]);
     }
     

@@ -2,20 +2,21 @@
 
 namespace addons\Purchase\services;
 
+use Yii;
+use common\components\Service;
+use common\enums\AuditStatusEnum;
+use common\helpers\Url;
+use common\enums\StatusEnum;
+
+use addons\Purchase\common\models\Purchase;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Purchase\common\models\PurchaseLog;
 use addons\Supply\common\enums\BuChanEnum;
-use common\enums\AuditStatusEnum;
-use Yii;
-use common\components\Service;
-use addons\Purchase\common\models\Purchase;
-use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseGoods;
-use common\enums\StatusEnum;
-use yii\db\Exception;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 
 /**
- * Class TypeService
+ * Class PurchaseService
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
@@ -23,17 +24,25 @@ class PurchaseService extends Service
 {
     
     /**
-     * 款式编辑 tab
+     * 采购单菜单
      * @param int $id 款式ID
      * @return array
      */
-    public function menuTabList($purchase_id,$returnUrl = null)
+    public function menuTabList($purchase_id, $purchase_type = 1, $returnUrl = null)
     {
-        return [
-                1=>['name'=>'基础信息','url'=>Url::to(['purchase/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                2=>['name'=>'采购商品','url'=>Url::to(['purchase-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'日志信息','url'=>Url::to(['purchase-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-        ];
+        if($purchase_type == PurchaseTypeEnum::MATERIAL) {
+            return [
+                    1=>['name'=>'基础信息','url'=>Url::to(['material/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'采购商品','url'=>Url::to(['material-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                    3=>['name'=>'日志信息','url'=>Url::to(['material-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+            ];
+        }else {
+            return [
+                    1=>['name'=>'基础信息','url'=>Url::to(['purchase/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'采购商品','url'=>Url::to(['purchase-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                    3=>['name'=>'日志信息','url'=>Url::to(['purchase-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+            ];
+        }
     }
     
     /**
@@ -121,15 +130,15 @@ class PurchaseService extends Service
      */
     public function createPurchaseLog($log){
 
-        $purchase_log = new PurchaseLog();
-        $purchase_log->attributes = $log;
-        $purchase_log->log_time = time();
-        $purchase_log->creator_id = \Yii::$app->user->id;
-        $purchase_log->creator = \Yii::$app->user->identity->username;
-        if(false === $purchase_log->save()){
-            throw new \Exception($this->getError($purchase_log));
+        $model = new PurchaseLog();
+        $model->attributes = $log;
+        $model->log_time = time();
+        $model->creator_id = \Yii::$app->user->id;
+        $model->creator = \Yii::$app->user->identity->username;
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
         }
-        return $purchase_log ;
+        return $model ;
     }
 
 

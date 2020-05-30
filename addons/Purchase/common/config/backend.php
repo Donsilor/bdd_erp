@@ -24,7 +24,7 @@ return [
 
     'menu' => [
         [
-            'title' => '采购管理',
+            'title' => '商品采购',
             'route' => 'indexPurchase',
             'icon' => 'fa fa-superpowers',
             'child' => [
@@ -42,6 +42,26 @@ return [
                     ],
             ],
 
+        ],
+        [
+                'title' => '物料采购',
+                'route' => 'indexPurchase',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                                'title' => '采购订单',
+                                'route' => 'material/index',
+                        ],
+                        [
+                                'title' => '采购收货单',
+                                'route' => 'material-receipt/index',
+                        ],
+                        [
+                                'title' => '不良返厂单',
+                                'route' => 'material-defective/index',
+                        ],
+                ],
+                
         ],
         [
             'title' => '功能配置',
