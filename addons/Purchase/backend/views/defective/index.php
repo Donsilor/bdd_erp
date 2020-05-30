@@ -12,7 +12,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('purchase_receipt', '不良返厂单');
+$this->title = Yii::t('defective', '不良返厂单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'receipt_no',
                 'value'=>function($model) {
-                    return Html::a($model->receipt_no, ['purchase-receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->receipt_no, ['receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
                 'filter' => true,
                 'format' => 'raw',
@@ -214,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     },
                 'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['purchase-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    return Html::a('单据明细', ['defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
                 'audit' => function($url, $model, $key){

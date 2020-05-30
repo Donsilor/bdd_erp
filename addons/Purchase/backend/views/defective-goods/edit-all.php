@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $defective yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('purchase_defective_goods', '不良返厂单详情');
+$this->title = Yii::t('defective_goods', '不良返厂单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::a('返回列表', ['purchase-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>

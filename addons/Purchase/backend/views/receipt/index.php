@@ -11,7 +11,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('purchase_receipt', '采购收货单');
+$this->title = Yii::t('receipt', '采购收货单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -261,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['purchase-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    return Html::a('单据明细', ['receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'delete' => function($url, $model, $key){
                     if($model->receipt_status != BillStatusEnum::CONFIRM) {
@@ -301,6 +301,6 @@ $this->params['breadcrumbs'][] = $this->title;
             return false;
         }
         var vals = valArr.join(',');
-        window.open('/purchase/purchase-receipt/print?ids='+vals);
+        window.open('/purchase/receipt/print?ids='+vals);
     }
 </script>
