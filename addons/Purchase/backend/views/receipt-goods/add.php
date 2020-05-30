@@ -601,6 +601,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
                             'name' => "receipt_goods_list",
+                            'addButtonOptions'=>['label'=>'','class'=>''],
                             'value' => $receipt_goods,
                             'columns' => $receiptColomns,
                         ]) ?>

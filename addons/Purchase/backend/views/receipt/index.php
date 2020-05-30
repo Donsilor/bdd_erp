@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-2'],
+                'headerOptions' => ['class' => 'col-md-3'],
             ],
             [
                 'attribute' => 'put_in_type',
@@ -223,6 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'header' => '操作',
                 'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
                 'buttons' => [

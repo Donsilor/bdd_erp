@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_l', '收货单列表');
+$this->title = Yii::t('bill_l', '收货单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -200,6 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
+                            'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                             'template' => '{edit} {audit} {goods} {ajax-apply} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
@@ -228,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('单据明细', ['warehouse-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('单据明细', ['bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
