@@ -9,7 +9,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_b', '退货返厂单列表');
+$this->title = Yii::t('bill_b', '退货返厂单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
