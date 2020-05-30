@@ -34,11 +34,11 @@ return [
                     ],
                     [
                             'title' => '采购收货单',
-                            'route' => 'purchase-receipt/index',
+                            'route' => 'receipt/index',
                     ],
                     [
                             'title' => '不良返厂单',
-                            'route' => 'purchase-defective/index',
+                            'route' => 'defective/index',
                     ],
             ],
 
@@ -50,7 +50,7 @@ return [
             'child' => [
                     [
                             'title' => '质检未过原因',
-                            'route' => 'purchase-fqc-config/index',
+                            'route' => 'fqc-config/index',
                     ]
             ],
 
