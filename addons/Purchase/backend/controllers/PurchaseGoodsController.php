@@ -88,7 +88,6 @@ class PurchaseGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);        
         $model = $model ?? new PurchaseGoodsForm();
-
         if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {   
             return $return;
         } 

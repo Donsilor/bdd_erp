@@ -19,6 +19,7 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
+            <?= $form->field($model, 'purchase_type')->hiddenInput()->label(false)?>
             <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
 	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->supplyService->supplier->getDropDown(),

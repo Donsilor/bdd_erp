@@ -90,7 +90,7 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        
+        $model->purchase_type = $this->purchaseType;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -122,6 +122,7 @@ class PurchaseController extends BaseController
             return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
         }
         $model->purchase_status = PurchaseStatusEnum::PENDING;
+        $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
         }
