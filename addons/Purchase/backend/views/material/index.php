@@ -10,7 +10,7 @@ use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '采购订单';
+$this->title = '物料采购订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
