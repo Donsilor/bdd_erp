@@ -27,7 +27,7 @@ use yii\base\Exception;
  * @property PurchaseDefectiveGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
-class PurchaseDefectiveGoodsController extends BaseController
+class DefectiveGoodsController extends BaseController
 {
     use Curd;
     

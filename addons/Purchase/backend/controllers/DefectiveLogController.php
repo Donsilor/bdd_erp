@@ -13,9 +13,9 @@ use common\helpers\Url;
 
 
 /**
- * PurchaseDefectiveLogController implements the CRUD actions for PurchaseDefectiveLog model.
+ * DefectiveLogController implements the CRUD actions for PurchaseDefectiveLog model.
  */
-class PurchaseDefectiveLogController extends BaseController
+class DefectiveLogController extends BaseController
 {
     use Curd;
     

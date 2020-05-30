@@ -20,7 +20,7 @@ use common\traits\Curd;
 * Class PurchaseDefectiveController
 * @package addons\Purchase\Backend\controllers
 */
-class PurchaseDefectiveController extends BaseController
+class DefectiveController extends BaseController
 {
     use Curd;
 
@@ -47,7 +47,8 @@ class PurchaseDefectiveController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
         $dataProvider = $searchModel

@@ -12,9 +12,9 @@ use common\models\base\SearchModel;
 
 
 /**
- * PurchaseReceiptLogController implements the CRUD actions for PurchaseReceiptLog model.
+ * ReceiptLogController implements the CRUD actions for PurchaseReceiptLog model.
  */
-class PurchaseReceiptLogController extends BaseController
+class ReceiptLogController extends BaseController
 {
     use Curd;
     

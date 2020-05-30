@@ -3,35 +3,28 @@
 namespace addons\Purchase\backend\controllers;
 
 
-use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
-use common\helpers\ArrayHelper;
-use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
-use common\traits\Curd;
 use addons\Purchase\common\models\PurchaseReceipt;
-use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\forms\PurchaseReceiptForm;
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceShipment;
-use addons\Purchase\common\enums\ReceiptGoodsAttrEnum;
-use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
+use common\helpers\Url;
+use common\traits\Curd;
 use yii\base\Exception;
 
 /**
- * PurchaseReceiptGoods
+ * ReceiptGoods
  *
- * Class PurchaseReceiptGoodsController
- * @property PurchaseReceiptGoodsForm $modelClass
+ * Class ReceiptGoodsController
+ * @property ReceiptGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
-class PurchaseReceiptGoodsController extends BaseController
+class ReceiptGoodsController extends BaseController
 {
     use Curd;
     

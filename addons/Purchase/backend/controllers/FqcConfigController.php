@@ -17,12 +17,12 @@ use yii\data\ActiveDataProvider;
  * @package addons\RfArticle\backend\controllers
  * @author jianyan74 <751393839@qq.com>
  */
-class PurchaseFqcConfigController extends BaseController
+class FqcConfigController extends BaseController
 {
     use Curd;
 
     /**
-     * @var PurchaseFqcConfigController
+     * @var FqcConfigController
      */
     public $modelClass = PurchaseFqcConfig::class;
 

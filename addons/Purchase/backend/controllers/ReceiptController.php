@@ -15,17 +15,17 @@ use common\enums\WhetherEnum;
 use common\helpers\Url;
 use common\traits\Curd;
 /**
-* PurchaseReceipt
+* Receipt
 *
-* Class PurchaseReceiptController
+* Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class PurchaseReceiptController extends BaseController
+class ReceiptController extends BaseController
 {
     use Curd;
 
     /**
-    * @var PurchaseReceipt
+    * @var Receipt
     */
     public $modelClass = PurchaseReceiptForm::class;
 

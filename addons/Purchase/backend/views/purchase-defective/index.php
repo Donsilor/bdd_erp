@@ -107,9 +107,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => '制单人',
-                'attribute' => 'member.username',
+                'attribute' => 'creator.username',
                 'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                     'class' => 'form-control',
                 ]),
                 'headerOptions' => ['width'=>'80'],
@@ -136,6 +136,41 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'value' => function ($model) {
                     return Yii::$app->formatter->asDatetime($model->created_at);
+                },
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'160'],
+            ],
+            [
+                'label' => '审核人',
+                'attribute' => 'auditor.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                    'class' => 'form-control',
+                ]),
+                'headerOptions' => ['width'=>'80'],
+
+            ],
+            [
+                'attribute' => 'audit_time',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'audit_time',
+                    'value' => '',
+                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d', time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
+                ]),
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->audit_time);
                 },
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'160'],
