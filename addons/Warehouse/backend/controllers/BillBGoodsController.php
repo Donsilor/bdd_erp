@@ -22,7 +22,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
  */
-class WarehouseBillBGoodsController extends BaseController
+class BillBGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillBGoodsForm::class;

@@ -18,7 +18,7 @@ use common\enums\AuditStatusEnum;
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
  */
-class WarehouseBillBController extends BaseController
+class BillBController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillBForm::class;

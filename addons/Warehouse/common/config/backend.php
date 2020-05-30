@@ -74,7 +74,7 @@ return [
                     ],
                     [
                             'title' => '退货返厂单',
-                            'route' => 'warehouse-bill-b/index',
+                            'route' => 'bill-b/index',
                     ],
                 ],
 
