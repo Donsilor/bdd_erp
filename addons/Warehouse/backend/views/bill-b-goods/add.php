@@ -31,16 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                         $warehouseColomns = [
                             [
-                                'name' => 'id',
-                                'title'=>"序号",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:60px'
-                                ]
-                            ],
-                            [
                                 'name' =>'goods_id',
                                 'title'=>"货号",
                                 'enableError'=>false,
@@ -89,7 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:120px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap()
                             ],
@@ -101,7 +92,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:120px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->warehouseService->warehouse::getDropDown()
                             ],
@@ -113,7 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:120px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'defaultValue' => 0,
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
@@ -160,7 +153,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
                             ],
@@ -172,7 +166,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:80px'
+                                    'style'=>'width:100px',
+                                    'prompt'=>'请选择',
                                 ],
                                 'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
                             ],
@@ -226,6 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
                             'name' => "bill_goods",
+                            'addButtonOptions'=>['label'=>'','class'=>''],
                             'value' => $warehouse_goods,
                             'columns' => $warehouseColomns,
                         ]) ?>
