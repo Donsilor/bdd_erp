@@ -179,6 +179,7 @@ class PurchaseReceiptController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+
                 //同步采购收货单至L单
                 Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
 

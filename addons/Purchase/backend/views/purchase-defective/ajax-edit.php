@@ -19,13 +19,6 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
             <?= $form->field($model, 'receipt_no')->textInput(["placeholder"=>"请输入出货单号"])?>
-	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ]);?>
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    

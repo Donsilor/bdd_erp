@@ -81,6 +81,12 @@ class PurchaseDefectiveController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            $receipt_no = Yii::$app->request->get('receipt_no');
+            $receipt = PurchaseReceipt::find()->where(['receipt_no'=>$receipt_no])->one();
+            if(!$receipt){
+                return $this->message('出货单号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $model->supplier_id = $receipt->supplier_id;
             if($model->isNewRecord){
                 $model->defective_no = SnHelper::createDefectiveSn();
             }

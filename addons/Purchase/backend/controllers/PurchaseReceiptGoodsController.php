@@ -147,7 +147,7 @@ class PurchaseReceiptGoodsController extends BaseController
                             $receipt_list['purchase_sn'] = $produce_info['from_order_sn'];
                             $receipt_list['goods_name'] = $produce_info['goods_name'];
                             $receipt_list['goods_num'] = 1;
-                            $receipt_list['style_sn'] = $produce_info['style_sn'] != "" ? $produce_info['style_sn'] : $produce_info['qiban_sn'];
+                            $receipt_list['style_sn'] = $produce_info['qiban_sn']?:$produce_info['style_sn'];
                             $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
                             $receipt_list['finger'] = $produce_attr_arr[AttrIdEnum::FINGER]??'';
@@ -164,7 +164,7 @@ class PurchaseReceiptGoodsController extends BaseController
                         $receipt_key = array_keys($receipt_goods_list[0]);
                         array_push($receipt_key, 'id', 'receipt_id', 'xuhao');
                         $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
-                        $xuhao = $xuhaoMax->xuhao??1;
+                        $xuhao = $xuhaoMax->xuhao?:0;
                         foreach ($receipt_goods_list as $goods) {
                             $xuhao++;
                             array_push($goods, null, $receipt_id, $xuhao);

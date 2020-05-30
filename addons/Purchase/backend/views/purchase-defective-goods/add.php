@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'readonly' =>'true',
-                                    'style'=>'width:100px'
+                                    'style'=>'width:120px'
                                 ]
                             ],
                             [

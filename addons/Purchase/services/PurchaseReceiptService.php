@@ -104,11 +104,11 @@ class PurchaseReceiptService extends Service
                 'supplier_id'=>$receipt->supplier_id,
                 'put_in_type'=>$receipt->put_in_type,
                 'company_id'=> 1,//暂时为1
-                'warehouse_id' => $receipt->to_warehouse_id,
-                'gold_weight' => $model->gold_weight,
-                'gold_loss' => $model->gold_loss,
+                'warehouse_id' => $receipt->to_warehouse_id?:0,
+                'gold_weight' => $model->gold_weight?:0,
+                'gold_loss' => $model->gold_loss?:0,
                 'gross_weight' => (String) $model->gross_weight,
-                'finger' => (String) $model->finger,
+                'finger' => (String) $model->finger?:'0',
                 'produce_sn' => $model->produce_sn,
                 'cert_id' => $model->cert_id,
                 'goods_num' => $model->goods_num,
@@ -119,7 +119,7 @@ class PurchaseReceiptService extends Service
                 'diamond_clarity' => (String) $model->main_stone_clarity,
                 'jintuo_type' => $model->jintuo_type,
                 'market_price' => $model->market_price,
-                'xiangkou' => $model->xiangkou,
+                'xiangkou' => $model->xiangkou?:0,
                 'parts_gold_weight' => $model->parts_weight,
                 'parts_num' => 1,
                 'main_stone_type' => $model->main_stone,
@@ -155,7 +155,6 @@ class PurchaseReceiptService extends Service
             'from_warehouse_id' => 0,
             'send_goods_sn' => $receipt->receipt_no,
         ];
-
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
     }
 }
