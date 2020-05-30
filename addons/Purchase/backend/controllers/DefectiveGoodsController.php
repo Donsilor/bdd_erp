@@ -106,15 +106,22 @@ class DefectiveGoodsController extends BaseController
             try {
                 $trans = Yii::$app->db->beginTransaction();
                 foreach ($xuhao_arr as $xuhao) {
+
+                    $check = PurchaseDefectiveGoods::find()->where(['defective_id' => $defective_id, 'xuhao' => $xuhao])->one();
+                    if($check){
+                        throw new Exception("序号【{$xuhao}】已存在，不能重复添加");
+                    }
+
                     $receipt_info = PurchaseReceipt::find()->where(['receipt_no' => $receipt_no])->one();
                     if(empty($receipt_info)){
                         throw new Exception("采购收货单【{$receipt_no}】不存在");
                     }
-                    $receipt_goods = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_info['id'], 'xuhao' => $xuhao])->one();
 
+                    $receipt_goods = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_info['id'], 'xuhao' => $xuhao])->one();
                     if(empty($receipt_goods)){
-                        throw new Exception("采购收货单【{$receipt_no}】中序号【{$xuhao}】不存在");
+                        throw new Exception("序号【{$xuhao}】不在采购收货单【{$receipt_no}】中");
                     }
+
                     $defective_list = [];
                     $defective_list['id'] = null;
                     $defective_list['defective_id'] = $defective_id;

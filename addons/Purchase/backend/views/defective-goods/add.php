@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'defective_id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-6">
+                     <div class="col-lg-4">
                         <?= $form->field($model, 'xuhao')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
@@ -38,16 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'input-priority',
                                     'readonly' =>'true',
                                     'style'=>'width:120px'
-                                ]
-                            ],
-                            [
-                                'name' =>'produce_sn',
-                                'title'=>"布产单编号",
-                                'enableError'=>false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' =>'true',
-                                    'style'=>'width:160px'
                                 ]
                             ],
                             [
@@ -133,6 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
                             'name' => "defective_goods_list",
+                            'addButtonOptions'=>['label'=>'','class'=>''],
                             'value' => $defectiveGoods,
                             'columns' => $defectiveColomns,
                         ]) ?>
