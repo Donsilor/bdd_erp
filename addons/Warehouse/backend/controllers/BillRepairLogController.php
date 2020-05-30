@@ -16,7 +16,7 @@ use Yii;
  * Class DefaultController
  * @package addons\Warehouse\backend\controllers
  */
-class WarehouseBillRepairLogController extends BaseController
+class BillRepairLogController extends BaseController
 {
     use Curd;
 

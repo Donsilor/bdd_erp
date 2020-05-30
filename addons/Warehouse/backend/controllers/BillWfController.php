@@ -25,7 +25,7 @@ use Yii;
  * Class AttributeController
  * @package backend\modules\goods\controllers
  */
-class WarehouseBillWfController extends BaseController
+class BillWfController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillWfForm::class;

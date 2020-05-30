@@ -22,7 +22,7 @@ use common\traits\Curd;
 * Class WarehouseBillRepairController
 * @package backend\modules\goods\controllers
 */
-class WarehouseBillRepairController extends BaseController
+class BillRepairController extends BaseController
 {
     use Curd;
 

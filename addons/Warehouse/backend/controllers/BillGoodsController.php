@@ -16,7 +16,7 @@ use yii\base\Exception;
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
  */
-class WarehouseBillGoodsController extends BaseController
+class BillGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;

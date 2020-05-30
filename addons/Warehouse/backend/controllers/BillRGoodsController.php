@@ -12,7 +12,7 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use common\enums\StatusEnum;
 use yii\base\Exception;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillOForm;
+use addons\Warehouse\common\forms\WarehouseBillRForm;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 
@@ -20,7 +20,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
  */
-class WarehouseBillOGoodsController extends BaseController
+class BillRGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
@@ -63,7 +63,7 @@ class WarehouseBillOGoodsController extends BaseController
 
     /**
      * 编辑/创建
-     * @property WarehouseBillOForm $model
+     * @property WarehouseBillRForm $model
      * @return mixed
      */
     public function actionEdit()
@@ -74,7 +74,7 @@ class WarehouseBillOGoodsController extends BaseController
         $goods_ids = Yii::$app->request->get('goods_ids');
         $search = Yii::$app->request->get('search');
         $warehouse_goods_list = Yii::$app->request->post('warehouse_goods_list');
-        $model = new WarehouseBillOForm();
+        $model = new WarehouseBillRForm();
         $model->goods_ids = $goods_ids;
         $model->id = $bill_id;
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);

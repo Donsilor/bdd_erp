@@ -10,7 +10,7 @@ use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\forms\WarehouseBillRForm;
+use addons\Warehouse\common\forms\WarehouseBillOForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
@@ -23,11 +23,11 @@ use common\helpers\Url;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillRController extends BaseController
+class BillOController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
-    public $billType = BillTypeEnum::BILL_TYPE_R;
+    public $billType = BillTypeEnum::BILL_TYPE_O;
 
     /**
      * Lists all StyleChannel models.
@@ -94,7 +94,7 @@ class WarehouseBillRController extends BaseController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillRForm::class;
+        $this->modelClass = WarehouseBillOForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         // ajax 校验
@@ -150,7 +150,7 @@ class WarehouseBillRController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = WarehouseBillRForm::class;
+        $this->modelClass = WarehouseBillOForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         $billGoodsModel = new WarehouseBillGoods();

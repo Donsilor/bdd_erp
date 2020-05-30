@@ -25,7 +25,7 @@ use yii\db\Exception;
  * Class DefaultController
  * @package addons\Supply\backend\controllers
  */
-class WarehouseBillPayController extends BaseController
+class BillPayController extends BaseController
 {
     use Curd;
 

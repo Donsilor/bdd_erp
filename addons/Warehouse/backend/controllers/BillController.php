@@ -14,7 +14,7 @@ use addons\Warehouse\common\models\WarehouseBill;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillController extends BaseController
+class BillController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBill::class;
