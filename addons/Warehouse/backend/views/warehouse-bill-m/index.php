@@ -12,6 +12,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 
 $this->title = Yii::t('warehouse_bill_m', '调拨单列表');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -24,6 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -50,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
 
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'bill_no',
@@ -243,3 +251,25 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            appConfirm("确定全部导出吗",'可能会很慢，请谨慎操作',function (value) {
+                switch (value) {
+                    case "defeat":
+                        window.location = "<?= Url::to('index?action=export'.$params);?>";
+                        break;
+                    default:
+                }
+            });
+            // return false;
+            var url = "<?= Url::to('export?action=export'.$params);?>";
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
+
+    }
+
+</script>

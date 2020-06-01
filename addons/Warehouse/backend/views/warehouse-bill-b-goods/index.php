@@ -28,8 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
+
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
+        echo Html::a('导出', ['warehouse-bill-b/export?ids='.$bill->id],[
+            'class'=>'btn btn-success btn-xs'
+        ]);
         ?>
     </div>
     <div class="tab-content" style="padding-right: 10px;">

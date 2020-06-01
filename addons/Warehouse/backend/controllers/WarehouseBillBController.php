@@ -3,6 +3,12 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\PutInTypeEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -205,9 +211,7 @@ class WarehouseBillBController extends BaseController
         try{
             $trans = \Yii::$app->db->beginTransaction();
             $model->bill_status = BillStatusEnum::CANCEL;
-
             \Yii::$app->warehouseService->billB->closeBillB($model);
-
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -230,6 +234,62 @@ class WarehouseBillBController extends BaseController
         ];
         return ExcelHelper::exportData($list, $header, '盘点数据导出_' . time());
 
+    }
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '退货返厂单';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+
+        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','wg.style_sn','wg.goods_name','wg.put_in_type'
+            ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
+            'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
+
+        $list = WarehouseBill::find()->alias('w')
+            ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->where(['w.id' => $ids])
+            ->select($select)->asArray()->all();
+        $header = [
+            ['单据编号', 'bill_no' , 'text'],
+            ['单据类型', 'bill_type' , 'selectd', BillTypeEnum::getMap()],
+            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
+            ['货号', 'goods_id' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['商品名称', 'goods_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['款式分类', 'style_cate_name' , 'text'],
+            ['入库方式', 'put_in_type' , 'selectd',PutInTypeEnum::getMap()],
+            ['主成色', 'material' , function($model){
+                return \Yii::$app->attr->valueName($model['material']);
+            }],
+            ['金重', 'gold_weight' , 'text'],
+            ['金损', 'gold_loss' , 'text'],
+            ['钻石大小', 'diamond_carat' , 'text'],
+            ['钻石颜色', 'diamond_color' , function($model){
+                return \Yii::$app->attr->valueName($model['diamond_color']);
+            }],
+            ['钻石净度', 'diamond_clarity' ,function($model){
+                return \Yii::$app->attr->valueName($model['diamond_clarity']);
+            }],
+            ['证书号', 'diamond_cert_id' , 'text'],
+            ['成本价', 'cost_price' , 'text']
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
 }

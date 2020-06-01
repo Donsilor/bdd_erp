@@ -23,6 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -235,3 +239,15 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            rfMsg("请选中单据或填写单据ID");
+            return false;
+        }
+        var url = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        window.location.href = url;
+    }
+
+</script>
