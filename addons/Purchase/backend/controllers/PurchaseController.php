@@ -299,10 +299,81 @@ class PurchaseController extends BaseController
             ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
             ['成本价', 'cost_price' , 'text'],
             ['商品数量', 'goods_num' , 'text'],
-            ['采购备注', 'remark' , 'text'],
-            ['主石价格(元/颗)', 'main_stone_price' , 'text'],
+            ['手寸', 'id' , 'function',function($model){
+                return $model['attr']['38'] ?? '';
+            }],
+            ['证书号', 'id' , 'function',function($model){
+                return $model['attr']['31'] ?? '';
+            }],
+            ['主成色', 'id' , 'function',function($model){
+                return $model['attr']['10'] ?? '';
+            }],
+            ['主石类型', 'id' , 'function',function($model){
+                return $model['attr']['56'] ?? '';
+            }],
+            ['主石重', 'id' , 'function',function($model){
+                return $model['attr']['59'] ?? '';
+            }],
+            ['主石数', 'id' , 'function',function($model){
+                return $model['attr']['65'] ?? '';
+            }],
+            ['主石单价', 'main_stone_price' , 'text'],
+//            ['主石形状', 'id' , 'function',function($model){
+//                return $model['attr']['6'] ?? '';
+//            }],
+//            ['主石颜色', 'id' , 'function',function($model){
+//                return $model['attr']['7'] ?? '';
+//            }],
+//            ['主石净度', 'id' , 'function',function($model){
+//                return $model['attr']['2'] ?? '';
+//            }],
+//            ['主石荧光', 'id' , 'function',function($model){
+//                return $model['attr']['8'] ?? '';
+//            }],
+//            ['主石抛光', 'id' , 'function',function($model){
+//                return $model['attr']['28'] ?? '';
+//            }],
+//            ['主石对称', 'id' , 'function',function($model){
+//                return $model['attr']['29'] ?? '';
+//            }],
+//            ['主石切工', 'id' , 'function',function($model){
+//                return $model['attr']['4'] ?? '';
+//            }],
+            ['市场价(标签价)', 'id' , 'function',function($model){
+                return $model['attr']['2'] ?? '';
+            }],
+            ['镶口', 'id' , 'function',function($model){
+                return $model['attr']['49'] ?? '';
+            }],
+
+            ['副石1类型', 'id' , 'function',function($model){
+                return $model['attr']['60'] ?? '';
+            }],
+            ['副石1重', 'id' , 'function',function($model){
+                return $model['attr']['44'] ?? '';
+            }],
+            ['副石1粒数', 'id' , 'function',function($model){
+                return $model['attr']['45'] ?? '';
+            }],
             ['副石1单价', 'second_stone_price1' , 'text'],
+//            ['副石1净度', 'id' , 'function',function($model){
+//                return $model['attr']['47'] ?? '';
+//            }],
+//            ['副石1颜色', 'id' , 'function',function($model){
+//                return $model['attr']['46'] ?? '';
+//            }],
+
+            ['副石2类型', 'id' , 'function',function($model){
+                return $model['attr']['64'] ?? '';
+            }],
+            ['副石2粒数', 'id' , 'function',function($model){
+                return $model['attr']['62'] ?? '';
+            }],
+            ['副石2重', 'id' , 'function',function($model){
+                return $model['attr']['63'] ?? '';
+            }],
             ['副石2单价', 'second_stone_price2' , 'text'],
+            ['采购备注', 'remark' , 'text'],
             ['石料信息', 'stone_info' , 'text'],
             ['金损', 'gold_loss' , 'text'],
             ['单件银(金)额', 'gold_cost_price' , 'text'],
@@ -319,75 +390,7 @@ class PurchaseController extends BaseController
             }],
             ['毛重', 'id' , 'function',function($model){
                 return $model['attr']['11'] ?? '';
-            }],
-            ['手寸', 'id' , 'function',function($model){
-                return $model['attr']['38'] ?? '';
-            }],
-            ['证书号', 'id' , 'function',function($model){
-                return $model['attr']['31'] ?? '';
-            }],
-            ['主成色', 'id' , 'function',function($model){
-                return $model['attr']['10'] ?? '';
-            }],
-            ['主石大小', 'id' , 'function',function($model){
-                return $model['attr']['59'] ?? '';
-            }],
-            ['钻石形状', 'id' , 'function',function($model){
-                return $model['attr']['6'] ?? '';
-            }],
-            ['钻石颜色', 'id' , 'function',function($model){
-                return $model['attr']['7'] ?? '';
-            }],
-            ['钻石净度', 'id' , 'function',function($model){
-                return $model['attr']['2'] ?? '';
-            }],
-            ['钻石荧光', 'id' , 'function',function($model){
-                return $model['attr']['8'] ?? '';
-            }],
-            ['钻石抛光', 'id' , 'function',function($model){
-                return $model['attr']['28'] ?? '';
-            }],
-            ['钻石对称', 'id' , 'function',function($model){
-                return $model['attr']['29'] ?? '';
-            }],
-            ['钻石切工', 'id' , 'function',function($model){
-                return $model['attr']['4'] ?? '';
-            }],
-            ['市场价(标签价)', 'id' , 'function',function($model){
-                return $model['attr']['2'] ?? '';
-            }],
-            ['镶口', 'id' , 'function',function($model){
-                return $model['attr']['49'] ?? '';
-            }],
-            ['主石类型', 'id' , 'function',function($model){
-                return $model['attr']['56'] ?? '';
-            }],
-            ['副石1类型', 'id' , 'function',function($model){
-                return $model['attr']['60'] ?? '';
-            }],
-            ['副石1粒数', 'id' , 'function',function($model){
-                return $model['attr']['45'] ?? '';
-            }],
-            ['副石1净度', 'id' , 'function',function($model){
-                return $model['attr']['47'] ?? '';
-            }],
-            ['副石1颜色', 'id' , 'function',function($model){
-                return $model['attr']['46'] ?? '';
-            }],
-            ['副石1重', 'id' , 'function',function($model){
-                return $model['attr']['44'] ?? '';
-            }],
-            ['副石2类型', 'id' , 'function',function($model){
-                return $model['attr']['64'] ?? '';
-            }],
-            ['副石2粒数', 'id' , 'function',function($model){
-                return $model['attr']['62'] ?? '';
-            }],
-            ['副石2重', 'id' , 'function',function($model){
-                return $model['attr']['63'] ?? '';
-            }],
-
-
+            }]
 
         ];
 

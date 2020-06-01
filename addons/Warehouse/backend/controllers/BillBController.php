@@ -257,7 +257,8 @@ class BillBController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','wg.style_sn','wg.goods_name','wg.put_in_type'
+        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.main_stone_type','g.finger','g.main_stone_num',
+            'g.second_stone_num1','g.second_stone_weight1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
             'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
 
@@ -277,19 +278,24 @@ class BillBController extends BaseController
             ['商品名称', 'goods_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
             ['款式分类', 'style_cate_name' , 'text'],
-            ['入库方式', 'put_in_type' , 'selectd',PutInTypeEnum::getMap()],
+            ['仓库', 'warehouse_id' , 'selectd',Yii::$app->warehouseService->warehouse::getDropDownForAll()],
             ['主成色', 'material' , function($model){
                 return \Yii::$app->attr->valueName($model['material']);
             }],
             ['金重', 'gold_weight' , 'text'],
-            ['金损', 'gold_loss' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
             ['钻石大小', 'diamond_carat' , 'text'],
-            ['钻石颜色', 'diamond_color' , function($model){
-                return \Yii::$app->attr->valueName($model['diamond_color']);
-            }],
-            ['钻石净度', 'diamond_clarity' ,function($model){
-                return \Yii::$app->attr->valueName($model['diamond_clarity']);
-            }],
+            ['主石粒数', 'main_stone_num' , 'text'],
+            ['副石1重', 'second_stone_weight1' , 'text'],
+            ['副石1粒数', 'second_stone_num1' , 'text'],
+            ['手寸	', 'finger' , 'text'],
+
+//            ['钻石颜色', 'diamond_color' , function($model){
+//                return \Yii::$app->attr->valueName($model['diamond_color']);
+//            }],
+//            ['钻石净度', 'diamond_clarity' ,function($model){
+//                return \Yii::$app->attr->valueName($model['diamond_clarity']);
+//            }],
             ['证书号', 'diamond_cert_id' , 'text'],
             ['成本价', 'cost_price' , 'text']
 

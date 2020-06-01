@@ -27,7 +27,8 @@ class WarehouseBillMForm extends WarehouseBill
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'goods_num'=>'数量',
-            'total_cost'=>'总金额'
+            'total_cost'=>'总金额',
+
         ]);
     }
 

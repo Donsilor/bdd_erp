@@ -46,7 +46,9 @@ class BillBGoodsController extends BaseController
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
-            'relations' => []
+            'relations' => [
+
+            ]
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -77,9 +77,9 @@ class WarehouseBillGoods extends BaseModel
             'goods_name' => '商品名称',
             'style_sn' => '款号',
             'goods_num' => '商品数量',
-            'order_detail_id' => '订单商品明细ID',
+            'order_detail_id' => '订单商品明细',
             'put_in_type' => '入库方式',
-            'warehouse_id' => '仓库ID',
+            'warehouse_id' => '仓库',
             'from_warehouse_id' => '来源仓库',
             'to_warehouse_id' => '目标仓库',
             'material' => '主成色',
@@ -99,6 +99,15 @@ class WarehouseBillGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 出库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
     }
 
     /**
