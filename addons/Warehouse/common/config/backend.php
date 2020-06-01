@@ -45,8 +45,9 @@ return [
                             'route' => 'bill/index',
                     ],
                     [
-                            'title' => '收货单',
+                            'title' => '入库收货单',
                             'route' => 'bill-l/index',
+
                     ],
                     [
                             'title' => '调拨单',
@@ -69,7 +70,8 @@ return [
                             'route' => 'warehouse-bill-r/index',
                     ],*/
                     [
-                            'title' => '维修单',
+
+                            'title' => '仓库维修单',
                             'route' => 'bill-repair/index',
                     ],
                     [

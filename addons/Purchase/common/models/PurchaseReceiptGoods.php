@@ -113,7 +113,7 @@ class PurchaseReceiptGoods extends BaseModel
             'xuhao' => '序号',
             'barcode' => '条形码编号',
             'goods_name' => '商品名称',
-            'goods_num' => '商品数量',
+            'goods_num' => '数量',
             'style_sn' => '款式编号',
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',

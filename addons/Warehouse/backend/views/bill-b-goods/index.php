@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_b_goods', '退货返厂单明细');
+$this->title = Yii::t('bill_b_goods', '退货返厂单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -28,8 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
+
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
+        echo Html::a('导出', ['warehouse-bill-b/export?ids='.$bill->id],[
+            'class'=>'btn btn-success btn-xs'
+        ]);
         ?>
     </div>
     <div class="tab-content" style="padding-right: 10px;">

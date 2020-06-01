@@ -223,9 +223,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'header' => '操作',
                 'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
+                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::SAVE) {

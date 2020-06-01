@@ -4,6 +4,9 @@ namespace addons\Warehouse\backend\controllers;
 
 
 use addons\Warehouse\common\enums\RepairStatusEnum;
+use addons\Warehouse\common\enums\RepairTypeEnum;
+use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use Yii;
 use common\models\base\SearchModel;
@@ -58,6 +61,19 @@ class BillRepairController extends BaseController
             ->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['>',WarehouseBillRepairForm::tableName().'.status',-1]);
+
+
+        //导出
+        if(Yii::$app->request->get('action') === 'export'){
+            $query = Yii::$app->request->queryParams;
+            unset($query['action']);
+            if(empty(array_filter($query))){
+               // return $this->message('导出条件不能为空', $this->redirect(['index']), 'warning');
+            }
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $this->getExport($list);
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -256,5 +272,60 @@ class BillRepairController extends BaseController
         return $this->message("收货成功", $this->redirect(Yii::$app->request->referrer), 'success');
 
     }
+
+
+    /***
+     * 选中导出
+     */
+    public function actionExport($ids=null){
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+        $list = WarehouseBillRepair::find()->where(['id'=>$ids])->all();
+        $this->getExport($list);
+
+    }
+
+
+    /**
+     * 导出Excel
+     *
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function getExport($list)
+    {
+        // [名称, 字段名, 类型, 类型规则]
+        $header = [
+            ['维修单号', 'repair_no', 'text'],
+            ['货号', 'goods_id', 'text'],
+            ['布产号', 'produce_sn', 'text'],
+            ['调拨单号', 'bill_m_no', 'text'],
+            ['订单号', 'order_sn', 'text'],
+            ['客户姓名', 'consignee', 'text'],
+            ['维修单号', 'repair_type', 'selectd',RepairTypeEnum::getMap()],
+            ['维修状态', 'repair_status', 'selectd',RepairStatusEnum::getMap()],
+            ['维修工厂', 'supplier_id', 'selectd',Yii::$app->supplyService->supplier->getDropDown()],
+            ['跟单人', 'follower_id', 'function',function($model){
+                return $model->follower->username ?? '';
+            }],
+            ['制单人', 'creator_id', 'function',function($model){
+                return $model->creator->username ?? '';
+            }],
+            ['制单时间', 'created_at' , 'date', 'Y-m-d'],
+            ['下单时间', 'orders_time' , 'date', 'Y-m-d'],
+            ['预计出厂时间', 'predict_time' , 'date', 'Y-m-d'],
+            ['完成时间', 'predict_time' , 'date', 'Y-m-d'],
+            ['收货时间', 'receiving_time' , 'date', 'Y-m-d']
+        ];
+
+        return ExcelHelper::exportData($list, $header, '维修单导出_' . date('YmdHis',time()));
+    }
+
+
 
 }

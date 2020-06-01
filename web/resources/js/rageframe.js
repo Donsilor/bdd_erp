@@ -354,3 +354,20 @@ function rfText(text) {
 
     return '小手一抖就打开了一个框';
 }
+
+/**
+ *
+ * @param title
+ * @param onPrompt
+ * @param formType 输入框类型，支持0（文本）默认1（密码）2（多行文本）
+ * @param dValue 初始时的值，默认空字符
+ * @param area  ['800px', '350px'] //自定义文本域宽高 formType=2时才有效
+ * @param maxlength 可输入文本的最大长度，默认500
+ *
+ */
+function rfPrompt(title,onPrompt, formType=0, dValue='',maxlength=500,area=[]) {
+    layer.prompt({title: title, formType: formType,value:dValue, area:area}, function(value, index, elem){
+        onPrompt(value);
+        layer.close(index);
+    });
+}

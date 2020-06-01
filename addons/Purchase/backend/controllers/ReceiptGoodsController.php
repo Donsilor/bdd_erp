@@ -44,7 +44,7 @@ class ReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -143,9 +143,9 @@ class ReceiptGoodsController extends BaseController
                             $receipt_list['style_sn'] = $produce_info['qiban_sn']?:$produce_info['style_sn'];
                             $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
                             $receipt_list['product_type_id'] = $produce_info['product_type_id'];
-                            $receipt_list['finger'] = $produce_attr_arr[AttrIdEnum::FINGER]??'';
-                            $receipt_list['xiangkou'] = $produce_attr_arr[AttrIdEnum::XIANGKOU]??'';
-                            $receipt_list['material'] = $produce_attr_arr[AttrIdEnum::MATERIAL]??'';
+                            $receipt_list['finger'] = $produce_attr_arr[AttrIdEnum::FINGER]['attr_value']??'';
+                            $receipt_list['xiangkou'] = $produce_attr_arr[AttrIdEnum::XIANGKOU]['attr_value']??'';
+                            $receipt_list['material'] = $produce_attr_arr[AttrIdEnum::MATERIAL]['attr_value_id']??'';
                             $receipt_list['jintuo_type'] = $produce_info['jintuo_type'];
                             $receipt_goods[] = $receipt_list;
                         }
@@ -197,7 +197,7 @@ class ReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

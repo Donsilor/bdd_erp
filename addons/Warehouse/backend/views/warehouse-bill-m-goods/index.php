@@ -26,6 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
         }
+        echo Html::a('导出', ['warehouse-bill-m/export?ids='.$billInfo->id],[
+            'class'=>'btn btn-success btn-xs'
+        ]);
         ?>
     </div>
     <div class="tab-content" style="padding-right: 10px;">
