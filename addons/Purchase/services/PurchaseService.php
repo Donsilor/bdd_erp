@@ -30,13 +30,20 @@ class PurchaseService extends Service
      */
     public function menuTabList($purchase_id, $purchase_type = 1, $returnUrl = null)
     {
-        if($purchase_type == PurchaseTypeEnum::MATERIAL) {
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD) {
             return [
-                    1=>['name'=>'基础信息','url'=>Url::to(['material/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                    2=>['name'=>'采购商品','url'=>Url::to(['material-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                    3=>['name'=>'日志信息','url'=>Url::to(['material-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    1=>['name'=>'基础信息','url'=>Url::to(['purchase-gold/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'采购商品','url'=>Url::to(['purchase-gold-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                    //3=>['name'=>'日志信息','url'=>Url::to(['purchase-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
             ];
-        }else {
+        }else if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
+            return [
+                    1=>['name'=>'基础信息','url'=>Url::to(['purchase-stone/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                    2=>['name'=>'采购商品','url'=>Url::to(['purchase-stone-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                    //3=>['name'=>'日志信息','url'=>Url::to(['material-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+            ];
+        }
+        else {
             return [
                     1=>['name'=>'基础信息','url'=>Url::to(['purchase/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                     2=>['name'=>'采购商品','url'=>Url::to(['purchase-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],

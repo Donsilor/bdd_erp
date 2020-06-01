@@ -10,7 +10,7 @@ use addons\Purchase\common\enums\PurchaseTypeEnum;
  * Class MaterialGoodsController
  * @package backend\modules\goods\controllers
  */
-class MaterialStoneGoodsController extends PurchaseGoodsController
+class PurchaseStoneGoodsController extends PurchaseGoodsController
 {
    /**
      * @var int

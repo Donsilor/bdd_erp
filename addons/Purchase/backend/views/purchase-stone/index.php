@@ -195,7 +195,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['material-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品', ['purchase-stone-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
                     'ajax-apply' => function($url, $model, $key){

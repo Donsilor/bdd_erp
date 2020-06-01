@@ -10,12 +10,12 @@ use addons\Purchase\common\enums\PurchaseTypeEnum;
  * Class MaterialController
  * @package backend\modules\goods\controllers
  */
-class MaterialGoldController extends PurchaseController
+class PurchaseStoneController extends PurchaseController
 {  
     /**
      * @var int
      */
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
     
         
 }

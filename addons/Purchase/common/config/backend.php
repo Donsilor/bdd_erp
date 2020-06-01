@@ -50,15 +50,15 @@ return [
                 'child' => [
                         [
                                 'title' => '金料采购单',
-                                'route' => 'material-gold/index',
+                                'route' => 'purchase-gold/index',
                         ],
                         [
                                 'title' => '金料收货单',
-                                'route' => 'material-gold-receipt/index',
+                                'route' => 'purchase-gold-receipt/index',
                         ],
                         [
                                 'title' => '金料返厂单',
-                                'route' => 'material-gold-defective/index',
+                                'route' => 'purchase-gold-defective/index',
                         ],
                 ],
                 
@@ -70,15 +70,15 @@ return [
                 'child' => [
                         [
                                 'title' => '石料采购单',
-                                'route' => 'material-stone/index',
+                                'route' => 'purchase-stone/index',
                         ],
                         [
                                 'title' => '石料收货单',
-                                'route' => 'material-stone-receipt/index',
+                                'route' => 'purchase-stone-receipt/index',
                         ],
                         [
                                 'title' => '石料返厂单',
-                                'route' => 'material-stone-defective/index',
+                                'route' => 'purchase-stone-defective/index',
                         ],
                 ],
                 

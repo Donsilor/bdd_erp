@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -66,12 +67,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label' => '商品类型',
-                                    'attribute' => 'goods_type',
+                                    'label' => '起版类型',
+                                    'attribute' => 'qiban_type',
                                     'value' => function($model){
-                                            return PurchaseGoodsTypeEnum::getValue($model->goods_type);
+                                            return QibanTypeEnum::getValue($model->qiban_type);
                                      },
-                                    'filter' => Html::activeDropDownList($searchModel, 'goods_type',PurchaseGoodsTypeEnum::getMap(), [
+                                     'filter' => Html::activeDropDownList($searchModel, 'qiban_type',QibanTypeEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
                                     ]),
