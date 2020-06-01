@@ -3,20 +3,20 @@
 namespace addons\Purchase\services;
 
 
-
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
-use addons\Supply\common\enums\BuChanEnum;
+use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Supply\common\enums\QcTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
@@ -156,5 +156,24 @@ class PurchaseReceiptService extends Service
             'send_goods_sn' => $receipt->receipt_no,
         ];
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
+    }
+
+    /**
+     *  IQC质检
+     * @param WarehouseBillBForm $form
+     */
+    public function qcIqc($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->goods_status == QcTypeEnum::PASS){
+            $form->goods_status = ReceiptGoodsStatusEnum::IQC_PASS;
+        }else{
+            $form->goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
     }
 }

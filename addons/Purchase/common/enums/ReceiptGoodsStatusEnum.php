@@ -14,7 +14,9 @@ class ReceiptGoodsStatusEnum extends BaseEnum
     const IQC_NO_PASS = 3;
     const FACTORY_ING = 4;
     const FACTORY = 5;
-    const SCRAP = 6;
+    const WAREHOUSE_ING =6;
+    const WAREHOUSE = 7;
+    const SCRAP = 8;
     const CANCEL = 10;
 
     /**
@@ -30,6 +32,8 @@ class ReceiptGoodsStatusEnum extends BaseEnum
             self::IQC_NO_PASS => "IQC质检未过",
             self::FACTORY_ING => "返厂中",
             self::FACTORY => "已返厂",
+            self::WAREHOUSE_ING => "入库中",
+            self::WAREHOUSE => "已入库",
             self::SCRAP => "报废",
             self::CANCEL => "取消",
         ];

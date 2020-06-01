@@ -1,7 +1,9 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
+
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use common\enums\WhetherEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -26,6 +28,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo '&nbsp;&nbsp;&nbsp;';
+        }
+        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+            echo Html::a('IQC批量质检', ['ajax-iqc','id'=>$receipt->id],  [
+                'class'=>'btn btn-warning btn-xs',
+                "onclick" => "batchOperation(this);return false;",
+            ]);
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo Html::edit(['ajax-warehouse','id'=>$receipt->id], '批量申请入库', [
+                'class'=>'btn btn-success btn-xs',
+                "onclick" => "batchOperation(this);return false;",
+            ]);
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo Html::edit(['ajax-defective','id'=>$receipt->id], '批量生成不良返厂单', [
+                'class'=>'btn btn-danger btn-xs',
+                "onclick" => "batchOperation(this);return false;",
+            ]);
         }
         ?>
     </div>
@@ -517,6 +536,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'label' => '质检未过原因',
+                                'attribute' => 'fqc.name',
+                                'value' => "fqc.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'iqc_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -531,7 +584,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{iqc} {delete}',
                                 'buttons' => [
                                     'iqc' => function($url, $model, $key) use ($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM && $model->goods_status == ReceiptGoodsStatusEnum::IQC_ING) {
                                             return Html::edit(['ajax-iqc','id'=>$model->id], 'IQC质检', [
                                                 'class'=>'btn btn-success btn-sm',
                                                 'data-toggle' => 'modal',
@@ -556,3 +609,36 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script type="text/javascript">
+    //批量操作
+    function batchOperation(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        var ids = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            var str = $(this).val();
+            var arr = jQuery.parseJSON(str)
+            ids[i] = arr.id;
+        });
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        var ids = ids.join(',');
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                if (parseInt(data.code) !== 200) {
+                    rfAffirm(data.message);
+                } else {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+</script>
