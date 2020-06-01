@@ -365,6 +365,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
+                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'template' => '{edit} {apply} {audit} {orders} {finish} {receiving} {status} {delete} ',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
