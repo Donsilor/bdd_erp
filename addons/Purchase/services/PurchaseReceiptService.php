@@ -176,4 +176,23 @@ class PurchaseReceiptService extends Service
             throw new \Exception($this->getError($form));
         }
     }
+
+    /**
+     *  批量生成不良返厂单
+     * @param WarehouseBillBForm $form
+     */
+    public function batchDefective($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->goods_status == QcTypeEnum::PASS){
+            $form->goods_status = ReceiptGoodsStatusEnum::IQC_PASS;
+        }else{
+            $form->goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
 }

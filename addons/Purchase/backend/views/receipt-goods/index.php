@@ -36,13 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 "onclick" => "batchOperation(this);return false;",
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::edit(['ajax-warehouse','id'=>$receipt->id], '批量申请入库', [
+            echo Html::a('批量申请入库', ['ajax-warehouse','id'=>$receipt->id], [
                 'class'=>'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
                 "onclick" => "batchOperation(this);return false;",
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::edit(['ajax-defective','id'=>$receipt->id], '批量生成不良返厂单', [
+            echo Html::a('批量生成不良返厂单', ['ajax-defective','id'=>$receipt->id] ,[
                 'class'=>'btn btn-danger btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
                 "onclick" => "batchOperation(this);return false;",
             ]);
         }
@@ -633,10 +637,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 ids: ids
             },
             success: function (data) {
+                console.log(data);
                 if (parseInt(data.code) !== 200) {
                     rfAffirm(data.message);
                 } else {
-                    window.location.reload();
+                    //$('#data-supplier').html(data);
+                    //window.location.reload();
+                        var title = '基本信息';
+                        var width = '80%';
+                        var height = '80%';
+                        var offset = "10%";
+                    openIframe(title, width, height, href, offset);
+                    e.preventDefault();
+                    return false;
                 }
             }
         });

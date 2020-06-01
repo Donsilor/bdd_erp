@@ -102,6 +102,7 @@ class PurchaseReceiptGoods extends BaseModel
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
             [['xiangkou'], 'string', 'max' => 10],
+            [['supplier_id', 'receipt_no'], 'safe']
         ];
     }
 
@@ -187,7 +188,7 @@ class PurchaseReceiptGoods extends BaseModel
      * @return \yii\db\ActiveQuery
      */
     public function getReceipt(){
-        return $this->hasMany(PurchaseReceipt::class, ['id'=>'receipt_id']);
+        return $this->hasOne(PurchaseReceipt::class, ['id'=>'receipt_id'])->alias('receipt');
     }
     /**
      * 关联产品线分类一对一

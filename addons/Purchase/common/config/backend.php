@@ -40,6 +40,10 @@ return [
                             'title' => '不良返厂单',
                             'route' => 'defective/index',
                     ],
+                    [
+                            'title' => '质检列表',
+                            'route' => 'receipt-goods/iqc-index',
+                    ],
             ],
 
         ],

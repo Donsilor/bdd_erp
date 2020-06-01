@@ -48,7 +48,7 @@ class ReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt-goods/index']));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -72,6 +72,38 @@ class ReceiptGoodsController extends BaseController
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
             'receipt' => $receipt,
+        ]);
+    }
+
+    /**
+     * 质检列表
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionIqcIndex()
+    {
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt-goods/index']));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => ['purchase_sn'], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+
+            ]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
+        return $this->render('iqc-index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
         ]);
     }
 
@@ -245,6 +277,38 @@ class ReceiptGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
 
                 \Yii::$app->purchaseService->purchaseReceipt->qcIqc($model);
+
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        $model->goods_status = QcTypeEnum::PASS;
+        $model->ids = $ids;
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 批量生成不良返厂单
+     *
+     * @return mixed
+     */
+    public function actionAjaxDefective()
+    {
+        $id = Yii::$app->request->get('id');
+        $ids = Yii::$app->request->get('ids');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->purchaseService->purchaseReceipt->batchDefective($model);
 
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');

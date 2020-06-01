@@ -30,7 +30,7 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'id'=>'序号',
+            'id'=>'流水号',
             'jintuo_type'=>'金托类型',
         ]);
     }
