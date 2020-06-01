@@ -3,6 +3,7 @@
 
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use common\enums\WhetherEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -27,6 +28,25 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo '&nbsp;&nbsp;&nbsp;';
+        }
+        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+            echo Html::a('IQC批量质检', ['ajax-iqc','id'=>$receipt->id],  [
+                'class'=>'btn btn-warning btn-xs',
+                "onclick" => "batchOperation(this);return false;",
+            ]);
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo Html::edit(['ajax-warehouse','id'=>$receipt->id], '批量申请入库', [
+                'class'=>'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo Html::edit(['ajax-defective','id'=>$receipt->id], '批量生成不良返厂单', [
+                'class'=>'btn btn-danger btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
         }
         ?>
     </div>
@@ -591,3 +611,36 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script type="text/javascript">
+    //批量操作
+    function batchOperation(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        var ids = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            var str = $(this).val();
+            var arr = jQuery.parseJSON(str)
+            ids[i] = arr.id;
+        });
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        var ids = ids.join(',');
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                if (parseInt(data.code) !== 200) {
+                    rfAffirm(data.message);
+                } else {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+</script>
