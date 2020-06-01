@@ -1636,6 +1636,6 @@ tr.filters{
 	-webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
-.btn { margin-top:5px;}
+.btn { margin-bottom:3px !important}
 .no-border-top { border-top:none !important}
 .nowrap {white-space:nowrap !important;}

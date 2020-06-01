@@ -37,12 +37,19 @@ class AddonsController extends Controller
     public $isHook = false;
 
     /**
+     * 回调地址
+     * @var string
+     */
+    public $returnUrl  = null;
+    
+    /**
      * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
         parent::init();
-
+        
+        $this->returnUrl = Yii::$app->request->get('returnUrl');
         // 后台视图默认载入模块视图
         if (!$this->layout && in_array(Yii::$app->id, [AppEnum::BACKEND, AppEnum::MERCHANT])) {
             $this->layout = '@' . Yii::$app->id . '/views/layouts/addon';

@@ -174,12 +174,11 @@ class WarehouseBillRepairService extends Service
         $tmptime = $start + 24*3600;
         while( $offset > 0 ){
             $weekday = date('w', $tmptime);
-            $tmpday = date('Y-m-d', $tmptime);
             if($weekday != 0){//不是周末
                 $offset--;
             }
             $tmptime += 24*3600;
         }
-        return $tmpday;
+        return $tmptime;
     }
 }

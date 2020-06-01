@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use common\helpers\StringHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseDefective;
 /**
@@ -10,6 +11,7 @@ use addons\Purchase\common\models\PurchaseDefective;
  */
 class PurchaseDefectiveForm extends PurchaseDefective
 {
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +21,6 @@ class PurchaseDefectiveForm extends PurchaseDefective
 
         ];
         return array_merge(parent::rules() , $rules);
-    }   
-    
+    }
+
 }

@@ -2,24 +2,21 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\forms\PurchaseFollowerForm;
-use addons\Supply\common\models\SupplierFollower;
+use Yii;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
-use Yii;
-use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Purchase\common\models\Purchase;
 use common\helpers\SnHelper;
-use common\helpers\Url;
-use yii\base\Exception;
+use addons\Purchase\common\forms\PurchaseFollowerForm;
+use addons\Purchase\common\models\Purchase;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 /**
- * Attribute
+ * 
  *
- * Class AttributeController
+ * Class PurchaseController
  * @package backend\modules\goods\controllers
  */
 class PurchaseController extends BaseController
@@ -27,10 +24,13 @@ class PurchaseController extends BaseController
     use Curd;
     
     /**
-     * @var Attribute
-     */
+     * @var Purchase
+     */     
     public $modelClass = Purchase::class;
-    
+    /**
+     * @var int
+     */
+    public $purchaseType = PurchaseTypeEnum::GOODS;
     
     /**
      * 首页
@@ -56,7 +56,7 @@ class PurchaseController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $dataProvider->query->andWhere(['>','status',-1]);
-        
+        $dataProvider->query->andWhere(['=','purchase_type',$this->purchaseType]);
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
@@ -71,14 +71,13 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
         
         $model = $this->findModel($id);     
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($id,$returnUrl),
-            'returnUrl'=>$returnUrl,
+            'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($id,$this->purchaseType,$this->returnUrl),
+            'returnUrl'=>$this->returnUrl,
         ]);
     }    
     /**
@@ -91,7 +90,7 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        
+        $model->purchase_type = $this->purchaseType;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -109,21 +108,25 @@ class PurchaseController extends BaseController
         ]);
     }
 
-    /**
-     * @return mixed
+    /** 
      * 申请审核
+     * @return mixed
      */
     public function actionAjaxApply(){
+        
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if($model->purchase_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        $this->returnUrl = \Yii::$app->request->referrer;
+        
+        if($model->purchase_status != PurchaseStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
         }
-        $model->purchase_status = BillStatusEnum::PENDING;
+        $model->purchase_status = PurchaseStatusEnum::PENDING;
+        $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
 
     }
 
@@ -149,12 +152,12 @@ class PurchaseController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->purchase_status = BillStatusEnum::CONFIRM;
+                    $model->purchase_status = PurchaseStatusEnum::CONFIRM;
                 }else{
-                    $model->purchase_status = BillStatusEnum::SAVE;
+                    $model->purchase_status = PurchaseStatusEnum::SAVE;
                 }
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 if($model->audit_status == AuditStatusEnum::PASS){
                     Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
@@ -173,7 +176,10 @@ class PurchaseController extends BaseController
             'model' => $model,
         ]);
     }
-
+    /**
+     * 分配跟单人
+     * @return mixed|string|\yii\web\Response|string
+     */
     public function actionAjaxFollower(){
         
         $id = Yii::$app->request->get('id');
@@ -182,22 +188,29 @@ class PurchaseController extends BaseController
         $model = $this->findModel($id);
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            if(false === $model->save()){
-                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                
+                //日志
+                $log = [
+                        'purchase_id' => $id,
+                        'purchase_sn' => $model->purchase_sn,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => "分配跟单人",
+                        'log_msg' => "分配跟单人：".$model->follower->usrname??''
+                ];
+                Yii::$app->purchaseService->purchase->createPurchaseLog($log);                 
+                $trans->commit();  
+                
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);                
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
-
-            //日志
-            $follower = SupplierFollower::find()->where(['id'=>$model->follower_id])->one();
-            $log = [
-                'purchase_id' => $id,
-                'purchase_sn' => $model->purchase_sn,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => "分配跟单人",
-                'log_msg' => "分配到跟单人{$follower->member_name}"
-            ];
-            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
-            Yii::$app->getSession()->setFlash('success','保存成功');
-            return $this->redirect(Yii::$app->request->referrer);
         }
 
         return $this->renderAjax($this->action->id, [

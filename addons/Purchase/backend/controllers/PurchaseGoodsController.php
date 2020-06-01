@@ -16,10 +16,10 @@ use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use common\enums\StatusEnum;
-use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 /**
  * Attribute
  *
@@ -32,11 +32,13 @@ class PurchaseGoodsController extends BaseController
     use Curd;
     
     /**
-     * @var $modelClass PurchaseGoodsForm
+     * @var PurchaseGoodsForm
      */
     public $modelClass = PurchaseGoodsForm::class;
-    
-    
+    /**
+     * @var int
+     */
+    public $purchaseType = PurchaseTypeEnum::GOODS;
     /**
      * 首页
      *
@@ -46,8 +48,6 @@ class PurchaseGoodsController extends BaseController
     public function actionIndex()
     {
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase/index']));
         
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
@@ -71,9 +71,9 @@ class PurchaseGoodsController extends BaseController
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'purchase'=> $purchase,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$returnUrl),
-                'returnUrl'=>$returnUrl,
+                'tab'=>Yii::$app->request->get('tab',2),
+                'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$this->purchaseType,$this->returnUrl),
+                'returnUrl'=>$this->returnUrl,
         ]);
     }
     /**
@@ -86,11 +86,8 @@ class PurchaseGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $id = Yii::$app->request->get('id');
-        
-        $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);        
         $model = $model ?? new PurchaseGoodsForm();
-
         if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {   
             return $return;
         } 
@@ -150,8 +147,7 @@ class PurchaseGoodsController extends BaseController
      */
     public function actionDelete($id)
     {  
-        $purchase_id = Yii::$app->request->get('purchase_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index','purchase_id'=>$purchase_id]));
+        $purchase_id = Yii::$app->request->get('purchase_id');        
         
         try{   
             
@@ -175,11 +171,11 @@ class PurchaseGoodsController extends BaseController
             Yii::$app->purchaseService->purchase->purchaseSummary($purchase_id);
             $trans->commit();
             
-            return $this->message("删除成功", $this->redirect($returnUrl));
+            return $this->message("删除成功", $this->redirect($this->returnUrl));
         }catch (\Exception $e) {
             
             $trans->rollback();
-            return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+            return $this->message($e->getMessage(), $this->redirect($this->returnUrl), 'error');
         }
     }
     /**
@@ -225,16 +221,16 @@ class PurchaseGoodsController extends BaseController
      */
     public function actionApplyView()
     {
-        $returnUrl = Yii::$app->request->get('returnUrl'); 
         
         $id = Yii::$app->request->get('id');
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
         $model->initApplyView();
+        
         return $this->render($this->action->id, [
                 'model' => $model,
-                'returnUrl'=>$returnUrl
+                'returnUrl'=>$this->returnUrl
         ]);
     }
     /**

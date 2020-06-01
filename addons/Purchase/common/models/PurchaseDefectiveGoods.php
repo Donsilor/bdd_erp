@@ -11,7 +11,7 @@ use Yii;
  *
  * @property int $id ID
  * @property int $defective_id 返厂单ID
- * @property int $receipt_goods_id 关联purchase_receipt_goods表ID
+ * @property int xuhao 序号
  * @property string $style_sn 款式编号
  * @property string $factory_no 工厂模号
  * @property string $produce_sn 布产号
@@ -37,7 +37,7 @@ class PurchaseDefectiveGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'defective_id', 'receipt_goods_id'], 'required'],
+            [['id', 'defective_id', 'xuhao'], 'required'],
             [['defective_id', 'style_cate_id', 'product_type_id', 'oqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['style_sn'], 'string', 'max' => 50],
@@ -54,15 +54,15 @@ class PurchaseDefectiveGoods extends BaseModel
         return [
             'id' => 'ID',
             'defective_id' => '返厂单ID',
-            'receipt_goods_id' => '采购收货单商品序号',
+            'xuhao' => '采购收货单货品序号',
             'style_sn' => '款式编号',
             'factory_mo' => '工厂模号',
             'produce_sn' => '布产单编号',
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
             'cost_price' => '金额',
-            'oqc_reason' => 'OQC质检未过原因',
-            'oqc_remark' => '备注',
+            'oqc_reason' => '质检未过原因',
+            'oqc_remark' => '货品备注',
             'sort' => '排序',
             'status' => '状态',
             'created_at' => '创建时间',
