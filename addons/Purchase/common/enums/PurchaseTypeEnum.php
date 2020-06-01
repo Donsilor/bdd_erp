@@ -9,8 +9,8 @@ namespace addons\Purchase\common\enums;
 class PurchaseTypeEnum extends BaseEnum
 {
     const GOODS = 1;
-    const MATERIAL = 2;
-    
+    const MATERIAL_STONE = 2;
+    const MATERIAL_GOLD = 3;
     /**
      *
      * @return array
@@ -19,7 +19,8 @@ class PurchaseTypeEnum extends BaseEnum
     {
         return [
                 self::GOODS => "商品采购",
-                self::MATERIAL => "物料采购",                
+                self::MATERIAL_STONE =>'石料采购',
+                self::MATERIAL_GOLD =>'金料采购',
         ];
     }
     

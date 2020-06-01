@@ -217,6 +217,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'receipt_status',BillStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style'=> 'width:100px;'
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],

@@ -11,6 +11,7 @@ use addons\Purchase\common\models\PurchaseReceiptGoods;
  */
 class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
 {
+    public $ids;
     /**
      * {@inheritdoc}
      */

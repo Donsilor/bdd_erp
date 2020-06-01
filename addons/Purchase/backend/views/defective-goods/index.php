@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '质检未过原因',
                                 'attribute' => 'fqc.name',
                                 'value' => "fqc.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'
@@ -97,10 +97,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'oqc_remark',
+                                'attribute'=>'iqc_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'oqc_remark', [
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),

@@ -6,13 +6,12 @@ use yii\grid\GridView;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
-use addons\Style\common\enums\QibanTypeEnum;
 
-$this->title = '采购商品';
+$this->title = '石料采购详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $purchase->purchase_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -67,12 +66,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label' => '起版类型',
-                                    'attribute' => 'qiban_type',
+                                    'label' => '商品类型',
+                                    'attribute' => 'goods_type',
                                     'value' => function($model){
-                                            return QibanTypeEnum::getValue($model->qiban_type);
+                                            return PurchaseGoodsTypeEnum::getValue($model->goods_type);
                                      },
-                                     'filter' => Html::activeDropDownList($searchModel, 'qiban_type',QibanTypeEnum::getMap(), [
+                                    'filter' => Html::activeDropDownList($searchModel, 'goods_type',PurchaseGoodsTypeEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
                                     ]),
