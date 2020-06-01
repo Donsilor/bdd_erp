@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => "oqc_reason",
+                                'name' => "iqc_reason",
                                 'title'=>"质检未过原因",
                                 'enableError'=>false,
                                 'type'  => 'dropDownList',
@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'items' => Yii::$app->purchaseService->fqc->getDropDown()
                             ],
                             [
-                                'name' => "oqc_remark",
+                                'name' => "iqc_remark",
                                 'title'=>"货品备注",
                                 'enableError'=>false,
                                 'options' => [

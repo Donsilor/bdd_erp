@@ -25,9 +25,9 @@ class ReceiptGoodsStatusEnum extends BaseEnum
     {
         return [
             self::SAVE => "保存",
-            self::IQC_ING => "质检中",
-            self::IQC_PASS => "质检通过",
-            self::IQC_NO_PASS => "质检未过",
+            self::IQC_ING => "待质检",
+            self::IQC_PASS => "IQC质检通过",
+            self::IQC_NO_PASS => "IQC质检未过",
             self::FACTORY_ING => "返厂中",
             self::FACTORY => "已返厂",
             self::SCRAP => "报废",
