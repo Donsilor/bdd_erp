@@ -36,7 +36,7 @@ class PurchaseGoldGoodsForm extends PurchaseGoodsForm
                 'goods_sn'=>'商品编号',
                 'style_cate_id'=>'商品分类',
                 'cost_price'=>'金料总额',
-                'gold_price'=>'金价/克',
+                'gold_price'=>'金料单价/克',
         ]);
     }
 

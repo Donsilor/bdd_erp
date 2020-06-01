@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use Yii;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\forms\PurchaseStoneGoodsForm;
 /**
  * 
  * 物料商品
@@ -12,10 +13,15 @@ use addons\Purchase\common\enums\PurchaseTypeEnum;
  */
 class PurchaseStoneGoodsController extends PurchaseGoodsController
 {
+    /**
+     * @var PurchaseGoodsForm
+     */
+    public $modelClass = PurchaseStoneGoodsForm::class;
+    
    /**
      * @var int
      */
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
     
     
 }

@@ -4,34 +4,38 @@ namespace addons\Purchase\common\forms;
 
 use Yii;
 
-use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\models\AttributeSpec;
-use addons\Style\common\models\StyleAttribute;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
+use common\helpers\ArrayHelper;
 
 /**
- * 石料商品 Form
+ * 金料商品 Form
  *
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
-class PurchaseStoneGoodsForm extends PurchaseGoods
+class PurchaseStoneGoodsForm extends PurchaseGoodsForm
 {
+    public $style_cate_id = 13;//石料
+    public $jintuo_type = JintuoTypeEnum::Chengpin;
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
         //合并
-        return parent::attributeLabels() + [
+        return ArrayHelper::merge(parent::attributeLabels() , [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
-        ];
+                'goods_sn'=>'商品编号',
+                'style_cate_id'=>'商品分类',
+                'cost_price'=>'石料总额',
+                'main_stone_price'=>'石料单价/克拉',
+        ]);
     }
-    
+
     /**
      * 采购商品申请编辑-创建
      */
@@ -93,13 +97,7 @@ class PurchaseStoneGoodsForm extends PurchaseGoods
      */
     public function getAttrList()
     {
-        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
-        if($this->goods_type == PurchaseGoodsTypeEnum::STYLE) {
-            $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
-        }else{
-            $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);
-        }
-        return $attr_list;
+        return \Yii::$app->styleService->attribute->getAttrListByCateId($this->style_cate_id);
     }
     
 }
