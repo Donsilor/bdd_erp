@@ -38,14 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;&nbsp;&nbsp;';
             echo Html::edit(['ajax-warehouse','id'=>$receipt->id], '批量申请入库', [
                 'class'=>'btn btn-success btn-xs',
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
+                "onclick" => "batchOperation(this);return false;",
             ]);
             echo '&nbsp;&nbsp;&nbsp;';
             echo Html::edit(['ajax-defective','id'=>$receipt->id], '批量生成不良返厂单', [
                 'class'=>'btn btn-danger btn-xs',
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
+                "onclick" => "batchOperation(this);return false;",
             ]);
         }
         ?>
