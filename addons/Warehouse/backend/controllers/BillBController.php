@@ -193,6 +193,7 @@ class BillBController extends BaseController
 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch(\Exception $e){
+                $trans->rollBack();
                 $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }

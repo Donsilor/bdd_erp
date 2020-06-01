@@ -35,6 +35,8 @@ use Yii;
  * @property string $market_price 市场价
  * @property string $sale_price 销售价
  * @property string $cert_id 证书号
+ * @property string $iqc_reason 质检未过原因
+ * @property string $iqc_remark 质检备注
  * @property string $goods_remark 商品备注
  * @property int $main_stone 主石
  * @property int $main_stone_num 主石数量
@@ -91,11 +93,11 @@ class PurchaseReceiptGoods extends BaseModel
     {
         return [
             [['id', 'receipt_id', 'purchase_sn'], 'required'],
-            [['receipt_id', 'goods_num', 'xuhao', 'goods_status', 'style_cate_id', 'product_type_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['receipt_id', 'goods_num', 'xuhao', 'goods_status', 'iqc_reason', 'style_cate_id', 'product_type_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['finger', 'gold_weight', 'gold_price', 'gold_loss', 'gross_weight', 'suttle_weight', 'cost_price', 'market_price', 'sale_price', 'main_stone_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3', 'markup_rate', 'gong_fee', 'parts_weight', 'parts_price', 'parts_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'cert_fee', 'extra_stone_fee', 'tax_fee', 'other_fee'], 'number'],
             [['purchase_sn', 'produce_sn', 'factory_mo', 'cert_id', 'second_cert_id'], 'string', 'max' => 30],
             [['barcode'], 'string', 'max' => 100],
-            [['goods_name', 'goods_remark'], 'string', 'max' => 255],
+            [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
             [['xiangkou'], 'string', 'max' => 10],
         ];
@@ -112,7 +114,7 @@ class PurchaseReceiptGoods extends BaseModel
             'purchase_sn' => '采购单编号',
             'produce_sn' => '布产单编号',
             'xuhao' => '序号',
-            'goods_status' => '收货单货品状态',
+            'goods_status' => '货品状态',
             'barcode' => '条形码编号',
             'goods_name' => '商品名称',
             'goods_num' => '数量',
@@ -133,6 +135,8 @@ class PurchaseReceiptGoods extends BaseModel
             'market_price' => '市场价',
             'sale_price' => '销售价',
             'cert_id' => '证书号',
+            'iqc_reason' => '质检未过原因',
+            'iqc_remark' => '质检备注',
             'goods_remark' => '商品备注',
             'main_stone' => '主石',
             'main_stone_num' => '主石数量',
@@ -196,5 +200,13 @@ class PurchaseReceiptGoods extends BaseModel
     public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
     }
 }

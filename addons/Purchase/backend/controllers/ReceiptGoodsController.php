@@ -12,6 +12,7 @@ use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\enums\QcTypeEnum;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceShipment;
@@ -240,14 +241,9 @@ class ReceiptGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->receipt_status = BillStatusEnum::CONFIRM;
-                }else{
-                    $model->receipt_status = BillStatusEnum::SAVE;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+
+                \Yii::$app->purchaseService->purchaseReceipt->qcIqc($model);
+
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -255,7 +251,7 @@ class ReceiptGoodsController extends BaseController
                 return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        $model->audit_status = AuditStatusEnum::PASS;
+        $model->goods_status = QcTypeEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

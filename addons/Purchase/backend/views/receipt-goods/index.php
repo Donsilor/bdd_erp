@@ -1,7 +1,8 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
+
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -517,6 +518,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'label' => '质检未过原因',
+                                'attribute' => 'fqc.name',
+                                'value' => "fqc.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'iqc_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -531,7 +566,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{iqc} {delete}',
                                 'buttons' => [
                                     'iqc' => function($url, $model, $key) use ($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM && $model->goods_status == ReceiptGoodsStatusEnum::IQC_ING) {
                                             return Html::edit(['ajax-iqc','id'=>$model->id], 'IQC质检', [
                                                 'class'=>'btn btn-success btn-sm',
                                                 'data-toggle' => 'modal',

@@ -71,14 +71,6 @@ class PurchaseDefectiveGoods extends BaseModel
     }
 
     /**
-    * 关联产品线分类一对一
-    * @return \yii\db\ActiveQuery
-    */
-    public function getFqc()
-    {
-        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
-    }
-    /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
      */
@@ -94,5 +86,12 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
-
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
+    }
 }
