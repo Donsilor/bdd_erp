@@ -7,7 +7,7 @@
 
 <!--扩展插件模块信息-->
 <?php foreach ($addonsMenus as $key => $addon) { ?>
-    <li class="treeview rfLeftMenu rfLeftMenuAddon hide">
+    <li class="treeview rfLeftMenu rfLeftMenuAddon menu-open">
         <a href="#">
             <i class="<?= Yii::$app->params['addonsGroup'][$key]['icon']; ?> rf-i"></i>
             <span><?= Yii::$app->params['addonsGroup'][$key]['title']; ?></span>
