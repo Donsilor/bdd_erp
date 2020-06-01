@@ -26,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->purchase_sn ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->purchase_type) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>

@@ -2,6 +2,21 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\models\PurchaseGoods;
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use addons\Style\common\enums\InlayEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Supply\common\enums\GoodsTypeEnum;
+use addons\Supply\common\models\Supplier;
+use common\helpers\ArrayHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
+use common\models\backend\Member;
+use function PHPSTORM_META\map;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
@@ -57,6 +72,17 @@ class PurchaseController extends BaseController
         
         $dataProvider->query->andWhere(['>','status',-1]);
         $dataProvider->query->andWhere(['=','purchase_type',$this->purchaseType]);
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
+        }
+
+
+
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
@@ -200,7 +226,7 @@ class PurchaseController extends BaseController
                         'purchase_sn' => $model->purchase_sn,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
                         'log_module' => "分配跟单人",
-                        'log_msg' => "分配跟单人：".$model->follower->username??''
+                        'log_msg' => "分配跟单人：".$model->follower->username ?? ''
                 ];
                 Yii::$app->purchaseService->purchase->createPurchaseLog($log);                 
                 $trans->commit();  
@@ -216,6 +242,156 @@ class PurchaseController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '采购订单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
+        }
+
+        $select = ['p.purchase_sn','p.supplier_id','p.follower_id','p.purchase_status','m.username','s.supplier_name','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
+
+        $list = Purchase::find()->alias('p')
+            ->leftJoin(Member::tableName().' m','m.id=p.follower_id')
+            ->leftJoin(Supplier::tableName().' s','s.id=p.supplier_id')
+            ->leftJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
+            ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
+
+            ->where(['p.id'=>$ids])
+            ->select($select)
+            ->asArray()
+            ->all();
+
+        foreach ($list as &$val){
+            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
+            $val['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
+        }
+
+        //print_r($list);exit();
+
+        $header = [
+            ['订单编号', 'purchase_sn' , 'text'],
+            ['供应商', 'supplier_name' , 'text'],
+            ['跟单人', 'username' , 'text'],
+            ['订单状态', 'purchase_status' , 'selectd',PurchaseStatusEnum::getMap()],
+            ['商品类型', 'goods_type' , 'selectd',GoodsTypeEnum::getMap()],
+            ['商品名称', 'goods_name' , 'text'],
+            ['商品编号', 'style_sn' , 'text'],
+            ['起版号', 'qiban_sn' , 'text'],
+            ['起版类型', 'qiban_type' , 'selectd',QibanTypeEnum::getMap()],
+            ['产品线', 'product_type_name' , 'text'],
+            ['款式分类', 'style_cate_name' , 'text'],
+            ['款式性别', 'style_sex' , 'selectd',StyleSexEnum::getMap()],
+            ['金托类型', 'jintuo_type' , 'selectd',JintuoTypeEnum::getMap()],
+            ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
+            ['成本价', 'cost_price' , 'text'],
+            ['商品数量', 'goods_num' , 'text'],
+            ['采购备注', 'remark' , 'text'],
+            ['主石价格(元/颗)', 'main_stone_price' , 'text'],
+            ['副石1单价', 'second_stone_price1' , 'text'],
+            ['副石2单价', 'second_stone_price2' , 'text'],
+            ['石料信息', 'stone_info' , 'text'],
+            ['金损', 'gold_loss' , 'text'],
+            ['单件银(金)额', 'gold_cost_price' , 'text'],
+            ['配件信息', 'parts_info' , 'text'],
+            ['加工费/件', 'jiagong_fee' , 'text'],
+            ['镶石费/件', 'xiangqian_fee' , 'text'],
+            ['工费总额/件', 'gong_fee' , 'text'],
+            ['改图费', 'gaitu_fee' , 'text'],
+            ['喷蜡费', 'penla_fee' , 'text'],
+            ['单件额', 'unit_cost_price' , 'text'],
+            ['工厂成本价', 'factory_cost_price' , 'text'],
+            ['金重', 'id' , 'function',function($model){
+                return $model['attr']['11'] ?? '';
+            }],
+            ['毛重', 'id' , 'function',function($model){
+                return $model['attr']['11'] ?? '';
+            }],
+            ['手寸', 'id' , 'function',function($model){
+                return $model['attr']['38'] ?? '';
+            }],
+            ['证书号', 'id' , 'function',function($model){
+                return $model['attr']['31'] ?? '';
+            }],
+            ['主成色', 'id' , 'function',function($model){
+                return $model['attr']['10'] ?? '';
+            }],
+            ['主石大小', 'id' , 'function',function($model){
+                return $model['attr']['59'] ?? '';
+            }],
+            ['钻石形状', 'id' , 'function',function($model){
+                return $model['attr']['6'] ?? '';
+            }],
+            ['钻石颜色', 'id' , 'function',function($model){
+                return $model['attr']['7'] ?? '';
+            }],
+            ['钻石净度', 'id' , 'function',function($model){
+                return $model['attr']['2'] ?? '';
+            }],
+            ['钻石荧光', 'id' , 'function',function($model){
+                return $model['attr']['8'] ?? '';
+            }],
+            ['钻石抛光', 'id' , 'function',function($model){
+                return $model['attr']['28'] ?? '';
+            }],
+            ['钻石对称', 'id' , 'function',function($model){
+                return $model['attr']['29'] ?? '';
+            }],
+            ['钻石切工', 'id' , 'function',function($model){
+                return $model['attr']['4'] ?? '';
+            }],
+            ['市场价(标签价)', 'id' , 'function',function($model){
+                return $model['attr']['2'] ?? '';
+            }],
+            ['镶口', 'id' , 'function',function($model){
+                return $model['attr']['49'] ?? '';
+            }],
+            ['主石类型', 'id' , 'function',function($model){
+                return $model['attr']['56'] ?? '';
+            }],
+            ['副石1类型', 'id' , 'function',function($model){
+                return $model['attr']['60'] ?? '';
+            }],
+            ['副石1粒数', 'id' , 'function',function($model){
+                return $model['attr']['45'] ?? '';
+            }],
+            ['副石1净度', 'id' , 'function',function($model){
+                return $model['attr']['47'] ?? '';
+            }],
+            ['副石1颜色', 'id' , 'function',function($model){
+                return $model['attr']['46'] ?? '';
+            }],
+            ['副石1重', 'id' , 'function',function($model){
+                return $model['attr']['44'] ?? '';
+            }],
+            ['副石2类型', 'id' , 'function',function($model){
+                return $model['attr']['64'] ?? '';
+            }],
+            ['副石2粒数', 'id' , 'function',function($model){
+                return $model['attr']['62'] ?? '';
+            }],
+            ['副石2重', 'id' , 'function',function($model){
+                return $model['attr']['63'] ?? '';
+            }],
+
+
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
 
