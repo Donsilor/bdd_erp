@@ -44,21 +44,41 @@ return [
 
         ],
         [
-                'title' => '物料采购',
+                'title' => '金料采购',
                 'route' => 'indexPurchase',
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                         [
-                                'title' => '物料采购单',
-                                'route' => 'material/index',
+                                'title' => '金料采购单',
+                                'route' => 'material-gold/index',
                         ],
                         [
-                                'title' => '物料收货单',
-                                'route' => 'material-receipt/index',
+                                'title' => '金料收货单',
+                                'route' => 'material-gold-receipt/index',
                         ],
                         [
-                                'title' => '物料返厂单',
-                                'route' => 'material-defective/index',
+                                'title' => '金料返厂单',
+                                'route' => 'material-gold-defective/index',
+                        ],
+                ],
+                
+        ],
+        [
+                'title' => '石料采购',
+                'route' => 'indexPurchase',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                                'title' => '石料采购单',
+                                'route' => 'material-stone/index',
+                        ],
+                        [
+                                'title' => '石料收货单',
+                                'route' => 'material-stone-receipt/index',
+                        ],
+                        [
+                                'title' => '石料返厂单',
+                                'route' => 'material-stone-defective/index',
                         ],
                 ],
                 
