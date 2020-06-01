@@ -1,6 +1,7 @@
 <?php
 
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -529,6 +530,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => '操作',
                                 'template' => '{delete}',
                                 'buttons' => [
+                                    'audit' => function($url, $model, $key){
+                                        if($model->receipt_status == BillStatusEnum::CONFIRM) {
+                                            return Html::edit(['ajax-iqc','id'=>$model->id], 'IQC质检', [
+                                                'class'=>'btn btn-success btn-sm',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($receipt){
                                         if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
                                             return Html::delete(['delete', 'id' => $model->id]);
