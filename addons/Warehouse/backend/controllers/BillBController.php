@@ -8,6 +8,7 @@ use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
@@ -71,7 +72,11 @@ class BillBController extends BaseController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
         }
 
 

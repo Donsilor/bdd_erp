@@ -11,6 +11,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 
 $this->title = Yii::t('bill_b', '退货返厂单列表');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -243,11 +245,12 @@ $this->params['breadcrumbs'][] = $this->title;
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         if(ids.length == 0){
-            rfMsg("请选中单据或填写单据ID");
-            return false;
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = url = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
         }
-        var url = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
-        window.location.href = url;
+
     }
 
 </script>

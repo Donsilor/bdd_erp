@@ -234,7 +234,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['warehouse-bill-m-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['bill-m-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
 
                                 'delete' => function($url, $model, $key){
@@ -256,16 +256,8 @@ $params = $params ? "&".http_build_query($params) : '';
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         if(ids.length == 0){
-            appConfirm("确定全部导出吗",'可能会很慢，请谨慎操作',function (value) {
-                switch (value) {
-                    case "defeat":
-                        window.location = "<?= Url::to('index?action=export'.$params);?>";
-                        break;
-                    default:
-                }
-            });
-            // return false;
-            var url = "<?= Url::to('export?action=export'.$params);?>";
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
         }else{
             window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
         }

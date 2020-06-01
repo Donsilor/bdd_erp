@@ -371,3 +371,14 @@ function rfPrompt(title,onPrompt, formType=0, dValue='',maxlength=500,area=[]) {
         layer.close(index);
     });
 }
+
+function rfExport(url) {
+    appConfirm("确定全部导出吗",'可能会很慢，请谨慎操作',function (value) {
+        switch (value) {
+            case "defeat":
+                window.location = url;
+                break;
+            default:
+        }
+    });
+}
