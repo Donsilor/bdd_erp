@@ -528,10 +528,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'template' => '{iqc} {delete}',
                                 'buttons' => [
-                                    'audit' => function($url, $model, $key){
-                                        if($model->receipt_status == BillStatusEnum::CONFIRM) {
+                                    'iqc' => function($url, $model, $key) use ($receipt) {
+                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
                                             return Html::edit(['ajax-iqc','id'=>$model->id], 'IQC质检', [
                                                 'class'=>'btn btn-success btn-sm',
                                                 'data-toggle' => 'modal',
@@ -539,7 +539,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'delete' => function($url, $model, $key) use($receipt){
+                                    'delete' => function($url, $model, $key) use($receipt) {
                                         if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }

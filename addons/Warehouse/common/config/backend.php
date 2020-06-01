@@ -51,7 +51,7 @@ return [
                     ],
                     [
                             'title' => '调拨单',
-                            'route' => 'warehouse-bill-m/index',
+                            'route' => 'bill-m/index',
                     ],
                     [
                             'title' => '盘点单',

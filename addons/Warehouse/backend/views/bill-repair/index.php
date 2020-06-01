@@ -452,7 +452,7 @@ $params = $params ? "&".http_build_query($params) : '';
         if(ids.length == 0){
             // rfMsg("请选中单据或填写单据ID");
             // return false;
-            var url = "<?= Url::to('export?action=export'.$params);?>";
+            var url = "<?= Url::to('index?action=export'.$params);?>";
         }else{
             var url = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
             window.location.href = url;

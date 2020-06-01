@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
         }
-        echo Html::a('导出', ['warehouse-bill-m/export?ids='.$billInfo->id],[
+        echo Html::a('导出', ['bill-m/export?ids='.$billInfo->id],[
             'class'=>'btn btn-success btn-xs'
         ]);
         ?>

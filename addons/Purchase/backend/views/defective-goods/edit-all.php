@@ -85,11 +85,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'oqc_reason',
+                                'attribute' => 'iqc_reason',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'oqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'
@@ -98,13 +98,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'oqc_remark',
+                                'attribute'=>'iqc_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('oqc_remark', $model->oqc_remark, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('iqc_remark', $model->iqc_remark, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'oqc_remark', [
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),

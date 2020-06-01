@@ -3,6 +3,8 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -221,6 +223,41 @@ class ReceiptGoodsController extends BaseController
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
             'receipt' => $receipt,
+        ]);
+    }
+
+    /**
+     * IQC质检
+     *
+     * @return mixed
+     */
+    public function actionAjaxIqc()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->receipt_status = BillStatusEnum::CONFIRM;
+                }else{
+                    $model->receipt_status = BillStatusEnum::SAVE;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        $model->audit_status = AuditStatusEnum::PASS;
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 
