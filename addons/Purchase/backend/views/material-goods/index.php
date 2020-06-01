@@ -7,7 +7,7 @@ use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
 
-$this->title = '物料商品';
+$this->title = '物料采购详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">

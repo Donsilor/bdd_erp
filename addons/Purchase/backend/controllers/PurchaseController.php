@@ -200,7 +200,7 @@ class PurchaseController extends BaseController
                         'purchase_sn' => $model->purchase_sn,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
                         'log_module' => "分配跟单人",
-                        'log_msg' => "分配跟单人：".$model->follower->usrname??''
+                        'log_msg' => "分配跟单人：".$model->follower->username??''
                 ];
                 Yii::$app->purchaseService->purchase->createPurchaseLog($log);                 
                 $trans->commit();  
