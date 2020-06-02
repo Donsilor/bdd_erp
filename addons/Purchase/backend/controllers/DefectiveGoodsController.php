@@ -178,7 +178,7 @@ class DefectiveGoodsController extends BaseController
     {
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['defective-goods/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,

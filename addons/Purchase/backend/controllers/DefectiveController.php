@@ -86,103 +86,6 @@ class DefectiveController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $receipt_no = Yii::$app->request->get('receipt_no');
-            $receipt = PurchaseReceipt::find()->where(['receipt_no'=>$receipt_no])->one();
-            if(!$receipt){
-                return $this->message('出货单号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
-            $model->supplier_id = $receipt->supplier_id;
-            if($model->isNewRecord){
-                $model->defective_no = SnHelper::createDefectiveSn();
-            }
-            $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
-        }
-
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-
-    /**
-     * @return mixed
-     * 申请审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if($model->defective_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->defective_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
-    }
-
-    /**
-     * 审核-不良返厂单
-     *
-     * @return mixed
-     */
-    public function actionAjaxAudit()
-    {
-        $id = Yii::$app->request->get('id');
-
-        $this->modelClass = PurchaseDefectiveForm::class;
-        $model = $this->findModel($id);
-
-        if($model->audit_status == AuditStatusEnum::PENDING) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
-
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
-                    $model->defective_status = BillStatusEnum::CONFIRM;
-                }else{
-                    $model->defective_status = BillStatusEnum::SAVE;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $trans->commit();
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-        }
-
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * 详情展示页
      * @return string
      * @throws NotFoundHttpException
@@ -202,6 +105,97 @@ class DefectiveController extends BaseController
         ]);
     }
 
+    /**
+     * ajax 不良返厂单-申请审核
+     *
+     * @return mixed
+     */
+    public function actionAjaxApply()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->defective_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->defective_status = BillStatusEnum::PENDING;
+        // ajax 校验
+        $this->activeFormValidate($model);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->purchaseService->purchaseDefective->applyAudit($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("申请审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("申请审核成功", $this->redirect(Yii::$app->request->referrer), 'success');
+    }
+
+    /**
+     * ajax 不良返厂单-审核
+     *
+     * @return mixed
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                $model->auditor_id = \Yii::$app->user->id;
+                $model->audit_time = time();
+
+                \Yii::$app->purchaseService->purchaseDefective->auditDefect($model);
+
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * ajax 不良返厂单-取消/删除
+     *
+     * @return mixed
+     */
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->purchaseService->purchaseDefective->cancelDefect($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("取消失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("取消成功", $this->redirect(Yii::$app->request->referrer), 'success');
+    }
 
     /**
      * @param null $ids
