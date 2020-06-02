@@ -3,7 +3,12 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\ArrayHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -71,6 +76,14 @@ class ReceiptController extends BaseController
         //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);
+        }
+        //导出
+        if(Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
         }
 
         return $this->render('index', [
@@ -220,6 +233,105 @@ class ReceiptController extends BaseController
             'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '采购收货单';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+
+        $select = ['pr.receipt_no','type.name as product_type_name','cate.name as style_cate_name', 'prg.*'];
+        $list = PurchaseReceipt::find()->alias('pr')
+            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
+            ->where(['pr.id' => $ids])
+            ->select($select)->asArray()->all();
+        $header = [
+            ['条码号', 'receipt_no' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['货品名称', 'goods_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['款式分类', 'style_cate_name' , 'text'],
+            ['材质', 'material' , 'function', function($model){
+                return Yii::$app->attr->valueName($model->material ?? 0);
+            }],
+            ['成色', 'material' ,  function($model){
+                return Yii::$app->attr->valueName($model->material ?? 0);
+            }],
+            ['件数', 'goods_num' , 'text'],
+            ['指圈', 'finger' , 'text'],
+            //['尺寸', 'finger' , 'text'],
+            ['货重', 'gold_weight' , 'text'],
+            ['净重', 'suttle_weight' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['含耗重', 'gross_weight' , 'text'],
+            //['金价', 'gross_weight' , 'text'],
+            //['金料额', 'gross_weight' , 'text'],
+            ['石号', 'main_stone' , 'text'],
+            ['粒数', 'main_stone_num' , 'text'],
+            ['石重', 'main_stone_weight' , 'text'],
+            ['颜色', 'main_stone_color' ,'function', function($model){
+                return Yii::$app->attr->valueName($model->main_stone_color ?? 0);
+            }],
+            ['净度', 'main_stone_clarity' , 'function', function($model){
+                return Yii::$app->attr->valueName($model->main_stone_clarity ?? 0);
+            }],
+            ['单价', 'main_stone_price' , 'text'],
+            ['金额', 'main_stone_price' , function($model){
+                if($model->main_stone_price){
+                    return $model->main_stone_price * $model->main_stone_num;
+                }else{
+                    return 0;
+                }
+            }],
+            ['副石号', 'second_stone1' , 'text'],
+            ['副石粒数', 'second_stone_num1' , 'text'],
+            ['副石石重', 'second_stone_weight1' , 'text'],
+            ['副石单价', 'second_stone_price1' , 'text'],
+            ['副石金额', 'second_stone_price1' , function($model){
+                return $model->second_stone_price1 * $model->second_stone_num1;
+            }],
+
+            ['配件(g)', 'parts_weight' , 'text'],
+            ['配件额', 'parts_price' , 'text'],
+            ['配件工费', 'parts_fee' , 'text'],
+            ['工费', 'gong_fee' , 'text'],
+            ['镶石费', 'xianqian_fee' , 'text'],
+            //['车花片', 'xianqian_fee' , 'text'],
+            ['分色/分件', 'fense_fee' , 'text'],
+            ['补口费', 'bukou_fee' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
+
+            ['单价', 'cost_price' , 'function',function($model){
+                $main_stone_price = $model->main_stone_price ?? 0;
+                $main_stone_num = $model->main_stone_num ?? 0;
+                $cost_price = $model->cost_price ?? 0;
+                $gong_fee = $model->gong_fee ?? 0;
+                $bukou_fee = $model->bukou_fee ?? 0;
+                $biaomiangongyi_fee = $model->biaomiangongyi_fee ?? 0;
+                return $main_stone_price * $main_stone_num + $cost_price + $gong_fee + $bukou_fee
+                    + $biaomiangongyi_fee;
+            }],
+            //['总额', 'cost_price' , 'text'],
+            ['倍率', 'markup_rate' , 'text'],
+
+            ['备注', 'goods_remark' , 'text'],
+            ['标签价', 'sale_price' , 'text'],
+        ];
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
     /**

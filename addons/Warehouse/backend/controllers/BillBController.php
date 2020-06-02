@@ -226,21 +226,6 @@ class BillBController extends BaseController
         }
     }
 
-    /**
-     * 导出列表
-     * @param unknown $dataProvider
-     * @return boolean
-     */
-    private function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
-        $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
-        ];
-        return ExcelHelper::exportData($list, $header, '盘点数据导出_' . time());
-
-    }
 
     /**
      * @param null $ids

@@ -13,6 +13,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 
 $this->title = Yii::t('receipt', '采购收货单');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -25,6 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                     <!--Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]) -->
                 </div>
             </div>
@@ -292,6 +298,18 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
+
+    }
+
+
     function printDetail()
     {
         var valArr = new Array;
@@ -306,3 +324,4 @@ $this->params['breadcrumbs'][] = $this->title;
         window.open('/purchase/receipt/print?ids='+vals);
     }
 </script>
+
