@@ -3,7 +3,10 @@
 namespace addons\Purchase\services;
 
 
+use addons\Purchase\common\enums\DefectiveStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -19,6 +22,7 @@ use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use yii\db\Exception;
 
 /**
  * Class TypeService
@@ -164,16 +168,18 @@ class PurchaseReceiptService extends Service
      */
     public function qcIqc($form)
     {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
+        //if(false === $form->validate()) {
+            //throw new \Exception($this->getError($form));
+        //}
+        $ids = $form->getIds();
         if($form->goods_status == QcTypeEnum::PASS){
-            $form->goods_status = ReceiptGoodsStatusEnum::IQC_PASS;
+            $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_PASS];
         }else{
-            $form->goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
+            $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_NO_PASS, 'iqc_reason' => $form->iqc_reason, 'iqc_remark' => $form->iqc_remark];
         }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        $res = PurchaseReceiptGoods::updateAll($goods, ['id'=>$ids]);
+        if(false === $res) {
+            throw new Exception("保存失败");
         }
     }
 
@@ -183,16 +189,65 @@ class PurchaseReceiptService extends Service
      */
     public function batchDefective($form)
     {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
+        $ids = $form->getIds();
+        if(!count($ids)>1){
+            throw new Exception("至少选择一个货品");
         }
-        if($form->goods_status == QcTypeEnum::PASS){
-            $form->goods_status = ReceiptGoodsStatusEnum::IQC_PASS;
-        }else{
-            $form->goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
+        if(!$form->checkDistinct('receipt_no', $ids)){
+            throw new Exception("不是同一个出货单号不允许制单");
         }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        if(!$form->checkDistinct('supplier_id', $ids)){
+            throw new Exception("不是同一个供应商不允许制单");
+        }
+        $total_cost = 0;
+        $detail = [];
+        $receipt = [];
+        foreach($ids as $id)
+        {
+            $goods = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
+            $receipt_id = $goods->receipt_id;
+            if(!$receipt){
+                $receipt = PurchaseReceipt::find()->where(['id' => $receipt_id])->one();
+                $defect = PurchaseDefective::find()->select(['id'])->where(['receipt_no'=>$receipt->receipt_no])->one();
+            }
+            if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_NO_PASS)
+            {
+                throw new Exception("流水号【{$id}】不是IQC质检未过状态，不能生成不良品返厂单");
+            }
+            $check = PurchaseDefectiveGoods::find()->where(['defective_id'=>$defect->id, 'xuhao' => $goods->xuhao])->count(1);
+            if($check){
+                throw new Exception("流水号【{$id}】已存在保存状态的不良返厂单，不能多次生成不良品返厂单");
+            }
+            $detail[] = [
+                'xuhao' => $goods->xuhao,
+                'style_sn' => $goods->style_sn,
+                'factory_mo' => $goods->factory_mo,
+                'produce_sn' => $goods->produce_sn,
+                'style_cate_id' => $goods->style_cate_id,
+                'product_type_id' => $goods->product_type_id,
+                'cost_price' => $goods->cost_price,
+                'iqc_reason' => $goods->iqc_reason,
+                'iqc_remark' => $goods->iqc_remark,
+                'created_at' => time(),
+            ];
+            $total_cost = bcadd($total_cost, $goods->cost_price, 2);
+        }
+        $bill = [
+            'supplier_id' => $receipt->supplier_id,
+            'receipt_no' => $receipt->receipt_no,
+            'defective_num' => count($detail),
+            'total_cost' => $total_cost,
+            'audit_status' => AuditStatusEnum::PENDING,
+            'defective_status' => DefectiveStatusEnum::PENDING,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+
+        \Yii::$app->purchaseService->purchaseDefective->createDefactiveBill($bill, $detail);
+
+        $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
+        if(false === $res) {
+            throw new Exception("更新货品状态失败");
         }
     }
 }

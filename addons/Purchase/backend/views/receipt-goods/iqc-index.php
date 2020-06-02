@@ -26,14 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                         echo Html::a('IQC批量质检', ['ajax-iqc','id'=>$model->id],  [
                             'class'=>'btn btn-success btn-xs',
-                            "onclick" => "batchOperation(this);return false;",
+                            "onclick" => "batchIqc(this);return false;",
                         ]);
                         echo '&nbsp;';
-                        echo Html::a('批量生成不良返厂单', ['ajax-defective','id'=>$model->id] ,[
+                        echo Html::edit(['ajax-defective','id'=>$model->id], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                            "onclick" => "batchOperation(this);return false;",
+                            'onclick' => 'batchDefective(this);return false;',
                         ]);
                     ?>
                 </div>
@@ -217,7 +215,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     //批量操作
-    function batchOperation(obj) {
+    function batchIqc(obj) {
         let $e = $(obj);
         let url = $e.attr('href');
         var ids = new Array;
@@ -254,6 +252,44 @@ $this->params['breadcrumbs'][] = $this->title;
                     return false;
                 }
             }
+        });
+    }
+
+    //批量生成不良返厂单
+    function batchDefective(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        var ids = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            var str = $(this).val();
+            var arr = jQuery.parseJSON(str)
+            ids[i] = arr.id;
+        });
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        var ids = ids.join(',');
+        appConfirm("确定要生成不良返厂单吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
         });
     }
 </script>

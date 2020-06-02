@@ -269,15 +269,15 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
-     * IQC质检
+     * IQC批量质检
      *
      * @return mixed
      */
     public function actionAjaxIqc()
     {
-        $id = Yii::$app->request->get('id');
         $ids = Yii::$app->request->get('ids');
-        $model = $this->findModel($id);
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -294,7 +294,6 @@ class ReceiptGoodsController extends BaseController
             }
         }
         $model->goods_status = QcTypeEnum::PASS;
-        $model->ids = $ids;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -307,29 +306,20 @@ class ReceiptGoodsController extends BaseController
      */
     public function actionAjaxDefective()
     {
-        $id = Yii::$app->request->get('id');
-        $ids = Yii::$app->request->get('ids');
-        $model = $this->findModel($id);
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-
-                \Yii::$app->purchaseService->purchaseReceipt->batchDefective($model);
-
-                $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-        }
-        $model->goods_status = QcTypeEnum::PASS;
+        $ids = Yii::$app->request->post('ids');
+        $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->purchaseService->purchaseReceipt->batchDefective($model);
+
+            $trans->commit();
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
     }
 
     /**
