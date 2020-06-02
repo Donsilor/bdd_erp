@@ -84,7 +84,7 @@ class PurchaseReceiptService extends Service
         if($receipt->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
         }
-        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$receipt_id]);
+        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$receipt_id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }

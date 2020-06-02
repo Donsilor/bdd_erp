@@ -31,20 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;&nbsp;&nbsp;';
         }
         if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
-            echo Html::a('IQC批量质检', ['ajax-iqc','id'=>$receipt->id],  [
-                'class'=>'btn btn-warning btn-xs',
-                "onclick" => "batchOperation(this);return false;",
-            ]);
-            echo '&nbsp;&nbsp;&nbsp;';
             echo Html::a('批量申请入库', ['ajax-warehouse','id'=>$receipt->id], [
                 'class'=>'btn btn-success btn-xs',
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
-                "onclick" => "batchOperation(this);return false;",
-            ]);
-            echo '&nbsp;&nbsp;&nbsp;';
-            echo Html::a('批量生成不良返厂单', ['ajax-defective','id'=>$receipt->id] ,[
-                'class'=>'btn btn-danger btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModal',
                 "onclick" => "batchOperation(this);return false;",
@@ -154,6 +142,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute'=>'finger',
@@ -540,40 +541,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'goods_status',
-                                'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'label' => '质检未过原因',
-                                'attribute' => 'fqc.name',
-                                'value' => "fqc.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'iqc_remark',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -585,17 +552,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{iqc} {delete}',
+                                'template' => '{delete}',
                                 'buttons' => [
-                                    'iqc' => function($url, $model, $key) use ($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::CONFIRM && $model->goods_status == ReceiptGoodsStatusEnum::IQC_ING) {
-                                            return Html::edit(['ajax-iqc','id'=>$model->id], 'IQC质检', [
-                                                'class'=>'btn btn-success btn-sm',
-                                                'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
-                                            ]);
-                                        }
-                                    },
                                     'delete' => function($url, $model, $key) use($receipt) {
                                         if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
                                             return Html::delete(['delete', 'id' => $model->id]);

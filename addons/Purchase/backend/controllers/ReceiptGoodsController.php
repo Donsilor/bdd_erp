@@ -97,8 +97,16 @@ class ReceiptGoodsController extends BaseController
 
             ]
         ]);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
         $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
+        $supplier_id = $searchModel->supplier_id;
+        if($supplier_id){
+            $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.supplier_id', $supplier_id]);
+        }
+        $receipt_no = $searchModel->receipt_no;
+        if($receipt_no){
+            $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.receipt_no', $receipt_no]);
+        }
         return $this->render('iqc-index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -191,12 +199,12 @@ class ReceiptGoodsController extends BaseController
                     if(!empty($receipt_goods_list)){
                         $receipt_val = [];
                         $receipt_key = array_keys($receipt_goods_list[0]);
-                        array_push($receipt_key, 'id', 'receipt_id', 'xuhao');
+                        array_push($receipt_key,'receipt_id', 'xuhao');
                         $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
                         $xuhao = $xuhaoMax->xuhao?:0;
                         foreach ($receipt_goods_list as $goods) {
                             $xuhao++;
-                            array_push($goods, null, $receipt_id, $xuhao);
+                            array_push($goods, $receipt_id, $xuhao);
                             $receipt_val[] = array_values($goods);
                         }
                         $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();

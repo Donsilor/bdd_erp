@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'filter'=>Select2::widget([
-                                    'name'=>'SearchModel[receipt.supplier_id]',
+                                    'name'=>'SearchModel[supplier_id]',
                                     'value'=>$searchModel->supplier_id,
                                     'data'=>Yii::$app->supplyService->supplier->getDropDown(),
                                     'options' => ['placeholder' =>"请选择",'class' => 'col-md-2','style'=> 'width:260px;'],
@@ -136,6 +136,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'jintuo_type',
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'label' => '款式分类',
