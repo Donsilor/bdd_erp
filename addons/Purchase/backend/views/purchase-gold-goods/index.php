@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [ 
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
-                                             return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                             return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){                                            
