@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
         ?>
-
     </div>
     <div class="tab-content">
         <div class="row col-xs-15" style="padding-left: 0px;padding-right: 0px;">
@@ -53,15 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'100'],
                             ],*/
                             [
-                                    'attribute' => 'goods_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'value' => function($model) {
-                                        return Html::a($model->goods_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
                                     'attribute'=>'goods_name',
                                     'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                             'class' => 'form-control',
@@ -75,26 +65,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             
                             [
-                                    'label' => '商品分类',
-                                    'attribute' => 'style_cate_id',
-                                    'value' => "cate.name",
-                                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
+                                    'attribute' => 'material_type',
+                                    'value' => function($model){
+                                        return Yii::$app->attr->valueName($model->material_type);
+                                    },
+                                    'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],                            
                             [
-                                    'attribute' => 'goods_num',
-                                    'value' => "goods_num",
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                         'class' => 'form-control',
-                                    ]),
+                                    'attribute' => 'goods_weight',
                                     'value' => function ($model) {
-                                        return $model->goods_num ;
+                                        return $model->goods_weight ;
                                     },
-                                   'headerOptions' => ['width'=>'100'],
+                                    'filter' => false,                                    
+                                   'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                     'attribute'=>'cost_price',
@@ -104,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->cost_price ;
                                     },
-                                    'headerOptions' => ['width'=>'120'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                     'attribute'=>'gold_price',
@@ -114,9 +99,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->gold_price ;
                                     },
-                                    'headerOptions' => ['width'=>'120'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],
-                            [
+                            /*[
                                     'attribute' => '申请修改',
                                     'value' => function ($model) {
                                         if($model->is_apply == common\enums\ConfirmEnum::YES) {
@@ -133,47 +118,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['width' => '100'],
-                            ],
-                            [
-                                    'attribute' => '布产号',                                    
-                                    'value' => function ($model) {
-                                           if($model->produce_id && $model->produce) {
-                                               return $model->produce->produce_sn ;
-                                           }
-                                    },
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width' => '150'],
-                            ],
-                            [
-                                    'attribute' => '布产状态',
-                                    'value' => function ($model) {
-                                        if($model->produce_id && $model->produce) {
-                                            return BuChanEnum::getValue($model->produce->bc_status);
-                                        }else{
-                                            return '未布产';
-                                        }
-                                    },
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width' => '150'],
-                            ],
+                            ],*/                            
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{edit} {apply-edit} {delete}',
+                                'template' => '{edit} {delete}',
                                 'buttons' => [ 
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
                                              return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
-                                    'apply-edit' =>function($url, $model, $key){
-                                        if($model->produce_id && $model->produce && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                                        }
-                                    },                                    
+                                    'apply-edit' =>function($url, $model, $key){                                            
+                                         return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                     },                                    
                                     'delete' => function($url, $model, $key) use($purchase){
                                         if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
                                             return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);

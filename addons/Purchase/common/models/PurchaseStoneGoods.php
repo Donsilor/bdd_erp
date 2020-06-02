@@ -14,6 +14,7 @@ use Yii;
  * @property double $goods_weight 石料总重(ct)
  * @property int $goods_num 商品数量
  * @property string $cost_price 石料总额
+ * @property string stone_type 石料类型
  * @property string $stone_price 石料价格/克拉
  * @property int $stone_num 石料数量
  * @property string $stone_color 石料颜色
@@ -41,7 +42,7 @@ class PurchaseStoneGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id'], 'required'],
+            [['purchase_id','goods_name','stone_type','cost_price','goods_weight','stone_num'], 'required'],
             [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
@@ -58,20 +59,21 @@ class PurchaseStoneGoods extends BaseModel
     {
         return [
             'id' => 'ID',
-            'purchase_id' => '采购单ID',
-            'goods_sn' => '款号/起版号',
+            'purchase_id' => '采购单',
+            'goods_sn' => '商品编号',
             'goods_name' => '商品名称',
             'goods_weight' => '石料总重(ct)',
-            'goods_num' => '商品数量',
-            'cost_price' => '石料总额',
+            'goods_num' => '石包数量',
+            'cost_price' => '石包总额',
+            'stone_type' => '石料类型',
             'stone_price' => '石料价格/克拉',
-            'stone_num' => '石料数量',
-            'stone_color' => '石料颜色',
-            'stone_clarity' => '石料净度',
+            'stone_num' => '石包粒数',
+            'stone_color' => '颜色',
+            'stone_clarity' => '净度',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
-            'status' => '状态： -1已删除 0禁用 1启用',
-            'remark' => '采购备注',
+            'status' => '状态',
+            'remark' => '石料备注',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

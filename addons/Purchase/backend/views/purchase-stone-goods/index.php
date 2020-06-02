@@ -51,16 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ],*/
-                            [
-                                    'attribute' => 'goods_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'value' => function($model) {
-                                        return Html::a($model->goods_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
+                            ],*/                            
                             [
                                     'attribute'=>'goods_name',
                                     'filter' => Html::activeTextInput($searchModel, 'goods_name', [
@@ -72,28 +63,50 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
-                            ],
-                            
+                            ], 
                             [
-                                    'attribute' => 'style_cate_id',
-                                    'value' => "cate.name",
-                                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
-                            ],                            
+                                    'attribute' => 'stone_type',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return Yii::$app->attr->valueName($model->stone_type) ;
+                                    },
+                                    'headerOptions' => ['width'=>'150'],
+                                    ],
                             [
-                                    'attribute' => 'goods_num',
-                                    'value' => "goods_num",
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'attribute' => 'stone_num',
+                                    'filter' => Html::activeTextInput($searchModel, 'stone_num', [
                                          'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                        return $model->goods_num ;
+                                        return $model->stone_num ;
                                     },
-                                   'headerOptions' => ['width'=>'100'],
+                                   'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                    'attribute' => 'stone_color',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return Yii::$app->attr->valueName($model->stone_color) ;
+                                    },
+                                    'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                    'attribute' => 'stone_clarity',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return Yii::$app->attr->valueName($model->stone_clarity) ;
+                                    },
+                                    'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                    'attribute' => 'goods_weight',
+                                    'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                                            'class' => 'form-control',
+                                    ]),
+                                    'value' => function ($model) {
+                                        return $model->goods_weight ;
+                                    },
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                     'attribute'=>'cost_price',
@@ -103,60 +116,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->cost_price ;
                                     },
-                                    'headerOptions' => ['width'=>'120'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
-                                    'attribute'=>'main_stone_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
+                                    'attribute'=>'stone_price',
+                                    'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                        return $model->main_stone_price ;
+                                        return $model->stone_price ;
                                     },
-                                    'headerOptions' => ['width'=>'120'],
-                            ],
-                            [
-                                    'attribute' => '申请修改',
-                                    'value' => function ($model) {
-                                        if($model->is_apply == common\enums\ConfirmEnum::YES) {
-                                            return '已申请<br/>'.Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
-                                                    'class' => 'btn btn-danger btn-xs',
-                                            ]);
-                                        }else{
-                                            return '未申请';
-                                        }
-                                    },
-                                    'filter' => Html::activeDropDownList($searchModel, 'is_apply',common\enums\ConfirmEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width' => '100'],
-                            ],
-                            [
-                                    'attribute' => '布产号',                                    
-                                    'value' => function ($model) {
-                                           if($model->produce_id && $model->produce) {
-                                               return $model->produce->produce_sn ;
-                                           }
-                                    },
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width' => '150'],
-                            ],
-                            [
-                                    'attribute' => '布产状态',
-                                    'value' => function ($model) {
-                                        if($model->produce_id && $model->produce) {
-                                            return BuChanEnum::getValue($model->produce->bc_status);
-                                        }else{
-                                            return '未布产';
-                                        }
-                                    },
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width' => '150'],
-                            ],
+                                    'headerOptions' => ['width'=>'150'],
+                            ],                            
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
@@ -169,9 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){
-                                        if($model->produce_id && $model->produce && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
-                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                                        }
+                                        
                                     },                                    
                                     'delete' => function($url, $model, $key) use($purchase){
                                         if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {

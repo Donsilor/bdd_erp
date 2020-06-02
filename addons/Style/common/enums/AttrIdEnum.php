@@ -21,6 +21,9 @@ class AttrIdEnum
     const HEIGHT = 41;//高度（mm）
     const FACEWORK = 57;//表面工艺
     
+    //物料
+    const MAT_STONE_TYPE = 40;//石料类型
+    const MAT_MATERIAL_TYPE = 51;//材质
     
     //钻石信息
     const DIA_CLARITY = 2;//钻石净度

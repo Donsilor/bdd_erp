@@ -78,7 +78,7 @@ class PurchaseGoodsController extends BaseController
     }
     /**
      * 编辑/创建
-     * @property PurchaseGoodsForm $model
+     * @var PurchaseGoodsForm $model
      * @return mixed
      */
     public function actionEdit()
@@ -165,6 +165,7 @@ class PurchaseGoodsController extends BaseController
             if (!$model->delete()) {
                 throw new \Exception("删除失败",422);
             }
+            
             //删除商品属性
             PurchaseGoodsAttribute::deleteAll(['id'=>$id]);
             //更新单据汇总

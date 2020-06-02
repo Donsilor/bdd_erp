@@ -4,9 +4,8 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
-use addons\Warehouse\common\enums\BillStatusEnum;
-
 use common\enums\AuditStatusEnum;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -60,10 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'130'],
             ],
-
             [
                     'attribute' => 'supplier_id',
-                    'value' =>"supplier.supplier_name",
+                    'value' => function($model) {
+                        return $model->supplier->supplier_name ?? '';
+                    },
                     'filter'=>Select2::widget([
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
@@ -77,15 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                    'attribute' => 'follower_id',
-                    'value' => "follower.username",
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'goods_count',
-                    'value' => "goods_count",
+                    'attribute' => 'total_num',
+                    'value' => "total_num",
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
@@ -162,9 +155,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'purchase_status',                    
                 'value' => function ($model){
-                    return BillStatusEnum::getValue($model->purchase_status);
+                    return PurchaseStatusEnum::getValue($model->purchase_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',BillStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',PurchaseStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',                        
                 ]),
@@ -174,10 +167,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
+                'template' => '{edit} {audit} {goods} {apply} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::SAVE){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
@@ -186,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },                    
                     'audit' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::PENDING){
+                        if($model->purchase_status == PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -195,11 +188,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-gold-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-gold-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
-                    'ajax-apply' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::SAVE){
+                    'apply' => function($url, $model, $key){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -207,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'follower' => function($url, $model, $key){
-                        if($model->purchase_status <= BillStatusEnum::PENDING){
+                        if($model->purchase_status <= PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                                 'class'=>'btn btn-info btn-sm',
                                 'data-toggle' => 'modal',
@@ -216,7 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->purchase_status != BillStatusEnum::CONFIRM){
+                        if($model->purchase_status != PurchaseStatusEnum::CONFIRM){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

@@ -63,7 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'supplier_id',
-                    'value' =>"supplier.supplier_name",
+                    'value' =>function($model){
+                           return $model->supplier->supplier_name ?? '';
+                    },                    
                     'filter'=>Select2::widget([
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
@@ -75,17 +77,10 @@ $this->params['breadcrumbs'][] = $this->title;
                      ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-2'],
-            ],
+            ],           
             [
-                    'attribute' => 'follower_id',
-                    'value' => "follower.username",
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'goods_count',
-                    'value' => "goods_count",
+                    'attribute' => 'total_num',
+                    'value' => "total_num",
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
@@ -174,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
+                'template' => '{edit} {audit} {goods} {apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == BillStatusEnum::SAVE){
@@ -195,26 +190,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-stone-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-stone-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
-
-                    'ajax-apply' => function($url, $model, $key){
+                    'apply' => function($url, $model, $key){
                         if($model->purchase_status == BillStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);
                         }
-                    },
-                    'follower' => function($url, $model, $key){
-                        if($model->purchase_status <= BillStatusEnum::PENDING){
-                            return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
-                                'class'=>'btn btn-info btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                            ]);
-                        }
-                    },
+                    },                    
                     'delete' => function($url, $model, $key){
                         if($model->purchase_status != BillStatusEnum::CONFIRM){
                             return Html::delete(['delete', 'id' => $model->id]);

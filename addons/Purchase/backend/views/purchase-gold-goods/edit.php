@@ -13,53 +13,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
+              <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
               <div class="row">                        
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
+                            <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                            <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate->getGrpDropDown(),['prompt'=>'请选择','disabled'=>true]) ?>
-                    </div>
-			   </div> 
-			   <div class="row">                       
-                   
                     <div class="col-lg-4">
                         <?= $form->field($model, 'goods_name')->textInput() ?>
                     </div>                    
+			   </div> 
+			   <div class="row">
+			        <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_weight')->textInput() ?>
+                    </div>                    
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput() ?>
-                    </div>
+                    </div>                    
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
-			   </div>                     
-               <?php
-               $attr_list = $model->getAttrList();
-               foreach ($attr_list as $k=>$attr){
-                    $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
-                    $attr_field_name = "{$attr_field}[{$attr['id']}]";
-                    //通用属性值列表
-                    $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
-                    switch ($attr['input_type']){
-                        case common\enums\InputTypeEnum::INPUT_TEXT :{
-                            $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
-                            break;
-                        }
-                        default:{
-                            $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
-                            break;
-                        }
-                    }//end switch
-
-                    $collLg = 4;
-                    ?>
-                    <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
-                    <div class="col-lg-<?=$collLg?>"><?= $input ?></div>
-                    <?php if(($k+1) % 3 == 0 || ($k+1) == count($attr_list)){?></div><?php }?>
-                    <?php
-                }//end foreach $attr_list
-                ?>
- 
+			   </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'remark')->textarea() ?>
