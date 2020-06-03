@@ -75,10 +75,6 @@ class ReceiptController extends BaseController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
-        }
-        //导出
-        if(Yii::$app->request->get('action') === 'export'){
             $dataProvider->setPagination(false);
             $list = $dataProvider->models;
             $list = ArrayHelper::toArray($list);

@@ -75,24 +75,28 @@ class PurchaseReceiptService extends Service
 
     /**
      * 同步采购收货单生成L单
-     * @param unknown $purchase_id
-     * @param unknown $detail_ids
+     * @param object $form
+     * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncReceiptToBillInfoL($receipt_id, $detail_ids = null)
+    public function syncReceiptToBillInfoL($form, $detail_ids = null)
     {
-        $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
+        $receipt = PurchaseReceipt::find()->where(['id'=>$form->receipt_id])->one();
         if($receipt->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
         if($receipt->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
         }
-        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$receipt_id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->receipt_id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        $detail_ids = $form->getIds();
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
         $models = $query->all();
+        if(!$models){
+            throw new \Exception('采购收货单没有待入库的货品');
+        }
         $total_cost = 0;
         $market_price = 0;
         $sale_price = 0;
@@ -168,6 +172,7 @@ class PurchaseReceiptService extends Service
      */
     public function qcIqc($form)
     {
+        $this->iqcValidate($form);
         //if(false === $form->validate()) {
             //throw new \Exception($this->getError($form));
         //}
@@ -180,6 +185,22 @@ class PurchaseReceiptService extends Service
         $res = PurchaseReceiptGoods::updateAll($goods, ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("保存失败");
+        }
+    }
+
+    /**
+     *  IQC质检合法验证
+     * @param $ids
+     */
+    public function iqcValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
+                    throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
+                }
+            }
         }
     }
 
@@ -248,6 +269,22 @@ class PurchaseReceiptService extends Service
         $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("更新货品状态失败");
+        }
+    }
+
+    /**
+     *  申请入库合法验证
+     * @param $ids
+     */
+    public function warehouseValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
+                    throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
+                }
+            }
         }
     }
 }
