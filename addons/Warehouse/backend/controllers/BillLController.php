@@ -2,12 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use common\helpers\ArrayHelper;
-use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -19,6 +13,14 @@ use addons\Warehouse\common\forms\WarehouseBillLForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\OrderTypeEnum;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
@@ -89,7 +91,6 @@ class BillLController extends BaseController
 
     }
 
-
     /**
      * ajax编辑/创建
      *
@@ -126,27 +127,6 @@ class BillLController extends BaseController
         ]);
     }
 
-
-    /**
-     * @return mixed
-     * 提交审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->bill_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
-    }
-
-
     /**
      * 详情展示页
      * @return string
@@ -165,6 +145,25 @@ class BillLController extends BaseController
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id, $this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+    /**
+     * @return mixed
+     * 提交审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBill();
+        if($model->bill_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->bill_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
     }
 
     /**
@@ -200,7 +199,6 @@ class BillLController extends BaseController
         ]);
     }
 
-
     /**
      * 删除/关闭/取消
      *
@@ -212,22 +210,31 @@ class BillLController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
         }
-
         try{
             $trans = \Yii::$app->db->beginTransaction();
             $model->bill_status = BillStatusEnum::CANCEL;
             //更新库存状态
-            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
+            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id', 'source_detail_id'])->all();
+            if(!$billGoods){
+                throw new \Exception("单据明细为空");
+            }
             foreach ($billGoods as $goods){
-                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::CANCEL],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::RECEIVING]);
+                $res = WarehouseGoods::deleteAll(['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::RECEIVING]);
                 if(!$res){
                     throw new Exception("商品{$goods->goods_id}不是收货中或者不存在，请查看原因");
+                }
+            }
+            if($model->order_type == OrderTypeEnum::ORDER_L){
+                //同步采购收货单货品状态
+                $ids = ArrayHelper::getColumn(ArrayHelper::toArray($billGoods), 'source_detail_id');
+                $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_PASS], ['id'=>$ids]);
+                if(false === $res) {
+                    throw new \Exception("同步采购收货单货品状态失败");
                 }
             }
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
-
             //日志
             $log = [
                 'bill_id' => $model->id,
@@ -246,7 +253,6 @@ class BillLController extends BaseController
 
         return $this->message("取消失败", $this->redirect(['index']), 'error');
     }
-
 
     /**
      * @param null $ids
@@ -300,6 +306,5 @@ class BillLController extends BaseController
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
-
 
 }
