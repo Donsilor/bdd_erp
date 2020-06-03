@@ -138,15 +138,35 @@ class PurchaseReceiptService extends Service
                 'second_stone_weight2' => $model->second_stone_weight2,
                 'second_stone_price2' => $model->second_stone_price2
             ];
-
+            $bill_goods[] = [
+                'goods_name' => $model->goods_name,
+                'style_sn' => $model->style_sn,
+                'goods_num' => $model->goods_num,
+                'put_in_type' => $model->put_in_type,
+                'material' => $model->material,
+                'gold_weight' => $model->gold_weight,
+                'gold_loss' => $model->gold_loss,
+                'diamond_carat' =>$model->main_stone_weight,
+                'diamond_color' =>$model->main_stone_color,
+                'diamond_clarity' => $model->main_stone_clarity,
+                'diamond_cert_id' => $model->cert_id,
+                'source_detail_id' => $model->id,
+                'cost_price' => $model->cost_price,
+                'sale_price' => $model->sale_price,
+                'market_price' => $model->market_price,
+                'markup_rate' => $model->markup_rate,
+                'status' => 1,
+                'created_at' => time()
+            ];
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $market_price = bcadd($market_price, $model->market_price, 2);
             $sale_price = bcadd($sale_price, $model->sale_price, 2);
         }
-
         //批量更新采购收货单货品状态
         $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
-
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
         $bill = [
             'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
             'bill_status' => BillStatusEnum::SAVE,
@@ -163,7 +183,7 @@ class PurchaseReceiptService extends Service
             'from_warehouse_id' => 0,
             'send_goods_sn' => $form->receipt_no,
         ];
-        Yii::$app->warehouseService->billL->createBillL($bill, $goods);
+        Yii::$app->warehouseService->billL->createBillL($goods, $bill, $bill_goods);
     }
 
     /**

@@ -2,16 +2,23 @@
 
 namespace addons\Warehouse\services;
 
-
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\OrderTypeEnum;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
+use common\helpers\ArrayHelper;
 
 /**
- * Class TypeService
+ * 收货单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
@@ -20,71 +27,92 @@ class WarehouseBillLService extends Service
 
     /**
      * 创建收货单据
-     * @param array $bill
      * @param array $goods
-     * @return array
+     * @param array $bill
+     * @param array $bill_goods
      */
-    public function createBillL($bill, $goods){
-        $warehouseBill = new WarehouseBill();
-        $warehouseBill->bill_no = SnHelper::createBillSn($bill['bill_type']);
-        $warehouseBill->attributes = $bill;
-        if(false === $warehouseBill->save()){
-            throw new \Exception($this->getError($warehouseBill));
+    public function createBillL($goods, $bill, $bill_goods){
+        $billM = new WarehouseBill();
+        $billM->attributes = $bill;
+        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
+        if(false === $billM->save()){
+            throw new \Exception($this->getError($billM));
         }
-        $bill_id = $warehouseBill->attributes['id'];
-        $warehouseGoods = new WarehouseGoods();
-        $goods_list = [];
-        $bill_goods = [];
-        foreach ($goods as $item){
-            $item['goods_id'] = SnHelper::createGoodsId();
-            $warehouseGoods->setAttributes($item);
-            if(!$warehouseGoods->validate()){
-                throw new \Exception($this->getError($warehouseGoods));
+        $bill_id = $billM->attributes['id'];
+        $goodsM = new WarehouseGoods();
+        $billGoods = new WarehouseBillGoods();
+        foreach ($goods as $k => &$good){
+            $good['goods_id'] = SnHelper::createGoodsId();
+            $goodsM->setAttributes($good);
+            if(!$goodsM->validate()){
+                throw new \Exception($this->getError($goodsM));
             }
-            $goods_list[] = $item;
-            $bill_goods[] = [
-                'bill_id' => $bill_id,
-                'bill_no' => $warehouseBill->bill_no,
-                'bill_type' => $warehouseBill->bill_type,
-                'goods_id' => $warehouseGoods->goods_id,
-                'goods_name' => $warehouseGoods->goods_name,
-                'style_sn' => $warehouseGoods->style_sn,
-                'goods_num' => $warehouseGoods->goods_num,
-                'put_in_type' => $warehouseBill->put_in_type,
-                'material' => $warehouseGoods->material,
-                'gold_weight' => $warehouseGoods->gold_weight,
-                'gold_loss' => $warehouseGoods->gold_loss,
-                'diamond_carat' =>$warehouseGoods->diamond_carat,
-                'diamond_color' =>'', //$warehouseGoods->diamond_color,
-                'diamond_clarity' => $warehouseGoods->diamond_clarity,
-                'diamond_cert_id' => $warehouseGoods->diamond_cert_id,
-                'cost_price' => 0,//$warehouseGoods->cost_price,
-                'sale_price' => 0,//$warehouseGoods->sale_price,
-                'market_price' => $warehouseGoods->market_price,
-                'markup_rate' => 0, //$warehouseGoods->markup_rate
-                'status' => 1,
-                'created_at' => time()
-            ];
+            $bill_goods[$k]['bill_id'] = $bill_id;
+            $bill_goods[$k]['bill_no'] = $billM->bill_no;
+            $bill_goods[$k]['bill_type'] = $billM->bill_type;
+            $bill_goods[$k]['goods_id'] = $goodsM->goods_id;
+            $billGoods->setAttributes($bill_goods[$k]);
+            if(!$billGoods->validate()){
+                throw new \Exception($this->getError($billGoods));
+            }
         }
-
-        $goods_val = [];
-        $goods_key = array_keys($goods_list[0]);
-        foreach ($goods_list as $item) {
-            $goods_val[] = array_values($item);
+        $value = [];
+        $key = array_keys($goods[0]);
+        foreach ($goods as $good) {
+            $value[] = array_values($good);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $goods_key, $goods_val)->execute();
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
         if(false === $res){
-            throw new \Exception("保存商品信息失败");
+            throw new \Exception("创建货品信息失败");
         }
-
-        $bill_goods_val = [];
-        $bill_goods_key = array_keys($bill_goods[0]);
-        foreach ($bill_goods as $item) {
-            $bill_goods_val[] = array_values($item);
+        $value = [];
+        $key = array_keys($bill_goods[0]);
+        foreach ($bill_goods as $goods) {
+            $value[] = array_values($goods);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_key, $bill_goods_val)->execute();
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
-            throw new \Exception("保存收货单据明细失败");
+            throw new \Exception("创建收货单据明细失败");
+        }
+    }
+
+    /**
+     * 收货单-审核
+     * @param $form
+     */
+    public function auditBillL($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->audit_status == AuditStatusEnum::PASS){
+            //$form->status = StatusEnum::ENABLED;
+            $form->bill_status = BillStatusEnum::CONFIRM;
+        }else{
+            //$form->status = StatusEnum::DISABLED;
+            $form->bill_status = BillStatusEnum::SAVE;
+        }
+        $billGoods = WarehouseBillGoods::find()->select(['goods_id', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+        if(empty($billGoods)){
+            throw new \Exception("单据明细不能为空");
+        }
+        $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
+        $condition = ['goods_status' => GoodsStatusEnum::RECEIVING, 'goods_id' => $goods_ids];
+        $goods_status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_STOCK : GoodsStatusEnum::CANCEL;
+        $res = WarehouseGoods::updateAll(['goods_status' => $goods_status, 'put_in_type' => $form->put_in_type, 'warehouse_id' => $form->to_warehouse_id], $condition);
+        if(false === $res) {
+            throw new \Exception("更新收货单货品状态失败");
+        }
+        if($form->order_type == OrderTypeEnum::ORDER_L && $form->audit_status == AuditStatusEnum::PASS){
+            //同步采购收货单货品状态
+            $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
+            $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
+            if(false === $res) {
+                throw new \Exception("同步采购收货单货品状态失败");
+            }
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
         }
     }
 
