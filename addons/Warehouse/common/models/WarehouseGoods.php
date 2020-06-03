@@ -18,6 +18,7 @@ use Yii;
  * @property string $style_sn 款号
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
+ * @property int $style_sex 款式性别
  * @property int $goods_status 商品状态
  * @property int $supplier_id 供应商ID
  * @property int $put_in_type 入库方式
@@ -89,7 +90,7 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['product_type_id', 'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id','style_sex' ,'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'parts_gold_weight', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
@@ -114,6 +115,7 @@ class WarehouseGoods extends BaseModel
             'style_sn' => '款号',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
+            'style_sex' => '款式性别',
             'goods_status' => '商品状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',

@@ -5,9 +5,9 @@ namespace addons\Warehouse\services;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseGoodsLog;
 use common\components\Service;
-use common\enums\StatusEnum;
-use common\helpers\ArrayHelper;
 use common\helpers\Url;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Style\common\enums\StyleSexEnum;
 
 
 /**
@@ -40,6 +40,37 @@ class WarehouseGoodsService extends Service
             throw new \Exception($this->getError($model));
         }
         return $model;
+    }
+    /**
+     * 创建商品编号
+     * @param WarehouseGoods $model
+     */
+    public function createGoodsId($model,$str_pad = 7) {
+        
+        if(!$model->id) {
+            throw new \Exception("编货号失败：id不能为空");
+        }
+        //1.供应商简称
+        $supplier_tag = $model->supplier->supplier_tag ?? '00';
+        $prefix   = $supplier_tag ? $supplier_tag:'00';
+        //2.商品材质（产品线）
+        $type_tag = $model->productType->tag ?? '0';
+        $prefix .= $type_tag;
+        //3.产品分类
+        $cate_tag = $model->styleCate->tag ?? '';
+        if(count($cate_tag_list = explode("|", $cate_tag)) < 2 ) {
+            $cate_tag_list = [0,0];
+        }
+        list($cate_m, $cate_w) = $cate_tag_list;
+        if($model->style_sex == StyleSexEnum::MAN) {
+            $prefix .= $cate_m;
+        } else {
+            $prefix .= $cate_w;
+        }
+        //4.数字部分
+        $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
+
+        return $prefix.$middle;
     }
 
 }
