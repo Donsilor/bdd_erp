@@ -1,9 +1,8 @@
 <?php
 
 use common\helpers\Html;
-use common\helpers\Url;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -20,12 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box-header" style="border-bottom:1px solid #eee">
                         <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                         <div class="box-tools">
-                            <?= Html::create(['edit', 'style_id' => $style->id], '编辑属性',[
-                                    'class' => 'btn btn-primary btn-xs openIframe',
-                                    'data-width'=>'90%',
-                                    'data-height'=>'90%',
-                                    'data-offset'=>'20px',
-                                ]); 
+                            <?php
+                                if($style->audit_status == AuditStatusEnum::SAVE || $style->audit_status == AuditStatusEnum::UNPASS) {
+                                    echo Html::create(['edit', 'style_id' => $style->id], '编辑属性', [
+                                        'class' => 'btn btn-primary btn-xs openIframe',
+                                        'data-width' => '90%',
+                                        'data-height' => '90%',
+                                        'data-offset' => '20px',
+                                    ]);
+                                }
                             ?>
                         </div>
                     </div>
