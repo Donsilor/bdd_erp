@@ -369,31 +369,27 @@ class ReceiptGoodsController extends BaseController
     public function actionAjaxWarehouse()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
         $ids = Yii::$app->request->get('ids');
+        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
         $model->ids = $ids;
-        // ajax 校验
-        $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
-                $model->is_to_warehouse = WhetherEnum::ENABLED;
+                //$model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
                 //同步采购收货单至L单
                 Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
-
                 $trans->commit();
-                return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                Yii::$app->getSession()->setFlash('success','申请入库成功');
+                return ResultHelper::json(200, '申请入库成功');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("申请失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(422, $e->getMessage());
             }
         }
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }

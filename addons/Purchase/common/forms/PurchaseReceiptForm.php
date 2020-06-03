@@ -13,6 +13,7 @@ use addons\Purchase\common\models\PurchaseReceipt;
  */
 class PurchaseReceiptForm extends PurchaseReceipt
 {
+    public $ids;
     public $produce_sns;
     /**
      * {@inheritdoc}
@@ -40,7 +41,15 @@ class PurchaseReceiptForm extends PurchaseReceipt
     }
 
     /**
-     * 批量获取布产单号
+     * {@inheritdoc}
+     */
+    public function getIds(){
+
+        return $this->ids?:StringHelper::explode($this->ids);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getProduceSns()
     {

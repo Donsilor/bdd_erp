@@ -42,7 +42,7 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
      */
     public function getIds(){
 
-        return StringHelper::explode($this->ids);
+        return $this->ids?:StringHelper::explode($this->ids);
     }
 
     /**

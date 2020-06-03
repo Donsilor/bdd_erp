@@ -81,14 +81,13 @@ class PurchaseReceiptService extends Service
      */
     public function syncReceiptToBillInfoL($form, $detail_ids = null)
     {
-        $receipt = PurchaseReceipt::find()->where(['id'=>$form->receipt_id])->one();
-        if($receipt->receipt_num <= 0 ){
-            throw new \Exception('采购收货单没有明细');
-        }
-        if($receipt->audit_status != AuditStatusEnum::PASS){
+        if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
         }
-        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->receipt_id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        if($form->receipt_num <= 0 ){
+            throw new \Exception('采购收货单没有明细');
+        }
+        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
         $detail_ids = $form->getIds();
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
@@ -97,22 +96,20 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
-        $total_cost = 0;
-        $market_price = 0;
-        $sale_price = 0;
-        $goods = [];
+        $goods = $ids = [];
+        $total_cost= $market_price= $sale_price = 0;
         foreach ($models as $model){
-
+            $ids[] = $model->id;
             $goods[] = [
                 'goods_name' =>$model->goods_name,
                 'style_sn' => $model->style_sn,
                 'product_type_id'=>$model->product_type_id,
                 'style_cate_id'=>$model->style_cate_id,
                 'goods_status'=>GoodsStatusEnum::RECEIVING,
-                'supplier_id'=>$receipt->supplier_id,
-                'put_in_type'=>$receipt->put_in_type,
+                'supplier_id'=>$form->supplier_id,
+                'put_in_type'=>$form->put_in_type,
                 'company_id'=> 1,//暂时为1
-                'warehouse_id' => $receipt->to_warehouse_id?:0,
+                'warehouse_id' => $form->to_warehouse_id?:0,
                 'gold_weight' => $model->gold_weight?:0,
                 'gold_loss' => $model->gold_loss?:0,
                 'gross_weight' => (String) $model->gross_weight,
@@ -147,21 +144,24 @@ class PurchaseReceiptService extends Service
             $sale_price = bcadd($sale_price, $model->sale_price, 2);
         }
 
+        //批量更新采购收货单货品状态
+        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+
         $bill = [
             'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
             'bill_status' => BillStatusEnum::SAVE,
-            'supplier_id' => $receipt->supplier_id,
-            'put_in_type' => $receipt->put_in_type,
+            'supplier_id' => $form->supplier_id,
+            'put_in_type' => $form->put_in_type,
             'order_type' => OrderTypeEnum::ORDER_L,
             'goods_num' => count($goods),
             'total_cost' => $total_cost,
             'total_sale' => $sale_price,
             'total_market' => $market_price,
-            'to_warehouse_id' => $receipt->to_warehouse_id,
+            'to_warehouse_id' => $form->to_warehouse_id,
             'to_company_id' => 0,
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
-            'send_goods_sn' => $receipt->receipt_no,
+            'send_goods_sn' => $form->receipt_no,
         ];
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
     }
