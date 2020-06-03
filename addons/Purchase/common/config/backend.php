@@ -64,6 +64,10 @@ return [
                                 'title' => '金料返厂单',
                                 'route' => 'gold-defective/index',
                         ],
+                        [
+                                'title' => '金料质检列表',
+                                'route' => 'gold-receipt-goods/iqc-index',
+                        ],
                 ],
                 
         ],
@@ -83,6 +87,10 @@ return [
                         [
                                 'title' => '石料返厂单',
                                 'route' => 'stone-defective/index',
+                        ],
+                        [
+                                'title' => '石料质检列表',
+                                'route' => 'stone-receipt-goods/iqc-index',
                         ],
                 ],
                 
