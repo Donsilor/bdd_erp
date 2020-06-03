@@ -7,6 +7,7 @@ use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\enums\QcTypeEnum;
@@ -96,7 +97,7 @@ class GoldReceiptGoodsController extends BaseController
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
-        $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseGoldReceiptGoods::tableName().'.status',-1]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
             $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.supplier_id', $supplier_id]);

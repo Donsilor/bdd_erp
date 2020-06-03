@@ -44,15 +44,18 @@ class WarehouseGoodsService extends Service
     /**
      * 创建商品编号
      * @param WarehouseGoods $model
+     * @param boolean $save
+     * @throws \Exception
+     * @return string
      */
-    public function createGoodsId($model,$str_pad = 8) {
+    public function createGoodsId($model, $save = true) {
         
         if(!$model->id) {
             throw new \Exception("编货号失败：id不能为空");
         }
         //1.供应商简称
         $supplier_tag = $model->supplier->supplier_tag ?? '00';
-        $prefix   = $supplier_tag ? $supplier_tag:'00';
+        $prefix   = $supplier_tag;
         //2.商品材质（产品线）
         $type_tag = $model->productType->tag ?? '0';
         $prefix .= $type_tag;
@@ -68,9 +71,15 @@ class WarehouseGoodsService extends Service
             $prefix .= $cate_w;
         }
         //4.数字部分
-        $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
-
-        return $prefix.$middle;
+        $middle = str_pad($model->id,8,'0',STR_PAD_LEFT);
+        $model->goods_id = $prefix.$middle;
+        if($save === true) {
+            $result = $model->save(true,['id','goods_id']);
+            if($result === false){
+                throw new \Exception("编货号失败：保存货号失败");
+            }
+        }
+        return $model->goods_id;
     }
 
 }

@@ -41,12 +41,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'goods_id',
                             'value'=>function($model) {
-                                $model->goods_id = Yii::$app->warehouseService->warehouseGoods->createGoodsId($model);
+                                if(preg_match("/^9/is", $model->goods_id)){
+                                    $model->goods_id = Yii::$app->warehouseService->warehouseGoods->createGoodsId($model);
+                                }                                
                                 return Html::a($model->goods_id, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                 'class' => 'form-control',
-                                'style'=> 'width:150px;'
+                                'style'=> 'width:130px;'
                             ]),
                             'format' => 'raw',
                         ],
@@ -111,6 +113,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'attribute' => 'jintuo_type',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                            ]),
+                        ],
+                        [
                             'attribute' => 'goods_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -167,6 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute'=>'parts_num',
                             'filter' => false,
+
                             'headerOptions' => [],
                         ],
                         [
