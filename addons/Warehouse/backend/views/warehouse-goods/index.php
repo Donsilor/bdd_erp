@@ -112,7 +112,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-
+                        [
+                            'attribute' => 'jintuo_type',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                            ]),
+                        ],
 
                         [
                             'attribute' => 'goods_status',
@@ -420,20 +432,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
-                        ],
-                        [
-                            'attribute' => 'jintuo_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;'
-                            ]),
-                        ],
+                        ],                        
                         [
                             'attribute'=>'market_price',
                             'filter' => Html::activeTextInput($searchModel, 'market_price', [
