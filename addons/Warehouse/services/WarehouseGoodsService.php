@@ -74,7 +74,7 @@ class WarehouseGoodsService extends Service
         $middle = str_pad($model->id,8,'0',STR_PAD_LEFT);
         $model->goods_id = $prefix.$middle;
         if($save === true) {
-            $result = $model->save(true,['id','goods_id']);var_dump($result);
+            $result = $model->save(true,['id','goods_id']);
             if($result === false){
                 throw new \Exception("编货号失败：保存货号失败");
             }
