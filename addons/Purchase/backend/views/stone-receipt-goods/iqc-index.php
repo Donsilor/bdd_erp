@@ -13,7 +13,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('receipt_goods', '质检列表');
+$this->title = Yii::t('receipt_goods', '石料质检列表');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['iqc-index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -80,14 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'produce_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'receipt.supplier_id',
                                 'value' => 'receipt.supplier.supplier_name',
                                 'format' => 'raw',
@@ -111,65 +103,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'factory_mo',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_num',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'jintuo_type',
-                                'value' => function ($model){
-                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'label' => '款式分类',
-                                'attribute' => 'cate.name',
-                                'value' => "cate.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '产品线',
-                                'attribute' => 'type.name',
-                                'value' => "type.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'goods_status',
@@ -183,27 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'label' => '质检未过原因',
-                                'attribute' => 'fqc.name',
-                                'value' => "fqc.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'iqc_remark',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
                             ],
                         ]
                     ]); ?>
