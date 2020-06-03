@@ -17,6 +17,7 @@ use Yii;
  * @property string $style_sn 款号
  * @property int $goods_num 商品数量
  * @property int $order_detail_id 订单商品明细ID
+ * @property int $source_detail_id 来源明细ID
  * @property int $put_in_type 入库方式
  * @property int $warehouse_id 仓库ID
  * @property int $material 主成色
@@ -51,7 +52,7 @@ class WarehouseBillGoods extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'bill_id', 'goods_num', 'order_detail_id', 'put_in_type', 'warehouse_id','from_warehouse_id','to_warehouse_id', 'material', 'status','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'bill_id', 'goods_num', 'order_detail_id', 'source_detail_id', 'put_in_type', 'warehouse_id','from_warehouse_id','to_warehouse_id', 'material', 'status','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['bill_no', 'bill_type', 'goods_id', 'goods_name', 'style_sn'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
             [['bill_no', 'style_sn', 'diamond_cert_id'], 'string', 'max' => 30],
@@ -78,6 +79,7 @@ class WarehouseBillGoods extends BaseModel
             'style_sn' => '款号',
             'goods_num' => '商品数量',
             'order_detail_id' => '订单商品明细',
+            'source_detail_id' => '来源明细ID',
             'put_in_type' => '入库方式',
             'warehouse_id' => '仓库',
             'from_warehouse_id' => '来源仓库',
