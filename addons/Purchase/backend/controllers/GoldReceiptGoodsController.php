@@ -239,7 +239,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -278,7 +278,7 @@ class GoldReceiptGoodsController extends BaseController
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->iqcValidate($model);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-gold-goods/ajax-iqc?ids='.$ids]);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
         }
@@ -352,7 +352,7 @@ class GoldReceiptGoodsController extends BaseController
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->warehouseValidate($model);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-gold-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
         }

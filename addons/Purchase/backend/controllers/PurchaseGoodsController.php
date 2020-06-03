@@ -314,7 +314,7 @@ class PurchaseGoodsController extends BaseController
                 }elseif($qiban->status != StatusEnum::ENABLED) {
                     return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
                 }else{
-                    $exist = PurchaseGoods::find()->where(['purchase_id'=>$model->purchase_id,'qiban_sn'=>$goods_sn,'status'=>StatusEnum::ENABLED])->count();
+                    $exist = PurchaseGoods::find()->where(['qiban_sn'=>$goods_sn,'status'=>StatusEnum::ENABLED])->count();
                     if($exist) {
                         return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
                     }                    
