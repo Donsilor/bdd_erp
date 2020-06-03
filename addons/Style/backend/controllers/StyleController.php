@@ -73,10 +73,17 @@ class StyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
         
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            //重新编辑后，审核状态改为未审核
+            $model->audit_status = AuditStatusEnum::SAVE;
+
             if($model->isNewRecord){                
                 $model->creator_id = \Yii::$app->user->id;
             }
@@ -130,7 +137,26 @@ class StyleController extends BaseController
                 'tabList'=>\Yii::$app->styleService->style->menuTabList($id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
-    }    
+    }
+
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
     /**
      * 审核-款号
      *

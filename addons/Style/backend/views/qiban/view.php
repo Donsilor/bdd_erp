@@ -112,32 +112,34 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-footer text-center">
                 <?php
-                if($model->qiban_type == 1){
-                    echo Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                        'class' => 'btn btn-primary btn-sm openIframe',
-                        'data-width'=>'90%',
-                        'data-height'=>'90%',
-                        'data-offset'=>'20px',
-                    ]);
-                }else{
-                    echo Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                        'class' => 'btn btn-primary btn-sm openIframe',
-                        'data-width'=>'90%',
-                        'data-height'=>'90%',
-                        'data-offset'=>'20px',
-                    ]);
+                if(!$model->purchaseGoods){
+                    if($model->qiban_type == 1){
+                        echo Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                            'class' => 'btn btn-primary btn-sm openIframe',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                        ]);
+                    }else{
+                        echo Html::edit(['edit-no-style','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                            'class' => 'btn btn-primary btn-sm openIframe',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                        ]);
+                    }
                 }
                 ?>
 
                 <?php
-                if($model->audit_status != \common\enums\AuditStatusEnum::PENDING){
+                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-sm',
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]);
                 }
-                if($model->audit_status != \common\enums\AuditStatusEnum::SAVE){
+                if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                         'class'=>'btn btn-success btn-sm',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
