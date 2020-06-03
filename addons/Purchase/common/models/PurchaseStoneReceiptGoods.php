@@ -52,6 +52,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             [['goods_name', 'goods_remark'], 'string', 'max' => 255],
             [['goods_color', 'goods_clarity'], 'string', 'max' => 10],
             [['goods_norms'], 'string', 'max' => 20],
+            [['supplier_id', 'receipt_no'], 'safe'],
         ];
     }
 
@@ -83,5 +84,20 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 关联采购收货单明细表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceipt(){
+        return $this->hasOne(PurchaseReceipt::class, ['id'=>'receipt_id'])->alias('receipt');
+    }
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
     }
 }

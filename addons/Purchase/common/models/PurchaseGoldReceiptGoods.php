@@ -47,6 +47,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark'], 'string', 'max' => 255],
+            [['supplier_id', 'receipt_no'], 'safe'],
         ];
     }
 
@@ -75,5 +76,20 @@ class PurchaseGoldReceiptGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 关联采购收货单明细表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceipt(){
+        return $this->hasOne(PurchaseReceipt::class, ['id'=>'receipt_id'])->alias('receipt');
+    }
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
     }
 }
