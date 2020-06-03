@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('balance_type') ?>：</td>
-                                     <td><?= \common\enums\BalanceTypeEnum::getValue($model->balance_type) ?></td>
+                                     <td><?= \addons\Supply\common\enums\BalanceTypeEnum::getValue($model->balance_type) ?></td>
                                  </tr>
 
                                  <tr>

@@ -47,11 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'supplier_code')->textInput(['maxlength' => true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'balance_type')->dropDownList(\common\enums\BalanceTypeEnum::getMap()) ?>
+                        <?= $form->field($model, 'balance_type')->dropDownList(\addons\Supply\common\enums\BalanceTypeEnum::getMap()) ?>
                     </div>
                 </div>
                 <?php $model->business_scope = !empty($model->business_scope)?explode(',', $model->business_scope):null;?>
-                <?= $form->field($model, 'business_scope')->checkboxList(common\enums\BusinessScopeEnum::getMap()) ?>
+                <?= $form->field($model, 'business_scope')->checkboxList(\addons\Supply\common\enums\BusinessScopeEnum::getMap()) ?>
 
     		    <!-- ./nav-tabs-custom -->
             </div>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
               <div class="row">
                   <div class="col-lg-3">
                         <?php $model->pay_type = !empty($model->pay_type)?explode(',', $model->pay_type):null;?>
-                        <?= $form->field($model, 'pay_type')->checkboxList(common\enums\SettlementWayEnum::getMap()) ?>
+                        <?= $form->field($model, 'pay_type')->checkboxList(\addons\Supply\common\enums\SettlementWayEnum::getMap()) ?>
                   </div>
                   <div class="col-lg-3">
                         <?= $form->field($model, 'tax_no')->textInput(['maxlength' => true]) ?>
