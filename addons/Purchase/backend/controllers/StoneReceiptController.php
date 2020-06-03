@@ -32,7 +32,7 @@ class StoneReceiptController extends BaseController
     * @var Receipt
     */
     public $modelClass = PurchaseReceiptForm::class;
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
 
     /**
     * 首页

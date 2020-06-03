@@ -5,7 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
+use addons\Purchase\common\forms\PurchaseStoneReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Style\common\enums\AttrIdEnum;
@@ -33,8 +33,8 @@ class StoneReceiptGoodsController extends BaseController
     /**
      * @var $modelClass PurchaseReceiptGoodsForm
      */
-    public $modelClass = PurchaseGoldReceiptGoodsForm::class;
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $modelClass = PurchaseStoneReceiptGoodsForm::class;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
     
     /**
      * 首页
@@ -46,7 +46,7 @@ class StoneReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -82,7 +82,7 @@ class StoneReceiptGoodsController extends BaseController
     public function actionIqcIndex()
     {
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -239,7 +239,7 @@ class StoneReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -278,7 +278,7 @@ class StoneReceiptGoodsController extends BaseController
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->iqcValidate($model);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-gold-goods/ajax-iqc?ids='.$ids]);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
         }
@@ -352,7 +352,7 @@ class StoneReceiptGoodsController extends BaseController
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->warehouseValidate($model);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-gold-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
         }
