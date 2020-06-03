@@ -33,6 +33,7 @@ class StyleChannel extends BaseModel
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['merchant_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['tag'], 'string', 'max' => 10],
             [['code'], 'string', 'max' => 20],
@@ -50,7 +51,7 @@ class StyleChannel extends BaseModel
             'merchant_id' => '商户',
             'name' => '渠道名称',
             'code' => '渠道编码',
-            'tag' => '渠道标签',
+            'tag' => '标签(编款用)',
             'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',

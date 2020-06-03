@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->supplier_code ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_tag') ?>：</td>
+                                     <td><?= $model->supplier_tag ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('balance_type') ?>：</td>
                                      <td><?= \addons\Supply\common\enums\BalanceTypeEnum::getValue($model->balance_type) ?></td>
                                  </tr>

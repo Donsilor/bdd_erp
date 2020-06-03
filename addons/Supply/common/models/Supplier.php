@@ -10,6 +10,7 @@ use Yii;
  * @property int $id 供应商ID
  * @property int $merchant_id 商户ID
  * @property string $supplier_code 供应商编码
+ * @property string $supplier_tag 供应商标签(编货号用)
  * @property string $supplier_name 供应商名称
  * @property string $business_no 营业执照号码
  * @property string $business_address 营业执照地址
@@ -57,12 +58,13 @@ class Supplier extends BaseModel
     {
         return [
             [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_name', 'business_no'], 'required'],
+            [['supplier_name','supplier_tag', 'business_no'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
             [['business_no', 'tax_no'], 'string', 'max' => 50],
             [['business_scope'], 'parseBusinessScope'],
-            [['pay_type'], 'PayTypeScope'],
+            [['pay_type'], 'parsePayTypeScope'],
+            [['supplier_tag'], 'string', 'max' => 2, 'min'=>2],
             [['contract_file', 'business_file', 'tax_file', 'bank_name'], 'string', 'max' => 100],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];
@@ -77,6 +79,7 @@ class Supplier extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'supplier_code' => '供应商编码',
+            'supplier_tag'=>'标签(编货号用)',
             'supplier_name' => '供应商名称',
             'business_no' => '营业执照号码',
             'business_address' => '营业执照地址',
@@ -123,7 +126,7 @@ class Supplier extends BaseModel
     /**
      * 结算方式
      */
-    public function PayTypeScope()
+    public function parsePayTypeScope()
     {
         if(is_array($this->pay_type)){
             $this->pay_type = implode(',',$this->pay_type);

@@ -27,16 +27,19 @@ class WarehouseGoodsService extends Service
         ];
     }
 
-
-
+    /**
+     * 创建货号操作日志
+     * @param unknown $log
+     * @throws \Exception
+     * @return \addons\Warehouse\common\models\WarehouseGoodsLog
+     */ 
     public function createWarehouseGoodsLog($log){
-        $warehouse_goods_log = new WarehouseGoodsLog();
-        $warehouse_goods_log->attributes = $log;
-        if(false === $warehouse_goods_log->save()){
-            throw new \Exception($this->getError($warehouse_goods_log));
+        $model = new WarehouseGoodsLog();
+        $model->attributes = $log;
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
         }
-        return $warehouse_goods_log ;
-
+        return $model;
     }
 
 }

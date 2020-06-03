@@ -30,21 +30,8 @@ $form = ActiveForm::begin([
                     'allowClear' => true
                 ],
             ]);?>
-
-
            <?= $form->field($model, 'name')->textInput(); ?>
-            <?= $form->field($model, 'image')->widget(Files::class, [
-                'config' => [
-                    // 可设置自己的上传地址, 不设置则默认地址
-                    // 'server' => '',
-                    'pick' => [
-                        'multiple' => false,
-                    ],
-                ]
-            ]); ?>
-
-
-
+           <?= $form->field($model, 'tag')->textInput(); ?>
             <?= $form->field($model, 'sort')->textInput(); ?>
             <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
             <!-- /.tab-pane -->

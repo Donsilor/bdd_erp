@@ -13,6 +13,7 @@ use common\traits\Tree;
  *
  * @property int $id 主键
  * @property string $title 标题
+ * @property string $tag 标签(编货号用)
  * @property string $tree 树
  * @property int $sort 排序
  * @property int $level 级别
@@ -42,6 +43,7 @@ class ProductType extends BaseModel
                 [['name','status'], 'required'],
                 [['id','merchant_id','is_inlay','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['image'], 'string', 'max' => 100],
+                [['tag'], 'string', 'max' => 10],
                 [['tree'], 'string', 'max' => 255],
                 [['pid','name'], 'safe'],
         ];
@@ -55,6 +57,7 @@ class ProductType extends BaseModel
         return [
                 'id' => 'ID',
                 'name' => '产品线',
+                'tag' => '标签(编货号用)',
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',
