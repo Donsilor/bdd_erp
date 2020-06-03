@@ -15,6 +15,7 @@ use addons\Supply\common\models\Supplier;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
+use common\helpers\Url;
 use common\models\backend\Member;
 use function PHPSTORM_META\map;
 use Yii;
@@ -394,6 +395,21 @@ class PurchaseController extends BaseController
         ];
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
     }
 
 
