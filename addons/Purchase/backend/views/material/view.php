@@ -34,8 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_count') ?>：</td>
-                            <td><?= $model->goods_count ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
+                            <td><?= $model->total_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>

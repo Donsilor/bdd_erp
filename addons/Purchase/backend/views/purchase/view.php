@@ -28,18 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_type') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->purchase_type) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
-                            <td><?= $model->total_cost ?></td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
                             <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_count') ?>：</td>
-                            <td><?= $model->goods_count ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
+                            <td><?= $model->total_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
+                            <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>

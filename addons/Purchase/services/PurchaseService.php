@@ -59,11 +59,11 @@ class PurchaseService extends Service
     public function purchaseSummary($purchase_id) 
     {
         $sum = PurchaseGoods::find()
-                    ->select(['sum(goods_num) as goods_count','sum(cost_price*goods_num) as total_cost'])
+                    ->select(['sum(goods_num) as total_num','sum(cost_price*goods_num) as total_cost'])
                     ->where(['purchase_id'=>$purchase_id,'status'=>StatusEnum::ENABLED])
                     ->asArray()->one();
         if($sum) {
-            Purchase::updateAll(['goods_count'=>$sum['goods_count']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$purchase_id]);
+            Purchase::updateAll(['total_num'=>$sum['total_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$purchase_id]);
         }
     }
     
@@ -76,7 +76,7 @@ class PurchaseService extends Service
     public function syncPurchaseToProduce($purchase_id, $detail_ids = null)
     {
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
-        if($purchase->goods_count <= 0 ){
+        if($purchase->total_num <= 0 ){
             throw new \Exception('采购单没有明细');
         }
         if($purchase->audit_status != AuditStatusEnum::PASS){

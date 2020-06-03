@@ -43,7 +43,7 @@ class Purchase extends BaseModel
         return [
             [['total_cost'], 'number'],
             [['supplier_id'], 'required'],
-            [['id','supplier_id','goods_count', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
+            [['id','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['purchase_sn'], 'string', 'max' => 30],                
             [['audit_status'], 'checkAuditStatus'],
@@ -69,7 +69,7 @@ class Purchase extends BaseModel
      */
     public function checkAuditStatus($attribute, $params){
         
-        if($this->audit_status == 1 && $this->goods_count <= 0){
+        if($this->audit_status == 1 && $this->total_num <= 0){
             $this->addError("audit_status","采购单没有明细");
         }else if($this->audit_status == 1 && $this->follower_id  == ''){
             $this->addError("audit_status","没有分配跟单人");
@@ -87,7 +87,7 @@ class Purchase extends BaseModel
             'supplier_id' => '供应商',
             'purchase_type' => '采购类型',
             'total_cost' => '总金额(RMB)',
-            'goods_count' => '总数量(件)',  
+            'total_num' => '总数量(件)',  
             'follower_id' => '跟单人',
             'creator_id' => '创建人',
             'status' => '开启状态',

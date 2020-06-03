@@ -90,8 +90,8 @@ $params = $params ? "&".http_build_query($params) : '';
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'goods_count',
-                    'value' => "goods_count",
+                    'attribute' => 'total_num',
+                    'value' => "total_num",
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
