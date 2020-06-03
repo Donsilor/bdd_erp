@@ -360,7 +360,7 @@ class BillMController extends BaseController
             ['款式分类', 'style_cate_name' , 'text'],
             ['出库仓库', 'from_warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
             ['入库仓库', 'to_warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
-            ['主成色', 'material' , function($model){
+            ['主成色', 'material' , 'function', function($model){
                 return \Yii::$app->attr->valueName($model['material']);
             }],
             ['金重', 'gold_weight' , 'text'],

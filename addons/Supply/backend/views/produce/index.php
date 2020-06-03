@@ -109,19 +109,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
 
             ],
-            [
-                'attribute' => 'qiban_type',
-                'value' => function ($model){
-                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style' => 'width:100px;',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],
+//            [
+//                'attribute' => 'qiban_type',
+//                'value' => function ($model){
+//                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+//                },
+//                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
+//                    'prompt' => '全部',
+//                    'class' => 'form-control',
+//                    'style' => 'width:100px;',
+//                ]),
+//                'format' => 'raw',
+//                'headerOptions' => ['width'=>'100'],
+//            ],
             [
                 'attribute' => 'jintuo_type',
                 'value' => function ($model){
