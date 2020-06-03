@@ -31,7 +31,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
                     ]);?>
-                    <!--Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]) -->
+                    <?= Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
