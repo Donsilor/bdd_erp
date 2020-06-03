@@ -31,11 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;&nbsp;&nbsp;';
         }
         if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
-            echo Html::a('批量申请入库', ['ajax-warehouse','id'=>$receipt->id], [
+            echo Html::a('批量申请入库', ['warehouse'], [
                 'class'=>'btn btn-success btn-xs',
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
-                "onclick" => "batchOperation(this);return false;",
+                "onclick" => "batchWarehouse(this);return false;",
             ]);
         }
         ?>
@@ -573,13 +571,15 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     //批量操作
-    function batchOperation(obj) {
+    function batchWarehouse(obj) {
         let $e = $(obj);
         let url = $e.attr('href');
+        var receipt_id = '';
         var ids = new Array;
         $('input[name="id[]"]:checked').each(function(i){
             var str = $(this).val();
             var arr = jQuery.parseJSON(str)
+            receipt_id = arr.receipt_id;
             ids[i] = arr.id;
         });
         if(ids.length===0) {
@@ -592,6 +592,7 @@ $this->params['breadcrumbs'][] = $this->title;
             url: url,
             dataType: "json",
             data: {
+                receipt_id:receipt_id,
                 ids: ids
             },
             success: function (data) {
@@ -599,12 +600,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 if (parseInt(data.code) !== 200) {
                     rfAffirm(data.message);
                 } else {
-                    //$('#data-supplier').html(data);
-                    //window.location.reload();
-                        var title = '基本信息';
-                        var width = '80%';
-                        var height = '80%';
-                        var offset = "10%";
+                    var href = data.data.url;
+                    var title = '基本信息';
+                    var width = '80%';
+                    var height = '80%';
+                    var offset = "10%";
                     openIframe(title, width, height, href, offset);
                     e.preventDefault();
                     return false;

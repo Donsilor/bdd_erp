@@ -193,13 +193,13 @@ class ReceiptController extends BaseController
                 }
 
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
+                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
 
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message("申请入库失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
         return $this->renderAjax($this->action->id, [

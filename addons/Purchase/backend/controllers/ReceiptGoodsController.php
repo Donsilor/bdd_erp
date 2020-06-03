@@ -6,6 +6,7 @@ namespace addons\Purchase\backend\controllers;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
+use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -273,13 +274,31 @@ class ReceiptGoodsController extends BaseController
      *
      * @return mixed
      */
-    public function actionAjaxIqc()
+    public function actionIqc()
     {
         $ids = Yii::$app->request->get('ids');
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
-        // ajax 校验
-        $this->activeFormValidate($model);
+        try{
+            \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($model);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
+        }catch (\Exception $e){
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
+     * IQC批量质检
+     *
+     * @return mixed
+     */
+    public function actionAjaxIqc()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $ids = Yii::$app->request->get('ids');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
@@ -287,14 +306,15 @@ class ReceiptGoodsController extends BaseController
                 \Yii::$app->purchaseService->purchaseReceipt->qcIqc($model);
 
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(422, $e->getMessage());
             }
         }
         $model->goods_status = QcTypeEnum::PASS;
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -323,6 +343,25 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
+     * IQC批量质检
+     *
+     * @return mixed
+     */
+    public function actionWarehouse()
+    {
+        $receipt_id = Yii::$app->request->get('receipt_id');
+        $ids = Yii::$app->request->get('ids');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
+        try{
+            \Yii::$app->purchaseService->purchaseReceipt->warehouseValidate($model);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
+        }catch (\Exception $e){
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
      * 批量申请入库-采购收货单
      *
      * @return mixed
@@ -330,29 +369,27 @@ class ReceiptGoodsController extends BaseController
     public function actionAjaxWarehouse()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        // ajax 校验
-        $this->activeFormValidate($model);
+        $ids = Yii::$app->request->get('ids');
+        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
-                $model->is_to_warehouse = WhetherEnum::ENABLED;
+                //$model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
-
+                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                Yii::$app->getSession()->setFlash('success','申请入库成功');
+                return ResultHelper::json(200, '申请入库成功');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(422, $e->getMessage());
             }
         }
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }

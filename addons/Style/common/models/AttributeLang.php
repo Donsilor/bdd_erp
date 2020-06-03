@@ -11,7 +11,6 @@ use Yii;
  * @property string $language 语言类型(zh-CN,zh-HK,en-US)
  * @property int $attr_id 属性ID
  * @property string $attr_name 属性名称
- * @property string $default_value 默认值
  * @property string $remark 备注描述
  */
 class AttributeLang extends BaseModel
@@ -42,7 +41,6 @@ class AttributeLang extends BaseModel
             [['attr_name'], 'required'],
             [['language'], 'string', 'max' => 5],
             [['attr_name','attr_label'], 'string', 'max' => 50],
-            [['default_value'], 'string', 'max' => 20],
             [['attr_values','remark'], 'string', 'max' => 500],
             /* [['attr_name'],'unique', 'targetAttribute'=>['attr_name','language','remark'],
                  //'targetClass' => 'models\AttributeLang', // 模型，缺省时默认当前模型。
@@ -63,7 +61,6 @@ class AttributeLang extends BaseModel
             'attr_name' => '属性名称',
             'attr_label'=> '显示名称',
             'attr_values' => '属性值',
-            'default_value' => '默认值',
             'remark' => '属性备注',
         ];
     }
