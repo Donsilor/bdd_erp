@@ -55,11 +55,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'100'],
                             ],*/
                             [
-                                    'attribute' => 'goods_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                            
+                                'attribute'=>'goods_name',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                        'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->goods_name;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'300'],
+                            ],                                                      
                             [
                                     'attribute' => 'style_sn',
                                     'filter' => true,
@@ -67,7 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label' => '起版类型',
+                                    'attribute' => 'qiban_sn',
+                                    'filter' => true,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'150'],
+                            ],  
+                            [      
                                     'attribute' => 'qiban_type',
                                     'value' => function($model){
                                             return QibanTypeEnum::getValue($model->qiban_type);
@@ -78,19 +88,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ],
-
-                            [
-                                    'attribute'=>'goods_name',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         return $str;
-                                    },
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
                             ],
                             
                             [

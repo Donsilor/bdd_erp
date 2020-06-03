@@ -2,9 +2,8 @@
 use yii\widgets\ActiveForm;
 use common\helpers\Html;
 use common\helpers\Url;
-use addons\Style\common\enums\AttrTypeEnum;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -15,8 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                 <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>  
-
+                 <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
 			     <?php if($model->style_id) {?> 
 			         <div class="row">
     			         <?php if($model->isNewRecord) {?>      			    
@@ -32,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_type')->dropDownList(PurchaseGoodsTypeEnum::getMap(),['disabled'=>true]) ?> 
+                            <?= $form->field($model, 'qiban_type')->dropDownList(QibanTypeEnum::getMap(),['disabled'=>true]) ?> 
             			 </div>  
         			     <div class="col-lg-4">
             			 	<?= $form->field($model, 'style_sex')->dropDownList(StyleSexEnum::getMap(),['disabled'=>true]) ?>
@@ -44,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             			 	<?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
             			 </div> 
             			 <div class="col-lg-4">
-            			 	<?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>$model->goods_type==PurchaseGoodsTypeEnum::QIBAN]) ?>
+            			 	<?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()",'disabled'=>$model->qiban_type!= QibanTypeEnum::NON_VERSION]) ?>
             			 </div>           			 
         			 </div> 
         			 <div class="row">

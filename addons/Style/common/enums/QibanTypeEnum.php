@@ -5,7 +5,7 @@ namespace addons\Style\common\enums;
 use common\enums\BaseEnum;
 
 /**
- * 表面工艺  枚举
+ * 起版类型
  * @package common\enums
  */
 class QibanTypeEnum extends BaseEnum
