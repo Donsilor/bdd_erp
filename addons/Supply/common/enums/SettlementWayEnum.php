@@ -1,6 +1,8 @@
 <?php
 
-namespace common\enums;
+namespace addons\Supply\common\enums;
+
+use common\enums\BaseEnum;
 
 /**
  * 结算方式

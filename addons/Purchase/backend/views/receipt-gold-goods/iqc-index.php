@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             "onclick" => "batchIqc(this);return false;",
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
+                        echo Html::edit(['ajax-defective','id'=>$model->id], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'onclick' => 'batchDefective(this);return false;',
                         ]);
