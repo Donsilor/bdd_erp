@@ -45,7 +45,7 @@ class WarehouseGoodsService extends Service
      * 创建商品编号
      * @param WarehouseGoods $model
      */
-    public function createGoodsId($model,$str_pad = 7) {
+    public function createGoodsId($model,$str_pad = 8) {
         
         if(!$model->id) {
             throw new \Exception("编货号失败：id不能为空");
