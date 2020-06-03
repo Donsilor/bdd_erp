@@ -61,6 +61,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'150'],
             ],
             [
+                'attribute' => 'jintuo_type',
+                'value' => function($model){
+                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'150'],
+            ],
+            [
                     'headerOptions' => ['width'=>'300'],
                     'attribute' => 'qiban_name',
                     'value' => 'qiban_name',

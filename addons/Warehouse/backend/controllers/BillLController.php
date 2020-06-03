@@ -4,6 +4,10 @@ namespace addons\Warehouse\backend\controllers;
 
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -70,8 +74,12 @@ class BillLController extends BaseController
         $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
 
         //导出
-        if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+        if(\Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
         }
 
         return $this->render($this->action->id, [
@@ -268,20 +276,56 @@ class BillLController extends BaseController
 
 
     /**
-     * 列表导出
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
-        $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
-        ];
-        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
+    public function actionExport($ids=null){
+        $name = '入库单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
 
+        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.finger','g.gross_weight','g.main_stone_type','g.diamond_carat','g.main_stone_num',
+            'g.second_stone_num1','g.second_stone_weight1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
+            ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
+            'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
+        $list = WarehouseBill::find()->alias('w')
+            ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->where(['w.id' => $ids])
+            ->select($select)->asArray()->all();
+        $header = [
+            ['款号', 'style_sn' , 'text'],
+            ['仓库','warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
+            ['商品类型', 'style_cate_name' , 'selectd',BillStatusEnum::getMap()],
+            ['产品分类', 'product_type_name' , 'text'],
+            ['成色', 'material' , 'function',function($model){
+                return \Yii::$app->attr->valueName($model['material']);
+            }],
+            ['手寸', 'finger' , 'text'],
+//            ['尺寸（规格）', 'finger' , 'text'],
+            ['件数', 'goods_num' , 'text'],
+//            ['货重', 'gross_weight' , 'text'],
+            ['金重', 'gold_weight' , 'text'],
+            ['损耗', 'gold_loss' ,  'text'],
+            ['含耗重', 'gross_weight' , 'text'],
+//            ['金价', '' , 'text'],
+//            ['金料额', '' , 'text'],
+            ['石号', 'main_stone_type' , 'text'],
+            ['粒数', 'main_stone_num' , 'text'],
+            ['主石重', 'diamond_carat' , 'text'],
+            ['金额	', 'finger' , 'text'],
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
 
