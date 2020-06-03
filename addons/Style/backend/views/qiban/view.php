@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username : ''; ?></td>
+                            <td><?= $model->creator->username ?? ''; ?></td>
                         </tr>
 
                         <tr>
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->creator ? $model->auditor->username : ''; ?></td>
+                            <td><?= $model->auditor->username ?? ''; ?></td>
                         </tr>
 
                     </table>

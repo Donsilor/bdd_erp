@@ -11,17 +11,19 @@ namespace common\enums;
  */
 class AuditStatusEnum extends BaseEnum
 {
-    const PENDING = 0;
-    const PASS = 1;    
-    const UNPASS = 2;
+    const SAVE = 0;
+    const PENDING = 1;
+    const PASS = 2;
+    const UNPASS = 3;
     /**
      * @return array
      */
     public static function getMap(): array
     {
         return [
-                self::PENDING => '未审核',
-                self::PASS => '审核通过',                
+                self::SAVE => '未审核',
+                self::PENDING => '待审核',
+                self::PASS => '审核通过',
                 self::UNPASS => '不通过',
         ];
     }
