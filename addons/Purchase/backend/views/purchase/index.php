@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use kartik\daterange\DateRangePicker;
 
 use common\enums\AuditStatusEnum;
 
@@ -85,7 +86,10 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'follower_id',
                     'value' => "follower.username",
-                    'filter' => false,
+                    'filter' => Html::activeTextInput($searchModel, 'follower.username', [
+                        'class' => 'form-control',
+                        'style'=> 'width:150px;'
+                    ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
@@ -112,40 +116,100 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'200'],
             ],              
+
             [
+                'attribute'=>'delivery_time',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
                     'attribute' => 'delivery_time',
-                    'value' => function($model){
-                        return $model->delivery_time ? Yii::$app->formatter->asDate($model->delivery_time):'';
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ], 
+                    'value' => $searchModel->delivery_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDatetime($model->created_at);
+                }
+
+            ],
+
             [
+                'attribute'=>'created_at',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
                     'attribute' => 'created_at',
-                    'value' => function($model){
-                        return $model->created_at ? Yii::$app->formatter->asDate($model->created_at):'';
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-                    ], 
+                    'value' => $searchModel->created_at,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDatetime($model->created_at);
+                }
+
+            ],
             [
                     'attribute' => 'creator_id',
                     'value' => "creator.username",
-                    'filter' => false,
+                    'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                        'class' => 'form-control',
+                        'style'=> 'width:80px;'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                    'headerOptions' => ['width'=>'80'],
             ],
             [
-                'attribute' => 'audit_time',
-                'value' => function($model){
-                    return $model->audit_time ? Yii::$app->formatter->asDate($model->audit_time):'';
-                },
-                'filter' => false,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'attribute'=>'audit_time',
+                'filter' => DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'audit_time',
+                    'value' => $searchModel->audit_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+
+
+                    ],
+
+                ]),
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDatetime($model->created_at);
+                }
+
             ],
+
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
@@ -154,6 +218,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style'=> 'width:80px;'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -161,9 +226,12 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'auditor_id',
                 'value' => "auditor.username",
-                'filter' => false,
+                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
+                ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'attribute' => 'purchase_status',                    
@@ -172,7 +240,8 @@ $params = $params ? "&".http_build_query($params) : '';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'purchase_status',BillStatusEnum::getMap(), [
                     'prompt' => '全部',
-                    'class' => 'form-control',                        
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],

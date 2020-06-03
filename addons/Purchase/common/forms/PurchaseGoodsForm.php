@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\QibanTypeEnum;
 use Yii;
 
 use addons\Purchase\common\models\PurchaseGoods;
@@ -253,7 +254,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function getAttrList()
     {
         $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
-        if($this->goods_type == PurchaseGoodsTypeEnum::STYLE) {
+        if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
             $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
         }else{
             $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);

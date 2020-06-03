@@ -364,7 +364,9 @@ class BillMController extends BaseController
                 return \Yii::$app->attr->valueName($model['material']);
             }],
             ['金重', 'gold_weight' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石类型', 'main_stone_type' , 'function',function($model){
+                return Yii::$app->attr->valueName($model->main_stone_type ?? '');
+            }],
             ['钻石大小', 'diamond_carat' , 'text'],
             ['主石粒数', 'main_stone_num' , 'text'],
             ['副石1重', 'second_stone_weight1' , 'text'],

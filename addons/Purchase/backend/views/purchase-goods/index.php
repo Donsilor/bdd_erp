@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-            if($purchase->purchase_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+            if($purchase->purchase_status == \addons\Purchase\common\enums\PurchaseStatusEnum::SAVE){
                 echo Html::create(['edit', 'purchase_id' => $purchase->id], '创建', [
                     'class' => 'btn btn-primary btn-xs openIframe',
                     'data-width'=>'90%',

@@ -65,14 +65,16 @@ class PurchaseController extends BaseController
                 ],
                 'pageSize' => $this->getPageSize(),
                 'relations' => [
-                     
+                    'follower' => ['username'],
+                    'creator' => ['username'],
+                    'auditor' => ['username'],
                 ]
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['>','status',-1]);
-        $dataProvider->query->andWhere(['=','purchase_type',$this->purchaseType]);
+        $dataProvider->query->andWhere(['>','purchase.status',-1]);
+        $dataProvider->query->andWhere(['=','purchase.purchase_type',$this->purchaseType]);
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
             $dataProvider->setPagination(false);

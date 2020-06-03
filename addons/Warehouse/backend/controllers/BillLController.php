@@ -291,9 +291,9 @@ class BillLController extends BaseController
         }
 
         $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.finger','g.gross_weight','g.main_stone_type','g.diamond_carat','g.main_stone_num',
-            'g.second_stone_num1','g.second_stone_weight1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
+            'g.second_stone_type1','g.second_stone_num1','g.second_stone_weight1','g.second_stone_price1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
+            'wg.cost_price','wg.diamond_cert_id','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name'];
         $list = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
@@ -318,13 +318,27 @@ class BillLController extends BaseController
             ['含耗重', 'gross_weight' , 'text'],
 //            ['金价', '' , 'text'],
 //            ['金料额', '' , 'text'],
-            ['石号', 'main_stone_type' , 'text'],
+            ['石号', 'main_stone_type' , 'function',function($model){
+                return Yii::$app->attr->valueName($model->main_stone_type ?? '');
+            }],
             ['粒数', 'main_stone_num' , 'text'],
             ['主石重', 'diamond_carat' , 'text'],
-            ['金额	', 'finger' , 'text'],
+//            ['主石单价	', '' , 'text'],
+            ['副石号', 'second_stone_type1' , 'function',function($model){
+                return Yii::$app->attr->valueName($model->second_stone_type1 ?? '');
+            }],
+            ['副石粒数', 'second_stone_num1' , 'text'],
+            ['副石重量', 'second_stone_weight1' , 'text'],
+            ['副石单价', 'second_stone_price1' , 'text'],
+//            ['加工费', 'second_stone_price1' , 'text'],
+//            ['起版费', 'second_stone_price1' , 'text'],
+//            ['镶工费', 'second_stone_price1' , 'text'],
+//            ['喷拉砂', 'second_stone_price1' , 'text'],
+//            ['分色分件', 'second_stone_price1' , 'text'],
+//            ['总金额', 'second_stone_price1' , 'text'],
+            ['备注', 'goods_remark' , 'text'],
 
         ];
-
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 

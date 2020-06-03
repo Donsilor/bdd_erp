@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\models;
 
+use addons\Purchase\common\models\PurchaseGoods;
 use Yii;
 use common\models\backend\Member;
 
@@ -160,5 +161,14 @@ class Qiban extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+
+    /**
+     * 采购明细一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPurchaseGoods()
+    {
+        return $this->hasOne(PurchaseGoods::class, ['qiban_sn'=>'qiban_sn'])->alias('purchaseGoods');
     }
 }
