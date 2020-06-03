@@ -168,6 +168,7 @@ class PurchaseReceiptService extends Service
      */
     public function qcIqc($form)
     {
+        $this->iqcValidate($form);
         //if(false === $form->validate()) {
             //throw new \Exception($this->getError($form));
         //}
@@ -187,8 +188,16 @@ class PurchaseReceiptService extends Service
      *  IQC质检合法验证
      * @param $ids
      */
-    public function iqcValidate($ids){
-        //$ids = $form->getIds();
+    public function iqcValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
+                    throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
+                }
+            }
+        }
     }
 
     /**

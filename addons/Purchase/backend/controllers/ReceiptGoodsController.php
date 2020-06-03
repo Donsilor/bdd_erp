@@ -155,15 +155,15 @@ class ReceiptGoodsController extends BaseController
                     if(!$shippent_num){
                         throw new Exception("布产单{$produce_sn}未出货");
                     }
-                    $purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
+                    /*$purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
                         ->select('supplier_id')
                         ->where(['produce_sn' => $produce_sn])
                         ->andWhere(['<=', 'audit_status', AuditStatusEnum::PASS])
                         ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
                         ->asArray()
-                        ->all();
-                    //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
-                    $receipt_num = count($purchase_receipt_info);
+                        ->all();*/
+                    $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+                    //$receipt_num = count($purchase_receipt_info);
                     $the_receipt_num = bcsub($shippent_num, $receipt_num);
                     $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
                     $produce_attr_arr = [];
@@ -277,8 +277,10 @@ class ReceiptGoodsController extends BaseController
     public function actionIqc()
     {
         $ids = Yii::$app->request->get('ids');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($ids);
+            \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($model);
             return ResultHelper::json(200, '保存成功', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
