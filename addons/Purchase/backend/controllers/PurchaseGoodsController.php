@@ -20,6 +20,7 @@ use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 /**
  * Attribute
  *
@@ -324,7 +325,6 @@ class PurchaseGoodsController extends BaseController
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
-                    $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
                     $model->style_sex = $qiban->style_sex;
                     $model->goods_name = $qiban->qiban_name;
                     $model->cost_price  = $qiban->cost_price;
@@ -346,9 +346,9 @@ class PurchaseGoodsController extends BaseController
                 $model->style_id = $style->id;
                 $model->goods_sn = $goods_sn;
                 $model->style_sn = $goods_sn;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;
-                $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;

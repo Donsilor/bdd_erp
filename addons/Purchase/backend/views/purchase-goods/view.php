@@ -23,10 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
-                                    <td><?= \addons\Purchase\common\enums\PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
                                 </tr>
                                 <?php if($model->qiban_sn) {?>
                                 <tr>
