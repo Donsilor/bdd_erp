@@ -130,11 +130,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
 
                 <?php
-                if($model->audit_status != 1){
+                if($model->audit_status != \common\enums\AuditStatusEnum::PENDING){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-sm',
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
+                    ]);
+                }
+                if($model->audit_status != \common\enums\AuditStatusEnum::SAVE){
+                    echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                     ]);
                 }
                 ?>

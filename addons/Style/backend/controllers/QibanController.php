@@ -115,6 +115,9 @@ class QibanController extends BaseController
             $model->style_id = $style->id;
         }
         if ($model->load(Yii::$app->request->post())) {
+            //重新编辑后，审核状态改为未审核
+            $model->audit_status = AuditStatusEnum::SAVE;
+
             if($model->isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }            
@@ -170,6 +173,9 @@ class QibanController extends BaseController
         
         
         if ($model->load(Yii::$app->request->post())) {
+            //重新编辑后，审核状态改为未审核
+            $model->audit_status = AuditStatusEnum::SAVE;
+
             if($model->isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }
@@ -211,7 +217,27 @@ class QibanController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
-    }    
+    }
+
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
     /**
      * 审核-起版
      *
@@ -222,7 +248,11 @@ class QibanController extends BaseController
         $id = Yii::$app->request->get('id');
         
         $this->modelClass = QibanAuditForm::class;
-        $model = $this->findModel($id);        
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);        
         if ($model->load(Yii::$app->request->post())) {

@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
+use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -160,7 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {edit} {audit} {status}',
+                'template' => '{view} {edit}{ajax-apply} {audit} {status}',
                 'buttons' => [
                     'view'=> function($url, $model, $key){
                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -169,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'edit' => function($url, $model, $key){
                         //审核后不能编辑
-                        if($model->audit_status == 0 ){
+                        if(!$model->purchaseGoods){
                             if($model->qiban_type == 1){
                                 return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
@@ -188,8 +189,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
 
                     },
+                    'ajax-apply' => function($url, $model, $key){
+                        if($model->audit_status == AuditStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
                     'audit' => function($url, $model, $key){
-                        if($model->audit_status != 1){
+                        if($model->audit_status == AuditStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -197,13 +206,14 @@ $this->params['breadcrumbs'][] = $this->title;
                              ]); 
                         }
                     },
+
                     'status' => function($url, $model, $key){
-                        if($model->audit_status == 1){
+                        if($model->audit_status == AuditStatusEnum::PASS){
                             return Html::status($model->status);
                         }                        
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->audit_status == 0){
+                        if($model->audit_status <= AuditStatusEnum::PENDING){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },
