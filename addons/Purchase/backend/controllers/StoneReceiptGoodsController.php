@@ -26,7 +26,7 @@ use yii\base\Exception;
  * @property ReceiptGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
-class GoldReceiptGoodsController extends BaseController
+class StoneReceiptGoodsController extends BaseController
 {
     use Curd;
     
