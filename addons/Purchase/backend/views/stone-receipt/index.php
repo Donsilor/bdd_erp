@@ -11,7 +11,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold-receipt', '金料采购收货单');
+$this->title = Yii::t('gold-receipt', '石料采购收货单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';

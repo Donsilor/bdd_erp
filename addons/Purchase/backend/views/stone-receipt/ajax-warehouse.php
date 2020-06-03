@@ -1,15 +1,15 @@
 <?php
-use common\widgets\webuploader\Files;
+
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
-use common\enums\StatusEnum;
+
 $form = ActiveForm::begin([
-    'id' => $model->formName(),
-    'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['ajax-edit','id' => $model['id']]),
-    'fieldConfig' => [
-        'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
-    ]
+        'id' => $model->formName(),
+        'enableAjaxValidation' => true,
+        'validationUrl' => Url::to(['ajax-warehouse','id' => $model['id']]),
+        'fieldConfig' => [
+                //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
+        ]
 ]);
 ?>
     <div class="modal-header">
@@ -20,23 +20,18 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?= $form->field($model, 'pid')->widget(kartik\select2\Select2::class, [
-                'data' => $cateDropDownList,
+            <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+                'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
                 'options' => ['placeholder' => '请选择'],
                 'pluginOptions' => [
-                    'allowClear' => true
+                    'allowClear' => false
                 ],
             ]);?>
-           <?= $form->field($model, 'name')->textInput(); ?>
-           <?= $form->field($model, 'tag')->textInput(); ?>
-           <?= $form->field($model, 'sort')->textInput(); ?>
-           <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
+            <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
     </div>
-
-
 
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

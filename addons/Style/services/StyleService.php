@@ -62,11 +62,12 @@ class StyleService extends Service
         }
         //前缀
         $prefix   = $channel_tag;
-        $cate_tag = $model->cate->tag ?? '';        
-        list($cate_m, $cate_w) = explode("|", $cate_tag);
-        if(empty($cate_w)) {
+        $cate_tag = $model->cate->tag ?? '';    
+        $cate_tag_list = explode("|", $cate_tag);
+        if(count($cate_tag_list) < 2 ) {
             throw new \Exception("编款失败：款式分类未配置编码规则");
         }
+        list($cate_m, $cate_w) = $cate_tag_list;       
         if($model->style_sex == StyleSexEnum::MAN) {
             $prefix .= $cate_m;
         }else {

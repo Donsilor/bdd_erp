@@ -44,7 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'supplier_name')->textInput(['maxlength' => true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'supplier_code')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'supplier_tag')->textInput(['maxlength' => true]) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'supplier_code')->textInput(['maxlength' => true,'disabled'=>true,'placeholder'=>'系统自动生成']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'balance_type')->dropDownList(\addons\Supply\common\enums\BalanceTypeEnum::getMap()) ?>

@@ -89,11 +89,11 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['goods_id', 'product_type_id', 'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id', 'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'parts_gold_weight', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
-            [['style_sn'], 'string', 'max' => 30],
+            [['style_sn','goods_id'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id'], 'string', 'max' => 20],
             [['finger', 'order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],

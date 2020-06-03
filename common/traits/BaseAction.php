@@ -97,7 +97,12 @@ trait BaseAction
             }
         }
     }
-
+    protected function formValidate($model)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->data = \yii\widgets\ActiveForm::validate($model);
+        Yii::$app->end();
+    }
     /**
      * 错误提示信息
      *
