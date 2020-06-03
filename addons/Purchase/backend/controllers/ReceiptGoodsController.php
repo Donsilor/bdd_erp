@@ -281,7 +281,7 @@ class ReceiptGoodsController extends BaseController
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($model);
-            return ResultHelper::json(200, '保存成功', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
         }
@@ -343,6 +343,25 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
+     * IQC批量质检
+     *
+     * @return mixed
+     */
+    public function actionWarehouse()
+    {
+        $receipt_id = Yii::$app->request->get('receipt_id');
+        $ids = Yii::$app->request->get('ids');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
+        try{
+            \Yii::$app->purchaseService->purchaseReceipt->warehouseValidate($model);
+            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
+        }catch (\Exception $e){
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
      * 批量申请入库-采购收货单
      *
      * @return mixed
@@ -351,6 +370,8 @@ class ReceiptGoodsController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $ids = Yii::$app->request->get('ids');
+        $model->ids = $ids;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -363,13 +384,13 @@ class ReceiptGoodsController extends BaseController
                 }
 
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($id);
+                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
 
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message("申请失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
         return $this->renderAjax($this->action->id, [
