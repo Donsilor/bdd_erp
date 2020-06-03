@@ -44,8 +44,10 @@ class PurchaseReceiptForm extends PurchaseReceipt
      * {@inheritdoc}
      */
     public function getIds(){
-
-        return $this->ids?:StringHelper::explode($this->ids);
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
     }
 
     /**

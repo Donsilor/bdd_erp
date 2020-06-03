@@ -2,21 +2,20 @@
 
 namespace addons\Purchase\backend\controllers;
 
-
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\models\WarehouseBill;
-use common\helpers\ArrayHelper;
-use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
+use common\helpers\ArrayHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use common\traits\Curd;
 /**
@@ -25,7 +24,7 @@ use common\traits\Curd;
 * Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class ReceiptGoldController extends BaseController
+class GoldReceiptController extends BaseController
 {
     use Curd;
 
@@ -33,7 +32,7 @@ class ReceiptGoldController extends BaseController
     * @var Receipt
     */
     public $modelClass = PurchaseReceiptForm::class;
-
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
 
     /**
     * 首页
@@ -72,6 +71,7 @@ class ReceiptGoldController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.purchase_type', $this->purchaseType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -82,7 +82,7 @@ class ReceiptGoldController extends BaseController
             $this->actionExport($ids);
         }
 
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
@@ -193,7 +193,7 @@ class ReceiptGoldController extends BaseController
                 }
 
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
 
                 $trans->commit();
                 return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -226,7 +226,7 @@ class ReceiptGoldController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->receipt->menuTabList($id, $this->purchaseType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -341,7 +341,7 @@ class ReceiptGoldController extends BaseController
         $id_arr = explode(',', $ids);
         $id = $id_arr[0];//暂时打印一个
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt-gold/index']));
         $model = $this->findModel($id);
         $goodsModel = new PurchaseReceiptGoods();
         $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();

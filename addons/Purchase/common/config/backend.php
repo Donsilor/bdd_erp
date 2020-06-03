@@ -58,11 +58,11 @@ return [
                         ],
                         [
                                 'title' => '金料收货单',
-                                'route' => 'receipt-gold/index',
+                                'route' => 'gold-receipt/index',
                         ],
                         [
                                 'title' => '金料返厂单',
-                                'route' => 'defective-gold/index',
+                                'route' => 'gold-defective/index',
                         ],
                 ],
                 
@@ -78,11 +78,11 @@ return [
                         ],
                         [
                                 'title' => '石料收货单',
-                                'route' => 'receipt-stone/index',
+                                'route' => 'stone-receipt/index',
                         ],
                         [
                                 'title' => '石料返厂单',
-                                'route' => 'defective-stone/index',
+                                'route' => 'stone-defective/index',
                         ],
                 ],
                 

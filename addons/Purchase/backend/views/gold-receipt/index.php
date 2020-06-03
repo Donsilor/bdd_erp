@@ -11,7 +11,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('receipt', '采购收货单');
+$this->title = Yii::t('receipt', '金料采购收货单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -269,7 +269,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
                 },
                 'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    return Html::a('单据明细', ['receipt-gold-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'delete' => function($url, $model, $key){
                     if($model->receipt_status != BillStatusEnum::CONFIRM) {

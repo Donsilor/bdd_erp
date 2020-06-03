@@ -2,16 +2,16 @@
 
 namespace addons\Purchase\common\forms;
 
-use common\helpers\StringHelper;
 use Yii;
 use common\helpers\ArrayHelper;
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
+use common\helpers\StringHelper;
+use addons\Purchase\common\models\PurchaseGoldReceipt;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 /**
  * 采购收货单明细 Form
  *
  */
-class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
+class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
 {
     public $ids;
     /**
@@ -51,9 +51,9 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
      * {@inheritdoc}
      */
     public function checkDistinct($col, $ids){
-        $query = PurchaseReceiptGoods::find();
-        $query->from(['rg'=> PurchaseReceiptGoods::tableName()]);
-        $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
+        $query = PurchaseGoldReceiptGoods::find();
+        $query->from(['rg'=> PurchaseGoldReceiptGoods::tableName()]);
+        $query->leftJoin(['r' => PurchaseGoldReceipt::tableName()], 'r.id = rg.receipt_id');
         $query->where(['rg.id' => $ids]);
         $query->distinct($col);
         $query->count(1);

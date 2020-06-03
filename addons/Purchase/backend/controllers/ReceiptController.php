@@ -2,21 +2,20 @@
 
 namespace addons\Purchase\backend\controllers;
 
-
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\models\WarehouseBill;
-use common\helpers\ArrayHelper;
-use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
+use common\helpers\ArrayHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use common\traits\Curd;
 /**
@@ -72,6 +71,7 @@ class ReceiptController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.purchase_type', PurchaseTypeEnum::GOODS]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -82,7 +82,7 @@ class ReceiptController extends BaseController
             $this->actionExport($ids);
         }
 
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
