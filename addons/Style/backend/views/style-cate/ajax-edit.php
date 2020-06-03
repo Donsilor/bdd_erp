@@ -19,10 +19,7 @@ $form = ActiveForm::begin([
     </div>
 
     <div class="modal-body">
-
-
         <div class="tab-content">
-
             <?= $form->field($model, 'pid')->widget(kartik\select2\Select2::class, [
                 'data' => $cateDropDownList,
                 'options' => ['placeholder' => '请选择'],
@@ -32,8 +29,8 @@ $form = ActiveForm::begin([
             ]);?>
            <?= $form->field($model, 'name')->textInput(); ?>
            <?= $form->field($model, 'tag')->textInput(); ?>
-            <?= $form->field($model, 'sort')->textInput(); ?>
-            <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
+           <?= $form->field($model, 'sort')->textInput(); ?>
+           <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
