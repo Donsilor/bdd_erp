@@ -11,7 +11,8 @@ class StyleMaterialEnum extends BaseEnum
     const GOLD = 1;
     const SILVER = 2;
     const COPPER = 3;
-    const ALLOY = 4;    
+    const ALLOY = 4; 
+    const OTHER = 0;
     /**
      * @return array
      *
@@ -23,6 +24,7 @@ class StyleMaterialEnum extends BaseEnum
                 self::SILVER => "银",
                 self::COPPER => "铜",
                 self::ALLOY => "合金",
+                self::OTHER => "其他",
         ];
     }
 }

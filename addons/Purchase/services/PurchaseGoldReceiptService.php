@@ -2,20 +2,16 @@
 
 namespace addons\Purchase\services;
 
-
-use addons\Purchase\common\enums\DefectiveStatusEnum;
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseDefective;
-use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
@@ -26,76 +22,12 @@ use common\enums\StatusEnum;
 use yii\db\Exception;
 
 /**
- * Class TypeService
+ * 金料采购收货单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class PurchaseReceiptService extends Service
+class PurchaseGoldReceiptService extends Service
 {
-    
-    /**
-     * 采购收货单明细 tab
-     * @param int $id 采购单ID
-     * @return array
-     */
-    public function menuTabList($receipt_id, $purchase_type, $returnUrl = null, $tag = null)
-    {
-        switch ($purchase_type){
-
-            case PurchaseTypeEnum::GOODS:
-                {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }
-                    break;
-                }
-            case PurchaseTypeEnum::MATERIAL_STONE:
-                {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }
-                    break;
-                }
-            case PurchaseTypeEnum::MATERIAL_GOLD:
-                {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
-                    }
-                    break;
-                }
-        }
-        return $tablist;
-    }
     
     /**
      * 采购收货单汇总

@@ -16,6 +16,8 @@ use common\models\backend\Member;
  * @property int $supplier_id 供应商ID
  * @property string $receipt_no 工厂出货单号
  * @property int $receipt_num 出货数量
+ * @property int $receipt_type 收货类型
+ * @property int $receipt_status 单据状态
  * @property int $put_in_type 入库方式
  * @property int $is_to_warehouse 是否提交入库
  * @property int $to_warehouse_id 入库仓库
@@ -47,7 +49,7 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'put_in_type', 'is_to_warehouse', 'to_warehouse_id', 'auditor_id', 'receipt_status','audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'put_in_type', 'is_to_warehouse', 'to_warehouse_id', 'auditor_id', 'receipt_status', 'receipt_status', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
             [['receipt_no'], 'string', 'max' => 30],
@@ -66,6 +68,8 @@ class PurchaseReceipt extends BaseModel
             'merchant_id' => '商户ID',
             'supplier_id' => '供应商',
             'receipt_no' => '工厂出货单号',
+            'receipt_type' => '收货商品类型',
+            'receipt_status' => '单据状态',
             'receipt_num' => '出货数量',
             'total_cost' => '总金额',
             'put_in_type' => '入库方式',
@@ -73,7 +77,6 @@ class PurchaseReceipt extends BaseModel
             'to_warehouse_id' => '入库仓库',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
-            'receipt_status' => '单据状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '单据备注',

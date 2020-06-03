@@ -7,6 +7,7 @@ use common\traits\Tree;
  * 款式分类
  * @property int $id 主键
  * @property string $title 标题
+ * @property string $tag 标签(编款用)
  * @property string $tree 树
  * @property int $sort 排序
  * @property int $level 级别
@@ -36,6 +37,7 @@ class StyleCate extends BaseModel
                 [['status','name'], 'required'],
                 [['id','merchant_id','sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
                 [['name'], 'string', 'max' => 100],
+                [['tag'], 'string', 'max' => 10],
                 [['image'], 'string', 'max' => 100],
                 [['tree'], 'string', 'max' => 255],
                 [['pid','level','name'], 'safe'],
@@ -53,6 +55,7 @@ class StyleCate extends BaseModel
         return [
                 'id' => 'ID',
                 'name' => '分类名称',
+                'tag' => '标签(编款用)',
                 'image' =>  '图标',
                 'sort' => '排序',
                 'tree' => '树',

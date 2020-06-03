@@ -16,6 +16,7 @@ use addons\Style\common\forms\StyleAuditForm;
 use common\enums\StatusEnum;
 use yii\behaviors\AttributeTypecastBehavior;
 use addons\Style\common\enums\AttrTypeEnum;
+use common\helpers\SnHelper;
 
 /**
 * Style
@@ -76,16 +77,31 @@ class StyleController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            if($model->isNewRecord){
+            if($model->isNewRecord){                
                 $model->creator_id = \Yii::$app->user->id;
             }
             if($model->type) {
                 $model->is_inlay = $model->type->is_inlay;
             }
-
-            return $model->save()
-            ? $this->redirect(Yii::$app->request->referrer)
-            : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            $isNewRecord = $model->isNewRecord;
+            try{                
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //自动创建款号
+                if($isNewRecord && trim($model->style_sn) == "") { 
+                    $model->style_sn = Yii::$app->styleService->style->createStyleSn($model);
+                    if(false === $model->save()) {
+                        throw new \Exception($this->getError($model));
+                    }
+                }
+                $trans->commit();
+                $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
         }
         
         return $this->renderAjax($this->action->id, [
