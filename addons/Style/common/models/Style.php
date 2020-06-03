@@ -15,7 +15,7 @@ use addons\Supply\common\models\Supplier;
  * @property int $style_cate_id 产品分类
  * @property int $product_type_id 产品线
  * @property string $style_image 商品主图
- * @property string $style_3ds 360主图
+ * @property string $style_material 款式材质
  * @property string $sale_price 销售价
  * @property string $sale_volume 销量
  * @property string $market_price 市场价
@@ -24,7 +24,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $cost_price_max 成本价最大值
  * @property string $goods_num 商品数量
  * @property string $is_inlay 是否镶嵌
- * @property int $is_recommend 商品推荐 1是，0否，默认为0
+ * @property int $style_channel_id 款式渠道
  * @property int $is_lock 商品锁定 0未锁，1已锁
  * @property int $supplier_id 供应商id
  * @property int $status 款式状态 0下架，1正常，-1删除
@@ -53,14 +53,11 @@ class Style extends BaseModel
     {
         return [
                 [['id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
-                [['product_type_id','style_cate_id','style_sn','style_sex','style_name'], 'required'],
+                [['style_material','product_type_id','style_channel_id','style_cate_id','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
-                //['sale_price','compare','compareValue' => 0, 'operator' => '>'],
-                //['market_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
-                //['market_price','compare','compareValue' => 1000000000, 'operator' => '<'],
-                //['sale_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 ['cost_price','compare','compareValue' => 1000000000, 'operator' => '<'],
+                [['style_material'], 'string', 'max' => 10],
                 [['style_sn'], 'string', 'max' => 50],
                 [['style_image','style_3ds'], 'string', 'max' => 100],
                 [['audit_remark','remark','style_name'], 'string', 'max' => 255],
@@ -82,6 +79,7 @@ class Style extends BaseModel
             'style_source_id' => '款式来源',
             'style_channel_id' =>'归属渠道',
             'style_sex' => '款式性别',
+            'style_material' => '款式材质',
             'style_image' => '款式图片',
             'style_3ds' => '360主图',
             'sale_price' => '销售价',

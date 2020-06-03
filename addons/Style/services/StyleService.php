@@ -7,6 +7,9 @@ use common\components\Service;
 use addons\Style\common\models\Style;
 use common\helpers\Url;
 use addons\Style\common\models\StyleAttribute;
+use common\helpers\SnHelper;
+use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\enums\StyleMaterialEnum;
 
 /**
  * Class TypeService
@@ -43,5 +46,36 @@ class StyleService extends Service
     {
         return StyleAttribute::find()->where(['style_id'=>$style_id])->asArray()->all();
     }
-
+    
+    /**
+     * 创建款式编号
+     * @param Style $model
+     */
+    public static function createStyleSn($model,$str_pad = 6)
+    {   
+        if(!$model->id) {
+            throw new \Exception("编款失败：款式ID不能为空");
+        }
+        $channel_tag = $model->channel->tag ?? null;
+        if(empty($channel_tag)) {
+            throw new \Exception("编款失败：款式渠道未配置编码规则");
+        }
+        //前缀
+        $prefix   = $channel_tag;
+        $cate_tag = $model->cate->tag ?? '';        
+        list($cate_m, $cate_w) = explode("|", $cate_tag);
+        if(empty($cate_w)) {
+            throw new \Exception("编款失败：款式分类未配置编码规则");
+        }
+        if($model->style_sex == StyleSexEnum::MAN) {
+            $prefix .= $cate_m;
+        }else {
+            $prefix .= $cate_w;
+        }
+        //中间部分
+        $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
+        //结尾部分
+        $last = $model->style_material;
+        return $prefix.$middle.$last;
+    }
 }

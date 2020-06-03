@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->purchase_type) ?></td>
                         </tr>                        
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
+                            <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>

@@ -19,8 +19,8 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
    			<div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled'=>$model->isNewRecord?null:'disabled'])?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()?></div>
+   			    <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled'=>$model->isNewRecord?null:'disabled','placeholder'=>'编号为空时系统自动生成'])?></div>
             </div>
 			<div class="row">
                 <div class="col-lg-6">
@@ -46,6 +46,15 @@ $form = ActiveForm::begin([
             </div>
             <div class="row">
                 <div class="col-lg-6">
+                <?= $form->field($model, 'style_channel_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);?>              
+                </div>
+               <div class="col-lg-6">
                 <?= $form->field($model, 'style_source_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->styleService->styleSource->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
@@ -54,21 +63,15 @@ $form = ActiveForm::begin([
                     ],
                 ]);?>
                 </div>
-                <div class="col-lg-6">
-                <?= $form->field($model, 'style_channel_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);?>                
-                </div>
             </div>
    		    <div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap())?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'is_made')->radioList(\common\enums\ConfirmEnum::getMap())?></div>
+   		        <div class="col-lg-4"><?= $form->field($model, 'style_material')->radioList(\addons\Style\common\enums\StyleMaterialEnum::getMap())?></div>
+   		        <div class="col-lg-4"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap())?></div>
+                <div class="col-lg-4"><?= $form->field($model, 'is_made')->radioList(\common\enums\ConfirmEnum::getMap())?></div>
             </div>
-            <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
+            <div class="row">
+                <div class="col-lg-12"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>
+            </div>
         </div>    
                    
     </div>
