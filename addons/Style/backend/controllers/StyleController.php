@@ -73,11 +73,6 @@ class StyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-
-        if($model->audit_status == AuditStatusEnum::PENDING) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
-        
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -147,7 +142,7 @@ class StyleController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if($model->audit_status != AuditStatusEnum::SAVE){
+        if($model->audit_status != AuditStatusEnum::SAVE && $model->audit_status != AuditStatusEnum::UNPASS ){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $model->audit_status = AuditStatusEnum::PENDING;
@@ -167,7 +162,11 @@ class StyleController extends BaseController
         $id = Yii::$app->request->get('id');
         
         $this->modelClass = StyleAuditForm::class;
-        $model = $this->findModel($id);        
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);        
         if ($model->load(Yii::$app->request->post())) {
