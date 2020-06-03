@@ -16,7 +16,7 @@ use Yii;
  * @property int $goods_num 商品数量
  * @property int $material_type 商品类型
  * @property double $goods_weight 重量
- * @property string $const_price 成本价
+ * @property string $cost_price 成本价
  * @property string $gold_price 金料价格/克
  * @property string $goods_remark 商品备注
  * @property int $put_in_type 入库方式
@@ -44,7 +44,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
             [['id', 'receipt_id', 'xuhao', 'goods_status', 'goods_num', 'material_type', 'put_in_type', 'to_warehouse_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goods_weight', 'const_price', 'gold_price'], 'number'],
+            [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark'], 'string', 'max' => 255],
         ];
@@ -65,7 +65,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
             'goods_num' => '商品数量',
             'material_type' => '商品类型',
             'goods_weight' => '重量',
-            'const_price' => '成本价',
+            'cost_price' => '成本价',
             'gold_price' => '金料价格/克',
             'goods_remark' => '商品备注',
             'put_in_type' => '入库方式',

@@ -32,7 +32,7 @@ class ReceiptController extends BaseController
     * @var Receipt
     */
     public $modelClass = PurchaseReceiptForm::class;
-
+    public $purchaseType = PurchaseTypeEnum::GOODS;
 
     /**
     * 首页
@@ -71,7 +71,7 @@ class ReceiptController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',PurchaseReceipt::tableName().'.status',-1]);
-        $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.purchase_type', PurchaseTypeEnum::GOODS]);
+        $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.purchase_type', $this->purchaseType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -193,8 +193,7 @@ class ReceiptController extends BaseController
                 }
 
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
-
+                Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
                 $trans->commit();
                 return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -226,7 +225,7 @@ class ReceiptController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchaseReceipt->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->receipt->menuTabList($id, $this->purchaseType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

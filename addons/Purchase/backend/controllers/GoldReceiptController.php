@@ -217,7 +217,7 @@ class GoldReceiptController extends BaseController
         $id = Yii::$app->request->get('id');
         $receipt_no = Yii::$app->request->get('receipt_no');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt/index']));
         if(!$id){
             $result = $this->modelClass::find()->where(['receipt_no'=>$receipt_no])->asArray()->one();
             $id = !empty($result)?$result['id']:0;
@@ -341,7 +341,7 @@ class GoldReceiptController extends BaseController
         $id_arr = explode(',', $ids);
         $id = $id_arr[0];//暂时打印一个
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt-gold/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt/index']));
         $model = $this->findModel($id);
         $goodsModel = new PurchaseReceiptGoods();
         $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();

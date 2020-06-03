@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
@@ -37,7 +38,7 @@ class ReceiptGoodsController extends BaseController
      * @var $modelClass PurchaseReceiptGoodsForm
      */
     public $modelClass = PurchaseReceiptGoodsForm::class;
-    
+    public $purchaseType = PurchaseTypeEnum::GOODS;
     
     /**
      * 首页
@@ -69,7 +70,7 @@ class ReceiptGoodsController extends BaseController
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl),
+            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
             'receipt' => $receipt,
@@ -213,7 +214,7 @@ class ReceiptGoodsController extends BaseController
                             throw new Exception("保存失败");
                         }
                         //更新采购收货单汇总：总金额和总数量
-                        $res = Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($receipt_id);
+                        $res = Yii::$app->purchaseService->receipt->purchaseReceiptSummary($receipt_id);
                         if(false === $res){
                             throw new Exception('更新收货单汇总失败');
                         }
@@ -262,7 +263,7 @@ class ReceiptGoodsController extends BaseController
         return $this->render('edit-all', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id,$returnUrl,$tab),
+            'tabList' => \Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl, $tab),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
             'receipt' => $receipt,
@@ -303,7 +304,7 @@ class ReceiptGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->purchaseService->purchaseReceipt->qcIqc($model);
+                \Yii::$app->purchaseService->receipt->qcIqc($model);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -332,7 +333,7 @@ class ReceiptGoodsController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->purchaseReceipt->batchDefective($model);
+            \Yii::$app->purchaseService->receipt->batchDefective($model);
 
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -354,7 +355,7 @@ class ReceiptGoodsController extends BaseController
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->purchaseReceipt->warehouseValidate($model);
+            \Yii::$app->purchaseService->receipt->warehouseValidate($model);
             return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -380,7 +381,7 @@ class ReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->purchaseReceipt->syncReceiptToBillInfoL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');
@@ -414,13 +415,11 @@ class ReceiptGoodsController extends BaseController
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));
             }
-
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->purchaseService->purchaseReceipt->purchaseReceiptSummary($model->receipt_id);
+            $res = \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }
-
             \Yii::$app->getSession()->setFlash('success','删除成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
@@ -428,6 +427,5 @@ class ReceiptGoodsController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message("删除失败", $this->redirect(\Yii::$app->request->referrer), 'error');
     }
 }

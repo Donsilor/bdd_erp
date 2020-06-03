@@ -33,7 +33,6 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'id'=>'流水号',
-            'jintuo_type'=>'金托类型',
         ]);
     }
 

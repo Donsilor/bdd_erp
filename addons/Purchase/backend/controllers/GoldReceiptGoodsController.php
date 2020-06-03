@@ -5,7 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Style\common\enums\AttrIdEnum;
@@ -33,7 +33,7 @@ class GoldReceiptGoodsController extends BaseController
     /**
      * @var $modelClass PurchaseReceiptGoodsForm
      */
-    public $modelClass = PurchaseReceiptGoodsForm::class;
+    public $modelClass = PurchaseGoldReceiptGoodsForm::class;
     public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
     
     /**
@@ -63,7 +63,7 @@ class GoldReceiptGoodsController extends BaseController
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tabList' => \Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl),
@@ -105,7 +105,7 @@ class GoldReceiptGoodsController extends BaseController
         if($receipt_no){
             $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.receipt_no', $receipt_no]);
         }
-        return $this->render('iqc-index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'returnUrl' => $returnUrl,
@@ -256,7 +256,7 @@ class GoldReceiptGoodsController extends BaseController
         $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
-        return $this->render('edit-all', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tabList' => \Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl, $tab),
