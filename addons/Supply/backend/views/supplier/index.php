@@ -72,8 +72,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         $scope_key = explode(',', $model->business_scope);
                         $scope_val = \addons\Supply\common\enums\BusinessScopeEnum::getValues($scope_key);
                         return implode(",",$scope_val);
+                    }else{
+                        return '';
                     }
-                    return '';
                 },
                 'filter' => false,
                 'contentOptions' => ['style' => 'word-break:break-all;'],
