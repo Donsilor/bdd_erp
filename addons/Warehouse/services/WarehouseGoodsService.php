@@ -45,7 +45,7 @@ class WarehouseGoodsService extends Service
      * 创建商品编号
      * @param WarehouseGoods $model
      */
-    public function createGoodsId($model,$str_pad = 8) {
+    public function createGoodsId($model, $save = true, $str_pad = 8) {
         
         if(!$model->id) {
             throw new \Exception("编货号失败：id不能为空");
@@ -69,8 +69,13 @@ class WarehouseGoodsService extends Service
         }
         //4.数字部分
         $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
-
-        return $prefix.$middle;
+        $model->goods_id = $prefix.$middle;
+        if($save === true) {
+            if(false === $model->save(true,['id','goods_id'])){
+                throw new \Exception("编货号失败：保存货号失败");
+            }
+        }
+        return $model->goods_id;
     }
 
 }
