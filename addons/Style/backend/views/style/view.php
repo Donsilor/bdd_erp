@@ -113,13 +113,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
             <div class="text-center" >
 
-                <?php echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                    'class' => 'btn btn-primary btn-ms',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModalLg',
-                ]); ?>
                 <?php
-                if($model->audit_status != AuditStatusEnum::PASS){
+                if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS) {
+                    echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                        'class' => 'btn btn-primary btn-ms',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]);
+                    echo '&nbsp;';
+                    echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                        'class'=>'btn btn-success btn-ms',
+                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                    ]);
+                }
+                ?>
+                <?php
+                if($model->audit_status == AuditStatusEnum::PENDING){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-ms',
                         'data-toggle' => 'modal',
