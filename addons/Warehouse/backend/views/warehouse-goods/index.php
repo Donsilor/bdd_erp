@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'goods_id',
                             'value'=>function($model) {
+                                $model->goods_id = Yii::$app->warehouseService->warehouseGoods->createGoodsId($model);
                                 return Html::a($model->goods_id, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_id', [
@@ -69,8 +70,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
-
+                        [
+                            'attribute' => 'style_sex',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function($model){
+                                return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                    
+                            ]),
+                        ],
                         [
                             'attribute' => 'product_type_id',
                             'format' => 'raw',
