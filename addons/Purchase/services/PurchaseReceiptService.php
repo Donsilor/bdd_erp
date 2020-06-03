@@ -184,6 +184,14 @@ class PurchaseReceiptService extends Service
     }
 
     /**
+     *  IQC质检合法验证
+     * @param $ids
+     */
+    public function iqcValidate($ids){
+        //$ids = $form->getIds();
+    }
+
+    /**
      *  批量生成不良返厂单
      * @param WarehouseBillBForm $form
      */

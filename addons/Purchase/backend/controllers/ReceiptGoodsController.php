@@ -6,6 +6,7 @@ namespace addons\Purchase\backend\controllers;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
+use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -154,15 +155,15 @@ class ReceiptGoodsController extends BaseController
                     if(!$shippent_num){
                         throw new Exception("布产单{$produce_sn}未出货");
                     }
-                    /*$purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
+                    $purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
                         ->select('supplier_id')
                         ->where(['produce_sn' => $produce_sn])
                         ->andWhere(['<=', 'audit_status', AuditStatusEnum::PASS])
                         ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
                         ->asArray()
-                        ->all();*/
-                    $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
-                    //$receipt_num = count($purchase_receipt_info);
+                        ->all();
+                    //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+                    $receipt_num = count($purchase_receipt_info);
                     $the_receipt_num = bcsub($shippent_num, $receipt_num);
                     $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
                     $produce_attr_arr = [];
@@ -273,13 +274,29 @@ class ReceiptGoodsController extends BaseController
      *
      * @return mixed
      */
+    public function actionIqc()
+    {
+        $ids = Yii::$app->request->get('ids');
+        try{
+            \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($ids);
+            return ResultHelper::json(200, '保存成功', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
+        }catch (\Exception $e){
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
+     * IQC批量质检
+     *
+     * @return mixed
+     */
     public function actionAjaxIqc()
     {
+        $this->layout = '@backend/views/layouts/iframe';
+
         $ids = Yii::$app->request->get('ids');
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
-        // ajax 校验
-        $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
@@ -287,14 +304,15 @@ class ReceiptGoodsController extends BaseController
                 \Yii::$app->purchaseService->purchaseReceipt->qcIqc($model);
 
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(422, $e->getMessage());
             }
         }
         $model->goods_status = QcTypeEnum::PASS;
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }

@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('IQC批量质检', ['ajax-iqc','id'=>$model->id],  [
+                        echo Html::a('IQC批量质检', ['iqc'],  [
                             'class'=>'btn btn-success btn-xs',
                             "onclick" => "batchIqc(this);return false;",
                         ]);
@@ -237,16 +237,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ids: ids
             },
             success: function (data) {
-                console.log(data);
                 if (parseInt(data.code) !== 200) {
                     rfAffirm(data.message);
                 } else {
-                    //$('#data-supplier').html(data);
-                    //window.location.reload();
-                        var title = '基本信息';
-                        var width = '80%';
-                        var height = '80%';
-                        var offset = "10%";
+                    var href = data.data.url;
+                    var title = '基本信息';
+                    var width = '80%';
+                    var height = '80%';
+                    var offset = "10%";
                     openIframe(title, width, height, href, offset);
                     e.preventDefault();
                     return false;
@@ -282,7 +280,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ids: ids
                 },
                 success: function (data) {
-                    console.log(data);
                     if (parseInt(data.code) !== 200) {
                         rfAffirm(data.message);
                     } else {
