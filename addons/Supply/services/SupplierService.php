@@ -65,15 +65,14 @@ class SupplierService
      * 工厂跟单人
      * @return array
      */
-    public function getFollower($supplier_id){
+    public function getFollowers($supplier_id){
         $model = SupplierFollower::find()->alias('a')
             ->leftJoin(Member::tableName().' m','m.id = a.member_id')
             ->where(['a.supplier_id'=>$supplier_id,'a.status' => StatusEnum::ENABLED])
             ->select(['a.member_id','m.username as member_name'])
             ->asArray()
             ->all();
-        $model = ArrayHelper::map($model,'member_id', 'member_name');
-        return $model;
+        return ArrayHelper::map($model,'member_id', 'member_name');
     }
 
 
