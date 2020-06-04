@@ -24,6 +24,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $cost_price_max 成本价最大值
  * @property string $goods_num 商品数量
  * @property string $is_inlay 是否镶嵌
+ * @property string $is_autosn 是否自动编款
  * @property int $style_channel_id 款式渠道
  * @property int $is_lock 商品锁定 0未锁，1已锁
  * @property int $supplier_id 供应商id
@@ -52,7 +53,7 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['style_material','id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
+                [['style_material','id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
                 [['style_material','product_type_id','style_channel_id','style_cate_id','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -80,13 +81,13 @@ class Style extends BaseModel
             'style_sex' => '款式性别',
             'style_material' => '款式材质',
             'style_image' => '款式图片',
-            'style_3ds' => '360主图',
             'sale_price' => '销售价',
             'sale_volume' => '销量',
             'market_price' => '市场价',
             'cost_price' =>'成本价',
             'goods_num'=> "商品数量",
             'is_inlay'=> "是否镶嵌",
+            'is_autosn'=> "款号生成方式",
             'is_made' => '是否支持定制',
             'audit_status' => "审核状态",
             'audit_remark' => "审核备注",

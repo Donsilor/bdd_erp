@@ -10,6 +10,7 @@ use addons\Style\common\models\StyleAttribute;
 use common\helpers\SnHelper;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\StyleMaterialEnum;
+use common\enums\AutoSnEnum;
 
 /**
  * Class TypeService
@@ -29,7 +30,7 @@ class StyleService extends Service
         $menus = [
                 1=>['name'=>'基础信息','url'=>Url::to(['style/view','id'=>$style_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                 2=>['name'=>'款式属性','url'=>Url::to(['style-attribute/index','style_id'=>$style_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'商品属性','url'=>Url::to(['style-goods/edit-all','style_id'=>$style_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'商品列表','url'=>Url::to(['style-goods/edit-all','style_id'=>$style_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                 4=>['name'=>'石头信息','url'=>Url::to(['style-stone/index','style_id'=>$style_id,'tab'=>4,'returnUrl'=>$returnUrl])],
                 5=>['name'=>'工厂信息','url'=>Url::to(['style-factory/index','style_id'=>$style_id,'tab'=>5,'returnUrl'=>$returnUrl])],
                 6=>['name'=>'工费信息','url'=>Url::to(['style-factory-fee/index','style_id'=>$style_id,'tab'=>6,'returnUrl'=>$returnUrl])],
@@ -86,7 +87,8 @@ class StyleService extends Service
         $last = $model->style_material;
         $model->style_sn = $prefix.$middle.$last;
         if($save === true) {
-            $result = $model->save(true,['id','style_sn']);
+            $model->is_autosn = AutoSnEnum::YES;
+            $result = $model->save(true,['id','style_sn','is_autosn']);
             if($result === false){
                 throw new \Exception("编款失败：保存款号失败");
             }

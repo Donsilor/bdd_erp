@@ -17,6 +17,7 @@ use common\enums\StatusEnum;
 use yii\behaviors\AttributeTypecastBehavior;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\SnHelper;
+use common\enums\AutoSnEnum;
 
 /**
 * Style
@@ -92,7 +93,7 @@ class StyleController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //自动创建款号
-                if($isNewRecord && trim($model->style_sn) == "") { 
+                if($isNewRecord && trim($model->style_sn) == "") {
                     Yii::$app->styleService->style->createStyleSn($model);                    
                 }
                 $trans->commit();

@@ -66,19 +66,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'130'],
             ],
-            [
-                    'headerOptions' => ['width'=>'400'],
+            [                    
                     'attribute' => 'style_name',
                     'value' => 'style_name',
                     'filter' => Html::activeTextInput($searchModel, 'style_name', [
                           'class' => 'form-control',
+                           'style'=>'width:300px' 
                     ]),
                     'format' => 'raw',   
+                    'headerOptions' => ['class' => 'col-md-1'],
             ],            
             [
-                    'label' => '款式分类',
-                    'attribute' => 'cate.name',
-                    'value' => "cate.name",
+                    'attribute' => 'style_cate_id',
+                    'value' => function($model){
+                        return $model->cate->name ?? '';
+                    },
                     'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
@@ -87,9 +89,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-1','style'=>'width:150px;'],
             ], 
             [
-                    'label' => '产品线',
-                    'attribute' => 'type.name',
-                    'value' => "type.name",
+                    'attribute' => 'product_type_id',
+                    'value' => function($model){
+                         return $model->type->name ?? '';
+                    },
                     'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
@@ -102,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
                     'value' => function ($model){
-                    return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
+                        return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'is_inlay',\addons\Style\common\enums\InlayEnum::getMap(), [
                             'prompt' => '全部',
@@ -110,6 +113,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
             ], 
             [
+                    'attribute' => 'style_channel_id',
+                    'value' => function($model){
+                          return $model->channel->name ?? '';
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ], 
+            [
+                    'attribute' => 'is_autosn',
+                    'value' => function($model){
+                        return \common\enums\AutoSnEnum::getValue($model->is_autosn);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'is_autosn',\common\enums\AutoSnEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+           ], 
+            /*[
                     'label' => '成本价',
                     'attribute' => 'cost_price',
                     'value' => function ($model){
@@ -122,7 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
+            ],*/
             [
                     'attribute' => 'goods_num',
                     'value' => "goods_num",
@@ -169,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'ajax-apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提交', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);
