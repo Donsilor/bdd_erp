@@ -74,16 +74,16 @@ class StyleService extends Service
             $prefix .= $cate_w;
         }
         //中间部分
-        $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
+        $middle = str_pad($model->id,6,'0',STR_PAD_LEFT);
         //结尾部分
         $last = $model->style_material;
-        $style->style_sn = $prefix.$middle.$last;
+        $model->style_sn = $prefix.$middle.$last;
         if($save === true) {
             $result = $model->save(true,['id','style_sn']);
             if($result === false){
                 throw new \Exception("编款失败：保存款号失败");
             }
         }
-        return $style->style_sn;
+        return $model->style_sn;
     }
 }
