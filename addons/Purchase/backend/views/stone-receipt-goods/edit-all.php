@@ -75,7 +75,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_num',
+                                'format' => 'raw',
                                 'headerOptions' => [],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_num', $model->goods_num, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
@@ -98,9 +102,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'material_type', \addons\Style\common\enums\MaterialTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -120,28 +124,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'goods_color',
+                                'attribute' => 'goods_color',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_color', $model->goods_color, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'goods_color', Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'goods_color', [
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'goods_clarity',
+                                'attribute' => 'goods_clarity',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_clarity', $model->goods_clarity, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'goods_clarity', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'goods_clarity', [
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'goods_norms',
@@ -152,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [

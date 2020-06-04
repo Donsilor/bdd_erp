@@ -126,6 +126,7 @@ class ReceiptController extends BaseController
         if(!$model->receipt_num){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+        $model->audit_status = AuditStatusEnum::PENDING;
         $model->receipt_status = BillStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -144,6 +145,11 @@ class ReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::PASS){
+            $model->audit_status = AuditStatusEnum::PASS;
+        }else{
+            $model->audit_status = AuditStatusEnum::UNPASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -166,7 +172,6 @@ class ReceiptController extends BaseController
                 return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

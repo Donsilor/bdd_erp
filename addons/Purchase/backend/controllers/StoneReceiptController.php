@@ -89,6 +89,47 @@ class StoneReceiptController extends ReceiptController
     }
 
     /**
+     * 审核-采购收货单
+     *
+     * @return mixed
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::PASS){
+            $model->audit_status = AuditStatusEnum::PASS;
+        }else{
+            $model->audit_status = AuditStatusEnum::UNPASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->id;
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->receipt_status = BillStatusEnum::CONFIRM;
+                }else{
+                    $model->receipt_status = BillStatusEnum::SAVE;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * 申请入库-采购收货单
      *
      * @return mixed

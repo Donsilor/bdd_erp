@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\enums\WhetherEnum;
@@ -104,9 +105,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'material_type',
                                 'value' => function ($model){
-                                    return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
+                                    return Yii::$app->attr->valueName($model->material_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -123,22 +124,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'goods_color',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_color', [
+                                'attribute' => 'goods_color',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->goods_color);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'goods_clarity',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_clarity', [
+                                'attribute' => 'goods_clarity',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->goods_clarity);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'goods_norms',
@@ -146,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
