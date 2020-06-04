@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $defective yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('defective_goods', '不良返厂单详情');
+$this->title = Yii::t('defective_goods', '金料不良返厂单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

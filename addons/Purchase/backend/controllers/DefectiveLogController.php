@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -20,6 +21,7 @@ class DefectiveLogController extends BaseController
     use Curd;
     
     public $modelClass = PurchaseDefectiveLog::class;
+
     /**
      * Lists all PurchaseDefectiveLog models.
      * @return mixed
@@ -30,7 +32,7 @@ class DefectiveLogController extends BaseController
         $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective/index']));
         
-        $purchase_defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
+        $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -41,16 +43,15 @@ class DefectiveLogController extends BaseController
                 'pageSize' => $this->pageSize,
                 
         ]);
-        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', PurchaseDefectiveLog::tableName().'.defective_id', $defective_id]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
-                'purchase_defective' => $purchase_defective,
+                'purchase_defective' => $defective,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl),
+                'tabList'=>\Yii::$app->purchaseService->defective->menuTabList($defective_id, $defective->purchase_type, $returnUrl),
         ]);
     }
     

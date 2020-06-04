@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use Yii;
@@ -35,7 +36,7 @@ class GoldDefectiveGoodsController extends BaseController
      * @var $modelClass PurchaseDefectiveGoodsForm
      */
     public $modelClass = PurchaseDefectiveGoodsForm::class;
-    
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
     
     /**
      * 首页
@@ -47,7 +48,7 @@ class GoldDefectiveGoodsController extends BaseController
     {
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['defective-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-defective-goods/index']));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -71,7 +72,7 @@ class GoldDefectiveGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'defective' => $defective,
-            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl),
+            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id, $this->purchaseType, $returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
@@ -148,7 +149,7 @@ class GoldDefectiveGoodsController extends BaseController
                             throw new Exception("保存失败");
                         }
                         //更新不良返厂单汇总：总金额和总数量
-                        $res = Yii::$app->purchaseService->purchaseDefective->purchaseDefectiveSummary($defective_id);
+                        $res = Yii::$app->purchaseService->defective->purchaseDefectiveSummary($defective_id);
                         if(false === $res){
                             throw new Exception('更新不良返厂单汇总失败');
                         }
@@ -178,7 +179,7 @@ class GoldDefectiveGoodsController extends BaseController
     {
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['defective-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-defective-goods/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -203,7 +204,7 @@ class GoldDefectiveGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'defective' => $defective,
-            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl,$tab),
+            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id, $this->purchaseType, $returnUrl, $tab),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
