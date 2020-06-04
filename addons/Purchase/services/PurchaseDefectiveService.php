@@ -58,8 +58,8 @@ class PurchaseDefectiveService extends Service
                     if($tag==3){
                         $tablist = [
                             1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-defective-goods/edit-all','receipt_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','receipt_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
                         $tablist = [

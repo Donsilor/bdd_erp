@@ -72,7 +72,7 @@ class StoneDefectiveGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'defective' => $defective,
-            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id,$returnUrl),
+            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id, $this->purchaseType, $returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);

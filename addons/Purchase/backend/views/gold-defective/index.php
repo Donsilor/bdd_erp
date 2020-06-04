@@ -223,7 +223,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
                     },
                 'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    return Html::a('单据明细', ['gold-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
                 'audit' => function($url, $model, $key){
