@@ -19,7 +19,7 @@ use Yii;
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
  * @property string $produce_sn 布产号
- * @property int $material_type 商品类型
+ * @property string $material_type 商品类型
  * @property double $goods_weight 商品重量
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
@@ -50,13 +50,13 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             [['defective_id', 'xuhao'], 'required'],
-            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id', 'material_type', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'goods_price'], 'number'],
             [['goods_name', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
             [['goods_color', 'goods_clarity'], 'string', 'max' => 10],
-            [['goods_norms'], 'string', 'max' => 20],
+            [['material_type', 'goods_norms'], 'string', 'max' => 20],
         ];
     }
 

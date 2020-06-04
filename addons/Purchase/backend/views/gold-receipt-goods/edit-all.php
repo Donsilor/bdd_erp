@@ -75,7 +75,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_num',
-                                'headerOptions' => [],
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_num', $model->goods_num, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'

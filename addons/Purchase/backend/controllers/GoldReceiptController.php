@@ -2,16 +2,17 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
@@ -24,7 +25,7 @@ use common\traits\Curd;
 * Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class GoldReceiptController extends BaseController
+class GoldReceiptController extends ReceiptController
 {
     use Curd;
 
@@ -89,53 +90,6 @@ class GoldReceiptController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
-        }
-
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * @return mixed
-     * 申请审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if($model->receipt_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        if(!$model->receipt_num){
-            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->receipt_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
-    }
-
-
-    /**
      * 审核-采购收货单
      *
      * @return mixed
@@ -144,6 +98,11 @@ class GoldReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::PASS){
+            $model->audit_status = AuditStatusEnum::PASS;
+        }else{
+            $model->audit_status = AuditStatusEnum::UNPASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -153,6 +112,10 @@ class GoldReceiptController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $res = PurchaseGoldReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    if(false === $res) {
+                        throw new \Exception("更新货品状态失败");
+                    }
                 }else{
                     $model->receipt_status = BillStatusEnum::SAVE;
                 }
@@ -166,7 +129,6 @@ class GoldReceiptController extends BaseController
                 return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -174,7 +136,6 @@ class GoldReceiptController extends BaseController
 
     /**
      * 申请入库-采购收货单
-     *
      * @return mixed
      */
     public function actionAjaxWarehouse()
@@ -231,8 +192,6 @@ class GoldReceiptController extends BaseController
         ]);
     }
 
-
-
     /**
      * @param null $ids
      * @return bool|mixed
@@ -250,7 +209,7 @@ class GoldReceiptController extends BaseController
 
         $select = ['pr.receipt_no','type.name as product_type_name','cate.name as style_cate_name', 'prg.*'];
         $list = PurchaseReceipt::find()->alias('pr')
-            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
+            ->leftJoin(PurchaseGoldReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
             ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
             ->where(['pr.id' => $ids])
@@ -343,7 +302,7 @@ class GoldReceiptController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt/index']));
         $model = $this->findModel($id);
-        $goodsModel = new PurchaseReceiptGoods();
+        $goodsModel = new PurchaseGoldReceiptGoods();
         $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();
         foreach ($goodsList as &$item) {
             $item['stone_zhong'] = $item['main_stone_weight']+$item['second_stone_weight1']+$item['second_stone_weight2']+$item['second_stone_weight3'];

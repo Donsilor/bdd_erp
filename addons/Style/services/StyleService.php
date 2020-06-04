@@ -10,6 +10,7 @@ use addons\Style\common\models\StyleAttribute;
 use common\helpers\SnHelper;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\StyleMaterialEnum;
+use common\enums\AutoSnEnum;
 
 /**
  * Class TypeService
@@ -26,16 +27,22 @@ class StyleService extends Service
      */
     public function menuTabList($style_id,$returnUrl = null)
     {
-        return [
+        $menus = [
                 1=>['name'=>'基础信息','url'=>Url::to(['style/view','id'=>$style_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                 2=>['name'=>'款式属性','url'=>Url::to(['style-attribute/index','style_id'=>$style_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'商品属性','url'=>Url::to(['style-goods/edit-all','style_id'=>$style_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'商品列表','url'=>Url::to(['style-goods/edit-all','style_id'=>$style_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                 4=>['name'=>'石头信息','url'=>Url::to(['style-stone/index','style_id'=>$style_id,'tab'=>4,'returnUrl'=>$returnUrl])],
                 5=>['name'=>'工厂信息','url'=>Url::to(['style-factory/index','style_id'=>$style_id,'tab'=>5,'returnUrl'=>$returnUrl])],
                 6=>['name'=>'工费信息','url'=>Url::to(['style-factory-fee/index','style_id'=>$style_id,'tab'=>6,'returnUrl'=>$returnUrl])],
                 7=>['name'=>'款式图片','url'=>Url::to(['style-image/index','style_id'=>$style_id,'tab'=>7,'returnUrl'=>$returnUrl])],
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
+        
+        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();        
+        if($model && $model->is_inlay==0) {
+            unset($menus[4]);
+        }
+        return $menus;
     }
     
     /**
@@ -60,8 +67,9 @@ class StyleService extends Service
         if(empty($channel_tag)) {
             throw new \Exception("编款失败：款式渠道未配置编码规则");
         }
-        //前缀
+        //1.渠道部门代号
         $prefix   = $channel_tag;
+        //2.款式分类
         $cate_tag = $model->cate->tag ?? '';    
         $cate_tag_list = explode("-", $cate_tag);
         if(count($cate_tag_list) < 2 ) {
@@ -73,17 +81,18 @@ class StyleService extends Service
         }else {
             $prefix .= $cate_w;
         }
-        //中间部分
-        $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
-        //结尾部分
+        //3.中间部分
+        $middle = str_pad($model->id,6,'0',STR_PAD_LEFT);
+        //4.结尾部分-金属材质
         $last = $model->style_material;
-        $style->style_sn = $prefix.$middle.$last;
+        $model->style_sn = $prefix.$middle.$last;
         if($save === true) {
-            $result = $model->save(true,['id','style_sn']);
+            $model->is_autosn = AutoSnEnum::YES;
+            $result = $model->save(true,['id','style_sn','is_autosn']);
             if($result === false){
                 throw new \Exception("编款失败：保存款号失败");
             }
         }
-        return $style->style_sn;
+        return $model->style_sn;
     }
 }

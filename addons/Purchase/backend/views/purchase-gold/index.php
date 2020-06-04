@@ -167,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {apply} {delete}',
+                'template' => '{edit} {audit} {goods} {apply} {receipt} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
@@ -196,6 +196,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'receipt' => function($url, $model, $key){
+                        if($model->purchase_status == PurchaseStatusEnum::CONFIRM){
+                            return Html::edit(['ajax-receipt','id'=>$model->id], '申请收货', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"申请收货", "确定提交吗？");return false;',
                             ]);
                         }
                     },

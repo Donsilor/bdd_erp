@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
@@ -35,8 +36,8 @@ class StoneDefectiveController extends BaseController
     /**
     * @var PurchaseDefective
     */
-    public $modelClass = PurchaseDefective::class;
-
+    public $modelClass = PurchaseDefectiveForm::class;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
 
     /**
     * 首页
@@ -69,6 +70,7 @@ class StoneDefectiveController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',PurchaseDefective::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',PurchaseDefective::tableName().'.purchase_type', $this->purchaseType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -94,13 +96,13 @@ class StoneDefectiveController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-defective/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-defective/index']));
 
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchaseDefective->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->defective->menuTabList($id, $this->purchaseType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -124,7 +126,7 @@ class StoneDefectiveController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->purchaseDefective->applyAudit($model);
+            \Yii::$app->purchaseService->defective->applyAudit($model);
 
             $trans->commit();
         }catch (\Exception $e){
@@ -158,7 +160,7 @@ class StoneDefectiveController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 $model->audit_time = time();
 
-                \Yii::$app->purchaseService->purchaseDefective->auditDefect($model);
+                \Yii::$app->purchaseService->defective->auditDefect($model);
 
                 $trans->commit();
             }catch (\Exception $e){
@@ -187,7 +189,7 @@ class StoneDefectiveController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->purchaseDefective->cancelDefect($model);
+            \Yii::$app->purchaseService->defective->cancelDefect($model);
 
             $trans->commit();
         }catch (\Exception $e){

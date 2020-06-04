@@ -5,7 +5,7 @@ namespace addons\Purchase\common\forms;
 use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
-use addons\Purchase\common\models\PurchaseGoldReceipt;
+use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 /**
  * 采购收货单明细 Form
@@ -52,7 +52,7 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
     public function checkDistinct($col, $ids){
         $query = PurchaseGoldReceiptGoods::find();
         $query->from(['rg'=> PurchaseGoldReceiptGoods::tableName()]);
-        $query->leftJoin(['r' => PurchaseGoldReceipt::tableName()], 'r.id = rg.receipt_id');
+        $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
         $query->where(['rg.id' => $ids]);
         $query->distinct($col);
         $query->count(1);

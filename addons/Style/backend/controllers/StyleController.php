@@ -17,6 +17,7 @@ use common\enums\StatusEnum;
 use yii\behaviors\AttributeTypecastBehavior;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\SnHelper;
+use common\enums\AutoSnEnum;
 
 /**
 * Style
@@ -56,8 +57,12 @@ class StyleController extends BaseController
             ]
         ]);
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at','updated_at']);
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',Style::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 
@@ -92,7 +97,7 @@ class StyleController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //自动创建款号
-                if($isNewRecord && trim($model->style_sn) == "") { 
+                if($isNewRecord && trim($model->style_sn) == "") {
                     Yii::$app->styleService->style->createStyleSn($model);                    
                 }
                 $trans->commit();

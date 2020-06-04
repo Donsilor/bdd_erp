@@ -2,20 +2,20 @@
 
 namespace addons\Purchase\services;
 
-
-use addons\Purchase\common\enums\DefectiveStatusEnum;
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseDefective;
-use addons\Purchase\common\models\PurchaseDefectiveGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use common\helpers\SnHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
@@ -95,6 +95,44 @@ class PurchaseReceiptService extends Service
                 }
         }
         return $tablist;
+    }
+
+    /**
+     * 创建采购收货单
+     * @param array $bill
+     * @param array $detail
+     */
+    public function createReceipt($bill, $detail)
+    {
+        $billM = new PurchaseReceipt();
+        $billM->attributes = $bill;
+        $billM->receipt_no = SnHelper::createReceiptSn();
+
+        if(false === $billM->validate()) {
+            throw new \Exception($this->getError($billM));
+        }
+        if(false === $billM->save()) {
+            throw new \Exception($this->getError($billM));
+        }
+
+        $receipt_id = $billM->attributes['id'];
+        foreach ($detail as $good) {
+            if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $goods = new PurchaseStoneReceiptGoods();
+            }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $goods = new PurchaseGoldReceiptGoods();
+            }else{
+                $goods = new PurchaseReceiptGoods();
+            }
+            $goods->attributes = $good;
+            $goods->receipt_id = $receipt_id;
+            if(false === $goods->validate()) {
+                throw new \Exception($this->getError($goods));
+            }
+            if(false === $goods->save()) {
+                throw new \Exception($this->getError($goods));
+            }
+        }
     }
     
     /**
@@ -178,7 +216,9 @@ class PurchaseReceiptService extends Service
                 'second_stone_type2' => (String) $model->second_stone2,
                 'second_stone_num2' => $model->second_stone_num2,
                 'second_stone_weight2' => $model->second_stone_weight2,
-                'second_stone_price2' => $model->second_stone_price2
+                'second_stone_price2' => $model->second_stone_price2,
+                'creator_id' => \Yii::$app->user->identity->getId(),
+                'created_at' => time(),
             ];
             $bill_goods[] = [
                 'goods_name' => $model->goods_name,
@@ -197,8 +237,9 @@ class PurchaseReceiptService extends Service
                 'sale_price' => $model->sale_price,
                 'market_price' => $model->market_price,
                 'markup_rate' => $model->markup_rate,
-                'status' => 1,
-                'created_at' => time()
+                'status' => StatusEnum::ENABLED,
+                'creator_id' => \Yii::$app->user->identity->getId(),
+                'created_at' => time(),
             ];
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $market_price = bcadd($market_price, $model->market_price, 2);
@@ -224,6 +265,8 @@ class PurchaseReceiptService extends Service
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
             'send_goods_sn' => $form->receipt_no,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
         ];
         Yii::$app->warehouseService->billL->createBillL($goods, $bill, $bill_goods);
     }

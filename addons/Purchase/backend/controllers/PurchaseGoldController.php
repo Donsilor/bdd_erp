@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use Yii;
 use addons\Purchase\common\models\PurchaseGold;
 use common\enums\AuditStatusEnum;
@@ -166,5 +167,29 @@ class PurchaseGoldController extends BaseController
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
-    }    
+    }
+
+    /**
+     * ajax 申请收货
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxReceipt()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+
+            Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_GOLD);
+
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message('操作失败'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+    }
 }

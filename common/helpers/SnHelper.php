@@ -55,7 +55,6 @@ class SnHelper
     {
         return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
     }
-
     /**
      * 出货单编号
      * @param string $prefix
@@ -65,7 +64,15 @@ class SnHelper
     {
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 99999),5,'0',STR_PAD_LEFT);
     }
-
+    /**
+     * 采购收货单号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createReceiptSn($prefix = 'SH')
+    {
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
+    }
     /**
      * 不良返厂单号
      * @param string $prefix
@@ -75,7 +82,6 @@ class SnHelper
     {
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
     }
-    
     /**
      * 库存货号生成
      * @param string $prefix

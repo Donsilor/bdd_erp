@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
@@ -23,6 +24,31 @@ class PurchaseStoneReceiptGoodsForm extends PurchaseStoneReceiptGoods
 
         ];
         return array_merge(parent::rules() , $rules);
+    }
+
+    /**
+     * 石料类型列表
+     * @return array
+     */
+    public static function getStoneTypeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE);
+    }
+    /**
+     * 石料颜色列表
+     * @return array
+     */
+    public static function getColorMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR);
+    }
+    /**
+     * 石料净度列表
+     * @return array
+     */
+    public static function getClarityMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY);
     }
 
     /**

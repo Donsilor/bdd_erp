@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             "onclick" => "batchIqc(this);return false;",
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective','id'=>$model->id], '批量生成不良返厂单', [
+                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'onclick' => 'batchDefective(this);return false;',
                         ]);
@@ -103,11 +103,53 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'material_type',
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'goods_num',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'goods_weight',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'label' => '质检未过原因',
+                                'attribute' => 'fqc.name',
+                                'value' => "fqc.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'iqc_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
                             ],
                             [
@@ -122,6 +164,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute'=>'goods_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
                             ],
                         ]
                     ]); ?>

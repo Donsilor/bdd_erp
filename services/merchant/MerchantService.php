@@ -33,7 +33,9 @@ class MerchantService extends Service
      */
     public function setId($merchant_id)
     {
-        $this->merchant_id = $merchant_id;
+        if($merchant_id) {
+            $this->merchant_id = $merchant_id;
+        }
     }
 
     /**

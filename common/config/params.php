@@ -24,13 +24,12 @@ return [
     'currencyBase' =>'CNY',//基础货币代号
     'currencySign' =>'CNY',//当前货币符号
     'cachePrefix'=>'erp',//缓存前缀
-    'goodsType.diamond'=>15,//裸钻产品线
     //自定义配置 end
     
     // 是否在模块内
     'inAddon' => false,
     // 系统管理员账号id
-    'adminAccount' => '0',
+    'adminAccount' => '1',
     // 请求全局唯一ID
     'uuid' => '',
     // 真实 app id

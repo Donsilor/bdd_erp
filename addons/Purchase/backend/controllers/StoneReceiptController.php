@@ -2,11 +2,14 @@
 
 namespace addons\Purchase\backend\controllers;
 
+
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\models\ProductType;
@@ -24,7 +27,7 @@ use common\traits\Curd;
 * Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class StoneReceiptController extends BaseController
+class StoneReceiptController extends ReceiptController
 {
     use Curd;
 
@@ -89,53 +92,6 @@ class StoneReceiptController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
-        }
-
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * @return mixed
-     * 申请审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if($model->receipt_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        if(!$model->receipt_num){
-            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->receipt_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
-    }
-
-
-    /**
      * 审核-采购收货单
      *
      * @return mixed
@@ -144,6 +100,11 @@ class StoneReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::PASS){
+            $model->audit_status = AuditStatusEnum::PASS;
+        }else{
+            $model->audit_status = AuditStatusEnum::UNPASS;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -153,6 +114,10 @@ class StoneReceiptController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $res = PurchaseStoneReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    if(false === $res) {
+                        throw new \Exception("更新货品状态失败");
+                    }
                 }else{
                     $model->receipt_status = BillStatusEnum::SAVE;
                 }
@@ -166,7 +131,6 @@ class StoneReceiptController extends BaseController
                 return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

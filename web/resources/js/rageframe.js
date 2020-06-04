@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.sidebar-menu').tree();
+	$('.sidebar-menu').tree({accordion:false});
     if ($(this).width() < 769) {
         config.isMobile = true;
     }

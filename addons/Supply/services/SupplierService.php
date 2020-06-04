@@ -45,35 +45,18 @@ class SupplierService
             ->all();
         return ArrayHelper::map($model,'id', 'supplier_name');
     }
-
-    /**
-     * 下拉有效值
-     * @return array
-     */
-    public function getValidDropDown(){
-
-        $model = Supplier::find()
-            ->where(['status' => StatusEnum::ENABLED, 'audit_status' => AuditStatusEnum::PASS])
-            ->select(['id','supplier_name'])
-            ->asArray()
-            ->all();
-        return ArrayHelper::map($model,'id', 'supplier_name');
-    }
-
-
     /**
      * 工厂跟单人
      * @return array
      */
-    public function getFollower($supplier_id){
+    public function getFollowers($supplier_id){
         $model = SupplierFollower::find()->alias('a')
             ->leftJoin(Member::tableName().' m','m.id = a.member_id')
             ->where(['a.supplier_id'=>$supplier_id,'a.status' => StatusEnum::ENABLED])
             ->select(['a.member_id','m.username as member_name'])
             ->asArray()
             ->all();
-        $model = ArrayHelper::map($model,'member_id', 'member_name');
-        return $model;
+        return ArrayHelper::map($model,'member_id', 'member_name');
     }
 
 
