@@ -26,7 +26,7 @@ class StyleService extends Service
      */
     public function menuTabList($style_id,$returnUrl = null)
     {
-        return [
+        $menus = [
                 1=>['name'=>'基础信息','url'=>Url::to(['style/view','id'=>$style_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                 2=>['name'=>'款式属性','url'=>Url::to(['style-attribute/index','style_id'=>$style_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                 3=>['name'=>'商品属性','url'=>Url::to(['style-goods/edit-all','style_id'=>$style_id,'tab'=>3,'returnUrl'=>$returnUrl])],
@@ -36,6 +36,12 @@ class StyleService extends Service
                 7=>['name'=>'款式图片','url'=>Url::to(['style-image/index','style_id'=>$style_id,'tab'=>7,'returnUrl'=>$returnUrl])],
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
+        
+        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();        
+        if($model && $model->is_inlay==0) {
+            unset($menus[4]);
+        }
+        return $menus;
     }
     
     /**
