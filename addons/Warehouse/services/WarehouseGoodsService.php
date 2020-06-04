@@ -61,7 +61,7 @@ class WarehouseGoodsService extends Service
         $prefix .= $type_tag;
         //3.产品分类
         $cate_tag = $model->styleCate->tag ?? '';
-        if(count($cate_tag_list = explode("|", $cate_tag)) < 2 ) {
+        if(count($cate_tag_list = explode("-", $cate_tag)) < 2 ) {
             $cate_tag_list = [0,0];
         }
         list($cate_m, $cate_w) = $cate_tag_list;

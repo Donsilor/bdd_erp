@@ -93,10 +93,7 @@ class StyleController extends BaseController
                 }
                 //自动创建款号
                 if($isNewRecord && trim($model->style_sn) == "") { 
-                    $model->style_sn = Yii::$app->styleService->style->createStyleSn($model);
-                    if(false === $model->save()) {
-                        throw new \Exception($this->getError($model));
-                    }
+                    Yii::$app->styleService->style->createStyleSn($model);                    
                 }
                 $trans->commit();
                 $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');

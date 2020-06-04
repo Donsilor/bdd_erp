@@ -51,7 +51,7 @@ class StyleService extends Service
      * 创建款式编号
      * @param Style $model
      */
-    public static function createStyleSn($model,$str_pad = 6)
+    public static function createStyleSn($model,$save = true)
     {   
         if(!$model->id) {
             throw new \Exception("编款失败：款式ID不能为空");
@@ -63,7 +63,7 @@ class StyleService extends Service
         //前缀
         $prefix   = $channel_tag;
         $cate_tag = $model->cate->tag ?? '';    
-        $cate_tag_list = explode("|", $cate_tag);
+        $cate_tag_list = explode("-", $cate_tag);
         if(count($cate_tag_list) < 2 ) {
             throw new \Exception("编款失败：款式分类未配置编码规则");
         }
@@ -77,6 +77,13 @@ class StyleService extends Service
         $middle = str_pad($model->id,$str_pad,'0',STR_PAD_LEFT);
         //结尾部分
         $last = $model->style_material;
-        return $prefix.$middle.$last;
+        $style->style_sn = $prefix.$middle.$last;
+        if($save === true) {
+            $result = $model->save(true,['id','style_sn']);
+            if($result === false){
+                throw new \Exception("编款失败：保存款号失败");
+            }
+        }
+        return $style->style_sn;
     }
 }
