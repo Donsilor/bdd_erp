@@ -115,123 +115,6 @@ class GoldReceiptGoodsController extends BaseController
     }
 
     /**
-     * 创建
-     * @property PurchaseReceiptGoodsForm $model
-     * @return mixed
-     */
-    public function actionAdd()
-    {
-        $this->layout = '@backend/views/layouts/iframe';
-
-        $receipt_id = Yii::$app->request->get('receipt_id');
-        $produce_sns = Yii::$app->request->get('produce_sns');
-        $search = Yii::$app->request->get('search');
-        $receipt_goods_list = Yii::$app->request->post('receipt_goods_list');
-        $model = new PurchaseReceiptForm();
-        $model->produce_sns = $produce_sns;
-        $receiptModel = new PurchaseReceipt();
-        $receiptGoods = new PurchaseReceiptGoods();
-        $this->modelClass = PurchaseReceiptGoodsForm::class;
-        $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-        $receipt_goods = [];
-        if($search == 1 && !empty($produce_sns)){
-            $produce_arr = $model->getProduceSns($produce_sns);
-            $receiptInfo = $receiptModel::find()->where(['id'=>$receipt_id])->asArray()->one();
-            $supplier_id = $receiptInfo['supplier_id'];
-            try {
-                $trans = Yii::$app->db->beginTransaction();
-                foreach ($produce_arr as $produce_sn) {
-                    $produce_info = Produce::find()->where(['produce_sn' => $produce_sn])->one();
-                    if(empty($produce_info)){
-                        throw new Exception("布产单{$produce_sn}单号不对");
-                    }
-                    $produce_id = $produce_info['id'];
-                    if($supplier_id != $produce_info['supplier_id']){
-                        throw new Exception("布产单{$produce_sn}供应商不一致");
-                    }
-                    $shippent_num = ProduceShipment::find()->where(['produce_id' => $produce_id])->sum('shippent_num');
-                    if(!$shippent_num){
-                        throw new Exception("布产单{$produce_sn}未出货");
-                    }
-                    /*$purchase_receipt_info = PurchaseReceiptGoods::find()->joinWith(['receipt'])
-                        ->select('supplier_id')
-                        ->where(['produce_sn' => $produce_sn])
-                        ->andWhere(['<=', 'audit_status', AuditStatusEnum::PASS])
-                        ->andWhere([PurchaseReceiptGoods::tableName().'status'=>StatusEnum::ENABLED])
-                        ->asArray()
-                        ->all();*/
-                    $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
-                    //$receipt_num = count($purchase_receipt_info);
-                    $the_receipt_num = bcsub($shippent_num, $receipt_num);
-                    $produce_attr = ProduceAttribute::find()->where(['produce_id'=> $produce_id])->asArray()->all();
-                    $produce_attr_arr = [];
-                    foreach ($produce_attr as $attr) {
-                        $attr_name = Yii::$app->styleService->attribute->getAttrNameByAttrId($attr['attr_id']);
-                        $produce_attr_arr[$attr['attr_id']]['attr_name'] = $attr_name;
-                        $produce_attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
-                        $produce_attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
-                    }
-                    if ($the_receipt_num >= 1) {
-                        $receipt_list = [];
-                        foreach ($receiptGoods->attributeLabels() as $k => $item) {
-                            $receipt_list[$k] = '';
-                        }
-                        for ($i = 1; $i <= $the_receipt_num; $i++) {
-                            $receipt_list['id'] = null;
-                            $receipt_list['receipt_id'] = $receipt_id;
-                            $receipt_list['produce_sn'] = $produce_sn;
-                            $receipt_list['purchase_sn'] = $produce_info['from_order_sn'];
-                            $receipt_list['goods_name'] = $produce_info['goods_name'];
-                            $receipt_list['goods_num'] = 1;
-                            $receipt_list['style_sn'] = $produce_info['qiban_sn']?:$produce_info['style_sn'];
-                            $receipt_list['style_cate_id'] = $produce_info['style_cate_id'];
-                            $receipt_list['product_type_id'] = $produce_info['product_type_id'];
-                            $receipt_list['finger'] = $produce_attr_arr[AttrIdEnum::FINGER]['attr_value']??'';
-                            $receipt_list['xiangkou'] = $produce_attr_arr[AttrIdEnum::XIANGKOU]['attr_value']??'';
-                            $receipt_list['material'] = $produce_attr_arr[AttrIdEnum::MATERIAL]['attr_value_id']??'';
-                            $receipt_list['jintuo_type'] = $produce_info['jintuo_type'];
-                            $receipt_goods[] = $receipt_list;
-                        }
-                    } else {
-                        throw new Exception("布产单{$produce_sn}没有可出货数量");
-                    }
-                    if(!empty($receipt_goods_list)){
-                        $receipt_val = [];
-                        $receipt_key = array_keys($receipt_goods_list[0]);
-                        array_push($receipt_key,'receipt_id', 'xuhao');
-                        $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $receipt_id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
-                        $xuhao = $xuhaoMax->xuhao?:0;
-                        foreach ($receipt_goods_list as $goods) {
-                            $xuhao++;
-                            array_push($goods, $receipt_id, $xuhao);
-                            $receipt_val[] = array_values($goods);
-                        }
-                        $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $receipt_key, $receipt_val)->execute();
-                        if(false === $res){
-                            throw new Exception("保存失败");
-                        }
-                        //更新采购收货单汇总：总金额和总数量
-                        $res = Yii::$app->purchaseService->goldReceipt->purchaseReceiptSummary($receipt_id);
-                        if(false === $res){
-                            throw new Exception('更新收货单汇总失败');
-                        }
-                        $trans->commit();
-                        Yii::$app->getSession()->setFlash('success', '保存成功');
-                        return $this->redirect(Yii::$app->request->referrer);
-                    }
-                }
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
-            }
-        }
-        return $this->render($this->action->id, [
-            'model' => $model,
-            'receipt_goods' => $receipt_goods
-        ]);
-    }
-
-    /**
      * 编辑
      * @return string
      * @throws \yii\web\NotFoundHttpException
@@ -275,7 +158,7 @@ class GoldReceiptGoodsController extends BaseController
     public function actionIqc()
     {
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->iqcValidate($model);
@@ -295,7 +178,7 @@ class GoldReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try{
@@ -325,7 +208,7 @@ class GoldReceiptGoodsController extends BaseController
     public function actionAjaxDefective()
     {
         $ids = Yii::$app->request->post('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         try{
             $trans = Yii::$app->trans->beginTransaction();
@@ -349,7 +232,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         try{
             \Yii::$app->purchaseService->goldReceipt->warehouseValidate($model);

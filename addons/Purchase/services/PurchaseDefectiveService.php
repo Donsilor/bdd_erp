@@ -9,6 +9,8 @@ use addons\Purchase\common\models\PurchaseDefective;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
@@ -152,7 +154,7 @@ class PurchaseDefectiveService extends Service
         }
         //同步采购收货单商品状态
         $ids = $this->getReceiptGoodsIds($form);
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
+        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
             throw new \Exception("同步采购收货单货品状态失败");
         }
@@ -178,8 +180,15 @@ class PurchaseDefectiveService extends Service
             $goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
         }
         $ids = $this->getReceiptGoodsIds($form);
+        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
         //同步采购收货单货品状态
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
+        $res = $model::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
         if(false === $res) {
             throw new \Exception("同步采购收货单货品状态失败");
         }
@@ -197,9 +206,16 @@ class PurchaseDefectiveService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
         //同步采购收货单商品状态
         $ids = $this->getReceiptGoodsIds($form);
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_NO_PASS], ['id'=>$ids]);
+        $res = $model::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_NO_PASS], ['id'=>$ids]);
         if(false === $res) {
             throw new \Exception("同步采购收货单货品状态失败");
         }
@@ -217,9 +233,16 @@ class PurchaseDefectiveService extends Service
      * @param $form
      */
     public function getReceiptGoodsIds($form){
+        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
         $dfGoods = PurchaseDefectiveGoods::find()->select(['xuhao'])->where(['defective_id'=>$form->id])->asArray()->all();
         $receipt = PurchaseReceipt::find()->select(['id'])->where(['receipt_no'=>$form->receipt_no])->one();
-        $ids = PurchaseReceiptGoods::find()->select(['id'])->where(['receipt_id'=> $receipt->id, 'xuhao'=> ArrayHelper::getColumn($dfGoods,'xuhao')])->asArray()->all();
+        $ids = $model::find()->select(['id'])->where(['receipt_id'=> $receipt->id, 'xuhao'=> ArrayHelper::getColumn($dfGoods,'xuhao')])->asArray()->all();
         return ArrayHelper::getColumn($ids,'id')?:[];
     }
 }

@@ -9,11 +9,7 @@ use addons\Purchase\common\forms\PurchaseStoneReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\enums\QcTypeEnum;
-use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use common\helpers\ResultHelper;
 use common\helpers\Url;
@@ -24,7 +20,7 @@ use yii\base\Exception;
  * ReceiptGoods
  *
  * Class ReceiptGoodsController
- * @property ReceiptGoodsForm $modelClass
+ * @property PurchaseStoneReceiptGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
 class StoneReceiptGoodsController extends BaseController
@@ -32,7 +28,7 @@ class StoneReceiptGoodsController extends BaseController
     use Curd;
     
     /**
-     * @var $modelClass PurchaseReceiptGoodsForm
+     * @var $modelClass PurchaseStoneReceiptGoodsForm
      */
     public $modelClass = PurchaseStoneReceiptGoodsForm::class;
     public $purchaseType = PurchaseTypeEnum::MATERIAL_STONE;
@@ -158,10 +154,10 @@ class StoneReceiptGoodsController extends BaseController
     public function actionIqc()
     {
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->goldReceipt->iqcValidate($model);
+            \Yii::$app->purchaseService->stoneReceipt->iqcValidate($model);
             return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -178,13 +174,13 @@ class StoneReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->purchaseService->goldReceipt->qcIqc($model);
+                \Yii::$app->purchaseService->stoneReceipt->qcIqc($model);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -208,12 +204,12 @@ class StoneReceiptGoodsController extends BaseController
     public function actionAjaxDefective()
     {
         $ids = Yii::$app->request->post('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->goldReceipt->batchDefective($model);
+            \Yii::$app->purchaseService->stoneReceipt->batchDefective($model);
 
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -232,10 +228,10 @@ class StoneReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
+        $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->goldReceipt->warehouseValidate($model);
+            \Yii::$app->purchaseService->stoneReceipt->warehouseValidate($model);
             return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -261,7 +257,7 @@ class StoneReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->goldReceipt->syncReceiptToBillInfoL($model);
+                Yii::$app->purchaseService->stoneReceipt->syncReceiptToBillInfoL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');
@@ -297,7 +293,7 @@ class StoneReceiptGoodsController extends BaseController
             }
 
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->purchaseService->goldReceipt->purchaseReceiptSummary($model->receipt_id);
+            $res = \Yii::$app->purchaseService->stoneReceipt->purchaseReceiptSummary($model->receipt_id);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }

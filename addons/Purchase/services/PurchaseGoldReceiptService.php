@@ -6,7 +6,7 @@ use Yii;
 use common\components\Service;
 use common\helpers\Url;
 use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Purchase\common\enums\DefectiveStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
@@ -36,7 +36,7 @@ class PurchaseGoldReceiptService extends Service
     public function purchaseReceiptSummary($receipt_id)
     {
         $result = false;
-        $sum = PurchaseReceiptGoods::find()
+        $sum = PurchaseGoldReceiptGoods::find()
                     ->select(['sum(1) as receipt_num','sum(cost_price) as total_cost'])
                     ->where(['receipt_id'=>$receipt_id, 'status'=>StatusEnum::ENABLED])
                     ->asArray()->one();
@@ -61,7 +61,7 @@ class PurchaseGoldReceiptService extends Service
         if($form->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
-        $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        $query = PurchaseGoldReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
         $detail_ids = $form->getIds();
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
@@ -137,7 +137,7 @@ class PurchaseGoldReceiptService extends Service
             $sale_price = bcadd($sale_price, $model->sale_price, 2);
         }
         //批量更新采购收货单货品状态
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
@@ -176,7 +176,7 @@ class PurchaseGoldReceiptService extends Service
         }else{
             $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_NO_PASS, 'iqc_reason' => $form->iqc_reason, 'iqc_remark' => $form->iqc_remark];
         }
-        $res = PurchaseReceiptGoods::updateAll($goods, ['id'=>$ids]);
+        $res = PurchaseGoldReceiptGoods::updateAll($goods, ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("保存失败");
         }
@@ -190,7 +190,7 @@ class PurchaseGoldReceiptService extends Service
         $ids = $form->getIds();
         if(is_array($ids)){
             foreach ($ids as $id) {
-                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods = PurchaseGoldReceiptGoods::findOne(['id'=>$id]);
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
                     throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
                 }
@@ -219,7 +219,7 @@ class PurchaseGoldReceiptService extends Service
         $receipt = [];
         foreach($ids as $id)
         {
-            $goods = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
+            $goods = PurchaseGoldReceiptGoods::find()->where(['id'=>$id])->one();
             $receipt_id = $goods->receipt_id;
             if(!$receipt){
                 $receipt = PurchaseReceipt::find()->where(['id' => $receipt_id])->one();
@@ -235,12 +235,12 @@ class PurchaseGoldReceiptService extends Service
             }
             $detail[] = [
                 'xuhao' => $goods->xuhao,
-                'style_sn' => $goods->style_sn,
-                'factory_mo' => $goods->factory_mo,
-                'produce_sn' => $goods->produce_sn,
-                'style_cate_id' => $goods->style_cate_id,
-                'product_type_id' => $goods->product_type_id,
+                'goods_name' => $goods->goods_name,
+                'goods_num' => $goods->goods_num,
+                'material_type' => $goods->material_type,
+                'goods_weight' => $goods->goods_weight,
                 'cost_price' => $goods->cost_price,
+                'goods_price' => $goods->gold_price,
                 'iqc_reason' => $goods->iqc_reason,
                 'iqc_remark' => $goods->iqc_remark,
                 'created_at' => time(),
@@ -250,6 +250,7 @@ class PurchaseGoldReceiptService extends Service
         $bill = [
             'supplier_id' => $receipt->supplier_id,
             'receipt_no' => $receipt->receipt_no,
+            'purchase_type' => $receipt->purchase_type,
             'defective_num' => count($detail),
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::PENDING,
@@ -258,9 +259,9 @@ class PurchaseGoldReceiptService extends Service
             'created_at' => time(),
         ];
 
-        \Yii::$app->purchaseService->purchaseDefective->createDefactiveBill($bill, $detail);
+        \Yii::$app->purchaseService->defective->createDefactiveBill($bill, $detail);
 
-        $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
+        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("更新货品状态失败");
         }
@@ -274,7 +275,7 @@ class PurchaseGoldReceiptService extends Service
         $ids = $form->getIds();
         if(is_array($ids)){
             foreach ($ids as $id) {
-                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods = PurchaseGoldReceiptGoods::findOne(['id'=>$id]);
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
                     throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
                 }

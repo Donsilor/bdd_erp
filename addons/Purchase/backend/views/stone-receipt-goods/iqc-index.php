@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\enums\WhetherEnum;
@@ -29,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             "onclick" => "batchIqc(this);return false;",
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective','id'=>$model->id], '批量生成不良返厂单', [
+                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'onclick' => 'batchDefective(this);return false;',
                         ]);
@@ -111,6 +112,99 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'material_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->material_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_weight',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'goods_color',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->goods_color);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_clarity',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->goods_clarity);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_norms',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'stone_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cost_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'label' => '质检未过原因',
+                                'attribute' => 'fqc.name',
+                                'value' => "fqc.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'iqc_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'goods_status',
                                 'value' => function ($model){
                                     return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
@@ -122,6 +216,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute'=>'goods_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_remark', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
                             ],
                         ]
                     ]); ?>
