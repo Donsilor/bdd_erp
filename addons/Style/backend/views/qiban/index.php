@@ -122,7 +122,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
-            ],  
+            ],
+            [
+                'label' => '归属渠道',
+                'attribute' => 'channel.name',
+                'value' => "channel.name",
+                'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
             [
                     'label' => '成本价',
                     'attribute' => 'cost_price',
