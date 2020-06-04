@@ -178,7 +178,9 @@ class PurchaseReceiptService extends Service
                 'second_stone_type2' => (String) $model->second_stone2,
                 'second_stone_num2' => $model->second_stone_num2,
                 'second_stone_weight2' => $model->second_stone_weight2,
-                'second_stone_price2' => $model->second_stone_price2
+                'second_stone_price2' => $model->second_stone_price2,
+                'creator_id' => \Yii::$app->user->identity->getId(),
+                'created_at' => time(),
             ];
             $bill_goods[] = [
                 'goods_name' => $model->goods_name,
@@ -197,8 +199,9 @@ class PurchaseReceiptService extends Service
                 'sale_price' => $model->sale_price,
                 'market_price' => $model->market_price,
                 'markup_rate' => $model->markup_rate,
-                'status' => 1,
-                'created_at' => time()
+                'status' => StatusEnum::ENABLED,
+                'creator_id' => \Yii::$app->user->identity->getId(),
+                'created_at' => time(),
             ];
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $market_price = bcadd($market_price, $model->market_price, 2);
@@ -224,6 +227,8 @@ class PurchaseReceiptService extends Service
             'from_company_id' => 0,
             'from_warehouse_id' => 0,
             'send_goods_sn' => $form->receipt_no,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
         ];
         Yii::$app->warehouseService->billL->createBillL($goods, $bill, $bill_goods);
     }

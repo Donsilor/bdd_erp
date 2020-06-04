@@ -29,7 +29,7 @@ class SupplierController extends BaseController
     /**
     * @var Supplier
     */
-    public $modelClass = Supplier::class;
+    public $modelClass = SupplierForm::class;
 
 
     /**
@@ -52,9 +52,9 @@ class SupplierController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
 
-        //$dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',Supplier::tableName().'.status',-1]);
 
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
@@ -65,13 +65,13 @@ class SupplierController extends BaseController
      *
      * @return mixed
      */
-    public function actionEditLang()
+    public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
 
         $model = $this->findModel($id);
-        $model = $model ?? new SupplierForm();
+        $model = $model ?? new Supplier();
 
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -81,6 +81,7 @@ class SupplierController extends BaseController
             try{
                 $trans = Yii::$app->db->beginTransaction();
                 $model->status = StatusEnum::DISABLED;
+                $model->supplier_code = StringHelper::getFirstCode($model->supplier_name);
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
@@ -100,7 +101,6 @@ class SupplierController extends BaseController
         ]);
     }
 
-
     /**
      * 详情展示页
      * @return string
@@ -111,8 +111,8 @@ class SupplierController extends BaseController
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
-
         $model = $this->findModel($id);
+        $model = $model ?? new Supplier();
         if($model->business_scope){
             $business_scope_arr = explode(',', $model->business_scope);
             $business_scope_str = '';
@@ -138,20 +138,16 @@ class SupplierController extends BaseController
         ]);
     }
 
-
-
-
     /**
-     * 审核-款号
+     * 供应商-审核
      *
      * @return mixed
      */
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-
-        $this->modelClass = SupplierAuditForm::class;
         $model = $this->findModel($id);
+        $model = $model ?? new Supplier();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -179,17 +175,4 @@ class SupplierController extends BaseController
             'model' => $model,
         ]);
     }
-
-    /**
-     * 生成Code
-     *
-     * @return mixed
-     */
-    public function actionAutoCode()
-    {
-        $supplier_name = Yii::$app->request->post('supplier_name');
-        $str = StringHelper::getFirstCode($supplier_name);
-        return substr($str,0,31);
-    }
-
 }
