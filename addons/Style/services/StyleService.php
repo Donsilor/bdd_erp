@@ -60,8 +60,9 @@ class StyleService extends Service
         if(empty($channel_tag)) {
             throw new \Exception("编款失败：款式渠道未配置编码规则");
         }
-        //前缀
+        //1.渠道部门代号
         $prefix   = $channel_tag;
+        //2.款式分类
         $cate_tag = $model->cate->tag ?? '';    
         $cate_tag_list = explode("-", $cate_tag);
         if(count($cate_tag_list) < 2 ) {
@@ -73,9 +74,9 @@ class StyleService extends Service
         }else {
             $prefix .= $cate_w;
         }
-        //中间部分
+        //3.中间部分
         $middle = str_pad($model->id,6,'0',STR_PAD_LEFT);
-        //结尾部分
+        //4.结尾部分-金属材质
         $last = $model->style_material;
         $model->style_sn = $prefix.$middle.$last;
         if($save === true) {
