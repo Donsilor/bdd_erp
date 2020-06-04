@@ -5,6 +5,12 @@ namespace addons\Purchase\services;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseGold;
 use addons\Purchase\common\models\PurchaseGoldGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseStone;
+use addons\Purchase\common\models\PurchaseStoneGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -137,29 +143,35 @@ class PurchaseService extends Service
 
     /**
      * 同步采购单生成采购收货单
-     * @param int $purchase_id
-     * @param array $detail_ids
+     * @param object $form
+     * @param int $purchase_type
      * @throws \Exception
      */
-    public function syncPurchaseToGoldReceipt($purchase_id, $detail_ids = null)
+    public function syncPurchaseToReceipt($form, $purchase_type)
     {
-        $purchase = PurchaseGold::find()->where(['id'=>$purchase_id])->one();
-        if($purchase->total_num <= 0 ){
+        if($form->total_num <= 0 ){
             throw new \Exception('采购单没有明细');
         }
-        if($purchase->audit_status != AuditStatusEnum::PASS){
+        if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购单没有审核');
         }
-        $query = PurchaseGoldGoods::find()->where(['purchase_id'=>$purchase_id]);
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $PurchaseModel = new PurchaseStoneGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $PurchaseModel = new PurchaseGoldGoods();
+        }else{
+            $PurchaseModel = new PurchaseGoods();
+        }
+        $query = $PurchaseModel::find()->where(['purchase_id'=>$form->id]);
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
         $models = $query->all();
         $goods = $bill = [];
-        $i=0;
-        foreach ($models as $model){
-            $goods = [
-                'purchase_sn' =>$purchase->purchase_sn,
+        $total_cost = $i=0;
+        foreach ($models as $k => $model){
+            $goods[$k] = [
+                'purchase_sn' =>$form->purchase_sn,
                 'xuhao'=>$i++,
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
@@ -167,19 +179,32 @@ class PurchaseService extends Service
                 'material_type' => $model->material_type,
                 'goods_weight'=>$model->goods_weight,
                 'cost_price' =>$model->cost_price,
-                'gold_price' =>$model->gold_price,
-                'goods_remark'=>$model->goods_remark,
-                'put_in_type' =>$model->put_in_type,
+                'goods_remark'=>$model->remark,
                 'status'=>StatusEnum::ENABLED,
                 'created_at' => time()
             ];
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $goods[$k]['gold_price'] = $model->gold_price;
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $goods[$k]['goods_color'] = $model->goods_color;
+                $goods[$k]['goods_clarity'] = $model->goods_clarity;
+                $goods[$k]['goods_norms'] =  $model->goods_norms;
+                $goods[$k]['stone_price'] = $model->stone_price;
+            }
+            $total_cost = bcadd($total_cost, $model->cost_price, 2);
         }
         $bill = [
-
+            'supplier_id' => $form->supplier_id,
+            'purchase_type' => $purchase_type,
+            'receipt_status' => BillStatusEnum::PENDING,
+            'receipt_num' => count($goods),
+            'total_cost' => $total_cost,
+            'audit_status' => AuditStatusEnum::PENDING,
+            'created_at' => time(),
         ];
+
         Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
     }
-
 
     /**
      * 创建采购单日志

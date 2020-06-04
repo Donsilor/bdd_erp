@@ -116,6 +116,7 @@ class PurchaseReceiptService extends Service
         }
 
         $receipt_id = $billM->attributes['id'];
+
         if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $goods = new PurchaseStoneReceiptGoods();
         }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
