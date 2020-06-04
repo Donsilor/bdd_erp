@@ -2,10 +2,6 @@
 
 namespace addons\Purchase\backend\controllers;
 
-
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -13,12 +9,9 @@ use addons\Purchase\common\models\PurchaseDefective;
 use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseDefectiveGoodsForm;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
-use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
-use addons\Purchase\common\enums\ReceiptGoodsAttrEnum;
-use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\models\PurchaseReceipt;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
 use yii\base\Exception;
 
 /**
@@ -65,7 +58,7 @@ class DefectiveGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseDefectiveGoods::tableName().'.status',-1]);
 
         $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render($this->action->id, [
@@ -180,7 +173,6 @@ class DefectiveGoodsController extends BaseController
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['defective-goods/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -197,7 +189,7 @@ class DefectiveGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseDefectiveGoods::tableName().'.status',-1]);
 
         $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render($this->action->id, [

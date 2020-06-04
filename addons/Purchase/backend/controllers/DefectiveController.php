@@ -36,7 +36,7 @@ class DefectiveController extends BaseController
     /**
     * @var PurchaseDefective
     */
-    public $modelClass = PurchaseDefective::class;
+    public $modelClass = PurchaseDefectiveForm::class;
     public $purchaseType = PurchaseTypeEnum::GOODS;
 
     /**
@@ -70,6 +70,7 @@ class DefectiveController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',PurchaseDefective::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',PurchaseDefective::tableName().'.purchase_type', $this->purchaseType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
