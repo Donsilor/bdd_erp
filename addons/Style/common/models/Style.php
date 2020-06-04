@@ -85,7 +85,7 @@ class Style extends BaseModel
             'sale_volume' => '销量',
             'market_price' => '市场价',
             'cost_price' =>'成本价',
-            'goods_num'=> "商品数量",
+            'goods_num'=> "Sku数量",
             'is_inlay'=> "是否镶嵌",
             'is_autosn'=> "款号生成方式",
             'is_made' => '是否支持定制',
