@@ -65,7 +65,7 @@ class GoldDefectiveGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseDefectiveGoods::tableName().'.status',-1]);
 
         $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render('index', [
@@ -89,7 +89,6 @@ class GoldDefectiveGoodsController extends BaseController
         $defective_id = Yii::$app->request->get('defective_id');
         $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-defective-goods/index']));
-        $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -106,7 +105,7 @@ class GoldDefectiveGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['=','defective_id',$defective_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['>',PurchaseDefectiveGoods::tableName().'.status',-1]);
 
         $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
         return $this->render($this->action->id, [

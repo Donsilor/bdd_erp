@@ -23,10 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($defective->defective_status == \addons\Purchase\common\enums\DefectiveStatusEnum::SAVE) {
-            echo Html::create(['add', 'defective_id' => $defective->id], '新增货品', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-            ]);
-            echo '&nbsp;&nbsp;&nbsp;';
             echo Html::edit(['edit-all', 'defective_id' => $defective->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
@@ -69,19 +65,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'attribute' => 'material_type',
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:120px;'
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_weight',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
-                                'attribute'=>'factory_mo',
+                                'attribute'=>'goods_price',
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                'filter' => Html::activeTextInput($searchModel, 'goods_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:120px;'
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cost_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -104,30 +123,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                            ],
-                            [
-                                'label' => '款式分类',
-                                'attribute' => 'cate.name',
-                                'value' => "cate.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '产品线',
-                                'attribute' => 'type.name',
-                                'value' => "type.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
