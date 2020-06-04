@@ -166,5 +166,39 @@ class PurchaseGoldController extends BaseController
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
-    }    
+    }
+
+    /**
+     * ajax 申请收货
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxReceipt()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if(!$model->audit_status) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                Yii::$app->purchaseService->purchase->syncPurchaseToGoldReceipt($id);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 }
