@@ -7,7 +7,7 @@ use common\enums\StatusEnum;
 <?php foreach ($menus as $item) { 
     $menuOpen = $item['is_addon'] == 1;
     ?>
-    <li class="treeview hide<?= $menuOpen ?'menu-open':''?> rfLeftMenu <?= (isset($item['cate']['is_default_show']) && $item['cate']['is_default_show'] == StatusEnum::ENABLED) ? 'is_default_show' : ''; ?> rfLeftMenu-<?= $item['cate_id']; ?>">
+    <li class="treeview hide<?= $menuOpen ?' menu-open':''?> rfLeftMenu <?= (isset($item['cate']['is_default_show']) && $item['cate']['is_default_show'] == StatusEnum::ENABLED) ? 'is_default_show' : ''; ?> rfLeftMenu-<?= $item['cate_id']; ?>">
         <?php if (!empty($item['-'])) { ?>
             <a href="#">
                 <i class="fa <?= $level == 1 ? $item['icon'] : ''; ?> rf-i"></i> <span><?= $item['title']; ?></span>
