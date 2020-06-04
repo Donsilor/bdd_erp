@@ -185,11 +185,10 @@ class PurchaseGoldController extends BaseController
             Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_GOLD);
 
             $trans->commit();
-            \Yii::$app->getSession()->setFlash('success','申请成功');
-            return $this->redirect(\Yii::$app->request->referrer);
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message('操作失败'.$e->getMessage(), $this->redirect($this->returnUrl), 'error');
+            return $this->message('操作失败'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
     }

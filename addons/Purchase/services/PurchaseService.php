@@ -11,6 +11,7 @@ use addons\Purchase\common\models\PurchaseStone;
 use addons\Purchase\common\models\PurchaseStoneGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -145,9 +146,10 @@ class PurchaseService extends Service
      * 同步采购单生成采购收货单
      * @param object $form
      * @param int $purchase_type
+     * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncPurchaseToReceipt($form, $purchase_type)
+    public function syncPurchaseToReceipt($form, $purchase_type, $detail_ids = null)
     {
         if($form->total_num <= 0 ){
             throw new \Exception('采购单没有明细');
@@ -168,7 +170,8 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         $goods = $bill = [];
-        $total_cost = $i=0;
+        $total_cost =0;
+        $i=1;
         foreach ($models as $k => $model){
             $goods[$k] = [
                 'purchase_sn' =>$form->purchase_sn,
@@ -176,19 +179,20 @@ class PurchaseService extends Service
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
                 'goods_num' => $model->goods_num,
-                'material_type' => $model->material_type,
                 'goods_weight'=>$model->goods_weight,
                 'cost_price' =>$model->cost_price,
                 'goods_remark'=>$model->remark,
                 'status'=>StatusEnum::ENABLED,
-                'created_at' => time()
+                'created_at' => time(),
             ];
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-                $goods[$k]['goods_color'] = $model->goods_color;
-                $goods[$k]['goods_clarity'] = $model->goods_clarity;
-                $goods[$k]['goods_norms'] =  $model->goods_norms;
+                $goods[$k]['material_type'] = $model->stone_type;
+                $goods[$k]['goods_color'] = $model->stone_color;
+                $goods[$k]['goods_clarity'] = $model->stone_clarity;
+                //$goods[$k]['goods_norms'] =  $model->goods_norms;
                 $goods[$k]['stone_price'] = $model->stone_price;
             }
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
@@ -196,13 +200,15 @@ class PurchaseService extends Service
         $bill = [
             'supplier_id' => $form->supplier_id,
             'purchase_type' => $purchase_type,
+            'to_warehouse_id' => 1,
+            'put_in_type' => PutInTypeEnum::PURCHASE,
             'receipt_status' => BillStatusEnum::PENDING,
             'receipt_num' => count($goods),
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::PENDING,
+            'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-
         Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
     }
 

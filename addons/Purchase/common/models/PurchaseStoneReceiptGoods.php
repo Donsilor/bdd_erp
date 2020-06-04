@@ -14,7 +14,7 @@ use Yii;
  * @property int $goods_status 收货单货品状态
  * @property string $goods_name 商品名称
  * @property int $goods_num 商品数量
- * @property int $material_type 商品类型
+ * @property string $material_type 商品类型
  * @property double $goods_weight 重量
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
@@ -48,11 +48,11 @@ class PurchaseStoneReceiptGoods extends BaseModel
     {
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
-            [['id', 'receipt_id', 'xuhao', 'goods_status', 'goods_num', 'material_type', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'receipt_id', 'xuhao', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
-            [['goods_color', 'goods_clarity'], 'string', 'max' => 10],
+            [['goods_color', 'goods_clarity', 'material_type'], 'string', 'max' => 10],
             [['goods_norms'], 'string', 'max' => 20],
             [['supplier_id', 'receipt_no'], 'safe'],
         ];

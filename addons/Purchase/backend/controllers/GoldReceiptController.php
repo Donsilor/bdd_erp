@@ -2,13 +2,14 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -111,6 +112,10 @@ class GoldReceiptController extends ReceiptController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $res = PurchaseGoldReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    if(false === $res) {
+                        throw new \Exception("更新货品状态失败");
+                    }
                 }else{
                     $model->receipt_status = BillStatusEnum::SAVE;
                 }
@@ -204,7 +209,7 @@ class GoldReceiptController extends ReceiptController
 
         $select = ['pr.receipt_no','type.name as product_type_name','cate.name as style_cate_name', 'prg.*'];
         $list = PurchaseReceipt::find()->alias('pr')
-            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
+            ->leftJoin(PurchaseGoldReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
             ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
             ->where(['pr.id' => $ids])
@@ -297,7 +302,7 @@ class GoldReceiptController extends ReceiptController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt/index']));
         $model = $this->findModel($id);
-        $goodsModel = new PurchaseReceiptGoods();
+        $goodsModel = new PurchaseGoldReceiptGoods();
         $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();
         foreach ($goodsList as &$item) {
             $item['stone_zhong'] = $item['main_stone_weight']+$item['second_stone_weight1']+$item['second_stone_weight2']+$item['second_stone_weight3'];
