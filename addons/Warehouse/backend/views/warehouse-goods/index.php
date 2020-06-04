@@ -192,7 +192,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'总重',
-                            'value'=>'需确认规则',
+                            'value'=>function($model){
+                                return '需确认规则';
+                            },
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -206,7 +208,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'尺寸',
-                            'value'=>'需确认规则',
+                            'value'=>function($model){
+                                return '需确认规则';
+                            },
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -224,7 +228,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'主石规格',
-                            'value'=>'需确认规则',
+                            'value'=>function($model){
+                                return '需确认规则';
+                            },
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -250,7 +256,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'副石1规格',
-                            'value'=>'需确认规则',
+                            'value'=>function($model){
+                                return '需确认规则';
+                            },
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -340,7 +348,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'库龄',
-                            'value'=>'需确认规则',
+                            'value'=>function($model){
+                                return '需确认规则';
+                            },
                             'filter' => false,
                             'headerOptions' => [],
                         ],
