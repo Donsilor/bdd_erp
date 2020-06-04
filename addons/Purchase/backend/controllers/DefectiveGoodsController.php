@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use Yii;
@@ -35,7 +36,7 @@ class DefectiveGoodsController extends BaseController
      * @var $modelClass PurchaseDefectiveGoodsForm
      */
     public $modelClass = PurchaseDefectiveGoodsForm::class;
-    
+    public $purchaseType = PurchaseTypeEnum::GOODS;
     
     /**
      * 首页
@@ -67,11 +68,11 @@ class DefectiveGoodsController extends BaseController
         $dataProvider->query->andWhere(['>','status',-1]);
 
         $defective = PurchaseDefective::find()->where(['id'=>$defective_id])->one();
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'defective' => $defective,
-            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl),
+            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id, $this->purchaseType, $returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);
@@ -148,7 +149,7 @@ class DefectiveGoodsController extends BaseController
                             throw new Exception("保存失败");
                         }
                         //更新不良返厂单汇总：总金额和总数量
-                        $res = Yii::$app->purchaseService->purchaseDefective->purchaseDefectiveSummary($defective_id);
+                        $res = Yii::$app->purchaseService->defective->purchaseDefectiveSummary($defective_id);
                         if(false === $res){
                             throw new Exception('更新不良返厂单汇总失败');
                         }
@@ -203,7 +204,7 @@ class DefectiveGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'defective' => $defective,
-            'tabList' => \Yii::$app->purchaseService->purchaseDefective->menuTabList($defective_id,$returnUrl,$tab),
+            'tabList' => \Yii::$app->purchaseService->defective->menuTabList($defective_id, $this->purchaseType, $returnUrl, $tab),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
         ]);

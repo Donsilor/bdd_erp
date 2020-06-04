@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
@@ -36,7 +37,7 @@ class DefectiveController extends BaseController
     * @var PurchaseDefective
     */
     public $modelClass = PurchaseDefective::class;
-
+    public $purchaseType = PurchaseTypeEnum::GOODS;
 
     /**
     * 首页
@@ -100,7 +101,7 @@ class DefectiveController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->purchaseService->purchaseDefective->menuTabList($id,$returnUrl),
+            'tabList'=>\Yii::$app->purchaseService->defective->menuTabList($id, $this->purchaseType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -124,7 +125,7 @@ class DefectiveController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->purchaseDefective->applyAudit($model);
+            \Yii::$app->purchaseService->defective->applyAudit($model);
 
             $trans->commit();
         }catch (\Exception $e){
@@ -158,7 +159,7 @@ class DefectiveController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 $model->audit_time = time();
 
-                \Yii::$app->purchaseService->purchaseDefective->auditDefect($model);
+                \Yii::$app->purchaseService->defective->auditDefect($model);
 
                 $trans->commit();
             }catch (\Exception $e){
@@ -187,7 +188,7 @@ class DefectiveController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->purchaseDefective->cancelDefect($model);
+            \Yii::$app->purchaseService->defective->cancelDefect($model);
 
             $trans->commit();
         }catch (\Exception $e){

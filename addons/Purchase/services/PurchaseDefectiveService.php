@@ -2,7 +2,6 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -10,10 +9,9 @@ use addons\Purchase\common\models\PurchaseDefective;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\helpers\ArrayHelper;
 use common\enums\StatusEnum;
@@ -34,22 +32,63 @@ class PurchaseDefectiveService extends Service
      * @param int $id 不良返厂单ID
      * @return array
      */
-    public function menuTabList($defective_id,$returnUrl = null,$tag = null)
+    public function menuTabList($defective_id, $purchase_type, $returnUrl = null, $tag = null)
     {
-        if($tag==3){
-            $tabList = [
-                1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'单据明细(编辑)','url'=>Url::to(['defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-            ];
-        }else{
-            $tabList = [
-                1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                2=>['name'=>'单据明细','url'=>Url::to(['defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-            ];
+        switch ($purchase_type){
+
+            case PurchaseTypeEnum::GOODS:
+                {
+                    if($tag==3){
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
+            case PurchaseTypeEnum::MATERIAL_STONE:
+                {
+                    if($tag==3){
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['stone-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
+            case PurchaseTypeEnum::MATERIAL_GOLD:
+                {
+                    if($tag==3){
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['gold-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tablist = [
+                            1=>['name'=>'基础信息','url'=>Url::to(['gold-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['gold-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
         }
-        return $tabList;
+        return $tablist;
     }
     
     /**

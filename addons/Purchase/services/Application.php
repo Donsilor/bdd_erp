@@ -15,7 +15,7 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseStoneService $stone 石料采购订单
  * @property \addons\Purchase\services\PurchaseStoneGoodsService $stoneGoods 石料采购明细
  * @property \addons\Purchase\services\PurchaseReceiptService $receipt 采购收货单
- * @property \addons\Purchase\services\PurchaseDefectiveService $fefective 不良返厂单
+ * @property \addons\Purchase\services\PurchaseDefectiveService $defective 不良返厂单
  * @property \addons\Purchase\services\PurchaseGoldReceiptService $goldReceipt 不良返厂单
  * @property \addons\Purchase\services\PurchaseFqcConfigService $fqc 质检未过原因
  * 

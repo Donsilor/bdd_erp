@@ -7,11 +7,9 @@ use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
@@ -24,7 +22,7 @@ use common\traits\Curd;
 * Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class GoldReceiptController extends BaseController
+class GoldReceiptController extends ReceiptController
 {
     use Curd;
 
@@ -85,90 +83,6 @@ class GoldReceiptController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-        ]);
-    }
-
-    /**
-     * ajax编辑/创建
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
-        }
-
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * @return mixed
-     * 申请审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if($model->receipt_status != BillStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        if(!$model->receipt_num){
-            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->receipt_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
-    }
-
-
-    /**
-     * 审核-采购收货单
-     *
-     * @return mixed
-     */
-    public function actionAjaxAudit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->id;
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->receipt_status = BillStatusEnum::CONFIRM;
-                }else{
-                    $model->receipt_status = BillStatusEnum::SAVE;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $trans->commit();
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-        }
-        $model->audit_status = AuditStatusEnum::PASS;
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
         ]);
     }
 
