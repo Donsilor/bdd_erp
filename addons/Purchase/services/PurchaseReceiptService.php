@@ -2,6 +2,9 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use common\helpers\SnHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -92,6 +95,44 @@ class PurchaseReceiptService extends Service
                 }
         }
         return $tablist;
+    }
+
+    /**
+     * 创建采购收货单
+     * @param array $bill
+     * @param array $detail
+     */
+    public function createReceipt($bill, $detail)
+    {
+        $billM = new PurchaseReceipt();
+        $billM->attributes = $bill;
+        $billM->receipt_no = SnHelper::createReceiptSn();
+
+        if(false === $billM->validate()) {
+            throw new \Exception($this->getError($billM));
+        }
+        if(false === $billM->save()) {
+            throw new \Exception($this->getError($billM));
+        }
+
+        $receipt_id = $billM->attributes['id'];
+        if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $goods = new PurchaseStoneReceiptGoods();
+        }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $goods = new PurchaseGoldReceiptGoods();
+        }else{
+            $goods = new PurchaseReceiptGoods();
+        }
+        foreach ($detail as $good) {
+            $goods->attributes = $good;
+            $goods->receipt_id = $receipt_id;
+            if(false === $goods->validate()) {
+                throw new \Exception($this->getError($goods));
+            }
+            if(false === $goods->save()) {
+                throw new \Exception($this->getError($goods));
+            }
+        }
     }
     
     /**

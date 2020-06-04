@@ -2,6 +2,10 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use common\helpers\SnHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;

@@ -2,6 +2,9 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseGold;
+use addons\Purchase\common\models\PurchaseGoldGoods;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -131,6 +134,53 @@ class PurchaseService extends Service
             }
         }
     }
+
+    /**
+     * 同步采购单生成采购收货单
+     * @param int $purchase_id
+     * @param array $detail_ids
+     * @throws \Exception
+     */
+    public function syncPurchaseToGoldReceipt($purchase_id, $detail_ids = null)
+    {
+        $purchase = PurchaseGold::find()->where(['id'=>$purchase_id])->one();
+        if($purchase->total_num <= 0 ){
+            throw new \Exception('采购单没有明细');
+        }
+        if($purchase->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购单没有审核');
+        }
+        $query = PurchaseGoldGoods::find()->where(['purchase_id'=>$purchase_id]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        $goods = $bill = [];
+        $i=0;
+        foreach ($models as $model){
+            $goods = [
+                'purchase_sn' =>$purchase->purchase_sn,
+                'xuhao'=>$i++,
+                'goods_status' => ReceiptGoodsStatusEnum::SAVE,
+                'goods_name'=>$model->goods_name,
+                'goods_num' => $model->goods_num,
+                'material_type' => $model->material_type,
+                'goods_weight'=>$model->goods_weight,
+                'cost_price' =>$model->cost_price,
+                'gold_price' =>$model->gold_price,
+                'goods_remark'=>$model->goods_remark,
+                'put_in_type' =>$model->put_in_type,
+                'status'=>StatusEnum::ENABLED,
+                'created_at' => time()
+            ];
+        }
+        $bill = [
+
+        ];
+        Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
+    }
+
+
     /**
      * 创建采购单日志
      * @return array
