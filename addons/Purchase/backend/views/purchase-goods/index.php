@@ -3,10 +3,9 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Supply\common\enums\BuChanEnum;
-use common\enums\AuditStatusEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -187,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){
-                                         if($purchase->purchase_status == AuditStatusEnum::SAVE) {
+                                         if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
                                              return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
@@ -197,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },                                    
                                     'delete' => function($url, $model, $key) use($purchase){
-                                        if($purchase->purchase_status == AuditStatusEnum::SAVE) {
+                                        if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
                                             return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
                                         }
                                     },
