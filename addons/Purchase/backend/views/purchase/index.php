@@ -41,7 +41,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
         'options' => ['style'=>'white-space:nowrap;'],
-        'showFooter' => true,//显示footer行
+        'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
             [
@@ -64,9 +64,12 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value'=>function($model) {
                         return Html::a($model->purchase_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'130'],
+                    //'headerOptions' => ['width'=>'150'],
             ],
 
             [
@@ -76,7 +79,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
                             'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                            'options' => ['placeholder' =>"请选择"],
+                            'options' => ['placeholder' =>"请选择",'style'=>"width:180px"],
                             'pluginOptions' => [
                                     'allowClear' => true,                                          
                             ],
