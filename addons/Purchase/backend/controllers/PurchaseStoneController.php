@@ -189,7 +189,7 @@ class PurchaseStoneController extends BaseController
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message('操作失败'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            return $this->message('操作失败，'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
 }
