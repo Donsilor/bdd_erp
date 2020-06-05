@@ -8,6 +8,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use kartik\daterange\DateRangePicker;
 
 use common\enums\AuditStatusEnum;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -213,9 +214,9 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
-                        return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                        return AuditStatusEnum::getValue($model->audit_status);
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                             'style'=> 'width:80px;'
@@ -252,7 +253,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::SAVE){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
@@ -261,7 +262,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },                    
                     'audit' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::PENDING){
+                        if($model->purchase_status == PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -274,7 +275,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     },
 
                     'ajax-apply' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::SAVE){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -282,7 +283,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'follower' => function($url, $model, $key){
-                        if($model->purchase_status <= BillStatusEnum::PENDING){
+                        if($model->purchase_status <= PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
                                 'class'=>'btn btn-info btn-sm',
                                 'data-toggle' => 'modal',

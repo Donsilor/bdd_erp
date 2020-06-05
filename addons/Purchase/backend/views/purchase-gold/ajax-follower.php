@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="tab-content">
         <?= $form->field($model, 'supplier_id')->dropDownList(\Yii::$app->supplyService->supplier->getDropDown(),['prompt'=>'请选择','onchange'=>'getFollower()','disabled'=>true]);?>
-        <?= $form->field($model, 'follower_id')->dropDownList(\Yii::$app->supplyService->supplier->getFollower($model->supplier_id),['prompt'=>'请选择']);?>
+        <?= $form->field($model, 'follower_id')->dropDownList(\Yii::$app->supplyService->supplier->getFollowers($model->supplier_id),['prompt'=>'请选择']);?>
 
         <!-- /.tab-pane -->
     </div>

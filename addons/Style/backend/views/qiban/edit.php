@@ -46,7 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
                         </div>
                     </div>
-                    <div class="row">                        
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'style_channel_id')->dropDownList(Yii::$app->styleService->styleChannel->getDropDown(),['prompt'=>'请选择'])?>
+                        </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>

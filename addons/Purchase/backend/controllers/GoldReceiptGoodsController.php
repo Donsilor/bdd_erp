@@ -290,7 +290,7 @@ class GoldReceiptGoodsController extends BaseController
         try{
             $trans = \Yii::$app->db->beginTransaction();
 
-            $model = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
+            $model = PurchaseGoldReceiptGoods::find()->where(['id'=>$id])->one();
 
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));

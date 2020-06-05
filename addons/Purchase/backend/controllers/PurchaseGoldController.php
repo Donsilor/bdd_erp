@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use common\helpers\ArrayHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseGold;
 use common\enums\AuditStatusEnum;
@@ -45,8 +47,15 @@ class PurchaseGoldController extends BaseController
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
-        $dataProvider->query->andWhere(['>','status',-1]);      
-        
+        $dataProvider->query->andWhere(['>','status',-1]);
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
+        }
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -178,27 +187,45 @@ class PurchaseGoldController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if(!$model->audit_status) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->db->beginTransaction();
-                Yii::$app->purchaseService->purchase->syncPurchaseToGoldReceipt($id);
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-            }
+        try{
+            $trans = Yii::$app->db->beginTransaction();
 
+            Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_GOLD);
+
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message('操作失败，'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
     }
+
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '采购订单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
+        }
+        $list = [];
+        //print_r($list);exit();
+
+        $header = [
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+
 }

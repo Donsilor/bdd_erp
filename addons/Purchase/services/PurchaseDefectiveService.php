@@ -130,8 +130,8 @@ class PurchaseDefectiveService extends Service
 
         $defective_id = $billM->attributes['id'];
 
-        $goods = new PurchaseDefectiveGoods();
         foreach ($detail as $good) {
+            $goods = new PurchaseDefectiveGoods();
             $goods->attributes = $good;
             $goods->defective_id = $defective_id;
             if(false === $goods->validate()) {

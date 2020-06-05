@@ -350,7 +350,7 @@ class ProduceController extends BaseController
 
     public function actionGetFollower(){
         $supplier_id = Yii::$app->request->post('supplier_id');
-        $model = Yii::$app->supplyService->supplier->getFollower($supplier_id);
+        $model = Yii::$app->supplyService->supplier->getFollowers($supplier_id);
         return ResultHelper::json(200, 'ok',$model);
     }
 }

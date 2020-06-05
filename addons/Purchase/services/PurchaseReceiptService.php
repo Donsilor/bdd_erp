@@ -116,14 +116,21 @@ class PurchaseReceiptService extends Service
         }
 
         $receipt_id = $billM->attributes['id'];
-        if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $goods = new PurchaseStoneReceiptGoods();
-        }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $goods = new PurchaseGoldReceiptGoods();
-        }else{
-            $goods = new PurchaseReceiptGoods();
-        }
         foreach ($detail as $good) {
+            if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $goods = new PurchaseStoneReceiptGoods();
+            }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $goods = new PurchaseGoldReceiptGoods();
+            }else{
+                $goods = new PurchaseReceiptGoods();
+            }
+            $purchase_detail_id = $good['purchase_detail_id']??"";
+            if($purchase_detail_id){
+                $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
+                if($count >= 1){
+                    throw new \Exception("采购单已收货，不能重复收货");
+                }
+            }
             $goods->attributes = $good;
             $goods->receipt_id = $receipt_id;
             if(false === $goods->validate()) {

@@ -70,7 +70,7 @@ class ReceiptGoodsController extends BaseController
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'tabList' => \Yii::$app->purchaseService->purchaseReceipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl),
+            'tabList' => \Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl),
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
             'receipt' => $receipt,
@@ -281,7 +281,7 @@ class ReceiptGoodsController extends BaseController
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->purchaseReceipt->iqcValidate($model);
+            \Yii::$app->purchaseService->receipt->iqcValidate($model);
             return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());

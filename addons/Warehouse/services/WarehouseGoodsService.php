@@ -5,9 +5,11 @@ namespace addons\Warehouse\services;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseGoodsLog;
 use common\components\Service;
+use common\enums\ConfirmEnum;
 use common\helpers\Url;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Style\common\enums\StyleSexEnum;
+use common\enums\AuditStatusEnum;
 
 
 /**
@@ -80,6 +82,13 @@ class WarehouseGoodsService extends Service
             }
         }
         return $model->goods_id;
+    }
+
+
+    public function editStatus($model){
+       return !($model->audit_status == AuditStatusEnum::PENDING ||
+        ($model->is_apply == ConfirmEnum::YES &&
+            $model->apply_id != \Yii::$app->user->identity->getId()));
     }
 
 }

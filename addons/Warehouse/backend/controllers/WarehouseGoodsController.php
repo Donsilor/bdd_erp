@@ -5,6 +5,8 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoodsForm;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
 use common\helpers\ExcelHelper;
 use common\helpers\ResultHelper;
 use common\helpers\Url;
@@ -41,7 +43,7 @@ class WarehouseGoodsController extends BaseController
                 'supplier' => ['supplier_name'],
                 'warehouse' => ['name'],
                 'weixiuWarehouse' => ['name'],
-                'member' => ['username'],
+                'creator' => ['username'],
 
             ]
         ]);
@@ -98,24 +100,115 @@ class WarehouseGoodsController extends BaseController
      * @return array|mixed|string
      * WarehouseGoodsForm $model
      */
-    public function actionApplyEdit(){
+    public function actionEdit(){
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id', null);
         $this->modelClass = WarehouseGoodsForm::class;
         $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGoodsForm();
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            $model->createApply();
-
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->createApply();
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','申请提交成功！审批通过后生效');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
         }
-        return $this->render('edit', [
+        $model->initApplyEdit();
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }
 
-    public function actionEdit()
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
+    /**
+     * 查看审批
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionApplyView()
+    {
+
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = WarehouseGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGoodsForm();
+        $model->initApplyView();
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'returnUrl'=>$this->returnUrl
+        ]);
+    }
+    /**
+     * 申请编辑-审核(ajax)
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionApplyAudit()
+    {
+
+        $returnUrl = Yii::$app->request->get('returnUrl',Yii::$app->request->referrer);
+
+        $id = Yii::$app->request->get('id');
+
+        $this->modelClass = WarehouseGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGoodsForm();
+
+        $model->audit_status = AuditStatusEnum::PASS;
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->initApplyEdit();
+                }
+                $this->is_apply = ConfirmEnum::NO;
+                $this->apply_id = '';
+                $model->save(false);
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(['warehouse-goods/view','id'=>$id]), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+            }
+
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
+
+    public function actionEditss()
     {
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id', null);

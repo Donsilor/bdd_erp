@@ -90,7 +90,7 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['product_type_id','style_sex' ,'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id','style_sex' ,'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
@@ -99,6 +99,7 @@ class WarehouseGoods extends BaseModel
             [['finger', 'order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
             [['cert_type'], 'string', 'max' => 50],
+            [['audit_remark','remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
         ];
     }
@@ -123,7 +124,7 @@ class WarehouseGoods extends BaseModel
             'warehouse_id' => '仓库',
             'gold_weight' => '金重',
             'gold_loss' => '金损',
-            'gross_weight' => '毛重',
+            'gross_weight' => '总重',
             'finger' => '手寸',
             'order_detail_id' => 'Order Detail ID',
             'order_sn' => '订单号',
@@ -169,11 +170,17 @@ class WarehouseGoods extends BaseModel
             'second_stone_weight2' => '副石2重',
             'second_stone_price2' => '副石2总计价',
             'remark' => '商品备注',
+            'apply_id' => '当前申请人',
+            'auditor_id' => '审核人',
+            'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }
+
 
     /**
      * 关联产品线分类一对一
@@ -224,8 +231,25 @@ class WarehouseGoods extends BaseModel
      * 关联管理员一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getMember()
+    public function getCreator()
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id']);
+    }
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id']);
+    }
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApply()
+    {
+        return $this->hasOne(Member::class, ['id'=>'apply_id']);
     }
 }

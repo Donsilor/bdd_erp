@@ -192,9 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label'=>'总重',
-                            'value'=>function($model){
-                                return '需确认规则';
-                            },
+                            'value'=>'gross_weight',
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -397,19 +395,34 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit}',
+                            'template' => '{edit} {ajax-apply}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'class' => 'btn btn-primary btn-sm openIframe',
-                                        'data-width'=>'90%',
-                                        'data-height'=>'90%',
-                                        'data-offset'=>'20px',
-                                    ]);
+                                    if(\Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
+                                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'class' => 'btn btn-primary btn-sm openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
+                                    }
                                 },
 
-                                'apply-edit' =>function($url, $model, $key){
-                                    return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                'ajax-apply' => function($url, $model, $key){
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                                        ]);
+                                    }
+                                },
+
+                                'apply-view' => function($url, $model, $key){
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        return Html::edit(['apply-view','id'=>$model->id], '查看审批', [
+                                            'class'=>'btn btn-danger btn-sm',
+                                        ]);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);
