@@ -11,6 +11,8 @@ use addons\Purchase\common\enums\PurchaseStatusEnum;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = '金料采购单';
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -23,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+<!--                    --><?//= Html::button('导出', [
+//                        'class'=>'btn btn-success btn-xs',
+//                        'onclick' => 'batchExport()',
+//                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">  
@@ -230,3 +236,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
+
+    }
+
+</script>

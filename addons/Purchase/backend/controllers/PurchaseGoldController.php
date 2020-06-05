@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use common\helpers\ArrayHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseGold;
 use common\enums\AuditStatusEnum;
@@ -46,8 +47,15 @@ class PurchaseGoldController extends BaseController
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
-        $dataProvider->query->andWhere(['>','status',-1]);      
-        
+        $dataProvider->query->andWhere(['>','status',-1]);
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
+        }
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -192,4 +200,32 @@ class PurchaseGoldController extends BaseController
         }
 
     }
+
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '采购订单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
+        }
+        $list = [];
+        //print_r($list);exit();
+
+        $header = [
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+
 }
