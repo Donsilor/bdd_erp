@@ -49,7 +49,7 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'purchase_type', 'put_in_type', 'is_to_warehouse', 'to_warehouse_id', 'auditor_id', 'receipt_status', 'receipt_status', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'purchase_type', 'put_in_type', 'is_to_warehouse', 'to_warehouse_id', 'auditor_id', 'receipt_status', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
             [['receipt_no'], 'string', 'max' => 30],
