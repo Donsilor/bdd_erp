@@ -256,8 +256,8 @@ class StoneReceiptGoodsController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                //同步采购收货单至L单
-                Yii::$app->purchaseService->stoneReceipt->syncReceiptToBillInfoL($model);
+                //同步石包采购收货单至买石单
+                Yii::$app->purchaseService->stoneReceipt->syncReceiptToStoneBillMs($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');

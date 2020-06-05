@@ -14,13 +14,6 @@ $form = ActiveForm::begin([]);
                 'allowClear' => false
             ],
         ]);?>
-        <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false
-            ],
-        ]);?>
         <!-- /.tab-pane -->
     </div>
     <!-- /.tab-content -->

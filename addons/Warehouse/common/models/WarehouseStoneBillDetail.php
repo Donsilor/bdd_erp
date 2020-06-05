@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id ID
  * @property int $bill_id 单据ID
+ * @property int $source_detail_id 来源明细ID
  * @property string $bill_type 单据类型
  * @property string $shibao 石包名称
  * @property string $cert_id 证书号
@@ -45,11 +46,11 @@ class WarehouseStoneBillDetail extends BaseModel
     {
         return [
             [['bill_id', 'bill_type', 'shibao'], 'required'],
-            [['bill_id', 'stone_num', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['stone_weight', 'purchase_price', 'sale_price'], 'number'],
+            [['bill_id', 'source_detail_id', 'stone_num', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['carat', 'stone_weight', 'purchase_price', 'sale_price'], 'number'],
             [['bill_type'], 'string', 'max' => 10],
             [['shibao'], 'string', 'max' => 30],
-            [['cert_id', 'carat', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
+            [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
         ];
     }
 
@@ -62,6 +63,7 @@ class WarehouseStoneBillDetail extends BaseModel
             'id' => 'ID',
             'bill_id' => '单据ID',
             'bill_type' => '单据类型',
+            'source_detail_id' => '来源明细ID',
             'shibao' => '石包名称',
             'cert_id' => '证书号',
             'carat' => '石重',

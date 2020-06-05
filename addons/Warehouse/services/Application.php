@@ -17,6 +17,8 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseBillRepairService $repair 维修单据
+ * @property \addons\Warehouse\services\WarehouseStoneService $stone 石包
+ * @property \addons\Warehouse\services\WarehouseStoneBillService $stoneBill 石包单据
  * 
  */
 class Application extends Service
@@ -35,5 +37,7 @@ class Application extends Service
         'billB' => 'addons\Warehouse\services\WarehouseBillBService',
         'billLog' => 'addons\Warehouse\services\WarehouseBillLogService',
         'repair' => 'addons\Warehouse\services\WarehouseBillRepairService',
+        'stone' => 'addons\Warehouse\services\WarehouseStoneService',
+        'stoneBill' => 'addons\Warehouse\services\WarehouseStoneBillService',
     ];
 }
