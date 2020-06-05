@@ -125,7 +125,6 @@ class AddonsController extends BaseController
             $allCover = [];
             $removeAppIds = [];
             $defaultConfig = [];
-
             foreach ($config->appsConfig as $appId => $item) {
                 $file = $rootPath . $item;
 

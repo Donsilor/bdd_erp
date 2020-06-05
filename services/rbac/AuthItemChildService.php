@@ -83,12 +83,12 @@ class AuthItemChildService extends Service
         $defaultAuth = [];
         // 默认后台权限
         if (!empty($allAuthItem[AppEnum::BACKEND])) {
-            $defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::BACKEND, $name), $defaultAuth);
+            //$defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::BACKEND, $name), $defaultAuth);
         }
 
         // 默认商家权限
         if (!empty($allAuthItem[AppEnum::MERCHANT])) {
-            $defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::MERCHANT, $name), $defaultAuth);
+            //$defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::MERCHANT, $name), $defaultAuth);
         }
 
         // 重组路由
