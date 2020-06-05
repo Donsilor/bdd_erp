@@ -187,7 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){
-                                         if($purchase->audit_status == AuditStatusEnum::SAVE) {
+                                         if($purchase->purchase_status == AuditStatusEnum::SAVE) {
                                              return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
@@ -197,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },                                    
                                     'delete' => function($url, $model, $key) use($purchase){
-                                        if($purchase->audit_status == AuditStatusEnum::SAVE) {
+                                        if($purchase->purchase_status == AuditStatusEnum::SAVE) {
                                             return Html::delete(['delete','id' => $model->id,'purchase_id'=>$purchase->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
                                         }
                                     },
