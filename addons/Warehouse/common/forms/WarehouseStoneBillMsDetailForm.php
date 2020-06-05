@@ -2,15 +2,15 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\models\WarehouseStoneBill;
+use Yii;
+use addons\Warehouse\common\models\WarehouseStoneBillDetail;
 use common\helpers\ArrayHelper;
 
 /**
- * 石包单据 Form
+ * 石包单据明细 Form
  *
  */
-class WarehouseStoneBillMsDetailForm extends WarehouseStoneBill
+class WarehouseStoneBillMsDetailForm extends WarehouseStoneBillDetail
 {
     /**
      * {@inheritdoc}
