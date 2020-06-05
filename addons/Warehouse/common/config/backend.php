@@ -90,29 +90,17 @@ return [
                             'title' => '石包列表',
                             'route' => 'stone/index',
                         ],
-                    ],
-
-            ],
-            [
-                    'title' => '石包单据',
-                    'route' => 'indexStoneBill',
-                    'icon' => 'fa fa-superpowers',
-                    'child' => [
                         [
                             'title' => '买石单',
-                            'route' => 'bill-ms/index',
+                            'route' => 'stone-bill-ms/index',
                         ],
                         [
                             'title' => '送石单',
-                            'route' => 'bill-ss/index',
+                            'route' => 'stone-bill-ss/index',
                         ],
                         [
                             'title' => '退石单',
-                            'route' => 'bill-ts/index',
-                        ],
-                        [
-                            'title' => '还石单',
-                            'route' => 'bill-hs/index',
+                            'route' => 'stone-bill-ts/index',
                         ],
                     ],
 
