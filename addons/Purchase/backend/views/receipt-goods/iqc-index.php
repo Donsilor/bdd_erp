@@ -64,19 +64,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'xuhao',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'purchase_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xuhao',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
