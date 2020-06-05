@@ -50,26 +50,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
+                                'label' => 'ID',
                                 'attribute' => 'id',
                                 'filter' => false,
                                 'format' => 'raw',
                             ],
                             [
+                                'label' => '石包',
                                 'attribute'=>'shibao',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '证书号',
                                 'attribute' => 'cert_id',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => true,
                             ],
                             [
+                                'label' => '石重',
                                 'attribute' => 'carat',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'label' => '颜色',
                                 'attribute' => 'color',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->color);
@@ -78,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '净度',
                                 'attribute' => 'clarity',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->clarity);
@@ -86,6 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '切工',
                                 'attribute' => 'cut',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cut);
@@ -94,6 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '抛光',
                                 'attribute' => 'polish',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cut);
@@ -102,6 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '荧光',
                                 'attribute' => 'fluorescence',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->fluorescence);
@@ -110,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'fluorescence',
+                                'label' => '对称',
+                                'attribute' => 'symmetry',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->symmetry);
                                 },
@@ -118,21 +128,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '石包总数',
                                 'attribute' => 'stone_num',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '石包总重量',
                                 'attribute' => 'stone_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '每卡采购价格',
                                 'attribute' => 'purchase_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '每卡销售价格',
                                 'attribute' => 'sale_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
