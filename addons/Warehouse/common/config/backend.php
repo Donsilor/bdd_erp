@@ -82,6 +82,42 @@ return [
 
             ],
             [
+                    'title' => '石包管理',
+                    'route' => 'indexStone',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                        [
+                            'title' => '石包列表',
+                            'route' => 'stone/index',
+                        ],
+                    ],
+
+            ],
+            [
+                    'title' => '石包单据',
+                    'route' => 'indexStoneBill',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                        [
+                            'title' => '买石单',
+                            'route' => 'bill-ms/index',
+                        ],
+                        [
+                            'title' => '送石单',
+                            'route' => 'bill-ss/index',
+                        ],
+                        [
+                            'title' => '退石单',
+                            'route' => 'bill-ts/index',
+                        ],
+                        [
+                            'title' => '还石单',
+                            'route' => 'bill-hs/index',
+                        ],
+                    ],
+
+            ],
+            [
                 'title' => '功能配置',
                 'route' => 'indexWarehouseConfig',
                 'icon' => 'fa fa-superpowers',
