@@ -8,7 +8,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone', '石包列表');
+$this->title = Yii::t('stone_bill_ms', '买石单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -45,132 +45,84 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '名称',
-                            'attribute'=>'shibao',
-                            'filter' => Html::activeTextInput($searchModel, 'shibao', [
+                            'label' => '单据类型',
+                            'attribute'=>'bill_type',
+                            'filter' => Html::activeTextInput($searchModel, 'bill_type', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '库存数量',
-                            'attribute'=>'kucun_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'kucun_cnt', [
+                            'label' => '单据状态',
+                            'attribute'=>'bill_status',
+                            'filter' => Html::activeTextInput($searchModel, 'bill_status', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '库存重量',
-                            'attribute'=>'kucun_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'kucun_weight', [
+                            'label' => '供应商',
+                            'attribute'=>'supplier_id',
+                            'filter' => Html::activeTextInput($searchModel, 'supplier_id', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'160'],
                         ],
                         [
-                            'label' => '买入',
-                            'attribute'=>'MS_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'MS_cnt', [
+                            'label' => '石包总数',
+                            'attribute'=>'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '分包转入',
-                            'attribute'=>'fenbaoru_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'fenbaoru_cnt', [
+                            'label' => '石包总重量',
+                            'attribute'=>'goods_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '送出',
-                            'attribute'=>'SS_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'SS_cnt', [
+                            'label' => '石包总价',
+                            'attribute'=>'goods_total',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_total', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '分包转出',
-                            'attribute'=>'fenbaochu_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'fenbaochu_cnt', [
+                            'label' => '纸质单号',
+                            'attribute'=>'send_goods_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '还回',
-                            'attribute'=>'HS_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'HS_cnt', [
+                            'label' => '制单人',
+                            'attribute'=>'creator_id',
+                            'filter' => Html::activeTextInput($searchModel, 'creator_id', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '退石',
-                            'attribute'=>'TS_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'TS_cnt', [
+                            'label' => '制单时间',
+                            'attribute'=>'created_at',
+                            'filter' => Html::activeTextInput($searchModel, 'created_at', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'160'],
                         ],
                         [
-                            'label' => '退货',
-                            'attribute'=>'TH_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'TH_cnt', [
+                            'label' => '审核时间',
+                            'attribute'=>'audit_time',
+                            'filter' => Html::activeTextInput($searchModel, 'audit_time', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '遗失',
-                            'attribute'=>'YS_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'YS_cnt', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '损坏',
-                            'attribute'=>'SY_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'SY_cnt', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '其他入库',
-                            'attribute'=>'RK_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'RK_cnt', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '其他出库',
-                            'attribute'=>'CK_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'CK_cnt', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '每卡采购价格',
-                            'attribute'=>'purchase_price',
-                            'filter' => Html::activeTextInput($searchModel, 'purchase_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
-                        [
-                            'label' => '每卡销售价格',
-                            'attribute'=>'sale_price',
-                            'filter' => Html::activeTextInput($searchModel, 'sale_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
+                            'headerOptions' => ['width'=>'160'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',

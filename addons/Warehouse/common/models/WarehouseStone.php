@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "warehouse_stone".
  *
  * @property int $id
- * @property string $shibao
+ * @property string $shibao 石包名称
  * @property int $kucun_cnt 库存数量
  * @property int $MS_cnt 买入数量
  * @property int $fenbaoru_cnt 分包转入数量
@@ -21,18 +21,18 @@ use Yii;
  * @property int $TH_cnt 退货数
  * @property int $RK_cnt 其他入库数量
  * @property int $CK_cnt 其他出库数量
- * @property string $kucun_zhong 库存重量
- * @property string $MS_zhong 买入重量
- * @property string $fenbaoru_zhong 分包转入重量
- * @property string $SS_zhong 送出重量
- * @property string $fenbaochu_zhong 分包转出重量
- * @property string $HS_zhong 还回重量-镶嵌
- * @property string $TS_zhong 退石重量
- * @property string $YS_zhong 遗失重量
- * @property string $SY_zhong 损坏重量
- * @property string $TH_zhong 退货重
- * @property string $RK_zhong 其他入库重量
- * @property string $CK_zhong 其他出库重量
+ * @property string $kucun_weight 库存重量
+ * @property string $MS_weight 买入重量
+ * @property string $fenbaoru_weight 分包转入重量
+ * @property string $SS_weight 送出重量
+ * @property string $fenbaochu_weight 分包转出重量
+ * @property string $HS_weight 还回重量-镶嵌
+ * @property string $TS_weight 退石重量
+ * @property string $YS_weight 遗失重量
+ * @property string $SY_weight 损坏重量
+ * @property string $TH_weight 退货重
+ * @property string $RK_weight 其他入库重量
+ * @property string $CK_weight 其他出库重量
  * @property string $cost_price 原始采购成本
  * @property string $purchase_price 每卡采购价格
  * @property string $sale_price 每卡销售价格
@@ -59,8 +59,8 @@ class WarehouseStone extends BaseModel
     {
         return [
             [['shibao'], 'required'],
-            [['id','kucun_cnt', 'MS_cnt', 'fenbaoru_cnt', 'SS_cnt', 'fenbaochu_cnt', 'HS_cnt', 'TS_cnt', 'YS_cnt', 'SY_cnt', 'TH_cnt', 'RK_cnt', 'CK_cnt', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['kucun_zhong', 'MS_zhong', 'fenbaoru_zhong', 'SS_zhong', 'fenbaochu_zhong', 'HS_zhong', 'TS_zhong', 'YS_zhong', 'SY_zhong', 'TH_zhong', 'RK_zhong', 'CK_zhong', 'cost_price', 'purchase_price', 'sale_price'], 'number'],
+            [['id', 'kucun_cnt', 'MS_cnt', 'fenbaoru_cnt', 'SS_cnt', 'fenbaochu_cnt', 'HS_cnt', 'TS_cnt', 'YS_cnt', 'SY_cnt', 'TH_cnt', 'RK_cnt', 'CK_cnt', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['kucun_weight', 'MS_weight', 'fenbaoru_weight', 'SS_weight', 'fenbaochu_weight', 'HS_weight', 'TS_weight', 'YS_weight', 'SY_weight', 'TH_weight', 'RK_weight', 'CK_weight', 'cost_price', 'purchase_price', 'sale_price'], 'number'],
             [['shibao'], 'string', 'max' => 30],
             [['remark'], 'string', 'max' => 255],
             [['shibao'], 'unique'],
@@ -74,7 +74,7 @@ class WarehouseStone extends BaseModel
     {
         return [
             'id' => 'ID',
-            'shibao' => '名称',
+            'shibao' => '石包名称',
             'kucun_cnt' => '库存数量',
             'MS_cnt' => '买入数量',
             'fenbaoru_cnt' => '分包转入数量',
@@ -87,18 +87,18 @@ class WarehouseStone extends BaseModel
             'TH_cnt' => '退货数',
             'RK_cnt' => '其他入库数量',
             'CK_cnt' => '其他出库数量',
-            'kucun_zhong' => '库存重量',
-            'MS_zhong' => '买入重量',
-            'fenbaoru_zhong' => '分包转入重量',
-            'SS_zhong' => '送出重量',
-            'fenbaochu_zhong' => '分包转出重量',
-            'HS_zhong' => '还回重量-镶嵌',
-            'TS_zhong' => '退石重量',
-            'YS_zhong' => '遗失重量',
-            'SY_zhong' => '损坏重量',
-            'TH_zhong' => '退货重',
-            'RK_zhong' => '其他入库重量',
-            'CK_zhong' => '其他出库重量',
+            'kucun_weight' => '库存重量',
+            'MS_weight' => '买入重量',
+            'fenbaoru_weight' => '分包转入重量',
+            'SS_weight' => '送出重量',
+            'fenbaochu_weight' => '分包转出重量',
+            'HS_weight' => '还回重量-镶嵌',
+            'TS_weight' => '退石重量',
+            'YS_weight' => '遗失重量',
+            'SY_weight' => '损坏重量',
+            'TH_weight' => '退货重',
+            'RK_weight' => '其他入库重量',
+            'CK_weight' => '其他出库重量',
             'cost_price' => '原始采购成本',
             'purchase_price' => '每卡采购价格',
             'sale_price' => '每卡销售价格',
