@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:140%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:120%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '石重',
                                 'attribute' => 'carat',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '颜色',
@@ -163,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     },
                                 ],
-                                'headerOptions' => ['class' => 'col-md-3'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ]
                         ]
                     ]); ?>

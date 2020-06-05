@@ -3,8 +3,10 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseBill;
 use common\enums\AuditStatusEnum;
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -21,6 +23,8 @@ class StoneBillMsController extends StoneBillController
 {
     use Curd;
     public $modelClass = WarehouseStoneBillMsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_MS;
+
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -64,6 +68,26 @@ class StoneBillMsController extends StoneBillController
         ]);
 
 
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $bill_id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms/index']));
+        $model = $this->findModel($bill_id);
+        $model = $model ?? new WarehouseStoneBill();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
     }
 
     /**
