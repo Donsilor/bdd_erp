@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -169,6 +170,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
+                            'label' => '审核状态',
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                        ],
+                        [
                             'label' => '审核时间',
                             'attribute'=>'audit_time',
                             'filter' => DateRangePicker::widget([    // 日期组件
@@ -196,13 +211,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {audit} {status} {delete}',
+                            'template' => '{edit} {goods} {apply} {audit} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                    if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
+                                },
+                                'goods' => function($url, $model, $key){
+                                    return Html::a('明细', ['stone-bill-ms-detail/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
+                                'apply' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);
                                     }
                                 },
@@ -213,11 +239,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);
-                                    }
-                                },
-                                'status' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PASS ])) {
-                                        return Html::status($model->status);
                                     }
                                 },
                                 'delete' => function($url, $model, $key){

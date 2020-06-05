@@ -81,6 +81,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute'=>'receipt.supplier_id',
                                 'value' => 'receipt.supplier.supplier_name',
                                 'format' => 'raw',
@@ -203,19 +216,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'goods_status',
-                                'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute'=>'goods_remark',

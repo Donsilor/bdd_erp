@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehouseBill;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -60,6 +63,26 @@ class StoneBillMsController extends StoneBillController
             'searchModel' => $searchModel,
         ]);
 
+
+    }
+
+    /**
+     * @return mixed
+     * 提交审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseStoneBill();
+        if($model->bill_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->bill_status = BillStatusEnum::PENDING;
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
