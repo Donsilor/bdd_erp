@@ -90,14 +90,6 @@ return [
                             'title' => '石包列表',
                             'route' => 'stone/index',
                         ],
-                    ],
-
-            ],
-            [
-                    'title' => '石包单据',
-                    'route' => 'indexStoneBill',
-                    'icon' => 'fa fa-superpowers',
-                    'child' => [
                         [
                             'title' => '买石单',
                             'route' => 'stone-bill-ms/index',
@@ -109,10 +101,6 @@ return [
                         [
                             'title' => '退石单',
                             'route' => 'stone-bill-ts/index',
-                        ],
-                        [
-                            'title' => '还石单',
-                            'route' => 'stone-bill-hs/index',
                         ],
                     ],
 
