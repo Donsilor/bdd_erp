@@ -2,8 +2,11 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillDetail;
+use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -26,6 +29,30 @@ use common\helpers\ArrayHelper;
  */
 class WarehouseStoneBillService extends Service
 {
+
+    /**
+     * 石包单据明细 tab
+     * @param int $bill_id 单据ID
+     * @param $returnUrl URL
+     * @return array
+     */
+    public function menuTabList($bill_id, $bill_type, $returnUrl = null, $tag = null)
+    {
+        $tabList = [];
+        switch ($bill_type){
+
+            case StoneBillTypeEnum::STONE_MS:
+                {
+                    $tabList = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-detail/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    ];
+                    break;
+                }
+        }
+        return $tabList;
+    }
 
     /**
      * 创建买石单

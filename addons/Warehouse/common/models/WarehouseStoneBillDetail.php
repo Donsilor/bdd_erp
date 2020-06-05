@@ -47,7 +47,7 @@ class WarehouseStoneBillDetail extends BaseModel
         return [
             [['bill_id', 'bill_type', 'shibao'], 'required'],
             [['bill_id', 'source_detail_id', 'stone_num', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['carat', 'stone_weight', 'purchase_price', 'sale_price'], 'number'],
+            [['stone_weight', 'purchase_price', 'sale_price'], 'number'],
             [['bill_type'], 'string', 'max' => 10],
             [['shibao'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
