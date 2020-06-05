@@ -100,19 +100,19 @@ return [
                     'child' => [
                         [
                             'title' => '买石单',
-                            'route' => 'bill-ms/index',
+                            'route' => 'stone-bill-ms/index',
                         ],
                         [
                             'title' => '送石单',
-                            'route' => 'bill-ss/index',
+                            'route' => 'stone-bill-ss/index',
                         ],
                         [
                             'title' => '退石单',
-                            'route' => 'bill-ts/index',
+                            'route' => 'stone-bill-ts/index',
                         ],
                         [
                             'title' => '还石单',
-                            'route' => 'bill-hs/index',
+                            'route' => 'stone-bill-hs/index',
                         ],
                     ],
 
