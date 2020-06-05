@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\services;
 
+use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -48,12 +50,12 @@ class PurchaseStoneReceiptService extends Service
 
 
     /**
-     * 同步采购收货单生成L单
+     * 同步石料采购收货单生成买石单
      * @param object $form
      * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncReceiptToBillInfoL($form, $detail_ids = null)
+    public function syncReceiptToStoneBillMs($form, $detail_ids = null)
     {
         if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
@@ -71,93 +73,52 @@ class PurchaseStoneReceiptService extends Service
             throw new \Exception('采购收货单没有待入库的货品');
         }
         $goods = $ids = [];
-        $total_cost= $market_price= $sale_price = 0;
+        $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
             $ids[] = $model->id;
             $goods[] = [
-                'goods_name' =>$model->goods_name,
-                'style_sn' => $model->style_sn,
-                'product_type_id'=>$model->product_type_id,
-                'style_cate_id'=>$model->style_cate_id,
-                'goods_status'=>GoodsStatusEnum::RECEIVING,
-                'supplier_id'=>$form->supplier_id,
-                'put_in_type'=>$form->put_in_type,
-                'company_id'=> 1,//暂时为1
-                'warehouse_id' => $form->to_warehouse_id?:0,
-                'gold_weight' => $model->gold_weight?:0,
-                'gold_loss' => $model->gold_loss?:0,
-                'gross_weight' => (String) $model->gross_weight,
-                'finger' => (String) $model->finger?:'0',
-                'produce_sn' => $model->produce_sn,
-                'cert_id' => $model->cert_id,
-                'goods_num' => $model->goods_num,
-                'material' => (String) $model->material,
-                'material_type' => '',
-                'material_color' => '',
-                'diamond_carat' => $model->main_stone_weight,
-                'diamond_clarity' => (String) $model->main_stone_clarity,
-                'jintuo_type' => $model->jintuo_type,
-                'market_price' => $model->market_price,
-                'xiangkou' => $model->xiangkou?:0,
-                'parts_gold_weight' => $model->parts_weight,
-                'parts_num' => 1,
-                'main_stone_type' => $model->main_stone,
-                'main_stone_num' => $model->main_stone_num,
-                'second_stone_type1' => (String) $model->second_stone1,
-                'second_stone_num1' => $model->second_stone_num1,
-                'second_stone_price1' => $model->second_stone_price1,
-                'second_stone_weight1' => $model->second_stone_weight1,
-                'second_stone_type2' => (String) $model->second_stone2,
-                'second_stone_num2' => $model->second_stone_num2,
-                'second_stone_weight2' => $model->second_stone_weight2,
-                'second_stone_price2' => $model->second_stone_price2
-            ];
-            $bill_goods[] = [
-                'goods_name' => $model->goods_name,
-                'style_sn' => $model->style_sn,
-                'goods_num' => $model->goods_num,
-                'put_in_type' => $model->put_in_type,
-                'material' => $model->material,
-                'gold_weight' => $model->gold_weight,
-                'gold_loss' => $model->gold_loss,
-                'diamond_carat' =>$model->main_stone_weight,
-                'diamond_color' =>$model->main_stone_color,
-                'diamond_clarity' => $model->main_stone_clarity,
-                'diamond_cert_id' => $model->cert_id,
+                'shibao' => $model->goods_name,
+                //'cert_id' => $model->cert_id,
+                'carat' => $model->goods_weight,
+                'color' => $model->goods_color,
+                'clarity' => $model->goods_clarity,
+                //'cut' => $model->cut,
+                //'polish' => $model->polish,
+                //'fluorescence' =>$model->fluorescence,
+                //'symmetry' =>$model->symmetry,
+                'stone_num' => $model->goods_num,
                 'source_detail_id' => $model->id,
-                'cost_price' => $model->cost_price,
-                'sale_price' => $model->sale_price,
-                'market_price' => $model->market_price,
-                'markup_rate' => $model->markup_rate,
-                'status' => 1,
+                'purchase_price' => $model->cost_price,
+                'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
+                //'sale_price' => $model->sale_price,
+                'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
-            $total_cost = bcadd($total_cost, $model->cost_price, 2);
-            $market_price = bcadd($market_price, $model->market_price, 2);
-            $sale_price = bcadd($sale_price, $model->sale_price, 2);
+
+            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
         //批量更新采购收货单货品状态
-        $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type],['id'=>$ids]);
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
         $bill = [
-            'bill_type' =>  BillTypeEnum::BILL_TYPE_L,
+            'bill_type' =>  StoneBillTypeEnum::STONE_MS,
             'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
-            'order_type' => OrderTypeEnum::ORDER_L,
+            'adjust_type' => AdjustTypeEnum::ADD,
             'goods_num' => count($goods),
-            'total_cost' => $total_cost,
-            'total_sale' => $sale_price,
-            'total_market' => $market_price,
-            'to_warehouse_id' => $form->to_warehouse_id,
-            'to_company_id' => 0,
-            'from_company_id' => 0,
-            'from_warehouse_id' => 0,
+            'goods_weight' => $total_weight,
+            'goods_total' => $form->total_cost,
+            'purchase_price' => $form->total_cost,
             'send_goods_sn' => $form->receipt_no,
+            'remark' => $form->remark,
+            'status' => StatusEnum::ENABLED,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
         ];
-        Yii::$app->warehouseService->billL->createBillL($goods, $bill, $bill_goods);
+        Yii::$app->warehouseService->stoneBill->createBillMs($bill, $goods);
     }
 
     /**

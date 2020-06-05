@@ -2,12 +2,15 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\Supplier;
+use common\models\backend\Member;
 use Yii;
 
 /**
  * This is the model class for table "warehouse_stone_bill".
  *
  * @property int $id ID
+ * @property string $bill_no 单据编号
  * @property string $bill_type 单据类型
  * @property int $bill_status 单据状态
  * @property int $supplier_id 供应商
@@ -55,7 +58,7 @@ class WarehouseStoneBill extends BaseModel
             [['bill_type'], 'string', 'max' => 3],
             [['send_goods_sn'], 'string', 'max' => 100],
             [['audit_remark', 'fin_remark', 'remark'], 'string', 'max' => 255],
-            [['fin_check'], 'string', 'max' => 30],
+            [['bill_no', 'fin_check'], 'string', 'max' => 30],
         ];
     }
 
@@ -66,6 +69,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             'id' => 'ID',
+            'bill_no' => '单据编号',
             'bill_type' => '单据类型',
             'bill_status' => '单据状态',
             'supplier_id' => '供应商',
@@ -91,5 +95,30 @@ class WarehouseStoneBill extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
 }

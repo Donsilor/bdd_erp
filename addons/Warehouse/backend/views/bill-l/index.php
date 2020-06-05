@@ -207,7 +207,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {audit} {goods} {ajax-apply} {delete}',
+                            'template' => '{edit} {audit} {goods} {apply} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -217,7 +217,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         ]);
                                     }
                                 },
-                                'ajax-apply' => function($url, $model, $key){
+                                'apply' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                             'class'=>'btn btn-success btn-sm',

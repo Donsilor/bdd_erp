@@ -64,8 +64,8 @@ class ReceiptGoodsController extends BaseController
                 ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['=','receipt_id',$receipt_id]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        $dataProvider->query->andWhere(['=', 'receipt_id', $receipt_id]);
+        $dataProvider->query->andWhere(['>', PurchaseReceiptGoods::tableName().'.status', -1]);
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -101,6 +101,7 @@ class ReceiptGoodsController extends BaseController
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
         $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['=', PurchaseReceipt::tableName().'.receipt_status', BillStatusEnum::CONFIRM]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
             $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.supplier_id', $supplier_id]);
