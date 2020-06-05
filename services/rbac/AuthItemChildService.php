@@ -94,6 +94,7 @@ class AuthItemChildService extends Service
         // 重组路由
         $allAuth = [];
         foreach ($allAuthItem as $key => $item) {
+            $menu = [];
             if (isset($allMenu[$key])) {
                 $menu = ArrayHelper::regroupMapToArr($allMenu[$key]);
                 $menu = ArrayHelper::getColumn(ArrayHelper::getRowsByItemsMerge($menu, 'child'), 'route');

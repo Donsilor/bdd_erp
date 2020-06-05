@@ -102,6 +102,10 @@ return [
 
     'authItem' => [
         [
+            'title' => '所有权限',
+            'name' => '*',
+        ],
+        [
             'title' => '款式管理',
             'name' => 'style',
             'child' => [
