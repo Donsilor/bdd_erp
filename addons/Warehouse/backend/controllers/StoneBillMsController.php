@@ -34,7 +34,8 @@ class StoneBillMsController extends StoneBillController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
 
