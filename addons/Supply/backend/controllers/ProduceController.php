@@ -47,37 +47,34 @@ class ProduceController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['follower_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'purchaseGoods' => ['goods_name'],
-                'follower' => ['username'],
-                'inlay' => ['attr_value','attr_value_id']
+                
             ]
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['factory_distribute_time','factory_order_time','factory_delivery_time']);
 
-        $factory_distribute_time = $searchModel->factory_distribute_time;
-        if (!empty($factory_distribute_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_distribute_time', strtotime(explode('/', $factory_distribute_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_distribute_time', (strtotime(explode('/', $factory_distribute_time)[1]) + 86400)] );//结束时间
+        $factory_distribute_time = $searchModel->factory_distribute_time ?? '';
+        if (count($factory_distribute_times = explode('/', $factory_distribute_time)) ==2) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_distribute_time', strtotime($factory_distribute_times[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_distribute_time', (strtotime($factory_distribute_times[1]) + 86400)] );//结束时间
         }
 
-        $factory_order_time = $searchModel->factory_order_time;
-        if (!empty($factory_order_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_order_time', strtotime(explode('/', $factory_order_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_order_time', (strtotime(explode('/', $factory_order_time)[1]) + 86400)] );//结束时间
+        $factory_order_time = $searchModel->factory_order_time ?? '';
+        if (count($factory_order_times = explode('/', $searchModel->factory_order_time)) ==2 ) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_order_time', strtotime($factory_order_times[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_order_time', (strtotime($factory_order_times[1]) + 86400)] );//结束时间
         }
 
-
-        $factory_delivery_time = $searchModel->factory_delivery_time;
-        if (!empty($factory_delivery_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_delivery_time', strtotime(explode('/', $factory_delivery_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_delivery_time', (strtotime(explode('/', $factory_delivery_time)[1]) + 86400)] );//结束时间
+        $factory_delivery_time = $searchModel->factory_delivery_time ?? '';
+        if (count($factory_delivery_times = explode('/', $factory_delivery_time)) ==2) {
+            $dataProvider->query->andFilterWhere(['>=',Produce::tableName().'.factory_delivery_time', strtotime($factory_delivery_times[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Produce::tableName().'.factory_delivery_time', (strtotime($factory_delivery_times[1]) + 86400)] );//结束时间
         }
 
         return $this->render('index', [

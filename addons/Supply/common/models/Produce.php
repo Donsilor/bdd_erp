@@ -30,9 +30,11 @@ use common\models\backend\Member;
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $is_inlay 是否镶嵌
+ * @property int $inlay_type 镶嵌方式
  * @property int $bc_status 布产状态 1初始化 2待确认 3待生产 4生产中 5待出厂 6部分出厂 7已出厂
  * @property int $prc_status 生产状态
  * @property int $follower_id 跟单人ID
+ * @property int $follower_name 跟单人
  * @property int $created_at
  * @property int $updated_at
  * @property int $supplier_id 供应商ID
@@ -61,6 +63,8 @@ class Produce extends BaseModel
             [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
             [['goods_name'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
+            [['follower_name'], 'string', 'max' => 30],
+            [['inlay_type'], 'string', 'max' => 10],
         ];
     }
 
@@ -88,9 +92,11 @@ class Produce extends BaseModel
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'is_inlay' => '是否镶嵌',
+            'inlay_type' => '镶嵌方式',
             'bc_status' => '布产状态',
             'prc_status' => '生产状态',
-            'follower_id' => '跟单人',
+            'follower_id' => '跟单人id',
+            'follower_name' => '跟单人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'supplier_id' => '供应商',

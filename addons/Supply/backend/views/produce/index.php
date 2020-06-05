@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 
 use addons\Supply\common\enums\BuChanEnum;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -50,7 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>function($model) {
                         return Html::a($model->produce_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                            'class' => 'form-control',
+                            'style' => 'width:150px;',
+                    ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'130'],
             ],
@@ -68,15 +72,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                     'attribute' => 'from_order_sn',
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'from_order_sn', [
+                            'class' => 'form-control',
+                            'style' => 'width:150px;',
+                    ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
             [
-                'attribute' => 'style_sn',
-                'value' => "style_sn",
-                'filter' => true,
-                'format' => 'raw',
+                    'attribute' => 'style_sn',
+                    'value' => "style_sn",
+                    'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'class' => 'form-control',
+                                'style' => 'width:110px;',
+                    ]),
+                    'format' => 'raw',
 
             ],
             [
@@ -158,20 +168,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'100'],
             ],
             [
-                'label' => '镶嵌方式',
-                'value' => function($model){
-                    if($model->inlay){
-                        return $model->inlay->attr_value;
-                    }else{
-                        return '';
-                    }
-
+                'attribute' => 'inlay_type',
+                'value' => function($model){                    
+                    return Yii::$app->attr->valueName($model->inlay_type);                    
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'inlay.attr_value_id',Yii::$app->styleService->attribute->getValuesByAttrId(\addons\Style\common\enums\AttrIdEnum::INLAY_METHOD), [
+                'filter' => Html::activeDropDownList($searchModel, 'inlay_type',Yii::$app->attr->valueMap(AttrIdEnum::INLAY_METHOD), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style' => 'width:100px;',
-                ]),
+                    'style' => 'width:130px;',
+                ])
 
             ],
             [
@@ -243,8 +248,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'autoclose' => true,
                         'todayBtn' => 'linked',
                         'clearBtn' => true,
-
-
                     ],
 
                 ]),
@@ -254,32 +257,31 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'supplier_id',
-                'value' =>"supplier.supplier_name",
+                'value' => function($model){
+                      return $model->supplier->supplier_name ?? '';
+                },
                 'filter'=>\kartik\select2\Select2::widget([
                     'name'=>'SearchModel[supplier_id]',
                     'value'=>$searchModel->supplier_id,
                     'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                     'options' => ['placeholder' =>"请选择",'class' => 'col-md-1','style' => 'width:150px;',],
                     'pluginOptions' => [
                         'allowClear' => true,
                     ],
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' =>'col-md-2'],
+                'headerOptions' => ['class' =>'col-md-1'],
             ],
             [
-                'label' => '跟单人',
-                'filter' => Html::activeTextInput($searchModel, 'follower.username', [
+                'attribute' => 'follower_name',
+                'value' => 'follower_name',
+                'filter' => Html::activeTextInput($searchModel, 'follower_name', [
                     'class' => 'form-control',
                     'style' => 'width:80px;',
-                ]),
-                'value' => function ($model) {
-                    return $model->follower ? $model->follower->username : null;
-                },
+                ]),                
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'80'],
             ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
