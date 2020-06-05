@@ -100,16 +100,14 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'total_num',
                     'value' => "total_num",
-                    'filter' => true,
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
             [
                     'attribute' => 'total_cost',
-                    'value' => function ($model){
-                        return $model->total_cost;
-                    },
-                    'filter' => true,
+                    'value' => 'total_cost',
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
@@ -253,7 +251,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
+                'template' => '{goods} {edit} {audit} {apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
@@ -274,10 +272,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
-                    'ajax-apply' => function($url, $model, $key){
+                    'apply' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
