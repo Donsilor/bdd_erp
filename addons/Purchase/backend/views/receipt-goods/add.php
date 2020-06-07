@@ -600,6 +600,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         ?>
                         <?= unclead\multipleinput\MultipleInput::widget([
+                            'max' => 49,
                             'name' => "receipt_goods_list",
                             'addButtonOptions'=>['label'=>'','class'=>''],
                             'value' => $receipt_goods,

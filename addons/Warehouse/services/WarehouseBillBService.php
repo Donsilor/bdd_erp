@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 
+use common\helpers\ArrayHelper;
 use common\helpers\Url;
 use Yii;
 use yii\db\Exception;
@@ -87,10 +88,13 @@ class WarehouseBillBService extends WarehouseBillService
         if(empty($billGoods) && $form->audit_status == AuditStatusEnum::PASS){
             throw new \Exception("单据明细不能为空");
         }
-        $goods_ids = array_column($billGoods, 'goods_id');
+        $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
         $condition = ['goods_status' => GoodsStatusEnum::IN_RETURN_FACTORY, 'goods_id' => $goods_ids];
         $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_RETURN_FACTORY : GoodsStatusEnum::IN_RETURN_FACTORY;
-        WarehouseGoods::updateAll(['goods_status' => $status], $condition);
+        $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
+        if(false === $res){
+            throw new \Exception("更新货品状态失败");
+        }
     }
 
     /**

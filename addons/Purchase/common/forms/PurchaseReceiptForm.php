@@ -15,6 +15,7 @@ class PurchaseReceiptForm extends PurchaseReceipt
 {
     public $ids;
     public $produce_sns;
+    public $goods;
     /**
      * {@inheritdoc}
      */
