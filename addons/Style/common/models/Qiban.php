@@ -69,9 +69,6 @@ class Qiban extends BaseModel
     public function parseStyleImages()
     {
         $style_image = $this->style_image;
-        if(!empty($style_image[0]) && is_array($style_image)){
-            $this->style_image = $style_image[0];
-        }
         if(is_array($style_image)){
             $this->style_image = implode(',',$style_image);
         }
@@ -125,6 +122,12 @@ class Qiban extends BaseModel
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
         }
+
+        $style_image = $this->style_image;
+        if(is_array($style_image)){
+            $this->style_image = implode(',',$style_image);
+        }
+
         return parent::beforeSave($insert);
     }
 
