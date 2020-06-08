@@ -18,11 +18,11 @@ use common\helpers\StringHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillMsController extends StoneBillController
+class StoneBillSsController extends StoneBillController
 {
     use Curd;
     public $modelClass = WarehouseStoneBillMsForm::class;
-    public $billType = StoneBillTypeEnum::STONE_MS;
+    public $billType = StoneBillTypeEnum::STONE_SS;
 
     /**
      * Lists all StyleChannel models.
@@ -53,8 +53,7 @@ class StoneBillMsController extends StoneBillController
             $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBill::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseStoneBill::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
-
-        $dataProvider->query->andWhere(['>', WarehouseStoneBill::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBill::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=', WarehouseStoneBill::tableName().'.bill_type', $this->billType]);
 
         //导出
@@ -66,8 +65,6 @@ class StoneBillMsController extends StoneBillController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-
-
     }
 
     /**

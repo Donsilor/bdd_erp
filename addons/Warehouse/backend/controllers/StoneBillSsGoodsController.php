@@ -16,11 +16,11 @@ use common\helpers\ExcelHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillMsGoodsController extends StoneBillGoodsController
+class StoneBillSsGoodsController extends StoneBillGoodsController
 {
     use Curd;
     public $modelClass = WarehouseStoneBillMsGoodsForm::class;
-    public $billType = StoneBillTypeEnum::STONE_MS;
+    public $billType = StoneBillTypeEnum::STONE_SS;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -29,7 +29,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
     {
 
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ss-goods/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -68,6 +68,8 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
             'tab' => $tab,
             'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
+
+
     }
 
     public function getExport($dataProvider)

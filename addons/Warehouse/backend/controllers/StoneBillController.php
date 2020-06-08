@@ -17,13 +17,14 @@ class StoneBillController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseStoneBill::class;
+    public $billType = null;
+
     /**
      * Lists all StyleChannel models.
      * @return mixed
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -33,7 +34,8 @@ class StoneBillController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
 
@@ -45,8 +47,8 @@ class StoneBillController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBill::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseStoneBill::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
-
         $dataProvider->query->andWhere(['>',WarehouseStoneBill::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=', WarehouseStoneBill::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -57,8 +59,6 @@ class StoneBillController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-
-
     }
 
     public function getExport($dataProvider)

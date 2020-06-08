@@ -87,22 +87,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                 <?php
-                if($model->defective_status == BillStatusEnum::SAVE){
-                    echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
-                        'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                    ]);
-                }
+                    if($model->defective_status == BillStatusEnum::SAVE){
+                        echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                            'class'=>'btn btn-success btn-ms',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
                 ?>
-                    <?php
-                    if($model->defective_status != BillStatusEnum::PENDING){
+                <?php
+                    if($model->defective_status == BillStatusEnum::PENDING){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
                     }
-                    ?>
+                ?>
                 </div>
             </div>
         </div>
