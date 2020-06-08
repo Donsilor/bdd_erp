@@ -124,7 +124,11 @@ class PurchaseApplyController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                }
             }catch (\Exception $e) {
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

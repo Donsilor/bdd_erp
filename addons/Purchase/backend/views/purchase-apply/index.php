@@ -98,9 +98,11 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'remark',
                     'value' => "remark",
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'apply_sn', [
+                            'class' => 'form-control',
+                            'style'=> 'width:200px;'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute'=>'created_at',
@@ -206,7 +208,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{goods} {edit} {audit} {apply} {follower} {delete}',
+                'template' => '{goods} {edit} {audit} {apply} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->apply_status == ApplyStatusEnum::SAVE){
