@@ -86,6 +86,18 @@ return [
 
             ],
             [
+                'title' => '金料管理',
+                'route' => 'indexGold',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '金料列表',
+                        'route' => 'gold/index',
+                    ],
+                ],
+
+            ],
+            [
                     'title' => '石包管理',
                     'route' => 'indexStone',
                     'icon' => 'fa fa-superpowers',
