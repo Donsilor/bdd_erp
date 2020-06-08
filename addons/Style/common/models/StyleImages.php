@@ -39,7 +39,7 @@ class StyleImages extends BaseModel
             [['style_id','image','type','position'], 'required'],
             [[ 'style_id','type','is_default','position', 'creator_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['image'], 'string', 'max' => 100],
-            [['style_id','type','position'],'unique','targetAttribute' => ['type', 'style_id','position'],'comboNotUnique'=>'已经存在']
+//            [['style_id','type','position'],'unique','targetAttribute' => ['type', 'style_id','position'],'comboNotUnique'=>'已经存在']
 
         ];
     }

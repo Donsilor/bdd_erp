@@ -101,7 +101,11 @@ class StyleController extends BaseController
                     Yii::$app->styleService->style->createStyleSn($model);                    
                 }
                 $trans->commit();
-                $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                if($isNewRecord) {
+                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                }
             }catch (\Exception $e) {
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

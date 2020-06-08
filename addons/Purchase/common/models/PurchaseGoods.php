@@ -69,7 +69,7 @@ class PurchaseGoods extends BaseModel
             [['goods_name','purchase_id', 'jintuo_type','cost_price'], 'required'],
 
             [['purchase_id', 'style_id', 'qiban_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goods_bag_num','goods_bag_weight','goods_bag_unit','goods_weight_unit','cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
+            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],

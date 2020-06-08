@@ -22,6 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '添加', [
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo "&nbsp;";
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
@@ -76,26 +81,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '石包总数',
+                                'label' => '总数量(粒)',
                                 'attribute' => 'stone_num',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '石包总重量',
+                                'label' => '总重量(ct)',
                                 'attribute' => 'stone_weight',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '每卡采购价格',
-                                'attribute' => 'cost_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '每卡销售价格',
-                                'attribute' => 'sale_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
