@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\forms\WarehouseStoneBillSsForm;
+use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -21,7 +24,7 @@ use common\helpers\StringHelper;
 class StoneBillSsController extends StoneBillController
 {
     use Curd;
-    public $modelClass = WarehouseStoneBillMsForm::class;
+    public $modelClass = WarehouseStoneBillSsForm::class;
     public $billType = StoneBillTypeEnum::STONE_SS;
 
     /**
@@ -64,6 +67,46 @@ class StoneBillSsController extends StoneBillController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseStoneBill();
+
+        if($model->isNewRecord){
+            $model->bill_type = $this->billType;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            if($model->isNewRecord){
+                $model->bill_no = SnHelper::createBillSn($this->billType);
+                $model->bill_status = BillStatusEnum::SAVE;
+            }
+            $model->created_at = strtotime($model->created_at);
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 

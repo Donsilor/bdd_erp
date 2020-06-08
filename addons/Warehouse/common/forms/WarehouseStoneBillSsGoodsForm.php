@@ -2,15 +2,15 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\models\WarehouseStoneBill;
+use Yii;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\ArrayHelper;
 
 /**
- * 石包单据 Form
+ * 石包单据明细 Form
  *
  */
-class WarehouseStoneBillMsForm extends WarehouseStoneBill
+class WarehouseStoneBillSsGoodsForm extends WarehouseStoneBillGoods
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class WarehouseStoneBillMsForm extends WarehouseStoneBill
     public function rules()
     {
          $rules = [
-             [['created_at'], 'integer'],
+
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -29,8 +29,8 @@ class WarehouseStoneBillMsForm extends WarehouseStoneBill
     public function attributeLabels()
     {
         //合并
-        return ArrayHelper::merge(parent::attributeLabels() , [
-        ]);
+        //return ArrayHelper::merge(parent::attributeLabels() , [
+        //]);
     }
 
    
