@@ -98,5 +98,22 @@ class StyleGoodsController extends BaseController
                 'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
-    }  
+    }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = \Yii::$app->request->get('id');
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['style-goods/index']));
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
 }

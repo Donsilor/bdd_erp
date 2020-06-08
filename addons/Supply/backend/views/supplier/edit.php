@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'supplier_name')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'supplier_tag')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'supplier_tag')->textInput(['maxlength' => true,'readonly'=>$model->audit_status == \common\enums\AuditStatusEnum::PASS]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'balance_type')->dropDownList(\addons\Supply\common\enums\BalanceTypeEnum::getMap()) ?>

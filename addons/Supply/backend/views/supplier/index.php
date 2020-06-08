@@ -170,8 +170,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                              },
                             'apply' => function($url, $model, $key){
-                                if($model->audit_status == AuditStatusEnum::SAVE && $model->status == \common\enums\StatusEnum::ENABLED){
-                                    return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                if($model->audit_status == AuditStatusEnum::SAVE){
+                                    return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                         'class'=>'btn btn-success btn-sm',
                                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                     ]);
@@ -187,7 +187,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                              },
                              'status' => function($url, $model, $key){
-                                    return Html::status($model['status']);
+                                if($model->audit_status == AuditStatusEnum::PASS) {
+                                     return Html::status($model['status']);
+                                 }
                               },
                                 'delete' => function ($url, $model, $key) {
                                     if($model->audit_status == AuditStatusEnum::SAVE) {
