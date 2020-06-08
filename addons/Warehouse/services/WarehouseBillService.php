@@ -104,6 +104,25 @@ class WarehouseBillService extends Service
                     ];
                     break;
                 }
+            case BillTypeEnum::BILL_TYPE_T:
+                {
+                    if($tag==3){
+                        $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['bill-t/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['bill-t-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'结算商信息','url'=>Url::to(['bill-pay/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                            5=>['name'=>'日志列表','url'=>Url::to(['bill-log/index','bill_id'=>$bill_id,'tab'=>5,'returnUrl'=>$returnUrl])],
+                        ];
+                    }else{
+                        $tab = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['bill-t/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['bill-t-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'结算商信息','url'=>Url::to(['bill-pay/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])],
+                            5=>['name'=>'日志列表','url'=>Url::to(['bill-log/index','bill_id'=>$bill_id,'tab'=>5,'returnUrl'=>$returnUrl])],
+                        ];
+                    }
+                    break;
+                }
             
         }
         return $tab;
