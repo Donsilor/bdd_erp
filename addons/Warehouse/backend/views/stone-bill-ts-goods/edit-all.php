@@ -1,49 +1,50 @@
 <?php
 
+
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
-use yii\web\View;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel yii\data\ActiveDataProvider */
+/* @var $tabList yii\data\ActiveDataProvider */
+/* @var $tab yii\data\ActiveDataProvider */
+/* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill_ms_goods', '送石单明细');
+$this->title = Yii::t('stone_bill_ss_goods', '退石单详情');
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div style="float:right;margin-top:-40px;margin-right: 20px;">
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '添加', [
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModal',
             ]);
-            echo "&nbsp;";
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo '&nbsp;';
+            echo Html::a('返回列表', ['stone-bill-ts-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
-    <div class="tab-content" style="padding-right: 10px;">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="tab-content">
+        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 </div>
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:120%;white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -177,5 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
+        <!-- box end -->
     </div>
+    <!-- tab-content end -->
 </div>

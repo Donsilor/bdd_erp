@@ -3,16 +3,12 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Purchase\common\models\PurchaseDefective;
-use addons\Purchase\common\models\PurchaseDefectiveGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Warehouse\common\forms\WarehouseStoneBillMsGoodsForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillTsGoodsForm;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
@@ -20,11 +16,11 @@ use common\helpers\ExcelHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillMsGoodsController extends StoneBillGoodsController
+class StoneBillTsGoodsController extends StoneBillGoodsController
 {
     use Curd;
-    public $modelClass = WarehouseStoneBillMsGoodsForm::class;
-    public $billType = StoneBillTypeEnum::STONE_MS;
+    public $modelClass = WarehouseStoneBillTsGoodsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_TS;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -33,7 +29,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
     {
 
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ss-goods/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -72,6 +68,8 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
             'tab' => $tab,
             'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
+
+
     }
 
     /**
@@ -83,6 +81,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
+        $bill_id = \Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBillGoods();
         // ajax 校验
@@ -90,9 +89,10 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
+                if($model->isNewRecord) {
+                    $model->bill_id = $bill_id;
                 }
+                \Yii::$app->warehouseService->stoneBill->createBillGoods($model);
                 $trans->commit();
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){

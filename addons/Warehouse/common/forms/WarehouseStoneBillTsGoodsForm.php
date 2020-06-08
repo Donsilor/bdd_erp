@@ -10,7 +10,7 @@ use common\helpers\ArrayHelper;
  * 石包单据明细 Form
  *
  */
-class WarehouseStoneBillSsGoodsForm extends WarehouseStoneBillGoods
+class WarehouseStoneBillTsGoodsForm extends WarehouseStoneBillGoods
 {
     /**
      * {@inheritdoc}
