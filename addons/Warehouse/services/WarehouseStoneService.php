@@ -34,9 +34,9 @@ class WarehouseStoneService extends Service
                 $dia = [
                     'shibao' => $detail->shibao,
                     'kucun_cnt' => $detail->stone_num,
-                    'MS_cnt' => $detail->stone_num,
+                    'ms_cnt' => $detail->stone_num,
                     'kucun_zhong' => $detail->stone_weight,
-                    'MS_zhong' => $detail->stone_weight,
+                    'ms_zhong' => $detail->stone_weight,
                     'cost_price' => $detail->purchase_price,
                     'sale_price' => $detail->sale_price,
                     'purchase_price' => $detail->purchase_price,
