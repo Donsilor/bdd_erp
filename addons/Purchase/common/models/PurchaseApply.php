@@ -4,6 +4,8 @@ namespace addons\Purchase\common\models;
 
 use Yii;
 use yii\base\Model;
+use common\models\backend\Member;
+use addons\Style\common\models\StyleChannel;
 
 /**
  * This is the model class for table "purchase_apply".
@@ -40,8 +42,9 @@ class PurchaseApply extends BaseModel
     public function rules()
     {
         return [
+            [['channel_id'], 'required'],
             [['total_cost'], 'number'],
-            [['total_num', 'auditor_id', 'audit_status', 'audit_time', 'status', 'apply_status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['total_num','channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'apply_status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['apply_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];
@@ -53,21 +56,55 @@ class PurchaseApply extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'apply_sn' => Yii::t('app', '申请单号'),
-            'total_cost' => Yii::t('app', '总成本'),
-            'total_num' => Yii::t('app', '总数量'),
-            'auditor_id' => Yii::t('app', '审核人'),
-            'audit_status' => Yii::t('app', '审核状态：0待审核 1通过 2不通过'),
-            'audit_time' => Yii::t('app', '审核时间'),
-            'audit_remark' => Yii::t('app', '审核备注'),
-            'status' => Yii::t('app', '状态'),
-            'apply_status' => Yii::t('app', '订单状态'),
-            'remark' => Yii::t('app', '采购备注'),
-            'follower_id' => Yii::t('app', '跟单人'),
-            'creator_id' => Yii::t('app', '创建人'),
-            'created_at' => Yii::t('app', '创建时间'),
-            'updated_at' => Yii::t('app', '更新时间'),
+            'id' => 'ID',
+            'apply_sn' => '申请单号',
+            'total_cost' => '总成本',
+            'total_num' => '总数量',
+            'channel_id' => "采购渠道",
+            'auditor_id' => '审核人',
+            'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',
+            //'status' => '状态',
+            'apply_status' => '申请状态',
+            'remark' => '采购备注',
+            'follower_id' => '跟单人',
+            'creator_id' => '创建人',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
+    }
+    
+    /**
+     * 跟单人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFollower()
+    {
+        return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }

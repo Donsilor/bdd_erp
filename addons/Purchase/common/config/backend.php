@@ -34,7 +34,7 @@ return [
                     ],
                     [
                             'title' => '采购申请单',
-                            'route' => 'apply/index',
+                            'route' => 'purchase-apply/index',
                     ],
                     [
                             'title' => '采购收货单',
