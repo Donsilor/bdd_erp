@@ -10,7 +10,7 @@ use common\helpers\ArrayHelper;
  * 石包单据 Form
  *
  */
-class WarehouseStoneBillMsForm extends WarehouseStoneBill
+class WarehouseStoneBillSsForm extends WarehouseStoneBill
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class WarehouseStoneBillMsForm extends WarehouseStoneBill
     public function rules()
     {
          $rules = [
-             [['created_at'], 'integer'],
+             [['created_at', 'supplier_id'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -30,8 +30,8 @@ class WarehouseStoneBillMsForm extends WarehouseStoneBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
+            'created_at' => '日期',
         ]);
     }
 
-   
 }

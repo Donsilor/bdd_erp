@@ -19,6 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
+                </div>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -239,7 +245,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['stone-bill-ms-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['stone-bill-ss-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
