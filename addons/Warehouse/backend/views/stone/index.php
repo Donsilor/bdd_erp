@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -51,6 +52,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'label' => '石包类型',
+                            'attribute' => 'stone_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->stone_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '库存数量',

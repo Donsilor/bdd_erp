@@ -27,6 +27,8 @@ class WarehouseStoneService extends Service
                 $stoneM = new WarehouseStone();
                 $dia = [
                     'stone_name' => $detail->stone_name,
+                    'stone_color' => $detail->color,
+                    'stone_clarity' => $detail->clarity,
                     'stock_cnt' => $detail->stone_num,
                     'ms_cnt' => $detail->stone_num,
                     'stock_weight' => $detail->stone_weight,
@@ -51,8 +53,8 @@ class WarehouseStoneService extends Service
                 if(false === $shibao->save()){
                     throw new \Exception($this->getError($shibao));
                 }
+                $this->updateStockCnt($shibao);
             }
-            $this->updateStockCnt($shibao);
         }
     }
 
@@ -61,14 +63,12 @@ class WarehouseStoneService extends Service
      * @param $stone
      */
     public function updateStockCnt($stone){
-        if($stone){
-            $stock_cnt = $stone->ms_cnt+$stone->fenbaoru_cnt-$stone->ss_cnt-$stone->fenbaochu_cnt+$stone->ts_cnt-$stone->ys_cnt-$stone->sy_cnt-$stone->th_cnt+$stone->rk_cnt-$stone->ck_cnt;
-            $stock_weight = $stone->ms_weight+$stone->fenbaoru_weight-$stone->ss_weight-$stone->fenbaochu_weight+$stone->ts_weight-$stone->ys_weight-$stone->sy_weight-$stone->th_weight+$stone->rk_weight-$stone->ck_weight;
-            $stone->stock_cnt = $stock_cnt;
-            $stone->ck_weight = $stock_weight;
-            if(false === $stone->save()){
-                throw new \Exception($this->getError($stone));
-            }
+        $stock_cnt = $stone->ms_cnt+$stone->fenbaoru_cnt-$stone->ss_cnt-$stone->fenbaochu_cnt+$stone->ts_cnt-$stone->ys_cnt-$stone->sy_cnt-$stone->th_cnt+$stone->rk_cnt-$stone->ck_cnt;
+        $stock_weight = $stone->ms_weight+$stone->fenbaoru_weight-$stone->ss_weight-$stone->fenbaochu_weight+$stone->ts_weight-$stone->ys_weight-$stone->sy_weight-$stone->th_weight+$stone->rk_weight-$stone->ck_weight;
+        $stone->stock_cnt = $stock_cnt;
+        $stone->ck_weight = $stock_weight;
+        if(false === $stone->save()){
+            throw new \Exception($this->getError($stone));
         }
     }
 }
