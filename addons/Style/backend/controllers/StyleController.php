@@ -102,9 +102,9 @@ class StyleController extends BaseController
                 }
                 $trans->commit();
                 if($isNewRecord) {
-                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
-                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                    return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
                 }
             }catch (\Exception $e) {
                 $trans->rollback();

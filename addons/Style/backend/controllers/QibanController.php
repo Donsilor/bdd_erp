@@ -109,8 +109,7 @@ class QibanController extends BaseController
                 $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
                 $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
-                $style_images = Yii::$app->styleService->style->getStyleImages($style_sn);
-                $model->style_image = join(',',$style_images);
+                $model->style_image = Yii::$app->styleService->style->getStyleImages($style_sn);
                 $model->is_inlay  = $style->is_inlay;
             }else{
                 $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):[];
@@ -137,14 +136,13 @@ class QibanController extends BaseController
                 //创建属性关系表数据
                 $model->createAttrs();
                 $trans->commit();
-                //前端提示
-//                Yii::$app->getSession()->setFlash('success','保存成功');
                 if($isNewRecord) {
-                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
-                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                    //前端提示
+                    Yii::$app->getSession()->setFlash('success','保存成功');
+                    return ResultHelper::json(200, '保存成功');
                 }
-//                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -203,13 +201,13 @@ class QibanController extends BaseController
 
                 $trans->commit();
                 if($isNewRecord) {
-                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
-                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                    //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
                 }
-                //前端提示
-//                Yii::$app->getSession()->setFlash('success','保存成功');
-//                return ResultHelper::json(200, '保存成功');
+
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
