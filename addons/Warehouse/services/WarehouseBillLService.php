@@ -41,8 +41,11 @@ class WarehouseBillLService extends Service
         $bill_id = $billM->attributes['id'];
         $goodsM = new WarehouseGoods();
         $billGoods = new WarehouseBillGoods();
+        $goods_ids = [];
         foreach ($goods as $k => &$good){
-            $good['goods_id'] = SnHelper::createGoodsId();
+            $goods_id = SnHelper::createGoodsId();
+            $goods_ids[] = $goods_id;
+            $good['goods_id'] = $goods_id;
             $goodsM->setAttributes($good);
             if(!$goodsM->validate()){
                 throw new \Exception($this->getError($goodsM));
@@ -73,6 +76,22 @@ class WarehouseBillLService extends Service
         $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建收货单据明细失败");
+        }
+
+        //更新货号
+        $ids = WarehouseGoods::find()->select(['id'])->where(['goods_id' => $goods_ids])->all();
+        $ids = ArrayHelper::getColumn($ids,'id');
+        if($ids){
+            foreach ($ids as $id) {
+                $goods = WarehouseGoods::findOne(['id'=>$id]);
+                $old_goods_id = $goods->goods_id;
+                $goods_id = \Yii::$app->warehouseService->warehouseGoods->createGoodsId($goods);
+                $billGoods = WarehouseBillGoods::findOne(['goods_id'=>$old_goods_id]);
+                $billGoods->goods_id = $goods_id;
+                if(false === $billGoods->save()){
+                    throw new \Exception($this->getError($billGoods));
+                }
+            }
         }
     }
 

@@ -83,14 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'receipt.supplier_id',
                                 'value' => 'receipt.supplier.supplier_name',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2'],
                                 'filter'=>Select2::widget([
                                     'name'=>'SearchModel[supplier_id]',
                                     'value'=>$searchModel->supplier_id,
                                     'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-2','style'=> 'width:260px;'],
+                                    'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
+                                        'width' => 260
                                     ],
                                 ]),
                             ],

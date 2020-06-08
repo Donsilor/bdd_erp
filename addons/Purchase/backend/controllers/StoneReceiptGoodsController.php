@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -53,7 +54,7 @@ class StoneReceiptGoodsController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                     
+
                 ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -89,18 +90,19 @@ class StoneReceiptGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'receipt' => ['supplier_id','receipt_no','receipt_status']
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
         $dataProvider->query->andWhere(['>',PurchaseStoneReceiptGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=','receipt.receipt_status', BillStatusEnum::CONFIRM]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
-            $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.supplier_id', $supplier_id]);
+            $dataProvider->query->andWhere(['=','receipt.supplier_id', $supplier_id]);
         }
         $receipt_no = $searchModel->receipt_no;
         if($receipt_no){
-            $dataProvider->query->andWhere(['=',PurchaseReceipt::tableName().'.receipt_no', $receipt_no]);
+            $dataProvider->query->andWhere(['=','receipt.receipt_no', $receipt_no]);
         }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

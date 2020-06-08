@@ -96,12 +96,12 @@ class ReceiptGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'receipt' => ['supplier_id','receipt_no']
+                'receipt' => ['supplier_id','receipt_no','receipt_status']
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
         $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
-        //$dataProvider->query->andWhere(['=', PurchaseReceipt::tableName().'.receipt_status', BillStatusEnum::CONFIRM]);
+        $dataProvider->query->andWhere(['=','receipt.receipt_status', BillStatusEnum::CONFIRM]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
             $dataProvider->query->andWhere(['=','receipt.supplier_id', $supplier_id]);
