@@ -2,16 +2,15 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\StoneBillTypeEnum;
-use addons\Warehouse\common\models\WarehouseBill;
-use common\enums\AuditStatusEnum;
-use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
 use addons\Warehouse\common\models\WarehouseStoneBill;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use common\enums\AuditStatusEnum;
+use common\helpers\Url;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 
@@ -120,10 +119,6 @@ class StoneBillMsController extends StoneBillController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-
-        if($model->audit_status == AuditStatusEnum::PENDING) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -144,7 +139,7 @@ class StoneBillMsController extends StoneBillController
                 $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
