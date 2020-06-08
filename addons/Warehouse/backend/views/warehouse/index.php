@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return \common\enums\StatusEnum::getValue($model->status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getLockMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
 
