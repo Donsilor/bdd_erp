@@ -3,6 +3,10 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\models\PurchaseDefectiveGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -67,6 +71,77 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
             'bill' => $bill,
             'tab' => $tab,
             'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
+        ]);
+    }
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseStoneBillGoods();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 编辑明细
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionEditAll()
+    {
+        $bill_id = Yii::$app->request->get('bill_id');
+        $tab = Yii::$app->request->get('tab',3);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+
+            ]
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillGoods::tableName().'.status',-1]);
+
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'bill' => $bill,
+            'tabList' => \Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
         ]);
     }
 

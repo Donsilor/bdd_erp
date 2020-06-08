@@ -5,6 +5,7 @@ namespace addons\Warehouse\services;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\Url;
@@ -44,29 +45,53 @@ class WarehouseStoneBillService extends Service
 
             case StoneBillTypeEnum::STONE_MS:
                 {
-                    $tabList = [
-                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-                    ];
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-bill-ms-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
                     break;
                 }
             case StoneBillTypeEnum::STONE_SS:
                 {
-                    $tabList = [
-                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ss/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ss-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-                    ];
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ss/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ss-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ss/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-bill-ss-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
                     break;
                 }
             case StoneBillTypeEnum::STONE_TS:
                 {
-                    $tabList = [
-                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ts/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ts-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-                    ];
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ts/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ts-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ts/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-bill-ts-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
                     break;
                 }
         }
@@ -137,6 +162,32 @@ class WarehouseStoneBillService extends Service
             $form->bill_status = BillStatusEnum::SAVE;
         }
         if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 添加明细
+     * @param $form
+     */
+    public function createBillGoods($form)
+    {
+        $stone = WarehouseStone::findOne(['stone_name'=>$form->stone_name]);
+        $goods = [
+            'stone_name' => $stone->stone_name,
+            'stone_type' => $stone->stone_type,
+            'stone_num' => $form->stone_num,
+            'stone_weight' => $form->stone_weight,
+            'color' => $stone->stone_color,
+            'clarity' => $stone->stone_clarity,
+            'cost_price' => $stone->cost_price,
+            'sale_price' => $stone->sale_price,
+            'status' => StatusEnum::ENABLED,
+            'created_at' => time()
+        ];
+        $billGoods = new WarehouseStoneBillGoods();
+        $billGoods->attributes = $goods;
+        if(false === $billGoods->save()) {
             throw new \Exception($this->getError($form));
         }
     }

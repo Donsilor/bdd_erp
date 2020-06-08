@@ -18,7 +18,7 @@ class WarehouseStoneBillSsGoodsForm extends WarehouseStoneBillGoods
     public function rules()
     {
          $rules = [
-
+             [['stone_name', 'stone_num', 'stone_weight'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -29,8 +29,8 @@ class WarehouseStoneBillSsGoodsForm extends WarehouseStoneBillGoods
     public function attributeLabels()
     {
         //合并
-        //return ArrayHelper::merge(parent::attributeLabels() , [
-        //]);
+        return ArrayHelper::merge(parent::attributeLabels() , [
+        ]);
     }
 
    
