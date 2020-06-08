@@ -11,6 +11,7 @@ use Yii;
  * @property int $receipt_id 采购收货单ID
  * @property string $purchase_sn 采购单编号
  * @property int $xuhao 序号
+ * @property int $purchase_detail_id 采购单商品明细ID
  * @property int $goods_status 收货单货品状态
  * @property string $goods_name 商品名称
  * @property int $goods_num 商品数量
@@ -45,7 +46,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
     {
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
-            [['id', 'receipt_id', 'xuhao', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['material_type'], 'string', 'max' => 10],
@@ -64,6 +65,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
             'receipt_id' => '采购收货单ID',
             'purchase_sn' => '采购单编号',
             'xuhao' => '序号',
+            'purchase_detail_id' => '采购单商品明细ID',
             'goods_status' => '收货单货品状态',
             'goods_name' => '货品名称',
             'goods_num' => '货品数量',

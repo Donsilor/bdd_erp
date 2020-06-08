@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
-            echo '&nbsp;&nbsp;&nbsp;';
+            echo '&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
-            echo '&nbsp;&nbsp;&nbsp;';
+            echo '&nbsp;';
         }
         if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
             echo Html::a('批量申请入库', ['warehouse'], [
@@ -553,7 +553,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

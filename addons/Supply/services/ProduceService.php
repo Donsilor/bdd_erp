@@ -21,6 +21,7 @@ use common\helpers\SnHelper;
 use common\helpers\Url;
 use yii\base\Exception;
 use addons\Purchase\common\models\PurchaseGoods;
+use addons\Style\common\enums\AttrIdEnum;
 
 
 class ProduceService extends Service
@@ -64,7 +65,6 @@ class ProduceService extends Service
             $produce = new Produce();
             $produce->produce_sn = SnHelper::createProduceSn();
         }
-        
         $produce->attributes = $goods;   
         
         if(false === $produce->save()){            
@@ -79,7 +79,16 @@ class ProduceService extends Service
             if(false === $produceAttr->save()){
                 throw new \Exception($this->getError($produceAttr));
             }
+            if($produceAttr->attr_id == AttrIdEnum::INLAY_METHOD) {
+                $produce->inlay_type = $produceAttr->attr_value_id;
+            }
         }
+        $produce->follower_name = $produce->follower->username;
+        //更新布产单属性到布产单横向字段
+        if(false === $produce->save(true)) {
+            throw new \Exception($this->getError($produce));
+        }
+        
         if($is_new === true) {
             $follower_name = $produce->follower ? $produce->follower->username:'';
             $supplier_name = $produce->supplier ? $produce->supplier->supplier_name:'';
@@ -94,7 +103,6 @@ class ProduceService extends Service
             \Yii::$app->supplyService->produce->createProduceLog($log);            
         }
         
-
         return $produce ;
     }
 

@@ -24,6 +24,7 @@ class StyleSourceService
         $model = StyleSource::find()
                     ->where(['status' => StatusEnum::ENABLED])
                     ->select(['id','name'])
+                    ->orderBy('sort asc')
                     ->asArray()
                     ->all();
 

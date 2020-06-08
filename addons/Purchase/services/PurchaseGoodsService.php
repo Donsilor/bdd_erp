@@ -24,7 +24,7 @@ class PurchaseGoodsService extends Service
      */
     public function listColmuns($id)
     {
-        $models = PurchaseGoodsAttribute::find()->select(['attr_id','input_type','GROUP_CONCAT(attr_values) as attr_values'])->where(['id'=>$id])->groupBy(['attr_id'])->asArray()->all();
+        $models = PurchaseGoodsAttribute::find()->select(['attr_id','input_type','GROUP_CONCAT(attr_value order by sort asc) as attr_values'])->where(['id'=>$id])->groupBy(['attr_id'])->asArray()->all();
         $columns = [];
         if($models) {
             foreach ($models as $model) {

@@ -23,6 +23,7 @@ class StyleChannelService
         $model = StyleChannel::find()
             ->where(['status' => StatusEnum::ENABLED])
             ->select(['id','name'])
+            ->orderBy('sort asc')
             ->asArray()
             ->all();
 

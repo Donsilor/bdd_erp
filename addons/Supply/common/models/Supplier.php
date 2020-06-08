@@ -58,7 +58,7 @@ class Supplier extends BaseModel
     {
         return [
             [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_name','supplier_tag', 'business_no'], 'required'],
+            [['supplier_name','supplier_tag'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
             [['business_no', 'tax_no'], 'string', 'max' => 50],
@@ -79,7 +79,7 @@ class Supplier extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'supplier_code' => '供应商编码',
-            'supplier_tag'=>'标签(编货号用)',
+            'supplier_tag'=>'供应商简称(编货号用)',
             'supplier_name' => '供应商名称',
             'business_no' => '营业执照号码',
             'business_address' => '营业执照地址',

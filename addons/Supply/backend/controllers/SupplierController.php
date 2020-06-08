@@ -4,6 +4,8 @@ namespace addons\Supply\backend\controllers;
 
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use addons\Supply\common\models\SupplierFollower;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehouseStoneBill;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -139,6 +141,24 @@ class SupplierController extends BaseController
     }
 
     /**
+     * @return mixed
+     * 提交审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new Supplier();
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('供应商不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+    }
+
+    /**
      * 供应商-审核
      *
      * @return mixed
@@ -159,6 +179,7 @@ class SupplierController extends BaseController
                     $model->status = StatusEnum::ENABLED;
                 }else{
                     $model->status = StatusEnum::DISABLED;
+                    $model->audit_status = AuditStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));

@@ -65,19 +65,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'xuhao',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'purchase_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xuhao',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'xuhao', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -102,6 +102,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute'=>'goods_num',
@@ -182,40 +195,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                            ],
-                            [
-                                'label' => '质检未过原因',
-                                'attribute' => 'fqc.name',
-                                'value' => "fqc.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'iqc_reason', Yii::$app->purchaseService->fqc->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'iqc_remark',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'goods_status',
-                                'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute'=>'goods_remark',

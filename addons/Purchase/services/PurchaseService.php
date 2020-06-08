@@ -176,6 +176,7 @@ class PurchaseService extends Service
             $goods[$k] = [
                 'purchase_sn' =>$form->purchase_sn,
                 'xuhao'=>$i++,
+                'purchase_detail_id' => $model->id,
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
                 'goods_num' => $model->goods_num,

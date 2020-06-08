@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -159,6 +161,10 @@ class ReceiptController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $res = PurchaseReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    if(false === $res) {
+                        throw new \Exception("更新货品状态失败");
+                    }
                 }else{
                     $model->receipt_status = BillStatusEnum::SAVE;
                 }

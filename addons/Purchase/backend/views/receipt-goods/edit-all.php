@@ -1,6 +1,7 @@
 <?php
 
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
             ]);
-            echo '&nbsp;&nbsp;&nbsp;';
+            echo '&nbsp;';
             echo Html::a('返回列表', ['receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
@@ -660,7 +661,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt){
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

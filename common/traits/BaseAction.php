@@ -163,7 +163,7 @@ trait BaseAction
      * @param number $default
      * @return array|mixed
      */
-    public function getPageSize($default = 15)
+    public function getPageSize($default = 10)
     {
         return Yii::$app->request->get('per-page', $default);
     }

@@ -2,9 +2,8 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use common\helpers\SnHelper;
+
+use common\helpers\ArrayHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -15,6 +14,9 @@ use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseDefective;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
+use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
@@ -23,6 +25,11 @@ use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\models\Produce;
+use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
+use common\helpers\SnHelper;
 use yii\db\Exception;
 
 /**
@@ -40,18 +47,19 @@ class PurchaseReceiptService extends Service
      */
     public function menuTabList($receipt_id, $purchase_type, $returnUrl = null, $tag = null)
     {
+        $tabList = [];
         switch ($purchase_type){
 
             case PurchaseTypeEnum::GOODS:
                 {
                     if($tag==3){
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             3=>['name'=>'单据明细(编辑)','url'=>Url::to(['receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             2=>['name'=>'单据明细','url'=>Url::to(['receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
@@ -62,13 +70,13 @@ class PurchaseReceiptService extends Service
             case PurchaseTypeEnum::MATERIAL_STONE:
                 {
                     if($tag==3){
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['stone-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['stone-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             2=>['name'=>'单据明细','url'=>Url::to(['stone-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
@@ -79,13 +87,13 @@ class PurchaseReceiptService extends Service
             case PurchaseTypeEnum::MATERIAL_GOLD:
                 {
                     if($tag==3){
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
-                        $tablist = [
+                        $tabList = [
                             1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
                             2=>['name'=>'单据明细','url'=>Url::to(['gold-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                             4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
@@ -94,7 +102,7 @@ class PurchaseReceiptService extends Service
                     break;
                 }
         }
-        return $tablist;
+        return $tabList;
     }
 
     /**
@@ -124,6 +132,13 @@ class PurchaseReceiptService extends Service
             }else{
                 $goods = new PurchaseReceiptGoods();
             }
+            $purchase_detail_id = $good['purchase_detail_id']??"";
+            if($purchase_detail_id){
+                $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
+                if($count >= 1){
+                    throw new \Exception("采购单已收货，不能重复收货");
+                }
+            }
             $goods->attributes = $good;
             $goods->receipt_id = $receipt_id;
             if(false === $goods->validate()) {
@@ -150,6 +165,91 @@ class PurchaseReceiptService extends Service
             $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
         }
         return $result;
+    }
+
+    /**
+     * 不产单号批量查询可出货商品
+     * @param object $form
+     */
+    public function getGoodsByProduceSn($form)
+    {
+        $produce_sns = $form->getProduceSns();
+        if(!$produce_sns){
+            throw new \Exception("布产单号不能为空");
+        }
+        $receipt_goods = [];
+        foreach ($produce_sns as $produce_sn) {
+            $produce = Produce::findOne(['produce_sn' => $produce_sn]);
+            $message="布产单".$produce_sn;
+            if (!$produce) {
+                throw new \Exception($message."单号不对");
+            }
+            if ($form->supplier_id != $produce->supplier_id) {
+                throw new \Exception($message."供应商与收货单供应商不一致");
+            }
+            $shippent_num = ProduceShipment::find()->where(['produce_id' => $produce->id])->sum('shippent_num');
+            if (!$shippent_num) {
+                throw new \Exception($message."未出货");
+            }
+            $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            $the_num = bcsub($shippent_num, $receipt_num);
+            if (!$the_num) {
+                throw new \Exception($message."没有可出货数量");
+            }
+            $produce_attr = ProduceAttribute::find()->where(['produce_id' => $produce->id])->asArray()->all();
+            $attr_arr = [];
+            foreach ($produce_attr as $attr) {
+                $attr_name = Yii::$app->styleService->attribute->getAttrNameByAttrId($attr['attr_id']);
+                $attr_arr[$attr['attr_id']]['attr_name'] = $attr_name;
+                $attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
+                $attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
+            }
+            $goodsM = new PurchaseReceiptGoods();
+            for ($i = 1; $i <= $the_num; $i++) {
+                $goods = [
+                    'receipt_id' => $form->id,
+                    'produce_sn' => $produce_sn,
+                    'purchase_sn' => $produce->from_order_sn,
+                    'goods_name' => $produce->goods_name,
+                    'goods_num' => 1,
+                    'style_sn' => $produce->qiban_sn ?: $produce->style_sn,
+                    'style_cate_id' => $produce->style_cate_id,
+                    'product_type_id' => $produce->product_type_id,
+                    'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '',
+                    'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value'] ?? '',
+                    'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
+                    'jintuo_type' => $produce->jintuo_type,
+                ];
+                $receipt_goods[] = ArrayHelper::merge($goodsM->getAttributes(),$goods);
+            }
+        }
+        return $receipt_goods??[];
+    }
+
+    /**
+     * 添加采购收货单商品明细
+     * @param PurchaseReceiptGoodsForm $form
+     */
+    public function addReceiptGoods($form)
+    {
+        if(!empty($form->goods)){
+            $value = [];
+            $key = array_keys($form->goods[0]);
+            array_push($key,'receipt_id', 'xuhao');
+            $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
+            $xuhao = $xuhaoMax->xuhao?:0;
+            foreach ($form->goods as $good) {
+                $xuhao++;
+                array_push($good, $form->id, $xuhao);
+                $value[] = array_values($good);
+            }
+            $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \yii\base\Exception("保存失败");
+            }
+            //更新采购收货单汇总：总金额和总数量
+            $this->purchaseReceiptSummary($form->id);
+        }
     }
 
 
@@ -272,6 +372,22 @@ class PurchaseReceiptService extends Service
     }
 
     /**
+     *  IQC质检合法验证
+     * @param $ids
+     */
+    public function iqcValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
+                    throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
+                }
+            }
+        }
+    }
+
+    /**
      *  IQC质检
      * @param WarehouseBillBForm $form
      */
@@ -294,16 +410,16 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     *  IQC质检合法验证
+     *  申请入库合法验证
      * @param $ids
      */
-    public function iqcValidate($form){
+    public function warehouseValidate($form){
         $ids = $form->getIds();
         if(is_array($ids)){
             foreach ($ids as $id) {
                 $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
-                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
-                    throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
+                    throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
                 }
             }
         }
@@ -377,19 +493,5 @@ class PurchaseReceiptService extends Service
         }
     }
 
-    /**
-     *  申请入库合法验证
-     * @param $ids
-     */
-    public function warehouseValidate($form){
-        $ids = $form->getIds();
-        if(is_array($ids)){
-            foreach ($ids as $id) {
-                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
-                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
-                    throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
-                }
-            }
-        }
-    }
+
 }

@@ -41,7 +41,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
         'options' => ['style'=>'white-space:nowrap;'],
-        'showFooter' => true,//显示footer行
+        'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
             [
@@ -64,9 +64,12 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value'=>function($model) {
                         return Html::a($model->purchase_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'130'],
+                    //'headerOptions' => ['width'=>'150'],
             ],
 
             [
@@ -76,7 +79,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
                             'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                            'options' => ['placeholder' =>"请选择"],
+                            'options' => ['placeholder' =>"请选择",'style'=>"width:180px"],
                             'pluginOptions' => [
                                     'allowClear' => true,                                          
                             ],
@@ -97,16 +100,14 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'total_num',
                     'value' => "total_num",
-                    'filter' => true,
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
             [
                     'attribute' => 'total_cost',
-                    'value' => function ($model){
-                        return $model->total_cost;
-                    },
-                    'filter' => true,
+                    'value' => 'total_cost',
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
@@ -250,7 +251,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {ajax-apply} {follower} {delete}',
+                'template' => '{goods} {edit} {audit} {apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
@@ -271,10 +272,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
-                    'ajax-apply' => function($url, $model, $key){
+                    'apply' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
                                 'class'=>'btn btn-success btn-sm',
