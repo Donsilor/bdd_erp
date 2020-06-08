@@ -109,7 +109,8 @@ class QibanController extends BaseController
                 $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
                 $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
-                $model->style_image = Yii::$app->styleService->style->getStyleImages($style_sn);
+                $style_images = Yii::$app->styleService->style->getStyleImages($style_sn);
+                $model->style_image = join(',',$style_images);
                 $model->is_inlay  = $style->is_inlay;
             }else{
                 $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):[];
@@ -124,8 +125,8 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
             $model->audit_status = AuditStatusEnum::SAVE;
-
-            if($model->isNewRecord) {
+            $isNewRecord = $model->isNewRecord;
+            if($isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }            
             try{
@@ -137,8 +138,13 @@ class QibanController extends BaseController
                 $model->createAttrs();
                 $trans->commit();
                 //前端提示
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
+//                Yii::$app->getSession()->setFlash('success','保存成功');
+                if($isNewRecord) {
+                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                }
+//                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -183,8 +189,8 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
             $model->audit_status = AuditStatusEnum::SAVE;
-
-            if($model->isNewRecord) {
+            $isNewRecord = $model->isNewRecord;
+            if($isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }
             try{
@@ -196,9 +202,14 @@ class QibanController extends BaseController
                 $model->createAttrs();
 
                 $trans->commit();
+                if($isNewRecord) {
+                    $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                }
                 //前端提示
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
+//                Yii::$app->getSession()->setFlash('success','保存成功');
+//                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
