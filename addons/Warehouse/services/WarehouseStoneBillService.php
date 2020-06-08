@@ -100,24 +100,23 @@ class WarehouseStoneBillService extends Service
         }
         if($form->audit_status == AuditStatusEnum::PASS){
             $form->bill_status = BillStatusEnum::CONFIRM;
+
+            $billGoods = WarehouseStoneBillGoods::find()->select(['stone_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+            if(empty($billGoods)){
+                throw new \Exception("单据明细不能为空");
+            }
+            //石包入库
+            \Yii::$app->warehouseService->stone->editStone($form);
+            if($form->audit_status == AuditStatusEnum::PASS){
+                //同步石料采购收货单货品状态
+                $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
+                $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
+                if(false === $res) {
+                    throw new \Exception("同步石料采购收货单货品状态失败");
+                }
+            }
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
-        }
-        $billGoods = WarehouseStoneBillGoods::find()->select(['shibao', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
-        if(empty($billGoods)){
-            throw new \Exception("单据明细不能为空");
-        }
-
-        //石包入库
-        \Yii::$app->warehouseService->stone->editStone($form);
-
-        if($form->audit_status == AuditStatusEnum::PASS){
-            //同步石料采购收货单货品状态
-            $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-            $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
-            if(false === $res) {
-                throw new \Exception("同步石料采购收货单货品状态失败");
-            }
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
