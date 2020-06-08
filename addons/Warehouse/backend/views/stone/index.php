@@ -83,6 +83,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'label' => '每卡采购价格',
+                            'attribute'=>'cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
+                        [
+                            'label' => '每卡销售价格',
+                            'attribute'=>'sale_price',
+                            'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
+                        [
                             'label' => '颜色',
                             'attribute' => 'stone_color',
                             'value' => function($model){
@@ -187,22 +203,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'label' => '每卡采购价格',
-                            'attribute'=>'cost_price',
-                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
-                        [
-                            'label' => '每卡销售价格',
-                            'attribute'=>'sale_price',
-                            'filter' => Html::activeTextInput($searchModel, 'sale_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
