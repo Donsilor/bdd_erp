@@ -122,13 +122,22 @@ class PurchaseController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            if($model->isNewRecord){
+            $isNewRecord = $model->isNewRecord;
+            if($isNewRecord){
                $model->purchase_sn = SnHelper::createPurchaseSn();
                $model->creator_id  = \Yii::$app->user->identity->id;               
-            }            
-            return $model->save()
-            ? $this->redirect(Yii::$app->request->referrer)
-            : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
+            if($isNewRecord) {
+                return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+            }else{
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
+
         }
         
         return $this->renderAjax($this->action->id, [
