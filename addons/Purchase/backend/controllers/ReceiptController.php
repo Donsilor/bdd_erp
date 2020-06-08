@@ -105,9 +105,15 @@ class ReceiptController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            $isNewRecord = $model->isNewRecord;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            if($isNewRecord) {
+                return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+            }else{
+                $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
         }
 
         return $this->renderAjax($this->action->id, [
