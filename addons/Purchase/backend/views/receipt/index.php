@@ -231,7 +231,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
+                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {close}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                 'edit' => function($url, $model, $key){
@@ -244,7 +244,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 },
                 'ajax-apply' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::SAVE){
-                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                             'class'=>'btn btn-success btn-sm',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                         ]);
@@ -261,7 +261,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 },
                 'ajax-warehouse' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
-                        return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
+                        return Html::edit(['ajax-warehouse','id'=>$model->id], '入库', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
@@ -269,11 +269,13 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
                 },
                 'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    return Html::a('明细', ['receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'close' => function($url, $model, $key){
-                    if($model->receipt_status != BillStatusEnum::CONFIRM) {
-                        return Html::delete(['close', 'id' => $model->id]);
+                    if($model->receipt_status == BillStatusEnum::SAVE) {
+                        return Html::delete(['close', 'id' => $model->id],'关闭',[
+                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                        ]);
                     }
                 },
                 /* 'status' => function($url, $model, $key){

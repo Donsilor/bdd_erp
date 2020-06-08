@@ -170,7 +170,7 @@ class PurchaseController extends BaseController
 
 
     /**
-     * 申请审核
+     * 关闭
      * @return mixed
      */
     public function actionClose(){
