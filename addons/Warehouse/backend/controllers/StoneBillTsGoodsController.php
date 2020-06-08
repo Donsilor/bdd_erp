@@ -2,12 +2,13 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Warehouse\common\forms\WarehouseStoneBillSsGoodsForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillTsGoodsForm;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
@@ -15,11 +16,11 @@ use common\helpers\ExcelHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillSsGoodsController extends StoneBillGoodsController
+class StoneBillTsGoodsController extends StoneBillGoodsController
 {
     use Curd;
-    public $modelClass = WarehouseStoneBillSsGoodsForm::class;
-    public $billType = StoneBillTypeEnum::STONE_SS;
+    public $modelClass = WarehouseStoneBillTsGoodsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_TS;
     /**
      * Lists all StyleChannel models.
      * @return mixed

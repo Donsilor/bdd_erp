@@ -173,7 +173,10 @@ class WarehouseStoneBillService extends Service
     public function createBillGoods($form)
     {
         $stone = WarehouseStone::findOne(['stone_name'=>$form->stone_name]);
+        $bill = WarehouseStoneBill::findOne(['id'=>$form->bill_id]);
         $goods = [
+            'bill_id' => $form->bill_id,
+            'bill_type' => $bill->bill_type,
             'stone_name' => $stone->stone_name,
             'stone_type' => $stone->stone_type,
             'stone_num' => $form->stone_num,
@@ -188,6 +191,9 @@ class WarehouseStoneBillService extends Service
         $billGoods = new WarehouseStoneBillGoods();
         $billGoods->attributes = $goods;
         if(false === $billGoods->save()) {
+            throw new \Exception($this->getError($billGoods));
+        }
+        if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
     }
