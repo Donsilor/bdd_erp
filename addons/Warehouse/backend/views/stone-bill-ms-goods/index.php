@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill_ms_detail', '买石单明细');
+$this->title = Yii::t('stone_bill_ms_goods', '买石单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '石包',
-                                'attribute'=>'shibao',
+                                'attribute'=>'stone_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '每卡采购价格',
-                                'attribute' => 'purchase_price',
+                                'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],

@@ -3,14 +3,14 @@
 namespace addons\Warehouse\common\forms;
 
 use Yii;
-use addons\Warehouse\common\models\WarehouseStoneBillDetail;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\ArrayHelper;
 
 /**
  * 石包单据明细 Form
  *
  */
-class WarehouseStoneBillMsDetailForm extends WarehouseStoneBillDetail
+class WarehouseStoneBillMsGoodsForm extends WarehouseStoneBillGoods
 {
     /**
      * {@inheritdoc}

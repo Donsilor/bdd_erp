@@ -6,7 +6,7 @@ use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\models\WarehouseStoneBillDetail;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -46,7 +46,7 @@ class WarehouseStoneBillService extends Service
                 {
                     $tabList = [
                         1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-detail/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                         3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
                     ];
                     break;
@@ -68,7 +68,7 @@ class WarehouseStoneBillService extends Service
             throw new \Exception($this->getError($billM));
         }
         $bill_id = $billM->attributes['id'];
-        $goodsM = new WarehouseStoneBillDetail();
+        $goodsM = new WarehouseStoneBillGoods();
         foreach ($details as &$good){
             $good['bill_id'] = $bill_id;
             $good['bill_type'] = $billM->bill_type;
@@ -83,7 +83,7 @@ class WarehouseStoneBillService extends Service
         foreach ($details as $detail) {
             $value[] = array_values($detail);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillDetail::tableName(), $key, $value)->execute();
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建买石单明细失败");
         }
@@ -103,7 +103,7 @@ class WarehouseStoneBillService extends Service
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
         }
-        $billGoods = WarehouseStoneBillDetail::find()->select(['shibao', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+        $billGoods = WarehouseStoneBillGoods::find()->select(['shibao', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
         if(empty($billGoods)){
             throw new \Exception("单据明细不能为空");
         }

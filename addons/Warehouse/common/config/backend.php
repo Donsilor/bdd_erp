@@ -70,7 +70,6 @@ return [
                             'route' => 'warehouse-bill-r/index',
                     ],*/
                     [
-
                             'title' => '维修单',
                             'route' => 'bill-repair/index',
                     ],

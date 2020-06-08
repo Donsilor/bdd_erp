@@ -106,32 +106,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label' => '石包总数',
-                            'attribute'=>'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                            'attribute'=>'total_num',
+                            'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'label' => '石包总重量',
-                            'attribute'=>'goods_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                            'attribute'=>'total_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '石包总价',
-                            'attribute'=>'goods_total',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_total', [
+                            'attribute'=>'total_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '纸质单号',
-                            'attribute'=>'send_goods_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
+                            'attribute'=>'delivery_no',
+                            'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
