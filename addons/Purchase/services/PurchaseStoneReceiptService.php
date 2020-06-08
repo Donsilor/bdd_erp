@@ -77,7 +77,8 @@ class PurchaseStoneReceiptService extends Service
         foreach ($models as $model){
             $ids[] = $model->id;
             $goods[] = [
-                'shibao' => $model->goods_name,
+                'stone_name' => $model->goods_name,
+                'stone_type' => $model->material_type,
                 //'cert_id' => $model->cert_id,
                 'carat' => $model->goods_weight,
                 'color' => $model->goods_color,
@@ -108,11 +109,11 @@ class PurchaseStoneReceiptService extends Service
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
             'adjust_type' => AdjustTypeEnum::ADD,
-            'goods_num' => count($goods),
-            'goods_weight' => $total_weight,
-            'goods_total' => $form->total_cost,
-            'purchase_price' => $form->total_cost,
-            'send_goods_sn' => $form->receipt_no,
+            'total_num' => count($goods),
+            'total_weight' => $total_weight,
+            'total_cost' => $form->total_cost,
+            'pay_amount' => $form->total_cost,
+            'delivery_no' => $form->receipt_no,
             'remark' => $form->remark,
             'status' => StatusEnum::ENABLED,
             'creator_id' => \Yii::$app->user->identity->getId(),
