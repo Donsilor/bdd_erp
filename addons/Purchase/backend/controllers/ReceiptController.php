@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Style\common\enums\LogTypeEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -105,9 +106,15 @@ class ReceiptController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             $model->creator_id  = \Yii::$app->user->identity->id;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            $isNewRecord = $model->isNewRecord;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            if($isNewRecord) {
+                return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+            }else{
+                $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
         }
 
         return $this->renderAjax($this->action->id, [
@@ -241,7 +248,24 @@ class ReceiptController extends BaseController
         ]);
     }
 
+    /**
+     * 关闭
+     * @return mixed
+     */
+    public function actionClose(){
 
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->receipt_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        $model->receipt_status = BillStatusEnum::CANCEL;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
 
     /**
      * @param null $ids

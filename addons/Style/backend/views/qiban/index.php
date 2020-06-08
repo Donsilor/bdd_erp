@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>' width:120%;white-space:nowrap;' ],
         'showFooter' => true,//显示footer行
         'id'=>'grid',            
         'columns' => [
@@ -83,6 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
+                    'style' => 'width:80px;'
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'150'],
@@ -166,6 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style' => 'width:80px;'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -178,7 +181,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                         'prompt' => '全部',
-                        'class' => 'form-control',                        
+                        'class' => 'form-control',
+                        'style' => 'width:80px;'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -212,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {edit}{ajax-apply} {audit} {status}',
+                'template' => '{view} {edit} {ajax-apply} {audit} {status}',
                 'buttons' => [
                     'view'=> function($url, $model, $key){
                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -242,7 +246,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'ajax-apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提交', [
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);
