@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Style\common\models\StyleChannel;
 use common\models\backend\Member;
 use common\models\base\BaseModel;
 use Yii;
@@ -15,6 +16,7 @@ use Yii;
  * @property string $code 编码
  * @property int $status 状态
  * @property int $sort 排序
+ * @property int $channel_id 归属渠道
  * @property int $creator_id 添加人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -36,9 +38,9 @@ class Warehouse extends BaseModel
     public function rules()
     {
         return [
-            [['type', 'status', 'audit_status','sort','creator_id', 'created_at','auditor_id', 'audit_time', 'updated_at'], 'integer'],
-            [['name','code','type'], 'required'],
-            [['name'], 'string', 'max' => 200],
+            [['type', 'status', 'audit_status','sort','creator_id', 'created_at','auditor_id','channel_id', 'audit_time', 'updated_at'], 'integer'],
+            [['name','code','type','channel_id'], 'required'],
+            [['name'], 'string', 'max' => 100],
             [['code'], 'string', 'max' => 50],
             [['audit_remark'], 'string', 'max' => 255],
         ];
@@ -55,6 +57,7 @@ class Warehouse extends BaseModel
             'name' => '仓库名',
             'code' => '编码',
             'status' => '状态',
+            'channel_id' => '归属渠道',
             'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
             'audit_time' => '审核时间',
@@ -77,6 +80,16 @@ class Warehouse extends BaseModel
             $this->creator_id = Yii::$app->user->id;
         }
         return parent::beforeSave($insert);
+    }
+
+
+    /**
+     * 归属渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 
     /**

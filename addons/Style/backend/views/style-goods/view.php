@@ -12,59 +12,114 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->goods_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->goods_sn?></h2>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_no') ?>：</td>
-                            <td><?= $model->bill_no ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_sn') ?>：</td>
+                            <td><?= $model->goods_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_name') ?>：</td>
+                            <td><?= $model->goods_name ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
+                            <td><?= $model->style_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('to_warehouse_id') ?>：</td>
-                            <td><?= $model->toWarehouse->name ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                            <td><?= $model->cate->name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                            <td><?= $model->type->name ?? '' ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
+                            <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('xiangkou') ?>：</td>
+                            <td><?= $model->xiangkou ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finger') ?>：</td>
+                            <td><?= $model->finger ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('material') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->material)  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('main_stone_weight') ?>：</td>
+                            <td><?= $model->main_stone_weight ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>
+                            <td><?= $model->main_stone_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('second_stone_weight1') ?>：</td>
+                            <td><?= $model->second_stone_weight1 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('second_stone_num1') ?>：</td>
+                            <td><?= $model->second_stone_num1 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('second_stone_weight2') ?>：</td>
+                            <td><?= $model->second_stone_weight2 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('second_stone_num2') ?>：</td>
+                            <td><?= $model->second_stone_num2 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finger_range') ?>：</td>
+                            <td><?= $model->finger_range ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                            <td><?= $model->cost_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
+                            <td><?= $model->gold_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>
+                            <td><?= $model->gold_weight ?></td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('gold_weight_diff') ?>：</td>
+                            <td><?= $model->gold_weight_diff ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_price') ?>：</td>
+                            <td><?= $model->sale_price ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                             <td><?= $model->goods_num ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
-                            <td><?= $model->total_cost ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td><?= $model->remark ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator->username ?? ''  ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->auditor->username ?? '' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                            <td><?= $model->audit_remark ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                            <td><?= $model->remark ?></td>
+                            <td><?= Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
 
                     </table>
@@ -76,32 +131,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
 
             <?php
-            if($model->bill_status == BillStatusEnum::SAVE){
-                echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
-                    'data-toggle' => 'modal',
-                    'class'=>'btn btn-primary btn-ms',
-                    'data-target' => '#ajaxModalLg',
-                ]);
-                echo '&nbsp;';
-                echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
-                    'class'=>'btn btn-success btn-ms',
-                    'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
-                ]);
-                echo '&nbsp;';
-                echo Html::delete(['delete', 'id' => $model->id], '关闭',[
-                    'class'=>'btn btn-danger btn-ms',
-                ]);
-            }elseif ($model->bill_status == BillStatusEnum::PENDING){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                    'class'=>'btn btn-success btn-ms',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
-                ]);
-                echo '&nbsp;';
-                echo Html::delete(['delete', 'id' => $model->id], '关闭',[
-                    'class'=>'btn btn-danger btn-ms',
-                ]);
-            }
+              echo Html::edit(['edit-all','style_id' => $model->style_id,'returnUrl' => \common\helpers\Url::getReturnUrl()]);
+
             ?>
         </div>
 

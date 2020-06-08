@@ -28,6 +28,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
         <?= $form->field($model, 'name')->textInput() ?>
         <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'channel_id')->dropDownList(Yii::$app->styleService->styleChannel->getDropDown(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'type')->dropDownList(\addons\Warehouse\common\enums\WarehouseTypeEnum::getMap(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'sort')->textInput() ?>
 <!--        --><?//= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>

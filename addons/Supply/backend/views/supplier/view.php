@@ -1,7 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use addons\Supply\common\enums\BuChanEnum;
+use common\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -130,14 +130,14 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
                                  <tr>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->contract_file,90,90) ?></td>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->business_file,90,90) ?></td>
-                                     <td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->tax_file,90,90) ?></td>
+                                     <?php if($model->contract_file){?><td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->contract_file,90,90) ?></td><?php } ?>
+                                     <?php if($model->business_file){?><td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->business_file,90,90) ?></td><?php } ?>
+                                     <?php if($model->tax_file){?><td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->tax_file,90,90) ?></td><?php } ?>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('contract_file') ?>：</td>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('business_file') ?>：</td>
-                                     <td class="col-xs-4 text-center"><?= $model->getAttributeLabel('tax_file') ?>：</td>
+                                     <?php if($model->contract_file){?><td class="col-xs-4 text-center"><?= $model->getAttributeLabel('contract_file') ?>：</td><?php } ?>
+                                     <?php if($model->business_file){?><td class="col-xs-4 text-center"><?= $model->getAttributeLabel('business_file') ?>：</td><?php } ?>
+                                     <?php if($model->tax_file){?><td class="col-xs-4 text-center"><?= $model->getAttributeLabel('tax_file') ?>：</td><?php } ?>
                                  </tr>
                              </table>
                          </div>
@@ -145,6 +145,26 @@ $this->params['breadcrumbs'][] = $this->title;
                  </div>
              </div>
          </div>
+        <div class="box-footer text-center">
+            <?php
+                echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                    echo '&nbsp;';
+                    echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                    ]);
+                }
+                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                    echo '&nbsp;';
+                    echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                        'class'=>'btn btn-success btn-sm',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]);
+                }
+            ?>
+        </div>
     </div>
 </div>
 

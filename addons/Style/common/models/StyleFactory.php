@@ -46,7 +46,7 @@ class StyleFactory extends BaseModel
             [['remark'], 'string', 'max' => 255],
             [['factory_mo'], 'string', 'max' => 30],
             [['shipping_time'], 'number'],
-            ['factory_id','unique','message'=>'工厂已经存在'],
+            [['style_id','factory_id'],'unique','targetAttribute' => [ 'style_id','factory_id'],'comboNotUnique'=>'已经存在'],
 
         ];
     }

@@ -25,10 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
                             <td><?= $model->purchase_sn ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->purchase_type) ?></td>
-                        </tr>                        
+<!--                        <tr>-->
+<!--                            <td class="col-xs-1 text-right">--><?//= $model->getAttributeLabel('purchase_type') ?><!--：</td>-->
+<!--                            <td>--><?//= $model->purchase_type ?><!--</td>-->
+<!--                        </tr>                        -->
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
                             <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>
@@ -60,6 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->delivery_time) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -100,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                     <?php
                     if($model->purchase_status == BillStatusEnum::SAVE){
-                        echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                        echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                             'class'=>'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                         ]);
