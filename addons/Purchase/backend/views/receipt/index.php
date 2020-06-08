@@ -271,9 +271,9 @@ $params = $params ? "&".http_build_query($params) : '';
                 'goods' => function($url, $model, $key){
                     return Html::a('单据明细', ['receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
-                'delete' => function($url, $model, $key){
+                'close' => function($url, $model, $key){
                     if($model->receipt_status != BillStatusEnum::CONFIRM) {
-                        return Html::delete(['delete', 'id' => $model->id]);
+                        return Html::delete(['close', 'id' => $model->id]);
                     }
                 },
                 /* 'status' => function($url, $model, $key){
