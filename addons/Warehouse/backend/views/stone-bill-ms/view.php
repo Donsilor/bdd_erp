@@ -5,7 +5,7 @@ use common\enums\AuditStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\WarehouseBill */
+/* @var $model addons
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = '买石单详情';
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>

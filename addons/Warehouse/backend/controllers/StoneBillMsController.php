@@ -110,6 +110,46 @@ class StoneBillMsController extends StoneBillController
 
     }
 
+    /**
+     * ajax 买石单-审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+
+            try{
+                $trans = \Yii::$app->trans->beginTransaction();
+
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+
+                \Yii::$app->warehouseService->stoneBill->auditBillMs($model);
+
+                $trans->commit();
+
+                $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch(\Exception $e){
+                $trans->rollBack();
+                $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
     public function getExport($dataProvider)
     {
         $list = $dataProvider->models;
