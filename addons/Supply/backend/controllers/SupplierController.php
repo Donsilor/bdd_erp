@@ -119,7 +119,7 @@ class SupplierController extends BaseController
             $business_scope_arr = explode(',', $model->business_scope);
             $business_scope_str = '';
             foreach ($business_scope_arr as $business_scope){
-                $business_scope_str .= ','. Yii::$app->attr->valueName($business_scope);
+                $business_scope_str .= ','. \addons\Supply\common\enums\BusinessScopeEnum::getValue($business_scope);
             }
             $model->business_scope = trim( $business_scope_str,',' );
         }
@@ -128,7 +128,7 @@ class SupplierController extends BaseController
             $pay_type_arr = explode(',', $model->pay_type);
             $pay_type_str = '';
             foreach ($pay_type_arr as $pay_type){
-                $pay_type_str .= ','. Yii::$app->attr->valueName($pay_type);
+                $pay_type_str .= ','. \addons\Supply\common\enums\SettlementWayEnum::getValue($pay_type);
             }
             $model->pay_type = trim( $pay_type_str,',' );
         }
