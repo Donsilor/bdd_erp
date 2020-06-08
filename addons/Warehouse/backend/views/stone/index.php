@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -50,6 +51,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'label' => '石包类型',
+                            'attribute' => 'stone_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->stone_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
@@ -66,6 +80,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'stock_weight', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'label' => '颜色',
+                            'attribute' => 'stone_color',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_color);
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'label' => '净度',
+                            'attribute' => 'stone_clarity',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_clarity);
+                            },
+                            'filter' => false,
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -176,34 +208,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {audit} {status} {delete}',
+                            'template' => '',
                             'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
-                                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
-                                        ]);
-                                    }
-                                },
-                                'audit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
-                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
-                                        ]);
-                                    }
-                                },
-                                'status' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PASS ])) {
-                                        return Html::status($model->status);
-                                    }
-                                },
                                 'delete' => function($url, $model, $key){
-                                    if($model->audit_status != \common\enums\AuditStatusEnum::PASS) {
-                                        return Html::delete(['delete', 'id' => $model->id]);
-                                    }
+                                    return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
                         ]
