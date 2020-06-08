@@ -6,7 +6,7 @@ use common\helpers\Url;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-audit','id' => $model['id']]),
+        'validationUrl' => Url::to(['ajax-audit-follower','id' => $model['id']]),
         'fieldConfig' => [
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
@@ -20,8 +20,8 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?= $form->field($model, 'status')->radioList(\common\enums\AuditStatusEnum::getMap()); ?>
-            <?= $form->field($model, 'audit_remark')->textArea(); ?>
+            <?= $form->field($model, 'audit_follower_status')->radioList(\common\enums\AuditStatusEnum::getAuditMap()); ?>
+            <?= $form->field($model, 'audit_followe_remark')->textArea(); ?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->

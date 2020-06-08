@@ -17,10 +17,10 @@ class SupplierForm extends Supplier
     public function rules()
     {
         $rules = [
-            [['supplier_code','supplier_name'], 'unique'],
+            [['supplier_code','supplier_name','supplier_tag'], 'unique'],
             //[['supplier_name'], 'match', 'pattern' => '/[^a-z\d\x{4e00}-\x{9fa5}\(\)]/ui', 'message'=>'只能填写字母数字汉字和小括号'],
         ];
-        return array_merge(parent::rules() , $rules);
+        return ArrayHelper::merge(parent::rules() , $rules);
     }
 
     /**

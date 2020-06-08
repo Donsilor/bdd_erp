@@ -45,6 +45,7 @@ class AttrIdEnum
 
     //主石信息
     const MAIN_STONE_TYPE = 56;//主石类型
+    const MAIN_STONE_NUM = 65;//主石数量
     
     //副石1信息
     const SIDE_STONE1_TYPE = 60;//副石1类型

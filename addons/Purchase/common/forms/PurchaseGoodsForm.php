@@ -27,6 +27,8 @@ class PurchaseGoodsForm extends PurchaseGoods
     public $attr_require;
     //属性非必填
     public $attr_custom;
+
+    public $attr;
     /**
      * {@inheritdoc}
      */

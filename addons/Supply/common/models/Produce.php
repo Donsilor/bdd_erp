@@ -59,9 +59,9 @@ class Produce extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id','is_inlay', 'from_type', 'from_order_id', 'from_detail_id', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
+            [['merchant_id','is_inlay', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
             [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
-            [['goods_name'], 'string', 'max' => 255],
+            [['goods_name','audit_followe_remark'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
             [['follower_name'], 'string', 'max' => 30],
             [['inlay_type'], 'string', 'max' => 10],
@@ -97,6 +97,9 @@ class Produce extends BaseModel
             'prc_status' => '生产状态',
             'follower_id' => '跟单人id',
             'follower_name' => '跟单人',
+            'apply_follower_id' => '跟单人（更改）',
+            'audit_follower_status' => '跟单人审核',
+            'audit_followe_remark' => '跟单人审核备注',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'supplier_id' => '供应商',
@@ -148,8 +151,9 @@ class Produce extends BaseModel
      */
     public function getFollower()
     {
-        return $this->hasOne(Member::class, ['id'=>'follower_id']);
+        return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
     }
+
 
     /**
      * 对应镶嵌方式 inlay

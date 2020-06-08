@@ -2,10 +2,11 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\models\WarehouseStoneBillDetail;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -45,7 +46,7 @@ class WarehouseStoneBillService extends Service
                 {
                     $tabList = [
                         1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ms/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-detail/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ms-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
                         3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
                     ];
                     break;
@@ -67,7 +68,7 @@ class WarehouseStoneBillService extends Service
             throw new \Exception($this->getError($billM));
         }
         $bill_id = $billM->attributes['id'];
-        $goodsM = new WarehouseStoneBillDetail();
+        $goodsM = new WarehouseStoneBillGoods();
         foreach ($details as &$good){
             $good['bill_id'] = $bill_id;
             $good['bill_type'] = $billM->bill_type;
@@ -82,7 +83,7 @@ class WarehouseStoneBillService extends Service
         foreach ($details as $detail) {
             $value[] = array_values($detail);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillDetail::tableName(), $key, $value)->execute();
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建买石单明细失败");
         }
@@ -98,29 +99,24 @@ class WarehouseStoneBillService extends Service
             throw new \Exception($this->getError($form));
         }
         if($form->audit_status == AuditStatusEnum::PASS){
-            //$form->status = StatusEnum::ENABLED;
             $form->bill_status = BillStatusEnum::CONFIRM;
         }else{
-            //$form->status = StatusEnum::DISABLED;
             $form->bill_status = BillStatusEnum::SAVE;
         }
-        $billGoods = WarehouseBillGoods::find()->select(['goods_id', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+        $billGoods = WarehouseStoneBillGoods::find()->select(['shibao', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
         if(empty($billGoods)){
             throw new \Exception("单据明细不能为空");
         }
-        $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
-        $condition = ['goods_status' => GoodsStatusEnum::RECEIVING, 'goods_id' => $goods_ids];
-        $goods_status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_STOCK : GoodsStatusEnum::RECEIVING;
-        $res = WarehouseGoods::updateAll(['goods_status' => $goods_status, 'put_in_type' => $form->put_in_type, 'warehouse_id' => $form->to_warehouse_id], $condition);
-        if(false === $res) {
-            throw new \Exception("更新收货单货品状态失败");
-        }
-        if($form->order_type == OrderTypeEnum::ORDER_L && $form->audit_status == AuditStatusEnum::PASS){
-            //同步采购收货单货品状态
+
+        //石包入库
+        \Yii::$app->warehouseService->stone->editStone($form);
+
+        if($form->audit_status == AuditStatusEnum::PASS){
+            //同步石料采购收货单货品状态
             $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-            $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
+            $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
             if(false === $res) {
-                throw new \Exception("同步采购收货单货品状态失败");
+                throw new \Exception("同步石料采购收货单货品状态失败");
             }
         }
         if(false === $form->save()) {

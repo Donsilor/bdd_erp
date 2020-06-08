@@ -45,7 +45,8 @@ class StyleFactory extends BaseModel
             [[ 'style_id','factory_id','is_made','is_default', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remark'], 'string', 'max' => 255],
             [['factory_mo'], 'string', 'max' => 30],
-            [['shipping_time'], 'safe'],
+            [['shipping_time'], 'number'],
+            ['factory_id','unique','message'=>'工厂已经存在'],
 
         ];
     }
@@ -64,7 +65,7 @@ class StyleFactory extends BaseModel
             'remark' => '备注(计费方式)',
             'factory_mo' => '工厂模号',
             'creator_id' => '配置人',
-            'shipping_time' => '出货时间',
+            'shipping_time' => '出货时间(天)',
             'sort' => '排序',
             'status' => '状态',
             'created_at' => '创建时间',

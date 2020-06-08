@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\services;
 
+use addons\Style\common\models\Qiban;
+use addons\Style\common\models\Style;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -30,6 +32,20 @@ class PurchaseGoodsService extends Service
             }
         }
         return $columns;
+    }
+
+    public function getStyleImage($model){
+        if($model->qiban_sn){
+            $qiban = Qiban::find()->where(['qiban_sn'=>$model->qiban_sn])->one();
+            $image = !empty($qiban->style_image)?explode(',', $qiban->style_image):[];
+            $image = $image ? $image[0] :'' ;
+
+        }else{
+            $style = Style::find()->where(['style_sn'=>$model->style_sn])->one();
+            $image = $style->style_image ?? '';
+        }
+        return $image;
+
     }
     
 }

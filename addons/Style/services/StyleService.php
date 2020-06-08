@@ -2,6 +2,8 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\models\StyleImages;
+use common\enums\StatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Style\common\models\Style;
@@ -94,5 +96,16 @@ class StyleService extends Service
             }
         }
         return $model->style_sn;
+    }
+
+    public function getStyleImages($style_sn){
+        $list = StyleImages::find()->alias('a')
+            ->innerJoin(Style::tableName().' s','s.id=a.style_id')
+            ->where(['s.style_sn'=>$style_sn,'a.status'=>StatusEnum::ENABLED])
+            ->select(['a.image'])
+            ->asArray()
+            ->all();
+        if(empty($list)) return [];
+        return array_column($list,'image');
     }
 }

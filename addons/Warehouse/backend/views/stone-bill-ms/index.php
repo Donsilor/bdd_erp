@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:130%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -106,32 +106,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label' => '石包总数',
-                            'attribute'=>'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                            'attribute'=>'total_num',
+                            'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'label' => '石包总重量',
-                            'attribute'=>'goods_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                            'attribute'=>'total_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '石包总价',
-                            'attribute'=>'goods_total',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_total', [
+                            'attribute'=>'total_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '纸质单号',
-                            'attribute'=>'send_goods_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
+                            'attribute'=>'delivery_no',
+                            'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
@@ -211,7 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {goods} {apply} {audit} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
@@ -220,9 +220,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-target' => '#ajaxModalLg',
                                         ]);
                                     }
-                                },
-                                'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['stone-bill-ms-detail/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'apply' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE){
@@ -233,7 +230,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                    if(in_array($model->bill_status,[BillStatusEnum::PENDING])){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -241,9 +238,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                 },
+                                'goods' => function($url, $model, $key){
+                                    return Html::a('明细', ['stone-bill-ms-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
                                 'delete' => function($url, $model, $key){
-                                    if($model->audit_status != \common\enums\AuditStatusEnum::PASS) {
-                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                        return Html::delete(['delete', 'id' => $model->id],'取消');
                                     }
                                 },
                             ],

@@ -5,7 +5,7 @@ use common\enums\AuditStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\WarehouseBill */
+/* @var $model addons
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = '买石单详情';
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
@@ -41,28 +41,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
-                            <td><?= $model->goods_num ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
+                            <td><?= $model->total_num ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_weight') ?>：</td>
-                            <td><?= $model->goods_weight ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
+                            <td><?= $model->total_weight ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account_type') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\AccountTypeEnum::getValue($model->account_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_total') ?>：</td>
-                            <td><?= $model->goods_total ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
+                            <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_price') ?>：</td>
-                            <td><?= $model->purchase_price ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
+                            <td><?= $model->pay_amount ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
-                            <td><?= $model->send_goods_sn ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
+                            <td><?= $model->delivery_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>

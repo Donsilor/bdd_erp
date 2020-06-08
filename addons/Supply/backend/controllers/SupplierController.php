@@ -4,6 +4,8 @@ namespace addons\Supply\backend\controllers;
 
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use addons\Supply\common\models\SupplierFollower;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehouseStoneBill;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -117,7 +119,7 @@ class SupplierController extends BaseController
             $business_scope_arr = explode(',', $model->business_scope);
             $business_scope_str = '';
             foreach ($business_scope_arr as $business_scope){
-                $business_scope_str .= ','. Yii::$app->attr->valueName($business_scope);
+                $business_scope_str .= ','. \addons\Supply\common\enums\BusinessScopeEnum::getValue($business_scope);
             }
             $model->business_scope = trim( $business_scope_str,',' );
         }
@@ -126,7 +128,7 @@ class SupplierController extends BaseController
             $pay_type_arr = explode(',', $model->pay_type);
             $pay_type_str = '';
             foreach ($pay_type_arr as $pay_type){
-                $pay_type_str .= ','. Yii::$app->attr->valueName($pay_type);
+                $pay_type_str .= ','. \addons\Supply\common\enums\SettlementWayEnum::getValue($pay_type);
             }
             $model->pay_type = trim( $pay_type_str,',' );
         }
@@ -136,6 +138,24 @@ class SupplierController extends BaseController
             'tabList'=>\Yii::$app->supplyService->supplier->menuTabList($id,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+    /**
+     * @return mixed
+     * 提交审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new Supplier();
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('供应商不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
     }
 
     /**
@@ -159,6 +179,7 @@ class SupplierController extends BaseController
                     $model->status = StatusEnum::ENABLED;
                 }else{
                     $model->status = StatusEnum::DISABLED;
+                    $model->audit_status = AuditStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));

@@ -123,19 +123,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-12">
                                 <?= $form->field($model, 'style_image')->widget(common\widgets\webuploader\Files::class, [
                                     'config' => [
                                         'pick' => [
-                                            'multiple' => false,
-                                            'height'=> '50'
+                                            'multiple' => true,
                                         ],
-                                        'options'=>[
-                                            'height'=>'50'
-                                        ]
-
-                                    ],
-
+                                    ]
                                 ]); ?>
                             </div>
                         </div>

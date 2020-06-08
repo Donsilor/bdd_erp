@@ -2,25 +2,24 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\StoneBillTypeEnum;
-use addons\Warehouse\common\models\WarehouseBill;
-use common\helpers\Url;
+
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\models\WarehouseStoneBillDetail;
-use addons\Warehouse\common\forms\WarehouseStoneBillMsDetailForm;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
+use addons\Warehouse\common\forms\WarehouseStoneBillMsGoodsForm;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use common\helpers\Url;
 use common\helpers\ExcelHelper;
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillMsDetailController extends StoneBillDetailController
+class StoneBillMsGoodsController extends StoneBillDetailController
 {
     use Curd;
-    public $modelClass = WarehouseStoneBillMsDetailForm::class;
+    public $modelClass = WarehouseStoneBillMsGoodsForm::class;
     public $billType = StoneBillTypeEnum::STONE_MS;
     /**
      * Lists all StyleChannel models.
@@ -50,12 +49,12 @@ class StoneBillMsDetailController extends StoneBillDetailController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBillDetail::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseStoneBillDetail::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBillGoods::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseStoneBillGoods::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseStoneBillDetail::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillGoods::tableName().'.status',-1]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){

@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Style\common\models\StyleChannel;
 use Yii;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -66,8 +67,9 @@ class PurchaseGoods extends BaseModel
     {
         return [
             [['goods_name','purchase_id', 'jintuo_type','cost_price'], 'required'],
-            [['purchase_id', 'style_id', 'qiban_type', 'product_type_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
+
+            [['purchase_id', 'style_id', 'qiban_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['goods_bag_num','goods_bag_weight','goods_bag_unit','goods_weight_unit','cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
@@ -91,6 +93,7 @@ class PurchaseGoods extends BaseModel
             'qiban_sn' => '起版号',
             'qiban_type' => '起版类型',
             'product_type_id' => '产品线',
+            'style_channel_id' => '所属渠道',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
             'jintuo_type' => '金托类型',
@@ -154,4 +157,15 @@ class PurchaseGoods extends BaseModel
     {
         return $this->hasOne(Produce::class, ['id'=>'produce_id'])->alias('produce');
     }
+    /**
+     * 款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
+    }
+
+
+
 }
