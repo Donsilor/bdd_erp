@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_l_goods', '收货单详情');
+$this->title = Yii::t('warehouse_bill_t_goods', '其它收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,7 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
+            ]);
+            echo '&nbsp;';
+            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>

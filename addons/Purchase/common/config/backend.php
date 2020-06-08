@@ -27,10 +27,14 @@ return [
             'title' => '商品采购',
             'route' => 'indexPurchase',
             'icon' => 'fa fa-superpowers',
-            'child' => [
+            'child' => [                    
                     [
                             'title' => '采购订单',
                             'route' => 'purchase/index',
+                    ],
+                    [
+                            'title' => '采购申请单',
+                            'route' => 'apply/index',
                     ],
                     [
                             'title' => '采购收货单',

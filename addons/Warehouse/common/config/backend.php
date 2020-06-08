@@ -40,10 +40,10 @@ return [
                 'route' => 'indexWarehouseBill',
                 'icon' => 'fa fa-superpowers',
                 'child' => [
-                    [
-                            'title' => '单据列表',
-                            'route' => 'bill/index',
-                    ],
+                    //[
+                     //       'title' => '单据列表',
+                     //       'route' => 'bill/index',
+                    //],
                     [
                             'title' => '收货单',
                             'route' => 'bill-l/index',
