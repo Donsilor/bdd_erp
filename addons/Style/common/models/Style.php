@@ -53,7 +53,7 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['style_material','id','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
+                [['id','style_material','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
                 [['style_material','product_type_id','style_channel_id','style_cate_id','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],

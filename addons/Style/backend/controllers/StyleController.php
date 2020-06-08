@@ -43,7 +43,7 @@ class StyleController extends BaseController
     */
     public function actionIndex()
     {
-        $cate_id = Yii::$app->request->get('cate_id');
+       // $cate_id = Yii::$app->request->get('cate_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
