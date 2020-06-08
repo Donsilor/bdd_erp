@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'class' => 'yii\grid\SerialColumn',
                                     'visible' => true,
+                                    'headerOptions' => ['width' => '50'],
                                 ],
                                 [
                                     'label' => '属性ID',
