@@ -12,7 +12,7 @@ use common\helpers\StringHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillDetailController extends BaseController
+class StoneBillGoodsController extends BaseController
 {
 
 }

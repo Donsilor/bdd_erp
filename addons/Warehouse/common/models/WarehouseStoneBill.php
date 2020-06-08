@@ -53,7 +53,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -95,6 +95,19 @@ class WarehouseStoneBill extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId();
+        }
+        return parent::beforeSave($insert);
     }
 
     /**

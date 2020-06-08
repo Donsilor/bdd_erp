@@ -51,6 +51,24 @@ class WarehouseStoneBillService extends Service
                     ];
                     break;
                 }
+            case StoneBillTypeEnum::STONE_SS:
+                {
+                    $tabList = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ss/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ss-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    ];
+                    break;
+                }
+            case StoneBillTypeEnum::STONE_TS:
+                {
+                    $tabList = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ts/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ts-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                    ];
+                    break;
+                }
         }
         return $tabList;
     }

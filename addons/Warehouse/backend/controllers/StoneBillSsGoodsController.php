@@ -2,13 +2,12 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Warehouse\common\forms\WarehouseStoneBillMsGoodsForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillSsGoodsForm;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
@@ -16,11 +15,11 @@ use common\helpers\ExcelHelper;
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class StoneBillMsGoodsController extends StoneBillGoodsController
+class StoneBillSsGoodsController extends StoneBillGoodsController
 {
     use Curd;
-    public $modelClass = WarehouseStoneBillMsGoodsForm::class;
-    public $billType = StoneBillTypeEnum::STONE_MS;
+    public $modelClass = WarehouseStoneBillSsGoodsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_SS;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -29,7 +28,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
     {
 
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ss-goods/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -68,6 +67,8 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
             'tab' => $tab,
             'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
+
+
     }
 
     public function getExport($dataProvider)

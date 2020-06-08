@@ -9,6 +9,7 @@ use addons\Style\common\models\StyleAttribute;
 use yii\base\Model;
 use addons\Style\common\models\AttributeSpec;
 use common\enums\StatusEnum;
+use common\enums\InputTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -86,17 +87,21 @@ class StyleAttrForm extends Model
      */
     public function initAttrs()
     {
-        $attr_list = StyleAttribute::find()->select(['attr_id','attr_values'])->where(['style_id'=>$this->style_id])->asArray()->all();
-        if(empty($attr_list)) {
+        $models = StyleAttribute::find()->select(['input_type','attr_id','attr_values'])->where(['style_id'=>$this->style_id])->all();
+        if(empty($models)) {
             return ;
         }
-        $attr_list = array_column($attr_list,'attr_values','attr_id');
-        foreach ($attr_list as $attr_id => & $attr_value) {
-            $split_value = explode(",",$attr_value);
-            if(count($split_value) > 1) {
-                $attr_value = $split_value;
+        $attr_list = [];
+        foreach ($models as $model){
+            $attr_values = $model->attr_values;
+            if($model->input_type != InputTypeEnum::INPUT_TEXT) {
+                $split_values = explode(",",$attr_values);
+                if(count($split_values) > 1) {
+                    $attr_values = $split_values;
+                }
             }
-        }
+            $attr_list[$model->attr_id] = $attr_values;
+        }        
         $this->attr_custom  = $attr_list;
         $this->attr_require = $attr_list;
     }

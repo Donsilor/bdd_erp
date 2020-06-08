@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function($model){
                           return $model->channel->name ?? '';
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                             //'style'=>'width:100px'
@@ -146,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
            [
                     'attribute' => 'goods_num',
                     'value' => "goods_num",
-                    'filter' => Html::activeTextInput($searchModel, 'style_name', [
+                    'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                            'class' => 'form-control',
                            'style'=>'width:80px'
                     ]),
