@@ -31,6 +31,8 @@ $model = $model ?? new StyleAttrForm();
                               $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);                                  
                               switch ($attr['input_type']){
                                   case common\enums\InputTypeEnum::INPUT_TEXT :{
+                                      $attr_field = 'attr_custom';
+                                      $attr_field_name = "{$attr_field}[{$attr['id']}]"; 
                                       $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
                                       break;
                                   }
