@@ -29,22 +29,11 @@ $form = ActiveForm::begin([
         ]);?>
         <?= $form->field($model, 'factory_mo')->textInput() ?>
         <?= $form->field($model, 'remark')->textInput() ?>
-        <?= $form->field($model, 'shipping_time')->widget(DateTimePicker::class, [
-            'language' => 'zh-CN',
-            'options' => [
-                'value' => $model->isNewRecord ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', $model->shipping_time),
-            ],
-            'pluginOptions' => [
-                'format' => 'yyyy-mm-dd hh:ii',
-                'todayHighlight' => true,//今日高亮
-                'autoclose' => true,//选择后自动关闭
-                'todayBtn' => true,//今日按钮显示
-            ]
-        ]);?>
-            <?= $form->field($model, 'is_made')->radioList(common\enums\ConfirmEnum::getMap())?>
-            <?= $form->field($model, 'is_default')->radioList(common\enums\ConfirmEnum::getMap())?>
-            <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
-            <?= \yii\helpers\Html::activeHiddenInput($model,'style_id',array('value'=>$style_id)) ?>
+        <?= $form->field($model, 'shipping_time')->textInput() ?>
+        <?= $form->field($model, 'is_made')->radioList(common\enums\ConfirmEnum::getMap())?>
+        <?= $form->field($model, 'is_default')->radioList(common\enums\ConfirmEnum::getMap())?>
+        <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+        <?= \yii\helpers\Html::activeHiddenInput($model,'style_id',array('value'=>$style_id)) ?>
 
     </div>
     <div class="modal-footer">

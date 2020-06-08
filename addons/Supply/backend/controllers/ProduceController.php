@@ -5,6 +5,7 @@ namespace addons\Supply\backend\controllers;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\LogModuleEnum;
 use addons\Supply\common\enums\NopassReasonEnum;
+use addons\Supply\common\forms\ProduceFollowerForm;
 use addons\Supply\common\forms\ToFactoryForm;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
@@ -12,12 +13,14 @@ use addons\Supply\common\models\ProduceOqc;
 use addons\Supply\common\models\ProduceShipment;
 use addons\Supply\common\models\Supplier;
 use addons\Supply\common\models\SupplierFollower;
+use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
+use common\models\backend\Member;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use Yii;
@@ -180,6 +183,93 @@ class ProduceController extends BaseController
         Yii::$app->supplyService->produce->createProduceLog($log);
         Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
+    }
+
+
+    //更新跟单人
+    public function actionChangeFollower(){
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = ProduceFollowerForm::class;
+        $model = $this->findModel($id);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['produce/index']));
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->audit_follower_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+            //日志
+            $apply_follower = Member::find()->where(['id'=>$model->apply_follower_id])->one();
+            $log = [
+                'produce_id' => $id,
+                'produce_sn' => $model->produce_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'bc_status' => $model->bc_status,
+                'log_module' => '更改跟单人',
+                'log_msg' => "跟单人申请改成为".$apply_follower->username
+            ];
+            Yii::$app->supplyService->produce->createProduceLog($log);
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'returnUrl' => $returnUrl
+        ]);
+
+    }
+
+
+    /**
+     * ajax 跟单人审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAuditFollower()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->audit_follower_status == AuditStatusEnum::PENDING) {
+            $model->audit_follower_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $apply_follower = Member::find()->where(['id'=>$model->apply_follower_id])->one();
+
+            if($model->audit_follower_status == AuditStatusEnum::PASS){
+                $log_msg = "跟单人审核通过,跟单人由{$model->follower->username}更改为{$apply_follower->username}";
+                $model->follower_id = $model->apply_follower_id;
+                $model->follower_name = $apply_follower->username;
+            }else{
+                $log_msg = "跟单人审核不通过";
+            }
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            //日志
+
+            $log = [
+                'produce_id' => $id,
+                'produce_sn' => $model->produce_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'bc_status' => $model->bc_status,
+                'log_module' => '审核跟单人',
+                'log_msg' => $log_msg
+            ];
+            Yii::$app->supplyService->produce->createProduceLog($log);
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
     }
 
     //开始生产

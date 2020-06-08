@@ -74,7 +74,35 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                                     <td><?= $model->remark ?></td>
                                 </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right">商品图片：</td>
+                                    <td><?= \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); ?></td>
+                                </tr>
                             </table>
+                        </div>
+                        <div class="box-footer text-center">
+                            <?php
+                            if($purchase->audit_status == \common\enums\AuditStatusEnum::SAVE) {
+                                echo Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                            }
+                            ?>
+                            <?php
+                            if($model->produce_id && $model->produce && $model->produce->bc_status <= \addons\Supply\common\enums\BuChanEnum::IN_PRODUCTION) {
+                                echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                            }
+                            ?>
+                            <?php
+                            if($model->is_apply == common\enums\ConfirmEnum::YES) {
+                                echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
+                                    'class' => 'btn btn-danger btn-xs',
+                                ]);
+                            }
+                            ?>
+
+                            <?= Html::a('打印',['print','id'=>$model->id],[
+                                'target'=>'_blank',
+                                'class'=>'btn btn-info btn-ms',
+                            ]); ?>
                         </div>
                     </div>
                 </div>

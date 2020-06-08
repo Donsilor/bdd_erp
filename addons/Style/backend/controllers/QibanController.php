@@ -109,8 +109,10 @@ class QibanController extends BaseController
                 $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
                 $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
-                $model->style_image = $style->style_image;
-                $model->is_inlay  = $style->is_inlay;;
+                $model->style_image = Yii::$app->styleService->style->getStyleImages($style_sn);
+                $model->is_inlay  = $style->is_inlay;
+            }else{
+                $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):[];
             }
 
             //根据款号获取属性值
@@ -175,6 +177,7 @@ class QibanController extends BaseController
         $model->product_type_id = $product_type_id ?? $model->product_type_id;
         $model->style_sn = 'QIBAN';
         $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
+        $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):null;
         
         
         if ($model->load(Yii::$app->request->post())) {

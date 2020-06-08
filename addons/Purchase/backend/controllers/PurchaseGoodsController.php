@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use common\helpers\ArrayHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -66,6 +67,12 @@ class PurchaseGoodsController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','purchase_id',$purchase_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
+        $lists = $dataProvider->models;
+        foreach ($lists as &$list){
+            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$list->id])->select(['attr_id','attr_value'])->all();
+            $list['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
+        }
+        $dataProvider->models = $lists;
         
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
         return $this->render('index', [
@@ -130,12 +137,15 @@ class PurchaseGoodsController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $purchase_id = Yii::$app->request->get('purchase_id');
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
         $model->initAttrs();
+        $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
         return $this->render($this->action->id, [
             'model' => $model,
+            'purchase' => $purchase
         ]);
     }
     /**
@@ -317,7 +327,7 @@ class PurchaseGoodsController extends BaseController
                     $exist = PurchaseGoods::find()->where(['qiban_sn'=>$goods_sn,'status'=>StatusEnum::ENABLED])->count();
                     if($exist) {
                         return $this->message("起版号已添加过", $this->redirect($skiUrl), 'error');
-                    }                    
+                    }
                     $model->style_id = $qiban->id;
                     $model->goods_sn = $goods_sn;
                     $model->qiban_sn = $goods_sn;
@@ -325,6 +335,7 @@ class PurchaseGoodsController extends BaseController
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
+                    $model->style_channel_id = $qiban->style_channel_id;
                     $model->style_sex = $qiban->style_sex;
                     $model->goods_name = $qiban->qiban_name;
                     $model->cost_price  = $qiban->cost_price;
@@ -349,6 +360,7 @@ class PurchaseGoodsController extends BaseController
                 $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;
+                $model->style_channel_id = $style->style_channel_id;
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;

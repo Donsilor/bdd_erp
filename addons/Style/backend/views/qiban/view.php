@@ -27,9 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->style_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_name') ?>：</td>
+                            <td><?= $model->qiban_name ?></td>
                         </tr>
+
                         <?php if($model->audit_status == \common\enums\AuditStatusEnum::UNPASS){ ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
@@ -40,6 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
                             <td><?= $model->channel ? $model->channel->name : '' ?></td>
                         </tr>
+                        <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::HAVE_STYLE){ ?>
+                        <tr>
+                            <td class="col-xs-2 text-right">款式渠道：</td>
+                            <td><?= $model->style->channel->name ?? '' ?></td>
+                        </tr>
+                        <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                             <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
@@ -64,23 +71,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
                             <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                         </tr>
-
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_name') ?>：</td>
-                            <td><?= $model->qiban_name ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                             <td><?= $model->cost_price ?></td>
                         </tr>
 
-
-
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                             <td><?= $model->remark ?></td>
                         </tr>
-
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
+                            <td><?= $model->stone_info ?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                             <td><?= Yii::$app->formatter->asDatetime($model->created_at); ?></td>
@@ -89,7 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
                             <td><?= $model->creator->username ?? ''; ?></td>
                         </tr>
-
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
                             <td><?= Yii::$app->formatter->asDatetime($model->audit_time); ?></td>
@@ -98,12 +104,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor->username ?? ''; ?></td>
                         </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
 
                     </table>
                 </div>
                 <div class="col-xs-6">
                     <div class="margin-bottom">
-                        <?= \common\helpers\ImageHelper::fancyBox($model->style_image,400,400) ?>
+                        <?php
+                        $style_image_list = !empty($model->style_image)?explode(',', $model->style_image):[];
+                        foreach ($style_image_list as $img){
+                        ?>
+                        <?= \common\helpers\ImageHelper::fancyBox($img) ?>
+                        <?php } ?>
                     </div>
 
                 </div>

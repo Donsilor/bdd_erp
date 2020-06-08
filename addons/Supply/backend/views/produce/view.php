@@ -179,6 +179,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
                  }
                  echo $buttonHtml;
+
+                 if($model->bc_status >= BuChanEnum::ASSIGNED && $model->audit_follower_status != \common\enums\AuditStatusEnum::PENDING){
+                     echo  Html::edit(['change-follower','id'=>$model->id ,'returnUrl'=>$returnUrl], '更改跟单人', [
+                         'class'=>'btn btn-primary btn-ms',
+                         'style'=>"margin-left:5px",
+                         'data-toggle' => 'modal',
+                         'data-target' => '#ajaxModal',
+                     ]);
+                 }
+
+                 if($model->audit_follower_status == \common\enums\AuditStatusEnum::PENDING) {
+                     echo '&nbsp;';
+                     echo Html::edit(['ajax-audit-follower', 'id' => $model->id], '跟单人审核', [
+                         'class' => 'btn btn-success btn-ms',
+                         'data-toggle' => 'modal',
+                         'data-target' => '#ajaxModal',
+                     ]);
+                 }
+
+
                  ?>
              </div>
          </div>

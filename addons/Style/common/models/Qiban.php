@@ -58,8 +58,23 @@ class Qiban extends BaseModel
             [['qiban_name', 'audit_remark', 'remark','stone_info'], 'string', 'max' => 255],
             [['qiban_sn'], 'string', 'max' => 50],
             [['style_sn'], 'string', 'max' => 30],
-            [['style_image'], 'string', 'max' => 100],
+            [['style_image'],'parseStyleImages'],
         ];
+    }
+
+
+    /**
+     * 款式图库
+     */
+    public function parseStyleImages()
+    {
+        $style_image = $this->style_image;
+        if(!empty($style_image[0]) && is_array($style_image)){
+            $this->style_image = $style_image[0];
+        }
+        if(is_array($style_image)){
+            $this->style_image = implode(',',$style_image);
+        }
     }
 
     /**
@@ -76,7 +91,7 @@ class Qiban extends BaseModel
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
             'style_source_id' => '款式来源',
-            'style_channel_id' => '款式渠道',
+            'style_channel_id' => '归属渠道',
             'qiban_type' => '起版类型',
             'style_sex' => '款式性别',
             'style_image' => '起版主图',
@@ -170,5 +185,14 @@ class Qiban extends BaseModel
     public function getPurchaseGoods()
     {
         return $this->hasOne(PurchaseGoods::class, ['qiban_sn'=>'qiban_sn'])->alias('purchaseGoods');
+    }
+
+    /**
+     * 款式 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStyle()
+    {
+        return $this->hasOne(Style::class, ['style_sn'=>'style_sn'])->alias('style');
     }
 }
