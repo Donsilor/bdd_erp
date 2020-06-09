@@ -205,6 +205,34 @@ class PurchaseApplyController extends BaseController
             'model' => $model,
         ]);
     }
+    
+    /**
+     * 关闭
+     * @return mixed
+     */
+    public function actionClose(){
+        
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->apply_status != ApplyStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        $model->apply_status = ApplyStatusEnum::CANCEL;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        //日志
+        $log = [
+                'apply_id' => $id,
+                'apply_sn' => $model->apply_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "关闭单据",
+                'log_msg' => "关闭单据"
+        ];
+        Yii::$app->purchaseService->apply->createApplyLog($log);
+        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        
+    }
     /**
      * 分配跟单人
      * @return mixed|string|\yii\web\Response|string

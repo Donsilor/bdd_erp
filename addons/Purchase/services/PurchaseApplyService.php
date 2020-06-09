@@ -9,7 +9,7 @@ use common\helpers\Url;
 use common\enums\StatusEnum;
 use addons\Purchase\common\models\PurchaseApplyGoods;
 use addons\Purchase\common\models\PurchaseApply;
-use addons\apply\common\models\PurchaseApplyLog;
+use addons\Purchase\common\models\PurchaseApplyLog;
 
 /**
  * Class PurchaseApplyService
