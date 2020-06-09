@@ -281,6 +281,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
+                                    'visible'=> $purchase->purchase_status != PurchaseStatusEnum::SAVE,
                             ],
                             [
                                     'attribute' => '布产号',                                    
@@ -304,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width' => '150'],
+                                    'headerOptions' => ['width' => '150'],                                    
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -322,8 +323,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                              return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
-                                    'apply-edit' =>function($url, $model, $key){
-                                        if($model->produce_id && $model->produce && $model->produce->bc_status <= BuChanEnum::IN_PRODUCTION) {
+                                    'apply-edit' =>function($url, $model, $key) use($purchase){
+                                        if(($purchase->purchase_status != PurchaseStatusEnum::SAVE) && (!$model->produce || $model->produce->bc_status < BuChanEnum::IN_PRODUCTION)) {
                                             return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },                                    

@@ -4,9 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use kartik\daterange\DateRangePicker;
-
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 
@@ -238,9 +236,9 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'purchase_status',                    
                 'value' => function ($model){
-                    return BillStatusEnum::getValue($model->purchase_status);
+                    return PurchaseStatusEnum::getValue($model->purchase_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',BillStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',PurchaseStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style'=> 'width:80px;'
@@ -272,7 +270,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
 
                     'apply' => function($url, $model, $key){
@@ -293,7 +291,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'close' => function($url, $model, $key){
-                        if($model->purchase_status == BillStatusEnum::SAVE){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::delete(['close', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);
