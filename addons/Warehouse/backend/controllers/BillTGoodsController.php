@@ -4,6 +4,9 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillTForm;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -56,6 +59,35 @@ class BillTGoodsController extends BaseController
             'bill' => $bill,
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
+        ]);
+    }
+
+    /**
+     * 其它收货单-添加明细
+     * @return mixed
+     */
+    public function actionAdd()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $bill_id = Yii::$app->request->get('bill_id');
+        //$skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+        $model = new WarehouseBillTGoodsForm();
+        if($model->load(Yii::$app->request->post())){
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->bill_id = $bill_id;
+                Yii::$app->warehouseService->billT->addBillTGoods($model);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
         ]);
     }
 
