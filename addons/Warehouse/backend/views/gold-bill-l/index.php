@@ -62,9 +62,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => '单据类型',
                             'attribute' => 'bill_type',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
+                                return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\StoneBillTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:100px;'

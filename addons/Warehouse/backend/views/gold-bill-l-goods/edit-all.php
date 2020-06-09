@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },
