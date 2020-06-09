@@ -2,29 +2,21 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\enums\BillTypeEnum;
+use Yii;
+use common\components\Service;
+use common\helpers\SnHelper;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use common\helpers\Url;
-use Yii;
-use common\components\Service;
-use common\helpers\SnHelper;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\OrderTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 use common\helpers\ArrayHelper;
 
 /**
@@ -112,8 +104,7 @@ class WarehouseGoldBillService extends Service
         }
         if($form->audit_status == AuditStatusEnum::PASS){
             $form->bill_status = BillStatusEnum::CONFIRM;
-
-            $billGoods = WarehouseStoneBillGoods::find()->select(['stone_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+            $billGoods = WarehouseGoldBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
             if(empty($billGoods)){
                 throw new \Exception("单据明细不能为空");
             }
@@ -122,7 +113,7 @@ class WarehouseGoldBillService extends Service
             if($form->audit_status == AuditStatusEnum::PASS){
                 //同步金料采购收货单货品状态
                 $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-                $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
+                $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
                 if(false === $res) {
                     throw new \Exception("同步金料采购收货单货品状态失败");
                 }

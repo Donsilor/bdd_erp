@@ -211,7 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {delete}',
+                            'template' => '{apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){

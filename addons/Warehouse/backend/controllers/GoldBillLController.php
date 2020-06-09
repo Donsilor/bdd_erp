@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -100,6 +101,10 @@ class GoldBillLController extends GoldBillController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+        $goods = WarehouseGoldBillGoods::findOne(['bill_id'=>$id]);
+        if(!$goods){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
         $model->bill_status = BillStatusEnum::PENDING;
         $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
@@ -110,7 +115,7 @@ class GoldBillLController extends GoldBillController
     }
 
     /**
-     * ajax 买石单-审核
+     * ajax 收货单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException

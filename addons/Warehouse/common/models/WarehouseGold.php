@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $gold_name 金料名称
  * @property string $gold_type 金料类型
+ * @property int $gold_num 金料数量
  * @property string $gold_weight 库存重量
  * @property string $cost_price 成本价/克
  * @property string $sale_price 销售价格/克
@@ -36,7 +37,7 @@ class WarehouseGold extends BaseModel
         return [
             [['gold_name', 'gold_type'], 'required'],
             [['id', 'gold_weight', 'cost_price', 'sale_price'], 'number'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['gold_num', 'status', 'created_at', 'updated_at'], 'integer'],
             [['gold_name'], 'string', 'max' => 30],
             [['gold_type'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
@@ -53,6 +54,7 @@ class WarehouseGold extends BaseModel
             'id' => 'ID',
             'gold_name' => '金料名称',
             'gold_type' => '金料类型',
+            'gold_num' => '金料数量',
             'gold_weight' => '库存重量',
             'cost_price' => '成本价/克',
             'sale_price' => '销售价格/克',

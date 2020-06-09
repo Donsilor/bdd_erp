@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
+use addons\Warehouse\common\models\WarehouseGold;
 use Yii;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
@@ -20,55 +22,32 @@ class WarehouseGoldService extends Service
      */
     public function editGold($form)
     {
-        $stone = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
-        foreach ($stone as $detail){
-            $shibao = WarehouseStone::findOne(['stone_name'=>$detail->stone_name]);
-            if(!$shibao){
-                $stoneM = new WarehouseStone();
-                $dia = [
-                    'stone_name' => $detail->stone_name,
-                    'stone_color' => $detail->color,
-                    'stone_clarity' => $detail->clarity,
-                    'stock_cnt' => $detail->stone_num,
-                    'ms_cnt' => $detail->stone_num,
-                    'stock_weight' => $detail->stone_weight,
-                    'ms_weight' => $detail->stone_weight,
+        $gold = WarehouseGoldBillLGoodsForm::find()->where(['bill_id'=>$form->id])->all();
+        foreach ($gold as $detail){
+            $goods = WarehouseGold::findOne(['gold_name'=>$detail->gold_name]);
+            if(!$goods){
+                $goldM = new WarehouseGold();
+                $good = [
+                    'gold_name' => $detail->gold_name,
+                    'gold_type' => $detail->gold_type,
+                    'gold_num' => $detail->gold_num,
+                    'gold_weight' => $detail->gold_weight,
                     'cost_price' => $detail->cost_price,
-                    'sale_price' => $detail->sale_price,
+                    'sale_price' => $detail->sale_price
                 ];
-                $stoneM->attributes = $dia;
-                if(false === $stoneM->save()){
-                    throw new \Exception($this->getError($stoneM));
+                $goldM->attributes = $good;
+                if(false === $goldM->save()){
+                    throw new \Exception($this->getError($goldM));
                 }
             }else{
-                $cost_price = bcmul($shibao->stock_weight, $shibao->cost_price, 2);
-                $sale_price = bcmul($shibao->stock_weight, $shibao->sale_price, 2);
-                $total_cost = bcmul($detail->stone_weight, $detail->cost_price, 2);
-                $total_sale = bcmul($detail->stone_weight, $detail->sale_price, 2);
-                $total_cost = bcadd($total_cost, $cost_price, 2);
-                $total_sale = bcadd($total_sale, $sale_price, 2);
-                $shibao->stock_weight = bcadd($shibao->stock_weight, $detail->stone_weight, 2);
-                $shibao->cost_price = bcdiv($total_cost, $shibao->stock_weight, 2);
-                $shibao->sale_price = bcdiv($total_sale, $shibao->stock_weight, 2);
-                if(false === $shibao->save()){
-                    throw new \Exception($this->getError($shibao));
+                $goods->gold_num = bcadd($goods->gold_num, $detail->gold_num);
+                $goods->gold_weight = bcadd($goods->gold_weight, $detail->gold_weight, 2);
+                //$goods->cost_price = bcadd($goods->cost_price, $detail->cost_price, 2);
+                //$goods->sale_price = bcadd($goods->sale_price, $detail->sale_price, 2);
+                if(false === $goods->save()){
+                    throw new \Exception($this->getError($goods));
                 }
-                $this->updateStockCnt($shibao);
             }
-        }
-    }
-
-    /**
-     * 更新库存信息
-     * @param $stone
-     */
-    public function updateStockCnt($stone){
-        $stock_cnt = $stone->ms_cnt+$stone->fenbaoru_cnt-$stone->ss_cnt-$stone->fenbaochu_cnt+$stone->ts_cnt-$stone->ys_cnt-$stone->sy_cnt-$stone->th_cnt+$stone->rk_cnt-$stone->ck_cnt;
-        $stock_weight = $stone->ms_weight+$stone->fenbaoru_weight-$stone->ss_weight-$stone->fenbaochu_weight+$stone->ts_weight-$stone->ys_weight-$stone->sy_weight-$stone->th_weight+$stone->rk_weight-$stone->ck_weight;
-        $stone->stock_cnt = $stock_cnt;
-        $stone->ck_weight = $stock_weight;
-        if(false === $stone->save()){
-            throw new \Exception($this->getError($stone));
         }
     }
 }
