@@ -71,20 +71,13 @@ class PurchaseController extends BaseController
                 ]
         ]);
         
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        $dataProvider->query->andWhere(['>','purchase.status',-1]);
-        $dataProvider->query->andWhere(['=','purchase.purchase_type',$this->purchaseType]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);      
+       
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $dataProvider->setPagination(false);
-            $list = $dataProvider->models;
-            $list = ArrayHelper::toArray($list);
-            $ids = array_column($list,'id');
-            $this->actionExport($ids);
+            $queryIds = $dataProvider->query->select(Purchase::tableName().'.id');
+            $this->actionExport($queryIds);
         }
-
-
 
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -292,9 +285,9 @@ class PurchaseController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function actionExport($ids=null){
+    public function actionExport($ids = null){
         $name = '采购订单明细';
-        if(!is_array($ids)){
+        if(!is_object($ids)) {
             $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
@@ -309,7 +302,6 @@ class PurchaseController extends BaseController
             ->leftJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
             ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
-
             ->where(['p.id'=>$ids])
             ->select($select)
             ->asArray()

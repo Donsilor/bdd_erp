@@ -165,6 +165,14 @@ class PurchaseGoods extends BaseModel
     {
         return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
     }
+    /**
+     * 商品属性列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttrs()
+    {
+        return $this->hasMany(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('attrs');
+    }
 
 
 

@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\enums\WhetherEnum;
@@ -104,9 +105,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'material_type',
                                 'value' => function ($model){
-                                    return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
+                                    return Yii::$app->attr->valueName($model->material_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'

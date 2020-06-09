@@ -262,8 +262,8 @@ class GoldReceiptGoodsController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                //同步采购收货单至L单
-                Yii::$app->purchaseService->goldReceipt->syncReceiptToBillInfoL($model);
+                //同步采购收货单至金料收货单
+                Yii::$app->purchaseService->goldReceipt->syncReceiptToGoldL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');

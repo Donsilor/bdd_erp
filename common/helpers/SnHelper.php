@@ -29,6 +29,15 @@ class SnHelper
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),6,'0',STR_PAD_LEFT);
     }
     /**
+     * 采购申请单号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createPurchaseApplySn($prefix = 'CGA')
+    {
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 999999),5,'0',STR_PAD_LEFT);
+    }
+    /**
      * 布产单号
      * @param string $prefix
      * @return string

@@ -93,9 +93,11 @@ class WarehouseBillRepairService extends Service
         if($form->audit_status == AuditStatusEnum::PASS){
             $goods->weixiu_status = WeixiuStatusEnum::ACCEPT;
             $form->repair_status = RepairStatusEnum::AFFIRM;
+            $form->audit_status = AuditStatusEnum::PASS;
         }else{
             $goods->weixiu_status = WeixiuStatusEnum::SAVE;
             $form->repair_status = RepairStatusEnum::SAVE;
+            $form->audit_status = AuditStatusEnum::SAVE;
         }
         if(false === $goods->save()){
             throw new Exception($this->getError($goods));

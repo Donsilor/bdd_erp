@@ -9,6 +9,7 @@ use common\components\Service;
  * 
  * @package addons\Purchase\services
  * @property \addons\Purchase\services\PurchaseService $purchase 采购订单
+ * @property \addons\Purchase\services\PurchaseApplyService $apply 采购申请单
  * @property \addons\Purchase\services\PurchaseGoodsService $purchaseGoods 采购明细
  * @property \addons\Purchase\services\PurchaseGoldService $gold 金料采购订单
  * @property \addons\Purchase\services\PurchaseGoldGoodsService $goldGoods 金料采购明细
@@ -27,6 +28,7 @@ class Application extends Service
     public $childService = [
             /*********采购单相关*********/
             'purchase' => 'addons\Purchase\services\PurchaseService',
+            'apply' => 'addons\Purchase\services\PurchaseApplyService',
             'purchaseGoods' => 'addons\Purchase\services\PurchaseGoodsService',
             'gold' => 'addons\Purchase\services\PurchaseGoldService',
             'goldGoods' => 'addons\Purchase\services\PurchaseGoldGoodsService',
