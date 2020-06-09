@@ -2,16 +2,13 @@
 
 namespace addons\Purchase\common\forms;
 
-use addons\Style\common\enums\QibanTypeEnum;
 use Yii;
-
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\models\StyleAttribute;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Style\common\enums\AttrTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
 
