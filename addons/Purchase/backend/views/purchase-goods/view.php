@@ -187,16 +187,18 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
-                    <?php
-                    $attr_list = \addons\Purchase\common\models\PurchaseGoodsAttribute::find()->orderBy('sort asc')->where(['id'=>$model->id])->all();
-                    foreach ($attr_list as $k=>$attr){
-
-                        ?>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
-                            <td><?= $attr->attr_value ?></td>
-                        </tr>
-                    <?php } ?>
+                   <?php 
+                   if($model->attrs){
+                        foreach ($model->attrs as $attr){
+                            ?>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                                <td><?= $attr->attr_value ?></td>
+                            </tr>
+                        <?php 
+                        } 
+                    }
+                    ?>
                 </table>
             </div>
         </div>

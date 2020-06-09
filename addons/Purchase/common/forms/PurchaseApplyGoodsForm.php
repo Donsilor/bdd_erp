@@ -160,7 +160,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
             $model->id = $this->id;
             $model->attr_id  = $attr_id;
             
-            if(InputTypeEnum::isText($spec->input_type)) {
+            if(InputTypeEnum::isText($spec->input_type) || intval($attr_value_id) != $attr_value_id) {
                 $model->attr_value_id  = 0;
                 $model->attr_value = $attr_value_id;
             }else if(is_numeric($attr_value_id)){

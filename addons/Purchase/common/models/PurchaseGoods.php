@@ -169,9 +169,9 @@ class PurchaseGoods extends BaseModel
      * 商品属性列表
      * @return \yii\db\ActiveQuery
      */
-    public function getGoodsAttrs()
+    public function getAttrs()
     {
-        return $this->hasOne(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('goodsAttrs');
+        return $this->hasMany(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('attrs');
     }
 
 

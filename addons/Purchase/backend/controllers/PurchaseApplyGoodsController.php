@@ -62,13 +62,11 @@ class PurchaseApplyGoodsController extends BaseController
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=','apply_id',$apply_id]);
-
-        $lists = $dataProvider->models;
-        foreach ($lists as &$list){
-            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$list->id])->select(['attr_id','attr_value'])->all();
-            $list['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
+        $models = $dataProvider->models;
+        foreach ($models as & $model){
+            $attrs = $model->attrs ?? [];
+            $model['attr'] = ArrayHelper::map($attrs,'attr_id','attr_value');
         }
-        $dataProvider->models = $lists;
         
         $apply = PurchaseApply::find()->where(['id'=>$apply_id])->one();
         return $this->render('index', [
