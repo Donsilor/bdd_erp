@@ -485,7 +485,7 @@ class PurchaseReceiptService extends Service
             'created_at' => time(),
         ];
 
-        \Yii::$app->purchaseService->purchaseDefective->createDefactiveBill($bill, $detail);
+        \Yii::$app->purchaseService->defective->createDefactiveBill($bill, $detail);
 
         $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
