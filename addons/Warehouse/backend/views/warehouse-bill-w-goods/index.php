@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '调整状态',
                                     'attribute' => 'goodsW.adjust_status',
                                     'value' =>function($model){
-                                        return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status);
+                                        return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status ?? '');
                                     },
                                     'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
                                             'prompt' => '全部',

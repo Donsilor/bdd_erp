@@ -225,7 +225,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
+                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        ]);
                                     }
                                 },
                             ],

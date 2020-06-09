@@ -326,38 +326,74 @@ class PurchaseController extends BaseController
             ['订单编号', 'purchase_sn' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
             ['跟单人', 'username' , 'text'],
-            ['订单状态', 'purchase_status' , 'selectd',PurchaseStatusEnum::getMap()],
-            ['商品类型', 'goods_type' , 'selectd',GoodsTypeEnum::getMap()],
-            ['商品名称', 'goods_name' , 'text'],
-            ['商品编号', 'style_sn' , 'text'],
-            ['起版号', 'qiban_sn' , 'text'],
-            ['起版类型', 'qiban_type' , 'selectd',QibanTypeEnum::getMap()],
+            ['采购单状态', 'purchase_status' , 'selectd',PurchaseStatusEnum::getMap()],
+            ['款号', 'style_sn' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
-            ['款式性别', 'style_sex' , 'selectd',StyleSexEnum::getMap()],
-            ['金托类型', 'jintuo_type' , 'selectd',JintuoTypeEnum::getMap()],
-            ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
-            ['成本价', 'cost_price' , 'text'],
-            ['商品数量', 'goods_num' , 'text'],
+            ['货品名称', 'goods_name' , 'text'],
+            ['件数', 'goods_num' , 'text'],
+            ['材质', 'id' , 'function',function($model){
+                return $model['attr']['10'] ?? '';
+            }],
             ['手寸', 'id' , 'function',function($model){
                 return $model['attr']['38'] ?? '';
-            }],
-            ['证书号', 'id' , 'function',function($model){
-                return $model['attr']['31'] ?? '';
-            }],
-            ['主成色', 'id' , 'function',function($model){
-                return $model['attr']['10'] ?? '';
             }],
             ['主石类型', 'id' , 'function',function($model){
                 return $model['attr']['56'] ?? '';
             }],
-            ['主石重', 'id' , 'function',function($model){
+            ['主石重ct', 'id' , 'function',function($model){
                 return $model['attr']['59'] ?? '';
             }],
-            ['主石数', 'id' , 'function',function($model){
+            ['主石数量(粒)', 'id' , 'function',function($model){
                 return $model['attr']['65'] ?? '';
             }],
             ['主石单价', 'main_stone_price' , 'text'],
+            ['副石1类型', 'id' , 'function',function($model){
+                return $model['attr']['60'] ?? '';
+            }],
+            ['副石1重ct', 'id' , 'function',function($model){
+                return $model['attr']['44'] ?? '';
+            }],
+            ['副石1粒数(粒)', 'id' , 'function',function($model){
+                return $model['attr']['45'] ?? '';
+            }],
+            ['副石1单价', 'second_stone_price1' , 'text'],
+            ['石料信息', 'stone_info' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['银(金)价', 'gold_price' , 'text'],
+            ['单件银(金)额', 'gold_cost_price' , 'text'],
+            ['成本价', 'cost_price' , 'text'],
+            ['配件信息', 'parts_info' , 'text'],
+            ['加工费/件', 'jiagong_fee' , 'text'],
+            ['镶石费/件', 'xiangqian_fee' , 'text'],
+            ['工费总额/件', 'gong_fee' , 'text'],
+            ['改图费', 'gaitu_fee' , 'text'],
+            ['喷蜡费', 'penla_fee' , 'text'],
+            ['单件额', 'unit_cost_price' , 'text'],
+            ['工厂总额', 'factory_cost_price' , 'text'],
+
+
+
+
+
+            ['起版号', 'qiban_sn' , 'text'],
+            ['起版类型', 'qiban_type' , 'selectd',QibanTypeEnum::getMap()],
+
+
+            ['款式性别', 'style_sex' , 'selectd',StyleSexEnum::getMap()],
+            ['金托类型', 'jintuo_type' , 'selectd',JintuoTypeEnum::getMap()],
+            ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
+
+
+
+            ['证书号', 'id' , 'function',function($model){
+                return $model['attr']['31'] ?? '';
+            }],
+
+
+
+
+
 //            ['主石形状', 'id' , 'function',function($model){
 //                return $model['attr']['6'] ?? '';
 //            }],
@@ -386,16 +422,7 @@ class PurchaseController extends BaseController
                 return $model['attr']['49'] ?? '';
             }],
 
-            ['副石1类型', 'id' , 'function',function($model){
-                return $model['attr']['60'] ?? '';
-            }],
-            ['副石1重', 'id' , 'function',function($model){
-                return $model['attr']['44'] ?? '';
-            }],
-            ['副石1粒数', 'id' , 'function',function($model){
-                return $model['attr']['45'] ?? '';
-            }],
-            ['副石1单价', 'second_stone_price1' , 'text'],
+
 //            ['副石1净度', 'id' , 'function',function($model){
 //                return $model['attr']['47'] ?? '';
 //            }],
@@ -414,17 +441,10 @@ class PurchaseController extends BaseController
             }],
             ['副石2单价', 'second_stone_price2' , 'text'],
             ['采购备注', 'remark' , 'text'],
-            ['石料信息', 'stone_info' , 'text'],
-            ['金损', 'gold_loss' , 'text'],
-            ['单件银(金)额', 'gold_cost_price' , 'text'],
-            ['配件信息', 'parts_info' , 'text'],
-            ['加工费/件', 'jiagong_fee' , 'text'],
-            ['镶石费/件', 'xiangqian_fee' , 'text'],
-            ['工费总额/件', 'gong_fee' , 'text'],
-            ['改图费', 'gaitu_fee' , 'text'],
-            ['喷蜡费', 'penla_fee' , 'text'],
-            ['单件额', 'unit_cost_price' , 'text'],
-            ['工厂成本价', 'factory_cost_price' , 'text'],
+
+
+
+
             ['金重', 'id' , 'function',function($model){
                 return $model['attr']['11'] ?? '';
             }],

@@ -110,7 +110,8 @@ class BillMController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if($model->isNewRecord){
+                $isNewRecord = $model->isNewRecord;
+                if($isNewRecord){
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
                     $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
@@ -122,7 +123,7 @@ class BillMController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
 
-                if(!($model->isNewRecord) && $model->to_warehouse_id != $to_warehouse_id){
+                if(!($isNewRecord) && $model->to_warehouse_id != $to_warehouse_id){
                     //编辑单据明细所有入库仓库
                     WarehouseBillGoods::updateAll(['to_warehouse_id' => $model->to_warehouse_id],['bill_id' => $model->id]);
                 }
@@ -135,8 +136,13 @@ class BillMController extends BaseController
                 ];
                 \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    \Yii::$app->getSession()->setFlash('success','保存成功');
+                    return $this->redirect(\Yii::$app->request->referrer);
+                }
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -282,7 +288,7 @@ class BillMController extends BaseController
                 'log_msg' => '单据取消'
             ];
             \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
-            \Yii::$app->getSession()->setFlash('success','删除成功');
+            \Yii::$app->getSession()->setFlash('success','关闭成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
         }catch (\Exception $e){
@@ -291,7 +297,7 @@ class BillMController extends BaseController
         }
 
 
-        return $this->message("删除失败", $this->redirect(['index']), 'error');
+        return $this->message("关闭失败", $this->redirect(['index']), 'error');
     }
 
 
@@ -365,7 +371,7 @@ class BillMController extends BaseController
             }],
             ['金重', 'gold_weight' , 'text'],
             ['主石类型', 'main_stone_type' , 'function',function($model){
-                return Yii::$app->attr->valueName($model->main_stone_type ?? '');
+                return \Yii::$app->attr->valueName($model->main_stone_type ?? '');
             }],
             ['钻石大小', 'diamond_carat' , 'text'],
             ['主石粒数', 'main_stone_num' , 'text'],

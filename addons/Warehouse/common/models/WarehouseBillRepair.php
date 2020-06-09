@@ -58,12 +58,13 @@ class WarehouseBillRepair extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'order_id', 'goods_id', 'repair_type', 'supplier_id', 'repair_times', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'order_id', 'repair_type', 'supplier_id', 'repair_times', 'repair_status', 'follower_id', 'qc_status', 'qc_times', 'orders_time', 'predict_time', 'end_time', 'receiving_time', 'qc_nopass_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['repair_price'], 'number'],
             [['repair_no', 'order_sn', 'produce_sn', 'consignee', 'bill_m_no'], 'string', 'max' => 30],
             //[['repair_act'], 'string', 'max' => 100],
             [['repair_act'], 'RepairActScope'],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
+            [['goods_id'], 'string', 'max' => 30],
         ];
     }
 

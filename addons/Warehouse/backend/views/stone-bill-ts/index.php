@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'apply' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);

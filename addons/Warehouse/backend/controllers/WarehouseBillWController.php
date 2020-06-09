@@ -3,13 +3,17 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -97,21 +101,28 @@ class WarehouseBillWController extends BaseController
         }
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {            
-            if($model->isNewRecord){               
+        if ($model->load(Yii::$app->request->post())) {
+            $isNewRecord = $model->isNewRecord;
+            if($isNewRecord){
                 $model->bill_no   = SnHelper::createBillSn($this->billType);
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
-                if($model->isNewRecord) {
-                    Yii::$app->warehouseService->billW->createBillW($model);
+                if($isNewRecord) {
+                    $model = Yii::$app->warehouseService->billW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
                     }
                 }
-                $trans->commit();                
-                return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+                $trans->commit();
+
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
+                }
+
                 
             }catch (\Exception $e) {   
                 $trans->rollback();
@@ -259,6 +270,55 @@ class WarehouseBillWController extends BaseController
                 'model' => $model,
         ]);
     }
+
+
+    /**
+     * 删除/关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->bill_status = BillStatusEnum::CANCEL;
+
+            //仓库解锁
+            \Yii::$app->warehouseService->warehouse->unlockWarehouse($model->to_warehouse_id);
+            //更新库存状态
+            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
+            $goods_ids = array_column($billGoods,'goods_id');
+            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$goods_ids,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '盘点单',
+                'log_msg' => '单据关闭'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->getSession()->setFlash('success','关闭成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+
+        return $this->message("关闭失败", $this->redirect(['index']), 'error');
+    }
+
+
     /**
      * @param null $ids
      * @return bool|mixed

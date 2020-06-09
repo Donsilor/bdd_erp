@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 if($model->audit_status == \common\enums\AuditStatusEnum::SAVE) {
                     echo '&nbsp;';
-                    echo Html::edit(['ajax-apply', 'id' => $model->id], '提交审核', [
+                    echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
                         'class' => 'btn btn-success btn-sm',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                     ]);

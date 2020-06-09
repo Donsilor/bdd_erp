@@ -107,6 +107,7 @@ class WarehouseBillWService extends WarehouseBillService
         
         //更新应盘数量和总金额   
         $this->billWSummary($bill->id);
+        return $bill;
     }
     
     /**
@@ -139,8 +140,9 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $form->id;
                 $billGoods->bill_type = $form->bill_type;
+                $billGoods->style_sn = $goods->style_sn;
                 $billGoods->bill_no = $form->bill_no;
-                $billGoods->goods_id = $form->goods_id;
+                $billGoods->goods_id = $goods_id;
                 $billGoods->to_warehouse_id = $form->to_warehouse_id;//盘点仓库
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
             }else {

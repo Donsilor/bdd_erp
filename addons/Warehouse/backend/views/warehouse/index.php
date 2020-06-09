@@ -3,7 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \common\enums\StatusEnum::getValue($model->status);
+                                return \common\enums\StatusEnum::getValue($model->status,'getLockMap');
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getLockMap(), [
                                 'prompt' => '全部',
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                    if(in_array($model->audit_status,[AuditStatusEnum::SAVE ,AuditStatusEnum::UNPASS])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
@@ -179,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PENDING ,\common\enums\AuditStatusEnum::UNPASS])){
+                                    if($model->audit_status == AuditStatusEnum::PENDING){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -189,12 +189,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                                 'status' => function($url, $model, $key){
-                                    if(in_array($model->audit_status,[\common\enums\AuditStatusEnum::PASS ])) {
+                                    if($model->audit_status == AuditStatusEnum::PASS) {
                                         return Html::status($model->status);
                                     }
                                 },
                                 'delete' => function($url, $model, $key){
-                                    if($model->audit_status != \common\enums\AuditStatusEnum::PASS) {
+                                    if($model->audit_status == AuditStatusEnum::SAVE) {
                                         return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },
