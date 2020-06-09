@@ -12,6 +12,8 @@ class AttrIdEnum
     //金属信息
     const JINZHONG = 11;//金重
     const FINGER = 38;//手寸（指圈）
+    const MATERIAL_TYPE = 10;//材质
+    const MATERIAL_COLOR = 10;//材质颜色
     const MATERIAL = 10;//材质（成色）
     const XIANGKOU = 49;//镶口
     const INLAY_METHOD = 58;//镶嵌方式

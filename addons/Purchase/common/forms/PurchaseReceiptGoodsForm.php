@@ -56,7 +56,7 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
         $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
         $query->where(['rg.id' => $ids]);
         $query->distinct($col);
-        $query->count(1);
-        return $query->one()==1?:0;
+        $num = $query->count(1);
+        return $num==1?:0;
     }
 }
