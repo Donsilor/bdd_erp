@@ -378,7 +378,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                     if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::SAVE) {
-                        return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                     }
                  },
                 'apply' => function($url, $model, $key){
