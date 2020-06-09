@@ -5,22 +5,22 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\models\PurchaseLog;
+use addons\Purchase\common\models\PurchaseApply;
+use addons\Purchase\common\models\PurchaseApplyLog;
 
 /**
- * 采购日志
+ * 采购申请日志
  * 
  * Class PurchaseLogController
  * @package addons\Purchase\backend\controllers
  */
-class PurchaseLogController extends BaseController
+class PurchaseApplyLogController extends BaseController
 {
     use Curd;
     /**
      * @var PurchaseLog
      */
-    public $modelClass = PurchaseLog::class;
+    public $modelClass = PurchaseApplyLog::class;
 
     /**
      * Lists all PurchaseChannel models.
@@ -28,9 +28,9 @@ class PurchaseLogController extends BaseController
      */
     public function actionIndex()
     {
-        $purchase_id = Yii::$app->request->get('purchase_id');     
+        $apply_id = Yii::$app->request->get('apply_id');     
         
-        $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
+        $apply = PurchaseApply::find()->where(['id'=>$apply_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -38,21 +38,21 @@ class PurchaseLogController extends BaseController
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ],
-                'pageSize' => $this->pageSize,
+                'pageSize' => $this->getPageSize(),
                 
         ]);
         
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['=',PurchaseLog::tableName().'.purchase_id',$purchase_id]);
+        $dataProvider->query->andWhere(['=',PurchaseApplyLog::tableName().'.apply_id',$apply_id]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
-                'purchase' => $purchase,
+                'apply' => $apply,
                 'tab'=>Yii::$app->request->get('tab',3),
-                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$purchase->purchase_type,$this->returnUrl),                
+                'tabList'=>\Yii::$app->purchaseService->apply->menuTabList($apply_id,$this->returnUrl),                
         ]);
     }
     

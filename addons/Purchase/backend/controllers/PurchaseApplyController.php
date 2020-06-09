@@ -173,7 +173,7 @@ class PurchaseApplyController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if(!$model->audit_status) {
+        if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
         }
         // ajax 校验
@@ -190,10 +190,7 @@ class PurchaseApplyController extends BaseController
                 }
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
-                }
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->apply->syncPurchaseToProduce($id);
-                }
+                }                
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);

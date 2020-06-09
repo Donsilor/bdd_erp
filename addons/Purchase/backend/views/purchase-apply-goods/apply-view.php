@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use addons\Supply\common\enums\BuChanEnum;
+use addons\Purchase\common\enums\ApplyStatusEnum;
 
 $this->title = '采购编辑审批';
 $this->params['breadcrumbs'][] = ['label' =>  $this->title];
@@ -15,12 +16,10 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
         <div class="box-body table-responsive">
              <table class="table table-hover">
                     <tr>
-                        <td class="col-xs-1 text-right">采购单号：</td>
-                        <td><?php echo $model->produce ? $model->purchase->purchase_sn : '';?></td>
-                        <td class="col-xs-1 text-right">布产单号：</td>
-                        <td><?php echo $model->produce ? $model->produce->produce_sn : "";?></td>
-                        <td class="col-xs-1 text-right">布产状态：</td>
-                        <td><?php echo $model->produce ? BuChanEnum::getValue($model->produce->bc_status):'未布产';?></td>
+                        <td class="col-xs-1 text-right">采购申请单号：</td>
+                        <td><?php echo $model->apply->apply_sn ?? '';?></td>
+                        <td class="col-xs-1 text-right">单据状态：</td>
+                        <td><?php echo ApplyStatusEnum::getValue($model->apply->apply_status??'');?></td>
                     </tr>
                     <tr>
                         <td colspan="6" class="text-center">

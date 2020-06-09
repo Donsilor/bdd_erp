@@ -21,6 +21,7 @@ use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
+use addons\Purchase\common\models\PurchaseApply;
 /**
  * Attribute
  *
@@ -69,11 +70,11 @@ class PurchaseApplyGoodsController extends BaseController
         }
         $dataProvider->models = $lists;
         
-        $purchase = Purchase::find()->where(['id'=>$apply_id])->one();
+        $apply = PurchaseApply::find()->where(['id'=>$apply_id])->one();
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
-                'purchase'=> $purchase,
+                'apply'=> $apply,
                 'tab'=>Yii::$app->request->get('tab',2),
                 'tabList'=>Yii::$app->purchaseService->apply->menuTabList($apply_id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
@@ -107,7 +108,7 @@ class PurchaseApplyGoodsController extends BaseController
                 //创建属性关系表数据
                 $model->createAttrs();
                 //更新采购汇总：总金额和总数量
-                Yii::$app->purchaseService->apply->purchaseSummary($model->apply_id);
+                Yii::$app->purchaseService->apply->applySummary($model->apply_id);
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -132,14 +133,9 @@ class PurchaseApplyGoodsController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $apply_id = Yii::$app->request->get('apply_id');
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseApplyGoodsForm();
-        $model->initAttrs();
-        $purchase = Purchase::find()->where(['id'=>$apply_id])->one();
         return $this->render($this->action->id, [
             'model' => $model,
-            'purchase' => $purchase
         ]);
     }
     /**
@@ -152,29 +148,23 @@ class PurchaseApplyGoodsController extends BaseController
      */
     public function actionDelete($id)
     {  
-        $apply_id = Yii::$app->request->get('apply_id');        
-        
         try{   
             
-            $trans = Yii::$app->trans->beginTransaction();  
-            
-            $purchase = Purchase::find()->where(['id'=>$apply_id])->one();
-            if($purchase->audit_status != AuditStatusEnum::PENDING) {
-                throw new \Exception("采购单已审核,不允许删除",422);
-            }
-            
+            $trans = Yii::$app->trans->beginTransaction();
             $model = $this->findModel($id);            
-            if($model->produce_id) {
-                throw new \Exception("该商品已布产,不允许删除",422);
+            if(!$model->apply) {
+                throw new \Exception("无效采购单",422);
+            }            
+            if($model->apply->audit_status == AuditStatusEnum::PASS) {
+                throw new \Exception("采购申请单已审核,不允许删除商品",422);
             }
             if (!$model->delete()) {
                 throw new \Exception("删除失败",422);
             }
-            
             //删除商品属性
             PurchaseApplyGoodsAttribute::deleteAll(['id'=>$id]);
             //更新单据汇总
-            Yii::$app->purchaseService->apply->purchaseSummary($apply_id);
+            Yii::$app->purchaseService->apply->applySummary($model->apply->id);
             $trans->commit();
             
             return $this->message("删除成功", $this->redirect($this->returnUrl));
@@ -229,7 +219,7 @@ class PurchaseApplyGoodsController extends BaseController
     {
         
         $id = Yii::$app->request->get('id');
-        $this->modelClass = PurchaseApplyGoodsForm::class;
+        //$this->modelClass = PurchaseApplyGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseApplyGoodsForm();
         $model->initApplyView();

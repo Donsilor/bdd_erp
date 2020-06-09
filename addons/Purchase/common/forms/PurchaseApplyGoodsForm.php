@@ -10,6 +10,7 @@ use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\enums\JintuoTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
+use addons\Purchase\common\models\PurchaseApplyGoods;
 
 /**
  * 款式编辑-款式属性 Form
@@ -17,7 +18,7 @@ use common\enums\ConfirmEnum;
  * @property string $attr_require 必填属性
  * @property string $attr_custom 选填属性
  */
-class PurchaseApplyGoodsForm extends PurchaseApplyGoodsForm
+class PurchaseApplyGoodsForm extends PurchaseApplyGoods
 {
     //属性必填字段
     public $attr_require;
@@ -84,7 +85,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoodsForm
             $this->attr_custom  = $attr_list;
             $this->attr_require = $attr_list;
         }
-    }
+    }    
     /**
      * 初始化 已填写属性数据
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\apply\common\models;
+namespace addons\Purchase\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;

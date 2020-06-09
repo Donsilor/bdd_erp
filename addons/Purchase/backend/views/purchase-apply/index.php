@@ -250,7 +250,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->apply_status != ApplyStatusEnum::CONFIRM){
+                        if($model->apply_status == ApplyStatusEnum::SAVE){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

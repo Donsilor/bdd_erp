@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\AmountHelper;
+use addons\Purchase\common\enums\ApplyStatusEnum;
 
 $this->title =  '详情';
 $this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
@@ -81,28 +82,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             </table>
                         </div>
                         <div class="box-footer text-center">
+                            <?php if($model->apply->apply_status == ApplyStatusEnum::SAVE) {?>
+                                <?= Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
+                                <?= Html::edit(['ajax-apply','id'=>$model->id], '提审', ['class'=>'btn btn-success btn-sm','onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',]);?>
+                            <?php }?>
                             <?php
-                            if($purchase->audit_status == \common\enums\AuditStatusEnum::SAVE) {
-                                echo Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                            }
-                            ?>
-                            <?php
-                            if($model->produce_id && $model->produce && $model->produce->bc_status <= \addons\Supply\common\enums\BuChanEnum::IN_PRODUCTION) {
-                                echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                            if($model->apply->apply_status != ApplyStatusEnum::SAVE) {
+                                echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                             }
                             ?>
                             <?php
                             if($model->is_apply == common\enums\ConfirmEnum::YES) {
                                 echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
-                                    'class' => 'btn btn-danger btn-xs',
+                                    'class' => 'btn btn-danger btn-ms',
                                 ]);
                             }
-                            ?>
-
-                            <?= Html::a('打印',['print','id'=>$model->id],[
-                                'target'=>'_blank',
-                                'class'=>'btn btn-info btn-ms',
-                            ]); ?>
+                            ?>                            
                         </div>
                     </div>
                 </div>
@@ -110,56 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-xs-6">
                     <div class="box">
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
-                                    <td><?= $model->main_stone_price ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
-                                    <td><?= $model->gold_price ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_loss') ?>：</td>
-                                    <td><?= $model->gold_loss ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_cost_price') ?>：</td>
-                                    <td><?= $model->gold_cost_price ?></td>
-                                </tr>
-
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jiagong_fee') ?>：</td>
-                                    <td><?= $model->jiagong_fee ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xiangqian_fee') ?>：</td>
-                                    <td><?= $model->xiangqian_fee ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
-                                    <td><?= $model->gong_fee ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gaitu_fee') ?>：</td>
-                                    <td><?= $model->gaitu_fee ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('penla_fee') ?>：</td>
-                                    <td><?= $model->penla_fee ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('unit_cost_price') ?>：</td>
-                                    <td><?= $model->unit_cost_price ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_cost_price') ?>：</td>
-                                    <td><?= $model->factory_cost_price ?></td>
-                                </tr>
+                            <table class="table table-hover">                                
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
                                     <td><?= $model->stone_info ?></td>
@@ -176,10 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-
-
-
-
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
@@ -188,25 +130,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <?php
-                    $attr_list = \addons\Purchase\common\models\PurchaseGoodsAttribute::find()->orderBy('sort asc')->where(['id'=>$model->id])->all();
-                    foreach ($attr_list as $k=>$attr){
-
-                        ?>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
-                            <td><?= $attr->attr_value ?></td>
-                        </tr>
-                    <?php } ?>
+                    if($model->attrs){
+                        foreach ($model->attrs as $attr){
+                            ?>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                                <td><?= $attr->attr_value ?></td>
+                            </tr>
+                        <?php 
+                        } 
+                    }
+                    ?>
                 </table>
             </div>
         </div>
     </div>
-
-
-
 </div>
-
-
-
-
-

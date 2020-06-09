@@ -24,7 +24,15 @@ class PurchaseApplyGoodsAttribute extends BaseModel
     {
         return self::tableFullName('purchase_apply_goods_attribute');
     }
-
+    /**
+     * behaviors
+     * {@inheritDoc}
+     * @see \common\models\base\BaseModel::behaviors()
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */

@@ -8,12 +8,12 @@ $this->title = '采购日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
+    <h2 class="page-header">采购申请详情 - <?php echo $apply->apply_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="row">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                   <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '采购单号',
-                                'value' => function($model) use($purchase){
-                                    return $purchase->purchase_sn;
+                                'value' => function($model) use($apply){
+                                    return $apply->apply_sn;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'log_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                                'headerOptions' => ['style'=>'width:100px;'],
                                 'value' => function ($model){
                                     return \common\enums\LogTypeEnum::getValue($model->log_type);
                                 },

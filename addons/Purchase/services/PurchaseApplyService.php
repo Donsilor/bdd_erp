@@ -28,9 +28,9 @@ class PurchaseApplyService extends Service
     {
 
         return [
-                1=>['name'=>'基础信息','url'=>Url::to(['apply/view','id'=>$apply_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                2=>['name'=>'采购商品','url'=>Url::to(['apply-goods/index','apply_id'=>$apply_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                3=>['name'=>'日志信息','url'=>Url::to(['apply-log/index','apply_id'=>$apply_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+                1=>['name'=>'基础信息','url'=>Url::to(['purchase-apply/view','id'=>$apply_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                2=>['name'=>'采购商品','url'=>Url::to(['purchase-apply-goods/index','apply_id'=>$apply_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'日志信息','url'=>Url::to(['purchase-apply-log/index','apply_id'=>$apply_id,'tab'=>3,'returnUrl'=>$returnUrl])]
         ];
         
     }
