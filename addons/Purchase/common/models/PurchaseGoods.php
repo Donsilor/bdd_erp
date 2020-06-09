@@ -68,11 +68,12 @@ class PurchaseGoods extends BaseModel
         return [
             [['goods_name','purchase_id', 'jintuo_type','cost_price'], 'required'],
 
-            [['purchase_id', 'style_id', 'qiban_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price'], 'number'],
+            [['purchase_id', 'style_id', 'qiban_type', 'single_stone_weight','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price','single_stone_weight','company_unit_cost'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
+            [['product_size','goods_color'], 'string', 'max' => 100],
             [['style_sn', 'qiban_sn'], 'string', 'max' => 30],
         ];
     }
@@ -122,6 +123,10 @@ class PurchaseGoods extends BaseModel
             'penla_fee' => '喷蜡费/件',
             'unit_cost_price' => '单件额/件',
             'factory_cost_price' => '工厂成本价/件',
+            'product_size' => '成品尺寸',
+            'goods_color' => '货品外部颜色',
+            'single_stone_weight' => '单件连石重',
+            'company_unit_cost' => '公司单件成本',
         ];
     }
     
