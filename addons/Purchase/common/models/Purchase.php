@@ -12,6 +12,8 @@ use addons\Supply\common\models\Supplier;
  * @property int $id
  * @property string $title
  * @property string $purchase_sn 采购单号
+ * @property int $purchase_cate 采购分类
+ * @property int $put_in_type 采购方式
  * @property int $supplier_id 供应商
  * @property int $follower_id 跟单人
  * @property string $total_cost 总成本
@@ -20,6 +22,7 @@ use addons\Supply\common\models\Supplier;
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property string $audit_remark 审核备注
+ * @property string $apply_sn 采购申请单号
  * @property string $remark 采购备注
  * @property int $purchase_status 采购状态
  * @property int $created_at 创建时间
@@ -42,9 +45,9 @@ class Purchase extends BaseModel
     {
         return [
             [['total_cost'], 'number'],
-            [['supplier_id'], 'required'],
-            [['id','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
-            [['audit_remark', 'remark'], 'string', 'max' => 255],
+            [['supplier_id','purchase_cate','put_in_type'], 'required'],
+            [['id','purchase_cate','put_in_type','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
+            [['audit_remark','apply_sn', 'remark'], 'string', 'max' => 255],
             [['purchase_sn'], 'string', 'max' => 30],                
             [['audit_status'], 'checkAuditStatus'],
             ['delivery_time','safe']
@@ -84,8 +87,10 @@ class Purchase extends BaseModel
         return [
             'id' => 'ID',
             'purchase_sn' => '采购单号',
+            'purchase_cate'=>"采购分类",
             'supplier_id' => '供应商',
             'purchase_type' => '采购类型',
+            'put_in_type' =>'采购方式',
             'total_cost' => '总金额',
             'total_num' => '总数量',  
             'follower_id' => '跟单人',
@@ -97,6 +102,7 @@ class Purchase extends BaseModel
             'audit_remark' => '审核备注',
             'delivery_time'=>'预估交货时间',
             'purchase_status' => '采购单状态 ',
+            'apply_sn' => '采购申请单号',
             'remark' => '采购备注',            
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

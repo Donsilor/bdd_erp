@@ -24,7 +24,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
@@ -255,7 +255,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
+                                    'data-target' => '#ajaxModalLg',
                                     'class'=>'btn btn-primary btn-sm',
                             ]);
                         }
