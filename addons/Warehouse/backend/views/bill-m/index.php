@@ -217,7 +217,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                                 'ajax-apply' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);
@@ -239,7 +239,9 @@ $params = $params ? "&".http_build_query($params) : '';
 
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭');
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
+                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        ]);
                                     }
                                 },
                             ],

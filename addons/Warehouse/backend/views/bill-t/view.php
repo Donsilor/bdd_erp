@@ -24,6 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->bill_no ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
+                            <td><?= $model->send_goods_sn ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
@@ -102,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-target' => '#ajaxModalLg',
                     ]);
                     echo '&nbsp;';
-                    echo Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                    echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                         'class'=>'btn btn-success btn-ms',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                     ]);

@@ -106,7 +106,8 @@ class BillTController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if($model->isNewRecord){
+                $isNewRecord = $model->isNewRecord;
+                if($isNewRecord){
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
                 }
@@ -114,8 +115,13 @@ class BillTController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else {
+                    \Yii::$app->getSession()->setFlash('success', '保存成功');
+                    return $this->redirect(\Yii::$app->request->referrer);
+                }
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');

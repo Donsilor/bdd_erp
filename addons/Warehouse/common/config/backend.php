@@ -45,7 +45,7 @@ return [
                      //       'route' => 'bill/index',
                     //],
                     [
-                            'title' => '收货单',
+                            'title' => '入库单',
                             'route' => 'bill-l/index',
 
                     ],

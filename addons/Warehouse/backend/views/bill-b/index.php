@@ -206,7 +206,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                                 'apply' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提交审核', [
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定操作吗？");return false;',
                                         ]);
@@ -222,14 +222,16 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('单据明细', ['bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },*/
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status <= \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
-                                        return Html::delete(['delete', 'id' => $model->id], '取消');
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
+                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        ]);
                                     }
                                 },
                             ],
