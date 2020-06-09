@@ -102,7 +102,8 @@ class PurchaseGoldReceiptService extends Service
         }
         $bill = [
             'bill_type' =>  GoldBillTypeEnum::GOLD_L,
-            'bill_status' => BillStatusEnum::SAVE,
+            'bill_status' => BillStatusEnum::PENDING,
+            'audit_status' => AuditStatusEnum::PENDING,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
             'adjust_type' => AdjustTypeEnum::ADD,
