@@ -177,7 +177,7 @@ class PurchaseDefectiveService extends Service
             $goods_status = ReceiptGoodsStatusEnum::FACTORY;
         }else{
             $form->defective_status = BillStatusEnum::SAVE;
-            $goods_status = ReceiptGoodsStatusEnum::IQC_NO_PASS;
+            $goods_status = ReceiptGoodsStatusEnum::FACTORY_ING;
         }
         $ids = $this->getReceiptGoodsIds($form);
         if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){

@@ -442,22 +442,24 @@ class PurchaseReceiptService extends Service
             throw new Exception("不是同一个供应商不允许制单");
         }
         $total_cost = 0;
-        $detail = [];
+        $receipt = $defect = $detail = [];
         foreach($ids as $id)
         {
             $goods = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
             $receipt_id = $goods->receipt_id;
-            //if(!$receipt){
-            $receipt = PurchaseReceipt::find()->where(['id' => $receipt_id])->one();
-            //}
+            if(!$receipt){
+                $receipt = PurchaseReceipt::find()->where(['id' => $receipt_id])->one();
+                $defect = PurchaseDefective::find()->select(['id'])->where(['receipt_no'=>$receipt->receipt_no])->one();
+            }
             if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_NO_PASS)
             {
                 throw new Exception("流水号【{$id}】不是IQC质检未过状态，不能生成不良品返厂单");
             }
-            $defect = PurchaseDefective::find()->select(['id'])->where(['receipt_no'=>$receipt->receipt_no])->one();
-            $check = PurchaseDefectiveGoods::find()->where(['defective_id'=>$defect->id, 'xuhao' => $goods->xuhao])->count(1);
-            if($check){
-                throw new Exception("流水号【{$id}】已存在保存状态的不良返厂单，不能多次生成不良品返厂单");
+            if($defect){
+                $check = PurchaseDefectiveGoods::find()->where(['defective_id'=>$defect->id, 'xuhao' => $goods->xuhao])->count(1);
+                if($check){
+                    throw new Exception("流水号【{$id}】已存在保存状态的不良返厂单，不能多次生成不良品返厂单");
+                }
             }
             $detail[] = [
                 'xuhao' => $goods->xuhao,
