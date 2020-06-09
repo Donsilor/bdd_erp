@@ -60,7 +60,7 @@ $form = ActiveForm::begin([
                     'todayBtn' => true,//今日按钮显示
                 ]
             ]);?> 
-            <?= $form->field($model, 'apply_sn')->textArea(['options'=>['maxlength' => true],'placeholder' => '请输入采购申请单,多个用英文逗号隔开'])?>   
+            <?= $form->field($model, 'apply_sn')->textArea(['options'=>['maxlength' => true],'placeholder' => '请输入采购申请单,多个用逗号隔开'])?>   
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    

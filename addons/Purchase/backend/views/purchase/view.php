@@ -25,10 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
                             <td><?= $model->purchase_sn ?></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td class="col-xs-1 text-right">--><?//= $model->getAttributeLabel('purchase_type') ?><!--：</td>-->
-<!--                            <td>--><?//= $model->purchase_type ?><!--</td>-->
-<!--                        </tr>                        -->
+ 						<tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_cate') ?>：</td>
+                            <td><?= \addons\Purchase\common\enums\PurchaseCateEnum::getValue($model->purchase_cate)?></td>
+                        </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
                             <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>
@@ -64,6 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->delivery_time) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_sn') ?>：</td>
+                            <td><?= $model->apply_sn ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
