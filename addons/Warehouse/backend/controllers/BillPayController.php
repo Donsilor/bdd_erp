@@ -33,7 +33,6 @@ class BillPayController extends BaseController
      * @var Attribute
      */
     public $modelClass = WarehouseBillPay::class;
-    public $billType   = BillTypeEnum::BILL_TYPE_L;
     /**
     * 首页
     *
@@ -66,7 +65,7 @@ class BillPayController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $bill->bill_type, $returnUrl),
             'bill' => $bill,
         ]);
     }
