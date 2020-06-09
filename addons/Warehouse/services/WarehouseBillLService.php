@@ -61,8 +61,8 @@ class WarehouseBillLService extends Service
         }
         $value = [];
         $key = array_keys($goods[0]);
-        foreach ($goods as $good) {
-            $value[] = array_values($good);
+        foreach ($goods as $item) {
+            $value[] = array_values($item);
         }
         $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
         if(false === $res){
@@ -70,14 +70,13 @@ class WarehouseBillLService extends Service
         }
         $value = [];
         $key = array_keys($bill_goods[0]);
-        foreach ($bill_goods as $goods) {
-            $value[] = array_values($goods);
+        foreach ($bill_goods as $item) {
+            $value[] = array_values($item);
         }
         $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建收货单据明细失败");
         }
-
         //更新货号
         $ids = WarehouseGoods::find()->select(['id'])->where(['goods_id' => $goods_ids])->all();
         $ids = ArrayHelper::getColumn($ids,'id');
