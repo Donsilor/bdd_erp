@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-footer text-center">
                             <?php if($model->apply->apply_status == ApplyStatusEnum::SAVE) {?>
                                 <?= Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
-                                <?= Html::edit(['ajax-apply','id'=>$model->id], '提审', ['class'=>'btn btn-success btn-sm','onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',]);?>
+                                <?= Html::edit(['ajax-apply','id'=>$model->id], '提审', ['class'=>'btn btn-success btn-ms','onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',]);?>
                             <?php }?>
                             <?php
                             if($model->apply->apply_status != ApplyStatusEnum::SAVE) {

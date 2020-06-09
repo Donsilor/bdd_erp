@@ -313,13 +313,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{view} {edit} {apply-edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
-                                        return Html::edit(['view','id' => $model->id, 'purchase_id'=>$model->purchase_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'商品详情',[
+                                        return Html::edit(['view','id' => $model->id, 'purchase_id'=>$model->purchase_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
                                             'class' => 'btn btn-info btn-xs',
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($purchase){
                                          if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
-                                             return Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                             return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key){
