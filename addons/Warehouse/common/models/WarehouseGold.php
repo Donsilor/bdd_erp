@@ -35,7 +35,7 @@ class WarehouseGold extends BaseModel
     {
         return [
             [['gold_name', 'gold_type'], 'required'],
-            [['gold_weight', 'cost_price', 'sale_price'], 'number'],
+            [['id', 'gold_weight', 'cost_price', 'sale_price'], 'number'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['gold_name'], 'string', 'max' => 30],
             [['gold_type'], 'string', 'max' => 10],

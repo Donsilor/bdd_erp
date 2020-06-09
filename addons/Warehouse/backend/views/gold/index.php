@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
-                            'label' => '石料类型',
+                            'label' => '金料类型',
                             'attribute' => 'gold_type',
                             'value' => function ($model){
                                 return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->gold_type);

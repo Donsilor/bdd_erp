@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use yii\grid\GridView;
 use kartik\select2\Select2;
@@ -53,181 +54,148 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
                             ],
                             [
-                                'attribute'=>'id',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'id', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_id',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_name',
+                                'label' => 'ID',
+                                'attribute' => 'id',
+                                'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:260px;'
-                                ]),
                             ],
                             [
-                                'attribute'=>'goods.goods_status',
+                                'label' => '石包',
+                                'attribute'=>'stone_name',
                                 'value' => function($model){
-                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                    return Html::ajaxInput('stone_name',$model->stone_name);
                                 },
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'goods.style_cate_id',
-                                'value' => 'goods.styleCate.name',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'goods.product_type_id',
-                                'value' => 'goods.productType.name',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'put_in_type',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'label' => '石包类型',
+                                'attribute' => 'stone_type',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                                    return Yii::$app->attr->valueName($model->stone_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-
+                                    'style'=> 'width:100px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'from_warehouse_id',
-                                'value' =>"fromWarehouse.name",
-                                'filter'=>Select2::widget([
-                                    'name'=>'SearchModel[from_warehouse_id]',
-                                    'value'=>$searchModel->from_warehouse_id,
-                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                    'options' => ['placeholder' =>"请选择"],
-                                    'pluginOptions' => [
-                                        'allowClear' => true,
-
-                                    ],
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'attribute' => 'to_warehouse_id',
-                                'value' =>"toWarehouse.name",
-                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'material',
+                                'label' => '石包总数',
+                                'attribute' => 'stone_num',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
+                                    return Html::ajaxInput('stone_num',$model->stone_num);
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'gold_loss',
+                                'label' => '石包总重量',
+                                'attribute' => 'stone_weight',
                                 'value' => function($model){
-                                    return $model->gold_loss;
-                                },
-                                'format' => 'raw',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'diamond_carat',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'diamond_color',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_color);
+                                    return Html::ajaxInput('stone_weight',$model->stone_weight);
                                 },
                                 'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'diamond_clarity',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_clarity);
-                                },
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'diamond_cert_id',
-                                'filter' => false,
-                            ],
-                            [
+                                'label' => '每卡采购价格',
                                 'attribute' => 'cost_price',
                                 'value' => function($model){
                                     return Html::ajaxInput('cost_price',$model->cost_price);
                                 },
                                 'filter' => false,
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-
                             ],
                             [
-                                'attribute' => 'market_price',
+                                'label' => '每卡销售价格',
+                                'attribute' => 'sale_price',
                                 'value' => function($model){
-                                    return Html::ajaxInput('cost_price',$model->cost_price);
+                                    return Html::ajaxInput('sale_price',$model->sale_price);
                                 },
                                 'filter' => false,
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'created_at',
-                                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
-                                    'model' => $searchModel,
-                                    'attribute' => 'created_at',
-                                    'value' => $searchModel->created_at,
-                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'locale' => [
-                                            'separator' => '/',
-                                        ],
-                                        'endDate' => date('Y-m-d',time()),
-                                        'todayHighlight' => true,
-                                        'autoclose' => true,
-                                        'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-
-
-                                    ],
-
-                                ]),
-                                'value'=>function($model){
-                                    return Yii::$app->formatter->asDatetime($model->updated_at);
-                                }
-
+                                'label' => '证书号',
+                                'attribute' => 'cert_id',
+                                'value' => function($model){
+                                    return Html::ajaxInput('cert_id',$model->cert_id);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '石重',
+                                'attribute' => 'carat',
+                                'value' => function($model){
+                                    return Html::ajaxInput('carat',$model->carat);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '颜色',
+                                'attribute' => 'color',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'color', Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '净度',
+                                'attribute' => 'clarity',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'clarity', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '切工',
+                                'attribute' => 'cut',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'cut', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '抛光',
+                                'attribute' => 'polish',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '荧光',
+                                'attribute' => 'fluorescence',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'fluorescence', Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '对称',
+                                'attribute' => 'symmetry',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'symmetry', Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
