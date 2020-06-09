@@ -183,9 +183,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'material', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'material', Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'
@@ -317,9 +317,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'main_stone', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'main_stone', Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone',Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -354,9 +354,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_color',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'main_stone_color', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'main_stone_color', Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -367,9 +367,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_clarity',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'main_stone_clarity', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'main_stone_clarity', Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -392,9 +392,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'second_stone1', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'second_stone1', Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone1',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone1',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -429,9 +429,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'second_stone1', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'second_stone1', Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone2',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone2',Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -538,9 +538,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'biaomiangongyi',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'biaomiangongyi', Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'biaomiangongyi', Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI), [
+                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'

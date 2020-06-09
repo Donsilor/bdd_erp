@@ -53,12 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
-                            'label' => '石料类型',
+                            'label' => '金料类型',
                             'attribute' => 'gold_type',
                             'value' => function ($model){
-                                return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->gold_type);
+                                return Yii::$app->attr->valueName($model->gold_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'

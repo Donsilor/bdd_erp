@@ -18,8 +18,10 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseBillRepairService $repair 维修单据
  * @property \addons\Warehouse\services\WarehouseStoneService $stone 石包
+ * @property \addons\Warehouse\services\WarehouseGoldService $gold 金料
  * @property \addons\Warehouse\services\WarehouseStoneBillService $stoneBill 石包单据
- * 
+ * @property \addons\Warehouse\services\WarehouseGoldBillService $goldBill 金料单据
+ *
  */
 class Application extends Service
 {
@@ -39,5 +41,7 @@ class Application extends Service
         'repair' => 'addons\Warehouse\services\WarehouseBillRepairService',
         'stone' => 'addons\Warehouse\services\WarehouseStoneService',
         'stoneBill' => 'addons\Warehouse\services\WarehouseStoneBillService',
+        'gold' => 'addons\Warehouse\services\WarehouseGoldService',
+        'goldBill' => 'addons\Warehouse\services\WarehouseGoldBillService',
     ];
 }

@@ -94,6 +94,10 @@ return [
                         'title' => '金料列表',
                         'route' => 'gold/index',
                     ],
+                    [
+                        'title' => '收货单',
+                        'route' => 'gold-bill-l/index',
+                    ],
                 ],
 
             ],
