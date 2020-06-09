@@ -4,13 +4,13 @@ namespace addons\Warehouse\common\forms;
 
 
 use common\helpers\ArrayHelper;
-use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillGoodsT;
 
 /**
  * 其他收货单明细 Form
  *
  */
-class WarehouseBillTGoodsForm extends WarehouseBillGoods
+class WarehouseBillTGoodsForm extends WarehouseBillGoodsT
 {
     /**
      * {@inheritdoc}
