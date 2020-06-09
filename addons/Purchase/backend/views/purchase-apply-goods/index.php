@@ -280,6 +280,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
+                                    'visible' => $apply->apply_status != ApplyStatusEnum::SAVE,
                             ],                            
                             [
                                 'class' => 'yii\grid\ActionColumn',
