@@ -310,6 +310,12 @@ class PurchaseController extends BaseController
         foreach ($list as &$val){
             $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
             $val['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
+            $val['main_stone_num'] = $model['attr']['65'] ?? 0;
+            $val['main_stone_num_sum'] = $val['main_stone_num'] * $val['goods_num'];
+            $val['main_stone_weight'] = $model['attr']['59'] ?? 0;
+            $val['main_stone_weight_sum'] = $val['main_stone_weight'] * $val['main_stone_num_sum'];
+            $val['main_stone_price_sum'] = $val['main_stone_price'] * $val['main_stone_num_sum'];
+
         }
 
         //print_r($list);exit();
@@ -327,16 +333,20 @@ class PurchaseController extends BaseController
             ['材质', 'id' , 'function',function($model){
                 return $model['attr']['10'] ?? '';
             }],
+            ['货品外部颜色', 'goods_color' , 'text'],
             ['手寸', 'id' , 'function',function($model){
                 return $model['attr']['38'] ?? '';
             }],
+            ['成品尺寸', 'product_size' , 'text'],
             ['主石类型', 'id' , 'function',function($model){
                 return $model['attr']['56'] ?? '';
             }],
-            ['主石重ct', 'id' , 'function',function($model){
-                return $model['attr']['59'] ?? '';
+            ['主石重ct', 'main_stone_weight' ,'text'],
+            ['主石数量(粒)', 'main_stone_num' , 'text'],
+            ['石总数(粒）', 'id' , 'function',function($model){
+                return $model['attr']['65'] ?? '';
             }],
-            ['主石数量(粒)', 'id' , 'function',function($model){
+            ['石总重ct', 'id' , 'function',function($model){
                 return $model['attr']['65'] ?? '';
             }],
             ['主石单价', 'main_stone_price' , 'text'],
@@ -381,68 +391,7 @@ class PurchaseController extends BaseController
             ['证书号', 'id' , 'function',function($model){
                 return $model['attr']['31'] ?? '';
             }],
-
-
-
-
-
-//            ['主石形状', 'id' , 'function',function($model){
-//                return $model['attr']['6'] ?? '';
-//            }],
-//            ['主石颜色', 'id' , 'function',function($model){
-//                return $model['attr']['7'] ?? '';
-//            }],
-//            ['主石净度', 'id' , 'function',function($model){
-//                return $model['attr']['2'] ?? '';
-//            }],
-//            ['主石荧光', 'id' , 'function',function($model){
-//                return $model['attr']['8'] ?? '';
-//            }],
-//            ['主石抛光', 'id' , 'function',function($model){
-//                return $model['attr']['28'] ?? '';
-//            }],
-//            ['主石对称', 'id' , 'function',function($model){
-//                return $model['attr']['29'] ?? '';
-//            }],
-//            ['主石切工', 'id' , 'function',function($model){
-//                return $model['attr']['4'] ?? '';
-//            }],
-            ['市场价(标签价)', 'id' , 'function',function($model){
-                return $model['attr']['2'] ?? '';
-            }],
-            ['镶口', 'id' , 'function',function($model){
-                return $model['attr']['49'] ?? '';
-            }],
-
-
-//            ['副石1净度', 'id' , 'function',function($model){
-//                return $model['attr']['47'] ?? '';
-//            }],
-//            ['副石1颜色', 'id' , 'function',function($model){
-//                return $model['attr']['46'] ?? '';
-//            }],
-
-            ['副石2类型', 'id' , 'function',function($model){
-                return $model['attr']['64'] ?? '';
-            }],
-            ['副石2粒数', 'id' , 'function',function($model){
-                return $model['attr']['62'] ?? '';
-            }],
-            ['副石2重', 'id' , 'function',function($model){
-                return $model['attr']['63'] ?? '';
-            }],
-            ['副石2单价', 'second_stone_price2' , 'text'],
-            ['采购备注', 'remark' , 'text'],
-
-
-
-
-            ['金重', 'id' , 'function',function($model){
-                return $model['attr']['11'] ?? '';
-            }],
-            ['毛重', 'id' , 'function',function($model){
-                return $model['attr']['11'] ?? '';
-            }]
+            
 
         ];
 

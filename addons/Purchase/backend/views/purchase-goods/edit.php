@@ -158,9 +158,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'unit_cost_price')->textInput() ?>
                         </div>                      
                     </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'product_size')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'goods_color')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'single_stone_weight')->textInput() ?>
+                        </div>
+                    </div>
                     <div class="row">                        
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'company_unit_cost')->textInput() ?>
                         </div>
                     </div>
                 <div class="row">
