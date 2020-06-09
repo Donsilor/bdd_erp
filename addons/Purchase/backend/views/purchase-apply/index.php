@@ -225,7 +225,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品', ['purchase-apply-goods/index', 'apply_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-apply-goods/index', 'apply_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'apply' => function($url, $model, $key){
                         if($model->apply_status == ApplyStatusEnum::SAVE){
