@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'label' => '金料总价',
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'label' => '纸质单号',

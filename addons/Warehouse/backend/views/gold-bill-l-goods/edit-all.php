@@ -12,7 +12,7 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_l_goods', '收货单详情');
+$this->title = Yii::t('gold_bill_l_goods', '收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,14 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width'=>'90%',
-                'data-height'=>'90%',
-                'data-offset'=>'20px',
-            ]);
-            echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-b-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['gold-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -42,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%;white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -63,11 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '金料名称',
                                 'attribute'=>'gold_name',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('gold_name',$model->gold_name);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料类型',
@@ -80,29 +73,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料总数',
                                 'attribute' => 'gold_num',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('gold_num',$model->gold_num);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料总重量',
                                 'attribute' => 'gold_weight',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('gold_weight',$model->gold_weight);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '成本价',
                                 'attribute' => 'cost_price',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('cost_price',$model->cost_price);
                                 },
@@ -112,6 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '销售价',
                                 'attribute' => 'sale_price',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('sale_price',$model->sale_price);
                                 },

@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill_ms_goods', '买石单明细');
+$this->title = Yii::t('gold_bill_l_goods', '收货单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -60,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '金料名称',
                                 'attribute'=>'gold_name',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料类型',
@@ -73,19 +72,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料总数',
                                 'attribute' => 'gold_num',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '金料总重量',
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label' => '成本价',
