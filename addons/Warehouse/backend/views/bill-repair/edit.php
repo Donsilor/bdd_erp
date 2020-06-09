@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([
          'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['edit-lang', 'id' => $model->id]),
+        'validationUrl' => Url::to(['edit', 'id' => $model->id]),
         'fieldConfig' => [
             'template' => "{label}{input}{hint}",
         ],

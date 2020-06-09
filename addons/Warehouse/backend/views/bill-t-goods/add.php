@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'produce_sn')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
-                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchReceiptGoods()"]) ?>
+                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchStyleGoods()"]) ?>
                      </div>
                  </div>
                 <div class="box-body table-responsive">
@@ -658,7 +658,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-function searchReceiptGoods() {
+function searchStyleGoods() {
    var produce_sns = $.trim($("#purchasereceiptgoods-produce_sn").val());
    if(!produce_sns) {
 	    rfMsg("请输入布产单编号");

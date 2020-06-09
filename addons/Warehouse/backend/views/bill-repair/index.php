@@ -26,7 +26,7 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit-lang']) ?>
+                    <?= Html::create(['edit']) ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -390,7 +390,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
                 },
                 'audit' => function($url, $model, $key){
-                   if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::APPLY && $model->audit_status == AuditStatusEnum::PENDING){
+                   if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::APPLY){
                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',

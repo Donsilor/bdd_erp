@@ -86,7 +86,7 @@ class BillRepairController extends BaseController
      *
      * @return mixed
      */
-    public function actionEditLang()
+    public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
