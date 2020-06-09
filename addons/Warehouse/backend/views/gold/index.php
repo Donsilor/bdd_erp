@@ -66,6 +66,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'label' => '数量',
+                            'attribute'=>'gold_num',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_num', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'label' => '库存重量',
                             'attribute'=>'gold_weight',
                             'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
