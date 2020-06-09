@@ -66,10 +66,10 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     public function getPostAttrs()
     {
         $attr_list = [];
-        if(!$this->attr_require){
+        if($this->attr_require){
             $attr_list =  $this->attr_require + $attr_list;
         }
-        if(!$this->attr_custom){
+        if($this->attr_custom){
             $attr_list =  $this->attr_custom + $attr_list;
         }
         return $attr_list;
