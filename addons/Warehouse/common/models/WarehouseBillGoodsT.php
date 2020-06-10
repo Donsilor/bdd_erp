@@ -83,11 +83,11 @@ class WarehouseBillGoodsT extends BaseModel
         return [
             [['bill_id'], 'required'],
             [['id', 'bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price', 'cost_price', 'xiangkou', 'parts_gold_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
+            [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price', 'cost_price', 'parts_gold_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_id', 'style_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_image', 'cert_id', 'length'], 'string', 'max' => 100],
             [['gross_weight', 'diamond_cert_id'], 'string', 'max' => 20],
-            [['finger', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'main_stone_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
+            [['xiangkou', 'finger', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'main_stone_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
             [['cert_type'], 'string', 'max' => 50],
             [['remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
