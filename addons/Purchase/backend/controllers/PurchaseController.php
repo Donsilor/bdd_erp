@@ -2,24 +2,12 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Style\common\enums\InlayEnum;
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Style\common\enums\QibanTypeEnum;
-use addons\Style\common\enums\StyleSexEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Supply\common\enums\GoodsTypeEnum;
-use addons\Supply\common\models\Supplier;
+
+use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
-use common\helpers\Url;
 use common\models\backend\Member;
-use function PHPSTORM_META\map;
-use Yii;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
 use common\models\base\SearchModel;
@@ -29,6 +17,12 @@ use addons\Purchase\common\forms\PurchaseFollowerForm;
 use addons\Purchase\common\models\Purchase;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
+use addons\Purchase\common\models\PurchaseGoods;
+use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\models\Supplier;
 
 /**
  *
@@ -413,7 +407,8 @@ class PurchaseController extends BaseController
             $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
 
             //净重/单件(g) 总净重(g) ---金重
-            $val['gold_weight'] = $val[AttrIdEnum::JINZHONG] ?? 0;
+            $val['gold_weight'] = $attr[AttrIdEnum::JINZHONG] ?? 0;
+
             $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
 
             //工厂总额

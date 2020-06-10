@@ -163,6 +163,9 @@ class BillTController extends BaseController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+        if($model->goods_num<=0){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
         $model->bill_status = BillStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -190,7 +193,7 @@ class BillTController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = Yii::$app->user->identity->getId();
 
-                \Yii::$app->warehouseService->billL->auditBillL($model);
+                \Yii::$app->warehouseService->billT->auditBillT($model);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){

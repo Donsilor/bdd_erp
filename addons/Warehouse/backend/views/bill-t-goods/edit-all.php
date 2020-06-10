@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_t_goods', '其它收货单详情');
+$this->title = Yii::t('bill_t_goods', '其它收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -79,7 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'label' => '商品名称',
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full'],
@@ -87,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
+                                    'class' => 'form-control goods_name',
                                     'style'=> 'width:200px;'
                                 ]),
                             ],
@@ -140,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'gold_weight',
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
@@ -152,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'gold_loss',
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_loss', $model->gold_loss, ['data-id'=>$model->id]);
@@ -164,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'gross_weight',
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gross_weight', $model->gross_weight, ['data-id'=>$model->id]);
@@ -175,28 +174,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'xiangkou',
+                                'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('xiangkou', $model->xiangkou, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'xiangkou', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'finger',
+                                'attribute' => 'finger',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('finger', $model->finger, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'finger', [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cert_type',
@@ -209,7 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'cert_id',
@@ -220,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'cert_id', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -276,7 +277,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('diamond_carat', $model->diamond_carat, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -379,7 +380,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('diamond_discount', $model->diamond_discount, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'diamond_discount', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -429,7 +430,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -441,7 +442,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('market_price', $model->market_price, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'market_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -453,7 +454,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('length', $model->length, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'length', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -465,7 +466,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('parts_gold_weight', $model->parts_gold_weight, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -477,7 +478,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('parts_num', $model->parts_num, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -502,7 +503,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('main_stone_num', $model->main_stone_num, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -514,7 +515,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('main_stone_price', $model->main_stone_price, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -539,7 +540,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_num1', $model->second_stone_num1, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -551,7 +552,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_weight1', $model->second_stone_weight1, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -563,7 +564,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_price1', $model->second_stone_price1, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -627,7 +628,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_num2', $model->second_stone_num2, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -639,7 +640,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_weight2', $model->second_stone_weight2, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -651,7 +652,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_price2', $model->second_stone_price2, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -705,6 +706,20 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function(){
-        $(".batch_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs\" href=\"#\" role=\"button\">批量填充</a>");
+        $(".batch_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs batch\" href=\"#\" role=\"button\">批量填充</a>");
+    });
+    //批量填充
+    $(document).on("click",'.batch',function(){
+        var fromValue = "";
+        var name = $(this).parent().attr("data-sort");
+        var title = $(this).parent().html();
+        if(fromValue = prompt("<?= Yii::t("goods","请输入")?>", "0")){
+            $("input[name='"+name+"']").each(function(){
+                $(this).val(fromValue);
+                $(this).focus();
+            });
+        }else{
+            return false;
+        }
     });
 </script>

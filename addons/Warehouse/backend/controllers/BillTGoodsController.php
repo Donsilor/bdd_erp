@@ -38,7 +38,7 @@ class BillTGoodsController extends BaseController
 
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-t-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-t-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

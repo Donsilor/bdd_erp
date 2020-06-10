@@ -161,6 +161,9 @@ class BillBController extends BaseController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+        if($model->goods_num<=0){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
         $model->bill_status = BillStatusEnum::PENDING;
         $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){

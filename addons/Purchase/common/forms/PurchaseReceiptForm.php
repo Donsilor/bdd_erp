@@ -22,7 +22,7 @@ class PurchaseReceiptForm extends PurchaseReceipt
     public function rules()
     {
         $rules = [
-            [['put_in_type', 'to_warehouse_id'], 'required'],
+            [['put_in_type'], 'required'],
         ];
         return array_merge(parent::rules() , $rules);
     }

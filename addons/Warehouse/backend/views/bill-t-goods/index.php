@@ -13,7 +13,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_t_goods', '其他收货单详情');
+$this->title = Yii::t('bill_t_goods', '其他收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -160,30 +160,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'xiangkou',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                'attribute' => 'xiangkou',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->xiangkou);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                            ],
-                            [
-                                'attribute'=>'finger',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'finger', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'cert_type',
                                 'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'cert_type', [
+                            ],
+                            [
+                                'attribute' => 'finger',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->finger);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'cert_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->cert_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'cert_id',

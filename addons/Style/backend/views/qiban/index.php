@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use common\enums\AuditStatusEnum;
 use kartik\daterange\DateRangePicker;
+use addons\Style\common\enums\QibanTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
         'options' => ['style'=>' width:120%;white-space:nowrap;' ],
-        'showFooter' => true,//显示footer行
+        'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
             [
@@ -189,6 +190,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'created_at',
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDatetime($model->created_at);
+                },
                 'filter' => DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
                     'attribute' => 'created_at',
@@ -207,16 +211,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                     ],
-                ]),
-                'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
-                }
+                ]),               
 
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {edit} {ajax-apply} {audit} {status}',
+                'template' => '{view} {edit} {apply} {audit} {status}',
                 'buttons' => [
                     'view'=> function($url, $model, $key){
                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -226,7 +227,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'edit' => function($url, $model, $key){
                         //审核后不能编辑
                         if(!$model->purchaseGoods){
-                            if($model->qiban_type == 1){
+                            if($model->qiban_type == QibanTypeEnum::HAVE_STYLE){
                                 return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
                                     'data-width'=>'90%',
@@ -244,7 +245,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
 
                     },
-                    'ajax-apply' => function($url, $model, $key){
+                    'apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
