@@ -32,29 +32,29 @@
 				<div class="list clf">
 					<div class="child fl clf">
 						<div class="child-attr fl">采购订单：</div>
-						<div class="child-val fl">BSZ20200422002</div>
+						<div class="child-val fl"><?= $model->purchase_sn ?></div>
 					</div>
 					
 					<div class="child fl clf">
 						<div class="child-attr fl">采购下单员：</div>
-						<div class="child-val fl">邹竹英</div>
+						<div class="child-val fl"><?= $model->creator->username ?? '' ?></div>
 					</div>
 				</div>
 				<div class="list clf">
 					<div class="child fl clf">
 						<div class="child-attr fl">委托供应商：</div>
-						<div class="child-val fl">C08-金熠珠宝</div>
+						<div class="child-val fl"><?= $model->supplier->supplier_name ?? '' ?></div>
 					</div>
 				</div>
 				<div class="list clf">
 					<div class="child fl clf">
 						<div class="child-attr fl">供应商地址：</div>
-						<div class="child-val fl">番禺 </div>
+						<div class="child-val fl"><?= $model->supplier->address ?? '' ?> </div>
 					</div>
 					
 					<div class="child fl clf">
 						<div class="child-attr fl">联系方式：</div>
-						<div class="child-val fl"></div>
+						<div class="child-val fl"><?= $model->supplier->telephone ?? $model->supplier->mobile ?? '' ?></div>
 					</div>
 					
 					<div class="fr settle-accounts">
@@ -173,192 +173,189 @@
 				</tr>
 				<tr class="t-head bg-blue">
 					<td>
-						<div>主石</div>
+						<div>石料名称【石头类型】</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>石重ct</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>数量(粒)</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>石总数(粒）</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>石总重ct</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>石价【单价】</div>
 					</td>
 					<td>
-						<div>主石</div>
+						<div>金额</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>石料名称【石头类型】</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>石重ct</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>数量(粒)</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>总数量(粒）</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>总重ct</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>石价</div>
 					</td>
 					<td>
-						<div>副石</div>
+						<div>金额</div>
 					</td>
 				</tr>
 				
 				<!-- 列表内容 -->
+                <?php
+                  foreach ($lists as $key => $val){
+                      $model = \addons\Purchase\common\models\PurchaseGoods::find()->where(['id'=>$val['id']])->one();
+                ?>
 				<tr>
 					<td>
-						<div>1</div>
+						<div><?=$key+1 ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><img src="<?= Yii::$app->purchaseService->purchaseGoods->getStyleImage($model)?>"/> </div>
 					</td>
 					<td>
-						<div>DR0001182</div>
+						<div><?= $val['style_sn'] ?>/div>
 					</td>
 					<td>
-						<div>女戒</div>
+						<div><?= $val['style_cate_name'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['product_type_name'] ?></div>
 					</td>
 					<td>
-						<div>S925银莫桑石女戒</div>
+						<div><?= $val['goods_name'] ?></div>
 					</td>
 					<td>
-						<div>15</div>
+						<div><?= $val['goods_num'] ?></div>
 					</td>
 					<td>
-						<div>S925</div>
+						<div><?= $val['material'] ?></div>
 					</td>
 					<td>
-						<div>白色</div>
+						<div><?= $val['goods_color'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['finger'] ?></div>
 					</td>
 					<td>
-						<div>US5.5#/3件US5#/2件US6#/3件US6.5#/2件US7#/3件US8#/2件</div>
+						<div><?= $val['product_size'] ?></div>
 					</td>
 					<td>
-						<div>莫桑石</div>
+						<div><?= $val['main_stone_type'] ?></div>
 					</td>
 					<td>
-						<div>1.00</div>
+						<div><?= $val['main_stone_weight'] ?></div>
 					</td>
 					<td>
-						<div>1</div>
+						<div><?= $val['main_stone_num'] ?></div>
 					</td>
 					<td>
-						<div>15</div>
+						<div><?= $val['main_stone_num_sum'] ?></div>
 					</td>
 					<td>
-						<div>15.00</div>
+						<div><?= $val['main_stone_weight_sum'] ?></div>
 					</td>
 					<td>
-						<div>120</div>
+						<div><?= $val['main_stone_price'] ?></div>
 					</td>
 					<td>
-						<div>1800.00</div>
+						<div><?= $val['main_stone_price_sum'] ?></div>
 					</td>
 					<td>
-						<div>莫桑石</div>
+						<div><?= $val['second_stone_type1'] ?></div>
 					</td>
 					<td>
-						<div>0.44</div>
+						<div><?= $val['second_stone_weight'] ?></div>
 					</td>
 					<td>
-						<div>34</div>
+						<div><?= $val['second_stone_num'] ?></div>
 					</td>
 					<td>
-						<div>510</div>
+						<div><?= $val['second_stone_num_sum'] ?></div>
 					</td>
 					<td>
-						<div>6.60</div>
+						<div><?= $val['second_stone_weight_sum'] ?></div>
 					</td>
 					<td>
-						<div>230</div>
+						<div><?= $val['second_stone_price1'] ?></div>
 					</td>
 					<td>
-						<div>1518.00</div>
+						<div><?= $val['second_stone_price_sum'] ?></div>
 					</td>
 					<td>
-						<div>石头公司自配
-						主石尺寸6.5mm-1pc,
-						共需15pc，重15.00ct
-						副石1.4mm-26pc,
-						共需390pc,重0.312ct
-						1.5mm-4pc,
-						共需60pc重0.06ct
-						1.6mm-4pc,
-						共需60pc重0.068ct</div>
+						<div><?= $val['stone_info'] ?></div>
 					</td>
 					<td>
-						<div>3</div>
+						<div><?= $val['single_stone_weight'] ?></div>
 					</td>
 					<td>
-						<div>45</div>
+						<div><?= $val['single_stone_weight_sum'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['gold_weight'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['gold_weight_sum'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['gold_loss'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['gold_price'] ?></div>
 					</td>
 					<td>
-						<div>15.00</div>
+						<div><?= $val['gold_cost_price'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['cost_price'] ?></div>
 					</td>
 					<td>
-						<div></div>
+						<div><?= $val['parts_info'] ?></div>
 					</td>
 					<td>
-						<div>精工，光面</div>
+						<div><?= $val['face'] ?></div>
 					</td>
 					<td>
-						<div>35</div>
+						<div><?= $val['jiagong_fee'] ?></div>
 					</td>
 					<td>
-						<div>30</div>
+						<div><?= $val['xiangqian_fee'] ?></div>
 					</td>
 					<td>
-						<div>65</div>
+						<div><?= $val['gong_fee'] ?></div>
 					</td>
 					<td>
-						<div>220</div>
+						<div><?= $val['gaitu_fee'] ?></div>
 					</td>
 					<td>
-						<div>110</div>
+						<div><?= $val['penla_fee'] ?></div>
 					</td>
 					<td>
-						<div>80</div>
+						<div><?= $val['unit_cost_price'] ?></div>
 					</td>
 					<td>
-						<div>1530</div>
+						<div><?= $val['factory_cost_price_sum'] ?></div>
 					</td>
 					<td>
-						<div>4848</div>
+						<div><?= $val['company_unit_cost_sum'] ?></div>
 					</td>
 				</tr>
+                <?php } ?>
 				
 			</table>
 			

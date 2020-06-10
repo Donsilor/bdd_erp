@@ -294,6 +294,78 @@ class PurchaseController extends BaseController
             return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
         }
 
+        $list = $this->getData($ids);
+
+        $header = [
+            ['订单编号', 'purchase_sn' , 'text'],
+            ['供应商', 'supplier_name' , 'text'],
+            ['跟单人', 'username' , 'text'],
+            ['采购单状态', 'purchase_status' , 'selectd',PurchaseStatusEnum::getMap()],
+            ['款号', 'style_sn' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['货品名称', 'goods_name' , 'text'],
+            ['件数', 'goods_num' , 'text'],
+            ['材质', 'material' , 'text'],
+            ['货品外部颜色', 'goods_color' , 'text'],
+            ['手寸', 'finger' ,  'text'],
+            ['成品尺寸', 'product_size' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石重ct', 'main_stone_weight' ,'text'],
+            ['主石数量(粒)', 'main_stone_num' , 'text'],
+            ['石总数(粒）', 'main_stone_num_sum' , 'text'],
+            ['石总重ct', 'main_stone_weight_sum' , 'text'],
+            ['主石单价', 'main_stone_price' , 'text'],
+            ['主石金额', 'main_stone_price_sum' , 'text'],
+            ['副石1类型', 'second_stone_type1' , 'text'],
+            ['副石1重ct', 'second_stone_weight' , 'text'],
+            ['副石1粒数(粒)', 'second_stone_num' ,'text'],
+            ['副石总数(粒）', 'second_stone_num_sum' , 'text'],
+            ['副石总重ct', 'second_stone_weight_sum' , 'text'],
+            ['副石1单价', 'second_stone_price1' , 'text'],
+            ['副石金额', 'second_stone_price_sum' , 'text'],
+            ['石料信息', 'stone_info' , 'text'],
+            ['单件连石重(g)', 'single_stone_weight' , 'text'],
+            ['连石总重(g)', 'single_stone_weight_sum' , 'text'],
+            ['净重/单件(g)', 'gold_weight' , 'text'],
+            ['总净重(g)', 'gold_weight_sum' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['银(金)价', 'gold_price' , 'text'],
+            ['单件银(金)额', 'gold_cost_price' , 'text'],
+            ['金料额', 'cost_price' , 'text'],
+            ['配件信息', 'parts_info' , 'text'],
+            ['工艺描述', 'face' ,'text'],
+            ['加工费/件', 'jiagong_fee' , 'text'],
+            ['镶石费/件', 'xiangqian_fee' , 'text'],
+            ['工费总额/件', 'gong_fee' , 'text'],
+            ['改图费', 'gaitu_fee' , 'text'],
+            ['喷蜡费', 'penla_fee' , 'text'],
+            ['单件额', 'unit_cost_price' , 'text'],
+            ['工厂总额', 'factory_cost_price_sum' , 'text'],
+            ['公司成本总额', 'company_unit_cost_sum' , 'text'],
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $lists = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists
+        ]);
+    }
+
+    private function getData($ids){
         $select = ['p.purchase_sn','p.supplier_id','p.follower_id','p.purchase_status','m.username','s.supplier_name','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
 
         $list = Purchase::find()->alias('p')
@@ -310,107 +382,45 @@ class PurchaseController extends BaseController
         foreach ($list as &$val){
             $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
             $val['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
-            $val['main_stone_num'] = $model['attr']['65'] ?? 0;
+            //材质
+            $val['material'] = $val['attr']['10'] ?? 0;
+            //手寸
+            $val['finger'] = $val['attr']['38'] ?? 0;
+            //工艺描述
+            $val['face'] = $val['attr']['57'] ?? 0;
+            //主石
+            $val['main_stone_type'] = $val['attr']['56'] ?? 0;
+            $val['main_stone_num'] = $val['attr']['65'] ?? 0;
+            $val['main_stone_num'] = empty($val['main_stone_num'])? 0: $val['main_stone_num']; //值为空默认0
             $val['main_stone_num_sum'] = $val['main_stone_num'] * $val['goods_num'];
-            $val['main_stone_weight'] = $model['attr']['59'] ?? 0;
+            $val['main_stone_weight'] = $val['attr']['59'] ?? 0;
+            $val['main_stone_weight'] = empty($val['main_stone_weight'])? 0: $val['main_stone_weight']; //值为空默认0
             $val['main_stone_weight_sum'] = $val['main_stone_weight'] * $val['main_stone_num_sum'];
             $val['main_stone_price_sum'] = $val['main_stone_price'] * $val['main_stone_num_sum'];
 
+            //副石
+            $val['second_stone_type1'] = $val['attr']['60'] ?? 0;
+            $val['second_stone_num'] = $val['attr']['45'] ?? 0;
+            $val['second_stone_num'] = empty($val['second_stone_num'])? 0: $val['second_stone_num'];//值为空默认0
+            $val['second_stone_num_sum'] = $val['second_stone_num'] * $val['goods_num'];
+            $val['second_stone_weight'] = $val['attr']['44'] ?? 0;
+            $val['second_stone_weight'] = empty($val['second_stone_weight'])? 0: $val['second_stone_weight'];//值为空默认0
+            $val['second_stone_weight_sum'] = $val['second_stone_weight'] * $val['second_stone_num_sum'];
+            $val['second_stone_price_sum'] = $val['second_stone_price1'] * $val['second_stone_num_sum'];
+
+            //连石总重(g)
+            $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
+
+            //净重/单件(g) 总净重(g) ---金重
+            $val['gold_weight'] = $model['attr']['11'] ?? 0;
+            $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
+
+            //工厂总额
+            $val['factory_cost_price_sum'] = $val['factory_cost_price'] * $val['goods_num'];
+            //公司成本总额
+            $val['company_unit_cost_sum'] = $val['company_unit_cost'] * $val['goods_num'];
         }
-
-        //print_r($list);exit();
-
-        $header = [
-            ['订单编号', 'purchase_sn' , 'text'],
-            ['供应商', 'supplier_name' , 'text'],
-            ['跟单人', 'username' , 'text'],
-            ['采购单状态', 'purchase_status' , 'selectd',PurchaseStatusEnum::getMap()],
-            ['款号', 'style_sn' , 'text'],
-            ['产品分类', 'style_cate_name' , 'text'],
-            ['产品线', 'product_type_name' , 'text'],
-            ['货品名称', 'goods_name' , 'text'],
-            ['件数', 'goods_num' , 'text'],
-            ['材质', 'id' , 'function',function($model){
-                return $model['attr']['10'] ?? '';
-            }],
-            ['货品外部颜色', 'goods_color' , 'text'],
-            ['手寸', 'id' , 'function',function($model){
-                return $model['attr']['38'] ?? '';
-            }],
-            ['成品尺寸', 'product_size' , 'text'],
-            ['主石类型', 'id' , 'function',function($model){
-                return $model['attr']['56'] ?? '';
-            }],
-            ['主石重ct', 'main_stone_weight' ,'text'],
-            ['主石数量(粒)', 'main_stone_num' , 'text'],
-            ['石总数(粒）', 'id' , 'function',function($model){
-                return $model['attr']['65'] ?? '';
-            }],
-            ['石总重ct', 'id' , 'function',function($model){
-                return $model['attr']['65'] ?? '';
-            }],
-            ['主石单价', 'main_stone_price' , 'text'],
-            ['副石1类型', 'id' , 'function',function($model){
-                return $model['attr']['60'] ?? '';
-            }],
-            ['副石1重ct', 'id' , 'function',function($model){
-                return $model['attr']['44'] ?? '';
-            }],
-            ['副石1粒数(粒)', 'id' , 'function',function($model){
-                return $model['attr']['45'] ?? '';
-            }],
-            ['副石1单价', 'second_stone_price1' , 'text'],
-            ['石料信息', 'stone_info' , 'text'],
-            ['损耗', 'gold_loss' , 'text'],
-            ['银(金)价', 'gold_price' , 'text'],
-            ['单件银(金)额', 'gold_cost_price' , 'text'],
-            ['成本价', 'cost_price' , 'text'],
-            ['配件信息', 'parts_info' , 'text'],
-            ['加工费/件', 'jiagong_fee' , 'text'],
-            ['镶石费/件', 'xiangqian_fee' , 'text'],
-            ['工费总额/件', 'gong_fee' , 'text'],
-            ['改图费', 'gaitu_fee' , 'text'],
-            ['喷蜡费', 'penla_fee' , 'text'],
-            ['单件额', 'unit_cost_price' , 'text'],
-            ['工厂总额', 'factory_cost_price' , 'text'],
-
-
-
-
-
-            ['起版号', 'qiban_sn' , 'text'],
-            ['起版类型', 'qiban_type' , 'selectd',QibanTypeEnum::getMap()],
-
-
-            ['款式性别', 'style_sex' , 'selectd',StyleSexEnum::getMap()],
-            ['金托类型', 'jintuo_type' , 'selectd',JintuoTypeEnum::getMap()],
-            ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
-
-
-
-            ['证书号', 'id' , 'function',function($model){
-                return $model['attr']['31'] ?? '';
-            }],
-            
-
-        ];
-
-        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
-    }
-
-    /**
-     * 单据打印
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionPrint()
-    {
-        $this->layout = '@backend/views/layouts/print';
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        return $this->render($this->action->id, [
-            'model' => $model,
-        ]);
+        return $list;
     }
 
 

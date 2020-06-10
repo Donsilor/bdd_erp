@@ -2,9 +2,11 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Style\common\enums\LogTypeEnum;
+use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\PutInTypeEnum;
+use common\models\backend\Member;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -78,11 +80,8 @@ class ReceiptController extends BaseController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $dataProvider->setPagination(false);
-            $list = $dataProvider->models;
-            $list = ArrayHelper::toArray($list);
-            $ids = array_column($list,'id');
-            $this->actionExport($ids);
+            $queryIds = $dataProvider->query->select(PurchaseReceipt::tableName().'.id');
+            $this->actionExport($queryIds);
         }
 
         return $this->render($this->action->id, [
@@ -281,81 +280,54 @@ class ReceiptController extends BaseController
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-
-        $select = ['pr.receipt_no','type.name as product_type_name','cate.name as style_cate_name', 'prg.*'];
-        $list = PurchaseReceipt::find()->alias('pr')
-            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
-            ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
-            ->where(['pr.id' => $ids])
-            ->select($select)->asArray()->all();
+        $list = $this->getData($ids);
         $header = [
-            ['条码号', 'receipt_no' , 'text'],
+            ['工厂出货单号/收货单号', 'receipt_no' , 'text'],
+            ['采购订单号', 'purchase_sn' , 'text'],
+            ['供应商', 'supplier_name' , 'text'],
+            ['采购方式', 'put_in_type' , 'text'],
+            ['创建人', 'username' , 'text'],
+            ['单据状态', 'receipt_status' , 'text'],
             ['款号', 'style_sn' , 'text'],
             ['货品名称', 'goods_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
             ['款式分类', 'style_cate_name' , 'text'],
-            ['材质', 'material' , 'function', function($model){
-                return Yii::$app->attr->valueName($model->material ?? 0);
-            }],
-            ['成色', 'material' ,  function($model){
-                return Yii::$app->attr->valueName($model->material ?? 0);
-            }],
+            ['材质', 'material' , 'text'],
+            ['成色', 'material' ,  'text'],
             ['件数', 'goods_num' , 'text'],
             ['指圈', 'finger' , 'text'],
-            //['尺寸', 'finger' , 'text'],
+            ['尺寸', 'product_size' , 'text'],
             ['货重', 'gold_weight' , 'text'],
             ['净重', 'suttle_weight' , 'text'],
             ['损耗', 'gold_loss' , 'text'],
             ['含耗重', 'gross_weight' , 'text'],
-            //['金价', 'gross_weight' , 'text'],
-            //['金料额', 'gross_weight' , 'text'],
+            ['金价', 'gold_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
             ['石号', 'main_stone' , 'text'],
             ['粒数', 'main_stone_num' , 'text'],
             ['石重', 'main_stone_weight' , 'text'],
-            ['颜色', 'main_stone_color' ,'function', function($model){
-                return Yii::$app->attr->valueName($model->main_stone_color ?? 0);
-            }],
-            ['净度', 'main_stone_clarity' , 'function', function($model){
-                return Yii::$app->attr->valueName($model->main_stone_clarity ?? 0);
-            }],
+            ['颜色', 'main_stone_color' ,'text'],
+            ['净度', 'main_stone_clarity' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
-            ['金额', 'main_stone_price' , function($model){
-                if($model->main_stone_price){
-                    return $model->main_stone_price * $model->main_stone_num;
-                }else{
-                    return 0;
-                }
-            }],
+            ['金额', 'main_stone_price_sum','text'],
             ['副石号', 'second_stone1' , 'text'],
             ['副石粒数', 'second_stone_num1' , 'text'],
             ['副石石重', 'second_stone_weight1' , 'text'],
+            ['副石颜色', 'second_stone_color1' , 'text'],
+            ['副石净度', 'second_stone_clarity1' , 'text'],
             ['副石单价', 'second_stone_price1' , 'text'],
-            ['副石金额', 'second_stone_price1' , function($model){
-                return $model->second_stone_price1 * $model->second_stone_num1;
-            }],
-
+            ['副石金额', 'second_stone_price1_sum' , 'text'],
             ['配件(g)', 'parts_weight' , 'text'],
             ['配件额', 'parts_price' , 'text'],
             ['配件工费', 'parts_fee' , 'text'],
             ['工费', 'gong_fee' , 'text'],
             ['镶石费', 'xianqian_fee' , 'text'],
-            //['车花片', 'xianqian_fee' , 'text'],
+            ['工艺费', 'biaomiangongyi_fee' , 'text'],
             ['分色/分件', 'fense_fee' , 'text'],
             ['补口费', 'bukou_fee' , 'text'],
             ['证书费', 'cert_fee' , 'text'],
-
-            ['单价', 'cost_price' , 'function',function($model){
-                $main_stone_price = $model->main_stone_price ?? 0;
-                $main_stone_num = $model->main_stone_num ?? 0;
-                $cost_price = $model->cost_price ?? 0;
-                $gong_fee = $model->gong_fee ?? 0;
-                $bukou_fee = $model->bukou_fee ?? 0;
-                $biaomiangongyi_fee = $model->biaomiangongyi_fee ?? 0;
-                return $main_stone_price * $main_stone_num + $cost_price + $gong_fee + $bukou_fee
-                    + $biaomiangongyi_fee;
-            }],
-            //['总额', 'cost_price' , 'text'],
+            ['单价', 'price' , 'text'],
+            ['总额', 'price_sum' , 'text'],
             ['倍率', 'markup_rate' , 'text'],
 
             ['备注', 'goods_remark' , 'text'],
@@ -389,5 +361,55 @@ class ReceiptController extends BaseController
             'tab'=>$tab,
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+
+    private function getData($ids){
+        $select = ['pr.receipt_no','pr.receipt_status','pr.put_in_type','type.name as product_type_name','sup.supplier_name','member.username','cate.name as style_cate_name', 'prg.*'];
+        $lists = PurchaseReceipt::find()->alias('pr')
+            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
+            ->leftJoin(Supplier::tableName().' sup','sup.id=pr.supplier_id')
+            ->leftJoin(Member::tableName().' member','member.id=pr.creator_id')
+            ->where(['pr.id' => $ids])
+            ->select($select)->asArray()->all();
+        foreach ($lists as &$list){
+            //成色
+            $material = empty($list['material']) ?? 0;
+            $list['material'] = Yii::$app->attr->valueName($material);
+            //单据状态
+            $list['receipt_status'] = PurchaseStatusEnum::getValue($list['receipt_status']);
+            //入库方式
+            $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
+            //主石颜色
+            $main_stone_color = empty($list['main_stone_color']) ?? 0;
+            $list['main_stone_color'] = Yii::$app->attr->valueName($main_stone_color);
+            //主石净度
+            $main_stone_clarity = empty($list['main_stone_clarity']) ?? 0;
+            $list['main_stone_clarity'] = Yii::$app->attr->valueName($main_stone_clarity);
+            //主石金额
+            $main_stone_price = empty($list['main_stone_price']) ?? 0;
+            $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
+            //副石颜色
+            $second_stone_color1 = empty($list['second_stone_color1']) ?? 0;
+            $list['second_stone_color1'] = Yii::$app->attr->valueName($second_stone_color1);
+            //副石净度
+            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ?? 0;
+            $list['second_stone_clarity1'] = Yii::$app->attr->valueName($second_stone_clarity1);
+            //副石金额
+            $second_stone_price1 = empty($list['second_stone_price1']) ?? 0;
+            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+            //单价
+            $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
+                + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            //总额
+            $list['price_sum'] = $list['price'] * $list['goods_num'];
+
+        }
+
+
+
+        return $lists;
     }
 }

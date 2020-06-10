@@ -30,6 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->receipt_no ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_num') ?>：</td>
                             <td><?= $model->receipt_num ?></td>
                         </tr>

@@ -176,18 +176,43 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'company_unit_cost')->textInput() ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_amount')->textInput() ?>
+                        </div>
                     </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'stone_info')->textarea() ?>
-                    </div>                   
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_info')->textarea() ?>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'fense_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                        </div>
                     </div>
-                     <div class="col-lg-4">
-                		<?= $form->field($model, 'remark')->textarea() ?>
-                	</div>
-            	</div> 
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'cert_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+
+                        </div>
+                        <div class="col-lg-4">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'stone_info')->textarea() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'parts_info')->textarea() ?>
+                        </div>
+                         <div class="col-lg-4">
+                            <?= $form->field($model, 'remark')->textarea() ?>
+                        </div>
+                    </div>
             	<?php }?>
             </div>
             <?php ActiveForm::end(); ?>

@@ -69,7 +69,8 @@ class PurchaseGoods extends BaseModel
             [['goods_name','purchase_id', 'jintuo_type','cost_price'], 'required'],
 
             [['purchase_id', 'style_id', 'qiban_type', 'single_stone_weight','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price','single_stone_weight','company_unit_cost'], 'number'],
+            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
+                'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
@@ -127,6 +128,11 @@ class PurchaseGoods extends BaseModel
             'goods_color' => '货品外部颜色',
             'single_stone_weight' => '单件连石重',
             'company_unit_cost' => '公司单件成本',
+            'gold_amount' => '金料额',
+            'biaomiangongyi_fee' => '表面工艺工费',
+            'fense_fee' => '分色工艺工费',
+            'bukou_fee' => '补口工费',
+            'cert_fee' => '证书费',
         ];
     }
     
