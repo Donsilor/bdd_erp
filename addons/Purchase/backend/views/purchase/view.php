@@ -28,7 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
  						<tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_cate') ?>：</td>
                             <td><?= \addons\Purchase\common\enums\PurchaseCateEnum::getValue($model->purchase_cate)?></td>
-                        </tr>                        
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
+                            <td><?= \addons\Purchase\common\enums\OrderTypeEnum::getValue($model->order_type)?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
                             <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>

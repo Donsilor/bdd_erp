@@ -50,7 +50,7 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             [['defective_id', 'xuhao'], 'required'],
-            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id','style_channel_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'goods_price'], 'number'],
             [['goods_name', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
@@ -75,6 +75,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'factory_mo' => '工厂模号',
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
+            'style_channel_id' => '所属渠道',
             'produce_sn' => '布产号',
             'material_type' => '商品类型',
             'goods_weight' => '商品重量',

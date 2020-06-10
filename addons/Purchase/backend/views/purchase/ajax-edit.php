@@ -40,14 +40,27 @@ $form = ActiveForm::begin([
                 ]);?> 
             	</div>
             </div>
-              
-	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-            ]);?>    
+           <div class="row">
+               <div class="col-sm-6">
+                   <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
+                       'data' => \Yii::$app->supplyService->supplier->getDropDown(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => false
+                       ],
+                   ]);?>
+               </div>
+               <div class="col-sm-6">
+                   <?= $form->field($model, 'order_type')->widget(\kartik\select2\Select2::class, [
+                       'data' => \addons\Purchase\common\enums\OrderTypeEnum::getMap(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => false
+                       ],
+                   ]);?>
+               </div>
+           </div>
+
             <?= $form->field($model, 'delivery_time')->widget(DatePicker::class, [
                 'language' => 'zh-CN',
                 'options' => [
