@@ -88,9 +88,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'btn btn-primary btn-ms',
                     'data-target' => '#ajaxModalLg',
                 ]);
+
+                echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                    'class'=>'btn btn-success btn-ms',
+                    'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                ]);
             }
-            ?>
-            <?php
             if($model->receipt_status == BillStatusEnum::PENDING) {
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
@@ -98,18 +101,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModal',
                 ]);
             }
+
             ?>
-            <?php
-            if($model->receipt_status == BillStatusEnum::SAVE) {
-                echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                    'class'=>'btn btn-success btn-ms',
-                    'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                ]);
-            }
-            ?>
+            <?= Html::a('打印',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-ms',
+            ]); ?>
+            <?= Html::button('导出', [
+                'class'=>'btn btn-success btn-ms',
+                'onclick' => 'batchExport()',
+            ]);?>
         </div>
 
     <!-- box end -->
 </div>
 <!-- tab-content end -->
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+
+</script>

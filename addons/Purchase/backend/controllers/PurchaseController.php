@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+
 use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
@@ -20,9 +21,11 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\models\Supplier;
+
 /**
- * 
+ *
  *
  * Class PurchaseController
  * @package backend\modules\goods\controllers
@@ -30,16 +33,16 @@ use addons\Supply\common\models\Supplier;
 class PurchaseController extends BaseController
 {
     use Curd;
-    
+
     /**
      * @var Purchase
-     */     
+     */
     public $modelClass = Purchase::class;
     /**
      * @var int
      */
     public $purchaseType = PurchaseTypeEnum::GOODS;
-    
+
     /**
      * 首页
      *
@@ -49,22 +52,22 @@ class PurchaseController extends BaseController
     public function actionIndex()
     {
         $searchModel = new SearchModel([
-                'model' => $this->modelClass,
-                'scenario' => 'default',
-                'partialMatchAttributes' => [], // 模糊查询
-                'defaultOrder' => [
-                     'id' => SORT_DESC
-                ],
-                'pageSize' => $this->getPageSize(),
-                'relations' => [
-                    'follower' => ['username'],
-                    'creator' => ['username'],
-                    'auditor' => ['username'],
-                ]
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->getPageSize(),
+            'relations' => [
+                'follower' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
+            ]
         ]);
-        
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);      
-       
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
             $queryIds = $dataProvider->query->select(Purchase::tableName().'.id');
@@ -72,8 +75,8 @@ class PurchaseController extends BaseController
         }
 
         return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
     /**
@@ -85,15 +88,15 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        
-        $model = $this->findModel($id);     
+
+        $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($id,$this->purchaseType,$this->returnUrl),
             'returnUrl'=>$this->returnUrl,
         ]);
-    }    
+    }
     /**
      * ajax编辑/创建
      *
@@ -109,8 +112,8 @@ class PurchaseController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
             if($isNewRecord){
-               $model->purchase_sn = SnHelper::createPurchaseSn();
-               $model->creator_id  = \Yii::$app->user->identity->id;               
+                $model->purchase_sn = SnHelper::createPurchaseSn();
+                $model->creator_id  = \Yii::$app->user->identity->id;
             }
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
@@ -124,22 +127,22 @@ class PurchaseController extends BaseController
 
 
         }
-        
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
 
-    /** 
+    /**
      * 申请审核
      * @return mixed
      */
     public function actionAjaxApply(){
-        
+
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $this->returnUrl = \Yii::$app->request->referrer;
-        
+
         if($model->purchase_status != PurchaseStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
         }
@@ -232,9 +235,9 @@ class PurchaseController extends BaseController
      * @return mixed|string|\yii\web\Response|string
      */
     public function actionAjaxFollower(){
-        
+
         $id = Yii::$app->request->get('id');
-        
+
         $this->modelClass = PurchaseFollowerForm::class;
         $model = $this->findModel($id);
         $this->activeFormValidate($model);
@@ -244,20 +247,20 @@ class PurchaseController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                
+
                 //日志
                 $log = [
-                        'purchase_id' => $id,
-                        'purchase_sn' => $model->purchase_sn,
-                        'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_module' => "分配跟单人",
-                        'log_msg' => "分配跟单人：".$model->follower->username ?? ''
+                    'purchase_id' => $id,
+                    'purchase_sn' => $model->purchase_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => "分配跟单人",
+                    'log_msg' => "分配跟单人：".$model->follower->username ?? ''
                 ];
-                Yii::$app->purchaseService->purchase->createPurchaseLog($log);                 
-                $trans->commit();  
-                
+                Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                $trans->commit();
+
                 Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(Yii::$app->request->referrer);                
+                return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e) {
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -373,29 +376,29 @@ class PurchaseController extends BaseController
 
         foreach ($list as &$val){
             $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
-            $val['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
+            $attr = ArrayHelper::map($attr,'attr_id','attr_value');
             //材质
-            $val['material'] = $val['attr']['10'] ?? 0;
+            $val['material'] = $attr[AttrIdEnum::MATERIAL] ?? 0;
             //手寸
-            $val['finger'] = $val['attr']['38'] ?? 0;
+            $val['finger'] = $attr[AttrIdEnum::FINGER] ?? 0;
             //工艺描述
-            $val['face'] = $val['attr']['57'] ?? 0;
+            $val['face'] = $attr[AttrIdEnum::FACEWORK] ?? 0;
             //主石
-            $val['main_stone_type'] = $val['attr']['56'] ?? 0;
-            $val['main_stone_num'] = $val['attr']['65'] ?? 0;
+            $val['main_stone_type'] = $attr[AttrIdEnum::MAIN_STONE_TYPE] ?? 0;
+            $val['main_stone_num'] = $attr[AttrIdEnum::MAIN_STONE_NUM] ?? 0;
             $val['main_stone_num'] = empty($val['main_stone_num'])? 0: $val['main_stone_num']; //值为空默认0
             $val['main_stone_num_sum'] = $val['main_stone_num'] * $val['goods_num'];
-            $val['main_stone_weight'] = $val['attr']['59'] ?? 0;
+            $val['main_stone_weight'] = $attr[AttrIdEnum::DIA_CARAT] ?? 0;
             $val['main_stone_weight'] = empty($val['main_stone_weight'])? 0: $val['main_stone_weight']; //值为空默认0
             $val['main_stone_weight_sum'] = $val['main_stone_weight'] * $val['main_stone_num_sum'];
             $val['main_stone_price_sum'] = $val['main_stone_price'] * $val['main_stone_num_sum'];
 
             //副石
-            $val['second_stone_type1'] = $val['attr']['60'] ?? 0;
-            $val['second_stone_num'] = $val['attr']['45'] ?? 0;
+            $val['second_stone_type1'] = $attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? 0;
+            $val['second_stone_num'] = $attr[AttrIdEnum::SIDE_STONE1_NUM] ?? 0;
             $val['second_stone_num'] = empty($val['second_stone_num'])? 0: $val['second_stone_num'];//值为空默认0
             $val['second_stone_num_sum'] = $val['second_stone_num'] * $val['goods_num'];
-            $val['second_stone_weight'] = $val['attr']['44'] ?? 0;
+            $val['second_stone_weight'] = $attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
             $val['second_stone_weight'] = empty($val['second_stone_weight'])? 0: $val['second_stone_weight'];//值为空默认0
             $val['second_stone_weight_sum'] = $val['second_stone_weight'] * $val['second_stone_num_sum'];
             $val['second_stone_price_sum'] = $val['second_stone_price1'] * $val['second_stone_num_sum'];
@@ -404,7 +407,8 @@ class PurchaseController extends BaseController
             $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
 
             //净重/单件(g) 总净重(g) ---金重
-            $val['gold_weight'] = $val['attr']['11'] ?? 0;
+            $val['gold_weight'] = $attr[AttrIdEnum::JINZHONG] ?? 0;
+
             $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
 
             //工厂总额

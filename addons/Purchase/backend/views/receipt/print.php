@@ -1,220 +1,366 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>出货明细表</title>
-    <style type="text/css">
-        {literal}
-        *{margin:0;padding:0;}
-        body{font:12px/25px "宋体";}
-        .tRight{text-align:right;}
-        .tLeft{text-align:left;}
-        .wrap{width:1000px;margin:50px auto;}
-        h1{font-size:14px; text-align:center;margin-bottom:10px;}
-        table.list-ch{border-collapse:collapse;border:none;width:100%;margin-top:10px;}
-        table.list-ch td{ border:1px #333 solid;padding:0 2px;}
-        table.list-ch thead td{height:35px; line-height:14px; text-align:center; font-weight:bold;}
-        {/literal}
-    </style>
-</head>
-<?php
-$datetime = new \DateTime;
-$now_time = $datetime->format('Y-m-d H:i:s');
-$datetime->setTimestamp($model->created_at);
-$create_time = $datetime->format('Y-m-d H:i:s');
-?>
-<body>
-<!--startprint-->
-<div class="wrap">
-    <h1>出货明细表</h1>现在时间&nbsp;<?php echo $now_time; ?>
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            <td width="65">加工商：</td>
-            <td  width="100"  class="tLeft"><?= $model->supplier_id ?  $model->supplier->supplier_name : '' ?></td>
-            <td width="65">流水号：</td>
-            <td   width="100" class="tLeft"><?= $model->id ?></td>
-            <td width="65">出货单号:</td>
-            <td  width="100"  class="tLeft"><?= $model->receipt_no ?></td>
-            <td width="65">日期：</td>
-            <td  width="100" class="tLeft"><?= $create_time?></td>
-            <td width="65">件数：</td>
-            <td  width="100" ><?= $model->receipt_num ?></td>
-        </tr>
-        <tr>
-            <td>备注：</td>
-            <td colspan="8"><?= $model->remark ?></td>
-        </tr>
-    </table>
-    <table cellpadding="0" cellspacing="0" border="0" class="list-ch">
-        <thead>
-        <tr>
-            <td>序号</td>
-            <td>客来石<br />信息</td>
-            <td>品类</td>
-            <td>模号</td>
-            <td>售卖方式</td>
-            <td>戒托镶口</td>
-            <td>手寸</td>
-            <td>材质</td>
-            <td>毛重</td>
-            <td>主成色重(净金重)</td>
-            <td>金耗</td>
-            <td>金价</td>
-            <td>主石信息</td>
-            <td>主石单价</td>
 
-            <td>副石</td>
-            <td>副石单价</td>
-            <td>主副石总重量</td>
-            <td>工费</td>
-            <td>超石费</td>
-            <td>其他<br />工费</td>
-            <td>配件<br />成本</td>
-            <td>成本</td>
-            <td>税费</td>
-            <td>含税价</td>
-            <td>布产号</td>
-            <td>款号</td>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach($goodsList as $goods_info): ?>
-            <tr>
-                <td nowrap=true><?= $goods_info['id'] ?></td>
-                <td nowrap=true></td>
-                <td nowrap=true><?= $goods_info['style_cate_id'] ?></td>
-                <td><?= $goods_info['factory_mo'] ?></td>
-                <td></td>
-                <td><?= $goods_info['xiangkou'] ?></td>
-                <td><?= $goods_info['finger'] ?></td>
-                <td><?= $goods_info['material'] ?></td>
-                <td><?= $goods_info['gross_weight'] ?></td>
-                <td><?= $goods_info['gold_weight'] ?></td>
-                <td><?= $goods_info['gold_loss'] ?></td>
-                <td><?= $goods_info['gold_price'] ?></td>
-                <td><?= $goods_info['main_stone'] ?>&nbsp;<?= $goods_info['main_stone_weight'] ?>/<?= $goods_info['main_stone_num'] ?></td>
-                <td><?= $goods_info['main_stone_price'] ?></td>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <link href="/backend/resources/css/print.css" rel="stylesheet">
+		<script language="javascript">
+			function preview(fang) {
+				if (fang < 10) {
+					bdhtml = window.document.body.innerHTML; //获取当前页的html代码
+					sprnstr = "<!--startprint" + fang + "-->"; //设置打印开始区域
+					eprnstr = "<!--endprint" + fang + "-->"; //设置打印结束区域
+					prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
+					prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr)); //从结束代码向前取html
+					window.document.body.innerHTML = prnhtml;
+					window.print();
+					window.document.body.innerHTML = bdhtml;
+				} else {
+					window.print();
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container" id="wdf">
+			<!--startprint1-->
+			<div class="title">2020年4月恒得利珠宝产品订单下单表</div>
+			
+			<!-- 基础信息 -->
+			<div class="order-info">
+				<div class="list clf">
+					<div class="child fl clf">
+						<div class="child-attr fl">供应商：</div>
+						<div class="child-val fl"><?= $model->supplier->supplier_name ?></div>
+					</div>
+					
+					<div class="child fl clf">
+						<div class="child-attr fl">采购订单号：</div>
+						<div class="child-val fl"></div>
+					</div>
+				</div>
+				<div class="list clf">
+					<div class="child fl clf">
+						<div class="child-attr fl">销售渠道：</div>
+						<div class="child-val fl"></div>
+					</div>
+				</div>
+				<div class="list clf">
+					<div class="child fl clf">
+						<div class="child-attr fl">收货单号：</div>
+						<div class="child-val fl"><?= $model->receipt_no ?? '' ?> </div>
+					</div>
 
-                <td  width="85">
-                    <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone1'] ?>&nbsp;<?= $goods_info['second_stone_weight1'] ?>/<?= $goods_info['second_stone_num1'] ?>
-                    </span>
-                <span style="border-bottom:1px #000 solid;display:block;">
-                        <?= $goods_info['second_stone2'] ?>&nbsp;<?= $goods_info['second_stone_weight2'] ?>/<?= $goods_info['second_stone_num2'] ?>
-                    </span>
-                    <span style="display:block;"><?= $goods_info['second_stone3'] ?>&nbsp;<?= $goods_info['second_stone_weight3'] ?>/<?= $goods_info['second_stone_num3'] ?></span>
-            </td>
-            <td><span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone_price1'] ?></span>
-                    <span style="border-bottom:1px #000 solid;display:block;"><?= $goods_info['second_stone_price2'] ?></span>
-                <span style="display:block;"><?= $goods_info['second_stone_price3'] ?></span>
-                </td>
-                <td><?= $goods_info['stone_zhong'] ?></td>
-                <td><?= $goods_info['gong_fee'] ?></td>
-                <td><?= $goods_info['extra_stone_fee'] ?></td>
-                <td><?= $goods_info['other_fee'] ?></td>
-                <td><?= $goods_info['parts_fee'] ?></td>
-                <td><?= $goods_info['cost_price'] ?></td>
-                <td><?= $goods_info['tax_fee'] ?></td>
-                <td><?= $goods_info['han_tax_price'] ?></td>
-                <td><?= $goods_info['produce_sn'] ?></td>
-                <td><?= $goods_info['style_sn'] ?></td>
-            </tr>
-        <?php endforeach; ?>
-        <tr>
-            <td>合计</td>
-            <td colspan="25" class="tLeft">0</td>
-        </tr>
-        </tbody>
-    </table>
-    <table width="100%">
-        <tr>
-            <td width="33%" valign=top>
-                配石统计:<br />
-                <table cellpadding="0" cellspacing="0" border="0" class="list-ch" style="width:90%">
-                    <thead>
-                    <tr>
-                        <td>名称</td>
-                        <td>石单价</td>
-                        <td>数量</td>
-                        <td>石重</td>
-                        <td>石值</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </td>
-            <td width="33%" valign=top>
-                金料统计:
-                <table cellpadding="0" cellspacing="0" border="0" class="list-ch" style="width:90%">
-                    <thead>
-                    <tr>
-                        <td>成色</td>
-                        <td>重量</td>
-                        <td>平均金价</td>
-                        <td>金值</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </td>
-            <td width="33%" valign=top>
-                费用统计
-                <table cellpadding="0" cellspacing="0" border="0" class="list-ch" style="width:90%">
-                    <thead>
-                    <tr>
-                        <td>类别</td>
-                        <td>金额</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>0</td>
-                        <td>0</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <!--endprint-->
-    <br/><br/>
-    <div style="text-align:center;">
+				</div>
 
-        <button id="print_close" onclick="close_bill();">关闭</button>
-        <button id="print_btn" onclick="print_bill();">打&nbsp;印</button>
+			</div>
+			
+			<!-- 订单列表 -->
+			<table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
+				<!-- 列表头部 -->
+				<tr class="t-head">
+					<td rowspan="2">
+						<div>序号</div>
+					</td>
+					<td rowspan="2">
+						<div>款号</div>
+					</td>
+                    <td rowspan="2">
+                        <div>货品名称</div>
+                    </td>
+					<td rowspan="2">
+						<div>产品分类</div>
+					</td>
+					<td rowspan="2">
+						<div>产品线</div>
+					</td>
+                    <td rowspan="2">
+                        <div>材质</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>成色</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>件数</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>指圈</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>尺寸</div>
+                    </td>
+                    <td class="bg-blue bold" colspan="6">
+                        <div>金料</div>
+                    </td>
+                    <td class="bg-blue bold" colspan="7">
+                        <div>主石</div>
+                    </td>
+                    <td class="bg-blue bold" colspan="7">
+                        <div>副石</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>配件(g)</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>配件额</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>配件工费</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>工费</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>镶石费</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>工艺费用</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>分色/分件</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>补口费</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>单价</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>总额</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>证书费</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>备注</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>倍率</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>标签价</div>
+                    </td>
 
-    </div>
-</div>
-</body>
+                </tr>
+                <tr class="t-head bg-blue">
+                    <td>
+                        <div>货重</div>
+                    </td>
+                    <td>
+                        <div>净重</div>
+                    </td>
+                    <td>
+                        <div>损耗</div>
+                    </td>
+                    <td>
+                        <div>含耗重</div>
+                    </td>
+                    <td>
+                        <div>金价</div>
+                    </td>
+                    <td>
+                        <div>金料额</div>
+                    </td>
+					<td>
+						<div>石号</div>
+					</td>
+					<td>
+						<div>粒数</div>
+					</td>
+					<td>
+						<div>石重</div>
+					</td>
+					<td>
+						<div>颜色</div>
+					</td>
+					<td>
+						<div>净度</div>
+					</td>
+					<td>
+						<div>单价【单价】</div>
+					</td>
+					<td>
+						<div>金额</div>
+					</td>
 
-<script type="text/javascript">
+                    <td>
+                        <div>石号</div>
+                    </td>
+                    <td>
+                        <div>粒数</div>
+                    </td>
+                    <td>
+                        <div>石重</div>
+                    </td>
+                    <td>
+                        <div>颜色</div>
+                    </td>
+                    <td>
+                        <div>净度</div>
+                    </td>
+                    <td>
+                        <div>单价【单价】</div>
+                    </td>
+                    <td>
+                        <div>金额</div>
+                    </td>
+				</tr>
+				
+				<!-- 列表内容 -->
+                <?php
+                  foreach ($lists as $key => $val){
+                      $model = \addons\Purchase\common\models\PurchaseGoods::find()->where(['id'=>$val['id']])->one();
+                ?>
+				<tr>
+					<td>
+						<div><?=$key+1 ?></div>
+					</td>
+					<td>
+						<div><?= $val['style_sn'] ?>/div>
+					</td>
+                    <td>
+                        <div><?= $val['goods_name'] ?></div>
+                    </td>
+					<td>
+						<div><?= $val['style_cate_name'] ?></div>
+					</td>
+					<td>
+						<div><?= $val['product_type_name'] ?></div>
+					</td>
+                    <td>
+                        <div><?= $val['material'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['goods_color'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['goods_num'] ?></div>
+                    </td>
+					<td>
+						<div><?= $val['finger'] ?></div>
+					</td>
+                    <td>
+                        <div><?= $val['product_size'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['gold_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['suttle_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['gold_loss'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['gross_weight'] ?></div>
+                    </td>
 
-    function close_bill(){
-        window.close();
-    }
 
-    function print_bill(){
-        bdhtml = window.document.body.innerHTML;
-        sprnstr = "<!--startprint-->";
-        eprnstr = "<!--endprint-->";
-        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
-        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
-        window.document.body.innerHTML = prnhtml;
-        window.print();
-    }
-</script>
+                    <td>
+                        <div><?= $val['gold_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['gold_amount'] ?></div>
+                    </td>
+                    <td>
+                        <div>暂无</div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_num'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_color'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_clarity'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['main_stone_price_sum'] ?></div>
+                    </td>
+                    <td>
+                        <div>暂无</div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_num1'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_weight1'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_color1'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_clarity1'] ?></div>
+                    </td>
+
+                    <td>
+                        <div><?= $val['second_stone_price1'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_price1_sum'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_fee'] ?></div>
+                    </td>
+
+                    <td>
+                        <div><?= $val['gong_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['xianqian_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['biaomiangongyi_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['fense_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['bukou_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['price_sum'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['cert_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['markup_rate'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['goods_remark'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['sale_price'] ?></div>
+                    </td>
+
+				</tr>
+                <?php } ?>
+				
+			</table>
+			
+			<!--endprint1-->
+		</div>
+        <div class="text-center">
+            <!-- 打印按钮 -->
+            <button type="button" class="btn-ms" target="_blank" onclick="preview(1)">打印</button>
+        </div>
+
+	</body>
 </html>

@@ -89,7 +89,7 @@ class PurchaseStoneReceiptService extends Service
                 //'symmetry' =>$model->symmetry,
                 'stone_num' => $model->goods_num,
                 'source_detail_id' => $model->id,
-                'purchase_price' => $model->cost_price,
+                'cost_price' => $model->cost_price,
                 'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
                 //'sale_price' => $model->sale_price,
                 'status' => StatusEnum::ENABLED,

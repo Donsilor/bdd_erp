@@ -117,7 +117,7 @@
 						<div>石料信息</div>
 					</td>
 					<td rowspan="2">
-						<div></div>
+						<div>单件连石重(g)</div>
 					</td>
 					<td rowspan="2">
 						<div>连石总重(g)</div>

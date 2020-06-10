@@ -44,7 +44,7 @@ table,tr,td{
 }
 
 .list{
-    height: 1.8rem;
+    /*height: 1.8rem;*/
     line-height: 1.8rem;
     font-size: 1rem;
 }
