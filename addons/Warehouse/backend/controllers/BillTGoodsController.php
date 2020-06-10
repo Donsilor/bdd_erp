@@ -67,7 +67,7 @@ class BillTGoodsController extends BaseController
     }
 
     /**
-     * ajax编辑/创建
+     * ajax添加商品
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -94,6 +94,42 @@ class BillTGoodsController extends BaseController
             }
         }
         return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * ajax编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $id = \Yii::$app->request->get('id');
+        //$bill_id = Yii::$app->request->get('bill_id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillGoodsT();
+        // ajax 校验
+        //$this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                //$trans = \Yii::$app->db->beginTransaction();
+                //Yii::$app->warehouseService->billT->addBillTGoods($model);
+                //$trans->commit();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                //$trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -145,32 +181,14 @@ class BillTGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            //更新库存状态
-            $bill = WarehouseBill::find()->where(['id' => $model->bill_id])->one();
-            $goods = WarehouseGoods::find()->where(['goods_id' => $model->goods_id, 'goods_status' => GoodsStatusEnum::RECEIVING])->one();
-            if(!$goods){
-                throw new \yii\db\Exception("商品{$goods->goods_id}不是收货中或者不存在，请查看原因");
-            }
-            if(false === $goods->delete()){
-                throw new \Exception($this->getError($goods));
-            }
-            if($bill->order_type = OrderTypeEnum::ORDER_L && $model->source_detail_id){
-                $receipt_goods = PurchaseReceiptGoods::find()->where(['id'=>$model->source_detail_id])->one();
-                if($receipt_goods){
-                    $receipt_goods->goods_status = ReceiptGoodsStatusEnum::IQC_PASS;
-                    if(false === $receipt_goods->save()){
-                        throw new \Exception($this->getError($receipt_goods));
-                    }
-                }
-            }
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));
             }
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($bill->id);
-            if(false === $res){
-                throw new \yii\db\Exception('更新单据汇总失败');
-            }
+            //$res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
+            //if(false === $res){
+                //throw new \yii\db\Exception('更新单据汇总失败');
+            //}
             $trans->commit();
             \Yii::$app->getSession()->setFlash('success','删除成功');
             return $this->redirect(\Yii::$app->request->referrer);
