@@ -19,8 +19,28 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
-            <?= $form->field($model, 'purchase_type')->hiddenInput()->label(false)?>
             <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
+            <div class="row">
+            	<div class="col-sm-6">
+            	<?= $form->field($model, 'purchase_cate')->widget(\kartik\select2\Select2::class, [
+                    'data' => \addons\Purchase\common\enums\PurchaseCateEnum::getMap(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?> 
+            	</div>
+            	<div class="col-sm-6">
+            	<?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
+                    'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?> 
+            	</div>
+            </div>
+              
 	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->supplyService->supplier->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
@@ -39,7 +59,8 @@ $form = ActiveForm::begin([
                     'autoclose' => true,//选择后自动关闭
                     'todayBtn' => true,//今日按钮显示
                 ]
-            ]);?>    
+            ]);?> 
+            <?= $form->field($model, 'apply_sn')->textArea(['options'=>['maxlength' => true],'placeholder' => '请输入采购申请单,多个用逗号隔开'])?>   
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    

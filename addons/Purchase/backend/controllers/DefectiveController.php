@@ -144,13 +144,7 @@ class DefectiveController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-
         $model = $this->findModel($id);
-
-        if($model->audit_status == AuditStatusEnum::PENDING) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
-
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -169,7 +163,7 @@ class DefectiveController extends BaseController
             }
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
-
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

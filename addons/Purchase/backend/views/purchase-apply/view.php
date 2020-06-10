@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
                             <td><?= $model->channel->name ?? '';  ?></td>
-                        </tr>                        
+                        </tr>                                              
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
                             <td><?= $model->total_num ?></td>
@@ -37,6 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
+                            <td><?= $model->warehouse->name ?? '';  ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
+                            <td><?= Yii::$app->formatter->asDate($model->delivery_time);  ?></td>
+                        </tr>  
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_status') ?>：</td>
                             <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->apply_status)?></td>

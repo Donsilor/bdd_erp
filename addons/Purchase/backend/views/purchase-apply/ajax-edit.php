@@ -19,14 +19,40 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
-            <?= $form->field($model, 'apply_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?> 
-            <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+            <?= $form->field($model, 'apply_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>              
+            <div class="row">
+            	<div class="col-sm-6">
+            	<?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
-                ]);?>    
+                ]);?>
+            	</div>
+            	<div class="col-sm-6">
+            	<?= $form->field($model, 'warehouse_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?> 
+            	</div>
+            	
+            </div> 
+            <?= $form->field($model, 'delivery_time')->widget(DatePicker::class, [
+                'language' => 'zh-CN',
+                'options' => [
+                     'value' => $model->delivery_time ? date('Y-m-d', $model->delivery_time) :'',
+                ],
+                'pluginOptions' => [
+                    'format' => 'yyyy-mm-dd',
+                    'todayHighlight' => true,//今日高亮
+                    'autoclose' => true,//选择后自动关闭
+                    'todayBtn' => true,//今日按钮显示
+                ]
+            ]);?>      
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    

@@ -64,21 +64,20 @@ class AttributeController extends BaseController
     public function actionEditLang()
     {
         $id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $is_new = $model->isNewRecord;            
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 $this->editLang($model);
-                Yii::$app->styleService->attribute->updateAttrValues($id);
+                Yii::$app->styleService->attribute->updateAttrValues($model->id);
                 $trans->commit();
                 return $is_new ?
                     $this->message("添加成功", $this->redirect(['edit-lang','id'=>$model->id]), 'success'):
-                    $this->message("保存成功", $this->redirect($returnUrl), 'success');
+                    $this->message("保存成功", $this->redirect($this->returnUrl), 'success');
             }catch (Exception $e){
                 $trans->rollBack();
                 $error = $e->getMessage();
@@ -135,15 +134,15 @@ class AttributeController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 $this->editLang($model); 
-                Yii::$app->styleService->attribute->updateAttrValues($id);
-                $trans->commit();
+                Yii::$app->styleService->attribute->updateAttrValues($model->id);
                 
+                $trans->commit();                
                 return $is_new ?
                     $this->message("添加成功", $this->redirect(['edit-lang','id'=>$model->id]), 'success'):
-                    $this->message("保存成功", $this->redirect(['index']), 'success');
+                    $this->message("保存成功", $this->redirect($this->returnUrl), 'success');
             }catch (Exception $e){
                 $trans->rollBack();
                 $error = $e->getMessage();

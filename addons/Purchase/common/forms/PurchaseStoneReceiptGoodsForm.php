@@ -81,7 +81,7 @@ class PurchaseStoneReceiptGoodsForm extends PurchaseStoneReceiptGoods
         $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
         $query->where(['rg.id' => $ids]);
         $query->distinct($col);
-        $query->count(1);
-        return $query->one()==1?:0;
+        $res = $query->count(1);
+        return $res==1?:0;
     }
 }
