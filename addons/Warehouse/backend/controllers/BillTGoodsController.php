@@ -185,10 +185,10 @@ class BillTGoodsController extends BaseController
                 throw new \Exception($this->getError($model));
             }
             //更新收货单汇总：总金额和总数量
-            //$res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
-            //if(false === $res){
-                //throw new \yii\db\Exception('更新单据汇总失败');
-            //}
+            $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+            if(false === $res){
+                throw new \yii\db\Exception('更新单据汇总失败');
+            }
             $trans->commit();
             \Yii::$app->getSession()->setFlash('success','删除成功');
             return $this->redirect(\Yii::$app->request->referrer);

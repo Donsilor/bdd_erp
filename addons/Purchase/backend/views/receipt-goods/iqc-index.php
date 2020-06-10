@@ -64,9 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'purchase_sn',
+                                'attribute'=>'receipt.receipt_no',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
@@ -77,14 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'produce_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
                                 ]),
                             ],
                             [
@@ -99,6 +91,75 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'label' => '产品线',
+                                'attribute' => 'type.name',
+                                'value' => "type.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '款式分类',
+                                'attribute' => 'cate.name',
+                                'value' => "cate.name",
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:150px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'factory_mo',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'jintuo_type',
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'purchase_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'produce_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'receipt.supplier_id',
@@ -116,73 +177,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'receipt.receipt_no',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'factory_mo',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_num',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'jintuo_type',
-                                'value' => function ($model){
-                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'label' => '款式分类',
-                                'attribute' => 'cate.name',
-                                'value' => "cate.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '产品线',
-                                'attribute' => 'type.name',
-                                'value' => "type.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:150px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '质检未过原因',
