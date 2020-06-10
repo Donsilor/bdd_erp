@@ -7,6 +7,7 @@ use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
 $this->title = '采购申请明细';
 $this->params['breadcrumbs'][] = $this->title;
@@ -15,14 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">采购申请详情 - <?php echo $apply->apply_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?php
-            if($apply->apply_status == ApplyStatusEnum::SAVE){
-                echo Html::create(['edit', 'apply_id' => $apply->id], '创建', [
+        <?php if($apply->apply_status == ApplyStatusEnum::SAVE){ ?>        
+                <?= Html::create(['edit', 'apply_id' => $apply->id], '有款添加', [
                     'class' => 'btn btn-primary btn-xs openIframe',
                     'data-width'=>'90%',
                     'data-height'=>'90%',
                     'data-offset'=>'20px',
-                ]);
+                ]);?>
+                <?= Html::create(['edit-no-style', 'apply_id' => $apply->id], '无款添加', [
+                    'class' => 'btn btn-primary btn-xs openIframe',
+                    'data-width'=>'90%',
+                    'data-height'=>'90%',
+                    'data-offset'=>'20px',
+                ]);?>
+        <?php         
             }
         ?>
 
@@ -58,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'label' => '商品图片',
                                     'value' => function ($model) {
-                                        return \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90);
+                                        return \common\helpers\ImageHelper::fancyBox($model->goods_image,90,90);
                                     },
                                     'filter' => false,
                                     'format' => 'raw',
@@ -72,7 +79,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-2'],
-                            ],                                                      
+                            ],
+                            [
+                                    'attribute' => 'goods_type',
+                                    'value' => function($model){
+                                        return PurchaseGoodsTypeEnum::getValue($model->goods_type);
+                                    },
+                                    'filter' => Html::activeDropDownList($searchModel, 'goods_type',PurchaseGoodsTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                     'attribute' => 'style_sn',
                                     'value' =>'style_sn',
@@ -295,7 +314,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'edit' => function($url, $model, $key) use($apply){
                                          if($apply->apply_status == ApplyStatusEnum::SAVE) {
-                                             return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                             $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                             return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }                                         
                                     },
                                     'apply-edit' =>function($url, $model, $key) use($apply){
