@@ -174,28 +174,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'xiangkou',
+                                'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('xiangkou', $model->xiangkou, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'xiangkou', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
-                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'finger',
+                                'attribute' => 'finger',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('finger', $model->finger, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
-                                'filter' => Html::activeTextInput($searchModel, 'finger', [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cert_type',
@@ -208,7 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'cert_id',
@@ -219,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'cert_id', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
