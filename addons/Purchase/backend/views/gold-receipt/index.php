@@ -97,21 +97,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'to_warehouse_id',
-                'value' =>"toWarehouse.name",
-                'filter'=>Select2::widget([
-                    'name'=>'SearchModel[to_warehouse_id]',
-                    'value'=>$searchModel->to_warehouse_id,
-                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                    ],
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-2'],
-            ],
-            [
                 'attribute' => 'receipt_num',
                 'value' => 'receipt_num',
                 'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
