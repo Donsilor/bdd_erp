@@ -7,6 +7,7 @@ use addons\Purchase\common\enums\DefectiveStatusEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
+use addons\Purchase\common\models\PurchaseFqcConfig;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Style\common\models\ProductType;
@@ -19,6 +20,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\SnHelper;
 use common\helpers\StringHelper;
+use common\models\backend\Member;
 use Yii;
 use common\helpers\Url;
 use common\models\base\SearchModel;
@@ -212,10 +214,10 @@ class DefectiveController extends BaseController
         $list = $this->getData($ids);
 
         $header = [
+            ['序号', 'xuhao' , 'text'],
             ['条码号', 'defective_no' , 'text'],
             ['工厂出货单号', 'receipt_no' , 'text'],
-            ['工厂名称', 'supplier_id' , 'selectd', Yii::$app->supplyService->supplier->getDropDown()],
-            ['序号', 'xuhao' , 'text'],
+            ['工厂名称', 'supplier_name' , 'text'],
             ['模号', 'factory_mo' , 'text'],
             ['布产单号', 'produce_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
@@ -261,34 +263,52 @@ class DefectiveController extends BaseController
             ['备注', 'goods_remark' , 'text'],
             ['倍率', 'markup_rate' , 'text'],
             ['标签价', 'sale_price' , 'text'],
-            ['质检未过原因', 'iqc_reason' , 'text'],
+            ['质检未过原因', 'iqc_name' , 'text'],
             ['质检备注', 'iqc_remark' , 'text']
         ];
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $lists = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists
+        ]);
+    }
+
+
     private function getData($ids){
         $select = ['pd.defective_no','pd.defective_status','pd.receipt_no','pd.supplier_id','pdg.xuhao','pdg.style_sn',
             'pdg.factory_mo','pdg.produce_sn','type.name as product_type_name','cate.name as style_cate_name',
-            'channel.name as channel_name','sup.supplier_name','member.username', 'pdg.cost_price','pdg.iqc_reason',
-            'pdg.iqc_remark','prg.*','pdg.created_at',];
+            'channel.name as channel_name','sup.supplier_name','pdg.cost_price','pdg.iqc_reason',
+            'pdg.iqc_remark','iqc.name as iqc_name','prg.*','pdg.created_at'];
 
         $lists = PurchaseDefective::find()->alias('pd')
-            ->leftJoin(PurchaseDefectiveGoods::tableName()." pdg",'pd.id=pdg.defective_id')
-            ->leftJoin(PurchaseReceipt::tableName()." pr",'pr.receipt_no=pd.receipt_no')
-            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','prg.xuhao=pdg.xuhao and pr.id = prg.receipt_id')
+            ->innerJoin(PurchaseDefectiveGoods::tableName()." pdg",'pd.id=pdg.defective_id')
+            ->innerJoin(PurchaseReceipt::tableName()." pr",'pr.receipt_no=pd.receipt_no')
+            ->innerJoin(PurchaseReceiptGoods::tableName().' prg','prg.xuhao=pdg.xuhao and pr.id = prg.receipt_id')
             ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
             ->leftJoin(StyleChannel::tableName().' channel','channel.id=prg.style_channel_id')
             ->leftJoin(Supplier::tableName().' sup','sup.id=pd.supplier_id')
+            ->leftJoin(PurchaseFqcConfig::tableName().' iqc','iqc.id=pdg.iqc_reason')
             ->where(['pd.id' => $ids])
             ->select($select)->asArray()->all();
         foreach ($lists as &$list){
             //成色
             $material = empty($list['material']) ?? 0;
             $list['material'] = Yii::$app->attr->valueName($material);
-            //单据状态
-            $list['receipt_status'] = PurchaseStatusEnum::getValue($list['receipt_status']);
             //入库方式
             $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
             //主石颜色

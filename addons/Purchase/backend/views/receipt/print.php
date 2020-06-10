@@ -25,7 +25,7 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title">2020年4月恒得利珠宝产品订单下单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>采购收货单表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
@@ -209,7 +209,7 @@
                 ?>
 				<tr>
 					<td>
-						<div><?=$key+1 ?></div>
+						<div><?= $val['xuhao'] ?></div>
 					</td>
 					<td>
 						<div><?= $val['style_sn'] ?>/div>
