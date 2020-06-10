@@ -152,6 +152,9 @@ class PurchaseDefectiveService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        if($form->defective_num<=0){
+            throw new \Exception("单据明细不能为空");
+        }
         //同步采购收货单商品状态
         $ids = $this->getReceiptGoodsIds($form);
         $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
