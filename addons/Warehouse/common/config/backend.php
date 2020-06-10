@@ -95,11 +95,14 @@ return [
                         'route' => 'gold/index',
                     ],
                     [
-                        'title' => '收货单',
+                        'title' => '入库单',
                         'route' => 'gold-bill-l/index',
                     ],
+                    [
+                        'title' => '领料单',
+                        'route' => 'gold-bill-c/index',
+                    ],
                 ],
-
             ],
             [
                     'title' => '石包管理',
@@ -111,19 +114,18 @@ return [
                             'route' => 'stone/index',
                         ],
                         [
-                            'title' => '买石单',
+                            'title' => '入库单',
                             'route' => 'stone-bill-ms/index',
                         ],
                         [
-                            'title' => '送石单',
+                            'title' => '领石单',
                             'route' => 'stone-bill-ss/index',
                         ],
                         [
-                            'title' => '退石单',
+                            'title' => '返厂单',
                             'route' => 'stone-bill-ts/index',
                         ],
                     ],
-
             ],
             [
                 'title' => '功能配置',

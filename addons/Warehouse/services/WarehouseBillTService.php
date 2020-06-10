@@ -48,6 +48,9 @@ class WarehouseBillTService extends Service
         if($form->goods_num <= 0){
             throw new \Exception("商品数量必须大于0");
         }
+        if($form->goods_num > 100){
+            throw new \Exception("一次最多只能添加100个商品，可分多次添加");
+        }
         $style = Style::findOne(['style_sn'=>$form->style_sn]);
         if(!$style){
             throw new \Exception("款号不存在");
@@ -86,6 +89,16 @@ class WarehouseBillTService extends Service
         if(false === $res){
             throw new \Exception("创建收货单据明细失败");
         }
+    }
+
+    /**
+     * 编辑明细
+     * @param array $goods
+     * @param array $bill
+     * @param array $bill_goods
+     */
+    public function editGoods($form){
+
     }
 
     /**
