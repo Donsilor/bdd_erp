@@ -293,7 +293,7 @@ class ReceiptController extends BaseController
             ['产品线', 'product_type_name' , 'text'],
             ['款式分类', 'style_cate_name' , 'text'],
             ['材质', 'material' , 'text'],
-            ['成色', 'material' ,  'text'],
+            ['成色', 'goods_color' ,  'text'],
             ['件数', 'goods_num' , 'text'],
             ['指圈', 'finger' , 'text'],
             ['尺寸', 'product_size' , 'text'],
@@ -325,11 +325,10 @@ class ReceiptController extends BaseController
             ['工艺费', 'biaomiangongyi_fee' , 'text'],
             ['分色/分件', 'fense_fee' , 'text'],
             ['补口费', 'bukou_fee' , 'text'],
-            ['证书费', 'cert_fee' , 'text'],
             ['单价', 'price' , 'text'],
             ['总额', 'price_sum' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
             ['倍率', 'markup_rate' , 'text'],
-
             ['备注', 'goods_remark' , 'text'],
             ['标签价', 'sale_price' , 'text'],
         ];
@@ -343,23 +342,13 @@ class ReceiptController extends BaseController
      */
     public function actionPrint()
     {
-        $ids = Yii::$app->request->get('ids');
-        $id_arr = explode(',', $ids);
-        $id = $id_arr[0];//暂时打印一个
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $goodsModel = new PurchaseReceiptGoods();
-        $goodsList = $goodsModel::find()->where(['receipt_id' => $id])->asArray()->all();
-        foreach ($goodsList as &$item) {
-            $item['stone_zhong'] = $item['main_stone_weight']+$item['second_stone_weight1']+$item['second_stone_weight2']+$item['second_stone_weight3'];
-            $item['han_tax_price'] = $item['cost_price'] + $item['tax_fee'];
-        }
+        $lists = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'goodsList' => $goodsList,
-            'tab'=>$tab,
-            'returnUrl'=>$returnUrl,
+            'lists' => $lists
         ]);
     }
 
@@ -389,7 +378,7 @@ class ReceiptController extends BaseController
             $main_stone_clarity = empty($list['main_stone_clarity']) ?? 0;
             $list['main_stone_clarity'] = Yii::$app->attr->valueName($main_stone_clarity);
             //主石金额
-            $main_stone_price = empty($list['main_stone_price']) ?? 0;
+            $main_stone_price = empty($list['main_stone_price']) ?? 0.00;
             $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
             //副石颜色
             $second_stone_color1 = empty($list['second_stone_color1']) ?? 0;
@@ -398,7 +387,7 @@ class ReceiptController extends BaseController
             $second_stone_clarity1 = empty($list['second_stone_clarity1']) ?? 0;
             $list['second_stone_clarity1'] = Yii::$app->attr->valueName($second_stone_clarity1);
             //副石金额
-            $second_stone_price1 = empty($list['second_stone_price1']) ?? 0;
+            $second_stone_price1 = empty($list['second_stone_price1']) ?? 0.00;
             $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
             //单价
             $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
