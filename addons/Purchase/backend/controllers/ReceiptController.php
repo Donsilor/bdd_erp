@@ -283,6 +283,7 @@ class ReceiptController extends BaseController
         }
         $list = $this->getData($ids);
         $header = [
+            ['序号','xuhao','text'],
             ['工厂出货单号/收货单号', 'receipt_no' , 'text'],
             ['采购订单号', 'purchase_sn' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
@@ -367,6 +368,7 @@ class ReceiptController extends BaseController
             ->leftJoin(Supplier::tableName().' sup','sup.id=pr.supplier_id')
             ->leftJoin(Member::tableName().' member','member.id=pr.creator_id')
             ->where(['pr.id' => $ids])
+            ->orderBy('prg.xuhao asc')
             ->select($select)->asArray()->all();
         foreach ($lists as &$list){
             //成色
@@ -399,8 +401,6 @@ class ReceiptController extends BaseController
                 + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
             //总额
             $list['price_sum'] = $list['price'] * $list['goods_num'];
-
-
 
         }
 

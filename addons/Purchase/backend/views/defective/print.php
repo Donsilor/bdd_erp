@@ -25,7 +25,7 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title">2020年4月恒得利珠宝产品订单下单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>不良返厂单表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
@@ -131,10 +131,10 @@
                         <div>标签价</div>
                     </td>
                     <td rowspan="2">
-                        <div>采购订单号</div>
+                        <div>质检未过原因</div>
                     </td>
                     <td rowspan="2">
-                        <div>所属渠道</div>
+                        <div>质检备注</div>
                     </td>
 
                 </tr>
@@ -209,7 +209,7 @@
                 ?>
 				<tr>
 					<td>
-						<div><?=$key+1 ?></div>
+						<div><?= $val['xuhao'] ?></div>
 					</td>
 					<td>
 						<div><?= $val['style_sn'] ?>/div>
@@ -345,10 +345,10 @@
                         <div><?= $val['sale_price'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['purchase_sn'] ?></div>
+                        <div><?= $val['iqc_name'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['channel_name'] ?></div>
+                        <div><?= $val['iqc_remark'] ?></div>
                     </td>
 
 				</tr>
