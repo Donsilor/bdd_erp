@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\models\backend\Member;
@@ -328,9 +329,11 @@ class ReceiptController extends BaseController
             ['单价', 'price' , 'text'],
             ['总额', 'price_sum' , 'text'],
             ['证书费', 'cert_fee' , 'text'],
-            ['倍率', 'markup_rate' , 'text'],
             ['备注', 'goods_remark' , 'text'],
+            ['倍率', 'markup_rate' , 'text'],
             ['标签价', 'sale_price' , 'text'],
+            ['采购订单号', 'purchase_sn' , 'text'],
+            ['所属渠道', 'channel_name' , 'text'],
         ];
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
@@ -354,11 +357,13 @@ class ReceiptController extends BaseController
 
 
     private function getData($ids){
-        $select = ['pr.receipt_no','pr.receipt_status','pr.put_in_type','type.name as product_type_name','sup.supplier_name','member.username','cate.name as style_cate_name', 'prg.*'];
+        $select = ['pr.receipt_no','pr.receipt_status','pr.put_in_type','type.name as product_type_name',
+           'cate.name as style_cate_name', 'channel.name as channel_name','sup.supplier_name','member.username', 'prg.*'];
         $lists = PurchaseReceipt::find()->alias('pr')
-            ->leftJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
+            ->innerJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
             ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
+            ->leftJoin(StyleChannel::tableName().' channel','channel.id=prg.style_channel_id')
             ->leftJoin(Supplier::tableName().' sup','sup.id=pr.supplier_id')
             ->leftJoin(Member::tableName().' member','member.id=pr.creator_id')
             ->where(['pr.id' => $ids])
@@ -394,6 +399,8 @@ class ReceiptController extends BaseController
                 + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
             //总额
             $list['price_sum'] = $list['price'] * $list['goods_num'];
+
+
 
         }
 

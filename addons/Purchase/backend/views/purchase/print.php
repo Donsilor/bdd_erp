@@ -63,10 +63,8 @@
 				</div>
 				<div class="list bold">
 					<span>订单类型：</span>
-					<span>银版</span>
-					<span>常规</span>
-					<span>定制</span>
-					<span>试板</span>
+					<span><?= \addons\Purchase\common\enums\OrderTypeEnum::getValue($model->order_type) ?></span>
+
 				</div>
 			</div>
 			
@@ -220,13 +218,17 @@
                 <?php
                   foreach ($lists as $key => $val){
                       $model = \addons\Purchase\common\models\PurchaseGoods::find()->where(['id'=>$val['id']])->one();
+                      $img = '';
+                      if($model){
+                          $img = Yii::$app->purchaseService->purchaseGoods->getStyleImage($model);
+                      }
                 ?>
 				<tr>
 					<td>
 						<div><?=$key+1 ?></div>
 					</td>
 					<td>
-						<div><img src="<?= Yii::$app->purchaseService->purchaseGoods->getStyleImage($model)?>"/> </div>
+						<div><img src="<?= $img ?>"/> </div>
 					</td>
 					<td>
 						<div><?= $val['style_sn'] ?>/div>

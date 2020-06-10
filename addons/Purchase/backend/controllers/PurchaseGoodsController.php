@@ -163,7 +163,7 @@ class PurchaseGoodsController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();  
             
             $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
-            if($purchase->audit_status != AuditStatusEnum::PENDING) {
+            if($purchase->audit_status == AuditStatusEnum::PASS) {
                 throw new \Exception("采购单已审核,不允许删除",422);
             }
             

@@ -370,9 +370,9 @@ class PurchaseController extends BaseController
         $select = ['p.purchase_sn','p.supplier_id','p.follower_id','p.purchase_status','m.username','s.supplier_name','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
 
         $list = Purchase::find()->alias('p')
+            ->innerJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
             ->leftJoin(Member::tableName().' m','m.id=p.follower_id')
             ->leftJoin(Supplier::tableName().' s','s.id=p.supplier_id')
-            ->leftJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
             ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
             ->where(['p.id'=>$ids])
