@@ -2,11 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\OrderTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillTForm;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use common\helpers\ResultHelper;
+use addons\Warehouse\common\models\WarehouseBillGoodsT;
+use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -17,6 +14,10 @@ use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use common\helpers\ResultHelper;
 use yii\base\Exception;
 
 
@@ -26,7 +27,7 @@ use yii\base\Exception;
 class BillTGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillGoods::class;
+    public $modelClass = WarehouseBillTGoodsForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_T;
     /**
      * Lists all WarehouseBillGoods models.
@@ -46,12 +47,15 @@ class BillTGoodsController extends BaseController
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
-            'relations' => []
+            'relations' => [
+                'productType' => ['name'],
+                'styleCate' => ['name'],
+            ]
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -63,30 +67,33 @@ class BillTGoodsController extends BaseController
     }
 
     /**
-     * 其它收货单-添加明细
-     * @return mixed
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
      */
-    public function actionAdd()
+    public function actionAjaxEdit()
     {
-        $this->layout = '@backend/views/layouts/iframe';
-
+        $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
-        //$skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-        $model = new WarehouseBillTGoodsForm();
-        if($model->load(Yii::$app->request->post())){
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillGoodsT();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
             try{
-                $trans = Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->db->beginTransaction();
                 $model->bill_id = $bill_id;
                 Yii::$app->warehouseService->billT->addBillTGoods($model);
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
             }catch (\Exception $e){
                 $trans->rollBack();
-                return ResultHelper::json(422, $e->getMessage());
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
-        return $this->render($this->action->id, [
+        return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -114,7 +121,7 @@ class BillTGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

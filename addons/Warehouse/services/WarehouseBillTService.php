@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\models\Style;
+use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -47,12 +48,66 @@ class WarehouseBillTService extends Service
         if($form->goods_num <= 0){
             throw new \Exception("商品数量必须大于0");
         }
-
         $style = Style::findOne(['style_sn'=>$form->style_sn]);
         if(!$style){
             throw new \Exception("款号不存在");
         }
+        $bill = WarehouseBill::findOne(['id'=>$form->bill_id]);
+        $goodsM = new WarehouseBillGoodsT();
+        $goods = [
+            'goods_name' =>$style->style_name,
+            'style_sn' => $form->style_sn,
+            'product_type_id'=>$style->product_type_id,
+            'style_cate_id'=>$style->style_cate_id,
+            'style_sex' => $style->style_sex,
+            'goods_num' => 1,
+            'jintuo_type' => JintuoTypeEnum::Chengpin,
+            'cost_price' => $style->cost_price,
+            //'market_price' => $style->market_price,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        $goodsInfo = [];
+        for ($i=0; $i<$form->goods_num; $i++){
+            $goodsInfo[$i]= $goods;
+            $goodsInfo[$i]['bill_id'] = $form->bill_id;
+            $goodsInfo[$i]['goods_id'] = SnHelper::createGoodsId();
+            $goodsM->setAttributes($goodsInfo[$i]);
+            if(!$goodsM->validate()){
+                throw new \Exception($this->getError($goodsM));
+            }
+        }
+        $value = [];
+        $key = array_keys($goodsInfo[0]);
+        foreach ($goodsInfo as $item) {
+            $value[] = array_values($item);
+        }
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsT::tableName(), $key, $value)->execute();
+        if(false === $res){
+            throw new \Exception("创建收货单据明细失败");
+        }
+    }
 
+    /**
+     * 其他收货单-审核
+     * @param $form
+     */
+    public function auditBillT($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->audit_status == AuditStatusEnum::PASS){
+            //$form->status = StatusEnum::ENABLED;
+            $form->bill_status = BillStatusEnum::CONFIRM;
+        }else{
+            //$form->status = StatusEnum::DISABLED;
+            $form->bill_status = BillStatusEnum::SAVE;
+        }
+        $billGoods = WarehouseBillGoods::find()->select(['goods_id', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+        if(empty($billGoods)){
+            throw new \Exception("单据明细不能为空");
+        }
         $bill = WarehouseBill::findOne(['id'=>$form->bill_id]);
         $model = new WarehouseGoods();
         $goodsM = new WarehouseBillGoods();
@@ -140,28 +195,6 @@ class WarehouseBillTService extends Service
                     throw new \Exception($this->getError($billGoods));
                 }
             }
-        }
-    }
-
-    /**
-     * 其他收货单-审核
-     * @param $form
-     */
-    public function auditBillT($form)
-    {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-        if($form->audit_status == AuditStatusEnum::PASS){
-            //$form->status = StatusEnum::ENABLED;
-            $form->bill_status = BillStatusEnum::CONFIRM;
-        }else{
-            //$form->status = StatusEnum::DISABLED;
-            $form->bill_status = BillStatusEnum::SAVE;
-        }
-        $billGoods = WarehouseBillGoods::find()->select(['goods_id', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
-        if(empty($billGoods)){
-            throw new \Exception("单据明细不能为空");
         }
         $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
         $condition = ['goods_status' => GoodsStatusEnum::RECEIVING, 'goods_id' => $goods_ids];

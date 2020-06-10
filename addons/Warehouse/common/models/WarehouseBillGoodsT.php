@@ -63,6 +63,7 @@ use Yii;
  * @property string $remark 商品备注
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
+ * @property int $updated_at 更新时间
  */
 class WarehouseBillGoodsT extends BaseModel
 {
@@ -81,7 +82,7 @@ class WarehouseBillGoodsT extends BaseModel
     {
         return [
             [['bill_id'], 'required'],
-            [['id', 'bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at'], 'integer'],
+            [['id', 'bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'market_price', 'cost_price', 'xiangkou', 'parts_gold_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
             [['goods_id', 'style_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_image', 'cert_id', 'length'], 'string', 'max' => 100],
@@ -119,8 +120,8 @@ class WarehouseBillGoodsT extends BaseModel
             'material_type' => '材质',
             'material_color' => '材质颜色',
             'diamond_carat' => '钻石大小',
-            'diamond_color' => '砖石颜色',
-            'diamond_shape' => '砖石形状',
+            'diamond_color' => '钻石颜色',
+            'diamond_shape' => '钻石形状',
             'diamond_clarity' => '钻石净度',
             'diamond_cut' => '钻石切工',
             'diamond_polish' => '钻石抛光',
@@ -153,6 +154,7 @@ class WarehouseBillGoodsT extends BaseModel
             'remark' => '商品备注',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 
