@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use common\enums\AuditStatusEnum;
 use common\enums\WhetherEnum;
 use common\helpers\ResultHelper;
@@ -158,6 +159,36 @@ class ReceiptGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'receipt_goods' => $receipt_goods
+        ]);
+    }
+
+    /**
+     * ajax编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceiptGoods();
+        // ajax 校验
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
         ]);
     }
 

@@ -12,7 +12,7 @@ class PurchaseGoodsTypeEnum extends BaseEnum
 {
     const STYLE = 1;
     const QIBAN = 2;
-    
+    const OTHER = 3;
     /**
      *
      * @return array
@@ -20,8 +20,9 @@ class PurchaseGoodsTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-                self::STYLE => "款式商品",
-                self::QIBAN => "起版商品",  
+                self::STYLE => "有款商品",
+                self::QIBAN => "起版商品",
+                self::OTHER => "无款商品",
         ];
     }
     

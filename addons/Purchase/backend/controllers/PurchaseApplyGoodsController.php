@@ -22,6 +22,9 @@ use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
 use addons\Purchase\common\models\PurchaseApply;
+use common\helpers\SnHelper;
+use addons\Purchase\common\enums\ApplyGoodsTypeEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 /**
  * Attribute
  *
@@ -79,7 +82,7 @@ class PurchaseApplyGoodsController extends BaseController
         ]);
     }
     /**
-     * 编辑/创建
+     * 有款添加/编辑
      * @var PurchaseApplyGoodsForm $model
      * @return mixed
      */
@@ -111,6 +114,71 @@ class PurchaseApplyGoodsController extends BaseController
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        
+        $model->initAttrs();
+        return $this->render($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
+    /**
+     * 无款添加/编辑
+     * @property PurchaseGoodsForm $model
+     * @return mixed
+     */
+    public function actionEditNoStyle()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        
+        $id = Yii::$app->request->get('id');
+        
+        $apply_id = Yii::$app->request->get('apply_id');
+        $style_cate_id = Yii::$app->request->get('style_cate_id');
+        $product_type_id = Yii::$app->request->get('product_type_id');
+        $jintuo_type = Yii::$app->request->get('jintuo_type');
+        
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseApplyGoodsForm();
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord == true) {
+            $model->apply_id = $apply_id;
+            $model->goods_type = PurchaseGoodsTypeEnum::OTHER;
+            $model->qiban_type = QibanTypeEnum::NON_VERSION;
+        }  
+        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;
+        $model->product_type_id = $product_type_id ?? $model->product_type_id;
+        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
+        $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
+        
+        if ($model->load(Yii::$app->request->post())) {
+              
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if($isNewRecord == true) {
+                    $model->goods_sn = SnHelper::createQibanSn('QBA');
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                //创建属性关系表数据
+                $model->createAttrs();
+                //更新采购汇总
+                Yii::$app->purchaseService->apply->applySummary($model->apply_id);
+                
+                $trans->commit();
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    //前端提示
+                    Yii::$app->getSession()->setFlash('success','保存成功');
+                    return ResultHelper::json(200, '保存成功');
+                }
+                
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -311,7 +379,9 @@ class PurchaseApplyGoodsController extends BaseController
                     }
                     $model->style_id = $qiban->id;
                     $model->goods_sn = $goods_sn;
+                    $model->goods_image = $qiban->style_image;
                     $model->qiban_sn = $goods_sn;
+                    $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
                     $model->qiban_type = $qiban->qiban_type;
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
@@ -338,6 +408,8 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->style_id = $style->id;
                 $model->goods_sn = $goods_sn;
                 $model->style_sn = $goods_sn;
+                $model->goods_image = $style->style_image;
+                $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
                 $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;

@@ -85,6 +85,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
             $this->attr_custom  = $attr_list;
             $this->attr_require = $attr_list;
         }
+        $this->goods_images = $this->goods_images ? explode(',', $this->goods_images) : [];
     }    
     /**
      * 初始化 已填写属性数据

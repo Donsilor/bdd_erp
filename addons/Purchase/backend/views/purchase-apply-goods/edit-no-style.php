@@ -1,8 +1,6 @@
 <?php
 use yii\widgets\ActiveForm;
-use common\helpers\Html;
 use common\helpers\Url;
-use addons\Style\common\enums\AttrTypeEnum;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 
@@ -61,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'style_channel_id')->dropDownList(Yii::$app->styleService->styleChannel->getDropDown(),['prompt'=>'请选择'])?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_name')->textInput() ?>
+                            <?= $form->field($model, 'goods_name')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['prompt'=>'请选择']) ?>
@@ -88,8 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
                 $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
-                    $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
-                    $attr_field_name = "{$attr_field}[{$attr['id']}]";
+                     $attr_field_name = "attr_custom[{$attr['id']}]";
                     //通用属性值列表
                     $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
                     switch ($attr['input_type']){
@@ -124,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <?= $form->field($model, 'style_image')->widget(common\widgets\webuploader\Files::class, [
+                                <?= $form->field($model, 'goods_images')->widget(common\widgets\webuploader\Files::class, [
                                     'config' => [
                                         'pick' => [
                                             'multiple' => true,
@@ -141,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-var formID = 'qibanattrform';
+var formID = 'purchaseapplygoodsform';
 function searchGoods() {
     var style_cate_id = $("#"+formID+"-style_cate_id").val();
     var product_type_id = $("#"+formID+"-product_type_id").val();

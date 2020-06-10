@@ -5,6 +5,7 @@ use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\AmountHelper;
 use addons\Purchase\common\enums\ApplyStatusEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
 $this->title =  '详情';
 $this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
@@ -21,24 +22,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box">
                         <div class="table-responsive">
                             <table class="table table-hover">
+                                 
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
+                                    <td><?= PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
+                                </tr>  
+                                <?php if($model->goods_type != PurchaseGoodsTypeEnum::OTHER) {?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
                                 </tr>
-                                <?php if($model->qiban_sn) {?>
+                                <?php }?>
+                                <?php if($model->goods_type == PurchaseGoodsTypeEnum::QIBAN) {?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
                                     <td><?= $model->qiban_sn ?></td>
                                 </tr>
-                                <?php }?>   
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
+                                    <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
+                                </tr>  
+                                <?php }?>                      
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                                     <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
-                                    <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
-                                </tr>
+                                
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                                     <td><?= $model->cate->name ?></td>
@@ -77,13 +86,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right">商品图片：</td>
-                                    <td><?= \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); ?></td>
+                                    <td>
+                                     <?php 
+                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER) {
+                                             $model->goods_images = $model->goods_images ? explode(',', $model->goods_images) :[];                                    
+                                             foreach ($model->goods_images as $goods_image) {
+                                            	echo \common\helpers\ImageHelper::fancyBox($goods_image,90,90); 
+                                             } 	
+                                        }else {
+                                        	echo \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); 
+                                        }
+                                      ?>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
                         <div class="box-footer text-center">
                             <?php if($model->apply->apply_status == ApplyStatusEnum::SAVE) {?>
-                                <?= Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
+                                <?php if($model->goods_type == PurchaseGoodsTypeEnum::OTHER) {?>
+                                      <?= Html::edit(['edit-no-style','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
+                                 <?php } else {?>
+                                      <?= Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
+                                 <?php }?> 
                                 <?= Html::edit(['ajax-apply','id'=>$model->id], '提审', ['class'=>'btn btn-success btn-ms','onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',]);?>
                             <?php }?>
                             <?php

@@ -60,6 +60,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{edit} {delete}',
+                                'buttons' => [
+                                    'edit' => function($url, $model, $key) use($receipt) {
+                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                            return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
+                                                'class' => 'btn btn-primary btn-xs openIframe',
+                                                'data-width' => '90%',
+                                                'data-height' => '90%',
+                                                'data-offset' => '20px',
+                                            ]);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($receipt) {
+                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id], '删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'xuhao',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
@@ -550,11 +575,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key) use($receipt) {
+                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                            return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
+                                                'class' => 'btn btn-primary btn-xs openIframe',
+                                                'data-width' => '90%',
+                                                'data-height' => '90%',
+                                                'data-offset' => '20px',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($receipt) {
                                         if($receipt->receipt_status == BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                            return Html::delete(['delete', 'id' => $model->id], '删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],
