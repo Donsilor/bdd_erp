@@ -79,9 +79,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'label' => '商品名称',
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
                                 },
@@ -702,3 +703,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script type="text/javascript">
+    $(function(){
+        $(".batch_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs\" href=\"#\" role=\"button\">批量填充</a>");
+    });
+</script>
