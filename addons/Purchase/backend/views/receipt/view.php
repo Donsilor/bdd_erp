@@ -1,8 +1,7 @@
 <?php
 
 use common\helpers\Html;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 
 /* @var $this yii\web\View */
@@ -80,22 +79,20 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="box-footer text-center">
             <?php
-            if($model->receipt_status == BillStatusEnum::SAVE) {
+            if($model->receipt_status == PurchaseStatusEnum::SAVE) {
                 echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class' => 'btn btn-primary btn-ms',
                     'data-target' => '#ajaxModalLg',
                 ]);
                 echo '&nbsp';
-            }
-            if($model->receipt_status == BillStatusEnum::SAVE) {
                 echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                     'class'=>'btn btn-success btn-ms',
                     'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                 ]);
                 echo '&nbsp';
             }
-            if($model->receipt_status == BillStatusEnum::PENDING) {
+            if($model->receipt_status == PurchaseStatusEnum::PENDING) {
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',

@@ -259,7 +259,7 @@
                         <div><?= $val['gold_amount'] ?></div>
                     </td>
                     <td>
-                        <div>暂无</div>
+                        <div><?= $val['main_stone_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['main_stone_num'] ?></div>
@@ -280,7 +280,7 @@
                         <div><?= $val['main_stone_price_sum'] ?></div>
                     </td>
                     <td>
-                        <div>暂无</div>
+                        <div><?= $val['second_stone_sn1'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['second_stone_num1'] ?></div>

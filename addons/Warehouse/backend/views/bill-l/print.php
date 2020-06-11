@@ -25,7 +25,7 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>不良返厂单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>入库单表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
@@ -49,8 +49,11 @@
 			<table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
 				<!-- 列表头部 -->
 				<tr class="t-head">
+                    <td rowspan="2">
+                        <div>序号</div>
+                    </td>
 					<td rowspan="2">
-						<div>序号</div>
+						<div>条码号</div>
 					</td>
 					<td rowspan="2">
 						<div>款号</div>
@@ -130,12 +133,7 @@
                     <td rowspan="2">
                         <div>标签价</div>
                     </td>
-                    <td rowspan="2">
-                        <div>质检未过原因</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>质检备注</div>
-                    </td>
+
 
                 </tr>
                 <tr class="t-head bg-blue">
@@ -208,9 +206,12 @@
                       $model = \addons\Purchase\common\models\PurchaseGoods::find()->where(['id'=>$val['id']])->one();
                 ?>
 				<tr>
-					<td>
-						<div><?= $val['xuhao'] ?></div>
-					</td>
+                    <td>
+                        <div><?= $key+1 ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['goods_id'] ?>/div>
+                    </td>
 					<td>
 						<div><?= $val['style_sn'] ?>/div>
 					</td>
@@ -250,8 +251,6 @@
                     <td>
                         <div><?= $val['gross_weight'] ?></div>
                     </td>
-
-
                     <td>
                         <div><?= $val['gold_price'] ?></div>
                     </td>
@@ -259,13 +258,13 @@
                         <div><?= $val['gold_amount'] ?></div>
                     </td>
                     <td>
-                        <div>暂无</div>
+                        <div><?= $val['main_stone_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['main_stone_num'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['main_stone_weight'] ?></div>
+                        <div><?= $val['diamond_carat'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['main_stone_color'] ?></div>
@@ -280,7 +279,7 @@
                         <div><?= $val['main_stone_price_sum'] ?></div>
                     </td>
                     <td>
-                        <div>暂无</div>
+                        <div><?= $val['second_stone_sn1'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['second_stone_num1'] ?></div>
@@ -302,7 +301,7 @@
                         <div><?= $val['second_stone_price1_sum'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['parts_weight'] ?></div>
+                        <div><?= $val['parts_gold_weight'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['parts_price'] ?></div>
@@ -342,13 +341,7 @@
                         <div><?= $val['markup_rate'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['sale_price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['iqc_name'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['iqc_remark'] ?></div>
+                        <div><?= $val['market_price'] ?></div>
                     </td>
 
 				</tr>

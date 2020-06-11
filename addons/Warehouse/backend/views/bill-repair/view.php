@@ -133,7 +133,22 @@ $this->params['breadcrumbs'][] = $this->title;
                  </div>
              </div>
          </div>
+        <div class="box-footer text-center">
+            <?= Html::a('打印',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-ms',
+            ]); ?>
+            <?= Html::button('导出', [
+                'class'=>'btn btn-success btn-ms',
+                'onclick' => 'batchExport()',
+            ]);?>
+        </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+</script>
 
 
