@@ -278,7 +278,7 @@ class BillWController extends BaseController
      * @param $id
      * @return mixed
      */
-    public function actionAjaxClose($id)
+    public function actionDelete($id)
     {
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
