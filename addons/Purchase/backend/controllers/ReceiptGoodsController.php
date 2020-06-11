@@ -189,6 +189,44 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
+     * ajax批量编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchEdit()
+    {
+        $ids = Yii::$app->request->post('ids');
+        $field = Yii::$app->request->post('field');
+        $field_value = Yii::$app->request->post('field_value');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
+        $id_arr = $model->getIds();
+        if(!$id_arr){
+            return ResultHelper::json(422, "ID不能为空");
+        }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            foreach ($id_arr as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods->$field = $field_value;
+                if(false === $goods->validate()) {
+                    throw new \Exception($this->getError($goods));
+                }
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+            $trans->commit();
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
      * 编辑
      * @return string
      * @throws \yii\web\NotFoundHttpException

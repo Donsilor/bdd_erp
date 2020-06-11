@@ -5,6 +5,7 @@ namespace addons\Warehouse\common\forms;
 
 use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseBillGoodsT;
+use common\helpers\StringHelper;
 
 /**
  * 其他收货单明细 Form
@@ -12,6 +13,7 @@ use addons\Warehouse\common\models\WarehouseBillGoodsT;
  */
 class WarehouseBillTGoodsForm extends WarehouseBillGoodsT
 {
+    public $ids;
     /**
      * {@inheritdoc}
      */
@@ -31,5 +33,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsT
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
     }
 }

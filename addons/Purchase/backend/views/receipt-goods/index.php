@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
-            echo '&nbsp;';
         }
         if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
             echo Html::a('批量申请入库', ['warehouse'], [
