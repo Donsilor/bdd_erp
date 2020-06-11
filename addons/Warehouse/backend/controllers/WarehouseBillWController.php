@@ -70,11 +70,8 @@ class WarehouseBillWController extends BaseController
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $dataProvider->setPagination(false);
-            $list = $dataProvider->models;
-            $list = ArrayHelper::toArray($list);
-            $ids = array_column($list,'id');
-            $this->actionExport($ids);
+            $queryIds = $dataProvider->query->select(Warehousebill::tableName().'.id');
+            $this->actionExport($queryIds);
         }
         
         return $this->render($this->action->id, [
@@ -334,12 +331,45 @@ class WarehouseBillWController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.goods_num','g.main_stone_type','g.finger','g.diamond_shape','g.main_stone_num',
-            'g.second_stone_num1','g.second_stone_weight1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
+        $list = $this->getData($ids);
+
+        $header = [
+            ['单据编号', 'bill_no' , 'text'],
+            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
+            ['货品名称', 'goods_name' , 'text'],
+            ['条码号', 'goods_id' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['产品分类', 'product_type_name' , 'text'],
+            ['商品类型', 'style_cate_name' , 'text'],
+            ['仓库', 'warehouse_name' , 'text'],
+            ['材质', 'material' , 'text', ],
+            ['金重', 'gold_weight' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石形状', 'diamond_shape' , 'text'],
+            ['主石重（ct)', 'diamond_carat' , 'text'],
+            ['配石重（ct)', 'second_stone_weight1' , 'text'],
+            ['总重(g)', 'diamond_carat_sum' , 'text'],
+            ['手寸	', 'finger' , 'text'],
+            ['货品尺寸	', 'product_size' , 'text'],
+            ['库存数	', 'goods_num' , 'text'],
+            ['实盘数', 'actual_num' , 'text'],
+            ['盘盈数', 'profit_num' , 'text'],
+            ['盘亏数', 'loss_num' , 'text'],
+            ['盘点类型', 'status' , 'text'],
+            ['备注', 'goods_remark' , 'text'],
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    private function getData($ids){
+        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','w.from_warehouse_id','wg.bill_id','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','wg.status','type.name as product_type_name','cate.name as style_cate_name',
+            'wg.cost_price','wg.diamond_cert_id','wg.status','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name',
             'ww.actual_num','ww.profit_num','ww.loss_num'];
-        $list = WarehouseBill::find()->alias('w')
+        $lists = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(WarehouseBillW::tableName()." ww",'ww.id=w.id')
@@ -347,47 +377,39 @@ class WarehouseBillWController extends BaseController
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
             ->where(['w.id' => $ids])
             ->select($select)->asArray()->all();
-        $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
-            ['商品名称', 'goods_name' , 'text'],
-            ['条码号', 'goods_id' , 'text'],
-            ['款号', 'style_sn' , 'text'],
-            ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
-            ['材质', 'material' , 'function', function($model){
-                return \Yii::$app->attr->valueName($model['material']);
-            }],
-            ['金重', 'gold_weight' , 'text'],
-            ['主石类型', 'main_stone_type' , 'function',function($model){
-                return Yii::$app->attr->valueName($model->main_stone_type ?? '');
-            }],
-            ['主石形状', 'diamond_shape' , 'function',function($model){
-                return Yii::$app->attr->valueName($model->diamond_shape ?? '');
-            }],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
-            ['配石重（ct)', 'second_stone_weight1' , 'text'],
-            ['总重(g)', 'diamond_carat' , 'function',function($model){
-                $diamond_carat = $model->diamond_carat ?? 0;
-                $second_stone_weight1 = $model->second_stone_weight1 ?? 0;
-                return $diamond_carat + $second_stone_weight1;
-            }],
-            ['手寸	', 'finger' , 'text'],
-            ['货品尺寸	', 'finger' , 'text'],
-            ['库存数	', 'goods_num' , 'text'],
-            ['实盘数', 'actual_num' , 'text'],
-            ['盘盈数', 'profit_num' , 'text'],
-            ['盘亏数', 'loss_num' , 'text'],
-            ['盘点类型', 'status' , 'selectd',PandianStatusEnum::getMap()],
-            ['备注', 'second_stone_num1' , 'text'],
+        foreach ($lists as &$list){
+            $bill = WarehouseBill::find()->where(['id'=>$list['bill_id']])->one();
+            $list['warehouse_name'] = $bill->toWarehouse->name ?? '';
+            $list['material'] = \Yii::$app->attr->valueName($list['material']);
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+            $list['diamond_shape'] = \Yii::$app->attr->valueName($list['diamond_shape']);
 
+            $diamond_carat = empty($list['diamond_carat']) ? 0 :$list['diamond_carat'];
+            $second_stone_weight1 = empty($list['second_stone_weight1']) ? 0 :$list['second_stone_weight1'];
+            $list['diamond_carat_sum'] =  $diamond_carat + $second_stone_weight1;
 
-        ];
+            $list['status'] = PandianStatusEnum::getValue($list['status']);
 
-        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+        }
+        return $lists;
     }
 
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $lists = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists
+        ]);
+    }
 
 
 

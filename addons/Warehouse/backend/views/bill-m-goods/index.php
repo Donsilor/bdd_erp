@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'goods.goods_status',
                                 'value' => function($model){
-                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status ?? '');
                                 },
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],

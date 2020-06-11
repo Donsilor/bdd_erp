@@ -7,6 +7,7 @@ use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use addons\Warehouse\common\enums\RepairStatusEnum;
 use common\models\backend\Member;
 use Yii;
 use common\models\base\SearchModel;
@@ -305,14 +306,14 @@ class ReceiptController extends BaseController
             ['含耗重', 'gross_weight' , 'text'],
             ['金价', 'gold_price' , 'text'],
             ['金料额', 'gold_amount' , 'text'],
-            ['石号', 'cert_id' , 'text'],
+            ['石号', 'main_stone_sn' , 'text'],
             ['粒数', 'main_stone_num' , 'text'],
             ['石重', 'main_stone_weight' , 'text'],
             ['颜色', 'main_stone_color' ,'text'],
             ['净度', 'main_stone_clarity' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
             ['金额', 'main_stone_price_sum','text'],
-            ['副石号', 'second_cert_id1' , 'text'],
+            ['副石号', 'second_stone_sn1' , 'text'],
             ['副石粒数', 'second_stone_num1' , 'text'],
             ['副石石重', 'second_stone_weight1' , 'text'],
             ['副石颜色', 'second_stone_color1' , 'text'],
@@ -375,7 +376,7 @@ class ReceiptController extends BaseController
             $material = empty($list['material']) ? 0 : $list['material'];
             $list['material'] = Yii::$app->attr->valueName($material);
             //单据状态
-            $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
+            $list['receipt_status'] = PurchaseStatusEnum::getValue($list['receipt_status']);
             //入库方式
             $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
             //主石颜色

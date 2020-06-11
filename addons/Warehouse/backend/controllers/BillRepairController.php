@@ -5,6 +5,7 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\RepairStatusEnum;
 use addons\Warehouse\common\enums\RepairTypeEnum;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -65,14 +66,8 @@ class BillRepairController extends BaseController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $query = Yii::$app->request->queryParams;
-            unset($query['action']);
-            if(empty(array_filter($query))){
-               // return $this->message('导出条件不能为空', $this->redirect(['index']), 'warning');
-            }
-            $dataProvider->setPagination(false);
-            $list = $dataProvider->models;
-            $this->getExport($list);
+            $queryIds = $dataProvider->query->select(WarehouseBillRepairForm::tableName().'.id');
+            $this->actionExport($queryIds);
         }
 
         return $this->render('index', [
@@ -273,9 +268,8 @@ class BillRepairController extends BaseController
 
     }
 
-
     /***
-     * 选中导出
+     * 导出Excel
      */
     public function actionExport($ids=null){
         if(!is_array($ids)){
@@ -284,21 +278,7 @@ class BillRepairController extends BaseController
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-        $list = WarehouseBillRepair::find()->where(['id'=>$ids])->all();
-        $this->getExport($list);
-
-    }
-
-
-    /**
-     * 导出Excel
-     *
-     * @return bool
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
-    public function getExport($list)
-    {
+        $list = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
             ['维修单号', 'repair_no', 'text'],
@@ -324,7 +304,29 @@ class BillRepairController extends BaseController
         ];
 
         return ExcelHelper::exportData($list, $header, '维修单导出_' . date('YmdHis',time()));
+
     }
+
+
+    /**
+     *
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function getData($ids)
+    {
+        $select = [''];
+        $lists = WarehouseBillRepair::find()->alias('wr')
+            ->leftJoin(WarehouseGoods::tableName() . ' g','wr.goods_id=g.goods_id')
+            ->select($select)
+            ->asArray()
+            ->all();
+
+
+    }
+
+
 
 
 
