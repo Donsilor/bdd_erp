@@ -25,6 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
         if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width'=>'90%',
+                'data-height'=>'90%',
+                'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
