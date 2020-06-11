@@ -13,7 +13,6 @@ use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
-use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -31,7 +30,7 @@ use common\enums\AuditStatusEnum;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillWController extends BaseController
+class BillWController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillWForm::class;
