@@ -367,4 +367,60 @@ $this->registerJs($script);
         e.preventDefault();
         return false;
     }
+
+    //批量操作弹框
+    function batchPop(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        let text = $e.text();
+        let grid = $e.data('grid');
+        let id = $e.closest("tr").data("key");
+        let ids = [];
+        if(id) {
+            ids.push(id);
+        }
+        else if($("#"+grid).length>0) {
+            ids = $("#"+grid).yiiGridView("getSelectedRows");
+        }
+        if(!id){
+            $('input[name="id[]"]:checked').each(function(i){
+                var str = $(this).val();
+                if($.isNumeric(str)){
+                    ids[i] = str;
+                }else{
+                    var arr = $.parseJSON(str);
+                    ids[i] = arr.id;
+                }
+            });
+        }
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        if($.isArray(ids)){
+            ids = ids.join(',');
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                if (parseInt(data.code) !== 200) {
+                    rfAffirm(data.message);
+                } else {
+                    var href = data.data.url;
+                    var title = '基本信息';
+                    var width = '80%';
+                    var height = '80%';
+                    var offset = "10%";
+                    openIframe(title, width, height, href, offset);
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    }
 </script>

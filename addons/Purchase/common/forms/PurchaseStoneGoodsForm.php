@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use common\helpers\StringHelper;
 use Yii;
 
 use common\enums\ConfirmEnum;
@@ -16,7 +17,8 @@ use addons\Style\common\enums\AttrIdEnum;
  */
 class PurchaseStoneGoodsForm extends PurchaseStoneGoods
 {
-    
+    public $ids;
+    public $put_in_type;
     /**
      * 石料类型列表
      * @return array
@@ -62,7 +64,15 @@ class PurchaseStoneGoodsForm extends PurchaseStoneGoods
         if(false === $this->save(true,['is_apply','apply_info','updated_at'])) {
             throw new \Exception("保存失败",500);
         }
-        
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
     }
 }
 

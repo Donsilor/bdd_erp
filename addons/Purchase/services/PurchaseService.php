@@ -151,20 +151,27 @@ class PurchaseService extends Service
      */
     public function syncPurchaseToReceipt($form, $purchase_type, $detail_ids = null)
     {
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneGoods();
+            $PurchaseModel = new PurchaseStone();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldGoods();
+            $PurchaseModel = new PurchaseGold();
+        }else{
+            $model = new PurchaseGoods();
+            $PurchaseModel = new Purchase();
+        }
+        if(!empty($detail_ids)) {
+            $goods = $model::find()->select('purchase_id')->where(['id'=>$detail_ids[0]])->one();
+            $form = $PurchaseModel::find()->where(['id'=>$goods->purchase_id])->one();
+        }
         if($form->total_num <= 0 ){
             throw new \Exception('采购单没有明细');
         }
         if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购单没有审核');
         }
-        if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $PurchaseModel = new PurchaseStoneGoods();
-        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $PurchaseModel = new PurchaseGoldGoods();
-        }else{
-            $PurchaseModel = new PurchaseGoods();
-        }
-        $query = $PurchaseModel::find()->where(['purchase_id'=>$form->id]);
+        $query = $model::find()->where(['purchase_id'=>$form->id]);
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
