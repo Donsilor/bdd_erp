@@ -16,7 +16,7 @@ use addons\Warehouse\common\enums\PandianStatusEnum;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillWGoodsController extends BaseController
+class BillWGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
@@ -29,7 +29,7 @@ class WarehouseBillWGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-w/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-w/index']));
         $bill = WarehouseBillWForm::find()->where(['id'=>$bill_id])->one();
         
         $searchModel = new SearchModel([

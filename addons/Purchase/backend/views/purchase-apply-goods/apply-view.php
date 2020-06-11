@@ -4,21 +4,21 @@ use common\helpers\Html;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\enums\ApplyStatusEnum;
 
-$this->title = '采购编辑审批';
+$this->title = '采购申请编辑审批';
 $this->params['breadcrumbs'][] = ['label' =>  $this->title];
 ?>
 <div class="row">
 <div class="col-xs-12">
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title"><i class="fa fa-cog"></i> 采购布产编辑-审批</h3>                         
+            <h3 class="box-title"><i class="fa fa-cog"></i> 采购申请编辑-审批</h3>                         
         </div>
         <div class="box-body table-responsive">
              <table class="table table-hover">
                     <tr>
                         <td class="col-xs-1 text-right">采购申请单号：</td>
                         <td><?php echo $model->apply->apply_sn ?? '';?></td>
-                        <td class="col-xs-1 text-right">单据状态：</td>
+                        <td class="col-xs-1 text-right">申请单状态：</td>
                         <td><?php echo ApplyStatusEnum::getValue($model->apply->apply_status??'');?></td>
                     </tr>
                     <tr>

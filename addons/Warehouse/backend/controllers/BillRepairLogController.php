@@ -34,7 +34,7 @@ class BillRepairLogController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $billInfo = WarehouseBillRepair::find()->where(['id'=>$bill_id])->one();
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

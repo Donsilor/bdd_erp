@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);?>
            <?php }?>
            <?php if($model->bill_status < BillStatusEnum::CONFIRM) {?>
-           		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms']);?>
+           		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms','onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新吗？");return false;']);?>
            <?php }?>
             <?php
                 if($model->bill_status == BillStatusEnum::PENDING){

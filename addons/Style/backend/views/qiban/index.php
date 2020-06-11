@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-height'=>'90%',
                         'data-offset'=>'20px',
                     ]); ?>
-                    <?= Html::create(['edit-no-style'], '无款起版', [
+                    <?= Html::create(['edit-no-style','1'=>1], '无款起版', [
                         'class' => 'btn btn-primary btn-xs openIframe',
                         'data-width'=>'90%',
                         'data-height'=>'90%',

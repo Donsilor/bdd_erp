@@ -210,7 +210,7 @@ class PurchaseApplyController extends BaseController
      * 关闭
      * @return mixed
      */
-    public function actionClose(){
+    public function actionDelete(){
         
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -226,8 +226,8 @@ class PurchaseApplyController extends BaseController
                 'apply_id' => $id,
                 'apply_sn' => $model->apply_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => "关闭单据",
-                'log_msg' => "关闭单据"
+                'log_module' => "取消单据",
+                'log_msg' => "取消单据"
         ];
         Yii::$app->purchaseService->apply->createApplyLog($log);
         return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -241,7 +241,7 @@ class PurchaseApplyController extends BaseController
         
         $id = Yii::$app->request->get('id');
         
-        $this->modelClass = PurchaseFollowerForm::class;
+        //$this->modelClass = PurchaseFollowerForm::class;
         $model = $this->findModel($id);
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {

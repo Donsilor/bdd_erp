@@ -2,24 +2,16 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\models\WarehouseBillGoodsT;
-use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use common\helpers\ResultHelper;
 use yii\base\Exception;
-
 
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
@@ -35,7 +27,6 @@ class BillTGoodsController extends BaseController
      */
     public function actionIndex()
     {
-
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-t-goods/index']));
@@ -132,6 +123,44 @@ class BillTGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * ajax批量编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchEdit()
+    {
+        $ids = Yii::$app->request->post('ids');
+        $field = Yii::$app->request->post('field');
+        $field_value = Yii::$app->request->post('field_value');
+        $model = new WarehouseBillTGoodsForm();
+        $model->ids = $ids;
+        $id_arr = $model->getIds();
+        if(!$id_arr){
+            return ResultHelper::json(422, "ID不能为空");
+        }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            foreach ($id_arr as $id) {
+                $goods = WarehouseBillGoodsT::findOne(['id'=>$id]);
+                $goods->$field = $field_value;
+                if(false === $goods->validate()) {
+                    throw new \Exception($this->getError($goods));
+                }
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+            $trans->commit();
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
     /**

@@ -102,7 +102,7 @@ class ReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-
+        $model = $model ?? new PurchaseReceipt();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -130,6 +130,7 @@ class ReceiptController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceipt();
         if($model->receipt_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -155,6 +156,7 @@ class ReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceipt();
         if($model->audit_status == AuditStatusEnum::PASS){
             $model->audit_status = AuditStatusEnum::PASS;
         }else{
@@ -200,18 +202,17 @@ class ReceiptController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceipt();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
                 $model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
-                //同步采购收货单至L单
+                //采购收货单同步至L单
                 Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
                 $trans->commit();
                 return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -233,14 +234,15 @@ class ReceiptController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $receipt_no = Yii::$app->request->get('receipt_no');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
-        if(!$id){
-            $result = $this->modelClass::find()->where(['receipt_no'=>$receipt_no])->asArray()->one();
-            $id = !empty($result)?$result['id']:0;
-        }
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceipt();
+        $receipt_no = Yii::$app->request->get('receipt_no');
+        if(!$id){
+            $receipt = PurchaseReceipt::findOne(['receipt_no'=>$receipt_no]);
+            $id = $receipt->id;
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,

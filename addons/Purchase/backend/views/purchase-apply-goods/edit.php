@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	  $attr_list = $model->getAttrList();
+            	  $attr_list = $model->getAttrList();   
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['attr_id'];//属性ID                      
                       $attr_values = $attr['attr_values'];//属性值                                    

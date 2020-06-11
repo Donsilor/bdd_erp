@@ -11,6 +11,7 @@ use addons\Style\common\enums\JintuoTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
 use addons\Purchase\common\models\PurchaseApplyGoods;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -246,7 +247,9 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     public function getAttrList()
     {
         $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
-        if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
+        if($this->goods_type == PurchaseGoodsTypeEnum::OTHER) {
+            $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($this->style_cate_id,$attr_type,$this->is_inlay);
+        }else if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
             $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
         }else{
             $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);

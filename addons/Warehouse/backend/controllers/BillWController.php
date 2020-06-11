@@ -2,10 +2,20 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use Yii;
+use common\traits\Curd;
+use common\models\base\SearchModel;
+use common\helpers\ExcelHelper;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
+use common\helpers\SnHelper;
+use common\helpers\Url;
+use common\enums\AuditStatusEnum;
 
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
@@ -13,25 +23,15 @@ use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
-use common\enums\StatusEnum;
-use common\helpers\ArrayHelper;
-use common\helpers\StringHelper;
-use Yii;
-use common\traits\Curd;
-use common\models\base\SearchModel;
-use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
-use common\helpers\SnHelper;
-use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
+
 
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class WarehouseBillWController extends BaseController
+class BillWController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillWForm::class;
@@ -270,7 +270,7 @@ class WarehouseBillWController extends BaseController
 
 
     /**
-     * 删除/关闭
+     * 关闭
      *
      * @param $id
      * @return mixed
@@ -288,9 +288,8 @@ class WarehouseBillWController extends BaseController
             //仓库解锁
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($model->to_warehouse_id);
             //更新库存状态
-            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
-            $goods_ids = array_column($billGoods,'goods_id');
-            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$goods_ids,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+            $subQuery = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id']);
+            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
@@ -303,16 +302,12 @@ class WarehouseBillWController extends BaseController
                 'log_msg' => '单据关闭'
             ];
             \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
-            \Yii::$app->getSession()->setFlash('success','关闭成功');
             $trans->commit();
-            return $this->redirect(\Yii::$app->request->referrer);
+            return $this->message('关闭成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
-
-        return $this->message("关闭失败", $this->redirect(['index']), 'error');
     }
 
 
@@ -322,7 +317,7 @@ class WarehouseBillWController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function actionExport($ids=null){
+    public function actionExport($ids = null){
         $name = '盘点单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);

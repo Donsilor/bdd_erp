@@ -230,7 +230,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         }
                                     }, 
                                     'goods' => function($url, $model, $key){
-                                        return Html::edit(['warehouse-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
+                                        return Html::edit(['bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->bill_status == BillStatusEnum::PENDING){
@@ -243,8 +243,8 @@ $params = $params ? "&".http_build_query($params) : '';
                                     },
                                     'delete' => function($url, $model, $key){
                                         if($model->bill_status == BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id], '关闭',[
-                                                'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                            return Html::delete(['delete', 'id' => $model->id], '取消',[
+                                                'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
                                             ]);
                                         }                                        
                                     },

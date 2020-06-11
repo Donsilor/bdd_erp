@@ -65,7 +65,7 @@ class BillController extends BaseController
         }
         //echo $this->action->id;
         if($searchModel->bill_type) {
-            $this->action->id = '../warehouse-bill-'.strtolower($searchModel->bill_type).'/index';
+            $this->action->id = '../bill-'.strtolower($searchModel->bill_type).'/index';
         }       
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

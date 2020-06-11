@@ -711,12 +711,38 @@ $this->params['breadcrumbs'][] = $this->title;
     //批量填充
     $(document).on("click",'.batch',function(){
         var fromValue = "";
+        var url = "/warehouse/bill-t-goods/batch-edit";
         var name = $(this).parent().attr("data-sort");
         var title = $(this).parent().html();
         if(fromValue = prompt("<?= Yii::t("goods","请输入")?>", "0")){
-            $("input[name='"+name+"']").each(function(){
-                $(this).val(fromValue);
-                $(this).focus();
+            var ids = new Array;
+            $('input[name="id[]"]').each(function(i){
+                ids[i] = $(this).val();
+            });
+            if(ids.length===0) {
+                return false;
+            }
+            var ids = ids.join(',');
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids,
+                    field:name,
+                    field_value:fromValue,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        //$("input[name='"+name+"']").each(function(){
+                            //$(this).val(fromValue);
+                            //$(this).focus();
+                        //});
+                        window.location.reload();
+                    }
+                }
             });
         }else{
             return false;

@@ -127,38 +127,34 @@ class ReceiptGoodsController extends BaseController
     public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
-
-        $receipt_id = Yii::$app->request->get('receipt_id');
-        $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-        $model = PurchaseReceiptForm::findOne(['id'=>$receipt_id]);
+        $id = Yii::$app->request->get('receipt_id');
+        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
         $model->produce_sns = Yii::$app->request->get('produce_sns');
-        $receipt_goods = [];
-        if(Yii::$app->request->get('search') && $model->produce_sns){
+        $model->goods = Yii::$app->request->post('PurchaseReceiptForm', '');
+        $goods_list = [];
+        if(Yii::$app->request->get('search') && $model->produce_sns && empty($model->getGoods())){
+            $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             try{
-                $receipt_goods = Yii::$app->purchaseService->receipt->getGoodsByProduceSn($model);
+                $goods_list = Yii::$app->purchaseService->receipt->getGoodsByProduceSn($model);
             }catch (\Exception $e){
                 return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
             }
-
         }
-        $goods = Yii::$app->request->post('receipt_goods_list');
-        if($model->load(Yii::$app->request->post()) && $goods && $goods[0]['produce_sn']){
+        if($model->load(Yii::$app->request->post()) && $model->getGoods()){
             try{
-                $model->goods = $goods;
                 $trans = Yii::$app->db->beginTransaction();
-
                 Yii::$app->purchaseService->receipt->addReceiptGoods($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
+                return ResultHelper::json(422, '保存失败'.$e->getMessage());
             }
         }
         return $this->render($this->action->id, [
             'model' => $model,
-            'receipt_goods' => $receipt_goods
+            'goods_list' => $goods_list
         ]);
     }
 
@@ -190,6 +186,44 @@ class ReceiptGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * ajax批量编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchEdit()
+    {
+        $ids = Yii::$app->request->post('ids');
+        $field = Yii::$app->request->post('field');
+        $field_value = Yii::$app->request->post('field_value');
+        $model = new PurchaseReceiptGoodsForm();
+        $model->ids = $ids;
+        $id_arr = $model->getIds();
+        if(!$id_arr){
+            return ResultHelper::json(422, "ID不能为空");
+        }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            foreach ($id_arr as $id) {
+                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods->$field = $field_value;
+                if(false === $goods->validate()) {
+                    throw new \Exception($this->getError($goods));
+                }
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+            $trans->commit();
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
     /**

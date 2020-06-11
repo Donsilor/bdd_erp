@@ -51,7 +51,7 @@ class BillWfGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-wf/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-wf/index']));
         $this->pageSize = 1000;
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -221,10 +221,10 @@ class BillWfGoodsController extends BaseController
                 throw new Exception("商品不是调拨中或者不存在，请查看原因");
             }
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['warehouse-bill-wf-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['bill-wf-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-wf-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['bill-wf-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
 

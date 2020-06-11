@@ -19,8 +19,8 @@ use common\models\backend\Member;
  * @property int $purchase_type 采购类型
  * @property int $receipt_status 单据状态
  * @property int $put_in_type 入库方式
- * @property int $is_to_warehouse 是否提交入库
  * @property int $to_warehouse_id 入库仓库
+ * @property int $is_to_warehouse 是否提交入库
  * @property string $total_cost 总金额（总成本）
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -73,8 +73,8 @@ class PurchaseReceipt extends BaseModel
             'receipt_num' => '出货数量',
             'total_cost' => '总金额',
             'put_in_type' => '入库方式',
-            'is_to_warehouse' => '是否提交入库',
             'to_warehouse_id' => '入库仓库',
+            'is_to_warehouse' => '是否提交入库',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
@@ -104,12 +104,12 @@ class PurchaseReceipt extends BaseModel
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
     /**
-     * 关联管理员一对一
+     * 入库仓库 一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getMember()
+    public function getToWarehouse()
     {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
     /**
      * 创建人
@@ -126,13 +126,5 @@ class PurchaseReceipt extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
-    }
-    /**
-     * 入库仓库 一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getToWarehouse()
-    {
-        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
 }

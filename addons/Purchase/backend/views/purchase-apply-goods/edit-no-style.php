@@ -84,8 +84,9 @@ $this->params['breadcrumbs'][] = $this->title;
                    </div>   
                   <?php }?>
                 <?php
-                $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
-                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
+                //$attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
+                //$attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
+                $attr_list = $model->getAttrList();   
                 foreach ($attr_list as $k=>$attr){
                      $attr_field_name = "attr_custom[{$attr['id']}]";
                     //通用属性值列表

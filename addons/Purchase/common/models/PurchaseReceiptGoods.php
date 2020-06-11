@@ -151,7 +151,7 @@ class PurchaseReceiptGoods extends BaseModel
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'main_stone' => '主石',
-            'main_stone_cert_id' => '主石证书号',
+            'main_cert_id' => '主石证书号',
             'main_stone_sn' => '主石编号',
             'main_stone_num' => '主石数量',
             'main_stone_weight' => '主石重',

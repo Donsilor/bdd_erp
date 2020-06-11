@@ -277,13 +277,14 @@ class PurchaseReceiptService extends Service
      */
     public function addReceiptGoods($form)
     {
-        if(!empty($form->goods)){
+        $goods = $form->getGoods();
+        if(!empty($goods)){
             $value = [];
-            $key = array_keys($form->goods[0]);
+            $key = array_keys($goods[0]);
             array_push($key,'receipt_id', 'xuhao');
             $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
             $xuhao = $xuhaoMax->xuhao?:0;
-            foreach ($form->goods as $good) {
+            foreach ($goods as $good) {
                 $xuhao++;
                 array_push($good, $form->id, $xuhao);
                 $value[] = array_values($good);
