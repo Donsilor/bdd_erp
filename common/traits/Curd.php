@@ -164,7 +164,6 @@ trait Curd
             $model = new $this->modelClass;
             return $model->loadDefaultValues();
         }
-
         return $model;
     }
     

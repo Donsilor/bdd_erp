@@ -78,53 +78,41 @@ class QibanController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
-
+        
+        $style_sn = Yii::$app->request->get('style_sn');
         $search = Yii::$app->request->get('search');
         $jintuo_type = Yii::$app->request->get('jintuo_type');
+        
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
-        $model->initAttrs();
-        if($model->isNewRecord) {
-            $style_sn = Yii::$app->request->get('style_sn');
-            $model->style_sn = $style_sn;
-        }else{
-            $style_sn = $model->style_sn;
-        }
+        $isNewRecord = $model->isNewRecord;
+        
         if($jintuo_type) {
             $model->jintuo_type = $jintuo_type;
         }
-
         if($style_sn && $search) {
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
             if(!$style) {
                 return $this->message("无效的款号", $this->redirect($skiUrl), 'error');
-            }elseif($style->status != 1) {
+            }elseif($style->status != StatusEnum::ENABLED) {
                 return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
             }
-            if($model->isNewRecord) {
-                $model->style_cate_id = $style->style_cate_id;
-                $model->product_type_id = $style->product_type_id;
+            if($isNewRecord) {
                 $model->qiban_type = QibanTypeEnum::HAVE_STYLE;
-                $model->style_sex = $style->style_sex;
                 $model->qiban_name = $style->style_name;
-                $model->style_image = Yii::$app->styleService->style->getStyleImages($style_sn);
+                $model->style_id = $style->id;
+                $model->style_sn = $style->style_sn;
+                $model->style_cate_id = $style->style_cate_id;
+                $model->product_type_id = $style->product_type_id;                
+                $model->style_sex = $style->style_sex;                
                 $model->is_inlay  = $style->is_inlay;
-            }else{
-                $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):[];
             }
-
-            //根据款号获取属性值
-            $style_model = new StyleAttrForm();
-            $style_model->style_id = $style->id;
-            $style_model->initAttrs();
-            $model->style_id = $style->id;
         }
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;
-            $isNewRecord = $model->isNewRecord;
+            $model->audit_status = AuditStatusEnum::SAVE;            
             if($isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }            
@@ -149,8 +137,7 @@ class QibanController extends BaseController
             }
         }
 
-
-
+        $model->initAttrs();
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
@@ -169,25 +156,24 @@ class QibanController extends BaseController
         $style_cate_id = Yii::$app->request->get('style_cate_id');
         $product_type_id = Yii::$app->request->get('product_type_id');
         $jintuo_type = Yii::$app->request->get('jintuo_type');
+        
         $this->modelClass = QibanAttrForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
-        $model->initAttrs();
-        
+        $isNewRecord = $model->isNewRecord;
         //无款起版
-        $model->qiban_type = QibanTypeEnum::NO_STYLE;        
-        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;
-        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
+        if($isNewRecord) {
+            $model->qiban_type = QibanTypeEnum::NO_STYLE;   
+            $model->style_sn = 'QIBAN';
+            $model->is_inlay = $model->type->is_inlay ?? 0;
+        }         
+        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;        
         $model->product_type_id = $product_type_id ?? $model->product_type_id;
-        $model->style_sn = 'QIBAN';
-        $model->is_inlay = $model->type ? $model->type->is_inlay : 0;
-        $model->style_image = !empty($model->style_image)?explode(',', $model->style_image):null;
-        
+        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
         
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;
-            $isNewRecord = $model->isNewRecord;
+            $model->audit_status = AuditStatusEnum::SAVE;            
             if($isNewRecord) {
                 $model->qiban_sn = SnHelper::createQibanSn();
             }
@@ -213,7 +199,7 @@ class QibanController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-
+        $model->initAttrs();
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
