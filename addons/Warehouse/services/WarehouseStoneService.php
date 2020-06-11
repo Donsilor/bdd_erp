@@ -6,6 +6,7 @@ use Yii;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\components\Service;
+use addons\Style\common\enums\AttrIdEnum;
 
 /**
  * Class TypeService
@@ -70,5 +71,29 @@ class WarehouseStoneService extends Service
         if(false === $stone->save()){
             throw new \Exception($this->getError($stone));
         }
+    }
+    /**
+     * 创建石包号
+     * @param WarehouseStone $model
+     * @param string $save
+     */
+    public function createStoneSn($model, $save = true)
+    {   
+        //1.供应商
+        $stone_sn = $model->supplier->label ?? '00';
+        //2.石料类型
+        $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE,'id','code');
+        $type_code = $type_codes[$model->stone_type] ?? '00';
+        $stone_sn  .= str_pad($type_code,2,'0',STR_PAD_LEFT);
+        //3.数字编号
+        $stone_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT);
+        
+        if($save === true) {
+            $model->stone_sn = $stone_sn;
+            if($model->save(true,['id','stone_sn'])) {
+                throw new \Exception($this->getError($model));
+            }
+        }
+        return $stone_sn;
     }
 }
