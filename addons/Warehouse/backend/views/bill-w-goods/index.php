@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </h3>
                     <div class="box-tools">
                     <?php if($bill->bill_status == BillStatusEnum::SAVE) {?>
-                        <?= Html::create(['warehouse-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
+                        <?= Html::create(['bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>    
                     </div>
                </div>

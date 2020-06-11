@@ -42,7 +42,7 @@ class BillPayController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouse-bill-pay/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-pay/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

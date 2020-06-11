@@ -55,19 +55,19 @@ return [
                     ],
                     [
                             'title' => '盘点单',
-                            'route' => 'warehouse-bill-w/index',
+                            'route' => 'bill-w/index',
                     ],
                     /*[
                             'title' => '维修退货单',
-                            'route' => 'warehouse-bill-o/index',
+                            'route' => 'bill-o/index',
                     ],
                     [
                             'title' => '维修调拨单',
-                            'route' => 'warehouse-bill-wf/index',
+                            'route' => 'bill-wf/index',
                     ],
                     [
                             'title' => '维修发货单',
-                            'route' => 'warehouse-bill-r/index',
+                            'route' => 'bill-r/index',
                     ],*/
                     [
                             'title' => '维修单',

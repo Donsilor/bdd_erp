@@ -153,7 +153,7 @@ class BillOGoodsController extends BaseController
                     return $this->redirect(Yii::$app->request->referrer);
                 }catch (\Exception $e){
                     $trans->rollBack();
-                    return $this->message($e->getMessage(), $this->redirect(['warehouse-bill-b-goods/index','bill_id'=>$bill_id]), 'error');
+                    return $this->message($e->getMessage(), $this->redirect(['bill-b-goods/index','bill_id'=>$bill_id]), 'error');
                 }
             }
         }

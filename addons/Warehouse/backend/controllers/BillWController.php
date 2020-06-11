@@ -291,9 +291,8 @@ class WarehouseBillWController extends BaseController
             //仓库解锁
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($model->to_warehouse_id);
             //更新库存状态
-            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
-            $goods_ids = array_column($billGoods,'goods_id');
-            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$goods_ids,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+            $subQuery = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id']);
+            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
@@ -306,16 +305,12 @@ class WarehouseBillWController extends BaseController
                 'log_msg' => '单据关闭'
             ];
             \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
-            \Yii::$app->getSession()->setFlash('success','关闭成功');
             $trans->commit();
-            return $this->redirect(\Yii::$app->request->referrer);
+            return $this->message('关闭成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
-
-        return $this->message("关闭失败", $this->redirect(['index']), 'error');
     }
 
 

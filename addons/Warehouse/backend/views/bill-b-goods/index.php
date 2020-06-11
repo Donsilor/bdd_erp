@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        echo Html::a('导出', ['warehouse-bill-b/export?ids='.$bill->id],[
+        echo Html::a('导出', ['bill-b/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
         ]);
         ?>
