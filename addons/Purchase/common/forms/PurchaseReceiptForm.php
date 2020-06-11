@@ -58,4 +58,16 @@ class PurchaseReceiptForm extends PurchaseReceipt
     {
         return StringHelper::explodeIds($this->produce_sns);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGoods()
+    {
+        if($this->goods
+            && $this->goods['goods'][0]['produce_sn']){
+            return $this->goods['goods']??[];
+        }
+        return [];
+    }
 }
