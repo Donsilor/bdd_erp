@@ -45,14 +45,21 @@ class SupplierController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['supplier_name', 'contactor', 'mobile', 'telephone', 'address'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize
         ]);
+
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams,['audit_time']);
+
+        $audit_time = $searchModel->audit_time;
+        if (!empty($audit_time)) {
+            $dataProvider->query->andFilterWhere(['>=',Supplier::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Supplier::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        }
 
         $dataProvider->query->andWhere(['>',Supplier::tableName().'.status',-1]);
 
