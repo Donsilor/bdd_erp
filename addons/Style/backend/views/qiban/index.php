@@ -228,7 +228,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         //审核后不能编辑
                         if(!$model->purchaseGoods){
                             if($model->qiban_type == QibanTypeEnum::HAVE_STYLE){
-                                return Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
+                                return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
                                     'data-width'=>'90%',
                                     'data-height'=>'90%',

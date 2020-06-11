@@ -14,12 +14,14 @@ use common\models\backend\Member;
  * @property string $qiban_name 起版名称
  * @property string $qiban_sn 起版编号
  * @property string $style_sn  款号
+ * @property int $style_id 款式ID
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
  * @property int $style_source_id 款式来源
  * @property int $style_channel_id 款式渠道
  * @property int $style_sex 款式性别 1男 2女 3通用款
  * @property string $style_image 商品主图
+ * @property string $style_images 图片列表
  * @property string $sale_price 销售价
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
@@ -53,12 +55,12 @@ class Qiban extends BaseModel
     {
         return [
             [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price','qiban_name'],'required'],
-            [['merchant_id', 'style_cate_id', 'product_type_id','is_inlay', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'style_id','style_cate_id', 'product_type_id','is_inlay', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
             [['qiban_name', 'audit_remark', 'remark','stone_info'], 'string', 'max' => 255],
-            [['qiban_sn'], 'string', 'max' => 50],
-            [['style_sn'], 'string', 'max' => 30],
-            [['style_image'],'parseStyleImages'],
+            [['style_sn','qiban_sn'], 'string', 'max' => 30],            
+            [['style_images'],'parseStyleImages'],
+            [['style_image'], 'safe'],
         ];
     }
 
@@ -68,9 +70,9 @@ class Qiban extends BaseModel
      */
     public function parseStyleImages()
     {
-        $style_image = $this->style_image;
-        if(is_array($style_image)){
-            $this->style_image = implode(',',$style_image);
+        $style_images = $this->style_images;
+        if(is_array($style_images)){            
+            $this->style_images = implode(',',$style_images);
         }
     }
 
@@ -84,7 +86,8 @@ class Qiban extends BaseModel
             'merchant_id' => '商户ID',
             'qiban_name' => '起版名称',
             'qiban_sn' => '起版编号',
-            'style_sn' => ' 款号',
+            'style_sn' => '款式编号',
+            'style_id' => '款式ID',
             'style_cate_id' => '款式分类',
             'product_type_id' => '产品线',
             'style_source_id' => '款式来源',
@@ -92,6 +95,7 @@ class Qiban extends BaseModel
             'qiban_type' => '起版类型',
             'style_sex' => '款式性别',
             'style_image' => '起版主图',
+            'style_images' => '起版图片',
             'sale_price' => '销售价',
             'market_price' => '市场价',
             'cost_price' => '成本价',
@@ -122,12 +126,13 @@ class Qiban extends BaseModel
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;
         }
-
-        $style_image = $this->style_image;
-        if(is_array($style_image)){
-            $this->style_image = implode(',',$style_image);
+        $style_images = $this->style_images;
+        if(is_array($style_images)){
+            $this->style_image = $style_images[0] ?? '';
+        }else{
+            $style_images = explode(",", $style_images);
+            $this->style_image = $style_images[0] ?? '';            
         }
-
         return parent::beforeSave($insert);
     }
 

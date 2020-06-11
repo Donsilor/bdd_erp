@@ -3,6 +3,7 @@ use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -44,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                      </div>
                      <div class="row">                        
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
+                            <?= $form->field($model, 'goods_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])->label("商品编号") ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getMap(),['disabled'=>true]) ?>
+                            <?= $form->field($model, 'goods_type')->dropDownList(PurchaseGoodsTypeEnum::getMap(),['disabled'=>true]) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'is_inlay')->dropDownList(\addons\Style\common\enums\InlayEnum::getMap(),['prompt'=>'请选择','disabled'=>true]) ?>

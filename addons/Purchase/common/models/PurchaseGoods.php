@@ -13,42 +13,53 @@ use addons\Supply\common\models\Produce;
  *
  * @property int $id ID
  * @property int $purchase_id 采购单ID
+ * @property string $goods_sn 款号/起版号
  * @property int $goods_type 商品类型 1款号 2起版号
  * @property string $goods_name 商品名称
- * @property string $goods_sn 款号/起版号
- * @property int $style_id 商品id
+ * @property string $goods_image 商品图片
+ * @property int $style_id 款号/起版ID
  * @property string $style_sn 商品编号
  * @property string $qiban_sn
  * @property int $qiban_type 起版类型 0非起版 1有款起版 2无款起版
+ * @property int $style_channel_id
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
  * @property int $jintuo_type 金托类型
+ * @property int $is_inlay 是否镶嵌
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
- * @property int $is_inlay 是否镶嵌
  * @property int $produce_id 布产ID
  * @property int $is_apply 是否申请修改
  * @property string $apply_info
  * @property int $status 状态： -1已删除 0禁用 1启用
- * @property string $remark 备注
+ * @property string $remark 采购备注
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
- * @property string $main_stone_price 主石价格/克拉
- * @property string $second_stone_price1 副石1单价/克拉
- * @property string $second_stone_price2 副石2单价/克拉
+ * @property string $main_stone_price 主石价格(元/克拉)
+ * @property string $second_stone_price1 副石1单价
+ * @property string $second_stone_price2 副石2单价
  * @property string $stone_info 石料信息
  * @property double $gold_loss 金损
- * @property string $gold_price 金价/克
- * @property string $gold_cost_price 单件银额/件
+ * @property string $gold_price 金价
+ * @property string $gold_cost_price 单件银(金)额
+ * @property string $gold_amount 金料额
  * @property string $parts_info 配件信息
- * @property string $jiagong_fee 金属加工费/件
+ * @property string $jiagong_fee 加工费/件
  * @property string $xiangqian_fee 镶石费/件
- * @property string $gong_fee 工费总额/件
+ * @property string $gong_fee 工费总额/件(jiagong+xiangqian)
  * @property string $gaitu_fee 改图费
  * @property string $penla_fee 喷蜡费
  * @property string $unit_cost_price 单件额
- * @property string $factory_cost_price 单件工厂金额
+ * @property string $factory_cost_price 工厂成本价
+ * @property string $product_size 成品尺寸
+ * @property string $goods_color 货品外部颜色
+ * @property double $single_stone_weight 单件连石重
+ * @property string $company_unit_cost 公司单件成本
+ * @property string $biaomiangongyi_fee
+ * @property string $fense_fee
+ * @property string $bukou_fee
+ * @property string $cert_fee
  */
 class PurchaseGoods extends BaseModel
 {

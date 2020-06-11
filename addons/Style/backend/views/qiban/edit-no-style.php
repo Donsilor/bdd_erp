@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <?= $form->field($model, 'style_image')->widget(common\widgets\webuploader\Files::class, [
+                                <?= $form->field($model, 'style_images')->widget(common\widgets\webuploader\Files::class, [
                                     'config' => [
                                         'pick' => [
                                             'multiple' => true,

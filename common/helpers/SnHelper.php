@@ -64,8 +64,8 @@ class SnHelper
      */
     public static function createQibanSn($prefix = 'QB')
     {
-        $number_len = 6 - strlen($prefix);
-        $number_max = substr('999999',0, $number_len);
+        $number_len = 7 - strlen($prefix);
+        $number_max = substr('9999999',0, $number_len);
         return $prefix.date('md').mt_rand(3,9).str_pad(mt_rand(1, $number_max),$number_len,'0',STR_PAD_LEFT);
     }
     /**

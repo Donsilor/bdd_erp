@@ -21,7 +21,6 @@ class QibanAttrForm extends Qiban
     public $attr_require;
     //属性非必填
     public $attr_custom;
-    public $style_id;
     /**
      * {@inheritdoc}
      */
@@ -42,7 +41,7 @@ class QibanAttrForm extends Qiban
                 return false;
             }],
             [['style_sn'],'required','isEmpty'=>function($value){
-                if ($this->qiban_type == 1 && empty($value)){
+                if ($this->qiban_type == QibanTypeEnum::HAVE_STYLE && empty($value)){
                     return true;
                 }else{
                     return false;
@@ -81,21 +80,14 @@ class QibanAttrForm extends Qiban
      * 自动填充已填写 表单属性
      */
     public function initAttrs()
-    {
+    {     
         $attr_list = QibanAttribute::find()->select(['attr_id','attr_values'])->where(['qiban_id'=>$this->id])->asArray()->all();
-        if(empty($attr_list)) {
-
-            return ;
+        if(!empty($attr_list)) {
+            $attr_list = array_column($attr_list,'attr_values','attr_id');
+            $this->attr_custom  = $attr_list;
+            $this->attr_require = $attr_list;
         }
-        $attr_list = array_column($attr_list,'attr_values','attr_id');
-        foreach ($attr_list as $attr_id => & $attr_value) {
-            $split_value = explode(",",$attr_value);
-            if(count($split_value) > 1) {
-                $attr_value = $split_value;
-            }
-        }
-        $this->attr_custom  = $attr_list;
-        $this->attr_require = $attr_list;
+        $this->style_images = $this->style_images ? explode(',', $this->style_images) : [];
     }
     /**
      * 创建商品属性
