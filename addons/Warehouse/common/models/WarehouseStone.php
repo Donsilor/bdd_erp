@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $stone_name 石包名称
  * @property string $stone_type 石料类型
+ * @property string $supplier_id 供应商
  * @property string $stone_color 石料颜色
  * @property string $stone_clarity 石料净度
  * @property int $stock_cnt 库存数量
@@ -60,7 +61,7 @@ class WarehouseStone extends BaseModel
     {
         return [
             [['stone_name'], 'required'],
-            [['id', 'stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'stock_cnt', 'supplier_id', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['stock_weight', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'cost_price', 'sale_price'], 'number'],
             [['stone_name'], 'string', 'max' => 30],
             [['stone_type', 'stone_color', 'stone_clarity'], 'string', 'max' => 10],
@@ -78,6 +79,7 @@ class WarehouseStone extends BaseModel
             'id' => 'ID',
             'stone_name' => '石包名称',
             'stone_type' => '石料类型',
+            'supplier_id' => '供应商',
             'stone_color' => '石料颜色',
             'stone_clarity' => '石料净度',
             'stock_cnt' => '库存数量',
