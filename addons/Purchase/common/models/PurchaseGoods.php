@@ -113,7 +113,7 @@ class PurchaseGoods extends BaseModel
             'second_stone_price1' => '副石1单价/ct',
             'second_stone_price2' => '副石2单价/ct',
             'stone_info' => '石料信息',
-            'gold_loss' => '金损/件',
+            'gold_loss' => '损耗/件',
             'gold_price' => '金价/g',
             'gold_cost_price' => '单件银额/件',
             'parts_info' => '配件信息',

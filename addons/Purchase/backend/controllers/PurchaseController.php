@@ -407,8 +407,7 @@ class PurchaseController extends BaseController
             $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
 
             //净重/单件(g) 总净重(g) ---金重
-            $val['gold_weight'] = $attr[AttrIdEnum::JINZHONG] ?? 0;
-
+            $val['gold_weight'] = isset($val['gold_weight']) && !empty($val['gold_weight']) ?? 0;
             $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
 
             //工厂总额
