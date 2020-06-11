@@ -2,10 +2,20 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use Yii;
+use common\traits\Curd;
+use common\models\base\SearchModel;
+use common\helpers\ExcelHelper;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
+use common\helpers\SnHelper;
+use common\helpers\Url;
+use common\enums\AuditStatusEnum;
 
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
@@ -13,18 +23,9 @@ use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
-use common\helpers\ArrayHelper;
-use common\helpers\StringHelper;
-use Yii;
-use common\traits\Curd;
-use common\models\base\SearchModel;
-use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
-use common\helpers\SnHelper;
-use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
+
 
 
 /**
@@ -272,12 +273,12 @@ class BillWController extends BaseController
 
 
     /**
-     * 删除/关闭
+     * 关闭
      *
      * @param $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionAjaxClose($id)
     {
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
@@ -319,7 +320,7 @@ class BillWController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function actionExport($ids=null){
+    public function actionExport($ids = null){
         $name = '盘点单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
@@ -349,7 +350,7 @@ class BillWController extends BaseController
             ['款号', 'style_sn' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
             ['款式分类', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
+            ['仓库', 'warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse->getDropDownForAll()],
             ['材质', 'material' , 'function', function($model){
                 return \Yii::$app->attr->valueName($model['material']);
             }],
@@ -360,8 +361,8 @@ class BillWController extends BaseController
             ['主石形状', 'diamond_shape' , 'function',function($model){
                 return Yii::$app->attr->valueName($model->diamond_shape ?? '');
             }],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
-            ['配石重（ct)', 'second_stone_weight1' , 'text'],
+            ['主石重(ct)', 'diamond_carat' , 'text'],
+            ['配石重(ct)', 'second_stone_weight1' , 'text'],
             ['总重(g)', 'diamond_carat' , 'function',function($model){
                 $diamond_carat = $model->diamond_carat ?? 0;
                 $second_stone_weight1 = $model->second_stone_weight1 ?? 0;
