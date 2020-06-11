@@ -3,6 +3,8 @@
 namespace addons\Purchase\services;
 
 
+use addons\Purchase\common\models\Purchase;
+use addons\Purchase\common\models\PurchaseGoods;
 use common\helpers\ArrayHelper;
 use Yii;
 use common\components\Service;
@@ -196,6 +198,14 @@ class PurchaseReceiptService extends Service
             if (!$the_num) {
                 throw new \Exception($message."没有可出货数量");
             }
+            $purchase = Purchase::findOne(['id' => $produce->from_order_id]);
+            if(!$purchase){
+                throw new \Exception($message."对应的采购单号不对");
+            }
+            $purchaseGoods = PurchaseGoods::findOne(['produce_id' => $produce->id]);
+            if(!$purchaseGoods){
+                throw new \Exception($message."未绑定采购单明细");
+            }
             $produce_attr = ProduceAttribute::find()->where(['produce_id' => $produce->id])->asArray()->all();
             $attr_arr = [];
             foreach ($produce_attr as $attr) {
@@ -219,6 +229,41 @@ class PurchaseReceiptService extends Service
                     'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value'] ?? '',
                     'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
                     'jintuo_type' => $produce->jintuo_type,
+                    'style_sex' => $produce->style_sex,
+                    'style_channel_id' => $purchaseGoods->style_channel_id,
+                    'factory_mo' => 1,
+                    'gold_weight' => $attr_arr[AttrIdEnum::JINZHONG]['attr_value'] ?? '',
+                    'gold_price' => $purchaseGoods->gold_price,
+                    'gold_loss' => $purchaseGoods->gold_loss,
+                    'gold_amount' => $purchaseGoods->gold_amount,
+                    'gross_weight' => $purchaseGoods->single_stone_weight,
+                    'suttle_weight' => $purchaseGoods->single_stone_weight,
+                    'cost_price' => $purchaseGoods->factory_cost_price,
+                    'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
+                    'product_size' => $purchaseGoods->product_size,
+                    'put_in_type' =>$purchase->put_in_type,
+                    'main_stone' => $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '',
+                    'main_stone_num' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '',
+                    'main_stone_weight' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '',
+                    'main_stone_color' => $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '',
+                    'main_stone_clarity' => $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '',
+                    'main_stone_price' => 0,
+                    'second_stone1' => $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '',
+                    'second_stone_num1' => $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '',
+                    'second_stone_weight1' => $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '',
+                    'second_stone_price1' => 0,
+                    'second_stone2' => $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '',
+                    'second_stone_num2' => $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '',
+                    'second_stone_weight2' => $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '',
+                    'second_stone_price2' => 0,
+                    'gong_fee' => $purchaseGoods->gong_fee,
+                    'xianqian_fee' => $purchaseGoods->xiangqian_fee,
+                    'biaomiangongyi' => $attr_arr[AttrIdEnum::FACEWORK]['attr_value_id'] ?? '',
+                    'biaomiangongyi_fee' => $purchaseGoods->biaomiangongyi_fee,
+                    'fense_fee' => $purchaseGoods->fense_fee,
+                    'bukou_fee' => $purchaseGoods->bukou_fee,
+                    'cert_fee' => $purchaseGoods->cert_fee,
+                    'extra_stone_fee' => 0,
                 ];
                 $receipt_goods[] = ArrayHelper::merge($goodsM->getAttributes(),$goods);
             }
