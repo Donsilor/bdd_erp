@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_stone_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_cert_id')->textInput() ?>
+                        <?= $form->field($model, 'second_cert_id1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone1')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE),['prompt'=>'请选择']) ?>

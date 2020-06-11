@@ -17,12 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
-                 <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-4">
+                     <div class="col-lg-12">
+                        <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                         <?= $form->field($model, 'produce_sns')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
-                     </div>
-                     <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchReceiptGoods()"]) ?>
                      </div>
                  </div>
@@ -326,7 +324,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => "second_cert_id",
+                                'name' => "second_cert_id1",
                                 'title'=>"副石证书号",
                                 'enableError'=>false,
                                 'options' => [

@@ -46,7 +46,7 @@ use Yii;
  * @property int $main_stone_color 主石颜色
  * @property int $main_stone_clarity 主石净度
  * @property string $main_stone_price 主石买入单价
- * @property string $second_cert_id 副石证书号
+ * @property string $second_cert_id1 副石证书号
  * @property int $second_stone1 副石1
  * @property int $second_stone_num1 副石1数量
  * @property double $second_stone_weight1 副石1重量
@@ -97,8 +97,8 @@ class PurchaseReceiptGoods extends BaseModel
             [['id', 'receipt_id', 'purchase_sn'], 'required'],
             [['receipt_id', 'style_sex', 'goods_num', 'xuhao', 'goods_status', 'iqc_reason', 'style_cate_id', 'product_type_id', 'style_channel_id','put_in_type', 'to_warehouse_id', 'material', 'jintuo_type', 'main_stone', 'main_stone_num', 'main_stone_color', 'main_stone_clarity', 'second_stone1', 'second_stone_num1', 'second_stone2', 'second_stone_num2', 'second_stone3', 'second_stone_num3', 'biaomiangongyi', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['finger', 'gold_weight', 'gold_price', 'gold_loss', 'gross_weight', 'suttle_weight', 'cost_price', 'market_price', 'sale_price', 'main_stone_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3', 'markup_rate', 'gong_fee', 'parts_weight', 'parts_price', 'parts_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'cert_fee', 'extra_stone_fee', 'tax_fee', 'other_fee','gold_amount'], 'number'],
-            [['purchase_sn', 'produce_sn', 'factory_mo', 'cert_id', 'second_cert_id'], 'string', 'max' => 30],
-            [['barcode','product_size'], 'string', 'max' => 100],
+            [['purchase_sn', 'produce_sn', 'factory_mo', 'cert_id', 'second_cert_id1'], 'string', 'max' => 30],
+            [['barcode','product_size','main_cert_id','second_cert_id1'], 'string', 'max' => 100],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
             [['xiangkou'], 'string', 'max' => 10],
@@ -150,12 +150,13 @@ class PurchaseReceiptGoods extends BaseModel
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'main_stone' => '主石',
+            'main_stone_cert_id' => '主石证书号',
             'main_stone_num' => '主石数量',
             'main_stone_weight' => '主石重',
             'main_stone_color' => '主石颜色',
             'main_stone_clarity' => '主石净度',
             'main_stone_price' => '主石买入单价',
-            'second_cert_id' => '副石证书号',
+            'second_cert_id1' => '副石证书号',
             'second_stone1' => '副石1',
             'second_stone_num1' => '副石1数量',
             'second_stone_weight1' => '副石1重量',

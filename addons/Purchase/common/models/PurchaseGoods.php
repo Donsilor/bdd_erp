@@ -50,7 +50,7 @@ use addons\Supply\common\models\Produce;
  * @property string $gong_fee 工费总额/件(jiagong+xiangqian)
  * @property string $gaitu_fee 改图费
  * @property string $penla_fee 喷蜡费
- * @property string $unit_cost_price 单件额
+ * @property string $unit_cost_price 单件额 工费+镶石费+单件银额
  * @property string $factory_cost_price 工厂成本价
  * @property string $product_size 成品尺寸
  * @property string $goods_color 货品外部颜色
@@ -81,7 +81,7 @@ class PurchaseGoods extends BaseModel
 
             [['purchase_id', 'style_id', 'qiban_type', 'single_stone_weight','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
-                'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee'], 'number'],
+                'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','parts_fee'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
@@ -124,13 +124,16 @@ class PurchaseGoods extends BaseModel
             'second_stone_price1' => '副石1单价/ct',
             'second_stone_price2' => '副石2单价/ct',
             'stone_info' => '石料信息',
-            'gold_loss' => '金损/件',
+            'gold_loss' => '损耗/件',
             'gold_price' => '金价/g',
             'gold_cost_price' => '单件银额/件',
             'parts_info' => '配件信息',
             'jiagong_fee' => '金属加工费/件',
             'xiangqian_fee' => '镶石费/件',
             'gong_fee' => '工费总额/件',
+            'parts_weight' => '配件重量',
+            'parts_price' => '配件金额',
+            'parts_fee' => '配件工费',
             'gaitu_fee' => '改图费/件',
             'penla_fee' => '喷蜡费/件',
             'unit_cost_price' => '单件额/件',

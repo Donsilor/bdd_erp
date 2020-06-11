@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -77,11 +78,8 @@ class BillLController extends BaseController
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $dataProvider->setPagination(false);
-            $list = $dataProvider->models;
-            $list = ArrayHelper::toArray($list);
-            $ids = array_column($list,'id');
-            $this->actionExport($ids);
+            $queryIds = $dataProvider->query->select(Warehousebill::tableName().'.id');
+            $this->actionExport($queryIds);
         }
 
         return $this->render($this->action->id, [
@@ -272,56 +270,124 @@ class BillLController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.finger','g.gross_weight','g.main_stone_type','g.diamond_carat','g.main_stone_num',
-            'g.second_stone_type1','g.second_stone_num1','g.second_stone_weight1','g.second_stone_price1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
+        $list = $this->getData($ids);
+        $header = [
+            ['款号', 'style_sn' , 'text'],
+            ['货品名称', 'goods_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['款式分类', 'style_cate_name' , 'text'],
+            ['材质', 'material' , 'text'],
+            ['成色', 'goods_color' ,  'text'],
+            ['件数', 'goods_num' , 'text'],
+            ['指圈', 'finger' , 'text'],
+            ['尺寸', 'product_size' , 'text'],
+            ['货重', 'gold_weight' , 'text'],
+            ['净重', 'suttle_weight' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['含耗重', 'gold_weight_sum' , 'text'],
+            ['金价', 'gold_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
+            ['石号', 'diamond_cert_id' , 'text'],
+            ['粒数', 'main_stone_num' , 'text'],
+            ['石重', 'diamond_carat' , 'text'],
+            ['颜色', 'main_stone_color' ,'text'],
+            ['净度', 'main_stone_clarity' , 'text'],
+            ['单价', 'main_stone_price' , 'text'],
+            ['金额', 'main_stone_price_sum','text'],
+            ['副石号', 'second_cert_id1' , 'text'],
+            ['副石粒数', 'second_stone_num1' , 'text'],
+            ['副石石重', 'second_stone_weight1' , 'text'],
+            ['副石颜色', 'second_stone_color1' , 'text'],
+            ['副石净度', 'second_stone_clarity1' , 'text'],
+            ['副石单价', 'second_stone_price1' , 'text'],
+            ['副石金额', 'second_stone_price1_sum' , 'text'],
+            ['配件(g)', 'parts_gold_weight' , 'text'],
+            ['配件额', 'parts_price' , 'text'],
+            ['配件工费', 'parts_fee' , 'text'],
+            ['工费', 'gong_fee' , 'text'],
+            ['镶石费', 'xianqian_fee' , 'text'],
+            ['工艺费', 'biaomiangongyi_fee' , 'text'],
+            ['分色/分件费', 'fense_fee' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
+            ['补口费', 'bukou_fee' , 'text'],
+            ['单价', 'price' , 'text'],
+            ['总额', 'price_sum' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
+            ['备注', 'goods_remark' , 'text'],
+            ['倍率', 'markup_rate' , 'text'],
+            ['标签价', 'market_price' , 'text'],
+
+        ];
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $lists = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists
+        ]);
+    }
+
+    private function getData($ids){
+        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
             'wg.cost_price','wg.diamond_cert_id','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name'];
-        $list = WarehouseBill::find()->alias('w')
+        $lists = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
             ->where(['w.id' => $ids])
             ->select($select)->asArray()->all();
-        $header = [
-            ['款号', 'style_sn' , 'text'],
-            ['仓库','warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
-            ['商品类型', 'style_cate_name' , 'selectd',BillStatusEnum::getMap()],
-            ['产品分类', 'product_type_name' , 'text'],
-            ['成色', 'material' , 'function',function($model){
-                return \Yii::$app->attr->valueName($model['material']);
-            }],
-            ['手寸', 'finger' , 'text'],
-//            ['尺寸（规格）', 'finger' , 'text'],
-            ['件数', 'goods_num' , 'text'],
-//            ['货重', 'gross_weight' , 'text'],
-            ['金重', 'gold_weight' , 'text'],
-            ['损耗', 'gold_loss' ,  'text'],
-            ['含耗重', 'gross_weight' , 'text'],
-//            ['金价', '' , 'text'],
-//            ['金料额', '' , 'text'],
-            ['石号', 'main_stone_type' , 'function',function($model){
-                return Yii::$app->attr->valueName($model->main_stone_type ?? '');
-            }],
-            ['粒数', 'main_stone_num' , 'text'],
-            ['主石重', 'diamond_carat' , 'text'],
-//            ['主石单价	', '' , 'text'],
-            ['副石号', 'second_stone_type1' , 'function',function($model){
-                return Yii::$app->attr->valueName($model->second_stone_type1 ?? '');
-            }],
-            ['副石粒数', 'second_stone_num1' , 'text'],
-            ['副石重量', 'second_stone_weight1' , 'text'],
-            ['副石单价', 'second_stone_price1' , 'text'],
-//            ['加工费', 'second_stone_price1' , 'text'],
-//            ['起版费', 'second_stone_price1' , 'text'],
-//            ['镶工费', 'second_stone_price1' , 'text'],
-//            ['喷拉砂', 'second_stone_price1' , 'text'],
-//            ['分色分件', 'second_stone_price1' , 'text'],
-//            ['总金额', 'second_stone_price1' , 'text'],
-            ['备注', 'goods_remark' , 'text'],
+        foreach ($lists as &$list){
+            //成色
+            $material = empty($list['material']) ? 0 : $list['material'];
+            $list['material'] = Yii::$app->attr->valueName($material);
+            //单据状态
+            $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
+            //入库方式
+            $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
+            //主石颜色
+            $main_stone_color = empty($list['main_stone_color']) ? 0 : $list['main_stone_color'];
+            $list['main_stone_color'] = Yii::$app->attr->valueName($main_stone_color);
+            //主石净度
+            $main_stone_clarity = empty($list['main_stone_clarity']) ? 0 : $list['main_stone_clarity'];
+            $list['main_stone_clarity'] = Yii::$app->attr->valueName($main_stone_clarity);
+            //主石金额
+            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
+            $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
+            //副石颜色
+            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
+            $list['second_stone_color1'] = Yii::$app->attr->valueName($second_stone_color1);
+            //副石净度
+            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
+            $list['second_stone_clarity1'] = Yii::$app->attr->valueName($second_stone_clarity1);
+            //副石金额
+            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
+            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+            //单价
+            $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
+                + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            //总额
+            $list['price_sum'] = $list['price'] * $list['goods_num'];
+            //含耗重
+            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
+            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
+            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
-        ];
-        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+        }
+        return $lists;
     }
 
 }

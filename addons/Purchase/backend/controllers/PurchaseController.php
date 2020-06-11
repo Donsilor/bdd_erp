@@ -327,7 +327,7 @@ class PurchaseController extends BaseController
             ['损耗', 'gold_loss' , 'text'],
             ['银(金)价', 'gold_price' , 'text'],
             ['单件银(金)额', 'gold_cost_price' , 'text'],
-            ['金料额', 'cost_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
             ['配件信息', 'parts_info' , 'text'],
             ['工艺描述', 'face' ,'text'],
             ['加工费/件', 'jiagong_fee' , 'text'],
@@ -407,8 +407,7 @@ class PurchaseController extends BaseController
             $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
 
             //净重/单件(g) 总净重(g) ---金重
-            $val['gold_weight'] = $attr[AttrIdEnum::JINZHONG] ?? 0;
-
+            $val['gold_weight'] = isset($val['gold_weight']) && !empty($val['gold_weight']) ?? 0;
             $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
 
             //工厂总额

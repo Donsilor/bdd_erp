@@ -229,7 +229,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         //其他信息
         $fields = array(
                 'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_loss','jiagong_fee',
-                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','factory_cost_price','stone_info','parts_info','remark'
+                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','parts_weight','parts_price','parts_fee','factory_cost_price','stone_info','parts_info','remark'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(
