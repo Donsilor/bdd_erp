@@ -326,7 +326,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             [
-                                'name' => "second_cert_id",
+                                'name' => "second_cert_id1",
                                 'title'=>"副石证书号",
                                 'enableError'=>false,
                                 'options' => [

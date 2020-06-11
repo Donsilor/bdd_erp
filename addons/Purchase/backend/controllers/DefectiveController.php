@@ -242,7 +242,7 @@ class DefectiveController extends BaseController
             ['净度', 'main_stone_clarity' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
             ['金额', 'main_stone_price_sum','text'],
-            ['副石号', 'second_cert_id' , 'text'],
+            ['副石号', 'second_cert_id1' , 'text'],
             ['副石粒数', 'second_stone_num1' , 'text'],
             ['副石石重', 'second_stone_weight1' , 'text'],
             ['副石颜色', 'second_stone_color1' , 'text'],
