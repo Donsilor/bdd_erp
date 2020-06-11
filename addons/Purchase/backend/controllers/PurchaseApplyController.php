@@ -210,7 +210,7 @@ class PurchaseApplyController extends BaseController
      * 关闭
      * @return mixed
      */
-    public function actionClose(){
+    public function actionDelete(){
         
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);

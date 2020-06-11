@@ -204,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{goods} {edit} {audit} {apply} {close}',
+                'template' => '{goods} {edit} {audit} {apply} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->apply_status == ApplyStatusEnum::SAVE){
@@ -235,10 +235,10 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },                    
-                    'close' => function($url, $model, $key){
+                    'delete' => function($url, $model, $key){
                         if($model->apply_status == ApplyStatusEnum::SAVE){
-                            return Html::delete(['close', 'id' => $model->id],'关闭',[
-                                    'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                            return Html::delete(['delete', 'id' => $model->id],'取消',[
+                                    'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
                             ]);
                         }
                     },    
