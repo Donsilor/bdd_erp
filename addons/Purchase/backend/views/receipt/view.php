@@ -78,8 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-
-
         <div class="box-footer text-center">
             <?php
             if($model->receipt_status == BillStatusEnum::SAVE) {
@@ -88,11 +86,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'btn btn-primary btn-ms',
                     'data-target' => '#ajaxModalLg',
                 ]);
-
+                echo '&nbsp';
+            }
+            if($model->receipt_status == BillStatusEnum::SAVE) {
                 echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                     'class'=>'btn btn-success btn-ms',
                     'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                 ]);
+                echo '&nbsp';
             }
             if($model->receipt_status == BillStatusEnum::PENDING) {
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
@@ -100,17 +101,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
+                echo '&nbsp';
             }
-
-            ?>
-            <?= Html::a('打印',['print','id'=>$model->id],[
+            echo Html::a('打印',['print','id'=>$model->id],[
                 'target'=>'_blank',
                 'class'=>'btn btn-info btn-ms',
-            ]); ?>
-            <?= Html::button('导出', [
+            ]);
+            echo '&nbsp';
+            echo Html::button('导出', [
                 'class'=>'btn btn-success btn-ms',
                 'onclick' => 'batchExport()',
-            ]);?>
+            ]);
+            ?>
         </div>
 
     <!-- box end -->
