@@ -157,6 +157,7 @@ class WarehouseGoods extends BaseModel
             'xiangkou' => '戒托镶口',
             'bukou_fee' => '补口费',
             'biaomiangongyi_fee' => '工艺费',
+            'xianqian_fee' => '镶石费',
             'gong_fee' => '工费',
             'length' => '长度',
             'weixiu_status' => '维修状态',

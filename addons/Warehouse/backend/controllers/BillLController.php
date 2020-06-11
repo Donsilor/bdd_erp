@@ -277,44 +277,45 @@ class BillLController extends BaseController
             ['产品线', 'product_type_name' , 'text'],
             ['款式分类', 'style_cate_name' , 'text'],
             ['材质', 'material' , 'text'],
-            ['成色', 'material' ,  'text'],
+            ['成色', 'goods_color' ,  'text'],
             ['件数', 'goods_num' , 'text'],
             ['指圈', 'finger' , 'text'],
             ['尺寸', 'product_size' , 'text'],
             ['货重', 'gold_weight' , 'text'],
             ['净重', 'suttle_weight' , 'text'],
             ['损耗', 'gold_loss' , 'text'],
-            ['含耗重', 'gross_weight' , 'text'],
+            ['含耗重', 'gold_weight_sum' , 'text'],
             ['金价', 'gold_price' , 'text'],
             ['金料额', 'gold_amount' , 'text'],
-            ['石号', 'main_stone_sn' , 'text'],
+            ['石号', 'diamond_cert_id' , 'text'],
             ['粒数', 'main_stone_num' , 'text'],
-            ['石重', 'main_stone_weight' , 'text'],
+            ['石重', 'diamond_carat' , 'text'],
             ['颜色', 'main_stone_color' ,'text'],
             ['净度', 'main_stone_clarity' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
             ['金额', 'main_stone_price_sum','text'],
-            ['副石号', 'second_stone1_sn' , 'text'],
+            ['副石号', 'second_cert_id1' , 'text'],
             ['副石粒数', 'second_stone_num1' , 'text'],
             ['副石石重', 'second_stone_weight1' , 'text'],
             ['副石颜色', 'second_stone_color1' , 'text'],
             ['副石净度', 'second_stone_clarity1' , 'text'],
             ['副石单价', 'second_stone_price1' , 'text'],
             ['副石金额', 'second_stone_price1_sum' , 'text'],
-            ['配件(g)', 'parts_weight' , 'text'],
+            ['配件(g)', 'parts_gold_weight' , 'text'],
             ['配件额', 'parts_price' , 'text'],
             ['配件工费', 'parts_fee' , 'text'],
             ['工费', 'gong_fee' , 'text'],
             ['镶石费', 'xianqian_fee' , 'text'],
             ['工艺费', 'biaomiangongyi_fee' , 'text'],
-            ['分色/分件', 'fense_fee' , 'text'],
+            ['分色/分件费', 'fense_fee' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
             ['补口费', 'bukou_fee' , 'text'],
             ['单价', 'price' , 'text'],
             ['总额', 'price_sum' , 'text'],
             ['证书费', 'cert_fee' , 'text'],
             ['备注', 'goods_remark' , 'text'],
             ['倍率', 'markup_rate' , 'text'],
-            ['标签价', 'sale_price' , 'text'],
+            ['标签价', 'market_price' , 'text'],
 
         ];
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
@@ -351,35 +352,39 @@ class BillLController extends BaseController
             ->select($select)->asArray()->all();
         foreach ($lists as &$list){
             //成色
-            $material = empty($list['material']) ?? 0;
+            $material = empty($list['material']) ? 0 : $list['material'];
             $list['material'] = Yii::$app->attr->valueName($material);
             //单据状态
             $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
             //入库方式
             $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
             //主石颜色
-            $main_stone_color = empty($list['main_stone_color']) ?? 0;
+            $main_stone_color = empty($list['main_stone_color']) ? 0 : $list['main_stone_color'];
             $list['main_stone_color'] = Yii::$app->attr->valueName($main_stone_color);
             //主石净度
-            $main_stone_clarity = empty($list['main_stone_clarity']) ?? 0;
+            $main_stone_clarity = empty($list['main_stone_clarity']) ? 0 : $list['main_stone_clarity'];
             $list['main_stone_clarity'] = Yii::$app->attr->valueName($main_stone_clarity);
             //主石金额
-            $main_stone_price = empty($list['main_stone_price']) ?? 0.00;
+            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
             $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
             //副石颜色
-            $second_stone_color1 = empty($list['second_stone_color1']) ?? 0;
+            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
             $list['second_stone_color1'] = Yii::$app->attr->valueName($second_stone_color1);
             //副石净度
-            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ?? 0;
+            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
             $list['second_stone_clarity1'] = Yii::$app->attr->valueName($second_stone_clarity1);
             //副石金额
-            $second_stone_price1 = empty($list['second_stone_price1']) ?? 0.00;
+            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
             $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
             //单价
             $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
                 + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
             //总额
             $list['price_sum'] = $list['price'] * $list['goods_num'];
+            //含耗重
+            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
+            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
+            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
         }
         return $lists;

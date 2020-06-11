@@ -324,7 +324,7 @@
 						<div><?= $val['gold_cost_price'] ?></div>
 					</td>
 					<td>
-						<div><?= $val['cost_price'] ?></div>
+						<div><?= $val['gold_amount'] ?></div>
 					</td>
 					<td>
 						<div><?= $val['parts_info'] ?></div>

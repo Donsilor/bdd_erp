@@ -149,6 +149,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'fense_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'gaitu_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
@@ -180,15 +191,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'gold_amount')->textInput() ?>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                            <?= $form->field($model, 'parts_weight')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'fense_fee')->textInput() ?>
+                            <?= $form->field($model, 'parts_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                            <?= $form->field($model, 'parts_fee')->textInput() ?>
                         </div>
                     </div>
                     <div class="row">

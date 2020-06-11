@@ -327,7 +327,7 @@ class PurchaseController extends BaseController
             ['损耗', 'gold_loss' , 'text'],
             ['银(金)价', 'gold_price' , 'text'],
             ['单件银(金)额', 'gold_cost_price' , 'text'],
-            ['金料额', 'cost_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
             ['配件信息', 'parts_info' , 'text'],
             ['工艺描述', 'face' ,'text'],
             ['加工费/件', 'jiagong_fee' , 'text'],
