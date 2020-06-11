@@ -168,7 +168,7 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     * 不产单号批量查询可出货商品
+     * 布产单号批量查询可出货商品
      * @param object $form
      */
     public function getGoodsByProduceSn($form)

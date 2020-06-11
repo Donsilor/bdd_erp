@@ -21,7 +21,9 @@ class BusinessScopeEnum extends BaseEnum
     const PTZSXQP = 6;
     const CBSP = 7;
     const YSP = 8;
-    const QT = 9;
+    const GOLD = 9;
+    const STONE = 10;
+    const QT = 99;
 	
 	/**
 	 * @return array
@@ -29,15 +31,17 @@ class BusinessScopeEnum extends BaseEnum
 	public static function getMap(): array
 	{
 		return [
-				self::CPZ => '成品钻',
-				self::HJ => '黄金',
-                self::KJSJ => 'K金素金',
-                self::PTSJ => 'PT素金',
-                self::KJZSXQP => 'K金钻石镶嵌品',
-                self::PTZSXQP => 'PT钻石镶嵌品',
-                self::CBSP => '彩宝饰品',
-                self::YSP => '银饰品',
-                self::QT => '其他',
+            self::CPZ => '成品钻',
+            self::HJ => '黄金',
+            self::KJSJ => 'K金素金',
+            self::PTSJ => 'PT素金',
+            self::KJZSXQP => 'K金钻石镶嵌品',
+            self::PTZSXQP => 'PT钻石镶嵌品',
+            self::CBSP => '彩宝饰品',
+            self::YSP => '银饰品',
+            self::GOLD => '金料',
+            self::STONE => '石料',
+            self::QT => '其他',
 		];
 	}
 }
