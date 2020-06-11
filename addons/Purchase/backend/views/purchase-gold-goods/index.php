@@ -1,5 +1,7 @@
 <?php
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use common\enums\ConfirmEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -20,6 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-width'=>'90%',
                     'data-height'=>'90%',
                     'data-offset'=>'20px',
+                ]);
+            }
+            if($purchase->purchase_status == BillStatusEnum::CONFIRM) {
+                echo Html::batchPop(['warehouse'],'分批收货', [
+                    'class'=>'btn btn-success btn-xs',
                 ]);
             }
         ?>
@@ -100,6 +107,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->gold_price ;
                                     },
                                     'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'attribute' => 'is_receipt',
+                                'value' => function ($model){
+                                    return ConfirmEnum::getValue($model->is_receipt);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_receipt',ConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             /*[
                                     'attribute' => '申请修改',

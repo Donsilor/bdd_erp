@@ -3,6 +3,8 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use addons\Purchase\common\models\PurchaseStoneGoods;
+use common\enums\ConfirmEnum;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -155,7 +157,6 @@ class StoneReceiptController extends ReceiptController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
                 //同步采购收货单至L单
                 Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
 
@@ -195,7 +196,40 @@ class StoneReceiptController extends ReceiptController
         ]);
     }
 
-
+    /**
+     * 删除/关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $goods = PurchaseStoneReceiptGoods::find()->select('purchase_detail_id')->where(['receipt_id'=>$id])->all();
+            $ids = ArrayHelper::getColumn($goods, 'purchase_detail_id');
+            $res = PurchaseStoneGoods::updateAll(['is_receipt'=>ConfirmEnum::NO], ['id'=>$ids]);
+            if(false === $res){
+                throw new \Exception("更新采购单明细商品状态失败");
+            }
+            $res = PurchaseStoneReceiptGoods::deleteAll(['receipt_id'=>$id]);
+            if(false === $res){
+                throw new \Exception("删除明细失败");
+            }
+            if(false === $model->delete()){
+                throw new \Exception($this->getError($model));
+            }
+            \Yii::$app->getSession()->setFlash('success','删除成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
 
     /**
      * @param null $ids

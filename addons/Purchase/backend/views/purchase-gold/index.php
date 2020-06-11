@@ -173,7 +173,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {apply} {receipt} {delete}',
+                'template' => '{edit} {audit} {goods} {apply} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){

@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use common\helpers\StringHelper;
 use Yii;
 use addons\Purchase\common\models\PurchaseGoldGoods;
 use common\enums\ConfirmEnum;
@@ -13,6 +14,8 @@ use addons\Style\common\enums\AttrIdEnum;
  */
 class PurchaseGoldGoodsForm extends PurchaseGoldGoods
 {
+    public $ids;
+    public $put_in_type;
     /**
      * 材质列表
      * @return array
@@ -21,7 +24,6 @@ class PurchaseGoldGoodsForm extends PurchaseGoldGoods
     {
         return Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE);
     }
-    
     /**
      * 采购商品申请编辑-创建
      */
@@ -45,6 +47,15 @@ class PurchaseGoldGoodsForm extends PurchaseGoldGoods
             throw new \Exception("保存失败",500);
         }
         
-    }    
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
+    }
 }
 

@@ -12,6 +12,7 @@ use addons\Purchase\common\models\PurchaseStoneGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use common\enums\ConfirmEnum;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -24,6 +25,7 @@ use addons\Purchase\common\models\PurchaseLog;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use yii\db\Exception;
 
 /**
  * Class PurchaseService
@@ -143,6 +145,29 @@ class PurchaseService extends Service
     }
 
     /**
+     * 采购收货验证
+     * @param object $form
+     * @param int $purchase_type
+     */
+    public function receiptValidate($form, $purchase_type)
+    {
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $model = new PurchaseStoneGoods();
+            }else{
+                $model = new PurchaseGoldGoods();
+            }
+            foreach ($ids as $id) {
+                $goods = $model::findOne(['id'=>$id]);
+                if($goods->is_receipt){
+                    throw new Exception("【".$goods->goods_name."】已收货，不能重复收货");
+                }
+            }
+        }
+    }
+
+    /**
      * 同步采购单生成采购收货单
      * @param object $form
      * @param int $purchase_type
@@ -151,15 +176,16 @@ class PurchaseService extends Service
      */
     public function syncPurchaseToReceipt($form, $purchase_type, $detail_ids = null)
     {
+        if(!$form->put_in_type){
+            throw new \Exception('请选择入库方式');
+        }
+        $put_in_type = $form->put_in_type;
         if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneGoods();
             $PurchaseModel = new PurchaseStone();
-        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+        }else{
             $model = new PurchaseGoldGoods();
             $PurchaseModel = new PurchaseGold();
-        }else{
-            $model = new PurchaseGoods();
-            $PurchaseModel = new Purchase();
         }
         if(!empty($detail_ids)) {
             $goods = $model::find()->select('purchase_id')->where(['id'=>$detail_ids[0]])->one();
@@ -180,9 +206,13 @@ class PurchaseService extends Service
         $total_cost =0;
         $i=1;
         foreach ($models as $k => $model){
+            if($model->is_receipt){
+                throw new \Exception("【".$model->goods_name."】已收货，不能重复收货");
+            }
             $goods[$k] = [
                 'purchase_sn' =>$form->purchase_sn,
                 'xuhao'=>$i++,
+                'put_in_type' => $put_in_type,
                 'purchase_detail_id' => $model->id,
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
@@ -196,7 +226,7 @@ class PurchaseService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
-            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            }else{
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_color'] = $model->stone_color;
                 $goods[$k]['goods_clarity'] = $model->stone_clarity;
@@ -218,6 +248,12 @@ class PurchaseService extends Service
             'created_at' => time(),
         ];
         Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
+        if(!empty($detail_ids)){
+            $res = $model::updateAll(['is_receipt'=>ConfirmEnum::YES], ['id'=>$detail_ids]);
+            if(false === $res){
+                throw new \Exception('更新货品状态失败');
+            }
+        }
     }
 
     /**

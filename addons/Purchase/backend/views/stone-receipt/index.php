@@ -253,7 +253,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     return Html::a('单据明细', ['stone-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'delete' => function($url, $model, $key){
-                    if($model->receipt_status != BillStatusEnum::CONFIRM) {
+                    if($model->receipt_status == BillStatusEnum::SAVE) {
                         return Html::delete(['delete', 'id' => $model->id]);
                     }
                 },

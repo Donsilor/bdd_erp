@@ -170,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {apply} {follower} {receipt} {delete}',
+                'template' => '{edit} {audit} {goods} {apply} {follower} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == BillStatusEnum::SAVE){

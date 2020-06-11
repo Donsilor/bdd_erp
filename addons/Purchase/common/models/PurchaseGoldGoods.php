@@ -17,6 +17,7 @@ use Yii;
  * @property string $cost_price 成本价
  * @property string $gold_price 金料价格/克
  * @property int $is_apply 是否申请修改
+ * @property int $is_receipt 是否已收货
  * @property string $apply_info
  * @property int $status 状态： -1已删除 0禁用 1启用
  * @property string $remark 采购备注
@@ -40,12 +41,13 @@ class PurchaseGoldGoods extends BaseModel
     {
         return [
             [['purchase_id','goods_name','material_type','cost_price','goods_weight'], 'required'],
-            [['purchase_id', 'goods_num', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'remark'], 'string', 'max' => 255],
             [['material_type'], 'string', 'max' => 10],
+            [['put_in_type'], 'safe']
         ];
     }
 
@@ -66,6 +68,7 @@ class PurchaseGoldGoods extends BaseModel
             'gold_price' => '金料单价/克',
             'is_apply' => '是否申请修改',
             'apply_info' => 'Apply Info',
+            'is_receipt' => '是否已收货',
             'status' => '状态',
             'remark' => '采购备注',
             'created_at' => '创建时间',

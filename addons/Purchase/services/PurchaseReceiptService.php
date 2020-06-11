@@ -137,8 +137,8 @@ class PurchaseReceiptService extends Service
             $purchase_detail_id = $good['purchase_detail_id']??"";
             if($purchase_detail_id){
                 $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
-                if($count >= 1){
-                    throw new \Exception("采购单已收货，不能重复收货");
+                if($count){
+                    throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
                 }
             }
             $goods->attributes = $good;
