@@ -242,6 +242,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     }
     /**
      * 获取款式属性列表
+     * 
      * @return array|\yii\db\ActiveRecord[]
      */
     public function getAttrList()
@@ -249,7 +250,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
         $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
         if($this->goods_type == PurchaseGoodsTypeEnum::OTHER) {
             $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($this->style_cate_id,$attr_type,$this->is_inlay);
-        }else if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
+        }else if($this->goods_type == PurchaseGoodsTypeEnum::STYLE) {
             $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
         }else{
             $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);
