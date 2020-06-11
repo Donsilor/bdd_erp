@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -22,8 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-offset'=>'20px',
                 ]);
             }
+            if($purchase->purchase_status == BillStatusEnum::CONFIRM) {
+                echo Html::batchPop(['warehouse'],'分批收货', [
+                    'class'=>'btn btn-success btn-xs',
+                ]);
+            }
         ?>
-
     </div>
     <div class="tab-content">
         <div class="row col-xs-15" style="padding-left: 0px;padding-right: 0px;">
@@ -51,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'100'],
-                            ],*/                            
+                            ],*/
                             [
                                     'attribute'=>'goods_name',
                                     'filter' => Html::activeTextInput($searchModel, 'goods_name', [

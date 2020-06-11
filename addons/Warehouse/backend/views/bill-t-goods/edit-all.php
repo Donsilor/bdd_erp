@@ -736,10 +736,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (parseInt(data.code) !== 200) {
                         rfAffirm(data.message);
                     } else {
-                        $("input[name='"+name+"']").each(function(){
-                            $(this).val(fromValue);
+                        //$("input[name='"+name+"']").each(function(){
+                            //$(this).val(fromValue);
                             //$(this).focus();
-                        });
+                        //});
                         window.location.reload();
                     }
                 }

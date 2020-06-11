@@ -453,6 +453,23 @@ Css
         
         return self::a($content, $url, $options);
     }
+
+    /**
+     * 批量弹框操作
+     * @param array|string $url
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchPop($url = [], $content = '批量弹框', $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-primary btn-sm",
+            'onclick' => "batchPop(this);return false;"
+        ], $options);
+
+        return self::a($content, $url, $options);
+    }
     
     /**
      * 批量操作按钮
