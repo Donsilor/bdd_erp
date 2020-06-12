@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use common\enums\AuditStatusEnum;
@@ -155,6 +156,35 @@ class ReceiptGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'goods_list' => $goods_list
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $from = Yii::$app->request->post('PurchaseReceiptGoodsForm');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceiptGoods();
+        $model->ids = $id;
+        if($model->load(Yii::$app->request->post())){
+            try{
+                $model->goods_status = $from['goods_status']??"";
+                $model->iqc_reason = $from['iqc_reason']??"";
+                $model->iqc_remark = $from['iqc_remark']??"";
+                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, '保存失败'.$e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
         ]);
     }
 

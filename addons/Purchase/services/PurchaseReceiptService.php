@@ -453,7 +453,10 @@ class PurchaseReceiptService extends Service
      */
     public function qcIqc($form, $purchase_type)
     {
-        $this->iqcValidate($form);
+        if($form->goods_status === ""){
+            throw new Exception("请选择是否质检通过");
+        }
+        $this->iqcValidate($form, $purchase_type);
         $ids = $form->getIds();
         if($form->goods_status == QcTypeEnum::PASS){
             $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_PASS];
@@ -469,7 +472,7 @@ class PurchaseReceiptService extends Service
         }
         $res = $model::updateAll($goods, ['id'=>$ids]);
         if(false === $res) {
-            throw new Exception("保存失败");
+            throw new Exception("更新货品状态失败");
         }
     }
 

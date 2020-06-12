@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
-                                        'width' => 260
+                                        'width' => 160
                                     ],
                                 ]),
                             ],
