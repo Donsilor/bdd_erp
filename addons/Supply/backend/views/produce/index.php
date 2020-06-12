@@ -6,6 +6,7 @@ use yii\grid\GridView;
 
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -147,7 +148,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'type.name',
-                'value' => "type.name",
+                'value' => function($model){
+                   return $model->type->name ?? '';
+                },
                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
@@ -158,7 +161,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'cate.name',
-                'value' => 'cate.name',
+                'value' => function($model){
+                    return $model->cate->name ?? '';
+                },
                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
@@ -179,6 +184,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])
 
             ],
+            [
+                'attribute' => 'peiliao_type',
+                'value' => function($model){
+                    return PeiliaoTypeEnum::getValue($model->peiliao_type);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'inlay_type',PeiliaoTypeEnum::getMap(), [
+                        'prompt' => '全部',
+                        'class' => 'form-control',
+                        'style' => 'width:130px;',
+                ])
+                
+                ],
             [
                 'attribute' => 'factory_distribute_time',
                 'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
