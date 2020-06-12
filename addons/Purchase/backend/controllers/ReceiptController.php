@@ -8,6 +8,7 @@ use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\enums\RepairStatusEnum;
+use common\helpers\PageHelper;
 use common\models\backend\Member;
 use Yii;
 use common\models\base\SearchModel;
@@ -284,7 +285,7 @@ class ReceiptController extends BaseController
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-        $list = $this->getData($ids);
+        list($list,) = $this->getData($ids);
         $header = [
             ['序号','xuhao','text'],
             ['工厂出货单号/收货单号', 'receipt_no' , 'text'],
@@ -352,10 +353,11 @@ class ReceiptController extends BaseController
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists,$total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' => $total
         ]);
     }
 
@@ -363,7 +365,7 @@ class ReceiptController extends BaseController
     private function getData($ids){
         $select = ['pr.receipt_no','pr.receipt_status','pr.put_in_type','type.name as product_type_name',
            'cate.name as style_cate_name', 'channel.name as channel_name','sup.supplier_name','member.username', 'prg.*'];
-        $lists = PurchaseReceipt::find()->alias('pr')
+        $query = PurchaseReceipt::find()->alias('pr')
             ->innerJoin(PurchaseReceiptGoods::tableName().' prg','pr.id = prg.receipt_id')
             ->leftJoin(ProductType::tableName().' type','type.id=prg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=prg.style_cate_id')
@@ -372,7 +374,23 @@ class ReceiptController extends BaseController
             ->leftJoin(Member::tableName().' member','member.id=pr.creator_id')
             ->where(['pr.id' => $ids])
             ->orderBy('prg.xuhao asc')
-            ->select($select)->asArray()->all();
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'suttle_weight_count' => 0,
+            'gold_amount_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight1_count' => 0,
+            'second_stone_price1_sum_count' => 0,
+            'price_count' => 0,
+            'price_sum_count' => 0,
+            'cert_fee_count' => 0,
+
+        ];
         foreach ($lists as &$list){
             //成色
             $material = empty($list['material']) ? 0 : $list['material'];
@@ -409,10 +427,22 @@ class ReceiptController extends BaseController
             $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
             $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
+
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['gold_weight_count'] += $list['gold_weight']; //货重
+            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+            $total['main_stone_weight_count'] += $list['main_stone_weight']; //石重
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+            $total['price_count'] += $list['price']; //单价
+            $total['price_sum_count'] += $list['price_sum']; //总额
+            $total['cert_fee_count'] += $list['price_sum']; //证书费
+
+
         }
-
-
-
-        return $lists;
+        return [$lists,$total];
     }
 }

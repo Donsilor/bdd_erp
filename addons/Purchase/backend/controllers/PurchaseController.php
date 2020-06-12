@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use common\helpers\PageHelper;
 use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
@@ -289,7 +290,7 @@ class PurchaseController extends BaseController
             return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $list = $this->getData($ids);
+        list($list,) = $this->getData($ids);
 
         $header = [
             ['订单编号', 'purchase_sn' , 'text'],
@@ -330,7 +331,7 @@ class PurchaseController extends BaseController
             ['金料额', 'gold_amount' , 'text'],
             ['配件信息', 'parts_info' , 'text'],
             ['工艺描述', 'face' ,'text'],
-            ['加工费/件', 'jiagong_fee' , 'text'],
+            ['工费/件', 'jiagong_fee' , 'text'],
             ['镶石费/件', 'xiangqian_fee' , 'text'],
             ['工费总额/件', 'gong_fee' , 'text'],
             ['改图费', 'gaitu_fee' , 'text'],
@@ -353,69 +354,111 @@ class PurchaseController extends BaseController
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists, $total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' => $total
+
         ]);
     }
 
     private function getData($ids){
         $select = ['p.purchase_sn','p.supplier_id','p.follower_id','p.purchase_status','m.username','s.supplier_name','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
-
-        $list = Purchase::find()->alias('p')
+        $query = Purchase::find()->alias('p')
             ->innerJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
             ->leftJoin(Member::tableName().' m','m.id=p.follower_id')
             ->leftJoin(Supplier::tableName().' s','s.id=p.supplier_id')
             ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
             ->where(['p.id'=>$ids])
-            ->select($select)
-            ->asArray()
-            ->all();
-
-        foreach ($list as &$val){
-            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_num_count' => 0,
+            'main_stone_num_sum_count' => 0,
+            'main_stone_weight_sum_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight_count' => 0,
+            'second_stone_num_count' => 0,
+            'second_stone_num_sum_count' => 0,
+            'second_stone_weight_sum_count' => 0,
+            'second_stone_price_sum_count' => 0,
+            'jiagong_fee_count' => 0,
+            'xiangqian_fee_count' => 0,
+            'gong_fee_count' => 0,
+            'gaitu_fee_count' => 0,
+            'penla_fee_count' => 0,
+            'unit_cost_price_count' => 0,
+            'factory_cost_price_sum_count' => 0,
+            'company_unit_cost_sum_count' => 0,
+        ];
+        foreach ($lists as &$list){
+            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$list['id']])->asArray()->all();
             $attr = ArrayHelper::map($attr,'attr_id','attr_value');
             //材质
-            $val['material'] = $attr[AttrIdEnum::MATERIAL] ?? 0;
+            $list['material'] = $attr[AttrIdEnum::MATERIAL] ?? 0;
             //手寸
-            $val['finger'] = $attr[AttrIdEnum::FINGER] ?? 0;
+            $list['finger'] = $attr[AttrIdEnum::FINGER] ?? 0;
             //工艺描述
-            $val['face'] = $attr[AttrIdEnum::FACEWORK] ?? 0;
+            $list['face'] = $attr[AttrIdEnum::FACEWORK] ?? 0;
             //主石
-            $val['main_stone_type'] = $attr[AttrIdEnum::MAIN_STONE_TYPE] ?? 0;
-            $val['main_stone_num'] = $attr[AttrIdEnum::MAIN_STONE_NUM] ?? 0;
-            $val['main_stone_num'] = empty($val['main_stone_num'])? 0: $val['main_stone_num']; //值为空默认0
-            $val['main_stone_num_sum'] = $val['main_stone_num'] * $val['goods_num'];
-            $val['main_stone_weight'] = $attr[AttrIdEnum::DIA_CARAT] ?? 0;
-            $val['main_stone_weight'] = empty($val['main_stone_weight'])? 0: $val['main_stone_weight']; //值为空默认0
-            $val['main_stone_weight_sum'] = $val['main_stone_weight'] * $val['main_stone_num_sum'];
-            $val['main_stone_price_sum'] = $val['main_stone_price'] * $val['main_stone_num_sum'];
+            $list['main_stone_type'] = $attr[AttrIdEnum::MAIN_STONE_TYPE] ?? 0;
+            $list['main_stone_num'] = $attr[AttrIdEnum::MAIN_STONE_NUM] ?? 0;
+            $list['main_stone_num'] = empty($list['main_stone_num'])? 0: $list['main_stone_num']; //值为空默认0
+            $list['main_stone_num_sum'] = $list['main_stone_num'] * $list['goods_num'];
+            $list['main_stone_weight'] = $attr[AttrIdEnum::DIA_CARAT] ?? 0;
+            $list['main_stone_weight'] = empty($list['main_stone_weight'])? 0: $list['main_stone_weight']; //值为空默认0
+            $list['main_stone_weight_sum'] = $list['main_stone_weight'] * $list['main_stone_num_sum'];
+            $list['main_stone_price_sum'] = $list['main_stone_price'] * $list['main_stone_num_sum'];
 
             //副石
-            $val['second_stone_type1'] = $attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? 0;
-            $val['second_stone_num'] = $attr[AttrIdEnum::SIDE_STONE1_NUM] ?? 0;
-            $val['second_stone_num'] = empty($val['second_stone_num'])? 0: $val['second_stone_num'];//值为空默认0
-            $val['second_stone_num_sum'] = $val['second_stone_num'] * $val['goods_num'];
-            $val['second_stone_weight'] = $attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
-            $val['second_stone_weight'] = empty($val['second_stone_weight'])? 0: $val['second_stone_weight'];//值为空默认0
-            $val['second_stone_weight_sum'] = $val['second_stone_weight'] * $val['second_stone_num_sum'];
-            $val['second_stone_price_sum'] = $val['second_stone_price1'] * $val['second_stone_num_sum'];
+            $list['second_stone_type1'] = $attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? 0;
+            $list['second_stone_num'] = $attr[AttrIdEnum::SIDE_STONE1_NUM] ?? 0;
+            $list['second_stone_num'] = empty($list['second_stone_num'])? 0: $list['second_stone_num'];//值为空默认0
+            $list['second_stone_num_sum'] = $list['second_stone_num'] * $list['goods_num'];
+            $list['second_stone_weight'] = $attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
+            $list['second_stone_weight'] = empty($list['second_stone_weight'])? 0: $list['second_stone_weight'];//值为空默认0
+            $list['second_stone_weight_sum'] = $list['second_stone_weight'] * $list['second_stone_num_sum'];
+            $list['second_stone_price_sum'] = $list['second_stone_price1'] * $list['second_stone_num_sum'];
 
             //连石总重(g)
-            $val['single_stone_weight_sum'] = $val['single_stone_weight'] * $val['goods_num'];
+            $list['single_stone_weight_sum'] = $list['single_stone_weight'] * $list['goods_num'];
 
             //净重/单件(g) 总净重(g) ---金重
-            $val['gold_weight'] = isset($val['gold_weight']) && !empty($val['gold_weight']) ?? 0;
-            $val['gold_weight_sum'] = $val['gold_weight'] * $val['goods_num'];
+            $list['gold_weight'] = isset($list['gold_weight']) && !empty($list['gold_weight']) ?? 0;
+            $list['gold_weight_sum'] = $list['gold_weight'] * $list['goods_num'];
 
             //工厂总额
-            $val['factory_cost_price_sum'] = $val['factory_cost_price'] * $val['goods_num'];
+            $list['factory_cost_price_sum'] = $list['factory_cost_price'] * $list['goods_num'];
             //公司成本总额
-            $val['company_unit_cost_sum'] = $val['company_unit_cost'] * $val['goods_num'];
+            $list['company_unit_cost_sum'] = $list['company_unit_cost'] * $list['goods_num'];
+
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['main_stone_weight_count'] += $list['main_stone_weight']; //主石石重
+            $total['main_stone_num_count'] += $list['main_stone_num']; //主石数量
+            $total['main_stone_num_sum_count'] += $list['main_stone_num_sum']; //主石总数(粒）
+            $total['main_stone_weight_sum_count'] += $list['main_stone_weight_sum']; //主石总重ct
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight_count'] += $list['second_stone_weight']; //副石石重
+            $total['second_stone_num_count'] += $list['second_stone_num']; //副石数量
+            $total['second_stone_num_sum_count'] += $list['second_stone_num_sum']; //副石总数(粒）
+            $total['second_stone_weight_sum_count'] += $list['second_stone_weight_sum']; //副石总重ct
+            $total['second_stone_price_sum_count'] += $list['second_stone_price_sum']; //副石金额
+            $total['jiagong_fee_count'] += $list['jiagong_fee']; //工费
+            $total['xiangqian_fee_count'] += $list['xiangqian_fee']; //镶石费
+            $total['gong_fee_count'] += $list['gong_fee']; //工费总额
+            $total['gaitu_fee_count'] += $list['gaitu_fee']; //改图费
+            $total['penla_fee_count'] += $list['penla_fee']; //喷蜡费
+            $total['unit_cost_price_count'] += $list['unit_cost_price']; //单件额
+            $total['factory_cost_price_sum_count'] += $list['factory_cost_price_sum']; //工厂总额
+            $total['company_unit_cost_sum_count'] += $list['company_unit_cost_sum']; //公司成本总额
         }
-        return $list;
+        return [$lists,$total];
     }
 
 

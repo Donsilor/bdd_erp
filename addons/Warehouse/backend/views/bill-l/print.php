@@ -21,6 +21,10 @@
 				}
 			}
 		</script>
+        <style media="print">
+            .Noprint {   DISPLAY:   none;}
+            .PageNext {   PAGE-BREAK-AFTER:   always   }
+        </style>
 	</head>
 	<body>
 		<div class="container" id="wdf">
@@ -208,10 +212,10 @@
                         <div><?= $key+1 ?></div>
                     </td>
                     <td>
-                        <div><?= $val['goods_id'] ?>/div>
+                        <div><?= $val['goods_id'] ?></div>
                     </td>
 					<td>
-						<div><?= $val['style_sn'] ?>/div>
+						<div><?= $val['style_sn'] ?></div>
 					</td>
                     <td>
                         <div><?= $val['goods_name'] ?></div>
@@ -500,9 +504,54 @@
                  }
                 }
                 ?>
-				
+                <tr>
+                    <td colspan="3"><div>合计</div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['goods_num_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['gold_weight_count']?></div></td>
+                    <td><div><?= $total['suttle_weight_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['gold_amount_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['main_stone_weight_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['main_stone_price_sum_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['second_stone_weight1_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['second_stone_price1_sum_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['price_count']?></div></td>
+                    <td><div><?= $total['price_sum_count']?></div></td>
+                    <td><div><?= $total['cert_fee_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
 			</table>
-			
+            <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">签收人：</span></div>
 			<!--endprint1-->
 		</div>
         <div class="text-center">

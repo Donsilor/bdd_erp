@@ -34,6 +34,20 @@ class PageHelper {
             'data'=>$data,
         ];
     }
+
+
+    public static function findAll($query, $pagesize=10){
+        $lists = [];
+        if($pagesize == 0) return $lists;
+        $total_count = $query->count();
+        $pageCount = ceil($total_count / $pagesize);
+        for($page = 1; $page <= $pageCount; $page++){
+            $start = ($page - 1) * $pagesize;
+            $list = $query->offset($start)->limit($pagesize)->asArray()->all();
+            $lists = array_merge($lists,$list);
+        }
+        return $lists;
+    }
     
     
 }

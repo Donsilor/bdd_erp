@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use common\helpers\PageHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -270,7 +271,7 @@ class BillLController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $list = $this->getData($ids);
+        list($list,) = $this->getData($ids);
         $header = [
             ['款号', 'style_sn' , 'text'],
             ['条码号', 'goods_id' , 'text'],
@@ -333,10 +334,11 @@ class BillLController extends BaseController
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists,$total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' => $total
         ]);
     }
 
@@ -344,13 +346,29 @@ class BillLController extends BaseController
         $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
             'wg.cost_price','wg.diamond_cert_id','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name'];
-        $lists = WarehouseBill::find()->alias('w')
+        $query = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
             ->where(['w.id' => $ids])
-            ->select($select)->asArray()->all();
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'suttle_weight_count' => 0,
+            'gold_amount_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight1_count' => 0,
+            'second_stone_price1_sum_count' => 0,
+            'price_count' => 0,
+            'price_sum_count' => 0,
+            'cert_fee_count' => 0,
+
+        ];
         foreach ($lists as &$list){
             //成色
             $material = empty($list['material']) ? 0 : $list['material'];
@@ -387,8 +405,21 @@ class BillLController extends BaseController
             $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
             $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['gold_weight_count'] += $list['gold_weight']; //货重
+            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+            $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+            $total['price_count'] += $list['price']; //单价
+            $total['price_sum_count'] += $list['price_sum']; //总额
+            $total['cert_fee_count'] += $list['price_sum']; //证书费
+
         }
-        return $lists;
+        return [$lists,$total];
     }
 
 }

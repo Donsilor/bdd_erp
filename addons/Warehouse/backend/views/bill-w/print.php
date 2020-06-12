@@ -73,6 +73,9 @@
                         <div>金重</div>
                     </td>
                     <td>
+                        <div>深圳最低价格</div>
+                    </td>
+                    <td>
                         <div>主石类型</div>
                     </td>
                     <td>
@@ -144,6 +147,9 @@
                     </td>
                     <td>
                         <div><?= $val['gold_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['poll_price'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['main_stone_type'] ?></div>
@@ -218,6 +224,9 @@
                             <div>金重</div>
                         </td>
                         <td>
+                            <div>深圳最低价格</div>
+                        </td>
+                        <td>
                             <div>主石类型</div>
                         </td>
                         <td>
@@ -261,8 +270,31 @@
                  }
                 }
                 ?>
+                <tr>
+                    <td colspan="3"><div>合计</div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['goods_num_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
 			</table>
-
+            <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">审核人：<?= $model->auditor->username ?? ''?></span></span></div>
 
 			<!--endprint1-->
 		</div>

@@ -5,10 +5,13 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
+use common\helpers\PageHelper;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
@@ -236,66 +239,112 @@ class BillBController extends BaseController
     }
 
 
-    /**
-     * @param null $ids
-     * @return bool|mixed
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+    /***
+     * 导出Excel
      */
     public function actionExport($ids=null){
-        $name = '退货返厂单';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
+        list($list,) = $this->getData($ids);
+        // [名称, 字段名, 类型, 类型规则]
+        $header = [
+            ['维修单号', 'bill_no', 'text'],
+            ['维修状态', 'bill_status', 'text'],
+            ['维修工厂', 'supplier_name', 'text'],
+            ['货品名称', 'goods_name', 'text'],
+            ['条码号', 'goods_id', 'text'],
+            ['款号', 'style_sn', 'text'],
+            ['产品分类', 'product_type_name' , 'text'],
+            ['商品类型', 'style_cate_name' , 'text'],
+            ['仓库', 'warehouse_name' , 'text'],
+            ['材质', 'material' , 'text'],
+            ['金重', 'gold_weight' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石重（ct)', 'diamond_carat' , 'text'],
+            ['主石粒数', 'main_stone_num' , 'text'],
+            ['主石规格', 'main_stone_info' , 'text'],
+            ['副石重（ct）', 'second_stone_weight1' , 'text'],
+            ['副石粒数', 'second_stone_num1' , 'text'],
+            ['总重', 'gross_weight' , 'text'],
+            ['手寸	', 'finger' , 'text'],
+            ['尺寸	', 'product_size' , 'text'],
+            ['证书号	', 'cert_id' , 'text'],
+            ['工费	', 'gong_fee' , 'text'],
+            ['成本价	', 'cost_price' , 'text'],
+            ['备注	', 'remark' , 'text'],
+        ];
 
-        $select = ['w.bill_no','w.bill_type','w.bill_status','g.goods_id','g.main_stone_type','g.finger','g.main_stone_num',
-            'g.second_stone_num1','g.second_stone_weight1','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
-            ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
+        return ExcelHelper::exportData($list, $header, '退货返厂单_' . date('YmdHis',time()));
 
-        $list = WarehouseBill::find()->alias('w')
+    }
+
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        list($lists,$total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' =>$total
+        ]);
+    }
+
+    /**
+     *
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function getData($ids)
+    {
+        $select = ['g.*','w.bill_no','w.bill_status','type.name as product_type_name','cate.name as style_cate_name',
+            'warehouse.name as warehouse_name','sup.supplier_name'];
+        $query = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->leftJoin(Warehouse::tableName().' warehouse','warehouse.id=g.warehouse_id')
+            ->leftJoin(Supplier::tableName().' sup','sup.id=w.supplier_id')
             ->where(['w.id' => $ids])
-            ->select($select)->asArray()->all();
-        $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据类型', 'bill_type' , 'selectd', BillTypeEnum::getMap()],
-            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
-            ['货号', 'goods_id' , 'text'],
-            ['款号', 'style_sn' , 'text'],
-            ['商品名称', 'goods_name' , 'text'],
-            ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_id' , 'selectd',Yii::$app->warehouseService->warehouse::getDropDownForAll()],
-            ['主成色', 'material' , function($model){
-                return \Yii::$app->attr->valueName($model['material']);
-            }],
-            ['金重', 'gold_weight' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
-            ['钻石大小', 'diamond_carat' , 'text'],
-            ['主石粒数', 'main_stone_num' , 'text'],
-            ['副石1重', 'second_stone_weight1' , 'text'],
-            ['副石1粒数', 'second_stone_num1' , 'text'],
-            ['手寸	', 'finger' , 'text'],
-
-//            ['钻石颜色', 'diamond_color' , function($model){
-//                return \Yii::$app->attr->valueName($model['diamond_color']);
-//            }],
-//            ['钻石净度', 'diamond_clarity' ,function($model){
-//                return \Yii::$app->attr->valueName($model['diamond_clarity']);
-//            }],
-            ['证书号', 'diamond_cert_id' , 'text'],
-            ['成本价', 'cost_price' , 'text']
-
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'cost_price_count' => 0,
         ];
+        foreach ($lists as &$list){
+            $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
+            $list['material'] = \Yii::$app->attr->valueName($list['material']);
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+            $diamond_color = $list['diamond_color'] ? \Yii::$app->attr->valueName($list['diamond_color']): '无';
+            $diamond_clarity = $list['diamond_clarity'] ?\Yii::$app->attr->valueName($list['diamond_clarity']): '无';
+            $diamond_cut = $list['diamond_cut'] ?\Yii::$app->attr->valueName($list['diamond_cut']): '无';
+            $diamond_polish = $list['diamond_polish'] ?\Yii::$app->attr->valueName($list['diamond_polish']): '无';
+            $diamond_symmetry = $list['diamond_symmetry'] ?\Yii::$app->attr->valueName($list['diamond_symmetry']): '无';
+            $diamond_fluorescence = $list['diamond_fluorescence'] ?\Yii::$app->attr->valueName($list['diamond_fluorescence']): '无';
+            $list['main_stone_info'] = $diamond_color . '/' . $diamond_clarity . '/' . $diamond_cut . '/'
+                . $diamond_polish . '/' . $diamond_symmetry . '/' . $diamond_fluorescence;
 
-        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+            $total['cost_price_count'] += $list['cost_price'];
+
+        }
+        return [$lists,$total];
+
+
+
     }
 
 }

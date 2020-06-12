@@ -18,6 +18,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
 use common\helpers\SnHelper;
 use common\helpers\StringHelper;
 use common\models\backend\Member;
@@ -211,8 +212,7 @@ class DefectiveController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $list = $this->getData($ids);
-
+        list($list,) = $this->getData($ids);
         $header = [
             ['序号', 'xuhao' , 'text'],
             ['条码号', 'defective_no' , 'text'],
@@ -280,10 +280,11 @@ class DefectiveController extends BaseController
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists,$total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' => $total
         ]);
     }
 
@@ -294,7 +295,7 @@ class DefectiveController extends BaseController
             'channel.name as channel_name','sup.supplier_name','pdg.cost_price','pdg.iqc_reason',
             'pdg.iqc_remark','iqc.name as iqc_name','prg.*','pdg.created_at'];
 
-        $lists = PurchaseDefective::find()->alias('pd')
+        $query = PurchaseDefective::find()->alias('pd')
             ->innerJoin(PurchaseDefectiveGoods::tableName()." pdg",'pd.id=pdg.defective_id')
             ->innerJoin(PurchaseReceipt::tableName()." pr",'pr.receipt_no=pd.receipt_no')
             ->innerJoin(PurchaseReceiptGoods::tableName().' prg','prg.xuhao=pdg.xuhao and pr.id = prg.receipt_id')
@@ -304,7 +305,23 @@ class DefectiveController extends BaseController
             ->leftJoin(Supplier::tableName().' sup','sup.id=pd.supplier_id')
             ->leftJoin(PurchaseFqcConfig::tableName().' iqc','iqc.id=pdg.iqc_reason')
             ->where(['pd.id' => $ids])
-            ->select($select)->asArray()->all();
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'suttle_weight_count' => 0,
+            'gold_amount_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight1_count' => 0,
+            'second_stone_price1_sum_count' => 0,
+            'price_count' => 0,
+            'price_sum_count' => 0,
+            'cert_fee_count' => 0,
+
+        ];
         foreach ($lists as &$list){
             //成色
             $material = empty($list['material']) ? 0 : $list['material'];
@@ -338,9 +355,20 @@ class DefectiveController extends BaseController
             $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
             $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
             $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
+
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['gold_weight_count'] += $list['gold_weight']; //货重
+            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+            $total['main_stone_weight_count'] += $list['main_stone_weight']; //石重
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+            $total['price_count'] += $list['price']; //单价
+            $total['price_sum_count'] += $list['price_sum']; //总额
+            $total['cert_fee_count'] += $list['price_sum']; //证书费
         }
-
-
-        return $lists;
+        return [$lists,$total];
     }
 }
