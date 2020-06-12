@@ -20,7 +20,6 @@ use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use yii\db\Exception;
 
-
 /**
  * Class TypeService
  * @package services\common
@@ -28,74 +27,67 @@ use yii\db\Exception;
  */
 class PurchaseDefectiveService extends Service
 {
-    
     /**
      * 不良返厂单明细 tab
-     * @param int $id 不良返厂单ID
+     * @param int $defective_id 不良返厂单ID
+     * @param int $purchase_type 采购类型
+     * @param int $returnUrl
+     * @param int $tag 页签ID
      * @return array
      */
     public function menuTabList($defective_id, $purchase_type, $returnUrl = null, $tag = null)
     {
+        $tabList = $tab = [];
         switch ($purchase_type){
-
             case PurchaseTypeEnum::GOODS:
                 {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
             case PurchaseTypeEnum::MATERIAL_STONE:
                 {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['stone-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['stone-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['stone-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
             case PurchaseTypeEnum::MATERIAL_GOLD:
                 {
-                    if($tag==3){
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['gold-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['gold-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tablist = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
         }
-        return $tablist;
+        $tabList = ArrayHelper::merge($tabList, $tab);
+        ksort($tabList);
+        return $tabList;
     }
     
     /**
      * 不良返厂单汇总
      * @param int $defective_id
+     * @throws \Exception
      */
     public function purchaseDefectiveSummary($defective_id)
     {
@@ -114,6 +106,7 @@ class PurchaseDefectiveService extends Service
      * 创建不良返厂单
      * @param array $bill 单据详情
      * @param array $detail 单据明细
+     * @throws \Exception
      */
     public function createDefactiveBill($bill, $detail)
     {
@@ -145,7 +138,8 @@ class PurchaseDefectiveService extends Service
 
     /**
      * 不良返厂单-申请审核
-     * @param $form
+     * @param object $form
+     * @throws \Exception
      */
     public function applyAudit($form)
     {
@@ -156,11 +150,7 @@ class PurchaseDefectiveService extends Service
             throw new \Exception("单据明细不能为空");
         }
         //同步采购收货单商品状态
-        $ids = $this->getReceiptGoodsIds($form);
-        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
+        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::FACTORY_ING);
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -168,7 +158,8 @@ class PurchaseDefectiveService extends Service
 
     /**
      * 不良返厂单-审核
-     * @param $form
+     * @param object $form
+     * @throws \Exception
      */
     public function auditDefect($form)
     {
@@ -182,19 +173,7 @@ class PurchaseDefectiveService extends Service
             $form->defective_status = BillStatusEnum::SAVE;
             $goods_status = ReceiptGoodsStatusEnum::FACTORY_ING;
         }
-        $ids = $this->getReceiptGoodsIds($form);
-        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $model = new PurchaseStoneReceiptGoods();
-        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $model = new PurchaseGoldReceiptGoods();
-        }else{
-            $model = new PurchaseReceiptGoods();
-        }
-        //同步采购收货单货品状态
-        $res = $model::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
+        $this->getReceiptGoodsIds($form, $goods_status);
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -202,27 +181,17 @@ class PurchaseDefectiveService extends Service
 
     /**
      * 不良返厂单-取消/删除
-     * @param $form
+     * @param object $form
+     * @throws \Exception
      */
     public function cancelDefect($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $model = new PurchaseStoneReceiptGoods();
-        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $model = new PurchaseGoldReceiptGoods();
-        }else{
-            $model = new PurchaseReceiptGoods();
-        }
         //同步采购收货单商品状态
-        $ids = $this->getReceiptGoodsIds($form);
-        $res = $model::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_NO_PASS], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
-        $res = PurchaseDefectiveGoods::deleteAll(['id'=>$ids]);
+        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::IQC_PASS);
+        $res = PurchaseDefectiveGoods::deleteAll(['defective_id'=>$form->id]);
         if(false === $res) {
             throw new \Exception("删除单据明细失败");
         }
@@ -233,9 +202,11 @@ class PurchaseDefectiveService extends Service
 
     /**
      * 获取采购收货单明细ID
-     * @param $form
+     * @param object $form
+     * @param int $goods_status
+     * @throws \Exception
      */
-    public function getReceiptGoodsIds($form){
+    public function getReceiptGoodsIds($form, $goods_status){
         if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
         }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
@@ -243,9 +214,11 @@ class PurchaseDefectiveService extends Service
         }else{
             $model = new PurchaseReceiptGoods();
         }
-        $dfGoods = PurchaseDefectiveGoods::find()->select(['xuhao'])->where(['defective_id'=>$form->id])->asArray()->all();
-        $receipt = PurchaseReceipt::find()->select(['id'])->where(['receipt_no'=>$form->receipt_no])->one();
-        $ids = $model::find()->select(['id'])->where(['receipt_id'=> $receipt->id, 'xuhao'=> ArrayHelper::getColumn($dfGoods,'xuhao')])->asArray()->all();
-        return ArrayHelper::getColumn($ids,'id')?:[];
+        $goods = PurchaseDefectiveGoods::find()->select(['receipt_detail_id'])->where(['defective_id'=>$form->id])->asArray()->all();
+        $ids = ArrayHelper::getColumn($goods,'receipt_detail_id');
+        $res = $model::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
+        if(false === $res) {
+            throw new \Exception("同步采购收货单货品状态失败");
+        }
     }
 }

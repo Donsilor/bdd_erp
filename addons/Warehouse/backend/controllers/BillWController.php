@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use common\helpers\PageHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -325,9 +326,7 @@ class BillWController extends BaseController
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-
-        $list = $this->getData($ids);
-
+        list($list,) = $this->getData($ids);
         $header = [
             ['单据编号', 'bill_no' , 'text'],
             ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
@@ -339,6 +338,7 @@ class BillWController extends BaseController
             ['仓库', 'warehouse_name' , 'text'],
             ['材质', 'material' , 'text', ],
             ['金重', 'gold_weight' , 'text'],
+            ['深圳最低价格', 'poll_price' , 'text'],
             ['主石类型', 'main_stone_type' , 'text'],
             ['主石形状', 'diamond_shape' , 'text'],
             ['主石重（ct)', 'diamond_carat' , 'text'],
@@ -364,14 +364,19 @@ class BillWController extends BaseController
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
             'wg.cost_price','wg.diamond_cert_id','wg.status','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name',
             'ww.actual_num','ww.profit_num','ww.loss_num'];
-        $lists = WarehouseBill::find()->alias('w')
+        $query = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(WarehouseBillW::tableName()." ww",'ww.id=w.id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
             ->where(['w.id' => $ids])
-            ->select($select)->asArray()->all();
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+        ];
         foreach ($lists as &$list){
             $bill = WarehouseBill::find()->where(['id'=>$list['bill_id']])->one();
             $list['warehouse_name'] = $bill->toWarehouse->name ?? '';
@@ -379,14 +384,18 @@ class BillWController extends BaseController
             $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
             $list['diamond_shape'] = \Yii::$app->attr->valueName($list['diamond_shape']);
 
+            $list['poll_price'] = '';
+
             $diamond_carat = empty($list['diamond_carat']) ? 0 :$list['diamond_carat'];
             $second_stone_weight1 = empty($list['second_stone_weight1']) ? 0 :$list['second_stone_weight1'];
             $list['diamond_carat_sum'] =  $diamond_carat + $second_stone_weight1;
 
             $list['status'] = PandianStatusEnum::getValue($list['status']);
 
+            $total['goods_num_count'] += $list['goods_num'];
+
         }
-        return $lists;
+        return [$lists,$total];
     }
 
     /**
@@ -396,13 +405,16 @@ class BillWController extends BaseController
      */
     public function actionPrint()
     {
+
+
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists,$total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' => $total
         ]);
     }
 

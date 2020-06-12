@@ -29,16 +29,20 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>调拨单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>货品维修退货单</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
 
 				<div class="list clf">
 					<div class="child fl clf">
-						<div class="child-attr fl">调拨单号：</div>
-						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
+						<div class="child-attr fl">维修单号：</div>
+						<div class="child-val fl"><?= $model->repair_no ?? '' ?> </div>
 					</div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">维修工厂：</div>
+                        <div class="child-val fl"><?= $model->supplier->supplier_name ?? '' ?> </div>
+                    </div>
 
 				</div>
 
@@ -67,11 +71,9 @@
                         <div>商品类型</div>
                     </td>
                     <td>
-                        <div>出库仓库</div>
+                        <div>仓库</div>
                     </td>
-                    <td>
-                        <div>入库仓库</div>
-                    </td>
+
                     <td>
                         <div>材质</div>
                     </td>
@@ -91,6 +93,9 @@
                         <div>主石粒数</div>
                     </td>
                     <td>
+                        <div>主石规格(颜色/净度/切工/抛光/对称/荧光)</div>
+                    </td>
+                    <td>
                         <div>副石重</div>
                     </td>
                     <td>
@@ -103,7 +108,19 @@
                         <div>手寸</div>
                     </td>
                     <td>
-                        <div>货品尺寸</div>
+                        <div>尺寸</div>
+                    </td>
+                    <td>
+                        <div>证书号</div>
+                    </td>
+                    <td>
+                        <div>工费</div>
+                    </td>
+                    <td>
+                        <div>成本价</div>
+                    </td>
+                    <td>
+                        <div>备注</div>
                     </td>
 				</tr>
 				
@@ -132,10 +149,7 @@
                         <div><?= $val['style_cate_name'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['from_warehouse_name'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['to_warehouse_name'] ?></div>
+                        <div><?= $val['warehouse_name'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['material'] ?></div>
@@ -156,6 +170,9 @@
                         <div><?= $val['main_stone_num'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['main_stone_info'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['second_stone_weight1'] ?></div>
                     </td>
                     <td>
@@ -169,6 +186,18 @@
                     </td>
                     <td>
                         <div><?= $val['product_size'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['cert_id'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['gong_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['cost_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['remark'] ?></div>
                     </td>
 				</tr>
                 <?php if(($key + 1) % $pagesize == 0){?>
@@ -195,11 +224,9 @@
                                 <div>商品类型</div>
                             </td>
                             <td>
-                                <div>出库仓库</div>
+                                <div>仓库</div>
                             </td>
-                            <td>
-                                <div>入库仓库</div>
-                            </td>
+
                             <td>
                                 <div>材质</div>
                             </td>
@@ -219,6 +246,9 @@
                                 <div>主石粒数</div>
                             </td>
                             <td>
+                                <div>主石规格(颜色/净度/切工/抛光/对称/荧光)</div>
+                            </td>
+                            <td>
                                 <div>副石重</div>
                             </td>
                             <td>
@@ -231,7 +261,19 @@
                                 <div>手寸</div>
                             </td>
                             <td>
-                                <div>货品尺寸</div>
+                                <div>尺寸</div>
+                            </td>
+                            <td>
+                                <div>证书号</div>
+                            </td>
+                            <td>
+                                <div>工费</div>
+                            </td>
+                            <td>
+                                <div>成本价</div>
+                            </td>
+                            <td>
+                                <div>备注</div>
                             </td>
                         </tr>
                 <?php
@@ -246,8 +288,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td><div><?= $total['cost_price_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

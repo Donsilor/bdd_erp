@@ -53,6 +53,7 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
         $query = PurchaseGoldReceiptGoods::find();
         $query->from(['rg'=> PurchaseGoldReceiptGoods::tableName()]);
         $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
+        $query->select($col);
         $query->where(['rg.id' => $ids]);
         $query->distinct($col);
         $num = $query->count(1);

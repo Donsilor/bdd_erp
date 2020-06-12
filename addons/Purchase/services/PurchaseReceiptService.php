@@ -2,13 +2,10 @@
 
 namespace addons\Purchase\services;
 
-
-use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\models\PurchaseGoods;
-use common\helpers\ArrayHelper;
 use Yii;
 use common\components\Service;
-use common\helpers\Url;
+use addons\Purchase\common\models\Purchase;
+use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\enums\DefectiveStatusEnum;
@@ -19,19 +16,23 @@ use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Supply\common\models\Produce;
+use addons\Supply\common\models\ProduceAttribute;
+use addons\Supply\common\models\ProduceShipment;
+use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
+use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
+use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
+use common\helpers\Url;
 use yii\db\Exception;
 
 /**
@@ -41,76 +42,93 @@ use yii\db\Exception;
  */
 class PurchaseReceiptService extends Service
 {
-    
     /**
      * 采购收货单明细 tab
-     * @param int $id 采购单ID
+     * @param int $receipt_id 采购收货单ID
+     * @param int $purchase_type 采购类型
+     * @param string $returnUrl
+     * @param int $tag 页签ID
      * @return array
      */
     public function menuTabList($receipt_id, $purchase_type, $returnUrl = null, $tag = null)
     {
-        $tabList = [];
+        $tabList = $tab = [];
         switch ($purchase_type){
-
             case PurchaseTypeEnum::GOODS:
                 {
-                    if($tag==3){
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
             case PurchaseTypeEnum::MATERIAL_STONE:
                 {
-                    if($tag==3){
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['stone-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['stone-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['stone-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['stone-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['stone-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
             case PurchaseTypeEnum::MATERIAL_GOLD:
                 {
-                    if($tag==3){
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['gold-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
-                        $tabList = [
-                            1=>['name'=>'基础信息','url'=>Url::to(['gold-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
-                        ];
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
         }
+        $tabList = ArrayHelper::merge($tabList, $tab);
+        ksort($tabList);
         return $tabList;
+    }
+
+    /**
+     * 采购收货单汇总
+     * @param integer $receipt_id
+     * @param integer $purchase_type
+     * @throws \Exception
+     */
+    public function purchaseReceiptSummary($receipt_id, $purchase_type)
+    {
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
+        $sum = $model::find()
+            ->select(['sum(1) as receipt_num','sum(cost_price) as total_cost'])
+            ->where(['receipt_id'=>$receipt_id, 'status'=>StatusEnum::ENABLED])
+            ->asArray()->one();
+        if($sum) {
+            $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
+        }
+        return $result??"";
     }
 
     /**
      * 创建采购收货单
      * @param array $bill
      * @param array $detail
+     * @throws \Exception
      */
     public function createReceipt($bill, $detail)
     {
@@ -124,7 +142,6 @@ class PurchaseReceiptService extends Service
         if(false === $billM->save()) {
             throw new \Exception($this->getError($billM));
         }
-
         $receipt_id = $billM->attributes['id'];
         foreach ($detail as $good) {
             if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
@@ -151,27 +168,11 @@ class PurchaseReceiptService extends Service
             }
         }
     }
-    
-    /**
-     * 采购收货单汇总
-     * @param unknown $receipt_id
-     */
-    public function purchaseReceiptSummary($receipt_id)
-    {
-        $result = false;
-        $sum = PurchaseReceiptGoods::find()
-                    ->select(['sum(1) as receipt_num','sum(cost_price) as total_cost'])
-                    ->where(['receipt_id'=>$receipt_id, 'status'=>StatusEnum::ENABLED])
-                    ->asArray()->one();
-        if($sum) {
-            $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
-        }
-        return $result;
-    }
 
     /**
      * 布产单号批量查询可出货商品
      * @param object $form
+     * @throws \Exception
      */
     public function getGoodsByProduceSn($form)
     {
@@ -274,6 +275,7 @@ class PurchaseReceiptService extends Service
     /**
      * 添加采购收货单商品明细
      * @param PurchaseReceiptGoodsForm $form
+     * @throws \Exception
      */
     public function addReceiptGoods($form)
     {
@@ -294,10 +296,9 @@ class PurchaseReceiptService extends Service
                 throw new \yii\base\Exception("保存失败");
             }
             //更新采购收货单汇总：总金额和总数量
-            $this->purchaseReceiptSummary($form->id);
+            $this->purchaseReceiptSummary($form->id, PurchaseTypeEnum::GOODS);
         }
     }
-
 
     /**
      * 同步采购收货单生成L单
@@ -420,14 +421,23 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     *  IQC质检合法验证
-     * @param $ids
+     *  IQC批量质检验证
+     * @param object $form
+     * @param integer $purchase_type
+     * @throws \Exception
      */
-    public function iqcValidate($form){
+    public function iqcValidate($form, $purchase_type){
         $ids = $form->getIds();
         if(is_array($ids)){
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $model = new PurchaseGoldReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $model = new PurchaseStoneReceiptGoods();
+            }else{
+                $model = new PurchaseReceiptGoods();
+            }
             foreach ($ids as $id) {
-                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods = $model::findOne(['id'=>$id]);
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
                     throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
                 }
@@ -437,35 +447,53 @@ class PurchaseReceiptService extends Service
 
     /**
      *  IQC质检
-     * @param WarehouseBillBForm $form
+     * @param object $form
+     * @param integer $purchase_type
+     * @throws \Exception
      */
-    public function qcIqc($form)
+    public function qcIqc($form, $purchase_type)
     {
-        $this->iqcValidate($form);
-        //if(false === $form->validate()) {
-            //throw new \Exception($this->getError($form));
-        //}
+        if($form->goods_status === ""){
+            throw new Exception("请选择是否质检通过");
+        }
+        $this->iqcValidate($form, $purchase_type);
         $ids = $form->getIds();
         if($form->goods_status == QcTypeEnum::PASS){
             $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_PASS];
         }else{
             $goods = ['goods_status' =>ReceiptGoodsStatusEnum::IQC_NO_PASS, 'iqc_reason' => $form->iqc_reason, 'iqc_remark' => $form->iqc_remark];
         }
-        $res = PurchaseReceiptGoods::updateAll($goods, ['id'=>$ids]);
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
+        $res = $model::updateAll($goods, ['id'=>$ids]);
         if(false === $res) {
-            throw new Exception("保存失败");
+            throw new Exception("更新货品状态失败");
         }
     }
 
     /**
-     *  申请入库合法验证
-     * @param $ids
+     *  批量申请入库验证
+     * @param object $form
+     * @param integer $purchase_type
+     * @throws \Exception
      */
-    public function warehouseValidate($form){
+    public function warehouseValidate($form, $purchase_type){
         $ids = $form->getIds();
         if(is_array($ids)){
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $model = new PurchaseGoldReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $model = new PurchaseStoneReceiptGoods();
+            }else{
+                $model = new PurchaseReceiptGoods();
+            }
             foreach ($ids as $id) {
-                $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
+                $goods = $model::findOne(['id'=>$id]);
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
                     throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
                 }
@@ -475,9 +503,11 @@ class PurchaseReceiptService extends Service
 
     /**
      *  批量生成不良返厂单
-     * @param WarehouseBillBForm $form
+     * @param object $form
+     * @param integer $purchase_type
+     * @throws \Exception
      */
-    public function batchDefective($form)
+    public function batchDefective($form, $purchase_type)
     {
         $ids = $form->getIds();
         if(!count($ids)>1){
@@ -489,11 +519,18 @@ class PurchaseReceiptService extends Service
         if(!$form->checkDistinct('supplier_id', $ids)){
             throw new Exception("不是同一个供应商不允许制单");
         }
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+            $model = new PurchaseGoldReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $model = new PurchaseStoneReceiptGoods();
+        }else{
+            $model = new PurchaseReceiptGoods();
+        }
         $total_cost = 0;
         $receipt = $defect = $detail = [];
         foreach($ids as $id)
         {
-            $goods = PurchaseReceiptGoods::find()->where(['id'=>$id])->one();
+            $goods = $model::find()->where(['id'=>$id])->one();
             $receipt_id = $goods->receipt_id;
             if(!$receipt){
                 $receipt = PurchaseReceipt::find()->where(['id' => $receipt_id])->one();
@@ -509,23 +546,59 @@ class PurchaseReceiptService extends Service
                     throw new Exception("流水号【{$id}】已存在保存状态的不良返厂单，不能多次生成不良品返厂单");
                 }
             }
-            $detail[] = [
-                'xuhao' => $goods->xuhao,
-                'style_sn' => $goods->style_sn,
-                'factory_mo' => $goods->factory_mo,
-                'produce_sn' => $goods->produce_sn,
-                'style_cate_id' => $goods->style_cate_id,
-                'product_type_id' => $goods->product_type_id,
-                'cost_price' => $goods->cost_price,
-                'iqc_reason' => $goods->iqc_reason,
-                'iqc_remark' => $goods->iqc_remark,
-                'created_at' => time(),
-            ];
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $detail[] = [
+                    'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
+                    'goods_name' => $goods->goods_name,
+                    'goods_num' => $goods->goods_num,
+                    'material_type' => $goods->material_type,
+                    'goods_weight' => $goods->goods_weight,
+                    'cost_price' => $goods->cost_price,
+                    'goods_price' => $goods->gold_price,
+                    'iqc_reason' => $goods->iqc_reason,
+                    'iqc_remark' => $goods->iqc_remark,
+                    'created_at' => time(),
+                ];
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $detail[] = [
+                    'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
+                    'goods_name' => $goods->goods_name,
+                    'goods_num' => $goods->goods_num,
+                    'material_type' => (String) $goods->material_type,
+                    'goods_weight' => $goods->goods_weight,
+                    'goods_color' => $goods->goods_color,
+                    'goods_clarity' => $goods->goods_clarity,
+                    'goods_norms' => $goods->goods_norms,
+                    'cost_price' => $goods->cost_price,
+                    'goods_price' => $goods->stone_price,
+                    'iqc_reason' => $goods->iqc_reason,
+                    'iqc_remark' => $goods->iqc_remark,
+                    'created_at' => time(),
+                ];
+            }else{
+                $detail[] = [
+                    'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
+                    'style_sn' => $goods->style_sn,
+                    'factory_mo' => $goods->factory_mo,
+                    'produce_sn' => $goods->produce_sn,
+                    'style_cate_id' => $goods->style_cate_id,
+                    'product_type_id' => $goods->product_type_id,
+                    'cost_price' => $goods->cost_price,
+                    'iqc_reason' => $goods->iqc_reason,
+                    'iqc_remark' => $goods->iqc_remark,
+                    'created_at' => time(),
+                ];
+            }
             $total_cost = bcadd($total_cost, $goods->cost_price, 2);
         }
         $bill = [
-            'supplier_id' => $receipt->supplier_id,
-            'receipt_no' => $receipt->receipt_no,
+            'supplier_id' => $receipt->supplier_id??'',
+            'receipt_no' => $receipt->receipt_no??'',
+            'purchase_sn' => $receipt->purchase_sn??'',
+            'purchase_type' => $purchase_type,
             'defective_num' => count($detail),
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::PENDING,
@@ -533,14 +606,154 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-
         \Yii::$app->purchaseService->defective->createDefactiveBill($bill, $detail);
-
         $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("更新货品状态失败");
         }
     }
 
+    /**
+     * 金料采购收货单同步创建金料收货单
+     * @param object $form
+     * @param array $detail_ids
+     * @throws \Exception
+     */
+    public function syncReceiptToGoldL($form, $detail_ids = null)
+    {
+        if($form->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购收货单没有审核');
+        }
+        if($form->receipt_num <= 0 ){
+            throw new \Exception('采购收货单没有明细');
+        }
+        if(!$detail_ids){
+            $detail_ids = $form->getIds();
+        }
+        $query = PurchaseGoldReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        if(!$models){
+            throw new \Exception('采购收货单没有待入库的货品');
+        }
+        $goods = $ids = [];
+        $total_weight = $total_cost = $sale_price = 0;
+        foreach ($models as $model){
+            $ids[] = $model->id;
+            $goods[] = [
+                'gold_name' => $model->goods_name,
+                'gold_type' => $model->material_type,
+                'gold_num' => $model->goods_num,
+                'gold_weight' => $model->goods_weight,
+                'cost_price' => $model->cost_price,
+                'sale_price' => $model->gold_price,
+                'source_detail_id' =>$model->id,
+                'status' => StatusEnum::ENABLED,
+                'created_at' => time(),
+            ];
+            $total_cost = bcadd($total_cost, $model->cost_price, 2);
+            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
+            //$total_sale = bcadd($sale_price, $model->sale_price, 2);
+        }
+        //批量更新采购收货单货品状态
+        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
+        $bill = [
+            'bill_type' =>  GoldBillTypeEnum::GOLD_L,
+            'bill_status' => BillStatusEnum::PENDING,
+            'audit_status' => AuditStatusEnum::PENDING,
+            'supplier_id' => $form->supplier_id,
+            'put_in_type' => $form->put_in_type,
+            'adjust_type' => AdjustTypeEnum::ADD,
+            'goods_num' => count($goods),
+            'total_weight' => $total_weight,
+            'total_cost' => $form->total_cost,
+            'pay_amount' => $form->total_cost,
+            'delivery_no' => $form->receipt_no,
+            'remark' => $form->remark,
+            'status' => StatusEnum::ENABLED,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        Yii::$app->warehouseService->goldBill->createGoldL($bill, $goods);
+    }
 
+    /**
+     * 石料采购收货单同步创建石料收货单
+     * @param object $form
+     * @param array $detail_ids
+     * @throws \Exception
+     */
+    public function syncReceiptToStoneBillMs($form, $detail_ids = null)
+    {
+        if($form->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购收货单没有审核');
+        }
+        if($form->receipt_num <= 0 ){
+            throw new \Exception('采购收货单没有明细');
+        }
+        if(!$detail_ids){
+            $detail_ids = $form->getIds();
+        }
+        $query = PurchaseStoneReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        if(!$models){
+            throw new \Exception('采购收货单没有待入库的货品');
+        }
+        $goods = $ids = [];
+        $total_weight= $market_price= $sale_price = 0;
+        foreach ($models as $model){
+            $ids[] = $model->id;
+            $goods[] = [
+                'stone_name' => $model->goods_name,
+                'stone_type' => $model->material_type,
+                //'cert_id' => $model->cert_id,
+                'carat' => $model->goods_weight,
+                'color' => $model->goods_color,
+                'clarity' => $model->goods_clarity,
+                //'cut' => $model->cut,
+                //'polish' => $model->polish,
+                //'fluorescence' =>$model->fluorescence,
+                //'symmetry' =>$model->symmetry,
+                'stone_num' => $model->goods_num,
+                'source_detail_id' => $model->id,
+                'cost_price' => $model->cost_price,
+                'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
+                //'sale_price' => $model->sale_price,
+                'status' => StatusEnum::ENABLED,
+                'created_at' => time()
+            ];
+
+            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
+        }
+        //批量更新采购收货单货品状态
+        $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type],['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
+        $bill = [
+            'bill_type' =>  StoneBillTypeEnum::STONE_MS,
+            'bill_status' => BillStatusEnum::SAVE,
+            'supplier_id' => $form->supplier_id,
+            'put_in_type' => $form->put_in_type,
+            'adjust_type' => AdjustTypeEnum::ADD,
+            'total_num' => count($goods),
+            'total_weight' => $total_weight,
+            'total_cost' => $form->total_cost,
+            'pay_amount' => $form->total_cost,
+            'delivery_no' => $form->receipt_no,
+            'remark' => $form->remark,
+            'status' => StatusEnum::ENABLED,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        Yii::$app->warehouseService->stoneBill->createBillMs($bill, $goods);
+    }
 }

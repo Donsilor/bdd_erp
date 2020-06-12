@@ -21,6 +21,10 @@
 				}
 			}
 		</script>
+        <style media="print">
+            .Noprint {   DISPLAY:   none;}
+            .PageNext {   PAGE-BREAK-AFTER:   always   }
+        </style>
 	</head>
 	<body>
 		<div class="container" id="wdf">
@@ -213,25 +217,21 @@
 						<div>金额</div>
 					</td>
 				</tr>
-				
+
 				<!-- 列表内容 -->
                 <?php
                   foreach ($lists as $key => $val){
-                      $model = \addons\Purchase\common\models\PurchaseGoods::find()->where(['id'=>$val['id']])->one();
-                      $img = '';
-                      if($model){
-                          $img = Yii::$app->purchaseService->purchaseGoods->getStyleImage($model);
-                      }
+                      $pagesize = 10;
                 ?>
 				<tr>
 					<td>
 						<div><?=$key+1 ?></div>
 					</td>
 					<td>
-						<div><img src="<?= $img ?>"/> </div>
+						<div><img src="<?= $val['goods_image'] ?>"/> </div>
 					</td>
 					<td>
-						<div><?= $val['style_sn'] ?>/div>
+						<div><?= $val['style_sn'] ?></div>
 					</td>
 					<td>
 						<div><?= $val['style_cate_name'] ?></div>
@@ -357,8 +357,201 @@
 						<div><?= $val['company_unit_cost_sum'] ?></div>
 					</td>
 				</tr>
-                <?php } ?>
-				
+                <?php if(($key + 1) % $pagesize == 0){?>
+                </table>
+                <div class="PageNext"></div>
+                <table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
+                    <tr class="t-head">
+                        <td rowspan="2">
+                            <div>序号</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>图片</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>款号</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>品类</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>产品线</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>货品名称</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>件数</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>材质</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>货品外部颜色</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>手寸</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>成品尺寸</div>
+                        </td>
+                        <td class="bg-blue bold" colspan="7">
+                            <div>主石</div>
+                        </td>
+                        <td class="bg-blue bold" colspan="7">
+                            <div>副石</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>石料信息</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>单件连石重(g)</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>连石总重(g)</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>净重/单件(g)</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>总净重(g)</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>损耗</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>银价</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>单件银额</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>金额</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>配件信息</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>工艺描述</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>工费/件</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>镶石费/件</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>工费总额/件</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>改图费</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>喷蜡费</div>
+                        </td>
+                        <td rowspan="2">
+                            <div>单件额</div>
+                        </td>
+                        <td class="bg-orange" rowspan="2">
+                            <div>工厂总额</div>
+                        </td>
+                        <td class="bg-orange" rowspan="2">
+                            <div>公司成本总额</div>
+                        </td>
+                    </tr>
+                    <tr class="t-head bg-blue">
+                        <td>
+                            <div>石料名称【石头类型】</div>
+                        </td>
+                        <td>
+                            <div>石重ct</div>
+                        </td>
+                        <td>
+                            <div>数量(粒)</div>
+                        </td>
+                        <td>
+                            <div>石总数(粒）</div>
+                        </td>
+                        <td>
+                            <div>石总重ct</div>
+                        </td>
+                        <td>
+                            <div>石价【单价】</div>
+                        </td>
+                        <td>
+                            <div>金额</div>
+                        </td>
+                        <td>
+                            <div>石料名称【石头类型】</div>
+                        </td>
+                        <td>
+                            <div>石重ct</div>
+                        </td>
+                        <td>
+                            <div>数量(粒)</div>
+                        </td>
+                        <td>
+                            <div>总数量(粒）</div>
+                        </td>
+                        <td>
+                            <div>总重ct</div>
+                        </td>
+                        <td>
+                            <div>石价【单价】</div>
+                        </td>
+                        <td>
+                            <div>金额</div>
+                        </td>
+                    </tr>
+
+                <?php
+                    }
+                }
+                ?>
+                <tr>
+                    <td colspan="3"><div>合计</div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['goods_num_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['main_stone_weight_count']?></div></td>
+                    <td><div><?= $total['main_stone_num_count']?></div></td>
+                    <td><div><?= $total['main_stone_num_sum_count']?></div></td>
+                    <td><div><?= $total['main_stone_weight_sum_count']?></div></td>
+                    <td></td>
+                    <td><div><?= $total['main_stone_price_sum_count']?></div></td>
+                    <td></td>
+                    <td><div><?= $total['second_stone_weight_count']?></div></td>
+                    <td><div><?= $total['second_stone_num_count']?></div></td>
+                    <td><div><?= $total['second_stone_num_sum_count']?></div></td>
+                    <td><div><?= $total['second_stone_weight_sum_count']?></div></td>
+                    <td></td>
+                    <td><div><?= $total['second_stone_price_sum_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['jiagong_fee_count']?></div></td>
+                    <td><div><?= $total['xiangqian_fee_count']?></div></td>
+                    <td><div><?= $total['gong_fee_count']?></div></td>
+                    <td><div><?= $total['gaitu_fee_count']?></div></td>
+                    <td><div><?= $total['penla_fee_count']?></div></td>
+                    <td><div><?= $total['unit_cost_price_count']?></div></td>
+                    <td><div><?= $total['factory_cost_price_sum_count']?></div></td>
+                    <td><div><?= $total['company_unit_cost_sum_count']?></div></td>
+                </tr>
 			</table>
 			
 			<!--endprint1-->

@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%;'],
+                        //'options' => ['style'=>' width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
-                                        'width' => 260
+                                        'width' => 160
                                     ],
                                 ]),
                             ],

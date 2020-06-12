@@ -3,10 +3,16 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\Style;
+use addons\Style\common\models\StyleCate;
+use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\RepairStatusEnum;
 use addons\Warehouse\common\enums\RepairTypeEnum;
+use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
 use Yii;
@@ -278,35 +284,57 @@ class BillRepairController extends BaseController
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-        $list = $this->getData($ids);
+        list($list,) = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
             ['维修单号', 'repair_no', 'text'],
-            ['货号', 'goods_id', 'text'],
-            ['布产号', 'produce_sn', 'text'],
-            ['调拨单号', 'bill_m_no', 'text'],
-            ['订单号', 'order_sn', 'text'],
-            ['客户姓名', 'consignee', 'text'],
-            ['维修单号', 'repair_type', 'selectd',RepairTypeEnum::getMap()],
-            ['维修状态', 'repair_status', 'selectd',RepairStatusEnum::getMap()],
-            ['维修工厂', 'supplier_id', 'selectd',Yii::$app->supplyService->supplier->getDropDown()],
-            ['跟单人', 'follower_id', 'function',function($model){
-                return $model->follower->username ?? '';
-            }],
-            ['制单人', 'creator_id', 'function',function($model){
-                return $model->creator->username ?? '';
-            }],
-            ['制单时间', 'created_at' , 'date', 'Y-m-d'],
-            ['下单时间', 'orders_time' , 'date', 'Y-m-d'],
-            ['预计出厂时间', 'predict_time' , 'date', 'Y-m-d'],
-            ['完成时间', 'predict_time' , 'date', 'Y-m-d'],
-            ['收货时间', 'receiving_time' , 'date', 'Y-m-d']
+            ['维修状态', 'repair_status', 'text'],
+            ['维修工厂', 'supplier_name', 'text'],
+            ['货品名称', 'goods_name', 'text'],
+            ['条码号', 'goods_id', 'text'],
+            ['款号', 'style_sn', 'text'],
+            ['产品分类', 'product_type_name' , 'text'],
+            ['商品类型', 'style_cate_name' , 'text'],
+            ['仓库', 'warehouse_name' , 'text'],
+            ['材质', 'material' , 'text'],
+            ['金重', 'gold_weight' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石重（ct)', 'diamond_carat' , 'text'],
+            ['主石粒数', 'main_stone_num' , 'text'],
+            ['主石规格', 'main_stone_info' , 'text'],
+            ['副石重（ct）', 'second_stone_weight1' , 'text'],
+            ['副石粒数', 'second_stone_num1' , 'text'],
+            ['总重', 'gross_weight' , 'text'],
+            ['手寸	', 'finger' , 'text'],
+            ['尺寸	', 'product_size' , 'text'],
+            ['证书号	', 'cert_id' , 'text'],
+            ['工费	', 'gong_fee' , 'text'],
+            ['成本价	', 'cost_price' , 'text'],
+            ['备注	', 'remark' , 'text'],
         ];
 
         return ExcelHelper::exportData($list, $header, '维修单导出_' . date('YmdHis',time()));
 
     }
 
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        list($lists,$total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' =>$total
+        ]);
+    }
 
     /**
      *
@@ -316,12 +344,38 @@ class BillRepairController extends BaseController
      */
     public function getData($ids)
     {
-        $select = [''];
-        $lists = WarehouseBillRepair::find()->alias('wr')
+        $select = ['g.*','wr.repair_no','wr.repair_status','type.name as product_type_name','cate.name as style_cate_name',
+            'warehouse.name as warehouse_name','sup.supplier_name'];
+        $query = WarehouseBillRepair::find()->alias('wr')
             ->leftJoin(WarehouseGoods::tableName() . ' g','wr.goods_id=g.goods_id')
-            ->select($select)
-            ->asArray()
-            ->all();
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->leftJoin(Warehouse::tableName().' warehouse','warehouse.id=g.warehouse_id')
+            ->leftJoin(Supplier::tableName().' sup','sup.id=wr.supplier_id')
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'cost_price_count' => 0,
+        ];
+        foreach ($lists as &$list){
+            $list['repair_status'] = RepairStatusEnum::getValue($list['repair_status']);
+            $list['material'] = \Yii::$app->attr->valueName($list['material']);
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+            $diamond_color = $list['diamond_color'] ? \Yii::$app->attr->valueName($list['diamond_color']): '无';
+            $diamond_clarity = $list['diamond_clarity'] ?\Yii::$app->attr->valueName($list['diamond_clarity']): '无';
+            $diamond_cut = $list['diamond_cut'] ?\Yii::$app->attr->valueName($list['diamond_cut']): '无';
+            $diamond_polish = $list['diamond_polish'] ?\Yii::$app->attr->valueName($list['diamond_polish']): '无';
+            $diamond_symmetry = $list['diamond_symmetry'] ?\Yii::$app->attr->valueName($list['diamond_symmetry']): '无';
+            $diamond_fluorescence = $list['diamond_fluorescence'] ?\Yii::$app->attr->valueName($list['diamond_fluorescence']): '无';
+            $list['main_stone_info'] = $diamond_color . '/' . $diamond_clarity . '/' . $diamond_cut . '/'
+                . $diamond_polish . '/' . $diamond_symmetry . '/' . $diamond_fluorescence;
+
+            $total['cost_price_count'] += $list['cost_price'];
+
+        }
+        return [$lists,$total];
+
 
 
     }

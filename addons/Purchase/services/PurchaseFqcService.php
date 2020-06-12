@@ -14,7 +14,7 @@ use addons\Purchase\common\models\PurchaseFqcConfig;
  * @package addons\Style\services
  * @author jianyan74 <751393839@qq.com>
  */
-class PurchaseFqcConfigService extends Service
+class PurchaseFqcService extends Service
 {
 
 

@@ -159,7 +159,7 @@ class StoneReceiptGoodsController extends BaseController
         $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->stoneReceipt->iqcValidate($model);
+            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -182,7 +182,7 @@ class StoneReceiptGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->purchaseService->stoneReceipt->qcIqc($model);
+                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -211,7 +211,7 @@ class StoneReceiptGoodsController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->stoneReceipt->batchDefective($model);
+            \Yii::$app->purchaseService->receipt->batchDefective($model, $this->purchaseType);
 
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -233,7 +233,7 @@ class StoneReceiptGoodsController extends BaseController
         $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->stoneReceipt->warehouseValidate($model);
+            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -259,7 +259,7 @@ class StoneReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步石包采购收货单至买石单
-                Yii::$app->purchaseService->stoneReceipt->syncReceiptToStoneBillMs($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToStoneBillMs($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');
@@ -295,7 +295,7 @@ class StoneReceiptGoodsController extends BaseController
             }
 
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->purchaseService->stoneReceipt->purchaseReceiptSummary($model->receipt_id);
+            $res = \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }

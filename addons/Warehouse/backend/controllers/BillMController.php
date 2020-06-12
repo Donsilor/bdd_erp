@@ -17,6 +17,7 @@ use common\enums\AuditStatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\Html;
+use common\helpers\PageHelper;
 use common\helpers\SnHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -314,7 +315,7 @@ class BillMController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $list = $this->getData($ids);
+        list($list,) = $this->getData($ids);
         $header = [
             ['单据编号', 'bill_no' , 'text'],
             ['单据类型', 'bill_type' , 'text'],
@@ -328,11 +329,13 @@ class BillMController extends BaseController
             ['入库仓库', 'to_warehouse_name' , 'text'],
             ['材质', 'material' , 'text'],
             ['金重', 'gold_weight' , 'text'],
+            ['成本价', 'cost_price' , 'text'],
             ['主石类型', 'main_stone_type' , 'text'],
             ['主石重（ct)', 'diamond_carat' , 'text'],
             ['主石粒数', 'main_stone_num' , 'text'],
             ['副石重（ct）', 'second_stone_weight1' , 'text'],
             ['副石粒数', 'second_stone_num1' , 'text'],
+            ['总重', 'gross_weight' , 'text'],
             ['手寸	', 'finger' , 'text'],
             ['货品尺寸	', 'product_size' , 'text'],
 
@@ -351,10 +354,11 @@ class BillMController extends BaseController
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $lists = $this->getData($id);
+        list($lists,$total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
+            'total' =>$total
         ]);
     }
 
@@ -363,14 +367,18 @@ class BillMController extends BaseController
         $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','wg.id as wg_id','wg.from_warehouse_id','wg.to_warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
             'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
-        $lists = WarehouseBill::find()->alias('w')
+        $query = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
             ->where(['w.id' => $ids])
-            ->select($select)->asArray()->all();
-
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'cost_price_count' => 0,
+        ];
         foreach ($lists as &$list){
             $bill_goods = WarehouseBillGoods::find()->where(['id'=>$list['wg_id']])->one();
             $list['bill_type'] = BillTypeEnum::getValue($list['bill_type']);
@@ -380,8 +388,10 @@ class BillMController extends BaseController
             $list['material'] = \Yii::$app->attr->valueName($list['material']);
             $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
 
+            $total['cost_price_count'] += $list['cost_price'];
+
         }
-        return $lists;
+        return [$lists,$total];
     }
 
 

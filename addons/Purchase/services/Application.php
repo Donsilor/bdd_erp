@@ -17,9 +17,7 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseStoneGoodsService $stoneGoods 石料采购明细
  * @property \addons\Purchase\services\PurchaseReceiptService $receipt 采购收货单
  * @property \addons\Purchase\services\PurchaseDefectiveService $defective 不良返厂单
- * @property \addons\Purchase\services\PurchaseGoldReceiptService $goldReceipt 金料不良返厂单
- * @property \addons\Purchase\services\PurchaseStoneReceiptService $stoneReceipt 金料不良返厂单
- * @property \addons\Purchase\services\PurchaseFqcConfigService $fqc 质检未过原因
+ * @property \addons\Purchase\services\PurchaseFqcService $fqc 质检未过原因
  * @var array
  */
 class Application extends Service
@@ -36,8 +34,6 @@ class Application extends Service
             'stoneGoods' => 'addons\Purchase\services\PurchaseStoneGoodsService',
             'receipt' => 'addons\Purchase\services\PurchaseReceiptService',
             'defective' => 'addons\Purchase\services\PurchaseDefectiveService',
-            'goldReceipt' => 'addons\Purchase\services\PurchaseGoldReceiptService',
-            'stoneReceipt' => 'addons\Purchase\services\PurchaseStoneReceiptService',
-            'fqc' => 'addons\Purchase\services\PurchaseFqcConfigService',
+            'fqc' => 'addons\Purchase\services\PurchaseFqcService',
     ];
 }

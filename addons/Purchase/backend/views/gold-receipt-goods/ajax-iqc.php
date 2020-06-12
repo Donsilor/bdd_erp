@@ -18,13 +18,13 @@ $form = ActiveForm::begin([]);
 </div>
 <?php ActiveForm::end(); ?>
 <script>
-    $("#purchasereceiptgoodsform-goods_status").change(function(){
+    $("#purchasegoldreceiptgoodsform-goods_status").change(function(){
         var status = $(this).find(':checked').val();
         if(status == 0){
             $("#nopass_param").show();
         }else {
-            $("#select2-purchasereceiptgoodsform-iqc_reason-container").find('select').find("option:first").prop("selected",true);
-            $("#purchasereceiptgoodsform-iqc_remark").val("");
+            $("#select2-purchasegoldreceiptgoodsform-iqc_reason-container").find('select').find("option:first").prop("selected",true);
+            $("#purchasegoldreceiptgoodsform-iqc_remark").val("");
             $("#nopass_param").hide();
         }
     })
