@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -23,12 +24,29 @@ class PurchaseGoldDefectiveGoodsForm extends PurchaseDefectiveGoods
         ];
         return array_merge(parent::rules() , $rules);
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        //合并
+        return ArrayHelper::merge(parent::attributeLabels() , [
+            'material_type'=>'金料材质',
+        ]);
+    }
     /**
      * 批量获取序号
      */
     public function getXuhaos()
     {
         return StringHelper::explodeIds($this->xuhaos);
+    }
+    /**
+     * 材质列表
+     * @return array
+     */
+    public function getMaterialTypeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE);
     }
 }

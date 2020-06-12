@@ -16,6 +16,7 @@ use common\models\backend\Member;
  * @property int $purchase_type 采购类型
  * @property int $supplier_id 供应商ID
  * @property string $receipt_no 工厂出货单号
+ * @property string $purchase_sn 采购单号
  * @property int $defective_num 货品数量
  * @property string $total_const 总金额
  * @property int $auditor_id 审核人
@@ -48,7 +49,7 @@ class PurchaseDefective extends BaseModel
             [['id', 'merchant_id', 'supplier_id', 'defective_num', 'defective_status', 'purchase_type', 'auditor_id', 'audit_time', 'audit_status', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
-            [['defective_no', 'receipt_no'], 'string', 'max' => 30],
+            [['defective_no', 'purchase_sn', 'receipt_no'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];
     }
@@ -62,9 +63,10 @@ class PurchaseDefective extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'defective_no' => '返厂单编号',
-            'purchase_type' => '采购类型',
             'supplier_id' => '工厂名称',
-            'receipt_no' => '工厂出货单号',
+            'purchase_sn' => '采购单号',
+            'purchase_type' => '采购类型',
+            'receipt_no' => '采购收货单号',
             'defective_num' => '数量',
             'total_cost' => '总金额',
             'auditor_id' => '审核人',

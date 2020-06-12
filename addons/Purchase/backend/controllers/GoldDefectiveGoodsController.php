@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\models\PurchaseGold;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use Yii;
@@ -11,7 +12,7 @@ use common\models\base\SearchModel;
 use common\traits\Curd;
 use addons\Purchase\common\models\PurchaseDefective;
 use common\helpers\Url;
-use addons\Purchase\common\forms\PurchaseDefectiveGoodsForm;
+use addons\Purchase\common\forms\PurchaseGoldDefectiveGoodsForm;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
@@ -25,7 +26,7 @@ use yii\base\Exception;
  * PurchaseDefectiveGoods
  *
  * Class PurchaseDefectiveGoodsController
- * @property PurchaseDefectiveGoodsForm $modelClass
+ * @property PurchaseGoldDefectiveGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
 class GoldDefectiveGoodsController extends BaseController
@@ -33,9 +34,9 @@ class GoldDefectiveGoodsController extends BaseController
     use Curd;
     
     /**
-     * @var $modelClass PurchaseDefectiveGoodsForm
+     * @var $modelClass PurchaseGoldDefectiveGoodsForm
      */
-    public $modelClass = PurchaseDefectiveGoodsForm::class;
+    public $modelClass = PurchaseGoldDefectiveGoodsForm::class;
     public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
     
     /**

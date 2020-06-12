@@ -82,12 +82,15 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'receipt_no',
-                'value'=>function($model) {
-                    return Html::a($model->receipt_no, ['receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                },
+                'attribute' => 'purchase_sn',
+                'value' => 'purchase_sn',
                 'filter' => true,
-                'format' => 'raw',
+                'headerOptions' => ['width'=>'120'],
+            ],
+            [
+                'attribute' => 'receipt_no',
+                'value' => 'receipt_no',
+                'filter' => true,
                 'headerOptions' => ['width'=>'120'],
             ],
             [
@@ -97,7 +100,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'110'],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'attribute' => 'total_cost',
@@ -106,12 +109,11 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'label' => '制单人',
                 'attribute' => 'creator.username',
-                'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                     'class' => 'form-control',
                 ]),
@@ -144,44 +146,8 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['width'=>'200'],
             ],
             [
-                'label' => '审核人',
-                'attribute' => 'auditor.username',
-                'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
-                    'class' => 'form-control',
-                ]),
-                'headerOptions' => ['width'=>'100'],
-
-            ],
-            [
-                'attribute' => 'audit_time',
-                'filter' => DateRangePicker::widget([    // 日期组件
-                    'model' => $searchModel,
-                    'attribute' => 'audit_time',
-                    'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'locale' => [
-                            'separator' => '/',
-                        ],
-                        'endDate' => date('Y-m-d', time()),
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'todayBtn' => 'linked',
-                        'clearBtn' => true,
-                    ],
-                ]),
-                'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
-                },
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
-            ],
-            [
                 'attribute' => 'audit_status',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
                 'value' => function ($model){
                     return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                 },
@@ -189,7 +155,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'attribute' => 'defective_status',
@@ -201,7 +167,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'200'],
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -209,20 +175,19 @@ $params = $params ? "&".http_build_query($params) : '';
                 'template' => '{edit} {goods} {audit} {ajax-apply} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
-                'edit' => function($url, $model, $key){
-                    if($model->defective_status == BillStatusEnum::SAVE) {
-                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
+                    'edit' => function($url, $model, $key){
+                        if($model->defective_status == BillStatusEnum::SAVE) {
+                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
                     },
-                'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['gold-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    'goods' => function($url, $model, $key){
+                        return Html::a('单据明细', ['gold-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
-
-                'audit' => function($url, $model, $key){
-                    if($model->defective_status == BillStatusEnum::PENDING) {
+                    'audit' => function($url, $model, $key){
+                        if($model->defective_status == BillStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -230,33 +195,22 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },
-
-                'ajax-apply' => function($url, $model, $key){
-                    if($model->defective_status == BillStatusEnum::SAVE){
-                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                            'class'=>'btn btn-success btn-sm',
-                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                        ]);
-                    }
-                },
-                 'status' => function($url, $model, $key){
+                    'ajax-apply' => function($url, $model, $key){
+                        if($model->defective_status == BillStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'status' => function($url, $model, $key){
                         return Html::status($model['status']);
                     },
-
-                'delete' => function($url, $model, $key){
-                    if($model->defective_status != BillStatusEnum::CONFIRM) {
-                        return Html::delete(['delete', 'id' => $model->id], '取消');
+                    'delete' => function($url, $model, $key){
+                        if($model->defective_status != BillStatusEnum::CONFIRM) {
+                            return Html::delete(['delete', 'id' => $model->id], '取消');
+                        }
                     }
-                }
-                /*'delete' => function($url, $model, $key){
-                        return Html::delete(['delete', 'id' => $model->id]);
-                    },
-                'view'=> function($url, $model, $key){
-                    return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
-                    },
-                'show_log' => function($url, $model, $key){
-                    return Html::linkButton(['goods-log/index','id' => $model->id, 'type_id' => $model->type_id, 'returnUrl' => Url::getReturnUrl()], '日志');
-                    },*/
                 ]
             ]
     ]
