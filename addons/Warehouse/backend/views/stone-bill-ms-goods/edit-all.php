@@ -23,13 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width'=>'90%',
-                'data-height'=>'90%',
-                'data-offset'=>'20px',
-            ]);
-            echo '&nbsp;';
             echo Html::a('返回列表', ['stone-bill-ms-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
