@@ -396,13 +396,15 @@ class BillWController extends BaseController
      */
     public function actionPrint()
     {
+
+
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $lists = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
-            'lists' => $lists
+            'lists' => $lists,
         ]);
     }
 

@@ -21,7 +21,11 @@
 				}
 			}
 		</script>
-	</head>
+        <style media="print">
+            .Noprint {   DISPLAY:   none;}
+            .PageNext {   PAGE-BREAK-AFTER:   always   }
+        </style>
+    </head>
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
@@ -29,36 +33,33 @@
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
-
 				<div class="list clf">
 					<div class="child fl clf">
-						<div class="child-attr fl">调拨单号：</div>
-						<div class="child-val fl"><?= $model->receipt_no ?? '' ?> </div>
+						<div class="child-attr fl">盘点单：</div>
+						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
 					</div>
-
 				</div>
-
 			</div>
-			
+
 			<!-- 订单列表 -->
 			<table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
-				<!-- 列表头部 -->
-				<tr class="t-head">
+                <!-- 列表头部 -->
+                <tr class="t-head">
                     <td>
                         <div>序号</div>
                     </td>
                     <td>
                         <div>货品名称</div>
                     </td>
-					<td >
-						<div>条码号</div>
-					</td>
-					<td>
-						<div>款号</div>
-					</td>
-					<td>
-						<div>产品分类</div>
-					</td>
+                    <td>
+                        <div>条码号</div>
+                    </td>
+                    <td>
+                        <div>款号</div>
+                    </td>
+                    <td>
+                        <div>产品分类</div>
+                    </td>
                     <td>
                         <div>商品类型</div>
                     </td>
@@ -110,16 +111,15 @@
                     <td>
                         <div>备注</div>
                     </td>
-
-				</tr>
-				
-				<!-- 列表内容 -->
+                </tr>
+                <!-- 列表内容 -->
                 <?php
-                  foreach ($lists as $key => $val){
+                foreach ($lists as $key => $val){
+                    $pagesize = 10;
                 ?>
-				<tr>
+                <tr>
                     <td>
-                        <div><?= $key+1 ?></div>
+                        <div><?= $key + 1 ?></div>
                     </td>
                     <td>
                         <div><?= $val['goods_name'] ?></div>
@@ -127,12 +127,12 @@
                     <td>
                         <div><?= $val['goods_id'] ?>/div>
                     </td>
-					<td>
-						<div><?= $val['style_sn'] ?>/div>
-					</td>
-					<td>
-						<div><?= $val['product_type_name'] ?></div>
-					</td>
+                    <td>
+                        <div><?= $val['style_sn'] ?>/div>
+                    </td>
+                    <td>
+                        <div><?= $val['product_type_name'] ?></div>
+                    </td>
                     <td>
                         <div><?= $val['style_cate_name'] ?></div>
                     </td>
@@ -184,14 +184,89 @@
                     <td>
                         <div><?= $val['goods_remark'] ?></div>
                     </td>
-				</tr>
-                <?php } ?>
-				
+                </tr>
+                <?php if(($key + 1) % $pagesize == 0){?>
+                 </table>
+                <div class="PageNext"></div>
+                <table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
+                    <tr class="t-head">
+                        <td>
+                            <div>序号</div>
+                        </td>
+                        <td>
+                            <div>货品名称</div>
+                        </td>
+                        <td>
+                            <div>条码号</div>
+                        </td>
+                        <td>
+                            <div>款号</div>
+                        </td>
+                        <td>
+                            <div>产品分类</div>
+                        </td>
+                        <td>
+                            <div>商品类型</div>
+                        </td>
+                        <td>
+                            <div>仓库</div>
+                        </td>
+                        <td>
+                            <div>材质</div>
+                        </td>
+                        <td>
+                            <div>金重</div>
+                        </td>
+                        <td>
+                            <div>主石类型</div>
+                        </td>
+                        <td>
+                            <div>主石形状</div>
+                        </td>
+                        <td>
+                            <div>主石重</div>
+                        </td>
+                        <td>
+                            <div>配石重</div>
+                        </td>
+                        <td>
+                            <div>总重</div>
+                        </td>
+                        <td>
+                            <div>手寸</div>
+                        </td>
+                        <td>
+                            <div>货品尺寸</div>
+                        </td>
+                        <td>
+                            <div>库存数</div>
+                        </td>
+                        <td>
+                            <div>实盘数</div>
+                        </td>
+                        <td>
+                            <div>盘盈数</div>
+                        </td>
+                        <td>
+                            <div>盘亏数</div>
+                        </td>
+                        <td>
+                            <div>盘点类型</div>
+                        </td>
+                        <td>
+                            <div>备注</div>
+                        </td>
+                    </tr>
+                <?php
+                 }
+                }
+                ?>
 			</table>
-			
+
+
 			<!--endprint1-->
 		</div>
-        <div class="text-center">
+        <div class="text-center Noprint">
             <!-- 打印按钮 -->
             <button type="button" class="btn-ms" target="_blank" onclick="preview(1)">打印</button>
         </div>

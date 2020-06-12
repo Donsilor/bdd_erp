@@ -75,6 +75,9 @@
                         <div>金重</div>
                     </td>
                     <td>
+                        <div>成本</div>
+                    </td>
+                    <td>
                         <div>主石类型</div>
                     </td>
                     <td>
@@ -90,6 +93,9 @@
                         <div>副石粒数</div>
                     </td>
                     <td>
+                        <div>总重</div>
+                    </td>
+                    <td>
                         <div>手寸</div>
                     </td>
                     <td>
@@ -100,6 +106,7 @@
 				<!-- 列表内容 -->
                 <?php
                   foreach ($lists as $key => $val){
+                      $pagesize = 10;
                 ?>
 				<tr>
                     <td>
@@ -133,6 +140,9 @@
                         <div><?= $val['gold_weight'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['cost_price'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['main_stone_type'] ?></div>
                     </td>
                     <td>
@@ -148,13 +158,82 @@
                         <div><?= $val['second_stone_num1'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['gross_weight'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['finger'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['product_size'] ?></div>
                     </td>
 				</tr>
-                <?php } ?>
+                <?php if(($key + 1) % $pagesize == 0){?>
+                    </table>
+                    <div class="PageNext"></div>
+                    <table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
+                        <tr class="t-head">
+                            <td>
+                                <div>序号</div>
+                            </td>
+                            <td>
+                                <div>货品名称</div>
+                            </td>
+                            <td >
+                                <div>条码号</div>
+                            </td>
+                            <td>
+                                <div>款号</div>
+                            </td>
+                            <td>
+                                <div>产品分类</div>
+                            </td>
+                            <td>
+                                <div>商品类型</div>
+                            </td>
+                            <td>
+                                <div>出库仓库</div>
+                            </td>
+                            <td>
+                                <div>入库仓库</div>
+                            </td>
+                            <td>
+                                <div>材质</div>
+                            </td>
+                            <td>
+                                <div>金重</div>
+                            </td>
+                            <td>
+                                <div>成本</div>
+                            </td>
+                            <td>
+                                <div>主石类型</div>
+                            </td>
+                            <td>
+                                <div>主石重</div>
+                            </td>
+                            <td>
+                                <div>主石粒数</div>
+                            </td>
+                            <td>
+                                <div>副石重</div>
+                            </td>
+                            <td>
+                                <div>副石粒数</div>
+                            </td>
+                            <td>
+                                <div>总重</div>
+                            </td>
+                            <td>
+                                <div>手寸</div>
+                            </td>
+                            <td>
+                                <div>货品尺寸</div>
+                            </td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
 				
 			</table>
 			
