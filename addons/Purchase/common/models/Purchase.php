@@ -48,7 +48,7 @@ class Purchase extends BaseModel
             [['supplier_id','purchase_cate','put_in_type'], 'required'],
             [['id','purchase_cate','put_in_type','order_type','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
             [['audit_remark','apply_sn', 'remark'], 'string', 'max' => 255],
-            [['purchase_sn'], 'string', 'max' => 30],                
+            [['purchase_sn'], 'string', 'max' => 30],
             [['audit_status'], 'checkAuditStatus'],
             ['delivery_time','safe']
         ];
@@ -104,7 +104,7 @@ class Purchase extends BaseModel
             'delivery_time'=>'预估交货时间',
             'purchase_status' => '采购单状态 ',
             'apply_sn' => '采购申请单号',
-            'remark' => '采购备注',            
+            'remark' => '采购备注',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
