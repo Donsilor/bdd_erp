@@ -163,7 +163,7 @@ class GoldReceiptGoodsController extends BaseController
         $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->goldReceipt->iqcValidate($model);
+            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -186,7 +186,7 @@ class GoldReceiptGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->purchaseService->goldReceipt->qcIqc($model);
+                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -215,7 +215,7 @@ class GoldReceiptGoodsController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->goldReceipt->batchDefective($model);
+            \Yii::$app->purchaseService->receipt->batchDefective($model, $this->purchaseType);
 
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -237,7 +237,7 @@ class GoldReceiptGoodsController extends BaseController
         $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->goldReceipt->warehouseValidate($model);
+            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -263,7 +263,7 @@ class GoldReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至金料收货单
-                Yii::$app->purchaseService->goldReceipt->syncReceiptToGoldL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToGoldL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');
@@ -299,7 +299,7 @@ class GoldReceiptGoodsController extends BaseController
             }
 
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->purchaseService->goldReceipt->purchaseReceiptSummary($model->receipt_id);
+            $res = \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }
