@@ -549,6 +549,7 @@ class PurchaseReceiptService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $detail[] = [
                     'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
                     'goods_name' => $goods->goods_name,
                     'goods_num' => $goods->goods_num,
                     'material_type' => $goods->material_type,
@@ -562,6 +563,7 @@ class PurchaseReceiptService extends Service
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $detail[] = [
                     'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
                     'goods_name' => $goods->goods_name,
                     'goods_num' => $goods->goods_num,
                     'material_type' => (String) $goods->material_type,
@@ -578,6 +580,7 @@ class PurchaseReceiptService extends Service
             }else{
                 $detail[] = [
                     'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
                     'style_sn' => $goods->style_sn,
                     'factory_mo' => $goods->factory_mo,
                     'produce_sn' => $goods->produce_sn,
@@ -595,6 +598,7 @@ class PurchaseReceiptService extends Service
             'supplier_id' => $receipt->supplier_id??'',
             'receipt_no' => $receipt->receipt_no??'',
             'purchase_sn' => $receipt->purchase_sn??'',
+            'purchase_type' => $purchase_type,
             'defective_num' => count($detail),
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::PENDING,

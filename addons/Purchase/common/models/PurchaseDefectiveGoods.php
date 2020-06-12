@@ -19,6 +19,7 @@ use Yii;
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
  * @property string $produce_sn 布产号
+ * @property int $receipt_detail_id 收货单明细ID
  * @property string $material_type 商品类型
  * @property double $goods_weight 商品重量
  * @property string $goods_color 颜色
@@ -50,7 +51,7 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             [['defective_id', 'xuhao'], 'required'],
-            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id','style_channel_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id','style_channel_id', 'receipt_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'goods_price'], 'number'],
             [['goods_name', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
@@ -77,6 +78,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'product_type_id' => '产品线',
             'style_channel_id' => '所属渠道',
             'produce_sn' => '布产号',
+            'receipt_detail_id' => '收货单明细ID',
             'material_type' => '商品类型',
             'goods_weight' => '商品重量',
             'goods_color' => '颜色',

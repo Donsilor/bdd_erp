@@ -150,11 +150,7 @@ class PurchaseDefectiveService extends Service
             throw new \Exception("单据明细不能为空");
         }
         //同步采购收货单商品状态
-        $ids = $this->getReceiptGoodsIds($form);
-        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
+        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::FACTORY_ING);
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -177,19 +173,7 @@ class PurchaseDefectiveService extends Service
             $form->defective_status = BillStatusEnum::SAVE;
             $goods_status = ReceiptGoodsStatusEnum::FACTORY_ING;
         }
-        $ids = $this->getReceiptGoodsIds($form);
-        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $model = new PurchaseStoneReceiptGoods();
-        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $model = new PurchaseGoldReceiptGoods();
-        }else{
-            $model = new PurchaseReceiptGoods();
-        }
-        //同步采购收货单货品状态
-        $res = $model::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
+        $this->getReceiptGoodsIds($form, $goods_status);
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -205,20 +189,9 @@ class PurchaseDefectiveService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
-            $model = new PurchaseStoneReceiptGoods();
-        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
-            $model = new PurchaseGoldReceiptGoods();
-        }else{
-            $model = new PurchaseReceiptGoods();
-        }
         //同步采购收货单商品状态
-        $ids = $this->getReceiptGoodsIds($form);
-        $res = $model::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_NO_PASS], ['id'=>$ids]);
-        if(false === $res) {
-            throw new \Exception("同步采购收货单货品状态失败");
-        }
-        $res = PurchaseDefectiveGoods::deleteAll(['id'=>$ids]);
+        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::IQC_PASS);
+        $res = PurchaseDefectiveGoods::deleteAll(['defective_id'=>$form->id]);
         if(false === $res) {
             throw new \Exception("删除单据明细失败");
         }
@@ -230,9 +203,10 @@ class PurchaseDefectiveService extends Service
     /**
      * 获取采购收货单明细ID
      * @param object $form
+     * @param int $goods_status
      * @throws \Exception
      */
-    public function getReceiptGoodsIds($form){
+    public function getReceiptGoodsIds($form, $goods_status){
         if($form->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
         }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
@@ -240,9 +214,11 @@ class PurchaseDefectiveService extends Service
         }else{
             $model = new PurchaseReceiptGoods();
         }
-        $dfGoods = PurchaseDefectiveGoods::find()->select(['xuhao'])->where(['defective_id'=>$form->id])->asArray()->all();
-        $receipt = PurchaseReceipt::find()->select(['id'])->where(['receipt_no'=>$form->receipt_no])->one();
-        $ids = $model::find()->select(['id'])->where(['receipt_id'=> $receipt->id, 'xuhao'=> ArrayHelper::getColumn($dfGoods,'xuhao')])->asArray()->all();
-        return ArrayHelper::getColumn($ids,'id')?:[];
+        $goods = PurchaseDefectiveGoods::find()->select(['receipt_detail_id'])->where(['defective_id'=>$form->id])->asArray()->all();
+        $ids = ArrayHelper::getColumn($goods,'receipt_detail_id');
+        $res = $model::updateAll(['goods_status'=>$goods_status], ['id'=>$ids]);
+        if(false === $res) {
+            throw new \Exception("同步采购收货单货品状态失败");
+        }
     }
 }
