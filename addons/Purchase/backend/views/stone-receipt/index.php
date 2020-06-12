@@ -86,9 +86,6 @@ $params = $params ? "&".http_build_query($params) : '';
             ],
             [
                 'attribute' => 'purchase_sn',
-                'value'=>function($model) {
-                    return Html::a($model->purchase_sn, ['purchase-stone/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                },
                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                     'class' => 'form-control',
                 ]),

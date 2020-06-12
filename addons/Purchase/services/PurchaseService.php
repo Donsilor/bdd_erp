@@ -237,9 +237,9 @@ class PurchaseService extends Service
         }
         $bill = [
             'supplier_id' => $form->supplier_id,
-            'purchase_no' => $form->purchase_sn,
+            'purchase_sn' => $form->purchase_sn,
             'purchase_type' => $purchase_type,
-            'to_warehouse_id' => 1,
+            'to_warehouse_id' => 0,
             'put_in_type' => PutInTypeEnum::PURCHASE,
             'receipt_status' => BillStatusEnum::PENDING,
             'receipt_num' => count($goods),
