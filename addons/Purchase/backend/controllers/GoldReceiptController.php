@@ -158,7 +158,7 @@ class GoldReceiptController extends ReceiptController
                 }
 
                 //同步采购收货单至L单
-                Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToBillL($model);
 
                 $trans->commit();
                 return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');

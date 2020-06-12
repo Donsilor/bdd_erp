@@ -305,7 +305,7 @@ class PurchaseReceiptService extends Service
      * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncReceiptToBillInfoL($form, $detail_ids = null)
+    public function syncReceiptToBillL($form, $detail_ids = null)
     {
         if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
