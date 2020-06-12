@@ -215,7 +215,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {close}',
+                'template' => '{edit} {goods} {apply} {audit} {close}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                 'edit' => function($url, $model, $key){
@@ -226,7 +226,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ]);
                     }
                 },
-                'ajax-apply' => function($url, $model, $key){
+                'apply' => function($url, $model, $key){
                     if($model->receipt_status == PurchaseStatusEnum::SAVE){
                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                             'class'=>'btn btn-success btn-sm',
@@ -243,7 +243,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ]);
                     }
                 },
-                'ajax-warehouse' => function($url, $model, $key){
+                'warehouse' => function($url, $model, $key){
                     if($model->receipt_status == PurchaseStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
                         return Html::edit(['ajax-warehouse','id'=>$model->id], '入库', [
                             'class'=>'btn btn-success btn-sm',

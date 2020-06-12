@@ -220,63 +220,51 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
+                'template' => '{edit} {goods} {apply} {audit} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
-                'edit' => function($url, $model, $key){
-                    if($model->receipt_status == BillStatusEnum::SAVE) {
-                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                },
-                'ajax-apply' => function($url, $model, $key){
-                    if($model->receipt_status == BillStatusEnum::SAVE){
-                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                            'class'=>'btn btn-success btn-sm',
-                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                        ]);
-                    }
-                },
-                'audit' => function($url, $model, $key){
-                    if($model->receipt_status == BillStatusEnum::PENDING) {
-                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                            'class'=>'btn btn-success btn-sm',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                },
-                'ajax-warehouse' => function($url, $model, $key){
-                    if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
-                        return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
-                            'class'=>'btn btn-success btn-sm',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                },
-                'goods' => function($url, $model, $key){
-                    return Html::a('单据明细', ['stone-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                },
-                'delete' => function($url, $model, $key){
-                    if($model->receipt_status == BillStatusEnum::SAVE) {
-                        return Html::delete(['delete', 'id' => $model->id]);
-                    }
-                },
-                /* 'status' => function($url, $model, $key){
-                       return Html::status($model['status']);
-                   },
-               'delete' => function($url, $model, $key){
-                       return Html::delete(['delete', 'id' => $model->id]);
-                   },
-               'view'=> function($url, $model, $key){
-                   return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
-                   },
-               'show_log' => function($url, $model, $key){
-                   return Html::linkButton(['goods-log/index','id' => $model->id, 'type_id' => $model->type_id, 'returnUrl' => Url::getReturnUrl()], '日志');
-                   },*/
+                    'edit' => function($url, $model, $key){
+                        if($model->receipt_status == BillStatusEnum::SAVE) {
+                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
+                    },
+                    'apply' => function($url, $model, $key){
+                        if($model->receipt_status == BillStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'audit' => function($url, $model, $key){
+                        if($model->receipt_status == BillStatusEnum::PENDING) {
+                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                'class'=>'btn btn-success btn-sm',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
+                    },
+                    'warehouse' => function($url, $model, $key){
+                        if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
+                            return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
+                                'class'=>'btn btn-success btn-sm',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
+                    },
+                    'goods' => function($url, $model, $key){
+                        return Html::a('单据明细', ['stone-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    },
+                    'delete' => function($url, $model, $key){
+                        if($model->receipt_status == BillStatusEnum::SAVE) {
+                            return Html::delete(['delete', 'id' => $model->id]);
+                        }
+                    },
                 ],
                 'headerOptions' => ['class' => 'col-md-2'],
             ]
