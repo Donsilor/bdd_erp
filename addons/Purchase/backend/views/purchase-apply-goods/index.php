@@ -305,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {apply-edit} {delete}',
+                                'template' => '{view} {edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[

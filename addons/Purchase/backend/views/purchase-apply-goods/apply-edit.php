@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			 </div>
             	<?php
             	  $attr_list = $model->getAttrList();
+            	  //print_r($attr_list);exit;
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['attr_id'];//属性ID                      
                       $attr_values = $attr['attr_values'];//属性值                  

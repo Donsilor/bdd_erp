@@ -269,10 +269,10 @@ class PurchaseStoneGoodsController extends BaseController
     public function actionWarehouse()
     {
         $ids = Yii::$app->request->get('ids');
-        //$model = new PurchaseStoneGoodsForm();
-        //$model->ids = $ids;
+        $model = new PurchaseStoneGoodsForm();
+        $model->ids = $ids;
         try{
-            //\Yii::$app->purchaseService->stone->iqcValidate($model);
+            \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_STONE);
             return ResultHelper::json(200, '', ['url'=>'/purchase/purchase-stone-goods/ajax-warehouse?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());

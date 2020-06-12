@@ -85,6 +85,14 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-3'],
             ],
             [
+                'attribute' => 'purchase_sn',
+                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
                 'attribute' => 'put_in_type',
                 'format' => 'raw',
                 'value' => function ($model){
@@ -253,7 +261,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     return Html::a('单据明细', ['stone-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'delete' => function($url, $model, $key){
-                    if($model->receipt_status != BillStatusEnum::CONFIRM) {
+                    if($model->receipt_status == BillStatusEnum::SAVE) {
                         return Html::delete(['delete', 'id' => $model->id]);
                     }
                 },

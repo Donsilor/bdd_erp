@@ -213,7 +213,7 @@ class ReceiptController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //采购收货单同步至L单
-                Yii::$app->purchaseService->receipt->syncReceiptToBillInfoL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToBillL($model);
                 $trans->commit();
                 return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){

@@ -15,6 +15,7 @@ use common\models\backend\Member;
  * @property int $merchant_id 商户ID
  * @property int $supplier_id 供应商ID
  * @property string $receipt_no 工厂出货单号
+ * @property string $purchase_sn 采购单号
  * @property int $receipt_num 出货数量
  * @property int $purchase_type 采购类型
  * @property int $receipt_status 单据状态
@@ -52,7 +53,7 @@ class PurchaseReceipt extends BaseModel
             [['id', 'merchant_id', 'supplier_id', 'receipt_num', 'purchase_type', 'put_in_type', 'is_to_warehouse', 'to_warehouse_id', 'auditor_id', 'receipt_status', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
             [['total_cost'], 'number'],
-            [['receipt_no'], 'string', 'max' => 30],
+            [['receipt_no', 'purchase_sn'], 'string', 'max' => 30],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
             ['receipt_no', 'unique'],
         ];
@@ -68,6 +69,7 @@ class PurchaseReceipt extends BaseModel
             'merchant_id' => '商户ID',
             'supplier_id' => '供应商',
             'receipt_no' => '工厂出货单号',
+            'purchase_sn' => '采购单号',
             'purchase_type' => '采购类型',
             'receipt_status' => '单据状态',
             'receipt_num' => '出货数量',

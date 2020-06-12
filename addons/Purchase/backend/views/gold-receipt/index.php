@@ -85,6 +85,14 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-3'],
             ],
             [
+                'attribute' => 'purchase_sn',
+                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
                 'attribute' => 'put_in_type',
                 'format' => 'raw',
                 'value' => function ($model){
@@ -212,7 +220,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {ajax-apply} {audit} {ajax-warehouse} {delete}',
+                'template' => '{edit} {goods} {apply} {audit} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                 'edit' => function($url, $model, $key){
@@ -223,7 +231,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ]);
                     }
                 },
-                'ajax-apply' => function($url, $model, $key){
+                'apply' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::SAVE){
                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                             'class'=>'btn btn-success btn-sm',
@@ -240,7 +248,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ]);
                     }
                 },
-                'ajax-warehouse' => function($url, $model, $key){
+                'warehouse' => function($url, $model, $key){
                     if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
                         return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
                             'class'=>'btn btn-success btn-sm',
@@ -253,7 +261,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     return Html::a('单据明细', ['gold-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                 },
                 'delete' => function($url, $model, $key){
-                    if($model->receipt_status != BillStatusEnum::CONFIRM) {
+                    if($model->receipt_status == BillStatusEnum::SAVE) {
                         return Html::delete(['delete', 'id' => $model->id]);
                     }
                 },

@@ -21,6 +21,7 @@ use Yii;
  * @property string $stone_clarity 石料净度
  * @property int $is_apply 是否申请修改
  * @property string $apply_info 申请信息
+ * @property int $is_receipt 是否申请修改
  * @property int $status 状态： -1已删除 0禁用 1启用
  * @property string $remark 采购备注
  * @property int $created_at 创建时间
@@ -43,12 +44,13 @@ class PurchaseStoneGoods extends BaseModel
     {
         return [
             [['purchase_id','goods_name','stone_type','cost_price','goods_weight','stone_num'], 'required'],
-            [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'remark'], 'string', 'max' => 255],
             [['stone_color', 'stone_clarity'], 'string', 'max' => 10],
+            [['put_in_type'], 'safe']
         ];
     }
 
@@ -72,6 +74,7 @@ class PurchaseStoneGoods extends BaseModel
             'stone_clarity' => '净度',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
+            'is_receipt' => '是否已收货',
             'status' => '状态',
             'remark' => '石料备注',
             'created_at' => '创建时间',
