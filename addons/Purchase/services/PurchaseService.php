@@ -26,6 +26,7 @@ use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use yii\db\Exception;
+use addons\Supply\common\enums\FromTypeEnum;
 
 /**
  * Class PurchaseService
@@ -108,11 +109,12 @@ class PurchaseService extends Service
                     'from_order_id'=>$model->purchase_id,
                     'from_detail_id' => $model->id,
                     'from_order_sn'=>$purchase->purchase_sn,
-                    'from_type' => 2,
+                    'from_type' => FromTypeEnum::PURCHASE,
                     'style_sn' => $model->style_sn,
                     'bc_status' => BuChanEnum::ASSIGNED,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
+                    'peiliao_type'=>$model->peiliao_type,
                     'style_sex' =>$model->style_sex,
                     'goods_num' =>$model->goods_num,
                     'jintuo_type'=>$model->jintuo_type,

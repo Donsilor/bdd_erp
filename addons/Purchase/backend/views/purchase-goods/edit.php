@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -56,8 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
             			 	<?= $form->field($model, 'cost_price')->textInput() ?>
             			 </div> 
         			 </div>
-
-
+					<div class="row">
+            			 <div class="col-lg-4">
+                            <?= $form->field($model, 'peiliao_type')->dropDownList(PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+            			 </div>
+        			 </div>
+					<div style="margin-bottom:20px;">
+                        <h3 class="box-title"> 属性信息</h3>
+                    </div>
     			<?php }else{?>
         			<div class="row">
             			 <div class="col-lg-4">         

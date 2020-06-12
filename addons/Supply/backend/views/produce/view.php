@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
      <div class="col-xs-12">
-         <div class="box" style="margin: 0px;">
-             <div class="col-xs-6" style="padding:0px;margin-top: 0px;">
+         <div class="box">
+             <div class="col-xs-6">
                  <div class="box">
                      <div class="box-body table-responsive" style="padding-top: 0px;padding-bottom: 0px;">
                          <table class="table table-hover">
@@ -62,20 +62,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td><?=  $model->follower ?  $model->follower->username : '' ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('customer') ?>：</td>
-                                 <td><?= $model->customer ?></td>
-                             </tr>
-                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_order_time') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->factory_order_time) ?></td>
                              </tr>
-
+						     <tr>
+                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
+                             </tr>
                          </table>
                      </div>
                  </div>
              </div>
 
-             <div class="col-xs-6" style="padding:0px;margin-top: 0px;">
+             <div class="col-xs-6">
                  <div class="box">
                      <div class="box-body table-responsive" style="padding-top: 0px;padding-bottom: 0px;">
                          <table class="table table-hover">
@@ -96,13 +99,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
-                                 <td><?= $model->qiban_sn ?></td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
                                  <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
                              </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
+                                 <td><?= $model->qiban_sn ?></td>
+                             </tr>
+                             
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
                                  <td><?= $model->type->name ?></td>
@@ -111,26 +119,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                                  <td><?= $model->cate->name ?></td>
                              </tr>
-
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                              </tr>
 
-                             <tr>
-                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
-                             </tr>
-
                          </table>
                      </div>
                  </div>
-             </div>
-
+             </div>    
              <div class="box-footer text-center" >
                  <?php
                  $buttonHtml = '';
@@ -203,6 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
              </div>
          </div>
      </div>
+
     <div class="col-xs-6" style="margin-top: 20px;">
         <div class="box">
             <div class="box-header" >
