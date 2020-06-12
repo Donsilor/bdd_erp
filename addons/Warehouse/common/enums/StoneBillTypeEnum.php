@@ -26,10 +26,10 @@ class StoneBillTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::STONE_MS   => '买石单',
-            self::STONE_SS   => '送石单',
+            self::STONE_MS   => '入库单',
+            self::STONE_SS   => '领石单',
             self::STONE_HS   => '还石单',
-            self::STONE_TS   => '退石单',
+            self::STONE_TS   => '返厂单',
             self::STONE_YS   => '遗失单',
             self::STONE_SY   => '损益单',
             self::STONE_RK   => '其它入库单',
