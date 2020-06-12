@@ -89,7 +89,7 @@ return [
                                 'route' => 'stone-receipt/index',
                         ],
                         [
-                                'title' => '石料返厂单',
+                                'title' => '供应商退石单',
                                 'route' => 'stone-defective/index',
                         ],
                         [

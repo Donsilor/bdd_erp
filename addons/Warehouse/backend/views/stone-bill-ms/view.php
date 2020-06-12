@@ -8,7 +8,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $model addons
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '买石单详情';
+$this->title = '入库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

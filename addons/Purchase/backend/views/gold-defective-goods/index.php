@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -46,53 +47,53 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'id',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'id', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'xuhao',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:140px;'
+                                    'style'=> 'width:80px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'material_type',
                                 'value' => function ($model){
-                                    return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
+                                    return Yii::$app->attr->valueName($model->material_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',\addons\Style\common\enums\MaterialTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel,'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'cost_price',
@@ -118,11 +119,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'iqc_remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'iqc_remark', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -135,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ]
                         ]
                     ]); ?>

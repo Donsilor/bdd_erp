@@ -56,6 +56,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{view}',
+                                'buttons' => [
+                                    'view' => function($url, $model, $key){
+                                        return Html::edit(['view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '查看', [
+                                            'class' => 'btn btn-warning btn-xs openIframe',
+                                            'data-width'=>'90%',
+                                            'data-height'=>'90%',
+                                            'data-offset'=>'20px',
+                                        ]);
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'id',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'id', [
@@ -72,6 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '货品序号',
                                 'attribute'=>'xuhao',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [

@@ -13,7 +13,7 @@ $form = ActiveForm::begin([]);
             'pluginOptions' => [
                 'allowClear' => false
             ],
-        ])->label("入库方式");?>
+        ])->label("采购方式");?>
         <!-- /.tab-pane -->
     </div>
     <!-- /.tab-content -->

@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_receipt_goods', '石料采购收货单详情');
+$this->title = Yii::t('stone_receipt_goods', '石料采购收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -203,7 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt){
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

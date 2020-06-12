@@ -2,15 +2,6 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
-
-$supplier_id = Yii::$app->request->get('supplier_id');
-$disabled = false;
-if($supplier_id){
-    $model->supplier_id = $supplier_id;
-    $disabled = true;
-}
-
-
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
@@ -20,7 +11,6 @@ $form = ActiveForm::begin([
     ]
 ]);
 ?>
-
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         <h4 class="modal-title">基本信息</h4>
@@ -31,20 +21,9 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'type')->dropDownList(\addons\Warehouse\common\enums\WarehouseTypeEnum::getMap(),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'sort')->textInput() ?>
 <!--        --><?//= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
-<script type="text/javascript">
-    $('#warehouse-name').blur(function(){
-        var url = "<?=Url::to('auto-code') ?>";
-        var value = $(this).val();
-        var data = {'name':value};
-        $.post(url,data,function(e){
-            $('#warehouse-code').val($.trim(e)).change();
-        });
-    });
-</script>

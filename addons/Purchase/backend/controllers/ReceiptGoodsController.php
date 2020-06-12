@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use common\enums\AuditStatusEnum;
@@ -159,6 +160,35 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $from = Yii::$app->request->post('PurchaseReceiptGoodsForm');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceiptGoods();
+        $model->ids = $id;
+        if($model->load(Yii::$app->request->post())){
+            try{
+                $model->goods_status = $from['goods_status']??"";
+                $model->iqc_reason = $from['iqc_reason']??"";
+                $model->iqc_remark = $from['iqc_remark']??"";
+                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, '保存失败'.$e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * ajax编辑
      *
      * @return mixed|string|\yii\web\Response
@@ -273,7 +303,7 @@ class ReceiptGoodsController extends BaseController
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->receipt->iqcValidate($model);
+            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -296,7 +326,7 @@ class ReceiptGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->purchaseService->receipt->qcIqc($model);
+                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -325,7 +355,7 @@ class ReceiptGoodsController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->receipt->batchDefective($model);
+            \Yii::$app->purchaseService->receipt->batchDefective($model, $this->purchaseType);
 
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -347,7 +377,7 @@ class ReceiptGoodsController extends BaseController
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         try{
-            \Yii::$app->purchaseService->receipt->warehouseValidate($model);
+            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
             return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
         }catch (\Exception $e){
             return ResultHelper::json(422, $e->getMessage());
@@ -408,7 +438,7 @@ class ReceiptGoodsController extends BaseController
                 throw new \Exception($this->getError($model));
             }
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id);
+            $res = \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }

@@ -9,7 +9,7 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\PurchaseReceipt */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '石料不良返厂单详情';
+$this->title = '退石单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

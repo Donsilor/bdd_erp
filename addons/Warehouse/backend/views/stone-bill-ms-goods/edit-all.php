@@ -13,7 +13,7 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_l_goods', '收货单详情');
+$this->title = Yii::t('bill_l_goods', '入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
