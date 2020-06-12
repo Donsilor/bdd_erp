@@ -85,6 +85,17 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-3'],
             ],
             [
+                'attribute' => 'purchase_sn',
+                'value'=>function($model) {
+                    return Html::a($model->purchase_sn, ['purchase-stone/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                },
+                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
                 'attribute' => 'put_in_type',
                 'format' => 'raw',
                 'value' => function ($model){
