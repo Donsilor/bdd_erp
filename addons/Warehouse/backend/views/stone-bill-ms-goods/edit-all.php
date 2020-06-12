@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-b-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['stone-bill-ms-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -55,26 +55,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
-                            [
+                            /*[
                                 'label' => 'ID',
                                 'attribute' => 'id',
                                 'filter' => false,
                                 'format' => 'raw',
-                            ],
+                            ],*/
                             [
                                 'label' => '石包',
                                 'attribute'=>'stone_name',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('stone_name',$model->stone_name);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'stone_name', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '石包类型',
                                 'attribute' => 'stone_type',
-                                'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->stone_type);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'stone_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
@@ -86,55 +90,73 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '石包总数',
                                 'attribute' => 'stone_num',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('stone_num',$model->stone_num);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'stone_num', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '石包总重量',
                                 'attribute' => 'stone_weight',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('stone_weight',$model->stone_weight);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'stone_weight', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '每卡采购价格',
                                 'attribute' => 'cost_price',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('cost_price',$model->cost_price);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '每卡销售价格',
                                 'attribute' => 'sale_price',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('sale_price',$model->sale_price);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '证书号',
                                 'attribute' => 'cert_id',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('cert_id',$model->cert_id);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '石重',
                                 'attribute' => 'carat',
+                                'format' => 'raw',
                                 'value' => function($model){
                                     return Html::ajaxInput('carat',$model->carat);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'carat', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -144,7 +166,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'color', Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -154,7 +180,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'clarity', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -164,7 +194,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'cut', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -174,17 +208,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '荧光',
-                                'attribute' => 'fluorescence',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'fluorescence', Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
-                                },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -194,7 +222,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'symmetry', Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '荧光',
+                                'attribute' => 'fluorescence',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'fluorescence', Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [

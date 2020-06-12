@@ -141,19 +141,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '荧光',
-                                'attribute' => 'fluorescence',
+                                'label' => '对称',
+                                'attribute' => 'symmetry',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->fluorescence);
+                                    return Yii::$app->attr->valueName($model->symmetry);
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '对称',
-                                'attribute' => 'symmetry',
+                                'label' => '荧光',
+                                'attribute' => 'fluorescence',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->symmetry);
+                                    return Yii::$app->attr->valueName($model->fluorescence);
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],

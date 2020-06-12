@@ -50,12 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
-                            [
+                            /*[
                                 'label' => 'ID',
                                 'attribute' => 'id',
                                 'filter' => false,
                                 'format' => 'raw',
-                            ],
+                            ],*/
                             [
                                 'label' => '石包',
                                 'attribute'=>'stone_name',
@@ -117,7 +117,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->color);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -126,7 +130,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->clarity);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -135,25 +143,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cut);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'cut',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '抛光',
                                 'attribute' => 'polish',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->cut);
+                                    return Yii::$app->attr->valueName($model->polish);
                                 },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '荧光',
-                                'attribute' => 'fluorescence',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->fluorescence);
-                                },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -162,7 +169,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->symmetry);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '荧光',
+                                'attribute' => 'fluorescence',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->fluorescence);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
