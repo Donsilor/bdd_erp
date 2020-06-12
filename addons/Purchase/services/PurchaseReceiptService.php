@@ -313,8 +313,10 @@ class PurchaseReceiptService extends Service
         if($form->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
+        if(!$detail_ids){
+            $detail_ids = $form->getIds();
+        }
         $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
-        $detail_ids = $form->getIds();
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
