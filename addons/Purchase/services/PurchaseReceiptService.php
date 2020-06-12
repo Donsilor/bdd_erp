@@ -137,8 +137,8 @@ class PurchaseReceiptService extends Service
             $purchase_detail_id = $good['purchase_detail_id']??"";
             if($purchase_detail_id){
                 $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
-                if($count >= 1){
-                    throw new \Exception("采购单已收货，不能重复收货");
+                if($count){
+                    throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
                 }
             }
             $goods->attributes = $good;
@@ -232,29 +232,29 @@ class PurchaseReceiptService extends Service
                     'style_sex' => $produce->style_sex,
                     'style_channel_id' => $purchaseGoods->style_channel_id,
                     'factory_mo' => 1,
-                    'gold_weight' => $attr_arr[AttrIdEnum::JINZHONG]['attr_value'] ?? '',
+                    'gold_weight' => $attr_arr[AttrIdEnum::JINZHONG]['attr_value'] ?? '0',
                     'gold_price' => $purchaseGoods->gold_price,
                     'gold_loss' => $purchaseGoods->gold_loss,
                     'gold_amount' => $purchaseGoods->gold_amount,
                     'gross_weight' => $purchaseGoods->single_stone_weight,
-                    'suttle_weight' => $purchaseGoods->single_stone_weight,
+                    'suttle_weight' => $purchaseGoods->gold_price,
                     'cost_price' => $purchaseGoods->factory_cost_price,
                     'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
                     'product_size' => $purchaseGoods->product_size,
                     'put_in_type' =>$purchase->put_in_type,
                     'main_stone' => $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '',
-                    'main_stone_num' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '',
-                    'main_stone_weight' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '',
+                    'main_stone_num' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
+                    'main_stone_weight' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
                     'main_stone_color' => $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '',
                     'main_stone_clarity' => $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '',
                     'main_stone_price' => 0,
                     'second_stone1' => $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num1' => $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '',
-                    'second_stone_weight1' => $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '',
+                    'second_stone_num1' => $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0',
+                    'second_stone_weight1' => $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0',
                     'second_stone_price1' => 0,
                     'second_stone2' => $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num2' => $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '',
-                    'second_stone_weight2' => $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '',
+                    'second_stone_num2' => $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0',
+                    'second_stone_weight2' => $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0',
                     'second_stone_price2' => 0,
                     'gong_fee' => $purchaseGoods->gong_fee,
                     'xianqian_fee' => $purchaseGoods->xiangqian_fee,
@@ -305,7 +305,7 @@ class PurchaseReceiptService extends Service
      * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncReceiptToBillInfoL($form, $detail_ids = null)
+    public function syncReceiptToBillL($form, $detail_ids = null)
     {
         if($form->audit_status != AuditStatusEnum::PASS){
             throw new \Exception('采购收货单没有审核');
@@ -313,8 +313,10 @@ class PurchaseReceiptService extends Service
         if($form->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
+        if(!$detail_ids){
+            $detail_ids = $form->getIds();
+        }
         $query = PurchaseReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
-        $detail_ids = $form->getIds();
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
