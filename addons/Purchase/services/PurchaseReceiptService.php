@@ -44,14 +44,16 @@ class PurchaseReceiptService extends Service
 {
     /**
      * 采购收货单明细 tab
-     * @param int $id 采购单ID
+     * @param int $receipt_id 采购收货单ID
+     * @param int $purchase_type 采购类型
+     * @param string $returnUrl
+     * @param int $tag 页签ID
      * @return array
      */
     public function menuTabList($receipt_id, $purchase_type, $returnUrl = null, $tag = null)
     {
         $tabList = $tab = [];
         switch ($purchase_type){
-
             case PurchaseTypeEnum::GOODS:
                 {
                     $tabList = [
@@ -101,10 +103,10 @@ class PurchaseReceiptService extends Service
      * 采购收货单汇总
      * @param integer $receipt_id
      * @param integer $purchase_type
+     * @throws \Exception
      */
     public function purchaseReceiptSummary($receipt_id, $purchase_type)
     {
-        $result = false;
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
@@ -119,13 +121,14 @@ class PurchaseReceiptService extends Service
         if($sum) {
             $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
         }
-        return $result;
+        return $result??"";
     }
 
     /**
      * 创建采购收货单
      * @param array $bill
      * @param array $detail
+     * @throws \Exception
      */
     public function createReceipt($bill, $detail)
     {
@@ -139,7 +142,6 @@ class PurchaseReceiptService extends Service
         if(false === $billM->save()) {
             throw new \Exception($this->getError($billM));
         }
-
         $receipt_id = $billM->attributes['id'];
         foreach ($detail as $good) {
             if($billM->purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
@@ -170,6 +172,7 @@ class PurchaseReceiptService extends Service
     /**
      * 布产单号批量查询可出货商品
      * @param object $form
+     * @throws \Exception
      */
     public function getGoodsByProduceSn($form)
     {
@@ -272,6 +275,7 @@ class PurchaseReceiptService extends Service
     /**
      * 添加采购收货单商品明细
      * @param PurchaseReceiptGoodsForm $form
+     * @throws \Exception
      */
     public function addReceiptGoods($form)
     {
@@ -420,6 +424,7 @@ class PurchaseReceiptService extends Service
      *  IQC批量质检验证
      * @param object $form
      * @param integer $purchase_type
+     * @throws \Exception
      */
     public function iqcValidate($form, $purchase_type){
         $ids = $form->getIds();
@@ -444,6 +449,7 @@ class PurchaseReceiptService extends Service
      *  IQC质检
      * @param object $form
      * @param integer $purchase_type
+     * @throws \Exception
      */
     public function qcIqc($form, $purchase_type)
     {
@@ -471,6 +477,7 @@ class PurchaseReceiptService extends Service
      *  批量申请入库验证
      * @param object $form
      * @param integer $purchase_type
+     * @throws \Exception
      */
     public function warehouseValidate($form, $purchase_type){
         $ids = $form->getIds();
@@ -495,6 +502,7 @@ class PurchaseReceiptService extends Service
      *  批量生成不良返厂单
      * @param object $form
      * @param integer $purchase_type
+     * @throws \Exception
      */
     public function batchDefective($form, $purchase_type)
     {
