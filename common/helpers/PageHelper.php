@@ -20,7 +20,7 @@ class PageHelper {
 		if(empty($total_count)) {
 			$total_count = $query->count();
 		}
-        $pages = new Pagination(['totalCount' =>$query->count(),'page'=>$page,'pageSize'=>$page_size]);    //实例化分页类,带上参数(总条数,每页显示条数)
+		$pages = new Pagination(['totalCount' =>$total_count,'page'=>$page,'pageSize'=>$page_size]);    //实例化分页类,带上参数(总条数,每页显示条数)
         if($returnArray){
             $data = $query->offset($pages->offset)->limit($pages->limit)->asArray()->all();
         }else{
