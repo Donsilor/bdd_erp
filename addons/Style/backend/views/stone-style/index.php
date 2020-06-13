@@ -71,6 +71,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'stone_weight_min',
+                            'value' => 'stone_weight_min',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'stone_weight_min', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'stone_weight_max',
+                            'value' => 'stone_weight_max',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'stone_weight_max', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute' => 'remark',
                             'value' => 'remark',
                             'headerOptions' => ['class' => 'col-md-1'],

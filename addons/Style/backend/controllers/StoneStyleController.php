@@ -37,21 +37,25 @@ class StoneStyleController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['created_at']);
+            ->search(Yii::$app->request->queryParams,['created_at', 'audit_time', 'stone_weight_min', 'stone_weight_max']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',StyleStoneStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
-        $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['audit_time']);
-
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',StyleStoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        }
+        $stone_weight_min = $searchModel->stone_weight_min;
+        if (!empty($stone_weight_min)) {
+            $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.stone_weight_min', $stone_weight_min] );//结束时间
+        }
+        $stone_weight_max = $searchModel->stone_weight_max;
+        if (!empty($stone_weight_max)) {
+            $dataProvider->query->andFilterWhere(['<=',StyleStoneStyle::tableName().'.stone_weight_max', $stone_weight_max] );//结束时间
         }
 
         $dataProvider->query->andWhere(['>',StyleStoneStyle::tableName().'.status',-1]);
