@@ -125,6 +125,10 @@ return [
                             'title' => '返厂单',
                             'route' => 'stone-bill-ts/index',
                         ],
+                        [
+                            'title' => '盘点单',
+                            'route' => 'stone-bill-w/index',
+                        ],
                     ],
             ],
             [

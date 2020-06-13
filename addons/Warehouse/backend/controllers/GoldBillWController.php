@@ -2,17 +2,14 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use common\helpers\PageHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
-use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use common\enums\AuditStatusEnum;
-
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -20,19 +17,17 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
-use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
-
-
+use common\helpers\PageHelper;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class BillWController extends BaseController
+class GoldBillWController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillWForm::class;

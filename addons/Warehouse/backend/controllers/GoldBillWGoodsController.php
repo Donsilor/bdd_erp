@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -12,11 +11,10 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 
-
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class BillWGoodsController extends BaseController
+class GoldBillWGoodsController extends BaseController
 {
     use Curd;
     public $modelClass = WarehouseBillGoods::class;
