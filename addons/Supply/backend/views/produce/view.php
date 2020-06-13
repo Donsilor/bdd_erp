@@ -91,6 +91,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="no-border-top"><?= $model->style_sn ?></td>
                              </tr>
                              <tr>
+                                 <td class="col-xs-2 text-right no-border-top">模号：</td>
+                                 <td class="no-border-top"><?= $model->factory_mo ?></td>
+                             </tr>
+                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                                  <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                              </tr>

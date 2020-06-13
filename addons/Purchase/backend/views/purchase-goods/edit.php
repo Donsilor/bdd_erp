@@ -215,7 +215,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'cert_fee')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-
+                            <?= $form->field($model, 'factory_mo')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
 

@@ -123,6 +123,7 @@ class PurchaseService extends Service
                     'style_cate_id'=>$model->style_cate_id,
                     'supplier_id'=>$purchase->supplier_id,
                     'follower_id'=>$purchase->follower_id,
+                    'factory_mo'=>$model->factory_mo,
                     'factory_distribute_time' => time()
             ];            
             if($model->produce_id && $model->produce){

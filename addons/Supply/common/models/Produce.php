@@ -66,7 +66,7 @@ class Produce extends BaseModel
             [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
             [['goods_name','audit_followe_remark'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
-            [['follower_name'], 'string', 'max' => 30],
+            [['follower_name','factory_mo'], 'string', 'max' => 30],
             [['inlay_type'], 'string', 'max' => 10],
         ];
     }
@@ -90,6 +90,7 @@ class Produce extends BaseModel
             'goods_name' => '商品名称',
             'goods_num' => '商品数量',
             'shippent_num' => '出厂数量',
+            'factory_mo' => '工厂模号',
             'customer' => '顾客姓名',
             'jintuo_type' => '金托类型',
             'style_sex' => '款式性别',

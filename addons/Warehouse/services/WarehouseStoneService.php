@@ -22,12 +22,16 @@ class WarehouseStoneService extends Service
     public function editStone($form)
     {
         $stone = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
+        $ids = [];
         foreach ($stone as $detail){
-            $shibao = WarehouseStone::findOne(['stone_name'=>$detail->stone_name]);
-            if(!$shibao){
+            //$shibao = WarehouseStone::findOne(['stone_name'=>$detail->stone_name]);
+            //if(!$shibao){
                 $stoneM = new WarehouseStone();
                 $dia = [
+                    'stone_sn' => "hdl01",//临时
                     'stone_name' => $detail->stone_name,
+                    'stone_type' => $detail->stone_type,
+                    'supplier_id' => $form->supplier_id,
                     'stone_color' => $detail->color,
                     'stone_clarity' => $detail->clarity,
                     'stock_cnt' => $detail->stone_num,
@@ -41,7 +45,8 @@ class WarehouseStoneService extends Service
                 if(false === $stoneM->save()){
                     throw new \Exception($this->getError($stoneM));
                 }
-            }else{
+                $ids[] = $stoneM->attributes['id'];
+            /*}else{
                 $cost_price = bcmul($shibao->stock_weight, $shibao->cost_price, 2);
                 $sale_price = bcmul($shibao->stock_weight, $shibao->sale_price, 2);
                 $total_cost = bcmul($detail->stone_weight, $detail->cost_price, 2);
@@ -55,6 +60,12 @@ class WarehouseStoneService extends Service
                     throw new \Exception($this->getError($shibao));
                 }
                 $this->updateStockCnt($shibao);
+            }*/
+        }
+        if($ids){
+            foreach ($ids as $id){
+                $stone = WarehouseStone::findOne(['id'=>$id]);
+                $this->createStoneSn($stone);
             }
         }
     }
@@ -78,19 +89,17 @@ class WarehouseStoneService extends Service
      * @param string $save
      */
     public function createStoneSn($model, $save = true)
-    {   
+    {
         //1.供应商
-        $stone_sn = $model->supplier->label ?? '00';
+        $stone_sn = $model->supplier->supplier_tag ?? '00';
         //2.石料类型
         $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE,'id','code');
-        $type_code = $type_codes[$model->stone_type] ?? '00';
-        $stone_sn  .= str_pad($type_code,2,'0',STR_PAD_LEFT);
+        $stone_sn .= $type_codes[$model->stone_type] ?? '0';
         //3.数字编号
-        $stone_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT);
-        
+        $stone_sn .= str_pad($model->id,7,'0',STR_PAD_LEFT);
         if($save === true) {
             $model->stone_sn = $stone_sn;
-            if($model->save(true,['id','stone_sn'])) {
+            if(false === $model->save()) {
                 throw new \Exception($this->getError($model));
             }
         }

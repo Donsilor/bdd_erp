@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill_ms', '入库单');
+$this->title = Yii::t('stone_bill_ms', '石包入库单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -59,36 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '单据类型',
-                            'attribute' => 'bill_type',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\StoneBillTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                        ],
-                        [
-                            'label' => '单据状态',
-                            'attribute' => 'bill_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
-                        ],
-                        [
                             'label' => '加工商',
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
@@ -129,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '纸质单号',
+                            'label' => '采购收货单号',
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
@@ -184,28 +154,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'label' => '审核时间',
-                            'attribute'=>'audit_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'audit_time',
-                                'value' => $searchModel->audit_time,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
+                            'label' => '单据状态',
+                            'attribute' => 'bill_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
                             ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->audit_time);
-                            }
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
