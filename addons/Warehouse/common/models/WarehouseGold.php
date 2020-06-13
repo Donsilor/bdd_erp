@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\Supplier;
 use Yii;
 
 /**
@@ -63,5 +64,14 @@ class WarehouseGold extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
 }

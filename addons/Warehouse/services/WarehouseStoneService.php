@@ -28,7 +28,7 @@ class WarehouseStoneService extends Service
             //if(!$shibao){
                 $stoneM = new WarehouseStone();
                 $dia = [
-                    'stone_sn' => "hdl01",//临时
+                    'stone_sn' => "---",//临时
                     'stone_name' => $detail->stone_name,
                     'stone_type' => $detail->stone_type,
                     'supplier_id' => $form->supplier_id,
