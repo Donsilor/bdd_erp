@@ -47,8 +47,21 @@ return [
                     ],
                     
             ],
-
-
+            [
+                    'title' => '原料管理',
+                    'route' => 'material_style',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '金料款式列表',
+                                    'route' => 'gold-style/index',
+                            ],
+                            [
+                                    'title' => '石料款式列表',
+                                    'route' => 'stone-style/index',
+                            ],
+                    ],
+            ],
             [
                     'title' => '功能配置',
                     'route' => 'function',

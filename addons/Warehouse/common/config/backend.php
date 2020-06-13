@@ -70,7 +70,7 @@ return [
                             'route' => 'bill-r/index',
                     ],*/
                     [
-                            'title' => '维修单',
+                            'title' => '维修出库单',
                             'route' => 'bill-repair/index',
                     ],
                     [

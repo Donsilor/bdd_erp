@@ -15,9 +15,9 @@ use common\helpers\Url;
 /* @var $form yii\widgets\ActiveForm */
 $id = $model->id;
 if(empty($id)){
-    $this->title = Yii::t('supplier', '新增维修单');
+    $this->title = Yii::t('supplier', '新增维修出库单');
 }else{
-    $this->title = Yii::t('supplier', '编辑维修单');
+    $this->title = Yii::t('supplier', '编辑维修出库单');
 }
 $this->params['breadcrumbs'][] = ['label' => Yii::t('warehouse_bill', 'repair'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

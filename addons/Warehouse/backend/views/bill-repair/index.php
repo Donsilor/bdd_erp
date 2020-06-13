@@ -13,7 +13,7 @@ use common\enums\AuditStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_repair', '维修单');
+$this->title = Yii::t('warehouse_bill_repair', '维修出库单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
