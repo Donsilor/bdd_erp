@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:130%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -52,6 +52,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'label' => '石包编号',
+                            'attribute'=>'stone_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '石包类型',
