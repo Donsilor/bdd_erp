@@ -222,12 +222,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <?php
-                    $attr_list = \addons\Supply\common\models\ProduceAttribute::find()->where(['produce_id'=>$model->id])->all();
-                    foreach ($attr_list as $k=>$attr){
-                        ?>
+                    foreach ($model->attrs as $k=>$attr){
+                     ?>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr['attr_id'])?>：</td>
-                            <td><?= $attr['attr_value'] ?></td>
+                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                            <td><?= $attr->attr_value ?></td>
                         </tr>
                     <?php } ?>
                 </table>
