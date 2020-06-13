@@ -32,42 +32,46 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_type') ?>：</td>
                                  <td><?= \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type) ?></td>
+                             </tr>                             
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_order_sn') ?>：</td>
+                                 <td><?= $model->from_order_sn ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bc_status') ?>：</td>
                                  <td><?= \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_order_sn') ?>：</td>
-                                 <td><?= $model->from_order_sn ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_detail_id') ?>：</td>
-                                 <td><?= $model->from_type == 2 ? $model->purchaseGoods->goods_name : '客订单' ?></td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_name') ?>：</td>
+                                 <td><?= $model->goods_name ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                                  <td><?= $model->goods_num ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right">出厂数量：</td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('shippent_num') ?>：</td>
                                  <td><?= Yii::$app->supplyService->produce->getShippentNum($model->id) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                                 <td><?= $model->supplier ?  $model->supplier->supplier_name : '' ?></td>
+                                 <td><?= $model->supplier->supplier_name ?? '' ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('follower_id') ?>：</td>
-                                 <td><?=  $model->follower ?  $model->follower->username : '' ?></td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('follower_name') ?>：</td>
+                                 <td><?=  $model->follower_name ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_order_time') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->factory_order_time) ?></td>
-                             </tr>
-						     <tr>
-                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
@@ -103,6 +107,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
                              </tr>
                              <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_status') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                             </tr>
+                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
                                  <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
                              </tr>
@@ -119,11 +131,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                                  <td><?= $model->cate->name ?></td>
                              </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                             </tr>
-
                          </table>
                      </div>
                  </div>

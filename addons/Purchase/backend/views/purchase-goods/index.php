@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
 
 $this->title = '采购商品';
 $this->params['breadcrumbs'][] = $this->title;
@@ -27,16 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
     <div class="tab-content">
-        <div class="row col-xs-15" style="padding-left: 0px;padding-right: 0px;">
+        <div class="row col-xs-15">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         'showFooter' => false,//显示footer行
                         'options' => ['style'=>'width:180%;white-space:nowrap;'],
-
                         'id'=>'grid', 
                         'columns' => [
                             [
@@ -104,193 +104,216 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],                                                      
                             [
                                     'attribute' => 'style_sn',
-                                    'filter' => true,
+                                    'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                            'class' => 'form-control',
+                                            'style'=>'width:100px'
+                                    ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                     'attribute' => 'qiban_sn',
-                                    'filter' => true,
+                                    'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                            'class' => 'form-control',
+                                            'style'=>'width:100px'
+                                    ]),
                                     'format' => 'raw',
-
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],  
                             [      
                                     'attribute' => 'qiban_type',
                                     'value' => function($model){
-                                            return QibanTypeEnum::getValue($model->qiban_type);
+                                        return addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
                                      },
-                                     'filter' => Html::activeDropDownList($searchModel, 'qiban_type',QibanTypeEnum::getMap(), [
+                                     'filter' => Html::activeDropDownList($searchModel, 'qiban_type',addons\Style\common\enums\QibanTypeEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
+                                            'style'=>'width:100px'
                                     ]),
                                     'format' => 'raw',
-                                   'headerOptions' => ['class' => 'col-md-1'],
+                                    'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'jintuo_type',
-                                'value' => function($model){
-                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                    'attribute' => 'jintuo_type',
+                                    'value' => function($model){
+                                        return addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                                    },
+                                    'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                        'prompt' => '全部',
+                                        'class' => 'form-control',
+                                        'style'=>'width:100px'
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            
                             [
-                                    'label' => '款式分类',
+                                    'attribute' => 'peiliao_type',
+                                    'value' => function($model){
+                                        return \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type);
+                                    },
+                                    'filter' => Html::activeDropDownList($searchModel, 'peiliao_type',\addons\Supply\common\enums\PeiliaoTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style'=>'width:100px'
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                     'attribute' => 'style_cate_id',
-                                    'value' => "cate.name",
+                                    'value' => function ($model){
+                                           return $model->cate->name ??'';
+                                    },
                                     'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
+                                            'style'=>'width:100px'
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                    'label' => '产品线',
                                     'attribute' => 'product_type_id',
-                                    'value' => "type.name",
+                                    'value' => function($model){
+                                        return $model->type->name ?? '';
+                                    },
                                     'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
+                                            'style'=>'width:100px'
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'style_channel_id',
-                                'value' => "channel.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                    'attribute' => 'style_channel_id',
+                                    'value' => function($model){
+                                        return $model->channel->name ?? '';
+                                     },
+                                    'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                                        'prompt' => '全部',
+                                        'class' => 'form-control',
+                                        'style'=>'width:100px'
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                     'attribute' => 'goods_num',
                                     'value' => "goods_num",
                                     'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                          'class' => 'form-control',
+                                         'style'=>'width:80px'
                                     ]),
-                                    'value' => function ($model) {
-                                        return $model->goods_num ;
-                                    },
                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                     'label'=>'成色',
                                     'value'=> function($model){
-                                        return $model->attr[\addons\Style\common\enums\AttrIdEnum::MATERIAL] ?? "";
+                                        return $model->attr[AttrIdEnum::MATERIAL] ?? "";
                                     }
                             ],
                             [
                                 'label'=>'金重',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::JINZHONG] ?? "";
+                                    return $model->attr[AttrIdEnum::JINZHONG] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'手寸',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::FINGER] ?? "";
+                                    return $model->attr[AttrIdEnum::FINGER] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'链长',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::CHAIN_LENGTH] ?? "";
+                                    return $model->attr[AttrIdEnum::CHAIN_LENGTH] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'镶口',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::XIANGKOU] ?? "";
+                                    return $model->attr[AttrIdEnum::XIANGKOU] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'主石类型',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE] ?? "";
+                                    return $model->attr[AttrIdEnum::MAIN_STONE_TYPE] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'主石数量',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_NUM] ?? "";
+                                    return $model->attr[AttrIdEnum::MAIN_STONE_NUM] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'主石规格(颜色/净度/切工/抛光/对称/荧光)',
                                 'value'=> function($model){
-                                    $color = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_COLOR] ?? "无";
-                                    $clarity = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY] ?? "无";
-                                    $cut = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_CUT] ?? "无";
-                                    $polish = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_POLISH] ?? "无";
-                                    $symmetry = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY] ?? "无";
-                                    $fluorescence = $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE] ?? "无";
+                                    $color = $model->attr[AttrIdEnum::DIA_COLOR] ?? "无";
+                                    $clarity = $model->attr[AttrIdEnum::DIA_CLARITY] ?? "无";
+                                    $cut = $model->attr[AttrIdEnum::DIA_CUT] ?? "无";
+                                    $polish = $model->attr[AttrIdEnum::DIA_POLISH] ?? "无";
+                                    $symmetry = $model->attr[AttrIdEnum::DIA_SYMMETRY] ?? "无";
+                                    $fluorescence = $model->attr[AttrIdEnum::DIA_FLUORESCENCE] ?? "无";
                                     return $color.'/'.$clarity.'/'.$cut.'/'.$polish.'/'.$symmetry.'/'.$fluorescence;
                                 }
                             ],
                             [
                                 'label'=>'副石1类型',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE] ?? "";
+                                    return $model->attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? "";
                                 }
                             ],
                             [
                                 'label'=>' 副石1数量',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_NUM] ?? "";
+                                    return $model->attr[AttrIdEnum::SIDE_STONE1_NUM] ?? "";
                                 }
                             ],
                             [
                                 'label'=>'副石1规格(颜色/净度)',
                                 'value'=> function($model){
-                                    $color = $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR] ?? "无";
-                                    $clarity = $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY] ?? "无";
+                                    $color = $model->attr[AttrIdEnum::SIDE_STONE1_COLOR] ?? "无";
+                                    $clarity = $model->attr[AttrIdEnum::SIDE_STONE1_CLARITY] ?? "无";
                                     return $color.'/'.$clarity;
                                 }
                             ],
                             [
                                 'label'=>'副石2类型',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE] ?? "";
+                                    return $model->attr[AttrIdEnum::SIDE_STONE2_TYPE] ?? "";
                                 }
                             ],
                             [
                                 'label'=>' 副石2数量',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_NUM] ?? "";
+                                    return $model->attr[AttrIdEnum::SIDE_STONE2_NUM] ?? "";
                                 }
                             ],
                             [
                                 'label'=>' 证书类型',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE] ?? "";
+                                    return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
                                 }
                             ],
                             [
                                 'label'=>' 证书编号',
                                 'value'=> function($model){
-                                    return $model->attr[\addons\Style\common\enums\AttrIdEnum::DIA_CERT_NO] ?? "";
+                                    return $model->attr[AttrIdEnum::DIA_CERT_NO] ?? "";
                                 }
                             ],
                             [
                                     'attribute'=>'成本价',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                             'class' => 'form-control',
+                                            'style'=>'width:80px'
                                     ]),
                                     'value' => function ($model) {
                                         return $model->cost_price ;
                                     },
-                                    'headerOptions' => ['width'=>'120'],
                             ],
                             [
                                     'attribute' => '申请修改',

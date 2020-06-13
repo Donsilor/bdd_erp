@@ -112,7 +112,7 @@ class ProduceService extends Service
      * @return mixed
      */
     public function getShippentNum($produce_id){
-        return ProduceShipment::find()->where(['produce_id'=>$produce_id])->sum('shippent_num');
+        return ProduceShipment::find()->where(['produce_id'=>$produce_id])->sum('shippent_num') ?? 0;
     }
 
 

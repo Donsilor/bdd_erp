@@ -60,5 +60,5 @@ class AttrIdEnum
     //副石2信息
     const SIDE_STONE2_TYPE = 64;//副石2类型
     const SIDE_STONE2_WEIGHT = 63;//副石2重量(ct)
-    const SIDE_STONE2_NUM = 66;//副石2数量
+    const SIDE_STONE2_NUM = 62;//副石2数量
 }
