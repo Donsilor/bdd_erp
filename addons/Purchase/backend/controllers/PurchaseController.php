@@ -196,7 +196,7 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if(!$model->audit_status) {
+        if($model->audit_status != AuditStatusEnum::UNPASS) {
             $model->audit_status = AuditStatusEnum::PASS;
         }
         // ajax 校验

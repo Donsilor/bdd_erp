@@ -47,6 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
         			 	<?= $form->field($model, 'cost_price')->textInput() ?>
         			 </div> 
     			 </div>
+    			 <div class="row">
+    			 	 <div class="col-lg-4">
+                            <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+            		 </div>
+            	 </div>
+    			 <div style="margin-bottom:20px;">
+                        <h3 class="box-title"> 属性信息</h3>
+                 </div>
             	<?php
             	  $attr_list = $model->getAttrList();
             	  foreach ($attr_list as $k=>$attr){ 
@@ -183,10 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'factory_mo')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-
-                    </div>
+                    </div>          			
                 </div>
                 <div class="row">
                     <div class="col-lg-4">

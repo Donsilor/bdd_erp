@@ -10,12 +10,12 @@ use common\enums\BaseEnum;
  */
 class PeiliaoStatusEnum extends BaseEnum
 {
-    const NONE = 1;
-    const PENDING = 2;
-    const DOING = 3;
-    const CONFIRM = 4;
-    const FINISH = 5;
     
+    const PENDING = 1;
+    const DOING = 2;
+    const CONFIRM = 3;
+    const FINISH = 4;
+    const NONE = 5;
     /**
      *
      * @return array

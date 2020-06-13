@@ -28,5 +28,18 @@ class PeiliaoTypeEnum extends BaseEnum
                 self::All => "需配石配料",                
         ];
     }
+    /**
+     * 配石/配料状态
+     * @return string[][]|number[][]
+     */
+    public static function getStatusMap()
+    {
+        return [
+                self::None=>[PeishiStatusEnum::NONE,PeiliaoStatusEnum::NONE],
+                self::PeiShi=>[PeishiStatusEnum::PENDING,PeiliaoStatusEnum::NONE],
+                self::PeiLiao=>[PeishiStatusEnum::NONE,PeiliaoStatusEnum::PENDING],
+                self::All=>[PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING],
+        ];
+    }
     
 }

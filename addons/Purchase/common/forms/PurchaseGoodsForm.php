@@ -11,6 +11,7 @@ use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\enums\JintuoTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -148,6 +149,10 @@ class PurchaseGoodsForm extends PurchaseGoods
             }else {
                 $org_value = '';
             }
+            if($code == 'peiliao_type') {
+                $org_value = PeiliaoTypeEnum::getValue($org_value);
+                $value = PeiliaoTypeEnum::getValue($value);
+            }
             $apply_info[$code] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
         }
         $this->apply_info = $apply_info;
@@ -194,7 +199,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function createApply()
     {
         //主要信息
-        $fields = array('goods_name','cost_price','goods_num');
+        $fields = array('goods_name','cost_price','goods_num','peiliao_type');
         $apply_info = array();
         foreach ($fields as $field) {
             $apply_info[] = array(
