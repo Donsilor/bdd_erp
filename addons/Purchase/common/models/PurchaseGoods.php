@@ -103,8 +103,8 @@ class PurchaseGoods extends BaseModel
             'goods_name' => '商品名称',
             'goods_sn' => '款号/起版号',
             'style_id' => '商品id',
-            'style_sn' => '款号',
-            'qiban_sn' => '起版号',
+            'style_sn' => '款式编号',
+            'qiban_sn' => '起版编号',
             'qiban_type' => '起版类型',
             'peiliao_type' => '配料类型',
             'product_type_id' => '产品线',
@@ -199,7 +199,7 @@ class PurchaseGoods extends BaseModel
      */
     public function getAttrs()
     {
-        return $this->hasMany(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('attrs');
+        return $this->hasMany(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
     }
 
 

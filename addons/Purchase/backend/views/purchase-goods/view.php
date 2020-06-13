@@ -21,6 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_name') ?>：</td>
+                                    <td><?= $model->goods_name ?></td>
+                                </tr>
+                                <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
                                 </tr>
@@ -50,14 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
                                     <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
                                 </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
+                                    <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
+                                </tr>
 							    <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
                                     <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_name') ?>：</td>
-                                    <td><?= $model->goods_name ?></td>
-                                </tr>
+                                </tr>                                
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                                     <td><?= $model->goods_num ?></td>
@@ -156,12 +160,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-footer text-center">
         <?php
         if($purchase->audit_status == \common\enums\AuditStatusEnum::SAVE) {
-            echo Html::edit(['edit','id' => $model->id],'商品编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+            echo Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
         }
         ?>
         <?php
         if($model->produce_id && $model->produce && $model->produce->bc_status <= \addons\Supply\common\enums\BuChanEnum::IN_PRODUCTION) {
-            echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+            echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
         }
         ?>
         <?php
@@ -171,14 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
         }
         ?>
-
-        <!--                            --><?//= Html::a('打印',['print','id'=>$model->id],[
-        //                                'target'=>'_blank',
-        //                                'class'=>'btn btn-info btn-ms',
-        //                            ]); ?>
     </div>
-
-
 
     <div class="col-xs-12">
         <div class="box">
@@ -203,9 +200,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 
