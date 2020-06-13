@@ -22,7 +22,7 @@ class PurchaseGoldGoodsForm extends PurchaseGoldGoods
      */
     public function getMaterialTypeMap()
     {
-        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE);
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE);
     }
     /**
      * 采购商品申请编辑-创建

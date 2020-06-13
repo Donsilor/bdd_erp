@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->material_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'

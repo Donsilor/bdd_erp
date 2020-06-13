@@ -47,6 +47,6 @@ class PurchaseGoldDefectiveGoodsForm extends PurchaseDefectiveGoods
      */
     public function getMaterialTypeMap()
     {
-        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_MATERIAL_TYPE);
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE);
     }
 }
