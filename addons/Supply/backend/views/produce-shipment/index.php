@@ -15,9 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">布产详情 - <?php echo $produce->produce_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="row col-xs-16" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive" >
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
