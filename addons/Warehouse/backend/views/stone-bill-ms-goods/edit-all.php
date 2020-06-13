@@ -57,10 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '石包',
                                 'attribute'=>'stone_name',
-                                'format' => 'raw',
-                                'value' => function($model){
-                                    return Html::ajaxInput('stone_name',$model->stone_name);
-                                },
                                 'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                     'class' => 'form-control',
                                 ]),
