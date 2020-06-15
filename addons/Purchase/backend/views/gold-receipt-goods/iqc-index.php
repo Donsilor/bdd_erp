@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        //'options' => ['style'=>' width:120%;'],
+                        'options' => ['style'=>' width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -117,6 +117,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
+                                'attribute'=>'goods_name',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'goods_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'material_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->material_type);
@@ -128,14 +146,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'goods_num',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',

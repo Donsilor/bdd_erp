@@ -71,6 +71,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'300'],
                             ],
                             [
+                                'attribute' => 'goods_sn',
+                                'value' => function ($model) {
+                                    return $model->goods_sn ;
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                     'attribute' => 'material_type',
                                     'value' => function($model){
                                         return Yii::$app->attr->valueName($model->material_type);
@@ -78,14 +86,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
-                            ],                            
+                            ],
                             [
                                     'attribute' => 'goods_weight',
                                     'value' => function ($model) {
                                         return $model->goods_weight ;
                                     },
                                     'filter' => false,                                    
-                                   'headerOptions' => ['width'=>'150'],
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                 'attribute'=>'gold_price',

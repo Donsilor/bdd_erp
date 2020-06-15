@@ -59,7 +59,7 @@ class PurchaseGoldGoods extends BaseModel
         return [
             'id' => 'ID',
             'purchase_id' => '采购单',
-            'goods_sn' => '商品编号',
+            'goods_sn' => '金料款号',
             'goods_name' => '商品名称',
             'goods_num' => '商品数量',
             'goods_weight' => '金料总重',
