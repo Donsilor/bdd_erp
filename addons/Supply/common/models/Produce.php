@@ -161,14 +161,12 @@ class Produce extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'follower_id'])->alias('follower');
     }
-
-
     /**
-     * 对应镶嵌方式 inlay
+     * 布产单属性列表  一对多
      * @return \yii\db\ActiveQuery
      */
-    public function getInlay()
+    public function getAttrs()
     {
-        return $this->hasOne(ProduceAttribute::class, ['produce_id'=>'id'])->where(['attr_id'=>AttrIdEnum::INLAY_METHOD])->distinct(true)->alias('inlay');
+        return $this->hasMany(ProduceAttribute::class, ['produce_id'=>'id'])->alias('attrs')->orderBy("sort asc");
     }
 }

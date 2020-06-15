@@ -70,7 +70,7 @@ return [
                             'route' => 'bill-r/index',
                     ],*/
                     [
-                            'title' => '维修单',
+                            'title' => '维修出库单',
                             'route' => 'bill-repair/index',
                     ],
                     [
@@ -124,6 +124,10 @@ return [
                         [
                             'title' => '返厂单',
                             'route' => 'stone-bill-ts/index',
+                        ],
+                        [
+                            'title' => '盘点单',
+                            'route' => 'stone-bill-w/index',
                         ],
                     ],
             ],

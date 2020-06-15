@@ -126,7 +126,7 @@ class PurchaseApplyGoods extends BaseModel
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
     /**
-     * 采购单一对一
+     * 采购申请单一对一
      * @return \yii\db\ActiveQuery
      */
     public function getApply()
@@ -148,7 +148,7 @@ class PurchaseApplyGoods extends BaseModel
      */
     public function getAttrs()
     {
-        return $this->hasMany(PurchaseApplyGoodsAttribute::class, ['id'=>'id'])->alias('attrs');
+        return $this->hasMany(PurchaseApplyGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
     }
     
 }

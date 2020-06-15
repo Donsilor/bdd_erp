@@ -40,10 +40,18 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bc_status') ?>：</td>
                                  <td><?= \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?></td>
+                             </tr>                             
+ 							<tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_name') ?>：</td>
-                                 <td><?= $model->goods_name ?></td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_status') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -68,15 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_distribute_time') ?>：</td>
                                  <td><?= \Yii::$app->formatter->asDatetime($model->factory_distribute_time) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_order_time') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_order_time) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
-                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
-                             </tr>
+                             </tr>  
+                                                      
                          </table>
                      </div>
                  </div>
@@ -87,12 +88,16 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box-body table-responsive" style="padding-top: 0px;padding-bottom: 0px;">
                          <table class="table table-hover">
                              <tr>
-                                 <td class="col-xs-2 text-right no-border-top"><?= $model->getAttributeLabel('style_sn') ?>：</td>
-                                 <td class="no-border-top"><?= $model->style_sn ?></td>
+                                 <td class="col-xs-2 text-right no-border-top"><?= $model->getAttributeLabel('goods_name') ?>：</td>
+                                 <td class="no-border-top"><?= $model->goods_name ?></td>
                              </tr>
                              <tr>
-                                 <td class="col-xs-2 text-right no-border-top">模号：</td>
-                                 <td class="no-border-top"><?= $model->factory_mo ?></td>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
+                                 <td><?= $model->style_sn ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                                 <td><?= $model->factory_mo ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
@@ -105,19 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
                                  <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
-                             </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status) ?></td>
-                             </tr>
+                             </tr>                             
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
                                  <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
@@ -134,6 +127,14 @@ $this->params['breadcrumbs'][] = $this->title;
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                                  <td><?= $model->cate->name ?></td>
+                             </tr>
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_order_time') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_order_time) ?></td>
+                             </tr> 
+                             <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_delivery_time') ?>：</td>
+                                 <td><?= \Yii::$app->formatter->asDatetime($model->factory_delivery_time) ?></td>
                              </tr>
                          </table>
                      </div>
@@ -221,12 +222,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <?php
-                    $attr_list = \addons\Supply\common\models\ProduceAttribute::find()->where(['produce_id'=>$model->id])->all();
-                    foreach ($attr_list as $k=>$attr){
-                        ?>
+                    foreach ($model->attrs as $k=>$attr){
+                     ?>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr['attr_id'])?>：</td>
-                            <td><?= $attr['attr_value'] ?></td>
+                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                            <td><?= $attr->attr_value ?></td>
                         </tr>
                     <?php } ?>
                 </table>

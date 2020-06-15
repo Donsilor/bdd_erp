@@ -1,11 +1,9 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -203,7 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt){
-                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

@@ -27,6 +27,9 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use yii\db\Exception;
 use addons\Supply\common\enums\FromTypeEnum;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
 
 /**
  * Class PurchaseService
@@ -104,20 +107,23 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
+            list($peishi_status,$peiliao_status) = PeiliaoTypeEnum::getValue($model->peiliao_type,"getStatusMap") ?? [PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING];
             $goods = [
                     'goods_name' =>$model->goods_name,
+                    'goods_num' =>$model->goods_num,                   
                     'from_order_id'=>$model->purchase_id,
                     'from_detail_id' => $model->id,
                     'from_order_sn'=>$purchase->purchase_sn,
                     'from_type' => FromTypeEnum::PURCHASE,
                     'style_sn' => $model->style_sn,
+                    'peishi_status'=>$peishi_status,
+                    'peiliao_status'=>$peiliao_status,
                     'bc_status' => BuChanEnum::ASSIGNED,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
-                    'peiliao_type'=>$model->peiliao_type,
-                    'style_sex' =>$model->style_sex,
-                    'goods_num' =>$model->goods_num,
                     'jintuo_type'=>$model->jintuo_type,
+                    'peiliao_type'=>$model->peiliao_type,
+                    'style_sex' =>$model->style_sex,                    
                     'is_inlay' =>$model->is_inlay,
                     'product_type_id'=>$model->product_type_id,
                     'style_cate_id'=>$model->style_cate_id,

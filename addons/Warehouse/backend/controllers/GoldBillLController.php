@@ -66,8 +66,6 @@ class GoldBillLController extends GoldBillController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-
-
     }
 
     /**
