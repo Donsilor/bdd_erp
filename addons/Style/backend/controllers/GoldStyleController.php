@@ -2,7 +2,6 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\Style\common\models\StyleStoneStyle;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;

@@ -1,25 +1,16 @@
 <?php
-/**
- * 供应商
- * User: BDD
- * Date: 2019/12/7
- * Time: 13:53
- */
 
 namespace addons\Supply\services;
 
-use addons\Supply\common\models\Supplier;
-use addons\Supply\common\models\SupplierFollower;
-use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use common\helpers\Url;
+use addons\Supply\common\models\Supplier;
+use addons\Supply\common\models\SupplierFollower;
 use common\models\backend\Member;
-
+use common\helpers\Url;
 
 class SupplierService
 {
-
     /**
      * 布产编辑 tab
      * @param int $id 款式ID
@@ -33,11 +24,10 @@ class SupplierService
         ];
     }
     /**
-     * 下拉
+     * 供应商下拉
      * @return array
      */
     public function getDropDown(){
-
         $model = Supplier::find()
             ->where(['status' => StatusEnum::ENABLED])
             ->select(['id','supplier_name'])
@@ -58,8 +48,4 @@ class SupplierService
             ->all();
         return ArrayHelper::map($model,'member_id', 'member_name');
     }
-
-
-
-
 }

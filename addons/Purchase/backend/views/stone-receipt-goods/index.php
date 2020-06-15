@@ -1,15 +1,9 @@
 <?php
 
-
 use addons\Style\common\enums\AttrIdEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use common\enums\WhetherEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
             echo '&nbsp;&nbsp;&nbsp;';
         }
-        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+        if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::a('批量申请入库', ['warehouse'], [
                 'class'=>'btn btn-success btn-xs',
                 "onclick" => "batchWarehouse(this);return false;",
@@ -189,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

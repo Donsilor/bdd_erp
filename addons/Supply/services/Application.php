@@ -9,12 +9,8 @@ use common\components\Service;
  *
  * @package addons\Supply\services
  * @property \addons\Supply\services\FactoryService $factory 工厂
-
  * @property \addons\Supply\services\ProduceService $produce 布产单
- * @property \addons\Supply\services\ProduceLogService $produce_log 布产日志
  * @property \addons\Supply\services\SupplierService $supplier 供应商
-
- *
  */
 class Application extends Service
 {
@@ -26,7 +22,5 @@ class Application extends Service
         'factory' => 'addons\Supply\services\FactoryService',
         'supplier' => 'addons\Supply\services\SupplierService',
         'produce' => 'addons\Supply\services\ProduceService',
-        'produce_log' => 'addons\Supply\services\ProduceLogService',
-        'supplier' => 'addons\Supply\services\SupplierService',
     ];
 }
