@@ -26,7 +26,7 @@ use common\enums\ConfirmEnum;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillWService extends WarehouseBillService
+class WarehouseGoldBillWService extends WarehouseBillService
 {
     
     /**
