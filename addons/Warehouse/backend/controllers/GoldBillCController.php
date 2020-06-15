@@ -111,7 +111,7 @@ class GoldBillCController extends GoldBillController
     }
 
     /**
-     * ajax 收货单-审核
+     * ajax 领料单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -130,7 +130,7 @@ class GoldBillCController extends GoldBillController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldBill->auditGoldL($model);
+                //\Yii::$app->warehouseService->goldBill->auditGoldL($model);
 
                 $trans->commit();
 
