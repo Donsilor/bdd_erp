@@ -157,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },
