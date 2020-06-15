@@ -70,7 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
                             ],
-                            
                             [
                                     'attribute' => 'material_type',
                                     'value' => function($model){
@@ -89,22 +88,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute'=>'gold_price',
+                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->gold_price ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                     'attribute'=>'cost_price',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
                                         return $model->cost_price ;
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
-                                    'attribute'=>'gold_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->gold_price ;
                                     },
                                     'headerOptions' => ['width'=>'150'],
                             ],

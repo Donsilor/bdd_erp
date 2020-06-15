@@ -94,14 +94,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],

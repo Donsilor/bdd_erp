@@ -225,7 +225,7 @@ class PurchaseService extends Service
                 'purchase_detail_id' => $model->id,
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
-                'goods_num' => $model->goods_num,
+                'goods_num' => 1,
                 'goods_weight'=>$model->goods_weight,
                 'cost_price' =>$model->cost_price,
                 'goods_remark'=>$model->remark,

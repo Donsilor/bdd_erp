@@ -19,7 +19,7 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GOLD_L   => '收货单',
+            self::GOLD_L   => '入库单',
         ];
     }
 

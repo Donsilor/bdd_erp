@@ -40,14 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         [
-                            'label' => '序号',
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '单号',
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
                                 return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
@@ -59,7 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '单据类型',
                             'attribute' => 'bill_type',
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
@@ -74,22 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                         ],
                         [
-                            'label' => '单据状态',
-                            'attribute' => 'bill_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
-                        ],
-                        [
-                            'label' => '加工商',
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -104,16 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
                         ],
-                        [
-                            'label' => '金料总数',
+                        /*[
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
-                        ],
+                        ],*/
                         [
-                            'label' => '金料总重量',
                             'attribute'=>'total_weight',
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
@@ -121,7 +100,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '金料总价',
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
@@ -129,7 +107,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '纸质单号',
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
@@ -137,7 +114,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '制单人',
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -146,7 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'label' => '制单时间',
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
@@ -170,7 +145,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'label' => '审核状态',
                             'attribute' => 'audit_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -184,28 +158,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'label' => '审核时间',
-                            'attribute'=>'audit_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'audit_time',
-                                'value' => $searchModel->audit_time,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
+                            'attribute' => 'bill_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
                             ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->audit_time);
-                            }
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',

@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use common\enums\StatusEnum;
 use Yii;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
@@ -33,10 +34,12 @@ class WarehouseGoldService extends Service
                     'gold_name' => $detail->gold_name,
                     'gold_type' => $detail->gold_type,
                     'supplier_id' => $form->supplier_id,
-                    'gold_num' => $detail->gold_num,
+                    'gold_num' => 1,
                     'gold_weight' => $detail->gold_weight,
                     'cost_price' => $detail->cost_price,
-                    'sale_price' => $detail->sale_price
+                    'gold_price' => $detail->gold_price,
+                    'status' => StatusEnum::ENABLED,
+                    'created_at' => time(),
                 ];
                 $goldM->attributes = $good;
                 if(false === $goldM->save()){
@@ -73,8 +76,7 @@ class WarehouseGoldService extends Service
         $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE,'id','code');
         $gold_sn .= $type_codes[$model->gold_type] ?? '0';
         //3.数字编号
-        $gold_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT);
-        $gold_sn .= $gold_sn."G";
+        $gold_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT)."G";
         if($save === true) {
             $model->gold_sn = $gold_sn;
             if(false === $model->save()) {
