@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\enums\AttrIdEnum;
+use common\helpers\ArrayHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -161,6 +163,32 @@ class BillTGoodsController extends BaseController
             $trans->rollBack();
             return ResultHelper::json(422, $e->getMessage());
         }
+    }
+
+
+    public function actionBatchSelect(){
+        $this->layout = '@backend/views/layouts/iframe';
+        $ids = Yii::$app->request->get('ids');
+        $id_arr = explode(',',$ids);
+        $name = Yii::$app->request->get('name');
+        $attr_id = Yii::$app->request->get('attr_id',0);
+        if($attr_id == 0){
+            return ResultHelper::json(400, '参数错误',[]);
+        }
+        $style_arr = WarehouseBillTGoodsForm::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
+        if(count($style_arr) != 1){
+            return ResultHelper::json(400, '请选择一个款的商品进行操作',[]);
+        }
+        $style_sn = $style_arr[0]['style_sn'];
+        $model = new WarehouseBillTGoodsForm();
+
+        $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn,$attr_id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'ids' => $ids,
+            'name'=> $name,
+            'attr_arr' =>$attr_arr
+        ]);
     }
 
     /**
