@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l', '收货单');
+$this->title = Yii::t('gold_bill_l', '金料入库单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

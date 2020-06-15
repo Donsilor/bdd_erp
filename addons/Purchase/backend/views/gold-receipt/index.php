@@ -158,15 +158,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'auditor_id',
-                'value' => 'auditor.username',
-                'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
-                    'class' => 'form-control',
-                    'style'=> 'width:100px;'
-                ]),
-            ],
-            [
                 'attribute' => 'audit_status',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
@@ -178,31 +169,6 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                     'style'=> 'width:100px;'
                 ]),
-            ],
-            [
-                'attribute' => 'audit_time',
-                'filter' => DateRangePicker::widget([    // 日期组件
-                    'model' => $searchModel,
-                    'attribute' => 'audit_time',
-                    'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'locale' => [
-                            'separator' => '/',
-                        ],
-                        'endDate' => date('Y-m-d', time()),
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'todayBtn' => 'linked',
-                        'clearBtn' => true,
-                    ],
-                ]),
-                'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
-                },
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'receipt_status',
