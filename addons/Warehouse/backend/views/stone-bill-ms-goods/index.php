@@ -1,5 +1,6 @@
 <?php
 
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
@@ -29,13 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content" style="padding-right: 10px;">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:130%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -47,6 +48,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{edit} {delete}',
+                                'buttons' => [
+                                    'edit' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
+                                        }
+
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ],
                             /*[
                                 'label' => 'ID',
                                 'attribute' => 'id',
@@ -54,13 +80,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],*/
                             [
-                                'label' => '石包',
                                 'attribute'=>'stone_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '石包类型',
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'stone_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->stone_type);
@@ -73,43 +102,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '石包总数',
                                 'attribute' => 'stone_num',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '石包总重量',
                                 'attribute' => 'stone_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '每卡采购价格',
+                                'attribute' => 'stone_price',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '每卡销售价格',
-                                'attribute' => 'sale_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '证书号',
                                 'attribute' => 'cert_id',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => true,
                             ],
-                            [
-                                'label' => '石重',
+                            /*[
                                 'attribute' => 'carat',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                            ],*/
                             [
-                                'label' => '颜色',
                                 'attribute' => 'color',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->color);
@@ -122,7 +144,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '净度',
                                 'attribute' => 'clarity',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->clarity);
@@ -135,7 +156,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '切工',
                                 'attribute' => 'cut',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cut);
@@ -148,20 +168,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '抛光',
-                                'attribute' => 'polish',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->polish);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '对称',
                                 'attribute' => 'symmetry',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->symmetry);
@@ -174,7 +180,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '荧光',
+                                'attribute' => 'polish',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->polish);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'fluorescence',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->fluorescence);
@@ -189,17 +206,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
 
                                     },
                                 ],
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ]
+                                'headerOptions' => [],
+                            ],
                         ]
                     ]); ?>
                 </div>

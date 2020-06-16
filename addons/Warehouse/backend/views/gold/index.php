@@ -47,8 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],*/
                         [
                             'label' => '批次号',
-                            'attribute'=>'batch_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'batch_sn', [
+                            'attribute'=>'gold_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
@@ -63,8 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label' => '金料款号',
-                            'attribute'=>'gold_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],

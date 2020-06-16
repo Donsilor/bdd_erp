@@ -41,5 +41,14 @@ class PeiliaoTypeEnum extends BaseEnum
                 self::All=>[PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING],
         ];
     }
+    /**
+     * 是否配料
+     * @param unknown $type
+     * @return boolean
+     */
+    public static function isPeiliao($peiliao_type)
+    {
+        return $peiliao_type != self::None;
+    }
     
 }

@@ -3,12 +3,13 @@
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Purchase\common\enums\ReceiptStatusEnum;
 use common\helpers\Html;
+use common\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_receipt_goods', '石料采购收货单详情');
+$this->title = Yii::t('stone_receipt_goods', '石料收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;&nbsp;&nbsp;';
         }
         if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
-            echo Html::a('批量申请入库', ['warehouse'], [
+            echo Html::a('批量入库', ['warehouse'], [
                 'class'=>'btn btn-success btn-xs',
                 "onclick" => "batchWarehouse(this);return false;",
             ]);
@@ -51,6 +52,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{edit} {delete}',
+                                'buttons' => [
+                                    'edit' => function($url, $model, $key) use($receipt){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($receipt){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'xuhao',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
@@ -72,15 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:280px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:200px;'
                                 ]),
                             ],
                             [
@@ -109,12 +126,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'goods_num',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -125,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -137,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'goods_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -147,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -156,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -180,11 +205,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
-                                    'delete' => function($url, $model, $key) use($receipt) {
+                                    'edit' => function($url, $model, $key) use($receipt){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($receipt){
                                         if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],

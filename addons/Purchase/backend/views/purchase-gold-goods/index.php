@@ -123,10 +123,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => Html::activeDropDownList($searchModel, 'is_receipt',ConfirmEnum::getMap(), [
                                         'prompt' => '全部',
                                         'class' => 'form-control',
-                                        'style' => 'width:100px;',
+                                        'style' => 'width:80px;',
                                     ]),
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'100'],
+                                    'headerOptions' => ['width'=>'80'],
                             ],
                             /*[
                                     'attribute' => '申请修改',

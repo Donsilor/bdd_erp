@@ -2,6 +2,10 @@
 
 use common\helpers\Html;
 use addons\Supply\common\enums\BuChanEnum;
+use common\helpers\ArrayHelper;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -47,11 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
+                                 <td><?= PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                                 <td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -122,11 +126,11 @@ $this->params['breadcrumbs'][] = $this->title;
                              
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
-                                 <td><?= $model->type->name ?></td>
+                                 <td><?= $model->type->name ?? '' ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
-                                 <td><?= $model->cate->name ?></td>
+                                 <td><?= $model->cate->name ??''?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_order_time') ?>：</td>
@@ -165,8 +169,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModal',
                 ]);
                 break;
-            //已分配
-            case BuChanEnum::ASSIGNED:
+            //待配料    
+            case BuChanEnum::TO_PEILIAO :
+                $buttonHtml .= Html::edit(['to-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
+                    'class'=>'btn btn-success btn-ms',
+                    'style'=>"margin-left:5px",
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModal',
+                ]);
+                break;
+            //配料中
+            case BuChanEnum::IN_PEILIAO:
+                
+                break;
+            //待生产
+            case BuChanEnum::TO_PRODUCTION:
                 $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
                     'class'=>'btn btn-danger btn-ms',
                     'style'=>"margin-left:5px",
@@ -223,6 +240,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-hover">
                     <?php
                     foreach ($model->attrs as $k=>$attr){
+                        $attrValues[$attr->attr_id] = $attr->attr_value;
                      ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
@@ -243,15 +261,77 @@ $this->params['breadcrumbs'][] = $this->title;
                 </table>
             </div>
         </div>
+        <?php if($model->peiliao_status != PeiliaoStatusEnum::NONE) {?>
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> 金料信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    	<tr><th>金料材质</th><th>金重</th><th>状态</th></tr>
+                    </thead>
+                    <tbody>
+                    	<?php if(!empty($attrValues[AttrIdEnum::MATERIAL])) {?>
+                    	<tr>
+                    		<td><?= $attrValues[AttrIdEnum::MATERIAL]?></td>
+                        	<td><?= $attrValues[AttrIdEnum::JINZHONG] ?? 0 ?>g</td>
+                        	<td><?= PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
+                    	</tr>
+                    	<?php }?>   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php }?>
+        <?php if($model->peishi_status != PeishiStatusEnum::NONE) {?>
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> 石料信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    	<tr><th>石头位置</th><th>石头类型</th><th>数量</th><th>石重</th><th>证书类型</th><th>规格(颜色/净度/切工/对称/荧光)</th><th>状态</th></tr>
+                    </thead>
+                    <tbody>
+                        <?php if(!empty($attrValues[AttrIdEnum::MAIN_STONE_TYPE])) {?>
+                    	<tr>
+                    		<td>主石</td>
+                        	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_TYPE]?></td>                        	
+                        	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_NUM]??'0'?></td>
+                        	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??'0'?>ct</td>
+                        	<td><?= $attrValues[AttrIdEnum::DIA_CERT_TYPE]??'无'?></td>
+                        	<td><?= ($attrValues[AttrIdEnum::DIA_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CLARITY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CUT] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_SYMMETRY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_FLUORESCENCE] ?? '无')?></td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                    	</tr>
+                    	<?php }?>                    	
+                    	<?php if(!empty($attrValues[AttrIdEnum::SIDE_STONE1_TYPE])) {?>
+                    	<tr>
+                    		<td>副石1</td>
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_TYPE]?></td>                        	
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_NUM]??'0'?></td>
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??'0'?>ct</td>
+                        	<td>无</td>
+                        	<td><?= ($attrValues[AttrIdEnum::SIDE_STONE1_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_CLARITY] ?? '无').'/无/无/无'?></td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                    	</tr>
+                    	<?php }?>                    	
+                    	<?php if(!empty($attrValues[AttrIdEnum::SIDE_STONE2_TYPE])) {?>
+                    	<tr>
+                    		<td>副石2</td>
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_TYPE]?></td>                        	
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_NUM]??'0'?></td>
+                        	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??'0'?>ct</td>
+                        	<td>无</td>
+                        	<td></td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                    	</tr>
+                    	<?php }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php }?>
     </div>
-
-
-
-
 </div>
-
-
-
-    <!-- box end -->
-
-<!-- tab-content end -->

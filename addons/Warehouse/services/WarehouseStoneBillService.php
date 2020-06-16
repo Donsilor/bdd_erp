@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
@@ -96,6 +99,23 @@ class WarehouseStoneBillService extends Service
                 }
         }
         return $tabList;
+    }
+
+    /**
+     * 单据汇总
+     * @param integer $bill_id
+     * @throws \Exception
+     */
+    public function purchaseStoneBillSummary($bill_id)
+    {
+        $sum = WarehouseStoneBillGoods::find()
+            ->select(['sum(1) as total_num','sum(stone_weight) as total_weight','sum(cost_price) as total_cost'])
+            ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
+            ->asArray()->one();
+        if($sum) {
+            $result = WarehouseStoneBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
+        }
+        return $result?:null;
     }
 
     /**

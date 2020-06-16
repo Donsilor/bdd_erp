@@ -14,6 +14,7 @@ use Yii;
  * @property int $purchase_detail_id 采购单商品明细ID
  * @property int $goods_status 收货单货品状态
  * @property string $goods_name 商品名称
+ * @property string $goods_sn 石料款号
  * @property int $goods_num 商品数量
  * @property string $material_type 商品类型
  * @property double $goods_weight 重量
@@ -48,10 +49,10 @@ class PurchaseStoneReceiptGoods extends BaseModel
     public function rules()
     {
         return [
-            [['receipt_id', 'purchase_sn'], 'required'],
+            [['receipt_id', 'purchase_sn', 'goods_name', 'material_type', 'goods_num', 'goods_weight'], 'required'],
             [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
-            [['purchase_sn'], 'string', 'max' => 30],
+            [['purchase_sn', 'goods_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_color', 'goods_clarity', 'material_type'], 'string', 'max' => 10],
             [['goods_norms'], 'string', 'max' => 20],
@@ -67,19 +68,20 @@ class PurchaseStoneReceiptGoods extends BaseModel
         return [
             'id' => 'ID',
             'receipt_id' => '采购收货单ID',
-            'purchase_sn' => '采购单编号',
-            'xuhao' => '序号',
-            'purchase_detail_id' => '采购单商品明细ID',
-            'goods_status' => '收货单货品状态',
-            'goods_name' => '商品名称',
-            'goods_num' => '商品数量',
-            'material_type' => '商品类型',
-            'goods_weight' => '重量',
+            'purchase_sn' => '采购单号',
+            'xuhao' => '石料序号',
+            'purchase_detail_id' => '采购单明细ID',
+            'goods_status' => '石料状态',
+            'goods_name' => '石料名称',
+            'goods_sn' => '石料款号',
+            'goods_num' => '石料数量',
+            'material_type' => '石料类型',
+            'goods_weight' => '石料重量(ct)',
             'goods_color' => '颜色',
             'goods_clarity' => '净度',
             'goods_norms' => '规格',
-            'cost_price' => '成本价',
-            'stone_price' => '石料单价/CT',
+            'cost_price' => '石料总额',
+            'stone_price' => '石料单价(ct)',
             'goods_remark' => '商品备注',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',

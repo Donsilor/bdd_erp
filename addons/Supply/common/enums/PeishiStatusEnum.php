@@ -14,7 +14,7 @@ class PeishiStatusEnum extends BaseEnum
     const DOING = 2;
     const CONFIRM = 3;
     const FINISH = 4;
-    const NONE = 5;
+    const NONE = 9;
     /**
      *
      * @return array

@@ -21,21 +21,21 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
            <div class="row">
                <div class="col-lg-4">
-                   <?= $form->field($model, 'stone_name')->textInput() ?>
+                   <?= $form->field($model, 'goods_name')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'material_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'style_sn')->textInput()?>
+                   <?= $form->field($model, 'goods_sn')->textInput()?>
                </div>
            </div>
            <div class="row">
                <div class="col-lg-4">
-                   <?= $form->field($model, 'stone_num')->textInput() ?>
+                   <?= $form->field($model, 'goods_num')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'stone_weight')->textInput() ?>
+                   <?= $form->field($model, 'goods_weight')->textInput() ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'stone_price')->textInput() ?>
@@ -43,27 +43,20 @@ $form = ActiveForm::begin([
            </div>
            <div class="row">
                <div class="col-lg-4">
-                   <?= $form->field($model, 'color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'clarity')->dropDownList($model->getClarityMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'goods_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'cut')->dropDownList($model->getCutMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'goods_clarity')->dropDownList($model->getClarityMap(),['prompt'=>'请选择']) ?>
                </div>
            </div>
            <div class="row">
                <div class="col-lg-4">
-                   <?= $form->field($model, 'symmetry')->dropDownList($model->getSymmetryMap(),['prompt'=>'请选择']) ?>
-               </div>
-               <div class="col-lg-4">
-                   <?= $form->field($model, 'polish')->dropDownList($model->getPolishMap(),['prompt'=>'请选择']) ?>
-               </div>
-               <div class="col-lg-4">
-                   <?= $form->field($model, 'fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'goods_remark')->textarea() ?>
                </div>
            </div>
-       </div>
        </div>
     </div>
     <div class="modal-footer">

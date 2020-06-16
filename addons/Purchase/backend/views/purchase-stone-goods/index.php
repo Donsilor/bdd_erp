@@ -64,12 +64,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         return $str;
+                                        return $model->goods_name;
                                     },
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
-                            ], 
+                            ],
+                            [
+                                'attribute'=>'goods_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->goods_sn;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'150'],
+                            ],
                             [
                                     'attribute' => 'stone_type',
                                     'filter' => false,
@@ -86,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->stone_num ;
                                     },
-                                   'headerOptions' => ['width'=>'150'],
+                                   'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                     'attribute' => 'stone_color',
@@ -115,22 +125,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute'=>'stone_price',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->stone_price ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                     'attribute'=>'cost_price',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
                                         return $model->cost_price ;
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
-                                    'attribute'=>'stone_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'stone_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->stone_price ;
                                     },
                                     'headerOptions' => ['width'=>'150'],
                             ],

@@ -614,7 +614,7 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     * 金料收货单同步创建金料入库单
+     * 金料收货单同步创建入库单
      * @param object $form
      * @param array $detail_ids
      * @throws \Exception
@@ -645,7 +645,7 @@ class PurchaseReceiptService extends Service
             $goods[] = [
                 'gold_name' => $model->goods_name,
                 'gold_type' => $model->material_type,
-                'gold_sn' => $model->goods_sn,
+                'style_sn' => $model->goods_sn,
                 'gold_num' => $model->goods_num,
                 'gold_weight' => $model->goods_weight,
                 'cost_price' => $model->cost_price,
@@ -684,7 +684,7 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     * 石料采购收货单同步创建石料收货单
+     * 石料收货单同步创建入库单
      * @param object $form
      * @param array $detail_ids
      * @throws \Exception
