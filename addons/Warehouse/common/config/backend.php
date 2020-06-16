@@ -105,12 +105,12 @@ return [
                 ],
             ],
             [
-                    'title' => '石包管理',
+                    'title' => '石料管理',
                     'route' => 'indexStone',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                         [
-                            'title' => '石包列表',
+                            'title' => '石料列表',
                             'route' => 'stone/index',
                         ],
                         [
