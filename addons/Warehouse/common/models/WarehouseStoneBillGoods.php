@@ -48,7 +48,7 @@ class WarehouseStoneBillGoods extends BaseModel
         return [
             [['bill_id', 'bill_type', 'stone_name'], 'required'],
             [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['carat', 'stone_weight', 'cost_price', 'sale_price'], 'number'],
+            [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
             [['stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
