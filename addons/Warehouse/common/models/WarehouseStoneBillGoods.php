@@ -11,6 +11,7 @@ use Yii;
  * @property int $bill_id 单据ID
  * @property string $bill_type 单据类型
  * @property string $stone_name 石包名称
+ * @property string $style_sn 石料款号
  * @property string $stone_type 商品类型
  * @property string $cert_id 证书号
  * @property string $carat 石重
@@ -49,7 +50,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['carat', 'stone_weight', 'cost_price', 'sale_price'], 'number'],
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
-            [['stone_name'], 'string', 'max' => 30],
+            [['stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
         ];
     }
@@ -63,8 +64,9 @@ class WarehouseStoneBillGoods extends BaseModel
             'id' => 'ID',
             'bill_id' => '单据ID',
             'bill_type' => '单据类型',
-            'stone_name' => '石包名称',
-            'stone_type' => '商品类型',
+            'stone_name' => '石料名称',
+            'style_sn' => '石料款号',
+            'stone_type' => '石料类型',
             'cert_id' => '证书号',
             'carat' => '石重',
             'color' => '颜色',
@@ -73,10 +75,11 @@ class WarehouseStoneBillGoods extends BaseModel
             'polish' => '抛光',
             'fluorescence' => '荧光',
             'symmetry' => '对称',
-            'stone_num' => '石包总粒数',
-            'stone_weight' => '石包总重量',
-            'cost_price' => '成本价',
-            'sale_price' => '销售价格',
+            'stone_num' => '石料粒数',
+            'stone_weight' => '石料重量(ct)',
+            'cost_price' => '石料总额',
+            'stone_price' => '石料单价(ct)',
+            'sale_price' => '销售价',
             'source_detail_id' => '来源明细ID',
             'status' => '状态 1启用 0禁用 -1删除',
             'created_at' => '创建时间',

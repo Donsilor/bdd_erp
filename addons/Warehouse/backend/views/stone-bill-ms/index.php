@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill_ms', '石包入库单');
+$this->title = Yii::t('stone_bill_ms', '石料入库单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:130%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -39,15 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
+                        /*[
                             'label' => '序号',
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
-                        ],
+                        ],*/
                         [
-                            'label' => '单号',
+                            'label' => '单据编号',
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
                                 return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
@@ -59,20 +59,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '加工商',
+                            'label' => '供应商',
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                                'options' => ['placeholder' =>"请选择"],
                                 'pluginOptions' => [
                                     'allowClear' => true,
+                                    'width' => '120',
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
+                            'headerOptions' => [],
                         ],
                         [
                             'label' => '石包总数',
@@ -80,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'120'],
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'label' => '石包总重量',
@@ -91,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '石包总价',
+                            'label' => '石包总额',
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
@@ -110,10 +111,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => '制单人',
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'label' => '制单时间',
@@ -122,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:120px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -143,15 +144,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => '审核状态',
                             'attribute' => 'audit_status',
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
                                 return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'width'=> '100',
                             ]),
+                            'headerOptions' => [],
                         ],
                         [
                             'label' => '单据状态',
@@ -162,11 +163,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
+                                'width'=> '100',
 
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
+                            'headerOptions' => [],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',

@@ -29,8 +29,8 @@ class WarehouseStoneBillMsGoodsForm extends WarehouseStoneBillGoods
     public function attributeLabels()
     {
         //合并
-        //return ArrayHelper::merge(parent::attributeLabels() , [
-        //]);
+        return ArrayHelper::merge(parent::attributeLabels() , [
+        ]);
     }
 
    
