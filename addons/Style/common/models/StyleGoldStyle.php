@@ -29,7 +29,7 @@ class StyleGoldStyle extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('gold_style');
+        return self::tableFullName('gold');
     }
 
     /**

@@ -40,7 +40,7 @@ class PurchaseGoldGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id','goods_name','material_type','cost_price','goods_weight'], 'required'],
+            [['purchase_id','goods_name','material_type','gold_price','goods_weight'], 'required'],
             [['purchase_id', 'goods_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['apply_info'], 'string'],
@@ -59,7 +59,7 @@ class PurchaseGoldGoods extends BaseModel
         return [
             'id' => 'ID',
             'purchase_id' => '采购单',
-            'goods_sn' => '商品编号',
+            'goods_sn' => '金料款号',
             'goods_name' => '商品名称',
             'goods_num' => '商品数量',
             'goods_weight' => '金料总重',

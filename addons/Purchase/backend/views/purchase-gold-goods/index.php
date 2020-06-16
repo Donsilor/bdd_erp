@@ -70,7 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
                             ],
-                            
+                            [
+                                    'attribute' => 'goods_sn',
+                                    'value' => function ($model) {
+                                        return $model->goods_sn ;
+                                    },
+                                    'filter' => false,
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'attribute' => 'material_type',
                                     'value' => function($model){
@@ -79,14 +86,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
-                            ],                            
+                            ],
                             [
                                     'attribute' => 'goods_weight',
                                     'value' => function ($model) {
                                         return $model->goods_weight ;
                                     },
                                     'filter' => false,                                    
-                                   'headerOptions' => ['width'=>'150'],
+                                    'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                    'attribute'=>'gold_price',
+                                    'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                        'class' => 'form-control',
+                                    ]),
+                                    'value' => function ($model) {
+                                        return $model->gold_price ;
+                                    },
+                                    'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                     'attribute'=>'cost_price',
@@ -99,27 +116,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'150'],
                             ],
                             [
-                                    'attribute'=>'gold_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->gold_price ;
+                                    'attribute' => 'is_receipt',
+                                    'value' => function ($model){
+                                        return ConfirmEnum::getValue($model->is_receipt);
                                     },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
-                                'attribute' => 'is_receipt',
-                                'value' => function ($model){
-                                    return ConfirmEnum::getValue($model->is_receipt);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'is_receipt',ConfirmEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
+                                    'filter' => Html::activeDropDownList($searchModel, 'is_receipt',ConfirmEnum::getMap(), [
+                                        'prompt' => '全部',
+                                        'class' => 'form-control',
+                                        'style' => 'width:100px;',
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
                             ],
                             /*[
                                     'attribute' => '申请修改',

@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l_goods', '金料入库单明细');
+$this->title = Yii::t('gold_bill_l_goods', '领料单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -57,11 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
                                 'attribute' => 'gold_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->gold_type);
@@ -71,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute' => 'gold_weight',

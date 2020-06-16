@@ -11,10 +11,12 @@ use Yii;
  * @property int $bill_id 单据ID
  * @property string $bill_type 单据类型
  * @property string $gold_name 金料名称
+ * @property string $gold_sn 金料款号
  * @property string $gold_type 商品类型
  * @property int $gold_num 金料总数
  * @property string $gold_weight 金料总重量
  * @property string $cost_price 成本价
+ * @property string $gold_price 单价
  * @property string $sale_price 销售价格
  * @property int $source_detail_id 来源明细ID
  * @property int $status 状态 1启用 0禁用 -1删除
@@ -38,10 +40,10 @@ class WarehouseGoldBillGoods extends BaseModel
     {
         return [
             [['bill_id', 'bill_type', 'gold_name'], 'required'],
-            [['id', 'bill_id', 'gold_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['gold_weight', 'cost_price', 'sale_price'], 'number'],
+            [['bill_id', 'gold_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
-            [['gold_name'], 'string', 'max' => 30],
+            [['gold_name', 'gold_sn'], 'string', 'max' => 30],
         ];
     }
 
@@ -55,10 +57,12 @@ class WarehouseGoldBillGoods extends BaseModel
             'bill_id' => '单据ID',
             'bill_type' => '单据类型',
             'gold_name' => '金料名称',
+            'gold_sn' => '金料款号',
             'gold_type' => '商品类型',
             'gold_num' => '金料总数',
-            'gold_weight' => '金料总重量',
-            'cost_price' => '成本价',
+            'gold_weight' => '金料总重/克',
+            'cost_price' => '金料总额',
+            'gold_price' => '金料单价/克',
             'sale_price' => '销售价格',
             'source_detail_id' => '来源明细ID',
             'status' => '状态 1启用 0禁用 -1删除',

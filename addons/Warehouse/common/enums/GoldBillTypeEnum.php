@@ -12,6 +12,7 @@ namespace addons\Warehouse\common\enums;
 class GoldBillTypeEnum extends \common\enums\BaseEnum
 {
     const GOLD_L   = 'GL';
+    const GOLD_C   = 'GC';
 
     /**
      * @return array
@@ -19,7 +20,8 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GOLD_L   => '收货单',
+            self::GOLD_L   => '入库单',
+            self::GOLD_C   => '领料单',
         ];
     }
 

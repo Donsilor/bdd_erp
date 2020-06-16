@@ -14,7 +14,7 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l_goods', '金料入库单详情');
+$this->title = Yii::t('gold_bill_l_goods', '领料单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -62,14 +62,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
                                 'attribute' => 'gold_type',
                                 'format' => 'raw',
                                 'value' => function ($model){
@@ -80,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute' => 'gold_weight',

@@ -32,7 +32,7 @@ class StyleStoneStyle extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('stone_style');
+        return self::tableFullName('stone');
     }
 
     /**
