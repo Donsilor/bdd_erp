@@ -40,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:140%;'],
+                    'options' => ['style'=>'width:150%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -73,7 +73,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                                 'attribute' => 'bill_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
+                                'headerOptions' => ['width'=>'120'],
                                 'value' => function ($model){
                                      return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                                 },

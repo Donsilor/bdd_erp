@@ -174,7 +174,7 @@ class WarehouseGoldBillService extends Service
     }
 
     /**
-     * 创建金料盘点单
+     * 创建盘点单
      * @param object $form
      */
     public function createBillW($form){
@@ -189,6 +189,7 @@ class WarehouseGoldBillService extends Service
         }
         //批量创建单据明细
         $goods_list = WarehouseGold::find()->where(['gold_type'=>$bill->warehouse])->asArray()->all();
+        $gold_weight = 0;
         if(!empty($goods_list)) {
             $bill_goods_values = [];
             foreach ($goods_list as $goods) {
@@ -205,6 +206,7 @@ class WarehouseGoldBillService extends Service
                     'status'=> PandianStatusEnum::SAVE,
                 ];
                 $bill_goods_values[] = array_values($bill_goods);
+                $gold_weight = bcadd($gold_weight, $goods['gold_weight'], 3);
             }
             if(empty($bill_goods_keys)) {
                 $bill_goods_keys = array_keys($bill_goods);
@@ -219,6 +221,7 @@ class WarehouseGoldBillService extends Service
         $billW = new WarehouseMaterialBillW();
         $billW->id = $bill->id;
         $billW->should_num = count($bill_goods);
+        $billW->should_weight = $gold_weight;
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
         }
@@ -233,18 +236,27 @@ class WarehouseGoldBillService extends Service
      */
     public function billWSummary($bill_id)
     {
-        $sum = WarehouseGoldBillGoods::find()->alias("g")
-            ->select(['sum(1) as actual_num',
+        $sum = WarehouseGoldBillGoods::find()->alias("g")->innerJoin(WarehouseMaterialBillW::tableName().' gw','g.id=gw.id')
+            ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
+                'sum(if(gw.status='.ConfirmEnum::YES.',g.gold_weight,0)) as actual_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
+                'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.gold_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
+                'sum(if(g.status='.PandianStatusEnum::LOSS.',g.gold_weight,0)) as loss_weight',
                 'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
+                'sum(if(g.status='.PandianStatusEnum::SAVE.',g.gold_weight,0)) as save_weight',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
-                'sum(1) as adjust_num',
+                'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.gold_weight,0)) as normal_weight',
+                'sum(if(g.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
+                'sum(if(g.adjust_status>'.PandianAdjustEnum::SAVE.',g.gold_weight,0)) as adjust_weight',
                 'sum(1) as goods_num',//明细总数量
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {
             $billUpdate = ['total_num'=>$sum['goods_num']];
-            $billWUpdate = ['save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
+            $billWUpdate = [
+                'save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num'],
+                'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight']
+            ];
             $res1 = WarehouseGoldBill::updateAll($billUpdate,['id'=>$bill_id]);
             $res2 = WarehouseMaterialBillW::updateAll($billWUpdate,['id'=>$bill_id]);
             return $res1 && $res2;
