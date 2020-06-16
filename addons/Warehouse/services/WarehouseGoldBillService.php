@@ -196,6 +196,7 @@ class WarehouseGoldBillService extends Service
                     'bill_id'=>$bill->id,
                     'bill_type'=>$bill->bill_type,
                     'bill_no'=>$bill->bill_no,
+                    'gold_sn'=>$goods['gold_sn'],
                     'gold_name'=>$goods['gold_name'],
                     'style_sn'=>$goods['style_sn'],
                     'gold_type'=>$goods['gold_type'],

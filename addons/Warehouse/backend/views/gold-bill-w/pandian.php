@@ -18,13 +18,17 @@ $form = ActiveForm::begin([
         <div class=" table-responsive">
             <table class="table table-hover">
                 <tr>
-                    <td class="col-xs-1 text-right no-border-top">货号：</td>
-                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'goods_ids')->textArea(['style'=>'height:200px;'])->label(false)?></td>
+                    <td class="col-xs-1 text-right no-border-top">批次号：</td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'gold_sn')->textInput()->label(false)?></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right no-border-top">金料总重：</td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'gold_weight')->textInput()->label(false)?></td>
                     <td class="text-left no-border-top"><button class="btn btn-primary" type="submit">盘点</button></td>
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">盘点仓库：</td>
-                    <td><?= $model->toWarehouse->name ??'' ?></td>
+                    <td><?= $model->billW->warehouse ??'' ?></td>
                 </tr>                         
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>
