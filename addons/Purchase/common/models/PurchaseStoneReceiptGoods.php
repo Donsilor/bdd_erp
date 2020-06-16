@@ -49,7 +49,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
     public function rules()
     {
         return [
-            [['receipt_id', 'purchase_sn'], 'required'],
+            [['receipt_id', 'purchase_sn', 'goods_name', 'material_type', 'goods_num', 'goods_weight'], 'required'],
             [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['purchase_sn', 'goods_sn'], 'string', 'max' => 30],

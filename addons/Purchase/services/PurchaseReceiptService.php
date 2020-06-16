@@ -684,7 +684,7 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     * 石料采购收货单同步创建石料收货单
+     * 石料收货单同步创建入库单
      * @param object $form
      * @param array $detail_ids
      * @throws \Exception
