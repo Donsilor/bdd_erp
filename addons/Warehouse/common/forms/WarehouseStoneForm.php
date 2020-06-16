@@ -28,8 +28,8 @@ class WarehouseStoneForm extends WarehouseStone
     public function attributeLabels()
     {
         //合并
-        //return ArrayHelper::merge(parent::attributeLabels() , [
-        //]);
+        return ArrayHelper::merge(parent::attributeLabels() , [
+        ]);
     }
 
    

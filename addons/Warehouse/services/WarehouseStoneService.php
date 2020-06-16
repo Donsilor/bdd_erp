@@ -21,47 +21,30 @@ class WarehouseStoneService extends Service
      */
     public function editStone($form)
     {
-        $stone = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
+        $goods = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
         $ids = [];
-        foreach ($stone as $detail){
-            //$shibao = WarehouseStone::findOne(['stone_name'=>$detail->stone_name]);
-            //if(!$shibao){
-                $stoneM = new WarehouseStone();
-                $dia = [
-                    'stone_sn' => "---",//临时
-                    'stone_name' => $detail->stone_name,
-                    'style_sn' => $detail->style_sn,
-                    'stone_type' => $detail->stone_type,
-                    'supplier_id' => $form->supplier_id,
-                    'stone_color' => $detail->color,
-                    'stone_clarity' => $detail->clarity,
-                    'stock_cnt' => $detail->stone_num,
-                    'ms_cnt' => $detail->stone_num,
-                    'stock_weight' => $detail->stone_weight,
-                    'ms_weight' => $detail->stone_weight,
-                    'cost_price' => $detail->cost_price,
-                    'sale_price' => $detail->sale_price,
-                ];
-                $stoneM->attributes = $dia;
-                if(false === $stoneM->save()){
-                    throw new \Exception($this->getError($stoneM));
-                }
-                $ids[] = $stoneM->attributes['id'];
-            /*}else{
-                $cost_price = bcmul($shibao->stock_weight, $shibao->cost_price, 2);
-                $sale_price = bcmul($shibao->stock_weight, $shibao->sale_price, 2);
-                $total_cost = bcmul($detail->stone_weight, $detail->cost_price, 2);
-                $total_sale = bcmul($detail->stone_weight, $detail->sale_price, 2);
-                $total_cost = bcadd($total_cost, $cost_price, 2);
-                $total_sale = bcadd($total_sale, $sale_price, 2);
-                $shibao->stock_weight = bcadd($shibao->stock_weight, $detail->stone_weight, 2);
-                $shibao->cost_price = bcdiv($total_cost, $shibao->stock_weight, 2);
-                $shibao->sale_price = bcdiv($total_sale, $shibao->stock_weight, 2);
-                if(false === $shibao->save()){
-                    throw new \Exception($this->getError($shibao));
-                }
-                $this->updateStockCnt($shibao);
-            }*/
+        foreach ($goods as $detail){
+            $stoneM = new WarehouseStone();
+            $stone = [
+                'stone_sn' => "---",//临时
+                'stone_name' => $detail->stone_name,
+                'style_sn' => $detail->style_sn,
+                'stone_type' => $detail->stone_type,
+                'supplier_id' => $form->supplier_id,
+                'stone_color' => $detail->color,
+                'stone_clarity' => $detail->clarity,
+                'stock_cnt' => $detail->stone_num,
+                'ms_cnt' => $detail->stone_num,
+                'stock_weight' => $detail->stone_weight,
+                'ms_weight' => $detail->stone_weight,
+                'cost_price' => $detail->cost_price,
+                'sale_price' => $detail->sale_price,
+            ];
+            $stoneM->attributes = $stone;
+            if(false === $stoneM->save()){
+                throw new \Exception($this->getError($stoneM));
+            }
+            $ids[] = $stoneM->attributes['id'];
         }
         if($ids){
             foreach ($ids as $id){
