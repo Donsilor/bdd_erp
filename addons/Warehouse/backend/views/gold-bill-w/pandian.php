@@ -28,12 +28,12 @@ $form = ActiveForm::begin([
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">盘点仓库：</td>
-                    <td><?= $model->billW->warehouse ??'' ?></td>
-                </tr>                         
+                    <td><?= Yii::$app->attr->valueName($model->warehouse) ??'' ?></td>
+                </tr>
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>
                     <td><?= $model->billW->should_num ?? 0;?></td>
-                </tr> 
+                </tr>
                 <tr>
                     <td class="col-xs-1 text-right">实盘数量：</td>
                     <td> <?= $model->billW->actual_num ?? 0;?> </td>

@@ -202,15 +202,13 @@ class GoldBillWController extends BaseController
     public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
-        
-        $model = $this->findModel($id) ?? new WarehouseBillWForm();      
-        
+        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->billW->pandianGoods($model);
+                Yii::$app->warehouseService->goldBill->pandianGoods($model);
                 
                 $trans->commit();
                 

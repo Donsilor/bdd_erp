@@ -2,9 +2,11 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -228,6 +230,57 @@ class WarehouseGoldBillService extends Service
         //更新应盘数量和总金额
         $this->billWSummary($bill->id);
         return $bill;
+    }
+
+    /**
+     * 盘点商品操作
+     * @param WarehouseBillWForm $form
+     */
+    public function pandianGoods($form)
+    {
+        //校验单据状态
+        if ($form->bill_status != GoldBillStatusEnum::SAVE) {
+            throw new \Exception("单据已盘点结束");
+        }
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $bill_detail_ids = [];
+        $billGoods = WarehouseGoldBillGoods::find()->where(['goods_id'=>$form->gold_sn,'bill_id'=>$form->id])->one();
+        if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
+            //已盘点且正常的忽略
+            //continue;
+        }
+        $goods = WarehouseGoods::find()->where(['goods_id'=>$form->gold_sn])->one();
+        if(empty($goods)) {
+            throw new \Exception("[{$form->gold_sn}]货号不存在");
+        }
+        if(!$billGoods) {
+            $billGoods = new WarehouseBillGoods();
+            $billGoods->bill_id = $form->id;
+            $billGoods->bill_type = $form->bill_type;
+            $billGoods->style_sn = $goods->style_sn;
+            $billGoods->bill_no = $form->bill_no;
+            $billGoods->goods_id = $form->gold_sn;
+            $billGoods->to_warehouse_id = $form->to_warehouse_id;//盘点仓库
+            $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
+        }else {
+            if($billGoods->to_warehouse_id == $goods->warehouse_id) {
+                $billGoods->status = PandianStatusEnum::NORMAL;//正常
+            }elseif($billGoods->to_warehouse_id != $goods->warehouse_id){
+                $billGoods->status = PandianStatusEnum::LOSS;//盘亏
+            }
+        }
+        $billGoods->goods_name = $goods->goods_name;
+        $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
+        //更多商品属性
+        //............
+        if(false === $billGoods->save()) {
+            throw new \Exception($this->getError($billGoods));
+        }
+        $bill_detail_ids[] = $billGoods->id;
+        WarehouseBillGoodsW::updateAll(['status'=>ConfirmEnum::YES],['id'=>$bill_detail_ids]);
+        $this->billWSummary($form->id);
     }
 
     /**
