@@ -44,19 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                    'attribute' => 'goods_id',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                            
-                            [
-                                    'attribute'=>'goods_name',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                    'attribute'=>'gold_name',
+                                    'filter' => Html::activeTextInput($searchModel, 'gold_name', [
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         return $str;
+                                        return $model->gold_name;
                                     },
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
@@ -68,30 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label' => '盘点仓库',
-                                    'attribute' => 'to_warehouse_id',
-                                    'value' =>"toWarehouse.name",
-                                    'filter'=> false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                             
-                            [
-                                    'label' => '归属仓库',
-                                    'attribute' => 'from_warehouse_id',
-                                    'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[from_warehouse_id]',
-                                            'value'=>$searchModel->from_warehouse_id,
-                                            'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择"],
-                                            'pluginOptions' => [
-                                                  'allowClear' => true,
-                                            ],
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
-                            ], 
-                            [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',
                                     'value' =>function($model){
@@ -100,19 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',                                            
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'110'],
-                            ],
-                            [
-                                    'label' => '调整状态',
-                                    'attribute' => 'goodsW.adjust_status',
-                                    'value' =>function($model){
-                                        return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status ?? '');
-                                    },
-                                    'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'110'],

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id ID
  * @property int $bill_id 单据ID
+ * @property string $bill_no 单据编号
  * @property string $bill_type 单据类型
  * @property string $stone_name 石包名称
  * @property string $style_sn 石料款号
@@ -50,7 +51,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
-            [['stone_name', 'style_sn'], 'string', 'max' => 30],
+            [['bill_no', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
         ];
     }
@@ -63,6 +64,7 @@ class WarehouseStoneBillGoods extends BaseModel
         return [
             'id' => 'ID',
             'bill_id' => '单据ID',
+            'bill_no' => '单据编号',
             'bill_type' => '单据类型',
             'stone_name' => '石料名称',
             'style_sn' => '石料款号',

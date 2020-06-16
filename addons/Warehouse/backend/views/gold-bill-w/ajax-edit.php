@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use addons\Warehouse\common\enums\BillTypeEnum;
@@ -22,16 +23,8 @@ $model = $model ?? new WarehouseBillWForm();
     <div class="modal-body"> 
        <div class="col-sm-12">
             <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-            <?= $form->field($model, 'bill_type')->dropDownList(BillTypeEnum::getMap(),['disabled'=>true])?>	        
-	        <?= $form->field($model, 'to_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
-	                'data' => $model->getWarehouseDropdown(),
-	                'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false,
-                        'disabled'=>$model->isNewRecord ? null:'disabled'
-                    ],
-            ])
-	        ?>
+            <?= $form->field($model, 'bill_type')->dropDownList(\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(),['disabled'=>true])?>
+            <?= $form->field($model, 'warehouse')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>"请选择",'disabled'=>$model->isNewRecord ? null:'disabled'])->label("盘点仓库")?>
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    
