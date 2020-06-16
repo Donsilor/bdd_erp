@@ -22,6 +22,7 @@ use Yii;
  * @property string $total_cost 金料总价
  * @property string $pay_amount 采购支付金额
  * @property string $delivery_no 送货单号
+ * @property string $warehouse 仓库
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
@@ -55,6 +56,7 @@ class WarehouseGoldBill extends BaseModel
             [['bill_type'], 'required'],
             [['id', 'bill_status', 'supplier_id', 'put_in_type', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
+            [['warehouse'], 'string', 'max' => 10],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['delivery_no'], 'string', 'max' => 100],
@@ -81,6 +83,7 @@ class WarehouseGoldBill extends BaseModel
             'total_cost' => '金料总额',
             'pay_amount' => '采购支付金额',
             'delivery_no' => '收货单号',
+            'warehouse' => '仓库',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
@@ -133,5 +136,13 @@ class WarehouseGoldBill extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 盘点单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBillW()
+    {
+        return $this->hasOne(WarehouseMaterialBillW::class, ['id'=>'id'])->alias('billW');
     }
 }

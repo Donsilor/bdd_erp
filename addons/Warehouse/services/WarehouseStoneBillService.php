@@ -7,6 +7,7 @@ use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\PandianStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
@@ -187,7 +188,7 @@ class WarehouseStoneBillService extends Service
     }
 
     /**
-     * 添加明细
+     * 添加单据明细
      * @param $form
      */
     public function createBillGoods($form)

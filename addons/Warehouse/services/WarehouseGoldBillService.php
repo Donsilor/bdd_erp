@@ -2,6 +2,18 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PandianAdjustEnum;
+use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillGoodsW;
+use addons\Warehouse\common\models\WarehouseBillW;
+use addons\Warehouse\common\models\WarehouseGold;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseMaterialBillW;
+use common\enums\ConfirmEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -72,6 +84,23 @@ class WarehouseGoldBillService extends Service
                     }
                     break;
                 }
+            case GoldBillTypeEnum::GOLD_W:
+                {
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-w-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
         }
         return $tabList;
     }
@@ -92,6 +121,7 @@ class WarehouseGoldBillService extends Service
         $goodsM = new WarehouseGoldBillGoods();
         foreach ($details as &$good){
             $good['bill_id'] = $bill_id;
+            $good['bill_no'] = $billM->bill_no;
             $good['bill_type'] = $billM->bill_type;
             $goodsM->setAttributes($good);
             if(!$goodsM->validate()){
@@ -144,7 +174,86 @@ class WarehouseGoldBillService extends Service
     }
 
     /**
-     * 添加明细
+     * 创建金料盘点单
+     * @param object $form
+     */
+    public function createBillW($form){
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $bill = new WarehouseGoldBill();
+        $bill->attributes = $form->toArray();
+        $bill->bill_status = BillStatusEnum::SAVE;
+        if(false === $bill->save() ) {
+            throw new \Exception($this->getError($bill));
+        }
+        //批量创建单据明细
+        $goods_list = WarehouseGold::find()->where(['gold_type'=>$bill->warehouse])->asArray()->all();
+        if(!empty($goods_list)) {
+            $bill_goods_values = [];
+            foreach ($goods_list as $goods) {
+                $bill_goods = [
+                    'bill_id'=>$bill->id,
+                    'bill_type'=>$bill->bill_type,
+                    'bill_no'=>$bill->bill_no,
+                    'gold_sn'=>$goods['gold_sn'],
+                    'gold_name'=>$goods['gold_name'],
+                    'style_sn'=>$goods['style_sn'],
+                    'gold_type'=>$goods['gold_type'],
+                    'gold_num'=>$goods['gold_num'],
+                    'gold_weight'=>$goods['gold_weight'],
+                    'status'=> PandianStatusEnum::SAVE,
+                ];
+                $bill_goods_values[] = array_values($bill_goods);
+            }
+            if(empty($bill_goods_keys)) {
+                $bill_goods_keys = array_keys($bill_goods);
+            }
+            //导入明细
+            $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+            if(!$result) {
+                throw new \Exception('导入单据明细失败');
+            }
+        }
+        //盘点单附属表
+        $billW = new WarehouseMaterialBillW();
+        $billW->id = $bill->id;
+        $billW->should_num = count($bill_goods);
+        if(false === $billW->save()){
+            throw new \Exception($this->getError($billW));
+        }
+        //更新应盘数量和总金额
+        $this->billWSummary($bill->id);
+        return $bill;
+    }
+
+    /**
+     * 盘点单汇总
+     * @param int $bill_id
+     */
+    public function billWSummary($bill_id)
+    {
+        $sum = WarehouseGoldBillGoods::find()->alias("g")
+            ->select(['sum(1) as actual_num',
+                'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
+                'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
+                'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
+                'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
+                'sum(1) as adjust_num',
+                'sum(1) as goods_num',//明细总数量
+            ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
+        if($sum) {
+            $billUpdate = ['total_num'=>$sum['goods_num']];
+            $billWUpdate = ['save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
+            $res1 = WarehouseGoldBill::updateAll($billUpdate,['id'=>$bill_id]);
+            $res2 = WarehouseMaterialBillW::updateAll($billWUpdate,['id'=>$bill_id]);
+            return $res1 && $res2;
+        }
+        return false;
+    }
+
+    /**
+     * 添加单据明细
      * @param $form
      */
     public function createBillGoods($form)
@@ -153,6 +262,7 @@ class WarehouseGoldBillService extends Service
         $bill = WarehouseStoneBill::findOne(['id'=>$form->bill_id]);
         $goods = [
             'bill_id' => $form->bill_id,
+            'bill_no' => $form->bill_no,
             'bill_type' => $bill->bill_type,
             'stone_name' => $stone->stone_name,
             'stone_type' => $stone->stone_type,

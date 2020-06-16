@@ -2,8 +2,8 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
@@ -12,9 +12,8 @@ $form = ActiveForm::begin([
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
 ]);
-$model = $model ?? new WarehouseBillWForm();
+$model = $model ?? new WarehouseGoldBillWForm();
 ?>
-
 <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         <h4 class="modal-title">基本信息</h4>
@@ -22,19 +21,10 @@ $model = $model ?? new WarehouseBillWForm();
     <div class="modal-body"> 
        <div class="col-sm-12">
             <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-            <?= $form->field($model, 'bill_type')->dropDownList(BillTypeEnum::getMap(),['disabled'=>true])?>	        
-	        <?= $form->field($model, 'to_warehouse_id')->label("盘点仓库")->widget(\kartik\select2\Select2::class, [
-	                'data' => $model->getWarehouseDropdown(),
-	                'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false,
-                        'disabled'=>$model->isNewRecord ? null:'disabled'
-                    ],
-            ])
-	        ?>
+            <?= $form->field($model, 'bill_type')->dropDownList(\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(),['disabled'=>true])?>
+            <?= $form->field($model, 'warehouse')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>"请选择",'disabled'=>$model->isNewRecord ? null:'disabled'])->label("盘点仓库")?>
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
-        </div>    
-                   
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
