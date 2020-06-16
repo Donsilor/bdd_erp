@@ -4,6 +4,8 @@ use common\helpers\Html;
 use addons\Supply\common\enums\BuChanEnum;
 use common\helpers\ArrayHelper;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -49,11 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
+                                 <td><?= PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
-                                 <td><?= \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status) ?></td>
+                                 <td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -238,12 +240,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-hover">
                     <?php
                     foreach ($model->attrs as $k=>$attr){
-                        $attrName = Yii::$app->attr->attrName($attr->attr_id);
-                        $attrNames[$attr->attr_id] = $attrName;
                         $attrValues[$attr->attr_id] = $attr->attr_value;
                      ?>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $attrName?>：</td>
+                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
                             <td><?= $attr->attr_value ?></td>
                         </tr>
                     <?php } ?>
@@ -261,6 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </table>
             </div>
         </div>
+        <?php if($model->peiliao_status != PeiliaoStatusEnum::NONE) {?>
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-info"></i> 金料信息</h3>
@@ -275,14 +276,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     	<tr>
                     		<td><?= $attrValues[AttrIdEnum::MATERIAL]?></td>
                         	<td><?= $attrValues[AttrIdEnum::JINZHONG] ?? 0 ?>g</td>
-                        	<td>待配料</td>
+                        	<td><?= PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
                     	</tr>
                     	<?php }?>   
                     </tbody>
                 </table>
             </div>
         </div>
-        
+        <?php }?>
+        <?php if($model->peishi_status != PeishiStatusEnum::NONE) {?>
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-info"></i> 石料信息</h3>
@@ -301,7 +303,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??'0'?>ct</td>
                         	<td><?= $attrValues[AttrIdEnum::DIA_CERT_TYPE]??'无'?></td>
                         	<td><?= ($attrValues[AttrIdEnum::DIA_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CLARITY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CUT] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_SYMMETRY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_FLUORESCENCE] ?? '无')?></td>
-                        	<td>待配料</td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>                    	
                     	<?php if(!empty($attrValues[AttrIdEnum::SIDE_STONE1_TYPE])) {?>
@@ -312,7 +314,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??'0'?>ct</td>
                         	<td>无</td>
                         	<td><?= ($attrValues[AttrIdEnum::SIDE_STONE1_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_CLARITY] ?? '无').'/无/无/无'?></td>
-                        	<td>待配料</td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>                    	
                     	<?php if(!empty($attrValues[AttrIdEnum::SIDE_STONE2_TYPE])) {?>
@@ -323,12 +325,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??'0'?>ct</td>
                         	<td>无</td>
                         	<td></td>
-                        	<td>待配料</td>
+                        	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>
                     </tbody>
                 </table>
             </div>
         </div>
+        <?php }?>
     </div>
 </div>
