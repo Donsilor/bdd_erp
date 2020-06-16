@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <div class="col-lg-4">
                       <?= $form->field($model, 'stone_price')->textInput() ?>
                   </div>
-			   </div> 
+			   </div>
 			   <div class="row">
                    <div class="col-lg-4">
                        <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>

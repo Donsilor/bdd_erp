@@ -7,7 +7,7 @@ use addons\Purchase\common\enums\ReceiptStatusEnum;
 /* @var $model common\models\PurchaseReceipt */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '石料采购收货单详情';
+$this->title = '石料收货单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

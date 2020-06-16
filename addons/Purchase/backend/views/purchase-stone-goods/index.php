@@ -125,22 +125,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute'=>'stone_price',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->stone_price ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                     'attribute'=>'cost_price',
                                     'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
                                         return $model->cost_price ;
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
-                                    'attribute'=>'stone_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'stone_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->stone_price ;
                                     },
                                     'headerOptions' => ['width'=>'150'],
                             ],

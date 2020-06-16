@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Warehouse\common\enums\BillStatusEnum;
+use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -109,6 +110,33 @@ class StoneReceiptGoodsController extends BaseController
             'searchModel' => $searchModel,
             'returnUrl' => $returnUrl,
             'tab'=>$tab,
+        ]);
+    }
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 3);
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 
