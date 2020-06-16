@@ -30,6 +30,7 @@ class WarehouseStoneService extends Service
                 $dia = [
                     'stone_sn' => "---",//临时
                     'stone_name' => $detail->stone_name,
+                    'style_sn' => $detail->style_sn,
                     'stone_type' => $detail->stone_type,
                     'supplier_id' => $form->supplier_id,
                     'stone_color' => $detail->color,

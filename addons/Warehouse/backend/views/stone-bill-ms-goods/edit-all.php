@@ -131,9 +131,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'stone_price',
                                 'format' => 'raw',
                                 'value' => function($model){
-                                    return Html::ajaxInput('sale_price',$model->sale_price);
+                                    return Html::ajaxInput('stone_price',$model->stone_price);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
