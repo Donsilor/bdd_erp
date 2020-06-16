@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'attribute' => 'gold_type',
                                     'value'  => function($model) {
-                                        return $model->material_type ?? '无';
+                                        return $model->gold_type ?? '无';
                                     },
                                     'filter' => false,
                                     

@@ -29,6 +29,7 @@ use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Supply\common\models\Peishi;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\models\ProduceGold;
 
 
 class ProduceService extends Service
@@ -166,7 +167,22 @@ class ProduceService extends Service
      */
     private function createPeiliao($form ,$attrValues)
     {        
-        
+        $gold = [
+                'gold_type' =>  $attrValues[AttrIdEnum::MATERIAL]??'',
+                'gold_weight' => $form->goods_num * ($attrValues[AttrIdEnum::JINZHONG]?? 0),
+        ];
+        $model = ProduceGold::find()->where(['produce_id'=>$form->id])->one();
+        if(!$model) {
+            $model = new ProduceGold();
+            $model->attributes = $gold;
+            $model->produce_id =  $form->id;
+            $model->produce_sn =  $form->produce_sn;
+        }else {
+            $model->attributes = ArrayHelper::merge($model->attributes, $gold);
+        }
+        if(false === $model->save()) {
+            throw new \Exception($this->getError($model));
+        }          
         //日志
         $log = [
                 'produce_id' => $form->id,
@@ -174,7 +190,7 @@ class ProduceService extends Service
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'bc_status' => $form->bc_status,
                 'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
-                'log_msg' => "生成配料单:111111111"
+                'log_msg' => "生成配料单:".$model->id,
         ];
         $this->createProduceLog($log);
     }
