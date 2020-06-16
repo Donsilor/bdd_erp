@@ -33,13 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'id',
                                     'value'  => 'id',
                                     'filter' => true,
-                            ],
-                            [
-                                    'attribute' => 'produce_sn',
-                                    'value'  => 'produce_sn',
-                                    'filter' => false,
-                            ],
-                                
+                            ],  
                             [
                                     'attribute' => 'stone_position',
                                     'value'  => function($model) {
@@ -91,6 +85,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,                                    
                             ],
                             [
+                                    'attribute' => 'songshi_user',
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'songshi_time',
+                                    'value' =>  function($model){
+                                        return Yii::$app->formatter->asDatetime($model->songshi_time);
+                                    },
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'peishi_user',
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'peishi_time',
+                                    'value' =>  function($model){
+                                        return Yii::$app->formatter->asDatetime($model->peishi_time);
+                                    },
+                                    'filter' => false,
+                            ],
+                            [
                                 'attribute'=>'remark',
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -103,13 +119,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
 
                             ],
-
                             [
-                                'label' => '操作人',
                                 'attribute' => 'creator_name',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => false,
-
                             ],
 
 

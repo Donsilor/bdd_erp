@@ -33,12 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'id',
                                     'value'  => 'id',
                                     'filter' => true,
-                            ],
-                            [
-                                    'attribute' => 'produce_sn',
-                                    'value'  => 'produce_sn',
-                                    'filter' => false,
-                            ],
+                            ],                            
                             [
                                     'attribute' => 'gold_type',
                                     'value'  => function($model) {
@@ -58,12 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'gold_spec',
                                     'value' => 'gold_spec',
                                     'filter' => false,                                    
-                            ],
-                            [
-                                'attribute'=>'remark',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
+                            ],                           
                             [
                                 'attribute' => 'created_at',
                                 'filter' => false,
@@ -72,16 +62,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
 
                             ],
-
                             [
-                                'label' => '操作人',
+                                    'attribute' => 'songliao_user',
+                                    'value' => 'songliao_user',
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'songliao_time',
+                                    'value' =>  function($model){
+                                        return Yii::$app->formatter->asDatetime($model->songliao_time);
+                                    },
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'peiliao_user',
+                                    'value' => 'songliao_user',
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute' => 'peiliao_time',
+                                    'value' =>  function($model){
+                                        return Yii::$app->formatter->asDatetime($model->peiliao_time);
+                                    },
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute'=>'remark',
+                                    'filter' => false,
+                            ],                            
+                            [
                                 'attribute' => 'creator_name',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => false,
 
                             ],
-
-
+                            
                         ]
                     ]); ?>
                 </div>
