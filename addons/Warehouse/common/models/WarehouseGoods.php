@@ -180,6 +180,7 @@ class WarehouseGoods extends BaseModel
             'second_stone_num2' => '副石2粒数',
             'second_stone_weight2' => '副石2重',
             'second_stone_price2' => '副石2总计价',
+            'is_apply' => '申请编辑',
             'remark' => '商品备注',
             'apply_id' => '当前申请人',
             'auditor_id' => '审核人',
@@ -261,6 +262,6 @@ class WarehouseGoods extends BaseModel
      */
     public function getApply()
     {
-        return $this->hasOne(Member::class, ['id'=>'apply_id']);
+        return $this->hasOne(Member::class, ['id'=>'apply_id'])->alias('apply');
     }
 }
