@@ -62,8 +62,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                                'attribute'=>'style_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),

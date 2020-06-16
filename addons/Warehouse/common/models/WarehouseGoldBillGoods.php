@@ -11,7 +11,7 @@ use Yii;
  * @property int $bill_id 单据ID
  * @property string $bill_type 单据类型
  * @property string $gold_name 金料名称
- * @property string $gold_sn 金料款号
+ * @property string $style_sn 金料款号
  * @property string $gold_type 商品类型
  * @property int $gold_num 金料总数
  * @property string $gold_weight 金料总重量
@@ -43,7 +43,7 @@ class WarehouseGoldBillGoods extends BaseModel
             [['bill_id', 'gold_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
-            [['gold_name', 'gold_sn'], 'string', 'max' => 30],
+            [['gold_name', 'style_sn'], 'string', 'max' => 30],
         ];
     }
 
@@ -57,7 +57,7 @@ class WarehouseGoldBillGoods extends BaseModel
             'bill_id' => '单据ID',
             'bill_type' => '单据类型',
             'gold_name' => '金料名称',
-            'gold_sn' => '金料款号',
+            'style_sn' => '金料款号',
             'gold_type' => '商品类型',
             'gold_num' => '金料总数',
             'gold_weight' => '金料总重/克',

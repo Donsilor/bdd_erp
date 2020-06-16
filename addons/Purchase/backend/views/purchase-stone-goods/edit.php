@@ -15,34 +15,37 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
               <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
               <div class="row">                        
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'goods_name')->textInput() ?>
+                </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_name')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                         <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
-                    </div>
+                 <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
+                </div>
+                <div class="col-lg-4">
+                  <?= $form->field($model, 'stone_sn')->textInput()?>
+                </div>
               </div>
               <div class="row">                        
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_num')->textInput() ?>
                     </div>
+                      <div class="col-lg-4">
+                          <?= $form->field($model, 'goods_weight')->textInput() ?>
+                      </div>
                     <div class="col-lg-4">
                          <?= $form->field($model, 'stone_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                            <?= $form->field($model, 'stone_clarity')->dropDownList($model->getClarityMap(),['prompt'=>'请选择']) ?>
-                    </div>          
 			   </div> 
-			   <div class="row">                    
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_weight')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
+			   <div class="row">
+                   <div class="col-lg-4">
+                       <?= $form->field($model, 'stone_clarity')->dropDownList($model->getClarityMap(),['prompt'=>'请选择']) ?>
+                   </div>
+                   <div class="col-lg-4">
+                       <?= $form->field($model, 'stone_price')->textInput() ?>
+                   </div>
+                   <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput() ?>
-                    </div> 
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'stone_price')->textInput() ?>
-                    </div>   
+                    </div>
 			   </div>
                 <div class="row">
                     <div class="col-lg-4">

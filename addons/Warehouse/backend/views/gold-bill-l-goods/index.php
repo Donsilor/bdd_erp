@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
+                                'attribute'=>'style_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],

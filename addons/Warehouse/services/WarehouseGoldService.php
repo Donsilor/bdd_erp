@@ -30,8 +30,8 @@ class WarehouseGoldService extends Service
             //if(!$goods){
                 $goldM = new WarehouseGold();
                 $good = [
-                    'batch_sn' => "---",//临时
-                    'gold_sn' => $detail->gold_sn,
+                    'gold_sn' => "---",//临时
+                    'style_sn' => $detail->style_sn,
                     'gold_name' => $detail->gold_name,
                     'gold_type' => $detail->gold_type,
                     'supplier_id' => $form->supplier_id,
@@ -60,7 +60,7 @@ class WarehouseGoldService extends Service
         if($ids){
             foreach ($ids as $id){
                 $stone = WarehouseGold::findOne(['id'=>$id]);
-                $this->createBatchSn($stone);
+                $this->createGoldSn($stone);
             }
         }
     }
@@ -70,21 +70,21 @@ class WarehouseGoldService extends Service
      * @param string $save
      *
      */
-    public function createBatchSn($model, $save = true)
+    public function createGoldSn($model, $save = true)
     {
         //1.供应商
-        $batch_sn = $model->supplier->supplier_tag ?? '00';
+        $gold_sn = $model->supplier->supplier_tag ?? '00';
         //2.金料类型
         $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE,'id','code');
-        $batch_sn .= $type_codes[$model->gold_type] ?? '0';
+        $gold_sn .= $type_codes[$model->gold_type] ?? '0';
         //3.数字编号
-        $batch_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT)."G";
+        $gold_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT)."G";
         if($save === true) {
-            $model->batch_sn = $batch_sn;
+            $model->gold_sn = $gold_sn;
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model));
             }
         }
-        return $batch_sn;
+        return $gold_sn;
     }
 }
