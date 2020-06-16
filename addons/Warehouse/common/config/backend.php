@@ -102,6 +102,10 @@ return [
                         'title' => '领料单',
                         'route' => 'gold-bill-c/index',
                     ],
+                    [
+                        'title' => '盘点单',
+                        'route' => 'gold-bill-w/index',
+                    ],
                 ],
             ],
             [
