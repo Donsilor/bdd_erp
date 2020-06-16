@@ -1,14 +1,9 @@
 <?php
 
-
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use common\enums\WhetherEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -67,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -77,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id], '删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
@@ -309,7 +304,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->main_stone);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -339,7 +334,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->main_stone_color);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_COLOR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -351,7 +346,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->main_stone_clarity);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_CLARITY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -372,7 +367,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->second_stone1);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone1',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone1',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -402,7 +397,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->second_stone2);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone2',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::SECOND_STONE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone2',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -486,7 +481,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->biaomiangongyi);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::BIAOMIANGONGYI), [
+                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FACEWORK), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -580,7 +575,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -590,7 +585,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id], '删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);

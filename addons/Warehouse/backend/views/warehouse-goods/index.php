@@ -126,6 +126,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'attribute'=>'is_apply',
+                            'value'=>function($model){
+                                return \common\enums\ConfirmEnum::getValue($model->is_apply);
+                            },
+                            'filter' => false,
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'label' => '申请编辑人',
+                            'attribute' => 'apply.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['width'=>'100'],
+
+                        ],
+                        [
                             'attribute' => 'goods_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -390,12 +405,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:150px;'
                             ]),
                         ],
-
-                        
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {ajax-apply}',
+                            'template' => '{edit} {ajax-apply} {apply-view}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(\Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
@@ -409,7 +422,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                                 'ajax-apply' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                                    if(\Yii::$app->warehouseService->warehouseGoods->applyStatus($model)){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',

@@ -1,13 +1,11 @@
 <?php
 
-use common\enums\BusinessScopeEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
+use addons\Purchase\common\enums\DefectiveStatusEnum;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-use addons\Warehouse\common\enums\BillStatusEnum;
-
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -115,7 +113,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'80'],
 
             ],
             [
@@ -154,14 +151,13 @@ $params = $params ? "&".http_build_query($params) : '';
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
-                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute' => 'defective_status',
                 'value' => function ($model){
-                    return BillStatusEnum::getValue($model->defective_status);
+                    return DefectiveStatusEnum::getValue($model->defective_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'defective_status',BillStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'defective_status',DefectiveStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
@@ -175,7 +171,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->defective_status == BillStatusEnum::SAVE) {
+                        if($model->defective_status == DefectiveStatusEnum::SAVE) {
                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
@@ -187,7 +183,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         },
 
                     'audit' => function($url, $model, $key){
-                        if($model->defective_status == BillStatusEnum::PENDING) {
+                        if($model->defective_status == DefectiveStatusEnum::PENDING) {
                                 return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -197,7 +193,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         },
 
                     'apply' => function($url, $model, $key){
-                        if($model->defective_status == BillStatusEnum::SAVE){
+                        if($model->defective_status == DefectiveStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -208,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             return Html::status($model['status']);
                         },
                     'delete' => function($url, $model, $key){
-                        if($model->defective_status != BillStatusEnum::CONFIRM) {
+                        if($model->defective_status != DefectiveStatusEnum::CONFIRM) {
                             return Html::delete(['delete', 'id' => $model->id], '取消');
                         }
                     }

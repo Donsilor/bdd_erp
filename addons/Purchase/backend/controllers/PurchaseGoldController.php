@@ -160,7 +160,7 @@ class PurchaseGoldController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
+                    //Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
                 }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');

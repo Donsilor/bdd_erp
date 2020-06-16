@@ -85,10 +85,14 @@ class WarehouseGoodsService extends Service
     }
 
 
-    public function editStatus($model){
-       return !($model->audit_status == AuditStatusEnum::PENDING ||
-        ($model->is_apply == ConfirmEnum::YES &&
-            $model->apply_id != \Yii::$app->user->identity->getId()));
+    //可编辑状态
+    public function editStatus($model)
+    {
+        return $model->is_apply == 0 || ($model->apply_id == \Yii::$app->user->identity->getId() && $model->audit_status == AuditStatusEnum::SAVE);
     }
 
+    //可提审状态
+    public function applyStatus($model){
+        return $model->apply_id == \Yii::$app->user->identity->getId() && $model->audit_status == AuditStatusEnum::SAVE;
+    }
 }

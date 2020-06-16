@@ -15,24 +15,24 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
               <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
               <div class="row">                        
-                    <div class="col-lg-4">
-                            <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_name')->textInput() ?>
-                    </div>                    
-			   </div> 
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择']) ?>
+                </div>
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'goods_name')->textInput() ?>
+                </div>
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'goods_weight')->textInput() ?>
+                </div>
+              </div>
 			   <div class="row">
-			        <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_weight')->textInput() ?>
-                    </div>                    
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'cost_price')->textInput() ?>
-                    </div>                    
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
-			   </div>
+                   <div class="col-lg-4">
+                       <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+                   </div>
+               </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'remark')->textarea() ?>

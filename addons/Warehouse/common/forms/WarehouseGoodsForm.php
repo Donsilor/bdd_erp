@@ -4,6 +4,7 @@ namespace addons\Warehouse\common\forms;
 
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\ConfirmEnum;
+use common\enums\LogTypeEnum;
 use common\helpers\ArrayHelper;
 
 /**
@@ -41,7 +42,7 @@ class WarehouseGoodsForm extends WarehouseGoods
      */
     public function initApplyEdit()
     {
-        if($this->is_apply == ConfirmEnum::NO) {
+        if($this->is_apply == 0) {
             $this->apply_info = [];
         }else if(!is_array($this->apply_info)) {
             $this->apply_info  = json_decode($this->apply_info,true) ?? [];
@@ -78,16 +79,5 @@ class WarehouseGoodsForm extends WarehouseGoods
         $this->apply_info = $apply_info;
     }
 
-
-    public function createApply(){
-        $data = \Yii::$app->request->post('WarehouseGoodsForm');
-        $this->apply_id = \Yii::$app->user->identity->getId();
-        $this->apply_info = json_encode($data);
-        $this->is_apply   = ConfirmEnum::YES;
-        if(false === $this->save(true,['is_apply','apply_info'])) {
-            throw new \Exception("保存失败",500);
-        }
-
-    }
 
 }

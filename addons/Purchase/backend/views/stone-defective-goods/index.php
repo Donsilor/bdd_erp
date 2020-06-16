@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($defective){
-                                        if($defective->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                                        if($defective->defective_status == \addons\Purchase\common\enums\DefectiveStatusEnum::PENDING){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
                                     },

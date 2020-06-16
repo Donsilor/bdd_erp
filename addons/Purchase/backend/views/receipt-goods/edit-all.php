@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
             echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
@@ -689,7 +689,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
                                             return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -699,7 +699,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id], '删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);

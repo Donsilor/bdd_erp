@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l_goods', '收货单明细');
+$this->title = Yii::t('gold_bill_l_goods', '金料入库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -29,10 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content" style="padding-right: 10px;">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                </div>
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -49,20 +46,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
-                            [
-                                'label' => 'ID',
+                            /*[
                                 'attribute' => 'id',
                                 'filter' => false,
                                 'format' => 'raw',
-                            ],
+                            ],*/
                             [
-                                'label' => '金料名称',
                                 'attribute'=>'gold_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label' => '金料类型',
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
                                 'attribute' => 'gold_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->gold_type);
@@ -72,32 +71,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '金料总数',
-                                'attribute' => 'gold_num',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'label' => '金料总重量',
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label' => '成本价',
-                                'attribute' => 'cost_price',
+                                'attribute' => 'gold_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label' => '销售价',
+                                'attribute' => 'cost_price',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            /*[
                                 'attribute' => 'sale_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],*/
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',

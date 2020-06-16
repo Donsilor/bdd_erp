@@ -3,6 +3,7 @@
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 
@@ -37,12 +38,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
+                        /*[
                             'label' => '序号',
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'100'],
+                        ],*/
+                        [
+                            'label' => '批次号',
+                            'attribute'=>'batch_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'batch_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'label' => '金料名称',
@@ -53,6 +62,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
+                            'label' => '金料款号',
+                            'attribute'=>'gold_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'label' => '金料类型',
                             'attribute' => 'gold_type',
                             'value' => function ($model){
@@ -61,20 +78,35 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => '200',
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
+                        /*[
                             'label' => '数量',
                             'attribute'=>'gold_num',
                             'filter' => Html::activeTextInput($searchModel, 'gold_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
-                        ],
+                        ],*/
                         [
-                            'label' => '库存重量',
+                            'label' => '库存重量/克',
                             'attribute'=>'gold_weight',
                             'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                 'class' => 'form-control',
@@ -82,17 +114,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '成本价/g',
-                            'attribute'=>'cost_price',
-                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                            'label' => '金料单价/克',
+                            'attribute'=>'gold_price',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
-                            'label' => '销售价/g',
-                            'attribute'=>'sale_price',
-                            'filter' => Html::activeTextInput($searchModel, 'sale_price', [
+                            'label' => '金料总额',
+                            'attribute'=>'cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],

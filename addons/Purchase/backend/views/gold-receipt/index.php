@@ -1,12 +1,12 @@
 <?php
 
-use common\enums\WhetherEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
+use common\enums\WhetherEnum;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -158,15 +158,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute' => 'auditor_id',
-                'value' => 'auditor.username',
-                'headerOptions' => ['class' => 'col-md-1'],
-                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
-                    'class' => 'form-control',
-                    'style'=> 'width:100px;'
-                ]),
-            ],
-            [
                 'attribute' => 'audit_status',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
@@ -180,36 +171,11 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
             ],
             [
-                'attribute' => 'audit_time',
-                'filter' => DateRangePicker::widget([    // 日期组件
-                    'model' => $searchModel,
-                    'attribute' => 'audit_time',
-                    'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'locale' => [
-                            'separator' => '/',
-                        ],
-                        'endDate' => date('Y-m-d', time()),
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'todayBtn' => 'linked',
-                        'clearBtn' => true,
-                    ],
-                ]),
-                'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
-                },
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
-            ],
-            [
                 'attribute' => 'receipt_status',
                 'value' => function ($model){
-                    return BillStatusEnum::getValue($model->receipt_status);
+                    return ReceiptStatusEnum::getValue($model->receipt_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'receipt_status',BillStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'receipt_status',ReceiptStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style'=> 'width:100px;'
@@ -224,7 +190,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->receipt_status == BillStatusEnum::SAVE) {
+                        if($model->receipt_status == ReceiptStatusEnum::SAVE) {
                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
@@ -232,7 +198,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'apply' => function($url, $model, $key){
-                        if($model->receipt_status == BillStatusEnum::SAVE){
+                        if($model->receipt_status == ReceiptStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -240,7 +206,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        if($model->receipt_status == BillStatusEnum::PENDING) {
+                        if($model->receipt_status == ReceiptStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -249,7 +215,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'warehouse' => function($url, $model, $key){
-                        if($model->receipt_status == BillStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
+                        if($model->receipt_status == ReceiptStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
                             return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -261,7 +227,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         return Html::a('单据明细', ['gold-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->receipt_status == BillStatusEnum::SAVE) {
+                        if($model->receipt_status == ReceiptStatusEnum::SAVE) {
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },
@@ -285,8 +251,6 @@ $params = $params ? "&".http_build_query($params) : '';
         }
 
     }
-
-
     function printDetail()
     {
         var valArr = new Array;

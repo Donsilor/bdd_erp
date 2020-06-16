@@ -103,6 +103,20 @@ $this->registerJs($script);
 ?>
 
 <script>
+    //列表每行选中背景高亮
+    $("#grid table tr>td").click(function () {
+        var checkbox = $(this).parent().find("input[type='checkbox']");
+        if(checkbox.is(':checked')) {
+            checkbox.removeAttr('checked');
+            $(this).parent().css('background-color','#fff');
+        }else{
+            checkbox.attr('checked', 'checked');
+            $(this).parent().css('background-color','#f5f5f5');
+        }
+    });
+</script>
+
+<script>
     // 小模拟框清除
     $('#ajaxModal').on('hide.bs.modal', function (e) {
         if (e.target == this) {

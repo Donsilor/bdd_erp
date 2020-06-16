@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
 
-                if($model->audit_status == \common\enums\AuditStatusEnum::SAVE) {
+                if(Yii::$app->warehouseService->warehouseGoods->applyStatus($model)) {
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
                         'class' => 'btn btn-success btn-sm',

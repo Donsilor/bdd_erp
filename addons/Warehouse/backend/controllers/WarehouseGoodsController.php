@@ -105,6 +105,7 @@ class WarehouseGoodsController extends BaseController
         $id = Yii::$app->request->get('id', null);
         $this->modelClass = WarehouseGoodsForm::class;
         $model = $this->findModel($id);
+        $old_model = clone $model;
         $model = $model ?? new WarehouseGoodsForm();
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -112,11 +113,35 @@ class WarehouseGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                $model->createApply();
+
+                $data = \Yii::$app->request->post('WarehouseGoodsForm');
+                $model->apply_info = json_encode($data);
+                $model->is_apply = ConfirmEnum::YES;
+                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->apply_id = \Yii::$app->user->identity->getId();
+                if(false === $model->save(true,['apply_id', 'is_apply', 'apply_info','audit_status'])) {
+                    throw new \Exception("保存失败",500);
+                }
+
+                //日志
+                $log_msg = '申请修改；';
+                foreach ($data as $k=>$val) {
+                    $old = $old_model->$k;
+                    if($old != $val){
+                        $log_msg .= "{$model->getAttributeLabel($k)} 由 ({$old}) 改成 ({$val})";
+                    }
+                }
+                $log = [
+                    'goods_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_msg' => $log_msg
+                ];
+                \Yii::$app->warehouseService->warehouseGoods->createWarehouseGoodsLog($log);
+
+
                 $trans->commit();
                 //前端提示
-                Yii::$app->getSession()->setFlash('success','申请提交成功！审批通过后生效');
-                return ResultHelper::json(200, '保存成功');
+                return ResultHelper::json(200, '操作成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -180,6 +205,7 @@ class WarehouseGoodsController extends BaseController
         $this->modelClass = WarehouseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseGoodsForm();
+        $old_model = clone $model;
 
         $model->audit_status = AuditStatusEnum::PASS;
         // ajax 校验
@@ -189,12 +215,28 @@ class WarehouseGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->initApplyEdit();
+                    //日志
+                    $log_msg = '审核通过；';
+                    $data = json_decode($model->apply_info,true) ?? [];
+                    foreach ($data as $k=>$val) {
+                        $old = $old_model->$k;
+                        if($old != $val){
+                            $log_msg .= "{$model->getAttributeLabel($k)} 由 ({$old}) 改成 ({$val})";
+                        }
+                    }
+                    $log = [
+                        'goods_id' => $model->id,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_msg' => $log_msg
+                    ];
+                    \Yii::$app->warehouseService->warehouseGoods->createWarehouseGoodsLog($log);
                 }
-                $this->is_apply = ConfirmEnum::NO;
-                $this->apply_id = '';
+                $model->apply_id = '';
+                $model->apply_info = '';
+                $model->is_apply = ConfirmEnum::NO;
                 $model->save(false);
                 $trans->commit();
-                return $this->message("保存成功", $this->redirect(['warehouse-goods/view','id'=>$id]), 'success');
+                return $this->message("操作成功", $this->redirect(['warehouse-goods/view','id'=>$id]), 'success');
             }catch (\Exception $e){
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');

@@ -90,6 +90,7 @@ class PurchaseStoneGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
+                $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }

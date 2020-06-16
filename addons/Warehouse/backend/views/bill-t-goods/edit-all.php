@@ -4,6 +4,7 @@
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use yii\grid\GridView;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -177,35 +178,35 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'xiangkou', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'xiangkou', Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'xiangkou','attr-id'=>AttrIdEnum::XIANGKOU],
                             ],
                             [
                                 'attribute' => 'finger',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'finger','attr-id'=>AttrIdEnum::FINGER],
                             ],
                             [
                                 'attribute' => 'cert_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'cert_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'cert_type', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -707,6 +708,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
     $(function(){
         $(".batch_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs batch\" href=\"#\" role=\"button\">批量填充</a>");
+        $(".batch_select_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs batch-select-full\" href=\"<?php echo \common\helpers\Url::to(['batch-select'])?>\" role=\"button\">批量填充</a>");
     });
     //批量填充
     $(document).on("click",'.batch',function(){
@@ -714,38 +716,52 @@ $this->params['breadcrumbs'][] = $this->title;
         var url = "/warehouse/bill-t-goods/batch-edit";
         var name = $(this).parent().attr("data-sort");
         var title = $(this).parent().html();
-        if(fromValue = prompt("<?= Yii::t("goods","请输入")?>", "0")){
-            var ids = new Array;
-            $('input[name="id[]"]').each(function(i){
-                ids[i] = $(this).val();
-            });
-            if(ids.length===0) {
-                return false;
-            }
-            var ids = ids.join(',');
-            $.ajax({
-                type: "post",
-                url: url,
-                dataType: "json",
-                data: {
-                    ids: ids,
-                    field:name,
-                    field_value:fromValue,
-                },
-                success: function (data) {
-                    if (parseInt(data.code) !== 200) {
-                        rfAffirm(data.message);
-                    } else {
-                        //$("input[name='"+name+"']").each(function(){
-                            //$(this).val(fromValue);
-                            //$(this).focus();
-                        //});
-                        window.location.reload();
-                    }
-                }
-            });
-        }else{
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length === 0) {
+            rfMsg('请选中后操作');
             return false;
         }
+        var ids = ids.join(',');
+        rfPrompt("<?= Yii::t("goods","请输入")?>",function (fromValue) {
+               $.ajax({
+                   type: "post",
+                   url: url,
+                   dataType: "json",
+                   data: {
+                       ids: ids,
+                       field:name,
+                       field_value:fromValue,
+                   },
+                   success: function (data) {
+                       if (parseInt(data.code) !== 200) {
+                           rfAffirm(data.message);
+                       } else {
+                           window.location.reload();
+                       }
+                   }
+               });
+
+        });
+
     });
+
+    $(document).on('click','a.batch-select-full',function (e) {
+        var name = $(this).parent().parent().attr('attr-name');
+        var attr_id = $(this).parent().parent().attr('attr-id');
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length === 0) {
+            rfMsg('请选中后操作');
+            return false;
+        }
+        var href = $(this).attr('href');
+        var ids = ids.join(',');
+        href += '?ids='+ids + "&name=" + name + "&attr_id=" + attr_id;
+        var title = '批量修改';
+        var width = '50%';
+        var height = '20%';
+        var offset = "10%";
+        openIframe(title, width, height, href, offset);
+        e.preventDefault();
+        return false;
+    })
 </script>
