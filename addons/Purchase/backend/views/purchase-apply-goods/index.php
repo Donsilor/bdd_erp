@@ -8,6 +8,7 @@ use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
+use common\enums\AuditStatusEnum;
 
 $this->title = '采购申请明细';
 $this->params['breadcrumbs'][] = $this->title;
@@ -62,6 +63,59 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'80'],
                             ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                //'headerOptions' => ['width' => '150'],
+                                'template' => '{view} {edit} {audit} {format-edit} {delete}',
+                                'buttons' => [
+                                    'view'=> function($url, $model, $key){
+                                        return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                            'class' => 'btn btn-info btn-xs',
+                                        ]);
+                                    },
+                                    'edit' => function($url, $model, $key) use($apply){
+                                         if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
+                                             $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                             return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                         }
+                                    },
+                                    'format-edit' =>function($url, $model, $key) use($apply){
+                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER && $model->audit_status == AuditStatusEnum::PASS) {
+                                            return Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
+                                    },
+                                    'apply-edit' =>function($url, $model, $key) use($apply){
+                                        if($apply->apply_status != ApplyStatusEnum::SAVE) {
+                                            return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
+                                    },
+
+                                    'audit' => function($url, $model, $key) use($apply){
+                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == AuditStatusEnum::SAVE){
+                                            if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
+                                                return Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
+                                                    'class'=>'btn btn-success btn-xs',
+                                                    'data-toggle' => 'modal',
+                                                    'data-target' => '#ajaxModal',
+                                                ]);
+                                            }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
+                                                return Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                                                    'class'=>'btn btn-success btn-xs',
+                                                    'data-toggle' => 'modal',
+                                                    'data-target' => '#ajaxModal',
+                                                ]);
+                                            }
+
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($apply){
+                                        if($apply->apply_status == ApplyStatusEnum::SAVE) {
+                                            return Html::delete(['delete','id' => $model->id,'apply_id'=>$apply->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
+                                        }
+                                    },
+                                ]
+                           ],
                             [
                                     'label' => '商品图片',
                                     'value' => function ($model) {
@@ -281,7 +335,58 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value'=> function($model){
                                         return $model->attr[AttrIdEnum::DIA_CERT_NO] ?? "";
                                     }
-                            ],                            
+                            ],
+                            [
+                                'attribute'=>'audit_time',
+                                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'audit_time',
+                                    'value' => $searchModel->audit_time,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+
+
+                                    ],
+
+                                ]),
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->audit_time);
+                                }
+
+                            ],
+
+                            [
+                                'attribute' => 'audit_status',
+                                'value' => function ($model){
+                                    return AuditStatusEnum::getValue($model->audit_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'auditor_id',
+                                'value' => "auditor.username",
+                                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
                             [
                                     'attribute' => '申请修改',
                                     'value' => function ($model) {
@@ -300,12 +405,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
                                     'visible' => $apply->apply_status != ApplyStatusEnum::SAVE,
-                            ],                            
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {delete}',
+                                'template' => '{view} {edit} {audit}  {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -313,23 +418,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($apply){
-                                         if($apply->apply_status == ApplyStatusEnum::SAVE) {
-                                             $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
-                                             return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                                         }                                         
+                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM) {
+                                            $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                            return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
                                     },
                                     'apply-edit' =>function($url, $model, $key) use($apply){
                                         if($apply->apply_status != ApplyStatusEnum::SAVE) {
                                             return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
-                                    },                                    
+                                    },
+                                    'audit' => function($url, $model, $key) use($apply){
+                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == AuditStatusEnum::SAVE){
+                                            if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
+                                                return Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
+                                                    'class'=>'btn btn-success btn-xs',
+                                                    'data-toggle' => 'modal',
+                                                    'data-target' => '#ajaxModal',
+                                                ]);
+                                            }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
+                                                return Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                                                    'class'=>'btn btn-success btn-xs',
+                                                    'data-toggle' => 'modal',
+                                                    'data-target' => '#ajaxModal',
+                                                ]);
+                                            }
+
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($apply){
                                         if($apply->apply_status == ApplyStatusEnum::SAVE) {
                                             return Html::delete(['delete','id' => $model->id,'apply_id'=>$apply->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
                                         }
                                     },
                                 ]
-                           ]
+                            ],
                       ]
                     ]); ?>
                 </div>

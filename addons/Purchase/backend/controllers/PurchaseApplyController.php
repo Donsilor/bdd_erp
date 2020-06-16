@@ -164,7 +164,7 @@ class PurchaseApplyController extends BaseController
 
 
     /**
-     * ajax 批量审核
+     * ajax 审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException

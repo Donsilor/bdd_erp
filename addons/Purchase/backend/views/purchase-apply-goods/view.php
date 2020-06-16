@@ -33,16 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->style_sn ?></td>
                                 </tr>
                                 <?php }?>
-                                <?php if($model->goods_type == PurchaseGoodsTypeEnum::QIBAN) {?>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
-                                    <td><?= $model->qiban_sn ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
-                                    <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
-                                </tr>  
-                                <?php }?>                      
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                                     <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
@@ -101,28 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                             </table>
                         </div>
-                        <div class="box-footer text-center">
-                            <?php if($model->apply->apply_status == ApplyStatusEnum::SAVE) {?>
-                                <?php if($model->goods_type == PurchaseGoodsTypeEnum::OTHER) {?>
-                                      <?= Html::edit(['edit-no-style','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
-                                 <?php } else {?>
-                                      <?= Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
-                                 <?php }?> 
-                                <?= Html::edit(['ajax-apply','id'=>$model->id], '提审', ['class'=>'btn btn-success btn-ms','onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',]);?>
-                            <?php }?>
-                            <?php
-                            if($model->apply->apply_status != ApplyStatusEnum::SAVE) {
-                                echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                            }
-                            ?>
-                            <?php
-                            if($model->is_apply == common\enums\ConfirmEnum::YES) {
-                                echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
-                                    'class' => 'btn btn-danger btn-ms',
-                                ]);
-                            }
-                            ?>                            
-                        </div>
+
                     </div>
                 </div>
 
@@ -145,6 +114,43 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
+    </div>
+    <div class="box-footer text-center">
+        <?php
+            if($model->apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
+                    echo Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
+                        'class'=>'btn btn-success btn-ms',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]);
+                }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
+                    echo Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                        'class'=>'btn btn-success btn-ms',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]);
+                }
+            }
+        ?>
+        <?php
+            if($model->apply->apply_status <= ApplyStatusEnum::CONFIRM) {
+                $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+        ?>
+            <?= Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
+        <?php }?>
+        <?php
+        if($model->apply->apply_status != ApplyStatusEnum::SAVE) {
+            echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+        }
+        ?>
+        <?php
+        if($model->is_apply == common\enums\ConfirmEnum::YES) {
+            echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
+                'class' => 'btn btn-danger btn-ms',
+            ]);
+        }
+        ?>
     </div>
     <div class="col-xs-12">
         <div class="box">

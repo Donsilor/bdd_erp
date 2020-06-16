@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use common\models\backend\Member;
 use Yii;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -53,13 +54,14 @@ class PurchaseApplyGoods extends BaseModel
     {
         return [
             [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
-            [['style_id','apply_id','goods_type', 'goods_num', 'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['style_id','apply_id','goods_type', 'goods_num','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at','format_sn'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
-            [['goods_name', 'stone_info', 'parts_info', 'remark'], 'string', 'max' => 255],
+            [['goods_name', 'stone_info', 'parts_info', 'remark','audit_remark','format_remark'], 'string', 'max' => 255],
             [['style_sn', 'qiban_sn'], 'string', 'max' => 30],            
             [['goods_image'], 'string', 'max' => 100],
+            [['format_images','format_video'], 'string', 'max' => 500],
             [['goods_images'],'parseGoodsImages'],
         ];
     }
@@ -72,7 +74,7 @@ class PurchaseApplyGoods extends BaseModel
         return [
             'id' => 'ID',
             'apply_id' => '采购单ID',
-            'goods_sn' => '款号/起版号',
+            'goods_sn' => '款号',
             'goods_num' => '商品数量',
             'goods_name' => '商品名称',
             'goods_type'=>'商品类型',
@@ -94,8 +96,16 @@ class PurchaseApplyGoods extends BaseModel
             'stone_info' => '石料信息',
             'parts_info' => '配件信息',
             'remark' => '采购备注',
+            'auditor_id' => '审核人',
+            'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
+            'format_sn' => '图纸编号',
+            'format_images' => '版式图片',
+            'format_video' => '上传视频',
+            'format_remark' => '版式备注',
         ];
     }
     /**
@@ -141,7 +151,14 @@ class PurchaseApplyGoods extends BaseModel
     {
         return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
     }
-    
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
     /**
      * 商品属性列表
      * @return \yii\db\ActiveQuery

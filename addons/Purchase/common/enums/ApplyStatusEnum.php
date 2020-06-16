@@ -15,7 +15,7 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
     const SAVE     = 1;
     const PENDING    = 2;
     const CONFIRM   = 3;
-    
+    const AUDITED   = 4;
     const CANCEL = 9;
     
     /**
@@ -27,8 +27,8 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
         return [
                 self::SAVE    => '已保存',
                 self::PENDING => '待审核',
-                self::CONFIRM => '已审核',
-
+                self::CONFIRM => '已审核（业务）',
+                self::AUDITED => '已审核（商品部）',
                 self::CANCEL => '已取消',
         ];
     }

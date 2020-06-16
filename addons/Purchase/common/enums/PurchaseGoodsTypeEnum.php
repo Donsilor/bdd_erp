@@ -11,8 +11,7 @@ use common\enums\BaseEnum;
 class PurchaseGoodsTypeEnum extends BaseEnum
 {
     const STYLE = 1;
-    const QIBAN = 2;
-    const OTHER = 3;
+    const OTHER = 2;
     /**
      *
      * @return array
@@ -21,7 +20,6 @@ class PurchaseGoodsTypeEnum extends BaseEnum
     {
         return [
                 self::STYLE => "有款商品",
-                self::QIBAN => "起版商品",
                 self::OTHER => "无款商品",
         ];
     }

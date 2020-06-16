@@ -59,7 +59,7 @@ class PurchaseApplyGoodsController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                     
+                    'auditor' => ['username'],
                 ]
         ]);
         
@@ -102,10 +102,13 @@ class PurchaseApplyGoodsController extends BaseController
                 return ResultHelper::json(422, $this->getError($model));
             }
             try{                
-                $trans = Yii::$app->trans->beginTransaction();  
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->audit_status = AuditStatusEnum::SAVE;
+
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
-                }     
+                }
+
                 //创建属性关系表数据
                 $model->createAttrs();
                 //更新采购汇总：总金额和总数量
@@ -125,6 +128,26 @@ class PurchaseApplyGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+
+
+    /**
+     * 有款添加/编辑
+     * @var PurchaseApplyGoodsForm $model
+     * @return mixed
+     */
+    public function actionFormatEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseApplyGoodsForm();
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
     
     /**
      * 无款添加/编辑
@@ -159,6 +182,7 @@ class PurchaseApplyGoodsController extends BaseController
               
             try{
                 $trans = Yii::$app->trans->beginTransaction();
+                $model->audit_status = AuditStatusEnum::SAVE;
                 if($isNewRecord == true) {
                     $model->goods_sn = SnHelper::createQibanSn('QBA');
                 }
@@ -424,4 +448,79 @@ class PurchaseApplyGoodsController extends BaseController
         return true;
     }
 
+
+    /**
+     * ajax 设计审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionDesignAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::SAVE) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax('apply-audit', [
+            'model' => $model,
+        ]);
+    }
+    /**
+     * ajax 商品审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionGoodsAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status == AuditStatusEnum::SAVE) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax('apply-audit', [
+            'model' => $model,
+        ]);
+    }
 }

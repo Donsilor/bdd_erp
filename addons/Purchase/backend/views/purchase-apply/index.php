@@ -51,7 +51,8 @@ $params = $params ? "&".http_build_query($params) : '';
                     'filter' => true,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
-            ],  
+            ],
+
             [
                     'attribute' => 'apply_sn',
                     'value'=>function($model) {
@@ -160,7 +161,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                 ]),
                 'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->created_at);
+                    return Yii::$app->formatter->asDatetime($model->audit_time);
                 }
 
             ],
