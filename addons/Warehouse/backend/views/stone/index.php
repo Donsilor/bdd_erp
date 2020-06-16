@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone', '石包列表');
+$this->title = Yii::t('stone', '石料列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:130%;'],
+                    //'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -38,15 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
-                            'label' => '序号',
+                        /*[
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
-                        ],
+                        ],*/
                         [
-                            'label' => '名称',
                             'attribute'=>'stone_name',
                             'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                 'class' => 'form-control',
@@ -54,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'160'],
                         ],
                         [
-                            'label' => '石包编号',
                             'attribute'=>'stone_sn',
                             'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                 'class' => 'form-control',
@@ -62,7 +59,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '石包类型',
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'attribute' => 'stone_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->stone_type);
@@ -75,7 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '库存数量',
                             'attribute'=>'stock_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
                                 'class' => 'form-control',
@@ -83,31 +85,34 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '库存重量',
                             'attribute'=>'stock_weight',
                             'filter' => Html::activeTextInput($searchModel, 'stock_weight', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '每卡采购价格',
+                            'attribute'=>'stone_price',
+                            'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width' => '120'],
+                            'headerOptions' => ['width' => '100'],
                         ],
-                        [
-                            'label' => '每卡销售价格',
+                        /*[
                             'attribute'=>'sale_price',
                             'filter' => Html::activeTextInput($searchModel, 'sale_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],
-                        ],
+                        ],*/
                         [
-                            'label' => '颜色',
                             'attribute' => 'stone_color',
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_color);
@@ -116,7 +121,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '净度',
                             'attribute' => 'stone_clarity',
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_clarity);
@@ -125,6 +129,38 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'attribute' => 'stone_cut',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_cut);
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_symmetry',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_symmetry);
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_polish',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_polish);
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_fluorescence',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_fluorescence);
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        /*[
                             'label' => '买入',
                             'attribute'=>'ms_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'ms_cnt', [
@@ -211,7 +247,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],
+                        ],*/
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',

@@ -90,9 +90,11 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
+                $model->cost_price = bcmul($model->stone_price, $model->stone_weight, 3);
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->warehouseService->stoneBill->purchaseStoneBillSummary($model->bill_id);
                 $trans->commit();
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){
