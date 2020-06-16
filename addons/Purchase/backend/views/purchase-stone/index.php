@@ -61,7 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'130'],
             ],
-
             [
                     'attribute' => 'supplier_id',
                     'value' =>function($model){

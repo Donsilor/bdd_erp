@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
                 </div>
                 <div class="col-lg-4">
-                  <?= $form->field($model, 'stone_sn')->textInput()?>
+                  <?= $form->field($model, 'goods_sn')->textInput()?>
                 </div>
               </div>
               <div class="row">                        
@@ -32,20 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
                       <div class="col-lg-4">
                           <?= $form->field($model, 'goods_weight')->textInput() ?>
                       </div>
-                    <div class="col-lg-4">
-                         <?= $form->field($model, 'stone_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
-                    </div>
+                  <div class="col-lg-4">
+                      <?= $form->field($model, 'stone_price')->textInput() ?>
+                  </div>
 			   </div> 
 			   <div class="row">
                    <div class="col-lg-4">
+                       <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+                   </div>
+                   <div class="col-lg-4">
+                       <?= $form->field($model, 'stone_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
+                   </div>
+                   <div class="col-lg-4">
                        <?= $form->field($model, 'stone_clarity')->dropDownList($model->getClarityMap(),['prompt'=>'请选择']) ?>
                    </div>
-                   <div class="col-lg-4">
-                       <?= $form->field($model, 'stone_price')->textInput() ?>
-                   </div>
-                   <div class="col-lg-4">
-                        <?= $form->field($model, 'cost_price')->textInput() ?>
-                    </div>
 			   </div>
                 <div class="row">
                     <div class="col-lg-4">

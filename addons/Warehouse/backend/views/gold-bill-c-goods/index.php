@@ -57,6 +57,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
                                 'attribute' => 'gold_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->gold_type);

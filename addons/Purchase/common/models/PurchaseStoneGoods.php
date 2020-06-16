@@ -62,7 +62,7 @@ class PurchaseStoneGoods extends BaseModel
         return [
             'id' => 'ID',
             'purchase_id' => '采购单',
-            'goods_sn' => '商品编号',
+            'goods_sn' => '石料款号',
             'goods_name' => '商品名称',
             'goods_weight' => '石料总重(ct)',
             'goods_num' => '石包数量',
