@@ -107,7 +107,11 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
+            $buchan_status = BuChanEnum::ASSIGNED;
             list($peishi_status,$peiliao_status) = PeiliaoTypeEnum::getValue($model->peiliao_type,"getStatusMap") ?? [PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING];
+            if(PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
+                $buchan_status = BuChanEnum::TO_PEILIAO;
+            }
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,                   
@@ -116,13 +120,13 @@ class PurchaseService extends Service
                     'from_order_sn'=>$purchase->purchase_sn,
                     'from_type' => FromTypeEnum::PURCHASE,
                     'style_sn' => $model->style_sn,
+                    'peiliao_type'=>$model->peiliao_type,
                     'peishi_status'=>$peishi_status,
                     'peiliao_status'=>$peiliao_status,
-                    'bc_status' => BuChanEnum::ASSIGNED,
+                    'bc_status' => $buchan_status,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
-                    'jintuo_type'=>$model->jintuo_type,
-                    'peiliao_type'=>$model->peiliao_type,
+                    'jintuo_type'=>$model->jintuo_type,                    
                     'style_sex' =>$model->style_sex,                    
                     'is_inlay' =>$model->is_inlay,
                     'product_type_id'=>$model->product_type_id,
@@ -131,7 +135,7 @@ class PurchaseService extends Service
                     'follower_id'=>$purchase->follower_id,
                     'factory_mo'=>$model->factory_mo,
                     'factory_distribute_time' => time()
-            ];            
+            ]; 
             if($model->produce_id && $model->produce){
                 if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
                     //生产中之后的流程，禁止同步

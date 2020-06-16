@@ -165,6 +165,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModal',
                 ]);
                 break;
+            //待配料    
+            case BuChanEnum::TO_PEILIAO :
+                $buttonHtml .= Html::edit(['to-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
+                    'class'=>'btn btn-success btn-ms',
+                    'style'=>"margin-left:5px",
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModal',
+                ]);
+                break;
+            //配料中
+            case BuChanEnum::IN_PEILIAO:
+                
+                break;
             //已分配
             case BuChanEnum::ASSIGNED:
                 $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
