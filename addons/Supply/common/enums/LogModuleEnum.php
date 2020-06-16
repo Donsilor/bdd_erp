@@ -12,9 +12,11 @@ class LogModuleEnum extends BaseEnum
 {
     const TO_FACTORY = 1;
     const TO_CONFIRMED  = 2;
-    const TO_PRODUCE  = 3;
-    const LEAVE_FACTORY  = 4;
-    const QC_QUALITY  = 5;
+    const TO_PEILIAO  = 3;
+    const CONFIRM_PEILIAO  = 4;
+    const TO_PRODUCE  = 5;
+    const LEAVE_FACTORY  = 6;
+    const QC_QUALITY  = 7;
 
     /**
      * 
@@ -25,6 +27,8 @@ class LogModuleEnum extends BaseEnum
         return [
             self::TO_FACTORY => "分配工厂",
             self::TO_CONFIRMED => "确认分配",
+            self::TO_PEILIAO => "开始配料",
+            self::CONFIRM_PEILIAO => "确认配料",
             self::TO_PRODUCE => "开始生产",
             self::LEAVE_FACTORY => "生产出厂",
             self::QC_QUALITY => "QC质检",

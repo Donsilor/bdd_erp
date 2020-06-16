@@ -44,6 +44,7 @@ class AttrIdEnum
     const DIA_STONE_FLOOR = 37;//石底层
     const DIA_POLISH = 28;//抛光
     const DIA_SYMMETRY = 29;//对称
+    const DIA_SPEC = 999;//规格(石头备注)
 
     //主石信息
     const MAIN_STONE_TYPE = 56;//主石类型
@@ -57,9 +58,17 @@ class AttrIdEnum
     const SIDE_STONE1_COLOR = 46;//副石1颜色
     const SIDE_STONE1_CLARITY = 47;//副石1净度    
     const SIDE_STONE1_WEIGHT = 44;//副石1重量(ct)
-    const SIDE_STONE1_NUM = 45;//副石1数量      
+    const SIDE_STONE1_NUM = 45;//副石1数量    
+    const SIDE_STONE1_SPEC = 999;//副石1规格
     //副石2信息
     const SIDE_STONE2_TYPE = 64;//副石2类型
     const SIDE_STONE2_WEIGHT = 63;//副石2重量(ct)
     const SIDE_STONE2_NUM = 62;//副石2数量
+    const SIDE_STONE2_SPEC = 999;//副石2规格
+    
+    //副石2信息
+    const SIDE_STONE3_TYPE = 999;//副石3类型
+    const SIDE_STONE3_WEIGHT = 999;//副石3重量(ct)
+    const SIDE_STONE3_NUM = 999;//副石3数量
+    const SIDE_STONE3_SPEC = 999;//副石3规格
 }
