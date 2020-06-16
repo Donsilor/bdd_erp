@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
