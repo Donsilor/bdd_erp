@@ -97,7 +97,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'label' => '盘点材质',
+                            'label' => '石料类型',
                             'value' => function($model){
                                 if($model->billW->gold_type){
                                     return Yii::$app->attr->valueName($model->billW->gold_type)??"";
@@ -122,7 +122,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
-                            'label' => '应盘重量/克',
+                            'label' => '应盘重量(ct)',
                             'value' => function($model){
                                 return $model->billW->should_weight ?? 0;
                             },
@@ -140,7 +140,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
-                            'label' => '实盘重量/克',
+                            'label' => '实盘重量(ct)',
                             'value' => function($model){
                                 return $model->billW->actual_weight ?? 0;
                             },

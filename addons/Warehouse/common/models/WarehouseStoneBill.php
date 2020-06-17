@@ -54,7 +54,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -111,7 +111,6 @@ class WarehouseStoneBill extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-
     /**
      * 创建人
      * @return \yii\db\ActiveQuery
