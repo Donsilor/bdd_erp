@@ -27,5 +27,18 @@ class QibanTypeEnum extends BaseEnum
                 self::NO_STYLE => "无款起版",
         ];
     }
+
+
+    /**
+     *
+     * @return array
+     */
+    public static function getStyleMap(): array
+    {
+        return [
+            self::HAVE_STYLE => "起版",
+            self::NON_VERSION => "非起版"
+        ];
+    }
     
 }

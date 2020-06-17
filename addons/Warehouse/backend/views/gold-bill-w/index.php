@@ -40,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:150%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -80,16 +80,37 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,
                         ],
                         [
-                            'attribute' => 'warehouse',
-                            'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->warehouse);
+                            'label' => '盘点仓库',
+                            'attribute' => 'to_warehouse_id',
+                            'value' =>"toWarehouse.name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[to_warehouse_id]',
+                                'value'=>$searchModel->to_warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => '200',
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'label' => '盘点材质',
+                            'value' => function($model){
+                                if($model->billW->gold_type){
+                                    return Yii::$app->attr->valueName($model->billW->gold_type)??"";
+                                }
+                                return "";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'warehouse',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'to_warehouse_id',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '应盘数量',

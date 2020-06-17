@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
@@ -13,6 +14,8 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGold;
+use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
+use addons\Warehouse\common\models\WarehouseGoldBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseMaterialBillW;
 use common\enums\ConfirmEnum;
@@ -190,10 +193,11 @@ class WarehouseGoldBillService extends Service
             throw new \Exception($this->getError($bill));
         }
         //批量创建单据明细
-        $goods_list = WarehouseGold::find()->where(['gold_type'=>$bill->warehouse])->asArray()->all();
+        $goods_list = WarehouseGold::find()->where(['warehouse_id'=>$bill->to_warehouse_id, 'gold_type' => $form->gold_type])->asArray()->all();
         $gold_weight = 0;
+        $bill_goods_values = [];
         if(!empty($goods_list)) {
-            $bill_goods_values = [];
+            $bill_goods= [];
             foreach ($goods_list as $goods) {
                 $bill_goods = [
                     'bill_id'=>$bill->id,
@@ -219,10 +223,18 @@ class WarehouseGoldBillService extends Service
                 throw new \Exception('导入单据明细失败');
             }
         }
+
+        //同步盘点明细关系表
+        $sql = "insert into ".WarehouseGoldBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseGoldBillGoods::tableName()." where bill_id=".$bill->id;
+        $should_num = Yii::$app->db->createCommand($sql)->execute();
+        if(false === $should_num) {
+            throw new \Exception('导入单据明细失败2');
+        }
         //盘点单附属表
-        $billW = new WarehouseMaterialBillW();
+        $billW = new WarehouseGoldBillW();
         $billW->id = $bill->id;
-        $billW->should_num = count($bill_goods);
+        $billW->gold_type = $form->gold_type;
+        $billW->should_num = $should_num;
         $billW->should_weight = $gold_weight;
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
@@ -246,40 +258,42 @@ class WarehouseGoldBillService extends Service
             throw new \Exception($this->getError($form));
         }
         $bill_detail_ids = [];
-        $billGoods = WarehouseGoldBillGoods::find()->where(['goods_id'=>$form->gold_sn,'bill_id'=>$form->id])->one();
+        $billGoods = WarehouseGoldBillGoods::find()->where(['gold_sn'=>$form->gold_sn,'bill_id'=>$form->id])->one();
         if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
             //已盘点且正常的忽略
-            //continue;
+            throw new \Exception("批次号[{$form->gold_sn}]已盘点且正常");
         }
-        $goods = WarehouseGoods::find()->where(['goods_id'=>$form->gold_sn])->one();
+        $goods = WarehouseGold::find()->where(['gold_sn'=>$form->gold_sn])->one();
         if(empty($goods)) {
-            throw new \Exception("[{$form->gold_sn}]货号不存在");
+            throw new \Exception("[{$form->gold_sn}]批次号不存在");
         }
         if(!$billGoods) {
-            $billGoods = new WarehouseBillGoods();
+            $billGoods = new WarehouseGoldBillGoods();
             $billGoods->bill_id = $form->id;
-            $billGoods->bill_type = $form->bill_type;
-            $billGoods->style_sn = $goods->style_sn;
             $billGoods->bill_no = $form->bill_no;
-            $billGoods->goods_id = $form->gold_sn;
-            $billGoods->to_warehouse_id = $form->to_warehouse_id;//盘点仓库
+            $billGoods->bill_type = $form->bill_type;
+            $billGoods->gold_sn = $goods->gold_sn;
+            $billGoods->gold_name = $goods->gold_name;
+            $billGoods->style_sn = $goods->style_sn;
+            $billGoods->gold_type = $goods->gold_type;
+            $billGoods->gold_weight = $form->gold_weight;
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
         }else {
-            if($billGoods->to_warehouse_id == $goods->warehouse_id) {
+            if($form->to_warehouse_id == $goods->warehouse_id
+                && bccomp($billGoods->gold_weight,$form->gold_weight,2)==0) {
                 $billGoods->status = PandianStatusEnum::NORMAL;//正常
-            }elseif($billGoods->to_warehouse_id != $goods->warehouse_id){
+            }elseif($form->to_warehouse_id != $goods->warehouse_id
+                || bccomp($billGoods->gold_weight,$form->gold_weight,2)!=0){
                 $billGoods->status = PandianStatusEnum::LOSS;//盘亏
             }
         }
-        $billGoods->goods_name = $goods->goods_name;
-        $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
         //更多商品属性
         //............
         if(false === $billGoods->save()) {
             throw new \Exception($this->getError($billGoods));
         }
-        $bill_detail_ids[] = $billGoods->id;
-        WarehouseBillGoodsW::updateAll(['status'=>ConfirmEnum::YES],['id'=>$bill_detail_ids]);
+        $data = ['status'=>ConfirmEnum::YES,'actual_weight'=>$form->gold_weight,'fin_status'=>FinAuditStatusEnum::PENDING];
+        WarehouseGoldBillGoodsW::updateAll($data,['id'=>$billGoods->id]);
         $this->billWSummary($form->id);
     }
 
@@ -289,7 +303,7 @@ class WarehouseGoldBillService extends Service
      */
     public function billWSummary($bill_id)
     {
-        $sum = WarehouseGoldBillGoods::find()->alias("g")->innerJoin(WarehouseMaterialBillW::tableName().' gw','g.id=gw.id')
+        $sum = WarehouseGoldBillGoods::find()->alias("g")->innerJoin(WarehouseGoldBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
                 'sum(if(gw.status='.ConfirmEnum::YES.',g.gold_weight,0)) as actual_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
@@ -300,9 +314,10 @@ class WarehouseGoldBillService extends Service
                 'sum(if(g.status='.PandianStatusEnum::SAVE.',g.gold_weight,0)) as save_weight',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.gold_weight,0)) as normal_weight',
-                'sum(if(g.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
-                'sum(if(g.adjust_status>'.PandianAdjustEnum::SAVE.',g.gold_weight,0)) as adjust_weight',
+                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
+                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.gold_weight,0)) as adjust_weight',
                 'sum(1) as goods_num',//明细总数量
+                'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {
             $billUpdate = ['total_num'=>$sum['goods_num']];
@@ -311,7 +326,7 @@ class WarehouseGoldBillService extends Service
                 'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight']
             ];
             $res1 = WarehouseGoldBill::updateAll($billUpdate,['id'=>$bill_id]);
-            $res2 = WarehouseMaterialBillW::updateAll($billWUpdate,['id'=>$bill_id]);
+            $res2 = WarehouseGoldBillW::updateAll($billWUpdate,['id'=>$bill_id]);
             return $res1 && $res2;
         }
         return false;

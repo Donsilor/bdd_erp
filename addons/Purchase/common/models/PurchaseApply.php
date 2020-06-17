@@ -48,9 +48,9 @@ class PurchaseApply extends BaseModel
         return [
             [['channel_id'], 'required'],
             [['total_cost'], 'number'],
-            [['warehouse_id','total_num','channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'apply_status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['warehouse_id','total_num','channel_id', 'auditor_id', 'audit_status', 'audit_time', 'final_auditor_id', 'final_audit_status', 'final_audit_time', 'status', 'apply_status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['apply_sn'], 'string', 'max' => 30],            
-            [['audit_remark', 'remark'], 'string', 'max' => 255],
+            [['audit_remark', 'remark','final_audit_remark'], 'string', 'max' => 255],
             [['delivery_time'], 'safe'],
         ];
     }
@@ -72,6 +72,10 @@ class PurchaseApply extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
+            'final_auditor_id' => '审核人',
+            'final_audit_status' => '审核状态',
+            'final_audit_time' => '审核时间',
+            'final_audit_remark' => '审核备注',
             //'status' => '状态',
             'apply_status' => '申请状态',
             'remark' => '采购备注',

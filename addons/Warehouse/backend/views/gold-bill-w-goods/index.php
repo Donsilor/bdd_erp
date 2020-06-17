@@ -10,7 +10,7 @@ $this->title = '盘点单明细';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
+    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
@@ -48,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'gold_sn',
                                 'filter' => true,
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'120'],
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute' => 'gold_type',
@@ -60,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width'=>'80'],
                             ],
                             [
                                 'attribute'=>'gold_name',
@@ -71,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->gold_name;
                                 },
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'200'],
+                                'headerOptions' => ['width'=>'160'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -80,9 +81,58 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
+                                'label' => '应盘重量',
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['width' => '100'],
+                            ],
+                            [
+                                'label' => '实盘重量',
+                                'value' => function($model){
+                                    return $model->goodsW->actual_weight ?? 0;
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                            ],
+                            [
+                                'label' => '财务审核状态',
+                                'value' => function($model){
+                                    if($model->goodsW->fin_status){
+                                        return \addons\Warehouse\common\enums\FinAuditStatusEnum::getValue($model->goodsW->fin_status);
+                                    }
+                                    return "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '120'],
+                            ],
+                            [
+                                'label' => '财务确认人',
+                                'value' => function($model){
+                                    return $model->goodsW->fin_checker ?? "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                            ],
+                            [
+                                'label' => '财务确认时间',
+                                'value' => function($model){
+                                    return $model->goodsW->fin_check_time ?? "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '120'],
+                            ],
+                            [
+                                'label' => '财务备注',
+                                'value' => function($model){
+                                    return $model->goodsW->fin_remark ?? "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
                             ],
                             [
                                     'label' => '盘点状态',

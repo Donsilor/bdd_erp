@@ -183,6 +183,9 @@ class PurchaseApplyGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->audit_status = AuditStatusEnum::SAVE;
+                //申请单里无款默认为起版
+                $model->qiban_type = QibanTypeEnum::NO_STYLE;
+
                 if($isNewRecord == true) {
                     $model->goods_sn = SnHelper::createQibanSn('QBA');
                 }
@@ -482,7 +485,7 @@ class PurchaseApplyGoodsController extends BaseController
 
         }
 
-        return $this->renderAjax('apply-audit', [
+        return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -519,7 +522,7 @@ class PurchaseApplyGoodsController extends BaseController
 
         }
 
-        return $this->renderAjax('apply-audit', [
+        return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }

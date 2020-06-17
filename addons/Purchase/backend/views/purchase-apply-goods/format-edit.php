@@ -19,9 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'format_sn')->textInput() ?>
                             </div>
                         </div>
-                        <div class="row col-lg-4">
-                                <?= $form->field($model, 'format_sn')->textInput() ?>
-                        </div>
                         <div class="row col-lg-9">
                             <?php $model->format_images = !empty($model->format_images)?explode(',', $model->format_images):null;?>
                             <?= $form->field($model, 'format_images')->widget(common\widgets\webuploader\Files::class, [
@@ -32,24 +29,73 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]); ?>
                         </div>
-                    <?php if($model->style_id) {?>
-                        <div style="margin: 0px 0 20px 0;">
-                            <h3 class="box-title"> 其他信息</h3>
+                        <div class="row col-lg-9">
+                            <?php $model->format_video = !empty($model->format_video)?explode(',', $model->format_video):null;?>
+                            <?= $form->field($model, 'format_video')->widget(common\widgets\webuploader\Files::class, [
+                                'type'=>'videos',
+                                'config' => [
+                                'pick' => [
+                                    'multiple' => true,
+                                ],
+                                ]
+                            ]); ?>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'stone_info')->textarea() ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'parts_info')->textarea() ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'remark')->textarea() ?>
+
+                        <div class="row col-lg-9" >
+                            <h3 class="box-title"> 工艺信息</h3>
+                        </div>
+                        <div class="row col-lg-9">
+                            <div class="box-body table-responsive">
+                                <div class="tab-content">
+                                    <?php
+                                        $format_info = [
+                                            [
+                                                'name' =>'format_craft_type',
+                                                'title'=>"特殊工艺",
+                                                'type'  => 'dropDownList',
+                                                'options' => [
+                                                    'class' => 'input-priority',
+                                                    'style'=>'width:160px',
+                                                    'prompt'=>'请选择',
+                                                ],
+                                                'items' => \addons\Purchase\common\enums\SpecialCraftEnum::getMap()
+                                            ],
+                                            [
+                                                'name' =>'format_craft_desc',
+                                                'title'=>"工艺描述",
+                                                'defaultValue' => '',
+                                                'options' => [
+                                                    'class' => 'input-priority',
+                                                    'style'=>'width:160px',
+                                                ],
+                                            ],
+                                            [
+                                                'name' =>'format_craft_images',
+                                                'title'=>'工艺图片',
+                                                'type' => \common\widgets\webuploader\Files::className(),
+                                                'options' => [
+                                                    'config' =>[
+                                                        'pick' => [
+                                                            'multiple' => true,
+                                                        ],
+                                                    ] ,
+                                                ],
+
+                                            ]
+                                        ];
+                                    ?>
+                                    <?= unclead\multipleinput\MultipleInput::widget([
+                                        'name' => "format_info",
+                                        'value' =>[],
+                                        'columns' => $format_info,
+                                    ]); ?>
+                                </div>
                             </div>
                         </div>
-                    <?php }?>
+
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>
+        </div>
     </div>
 </div>
