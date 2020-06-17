@@ -2,8 +2,10 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\BillWStatusEnum;
 use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\GoldStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
@@ -310,6 +312,61 @@ class WarehouseGoldBillService extends Service
             $form->fin_status = FinAuditStatusEnum::UNPASS;
         }
         if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 盘点结束
+     * @param WarehouseBillW $bill
+     */
+    public function finishBillW($bill_id)
+    {
+        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
+        if(!$bill || $bill->status == BillWStatusEnum::FINISHED) {
+            throw new \Exception("盘点已结束");
+        }
+        $bill->status = BillWStatusEnum::FINISHED;
+        $bill->bill_status = BillStatusEnum::PENDING; //待审核
+        if(false === $bill->save(false,['id','status', 'bill_status'])) {
+            throw new \Exception($this->getError($bill));
+        }
+        //1.未盘点设为盘亏
+        WarehouseGoldBillGoods::updateAll(['status'=>PandianStatusEnum::LOSS],['bill_id'=>$bill_id,'status'=>PandianStatusEnum::SAVE]);
+
+        //2.解锁商品
+        $subQuery = WarehouseGoldBillGoods::find()->select(['gold_sn'])->where(['bill_id'=>$bill->id]);
+        WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+
+        //3.解锁仓库
+        \Yii::$app->warehouseService->warehouse->unlockWarehouse($bill->to_warehouse_id);
+
+        //4.自动调整盘亏盘盈数据
+        //$this->adjustGoods($bill_id);
+        //5.盘点单汇总
+        $this->billWSummary($bill_id);
+    }
+
+    /**
+     * 盘点审核
+     * @param WarehouseBillWForm $form
+     */
+    public function auditBillW($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $subQuery = WarehouseGoldBillGoods::find()->select(['gold_sn'])->where(['bill_id'=>$form->id]);
+        if($form->audit_status == AuditStatusEnum::PASS) {
+            $form->bill_status = GoldBillStatusEnum::CONFIRM;
+            WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+            //解锁仓库
+            \Yii::$app->warehouseService->warehouse->unlockWarehouse($form->to_warehouse_id);
+        }else {
+            $form->bill_status = GoldBillStatusEnum::CANCEL;
+            WarehouseGoods::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+        }
+        if(false === $form->save() ){
             throw new \Exception($this->getError($form));
         }
     }
