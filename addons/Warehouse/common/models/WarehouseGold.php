@@ -16,7 +16,7 @@ use addons\Supply\common\models\Supplier;
  * @property int $supplier_id 供应商
  * @property int $gold_num 金料数量
  * @property string $gold_weight 库存重量/克
- * @property string $cost_price 金料总额/克
+ * @property string $cost_price 金料总额
  * @property string $gold_price 金料单价/克
  * @property string $sale_price 销售价
  * @property int $warehouse_id 所在仓库
@@ -65,7 +65,7 @@ class WarehouseGold extends BaseModel
             'supplier_id' => '供应商',
             'gold_num' => '金料数量',
             'gold_weight' => '库存重量/克',
-            'cost_price' => '金料总额/克',
+            'cost_price' => '金料总额',
             'gold_price' => '金料单价/克',
             'sale_price' => '销售价',
             'warehouse_id' => '所在仓库',
