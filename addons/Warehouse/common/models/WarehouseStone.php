@@ -12,6 +12,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $stone_sn 石料编号
  * @property string $stone_name 石料名称
  * @property string $stone_type 石料类型
+ * @property int $stone_status 石料状态
  * @property int $supplier_id 供应商
  * @property string $style_sn 石料款号
  * @property int $stock_cnt 库存数量
@@ -70,7 +71,7 @@ class WarehouseStone extends BaseModel
     {
         return [
             [['stone_sn', 'stone_name', 'stone_type'], 'required'],
-            [['supplier_id', 'stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'warehouse_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'warehouse_id', 'stone_status', 'status', 'created_at', 'updated_at'], 'integer'],
             [['stock_weight', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
             [['stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['stone_type', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence'], 'string', 'max' => 10],
@@ -88,6 +89,7 @@ class WarehouseStone extends BaseModel
             'stone_sn' => '石料编号',
             'stone_name' => '石料名称',
             'stone_type' => '石料类型',
+            'stone_status' => '石料状态',
             'supplier_id' => '供应商',
             'style_sn' => '石料款号',
             'stock_cnt' => '库存数量',
@@ -130,7 +132,6 @@ class WarehouseStone extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
-
     /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
