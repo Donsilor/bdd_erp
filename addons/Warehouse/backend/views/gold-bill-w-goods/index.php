@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'width:120%;'],
+                        //'options' => ['style'=>'width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
@@ -39,12 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'yii\grid\SerialColumn',
                                     'visible' => false,
                             ],
-                            [
+                            /*[
                                     'attribute' => 'id',
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'80'],
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'gold_sn',
                                 'filter' => true,
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '160'],
                             ],
                             [
                                     'label' => '盘点状态',

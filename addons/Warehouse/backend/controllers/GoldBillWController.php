@@ -2,9 +2,11 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -145,7 +147,7 @@ class GoldBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->billW->finishBillW($id); 
+            \Yii::$app->warehouseService->goldBill->finishBillW($id);
             
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -168,8 +170,8 @@ class GoldBillWController extends BaseController
         $id = Yii::$app->request->get('id');
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->billW->billWSummary($id);
+            //\Yii::$app->warehouseService->billW->adjustBillW($id);
+            \Yii::$app->warehouseService->goldBill->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -181,6 +183,8 @@ class GoldBillWController extends BaseController
     }
     /**
      * 详情
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
      * @return unknown
      */
     public function actionView()
@@ -255,7 +259,7 @@ class GoldBillWController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
-                \Yii::$app->warehouseService->billW->auditBillW($model);
+                \Yii::$app->warehouseService->goldBill->auditBillW($model);
                 
                 $trans->commit();
                 
@@ -285,25 +289,25 @@ class GoldBillWController extends BaseController
 
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model->bill_status = BillStatusEnum::CANCEL;
+            $model->bill_status = GoldBillStatusEnum::CANCEL;
 
             //仓库解锁
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($model->to_warehouse_id);
             //更新库存状态
-            $subQuery = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id']);
-            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
+            $subQuery = WarehouseGoldBillGoods::find()->where(['bill_id' => $id])->select(['gold_sn']);
+            WarehouseGoods::updateAll(['gold_status' => GoodsStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoodsStatusEnum::IN_PANDIAN]);
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
 
             //日志
-            $log = [
+            /*$log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '盘点单',
                 'log_msg' => '单据关闭'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);*/
             $trans->commit();
             return $this->message('关闭成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
