@@ -488,8 +488,9 @@ $this->registerJs($script);
                     var width = $e.data('width') || '80%';
                     var height = $e.data('height') || '80%';
                     var offset = $e.data('offset') || '10%';
+                    url = data.data.url || url+"?ids="+ids;
                     openIframe(title, width, height, url, offset);
-                    e.preventDefault();
+                    //$e.preventDefault();
                     return false;
                 }
             }

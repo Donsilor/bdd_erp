@@ -16,10 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('批量配石', ['test'],  [
+                        echo Html::a('批量配石', ['peishi','check'=>1],  [
                             'class'=>'btn btn-success btn-xs',
                             "onclick" => "batchPop2(this);return false;",
-                            'data-grid'=>'grid'
+                            'data-grid'=>'grid',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                            'data-title'=>'批量配石',
                         ]);
                         echo '&nbsp;';                        
                     ?>
@@ -64,6 +68,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type);
                                     },
                                     'filter' =>Html::activeDropDownList($searchModel, 'from_type',\addons\Supply\common\enums\FromTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style' => 'width:80px;',
+                                    ]),
+                                    'format' => 'raw',
+                            ],
+                            [
+                                    'attribute' => 'peishi_status',
+                                    'value' => function ($model){
+                                        return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
+                                    },
+                                    'filter' =>Html::activeDropDownList($searchModel, 'peishi_status',\addons\Supply\common\enums\PeishiStatusEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
                                             'style' => 'width:80px;',
