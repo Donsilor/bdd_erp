@@ -85,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'stone_num',
                                 'filter' => true,
                                 'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
                                 'label' => '实盘粒数',
@@ -93,13 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100','class' => 'danger'],
+                                'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:red'],
                             ],
                             [
                                 'label' => '应盘重量',
                                 'attribute' => 'stone_weight',
                                 'filter' => true,
                                 'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
                                 'label' => '实盘重量',
@@ -108,7 +111,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100','class' => 'danger'],
+                                'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:red'],
                             ],
                             [
                                 'label' => '财务审核状态',
