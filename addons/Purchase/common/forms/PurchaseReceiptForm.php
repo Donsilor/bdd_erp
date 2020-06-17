@@ -15,6 +15,7 @@ class PurchaseReceiptForm extends PurchaseReceipt
 {
     public $ids;
     public $goods;
+    public $produce_sns;
     /**
      * {@inheritdoc}
      */
@@ -47,6 +48,13 @@ class PurchaseReceiptForm extends PurchaseReceipt
             return StringHelper::explode($this->ids);
         }
         return [];
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getProduceSns()
+    {
+        return StringHelper::explodeIds($this->produce_sns);
     }
     /**
      * {@inheritdoc}

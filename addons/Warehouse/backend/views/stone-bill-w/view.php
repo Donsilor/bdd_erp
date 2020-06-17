@@ -3,7 +3,7 @@
 use common\helpers\Html;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Warehouse\common\enums\BillWStatusEnum;
 
 /* @var $this yii\web\View */
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?php echo GoldBillStatusEnum::getValue($model->bill_status)?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?php echo StoneBillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
             
             <?php
-                if($model->bill_status == GoldBillStatusEnum::SAVE){
+                if($model->bill_status == StoneBillStatusEnum::SAVE){
                     echo Html::edit(['ajax-edit','id'=>$model->id], '编辑', [
                         'data-toggle' => 'modal',
                         'class'=>'btn btn-primary btn-ms',
@@ -126,11 +126,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
                 ]);?>
            <?php }?>
-           <?php if($model->bill_status < GoldBillStatusEnum::CONFIRM) {?>
+           <?php if($model->bill_status < StoneBillStatusEnum::CONFIRM) {?>
            		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms','onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新吗？");return false;']);?>
            <?php }?>
             <?php
-                if($model->bill_status == GoldBillStatusEnum::PENDING){
+                if($model->bill_status == StoneBillStatusEnum::PENDING){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-ms',
                         'data-toggle' => 'modal',
