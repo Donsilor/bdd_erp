@@ -113,6 +113,14 @@ $this->registerJs($script);
             $(this).parent().parent().css('background-color','#fff');
         }
     });
+
+    //列表每行选中背景高亮
+    $("table tr > td").click(function () {
+        var checkbox = $(this).parent().find("input[type='checkbox'");
+        if(checkbox.length) {
+            checkbox.attr('checked', 'checked').change();  	
+        }
+    });
 </script>
 
 <script>
