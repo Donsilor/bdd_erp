@@ -2,10 +2,16 @@
 
 use common\helpers\Url;
 use common\enums\StatusEnum;
-
 ?>
-<?php foreach ($menus as $item) { 
-    $menuOpen = $item['is_addon'] == 1;
+<?php 
+$menuOpens = [];
+foreach ($menus as $k=>$item) {     
+    if(empty($menuOpens[$item['cate_id']]) || count($menuOpens[$item['cate_id']]) <2) {
+        $menuOpen = true;
+        $menuOpens[$item['cate_id']][] = true;
+    }else{
+        $menuOpen = false;
+    }
     ?>
     <li class="treeview hide<?= $menuOpen ?' menu-open':''?> rfLeftMenu <?= (isset($item['cate']['is_default_show']) && $item['cate']['is_default_show'] == StatusEnum::ENABLED) ? 'is_default_show' : ''; ?> rfLeftMenu-<?= $item['cate_id']; ?>">
         <?php if (!empty($item['-'])) { ?>
