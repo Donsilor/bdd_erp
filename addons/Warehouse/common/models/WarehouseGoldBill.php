@@ -83,7 +83,7 @@ class WarehouseGoldBill extends BaseModel
             'total_cost' => '金料总额',
             'pay_amount' => '采购支付金额',
             'delivery_no' => '收货单号',
-            'warehouse' => '仓库',
+            '' => '金料类型',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',

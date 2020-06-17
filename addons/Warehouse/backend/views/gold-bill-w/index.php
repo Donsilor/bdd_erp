@@ -127,7 +127,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
-                        [
+                        /*[
                                 'label' => '正常数量',
                                 'value' => function($model){
                                     return $model->billW->normal_num ?? 0;
@@ -204,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'attribute'=>'total_cost',
                                 'filter' => false,
                                 'headerOptions' => ['width' => '120'],
-                        ],
+                        ],*/
                         [
                                 'label' => '制单人',
                                 'attribute' => 'creator_id',
