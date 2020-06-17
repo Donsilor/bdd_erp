@@ -210,10 +210,11 @@ class StoneBillWController extends BaseController
     public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
-        $from = Yii::$app->request->post('WarehouseGoldBillWForm');
-        $model->gold_sn = $from['gold_sn']??"";
-        $model->gold_weight = $from['gold_weight']??"";
+        $model = $this->findModel($id) ?? new WarehouseStoneBillWForm();
+        $from = Yii::$app->request->post('WarehouseStoneBillWForm');
+        $model->stone_sn = $from['stone_sn']??"";
+        $model->stone_num = $from['stone_num']??"";
+        $model->stone_weight = $from['stone_weight']??"";
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{

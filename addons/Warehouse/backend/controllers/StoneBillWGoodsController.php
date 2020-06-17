@@ -5,8 +5,12 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
+use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
+use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
+use addons\Warehouse\common\models\WarehouseStoneBillW;
 use common\enums\AuditStatusEnum;
 use Yii;
 use common\traits\Curd;
@@ -33,9 +37,8 @@ class StoneBillWGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-w/index']));
-        $bill = WarehouseGoldBillWForm::find()->where(['id'=>$bill_id])->one();
-        
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-w/index']));
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -59,15 +62,15 @@ class StoneBillWGoodsController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['=',WarehouseGoldBillGoods::tableName().'.bill_id',$bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoods::tableName().'.status',PandianStatusEnum::SAVE]);
+        $dataProvider->query->andWhere(['=',WarehouseStoneBillGoods::tableName().'.bill_id',$bill_id]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillGoods::tableName().'.status',PandianStatusEnum::SAVE]);
         
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'bill'=>$bill,
                 'tab' =>$tab,
-                'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id,$this->billType,$returnUrl),
+                'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id,$this->billType,$returnUrl),
                 'returnUrl'=>$returnUrl
         ]);        
         
@@ -82,8 +85,8 @@ class StoneBillWGoodsController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = new WarehouseGoldBillGoodsW();
-        $model = $this->findModel($id) ?? new WarehouseGoldBillGoodsW();
+        $this->modelClass = new WarehouseStoneBillGoodsW();
+        $model = $this->findModel($id) ?? new WarehouseStoneBillGoodsW();
         //默认值
         if($model->fin_status == FinAuditStatusEnum::PENDING) {
             $model->fin_status = FinAuditStatusEnum::PASS;

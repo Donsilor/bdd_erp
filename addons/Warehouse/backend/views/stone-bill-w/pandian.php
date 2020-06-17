@@ -18,12 +18,16 @@ $form = ActiveForm::begin([
         <div class=" table-responsive">
             <table class="table table-hover">
                 <tr>
-                    <td class="col-xs-1 text-right no-border-top">批次号：</td>
-                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'gold_sn')->textInput()->label(false)?></td>
+                    <td class="col-xs-1 text-right no-border-top">石料编号：</td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_sn')->textInput()->label(false)?></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right no-border-top">金料粒数：</td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_num')->textInput()->label(false)?></td>
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right no-border-top">金料总重：</td>
-                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'gold_weight')->textInput()->label(false)?></td>
+                    <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_weight')->textInput()->label(false)?></td>
                     <td class="text-left no-border-top"><button class="btn btn-primary" type="submit">盘点</button></td>
                 </tr>
                 <tr>
@@ -32,7 +36,7 @@ $form = ActiveForm::begin([
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">盘点材质：</td>
-                    <td><?= Yii::$app->attr->valueName($model->billW->gold_type) ??'' ?></td>
+                    <td><?= Yii::$app->attr->valueName($model->billW->stone_type) ??'' ?></td>
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>

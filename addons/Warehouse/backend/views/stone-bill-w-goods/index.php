@@ -10,7 +10,7 @@ $this->title = '盘点单明细';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($bill->bill_status)?></h2>
+    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo \addons\Warehouse\common\enums\StoneBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {?>
-                        <?= Html::create(['gold-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {?>
+                        <?= Html::create(['stone-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>
                     </div>
                </div>
@@ -46,17 +46,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'80'],
                             ],*/
                             [
-                                'attribute' => 'gold_sn',
+                                'attribute' => 'stone_sn',
                                 'filter' => true,
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'stone_type',
                                 'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                    return Yii::$app->attr->valueName($model->stone_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -64,12 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                'attribute'=>'gold_name',
-                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'attribute'=>'stone_name',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                         'class' => 'form-control',
                                 ]),
                                 'value' => function ($model) {
-                                    return $model->gold_name;
+                                    return $model->stone_name;
                                 },
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'160'],
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '应盘重量',
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'stone_weight',
                                 'filter' => true,
                                 'headerOptions' => ['width' => '100'],
                             ],

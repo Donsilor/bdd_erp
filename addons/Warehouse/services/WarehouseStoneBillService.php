@@ -16,6 +16,7 @@ use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\enums\StoneStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -299,39 +300,56 @@ class WarehouseStoneBillService extends Service
     public function pandianGoods($form)
     {
         //校验单据状态
-        if ($form->bill_status != GoldBillStatusEnum::SAVE) {
+        if ($form->bill_status != StoneBillStatusEnum::SAVE) {
             throw new \Exception("单据已盘点结束");
         }
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        $bill_detail_ids = [];
-        $billGoods = WarehouseGoldBillGoods::find()->where(['gold_sn'=>$form->gold_sn,'bill_id'=>$form->id])->one();
+        if(!$form->stone_sn) {
+            throw new \Exception("石料编号不能为空");
+        }
+        if(!$form->stone_num) {
+            throw new \Exception("石料粒数不能为空");
+        }
+        if(!$form->stone_weight) {
+            throw new \Exception("石料重量不能为空");
+        }
+        $billGoods = WarehouseStoneBillGoods::find()->where(['stone_sn'=>$form->stone_sn,'bill_id'=>$form->id])->one();
         if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
             //已盘点且正常的忽略
-            throw new \Exception("批次号[{$form->gold_sn}]已盘点且正常");
+            throw new \Exception("石料编号[{$form->stone_sn}]已盘点且正常");
         }
-        $goods = WarehouseGold::find()->where(['gold_sn'=>$form->gold_sn])->one();
+        $goods = WarehouseStone::find()->where(['stone_sn'=>$form->stone_sn])->one();
         if(empty($goods)) {
-            throw new \Exception("[{$form->gold_sn}]批次号不存在");
+            throw new \Exception("[{$form->stone_sn}]批次号不存在");
         }
         if(!$billGoods) {
             $billGoods = new WarehouseGoldBillGoods();
             $billGoods->bill_id = $form->id;
             $billGoods->bill_no = $form->bill_no;
             $billGoods->bill_type = $form->bill_type;
-            $billGoods->gold_sn = $goods->gold_sn;
-            $billGoods->gold_name = $goods->gold_name;
+            $billGoods->stone_sn = $goods->stone_sn;
+            $billGoods->stone_name = $goods->stone_name;
             $billGoods->style_sn = $goods->style_sn;
-            $billGoods->gold_type = $goods->gold_type;
-            $billGoods->gold_weight = $form->gold_weight;
+            $billGoods->stone_type = $goods->stone_type;
+            $billGoods->color = $goods->stone_color;
+            $billGoods->clarity = $goods->stone_clarity;
+            $billGoods->cut = $goods->stone_cut;
+            $billGoods->polish = $goods->stone_polish;
+            $billGoods->fluorescence = $goods->stone_fluorescence;
+            $billGoods->symmetry = $goods->stone_symmetry;
+            $billGoods->stone_num = $form->stone_num;
+            $billGoods->stone_weight = $form->stone_weight;
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
         }else {
             if($form->to_warehouse_id == $goods->warehouse_id
-                && bccomp($billGoods->gold_weight,$form->gold_weight,2)==0) {
+                && bccomp($billGoods->stone_num,$form->stone_num,2)==0
+                && bccomp($billGoods->stone_weight,$form->stone_weight,2)==0) {
                 $billGoods->status = PandianStatusEnum::NORMAL;//正常
             }elseif($form->to_warehouse_id != $goods->warehouse_id
-                || bccomp($billGoods->gold_weight,$form->gold_weight,2)!=0){
+                || bccomp($billGoods->stone_num,$form->stone_num,2)!=0
+                || bccomp($billGoods->stone_weight,$form->stone_weight,2)!=0){
                 $billGoods->status = PandianStatusEnum::LOSS;//盘亏
             }
         }
@@ -341,7 +359,7 @@ class WarehouseStoneBillService extends Service
             throw new \Exception($this->getError($billGoods));
         }
         $data = ['status'=>ConfirmEnum::YES,'actual_weight'=>$form->gold_weight,'fin_status'=>FinAuditStatusEnum::PENDING];
-        WarehouseGoldBillGoodsW::updateAll($data,['id'=>$billGoods->id]);
+        WarehouseStoneBillGoodsW::updateAll($data,['id'=>$billGoods->id]);
         $this->billWSummary($form->id);
     }
 
@@ -368,21 +386,21 @@ class WarehouseStoneBillService extends Service
      */
     public function finishBillW($bill_id)
     {
-        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         if(!$bill || $bill->status == BillWStatusEnum::FINISHED) {
             throw new \Exception("盘点已结束");
         }
         $bill->status = BillWStatusEnum::FINISHED;
-        $bill->bill_status = BillStatusEnum::PENDING; //待审核
+        $bill->bill_status = StoneBillStatusEnum::PENDING; //待审核
         if(false === $bill->save(false,['id','status', 'bill_status'])) {
             throw new \Exception($this->getError($bill));
         }
         //1.未盘点设为盘亏
-        WarehouseGoldBillGoods::updateAll(['status'=>PandianStatusEnum::LOSS],['bill_id'=>$bill_id,'status'=>PandianStatusEnum::SAVE]);
+        WarehouseStoneBillGoods::updateAll(['status'=>PandianStatusEnum::LOSS],['bill_id'=>$bill_id,'status'=>PandianStatusEnum::SAVE]);
 
         //2.解锁商品
-        $subQuery = WarehouseGoldBillGoods::find()->select(['gold_sn'])->where(['bill_id'=>$bill->id]);
-        WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+        $subQuery = WarehouseStoneBillGoods::find()->select(['stone_sn'])->where(['bill_id'=>$bill->id]);
+        WarehouseStone::updateAll(['stone_status'=>StoneStatusEnum::IN_STOCK],['stone_sn'=>$subQuery,'stone_status'=>StoneStatusEnum::IN_PANDIAN]);
 
         //3.解锁仓库
         \Yii::$app->warehouseService->warehouse->unlockWarehouse($bill->to_warehouse_id);
@@ -402,15 +420,15 @@ class WarehouseStoneBillService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        $subQuery = WarehouseGoldBillGoods::find()->select(['gold_sn'])->where(['bill_id'=>$form->id]);
+        $subQuery = WarehouseStoneBillGoods::find()->select(['stone_sn'])->where(['bill_id'=>$form->id]);
         if($form->audit_status == AuditStatusEnum::PASS) {
-            $form->bill_status = GoldBillStatusEnum::CONFIRM;
-            WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+            $form->bill_status = StoneBillStatusEnum::CONFIRM;
+            WarehouseStone::updateAll(['stone_status'=>StoneStatusEnum::IN_STOCK],['stone_sn'=>$subQuery,'stone_status'=>StoneStatusEnum::IN_PANDIAN]);
             //解锁仓库
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($form->to_warehouse_id);
         }else {
-            $form->bill_status = GoldBillStatusEnum::CANCEL;
-            WarehouseGoods::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+            $form->bill_status = StoneBillStatusEnum::CANCEL;
+            WarehouseStone::updateAll(['stone_status'=>StoneStatusEnum::IN_STOCK],['stone_sn'=>$subQuery,'stone_status'=>StoneStatusEnum::IN_PANDIAN]);
         }
         if(false === $form->save() ){
             throw new \Exception($this->getError($form));
