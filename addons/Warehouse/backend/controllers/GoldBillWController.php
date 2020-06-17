@@ -91,9 +91,11 @@ class GoldBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        
+        $model = $model ?? new WarehouseGoldBillWForm();
         if($model->isNewRecord){
-            $model->bill_type = $this->billType; 
+            $from = Yii::$app->request->post('WarehouseGoldBillWForm');
+            $model->gold_type = $from['gold_type']??"";
+            $model->bill_type = $this->billType;
         }
         // ajax 校验
         $this->activeFormValidate($model);
@@ -203,6 +205,9 @@ class GoldBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
+        $from = Yii::$app->request->post('WarehouseGoldBillWForm');
+        $model->gold_sn = $from['gold_sn']??"";
+        $model->gold_weight = $from['gold_weight']??"";
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
