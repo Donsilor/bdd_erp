@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '100','class' => 'danger'],
                             ],
                             [
                                 'label' => '财务审核状态',

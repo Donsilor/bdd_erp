@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        //'options' => ['style'=>'width:120%;'],
+                        'options' => ['style'=>'width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
@@ -81,6 +81,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
+                                'label' => '应盘粒数',
+                                'attribute' => 'stone_num',
+                                'filter' => true,
+                                'headerOptions' => ['width' => '100'],
+                            ],
+                            [
+                                'label' => '实盘粒数',
+                                'value' => function($model){
+                                    return $model->goodsW->actual_num ?? 0;
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100','class' => 'danger'],
+                            ],
+                            [
                                 'label' => '应盘重量',
                                 'attribute' => 'stone_weight',
                                 'filter' => true,
@@ -93,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '100','class' => 'danger'],
                             ],
                             [
                                 'label' => '财务审核状态',

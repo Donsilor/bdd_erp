@@ -358,7 +358,7 @@ class WarehouseStoneBillService extends Service
         if(false === $billGoods->save()) {
             throw new \Exception($this->getError($billGoods));
         }
-        $data = ['status'=>ConfirmEnum::YES,'actual_weight'=>$form->gold_weight,'fin_status'=>FinAuditStatusEnum::PENDING];
+        $data = ['status'=>ConfirmEnum::YES,'actual_num'=>$form->stone_num,'actual_weight'=>$form->stone_weight,'fin_status'=>FinAuditStatusEnum::PENDING];
         WarehouseStoneBillGoodsW::updateAll($data,['id'=>$billGoods->id]);
         $this->billWSummary($form->id);
     }
