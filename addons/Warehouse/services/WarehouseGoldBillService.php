@@ -298,6 +298,23 @@ class WarehouseGoldBillService extends Service
     }
 
     /**
+     * 财务盘点明细-审核
+     * @param $form
+     */
+    public function auditFinW($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if($form->fin_status != FinAuditStatusEnum::PASS){
+            $form->fin_status = FinAuditStatusEnum::UNPASS;
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
      * 盘点单汇总
      * @param int $bill_id
      */

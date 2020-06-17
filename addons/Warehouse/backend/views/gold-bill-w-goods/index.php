@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '财务确认人',
                                 'value' => function($model){
-                                    return $model->goodsW->fin_checker ?? "";
+                                    return $model->goodsW->finer->username ?? "";
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
@@ -119,7 +119,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '财务确认时间',
                                 'value' => function($model){
-                                    return $model->goodsW->fin_check_time ?? "";
+                                    if($model->goodsW->fin_check_time){
+                                        return Yii::$app->formatter->asDatetime($model->goodsW->fin_check_time) ?? "";
+                                    }
+                                    return "";
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
@@ -150,10 +153,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit}',
-                                'buttons' => [                                                                   
-                                    'edit' => function($url, $model, $key) use($bill){
-                                        
+                                'template' => '{audit}',
+                                'buttons' => [
+                                    'audit' => function($url, $model, $key){
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
+                                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                                'class'=>'btn btn-success btn-sm',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
                                     },
                                 ]
                            ]

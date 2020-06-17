@@ -11,12 +11,10 @@ namespace addons\Warehouse\common\enums;
  */
 class FinAuditStatusEnum extends \common\enums\BaseEnum
 {
-    
-    const SAVE     = 1;
-    const PENDING    = 2;
-    const CONFIRM   = 3;
-    
-    const CANCEL = 9;    
+    const SAVE = 0;
+    const PENDING = 1;
+    const PASS = 2;
+    const UNPASS = 3;
     
     /**
      * 单据通用状态
@@ -25,11 +23,21 @@ class FinAuditStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::SAVE    => '已保存',
+            self::SAVE => '未审核',
             self::PENDING => '待审核',
-            self::CONFIRM => '已审核',
-            self::CANCEL => '已取消',
+            self::PASS => '审核通过',
+            self::UNPASS => '不通过',
         ];
     }
-
+    /**
+     *
+     * @return array
+     */
+    public static function getAuditMap(): array
+    {
+        return [
+            self::PASS => '通过',
+            self::UNPASS => '不通过',
+        ];
+    }
 }

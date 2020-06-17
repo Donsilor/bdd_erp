@@ -2,7 +2,10 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -66,6 +69,45 @@ class GoldBillWGoodsController extends BaseController
                 'returnUrl'=>$returnUrl
         ]);        
         
-    } 
+    }
+
+    /**
+     * ajax 审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = new WarehouseGoldBillGoodsW();
+        $model = $this->findModel($id) ?? new WarehouseGoldBillGoodsW();
+        //默认值
+        if($model->fin_status == FinAuditStatusEnum::PENDING) {
+            $model->fin_status = FinAuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->trans->beginTransaction();
+
+                $model->fin_check_time = time();
+                $model->fin_checker = (string) \Yii::$app->user->identity->id;
+
+                \Yii::$app->warehouseService->goldBill->auditFinW($model);
+
+                $trans->commit();
+
+                $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch(\Exception $e){
+                $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
     
 }
