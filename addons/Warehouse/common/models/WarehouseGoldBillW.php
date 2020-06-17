@@ -5,9 +5,10 @@ namespace addons\Warehouse\common\models;
 use Yii;
 
 /**
- * This is the model class for table "warehouse_material_bill_w".
+ * This is the model class for table "warehouse_gold_bill_w".
  *
  * @property int $id 单据ID
+ * @property string $gold_type 金料材质
  * @property int $save_num 待盘点
  * @property double $save_weight 待盘点重量
  * @property int $should_num 应盘数量
@@ -22,18 +23,18 @@ use Yii;
  * @property double $normal_weight 正常重量
  * @property int $adjust_num 调整数量
  * @property double $adjust_weight 调整重量
- * @property int $status 状态 1启用 0禁用 -1删除
+ * @property int $status 盘点状态 0未盘点 1盘点
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class WarehouseMaterialBillW extends BaseModel
+class WarehouseGoldBillW extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('warehouse_material_bill_w');
+        return self::tableFullName('warehouse_gold_bill_w');
     }
 
     /**
@@ -42,9 +43,10 @@ class WarehouseMaterialBillW extends BaseModel
     public function rules()
     {
         return [
-            [['id'], 'required'],
+            [['id', 'gold_type'], 'required'],
             [['id', 'save_num', 'should_num', 'actual_num', 'profit_num', 'loss_num', 'normal_num', 'adjust_num', 'status', 'created_at', 'updated_at'], 'integer'],
             [['save_weight', 'should_weight', 'actual_weight', 'profit_weight', 'loss_weight', 'normal_weight', 'adjust_weight'], 'number'],
+            [['gold_type'], 'string', 'max' => 10],
             [['id'], 'unique'],
         ];
     }
@@ -56,6 +58,7 @@ class WarehouseMaterialBillW extends BaseModel
     {
         return [
             'id' => '单据ID',
+            'gold_type' => '盘点材质',
             'save_num' => '待盘点',
             'save_weight' => '待盘点重量',
             'should_num' => '应盘数量',
@@ -70,7 +73,7 @@ class WarehouseMaterialBillW extends BaseModel
             'normal_weight' => '正常重量',
             'adjust_num' => '调整数量',
             'adjust_weight' => '调整重量',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '盘点状态 0未盘点 1盘点',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

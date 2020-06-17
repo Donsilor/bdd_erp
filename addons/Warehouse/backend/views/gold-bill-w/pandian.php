@@ -28,7 +28,11 @@ $form = ActiveForm::begin([
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">盘点仓库：</td>
-                    <td><?= Yii::$app->attr->valueName($model->warehouse) ??'' ?></td>
+                    <td><?= $model->toWarehouse->name ??'' ?></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right">盘点材质：</td>
+                    <td><?= Yii::$app->attr->valueName($model->billW->gold_type) ??'' ?></td>
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>
