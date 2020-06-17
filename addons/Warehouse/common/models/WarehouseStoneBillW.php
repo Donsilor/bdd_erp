@@ -43,10 +43,10 @@ class WarehouseStoneBillW extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'stone_type'], 'required'],
+            [['stone_type'], 'required'],
             [['id', 'save_num', 'should_num', 'actual_num', 'profit_num', 'loss_num', 'normal_num', 'adjust_num', 'status', 'created_at', 'updated_at'], 'integer'],
             [['save_weight', 'should_weight', 'actual_weight', 'profit_weight', 'loss_weight', 'normal_weight', 'adjust_weight'], 'number'],
-            [['gold_type'], 'string', 'max' => 10],
+            [['stone_type'], 'string', 'max' => 10],
             [['id'], 'unique'],
         ];
     }

@@ -135,4 +135,20 @@ class WarehouseStoneBill extends BaseModel
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
+    }
+    /**
+     * 盘点单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBillW()
+    {
+        return $this->hasOne(WarehouseStoneBillW::class, ['id'=>'id'])->alias('billW');
+    }
 }

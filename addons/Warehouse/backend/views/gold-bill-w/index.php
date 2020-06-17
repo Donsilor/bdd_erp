@@ -104,11 +104,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 }
                                 return "";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'to_warehouse_id',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],

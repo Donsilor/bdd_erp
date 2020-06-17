@@ -75,7 +75,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'120'],
                                 'value' => function ($model){
-                                     return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                                     return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
                                 },
                                 'filter' => false,
                         ],
@@ -99,16 +99,12 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'label' => '石料类型',
                             'value' => function($model){
-                                if($model->billW->gold_type){
-                                    return Yii::$app->attr->valueName($model->billW->gold_type)??"";
+                                if($model->billW->stone_type){
+                                    return Yii::$app->attr->valueName($model->billW->stone_type)??"";
                                 }
                                 return "";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'to_warehouse_id',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],

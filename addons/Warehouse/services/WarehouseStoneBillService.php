@@ -237,7 +237,7 @@ class WarehouseStoneBillService extends Service
         }
         //批量创建单据明细
         $goods_list = WarehouseStone::find()->where(['warehouse_id'=>$bill->to_warehouse_id, 'stone_type' => $form->stone_type])->asArray()->all();
-        $stone_weight = 0;
+        $stock_weight = 0;
         $bill_goods_values = [];
         if(!empty($goods_list)) {
             $bill_goods= [];
@@ -249,19 +249,19 @@ class WarehouseStoneBillService extends Service
                     'stone_sn'=>$goods['stone_sn'],
                     'stone_name'=>$goods['stone_name'],
                     'style_sn'=>$goods['style_sn'],
-                    'stone_type'=>$goods['gold_type'],
+                    'stone_type'=>$goods['stone_type'],
                     'color' => $goods['stone_color'],
                     'clarity' => $goods['stone_clarity'],
                     'cut' => $goods['stone_cut'],
                     'polish' => $goods['stone_polish'],
                     'fluorescence' => $goods['stone_fluorescence'],
                     'symmetry' => $goods['stone_symmetry'],
-                    'stone_num'=>$goods['stone_num'],
-                    'stone_weight'=>$goods['stone_weight'],
+                    'stone_num'=>$goods['stock_cnt'],
+                    'stone_weight'=>$goods['stock_weight'],
                     'status'=> PandianStatusEnum::SAVE,
                 ];
                 $bill_goods_values[] = array_values($bill_goods);
-                $stone_weight = bcadd($stone_weight, $goods['stone_weight'], 3);
+                $stock_weight = bcadd($stock_weight, $goods['stock_weight'], 3);
             }
             if(empty($bill_goods_keys)) {
                 $bill_goods_keys = array_keys($bill_goods);
@@ -272,7 +272,6 @@ class WarehouseStoneBillService extends Service
                 throw new \Exception('导入单据明细失败');
             }
         }
-
         //同步盘点明细关系表
         $sql = "insert into ".WarehouseStoneBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseStoneBillGoods::tableName()." where bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
@@ -284,7 +283,7 @@ class WarehouseStoneBillService extends Service
         $billW->id = $bill->id;
         $billW->stone_type = $form->stone_type;
         $billW->should_num = $should_num;
-        $billW->should_weight = $stone_weight;
+        $billW->should_weight = $stock_weight;
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
         }
@@ -426,17 +425,17 @@ class WarehouseStoneBillService extends Service
     {
         $sum = WarehouseStoneBillGoods::find()->alias("g")->innerJoin(WarehouseStoneBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.gold_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_weight,0)) as actual_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
-                'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.gold_weight,0)) as profit_weight',
+                'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
-                'sum(if(g.status='.PandianStatusEnum::LOSS.',g.gold_weight,0)) as loss_weight',
+                'sum(if(g.status='.PandianStatusEnum::LOSS.',g.stone_weight,0)) as loss_weight',
                 'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
-                'sum(if(g.status='.PandianStatusEnum::SAVE.',g.gold_weight,0)) as save_weight',
+                'sum(if(g.status='.PandianStatusEnum::SAVE.',g.stone_weight,0)) as save_weight',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
-                'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.gold_weight,0)) as normal_weight',
+                'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.stone_weight,0)) as normal_weight',
                 'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
-                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.gold_weight,0)) as adjust_weight',
+                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.stone_weight,0)) as adjust_weight',
                 'sum(1) as goods_num',//明细总数量
                 'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
