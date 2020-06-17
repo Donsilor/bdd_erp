@@ -104,6 +104,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
+                    }elseif($model->apply_status == ApplyStatusEnum::CONFIRM){
+                        echo Html::edit(['final-audit','id'=>$model->id], '商品部审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
                     }
                     ?>
                 </div>

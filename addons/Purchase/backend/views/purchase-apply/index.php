@@ -224,7 +224,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     'data-target' => '#ajaxModal',
                              ]); 
                         }elseif($model->apply_status == ApplyStatusEnum::CONFIRM){
-                            return Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                            return Html::edit(['final-audit','id'=>$model->id], '商品部审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',

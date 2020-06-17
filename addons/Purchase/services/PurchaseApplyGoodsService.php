@@ -3,10 +3,13 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\models\PurchaseApplyGoods;
+use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
+use common\enums\StatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -56,13 +59,52 @@ class PurchaseApplyGoodsService extends Service
      */
     public function syncApplyToQiban($apply_id){
         $apply_goods = PurchaseApplyGoods::find()->where(['apply_id'=>$apply_id])->all();
-        foreach ($apply_goods as $goods){
-            if($goods->audit_status != AuditStatusEnum::PASS){
-                throw new \Exception("明细{$goods->id}没有审核");
+        foreach ($apply_goods as $model){
+            if($model->audit_status != AuditStatusEnum::PASS){
+                throw new \Exception("明细{$model->id}没有审核");
             }
             //起版商品同步到起版表中
-            if($goods->qiban_type != QibanTypeEnum::NON_VERSION){
+            if($model->qiban_type != QibanTypeEnum::NON_VERSION){
+                $goods = [
+                    'qiban_name' => $model->goods_name,
+                    'qiban_type' => $model->qiban_type,
+                    'style_id' => $model->style_id,
+                    'style_sn' => $model->style_sn,
+                    'style_cate_id' => $model->style_cate_id,
+                    'product_type_id' => $model->product_type_id,
+                    'jintuo_type' => $model->jintuo_type,
+                    'style_channel_id' => $model->style_channel_id,
+                    'style_sex' => $model->style_sex,
+                    'style_image' => $model->goods_image,
+                    'style_images' => $model->goods_images,
+                    'cost_price' => $model->cost_price,
+                    'goods_num' => $model->goods_num,
+                    'is_inlay' => $model->is_inlay,
+                    'stone_info' => $model->stone_info,
+                    'parts_info' => $model->parts_info,
+                    'remark' => $model->remark,
+                    'creator_id' => $model->creator_id,
+                    'created_at' => $model->created_at,
+                    'updated_at' => $model->updated_at,
+                    'format_sn' => $model->format_sn,
+                    'format_images' => $model->format_images,
+                    'format_video' => $model->format_video,
+                    'format_info' => $model->format_info,
+                    'format_remark' => $model->format_remark,
 
+                    'audit_status' => AuditStatusEnum::PENDING,
+                    'status' => StatusEnum::DISABLED,
+                    'is_apply' => ConfirmEnum::YES,
+                ];
+
+                $goods_attrs = PurchaseApplyGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+                $qiban = \Yii::$app->styleService->qiban->createQiban($goods ,$goods_attrs);
+                if($qiban) {
+                    $model->qiban_sn = $qiban->qiban_sn;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model),422);
+                }
 
             }
         }
