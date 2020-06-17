@@ -91,6 +91,7 @@ class QibanController extends BaseController
         if($jintuo_type) {
             $model->jintuo_type = $jintuo_type;
         }
+
         if($style_sn && $search) {
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
             $style  = Style::find()->where(['style_sn'=>$style_sn])->one();
@@ -161,15 +162,18 @@ class QibanController extends BaseController
         $model = $this->findModel($id);
         $model = $model ?? new QibanAttrForm();
         $isNewRecord = $model->isNewRecord;
+        
+        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;
+        $model->product_type_id = $product_type_id ?? $model->product_type_id;
+        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
+        
         //无款起版
         if($isNewRecord) {
             $model->qiban_type = QibanTypeEnum::NO_STYLE;   
             $model->style_sn = 'QIBAN';
             $model->is_inlay = $model->type->is_inlay ?? 0;
         }         
-        $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;        
-        $model->product_type_id = $product_type_id ?? $model->product_type_id;
-        $model->jintuo_type = $jintuo_type ?? $model->jintuo_type;
+       
         
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
