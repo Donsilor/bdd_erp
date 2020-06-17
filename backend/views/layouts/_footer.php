@@ -107,7 +107,7 @@ $this->registerJs($script);
     $("table tr > td  input[type='checkbox']").change(function () {
         if($(this).is(':checked')) {
         	$(this).attr('checked', 'checked');        	
-            $(this).parent().parent().css('background-color','#f5f5f5');
+            $(this).parent().parent().css('background-color','#ecf0f5');
         }else{
             $(this).removeAttr('checked');
             $(this).parent().parent().css('background-color','#fff');
