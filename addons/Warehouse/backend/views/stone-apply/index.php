@@ -24,15 +24,42 @@ $this->params['breadcrumbs'][] = $this->title;
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
+                            
                             [
-                                'class' => 'yii\grid\SerialColumn',
-                                'visible' => true,
+                                    'class'=>'yii\grid\CheckboxColumn',
+                                    'name'=>'id',  //设置每行数据的复选框属性
+                                    'headerOptions' => ['width'=>'30'],
                             ],
+                                [
+                                        'class' => 'yii\grid\SerialColumn',
+                                        'visible' => true,
+                                ],
                             [
                                     'attribute' => 'id',
                                     'value'  => 'id',
                                     'filter' => true,
-                            ],  
+                            ], 
+                            [
+                                    'attribute' => 'from_order_sn',
+                                    'filter' => Html::activeTextInput($searchModel, 'from_order_sn', [
+                                            'class' => 'form-control',
+                                            'style' =>'width:150px'
+                                    ]),
+                                    'format' => 'raw',
+                            
+                            ],
+                            [
+                                    'attribute' => 'from_type',
+                                    'value' => function ($model){
+                                        return \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type);
+                                    },
+                                    'filter' =>Html::activeDropDownList($searchModel, 'from_type',\addons\Supply\common\enums\FromTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style' => 'width:80px;',
+                                    ]),
+                                    'format' => 'raw',
+                            ],
                             [
                                     'attribute' => 'stone_position',
                                     'value'  => function($model) {

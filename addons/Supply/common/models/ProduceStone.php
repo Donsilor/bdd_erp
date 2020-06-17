@@ -48,9 +48,9 @@ class ProduceStone extends BaseModel
     public function rules()
     {
         return [
-            [['produce_id', 'stone_num', 'stone_position', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['order_sn', 'caigou_user', 'songshi_user', 'peishi_user', 'creator_name'], 'string', 'max' => 30],
-            [['color', 'clarity', 'shape', 'cert_type', 'cert_no', 'carat', 'stone_type'], 'string', 'max' => 50],
+            [['produce_id','from_type', 'stone_num', 'stone_position', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['from_order_sn','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user', 'creator_name'], 'string', 'max' => 30],
+            [['color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
             [['remark','stone_spec'], 'string', 'max' => 255],
         ];
     }
@@ -64,7 +64,8 @@ class ProduceStone extends BaseModel
             'id' => "ID",
             'produce_id' => '布产ID',
             'produce_sn' => '布产编号',
-            'order_sn' => '订单号',
+            'from_type' => '来源类型',
+            'from_order_sn' => '来源订单号',            
             'color' => '石头颜色',
             'clarity' => '石头净度',
             'shape' => '石头形状',
