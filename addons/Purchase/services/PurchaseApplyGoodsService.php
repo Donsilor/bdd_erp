@@ -2,8 +2,11 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\models\PurchaseApplyGoods;
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -14,7 +17,7 @@ use addons\Purchase\common\models\PurchaseGoodsAttribute;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class PurchaseGoodsService extends Service
+class PurchaseApplyGoodsService extends Service
 {    
    
     /**
@@ -47,5 +50,24 @@ class PurchaseGoodsService extends Service
         return $image;
 
     }
+
+    /*
+     * 同步申请采购明细到起版
+     */
+    public function syncApplyToQiban($apply_id){
+        $apply_goods = PurchaseApplyGoods::find()->where(['apply_id'=>$apply_id])->all();
+        foreach ($apply_goods as $goods){
+            if($goods->audit_status != AuditStatusEnum::PASS){
+                throw new \Exception("明细{$goods->id}没有审核");
+            }
+            //起版商品同步到起版表中
+            if($goods->qiban_type != QibanTypeEnum::NON_VERSION){
+
+
+            }
+        }
+
+    }
+
     
 }

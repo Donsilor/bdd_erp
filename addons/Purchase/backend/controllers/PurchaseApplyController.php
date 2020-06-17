@@ -205,6 +205,51 @@ class PurchaseApplyController extends BaseController
             'model' => $model,
         ]);
     }
+
+
+    /**
+     * ajax 商品部审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionFinalAudit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->final_audit_status == AuditStatusEnum::SAVE) {
+            $model->final_audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->final_audit_time = time();
+                $model->final_auditor_id = \Yii::$app->user->identity->id;
+                if($model->final_audit_status == AuditStatusEnum::PASS){
+                    $model->apply_status = ApplyStatusEnum::AUDITED;
+
+                    //同步数据到待起版
+                    Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model->id);
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
     
     /**
      * 关闭
