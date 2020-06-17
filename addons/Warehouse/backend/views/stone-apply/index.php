@@ -14,6 +14,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?php
+                        echo Html::a('批量配石', ['test'],  [
+                            'class'=>'btn btn-success btn-xs',
+                            "onclick" => "batchPop2(this);return false;",
+                            'data-grid'=>'grid'
+                        ]);
+                        echo '&nbsp;';                        
+                    ?>
+                </div>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -157,3 +167,81 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    //批量操作
+    function batchPeishi(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        var ids = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            var str = $(this).val();
+            var arr = jQuery.parseJSON(str)
+            ids[i] = arr.id;
+        });
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        var ids = ids.join(',');
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                if (parseInt(data.code) !== 200) {
+                    rfAffirm(data.message);
+                } else {
+                    var href = data.data.url;
+                    var title = '基本信息';
+                    var width = '80%';
+                    var height = '80%';
+                    var offset = "10%";
+                    openIframe(title, width, height, href, offset);
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    }
+
+    //批量生成不良返厂单
+    function batchDefective(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        var ids = new Array;
+        $('input[name="id[]"]:checked').each(function(i){
+            var str = $(this).val();
+            var arr = jQuery.parseJSON(str)
+            ids[i] = arr.id;
+        });
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        var ids = ids.join(',');
+        appConfirm("确定要生成不良返厂单吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+</script>

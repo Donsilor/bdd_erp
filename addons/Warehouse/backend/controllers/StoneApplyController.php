@@ -7,6 +7,7 @@ use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Supply\common\models\ProduceStone;
+use common\helpers\ResultHelper;
 
 
 
@@ -45,6 +46,11 @@ class StoneApplyController extends BaseController
                 'searchModel' => $searchModel,                
         ]);
         
+    }
+    
+    public function actionTest()
+    {
+        return ResultHelper::json(200, 'shibai');
     }
     
 }
