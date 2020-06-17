@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -20,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                    <?php if($bill->bill_status == BillStatusEnum::SAVE) {?>
-                        <?= Html::create(['bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
-                    <?php }?>    
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {?>
+                        <?= Html::create(['gold-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
+                    <?php }?>
                     </div>
                </div>
             <div class="box-body table-responsive">  
@@ -44,22 +45,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                    'attribute' => 'goods_id',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                            
+                                'attribute' => 'gold_sn',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'120'],
+                            ],
                             [
-                                    'attribute'=>'goods_name',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         return $str;
-                                    },
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                'attribute' => 'gold_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->gold_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'gold_name',
+                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                        'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->gold_name;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'200'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -68,29 +80,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label' => '盘点仓库',
-                                    'attribute' => 'to_warehouse_id',
-                                    'value' =>"toWarehouse.name",
-                                    'filter'=> false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'150'],
-                            ],                             
-                            [
-                                    'label' => '归属仓库',
-                                    'attribute' => 'from_warehouse_id',
-                                    'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[from_warehouse_id]',
-                                            'value'=>$searchModel->from_warehouse_id,
-                                            'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择"],
-                                            'pluginOptions' => [
-                                                  'allowClear' => true,
-                                            ],
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
-                            ], 
+                                'attribute' => 'gold_weight',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
                             [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',
@@ -100,19 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',                                            
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'110'],
-                            ],
-                            [
-                                    'label' => '调整状态',
-                                    'attribute' => 'goodsW.adjust_status',
-                                    'value' =>function($model){
-                                        return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status ?? '');
-                                    },
-                                    'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
                                     ]),
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'110'],

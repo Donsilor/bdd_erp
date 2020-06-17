@@ -39,14 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         /*[
-                            'label' => '序号',
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
-                            'label' => '批次号',
                             'attribute'=>'gold_sn',
                             'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',
@@ -54,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '金料名称',
                             'attribute'=>'gold_name',
                             'filter' => Html::activeTextInput($searchModel, 'gold_name', [
                                 'class' => 'form-control',
@@ -62,7 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
-                            'label' => '金料款号',
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
@@ -70,7 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '金料类型',
                             'attribute' => 'gold_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->gold_type);
@@ -98,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         /*[
-                            'label' => '数量',
                             'attribute'=>'gold_num',
                             'filter' => Html::activeTextInput($searchModel, 'gold_num', [
                                 'class' => 'form-control',
@@ -106,7 +100,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
-                            'label' => '库存重量/克',
                             'attribute'=>'gold_weight',
                             'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                 'class' => 'form-control',
@@ -114,7 +107,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'label' => '金料单价/克',
                             'attribute'=>'gold_price',
                             'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                 'class' => 'form-control',
@@ -122,7 +114,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
-                            'label' => '金料总额',
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
@@ -130,7 +121,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
-                            'label' => '创建时间',
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,

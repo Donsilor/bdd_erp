@@ -2,37 +2,34 @@
 
 namespace addons\Warehouse\common\forms;
 
-use Yii;
-use addons\Warehouse\common\models\WarehouseGoldBill;
 use common\helpers\ArrayHelper;
-
+use addons\Warehouse\common\models\WarehouseGoldBill;
 /**
- * 金料单据 Form
+ * 盘点  Form
  *
  */
-class WarehouseGoldBillLForm extends WarehouseGoldBill
+class WarehouseGoldBillWForm extends WarehouseGoldBill
 {
+    public $gold_sn;
+    public $gold_weight;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-         $rules = [
-             [['created_at'], 'integer'],
-         ];
-         return ArrayHelper::merge(parent::rules() , $rules);
+        $rules = [
+                [['warehouse'], 'required']
+        ];
+        return ArrayHelper::merge(parent::rules() , $rules);
     }
-
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
-    {
+    { 
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
 
         ]);
     }
-
-   
 }

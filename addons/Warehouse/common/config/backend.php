@@ -29,21 +29,9 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                            'title' => '商品列表',
+                            'title' => '库存列表',
                             'route' => 'warehouse-goods/index',
-                    ],
-                ],
-
-            ],
-            [
-                'title' => '单据管理',
-                'route' => 'indexWarehouseBill',
-                'icon' => 'fa fa-superpowers',
-                'child' => [
-                    //[
-                     //       'title' => '单据列表',
-                     //       'route' => 'bill/index',
-                    //],
+                    ], 
                     [
                             'title' => '入库单',
                             'route' => 'bill-l/index',

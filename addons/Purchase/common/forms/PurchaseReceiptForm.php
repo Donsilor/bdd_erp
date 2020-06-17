@@ -14,7 +14,6 @@ use addons\Purchase\common\models\PurchaseReceipt;
 class PurchaseReceiptForm extends PurchaseReceipt
 {
     public $ids;
-    public $produce_sns;
     public $goods;
     /**
      * {@inheritdoc}
@@ -22,7 +21,7 @@ class PurchaseReceiptForm extends PurchaseReceipt
     public function rules()
     {
         $rules = [
-            [['put_in_type'], 'required'],
+            [['put_in_type', 'to_warehouse_id'], 'required'],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -40,7 +39,6 @@ class PurchaseReceiptForm extends PurchaseReceipt
             'to_warehouse_id'=>'入库仓库',
         ]);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -50,15 +48,6 @@ class PurchaseReceiptForm extends PurchaseReceipt
         }
         return [];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProduceSns()
-    {
-        return StringHelper::explodeIds($this->produce_sns);
-    }
-
     /**
      * {@inheritdoc}
      */

@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\models\WarehouseGoldBill;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -30,8 +33,8 @@ use common\helpers\PageHelper;
 class GoldBillWController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillWForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_W;
+    public $modelClass = WarehouseGoldBillWForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_W;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -57,16 +60,16 @@ class GoldBillWController extends BaseController
         
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type',$this->billType]);
-        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',WarehouseGoldBill::tableName().'.bill_type',$this->billType]);
+        $dataProvider->query->andWhere(['>',WarehouseGoldBill::tableName().'.status',-1]);
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(Warehousebill::tableName().'.id');
+            $queryIds = $dataProvider->query->select(WarehouseGoldBill::tableName().'.id');
             $this->actionExport($queryIds);
         }
         
@@ -102,7 +105,7 @@ class GoldBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->billW->createBillW($model);
+                    $model = Yii::$app->warehouseService->goldBill->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -188,7 +191,7 @@ class GoldBillWController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$returnUrl),
+                'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($id,$this->billType,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }
@@ -199,15 +202,13 @@ class GoldBillWController extends BaseController
     public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
-        
-        $model = $this->findModel($id) ?? new WarehouseBillWForm();      
-        
+        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->billW->pandianGoods($model);
+                Yii::$app->warehouseService->goldBill->pandianGoods($model);
                 
                 $trans->commit();
                 

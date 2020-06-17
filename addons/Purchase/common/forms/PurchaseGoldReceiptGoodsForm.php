@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
@@ -34,6 +35,15 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
         return ArrayHelper::merge(parent::attributeLabels() , [
             'id'=>'流水号',
         ]);
+    }
+
+    /**
+     * 材质列表
+     * @return array
+     */
+    public function getMaterialTypeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE);
     }
 
     /**

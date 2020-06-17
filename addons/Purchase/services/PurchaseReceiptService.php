@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -656,24 +657,24 @@ class PurchaseReceiptService extends Service
             ];
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
-            //$total_sale = bcadd($sale_price, $model->sale_price, 2);
         }
         //批量更新采购收货单货品状态
-        $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        $data = ['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id];
+        $res = PurchaseGoldReceiptGoods::updateAll($data, ['id'=>$ids]);
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
         $bill = [
             'bill_type' =>  GoldBillTypeEnum::GOLD_L,
-            'bill_status' => BillStatusEnum::PENDING,
-            'audit_status' => AuditStatusEnum::PENDING,
+            'bill_status' => GoldBillStatusEnum::SAVE,
+            'audit_status' => AuditStatusEnum::SAVE,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
+            'to_warehouse_id' => $form->to_warehouse_id,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
             'total_weight' => $total_weight,
-            'total_cost' => $form->total_cost,
-            'pay_amount' => $form->total_cost,
+            'total_cost' => $total_cost,
             'delivery_no' => $form->receipt_no,
             'remark' => $form->remark,
             'status' => StatusEnum::ENABLED,

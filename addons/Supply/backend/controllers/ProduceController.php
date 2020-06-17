@@ -25,6 +25,8 @@ use common\models\base\SearchModel;
 use common\traits\Curd;
 use Yii;
 use common\controllers\AddonsController;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
 
 /**
  * 默认控制器
@@ -268,8 +270,33 @@ class ProduceController extends BaseController
             'model' => $model,
         ]);
     }
-
-    //开始生产
+    /**
+     * 申请配料
+     * @return mixed|string|\yii\web\Response
+     */
+    public function actionToPeiliao(){
+        
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        
+        try{
+            
+            $trans = Yii::$app->trans->beginTransaction();
+            
+            Yii::$app->supplyService->produce->toPeiliao($model);
+            
+            $trans->commit();
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success'); 
+        }catch (\Exception $e) {            
+             $trans->rollback();
+             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');            
+        }
+        
+    }
+    /**
+     * 开始生产
+     * @return mixed|string|\yii\web\Response
+     */
     public function actionToProduce(){
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);

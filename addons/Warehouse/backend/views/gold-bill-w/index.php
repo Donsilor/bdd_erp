@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -39,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:125%;'],
+                    'options' => ['style'=>'width:150%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -72,28 +73,24 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                                 'attribute' => 'bill_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
+                                'headerOptions' => ['width'=>'120'],
                                 'value' => function ($model){
-                                     return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
+                                     return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                                 },
                                 'filter' => false,
                         ],
                         [
-                                'label' => '盘点仓库',
-                                'attribute' => 'to_warehouse_id',
-                                'value' =>"toWarehouse.name",
-                                'filter'=>Select2::widget([
-                                        'name'=>'SearchModel[to_warehouse_id]',
-                                        'value'=>$searchModel->to_warehouse_id,
-                                        'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                        'options' => ['placeholder' =>"请选择"],
-                                        'pluginOptions' => [
-                                             'allowClear' => true,
-                                        ],
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'200'],
-                        ],      
+                            'attribute' => 'warehouse',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->warehouse);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'warehouse',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                                 'label' => '应盘数量',
                                 'value' => function($model){
@@ -104,6 +101,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
+                            'label' => '应盘重量',
+                            'value' => function($model){
+                                return $model->billW->should_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                                 'label' => '实盘数量',
                                 'value' => function($model){
                                     return $model->billW->actual_num ?? 0;
@@ -111,8 +117,17 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,                                
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
-                        ], 
+                        ],
                         [
+                            'label' => '实盘重量',
+                            'value' => function($model){
+                                return $model->billW->actual_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        /*[
                                 'label' => '正常数量',
                                 'value' => function($model){
                                     return $model->billW->normal_num ?? 0;
@@ -120,6 +135,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                            'label' => '正常重量',
+                            'value' => function($model){
+                                return $model->billW->profit_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                                 'label' => '盘盈数量',
@@ -131,6 +155,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
+                            'label' => '盘盈重量',
+                            'value' => function($model){
+                                return $model->billW->profit_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                                 'label' => '盘亏数量',
                                 'value' => function($model){
                                       return $model->billW->loss_num ?? 0;
@@ -138,7 +171,16 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
-                        ],                        
+                        ],
+                        [
+                            'label' => '盘亏重量',
+                            'value' => function($model){
+                                return $model->billW->loss_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
                         [
                                 'label' => '调整数量',
                                 'value' => function($model){
@@ -149,11 +191,20 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
+                            'label' => '调整重量',
+                            'value' => function($model){
+                                return $model->billW->adjust_weight ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                                 'label' => '总金额',                                
                                 'attribute'=>'total_cost',
                                 'filter' => false,
                                 'headerOptions' => ['width' => '120'],
-                        ],
+                        ],*/
                         [
                                 'label' => '制单人',
                                 'attribute' => 'creator_id',
@@ -207,9 +258,9 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '120'],
                                 'value' => function ($model){
-                                    return BillStatusEnum::getValue($model->bill_status);
+                                    return \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($model->bill_status);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'bill_status',BillStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\GoldBillStatusEnum::getMap(), [
                                         'prompt' => '全部',
                                         'class' => 'form-control',
                                         
@@ -218,7 +269,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'headerOptions' => ['width'=>'200'],
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {goods} {audit} {delete}',
                                 'buttons' => [
                                    'edit' => function($url, $model, $key){
@@ -230,7 +281,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         }
                                     }, 
                                     'goods' => function($url, $model, $key){
-                                        return Html::edit(['bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
+                                        return Html::edit(['gold-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->bill_status == BillStatusEnum::PENDING){

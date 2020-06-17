@@ -174,8 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $buttonHtml .= Html::edit(['to-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
                     'class'=>'btn btn-success btn-ms',
                     'style'=>"margin-left:5px",
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
+                    'onclick' => 'rfTwiceAffirm(this,"开始配料","确定操作吗？");return false;',
                 ]);
                 break;
             //配料中
