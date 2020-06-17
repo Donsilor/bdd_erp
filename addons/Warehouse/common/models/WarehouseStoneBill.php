@@ -15,6 +15,7 @@ use Yii;
  * @property int $bill_status 单据状态
  * @property int $supplier_id 供应商
  * @property int $put_in_type 入库方式
+ * @property int $to_warehouse_id 入库仓库
  * @property int $adjust_type 调整类型 0扣减 1增加
  * @property int $account_type 结算方式
  * @property int $total_num 石包总数
@@ -53,7 +54,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -74,6 +75,7 @@ class WarehouseStoneBill extends BaseModel
             'bill_status' => '单据状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
+            'to_warehouse_id' => '入库仓库',
             'adjust_type' => '调整类型',
             'account_type' => '结算方式',
             'total_num' => '石料数量',
