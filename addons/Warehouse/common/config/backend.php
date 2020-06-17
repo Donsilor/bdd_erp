@@ -83,6 +83,10 @@ return [
                         'route' => 'gold/index',
                     ],
                     [
+                            'title' => '配料列表',
+                            'route' => 'gold-apply/index',
+                    ],
+                    [
                         'title' => '入库单',
                         'route' => 'gold-bill-l/index',
                     ],
@@ -104,6 +108,10 @@ return [
                         [
                             'title' => '石料列表',
                             'route' => 'stone/index',
+                        ],
+                        [
+                             'title' => '配石列表',
+                             'route' => 'stone-apply/index',
                         ],
                         [
                             'title' => '入库单',
