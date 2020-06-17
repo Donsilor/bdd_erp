@@ -245,7 +245,6 @@ class GoldReceiptGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }

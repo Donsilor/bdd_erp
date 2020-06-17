@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
@@ -23,11 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
-            echo '&nbsp;&nbsp;&nbsp;';
+        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
+            echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '批量编辑', ['class'=>'btn btn-info btn-xs']);
         }
-        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+        if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::a('批量申请入库', ['warehouse'], [
                 'class'=>'btn btn-success btn-xs',
                 "onclick" => "batchWarehouse(this);return false;",
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -154,11 +154,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key) use($receipt){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],

@@ -1,5 +1,6 @@
 <?php
 
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
@@ -82,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                             ],
-                            [
+                            /*[
                                 'attribute'=>'goods_num',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -93,20 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'goods_status',
-                                'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
@@ -129,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [
@@ -157,6 +145,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -171,11 +172,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
-                                    'delete' => function($url, $model, $key) use($receipt){
-                                        if($receipt->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                    'edit' => function($url, $model, $key) use($receipt){
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
+                                    'delete' => function($url, $model, $key) use($receipt) {
+                                        if($receipt->receipt_status == ReceiptStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],

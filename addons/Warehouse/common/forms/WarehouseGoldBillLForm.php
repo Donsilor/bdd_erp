@@ -30,6 +30,7 @@ class WarehouseGoldBillLForm extends WarehouseGoldBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
+
         ]);
     }
 

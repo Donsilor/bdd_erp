@@ -26,36 +26,26 @@ class WarehouseGoldService extends Service
         $gold = WarehouseGoldBillLGoodsForm::find()->where(['bill_id'=>$form->id])->all();
         $ids = [];
         foreach ($gold as $detail){
-            //$goods = WarehouseGold::findOne(['gold_name'=>$detail->gold_name]);
-            //if(!$goods){
-                $goldM = new WarehouseGold();
-                $good = [
-                    'gold_sn' => "---",//临时
-                    'style_sn' => $detail->style_sn,
-                    'gold_name' => $detail->gold_name,
-                    'gold_type' => $detail->gold_type,
-                    'supplier_id' => $form->supplier_id,
-                    'gold_num' => 1,
-                    'gold_weight' => $detail->gold_weight,
-                    'cost_price' => $detail->cost_price,
-                    'gold_price' => $detail->gold_price,
-                    'status' => StatusEnum::ENABLED,
-                    'created_at' => time(),
-                ];
-                $goldM->attributes = $good;
-                if(false === $goldM->save()){
-                    throw new \Exception($this->getError($goldM));
-                }
-                $ids[] = $goldM->attributes['id'];
-            /*}else{
-                $goods->gold_num = bcadd($goods->gold_num, $detail->gold_num);
-                $goods->gold_weight = bcadd($goods->gold_weight, $detail->gold_weight, 2);
-                //$goods->cost_price = bcadd($goods->cost_price, $detail->cost_price, 2);
-                //$goods->sale_price = bcadd($goods->sale_price, $detail->sale_price, 2);
-                if(false === $goods->save()){
-                    throw new \Exception($this->getError($goods));
-                }
-            }*/
+            $goldM = new WarehouseGold();
+            $good = [
+                'gold_sn' => "---",//临时
+                'style_sn' => $detail->style_sn,
+                'gold_name' => $detail->gold_name,
+                'gold_type' => $detail->gold_type,
+                'supplier_id' => $form->supplier_id,
+                'gold_num' => 1,
+                'gold_weight' => $detail->gold_weight,
+                'cost_price' => $detail->cost_price,
+                'gold_price' => $detail->gold_price,
+                'warehouse_id' => $form->to_warehouse_id,
+                'status' => StatusEnum::ENABLED,
+                'created_at' => time(),
+            ];
+            $goldM->attributes = $good;
+            if(false === $goldM->save()){
+                throw new \Exception($this->getError($goldM));
+            }
+            $ids[] = $goldM->attributes['id'];
         }
         if($ids){
             foreach ($ids as $id){

@@ -122,6 +122,7 @@ class GoldBillLController extends GoldBillController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGoldBillLForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {

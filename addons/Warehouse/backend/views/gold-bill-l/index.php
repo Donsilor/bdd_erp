@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:130%;'],
+                    'options' => ['style'=>'width:140%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -86,6 +86,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
+                        [
+                            'attribute' => 'to_warehouse_id',
+                            'value' =>"toWarehouse.name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[to_warehouse_id]',
+                                'value'=>$searchModel->to_warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => '200',
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
                         /*[
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
@@ -117,10 +133,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'attribute'=>'created_at',
