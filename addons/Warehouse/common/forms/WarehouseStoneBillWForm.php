@@ -12,6 +12,7 @@ class WarehouseStoneBillWForm extends WarehouseStoneBill
 {
     public $stone_sn;
     public $stone_type;
+    public $stone_num;
     public $stone_weight;
     /**
      * {@inheritdoc}

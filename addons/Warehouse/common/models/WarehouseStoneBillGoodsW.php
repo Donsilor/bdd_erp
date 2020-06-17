@@ -9,6 +9,7 @@ use Yii;
  * This is the model class for table "warehouse_stone_bill_goods_w".
  *
  * @property int $id
+ * @property int $actual_num 实盘重量
  * @property double $actual_weight 实盘重量
  * @property int $fin_status 财务审核状态
  * @property string $fin_checker 财务确认人
@@ -35,7 +36,7 @@ class WarehouseStoneBillGoodsW extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'fin_status', 'fin_check_time', 'updated_at', 'adjust_status', 'status'], 'integer'],
+            [['id', 'actual_num', 'fin_status', 'fin_check_time', 'updated_at', 'adjust_status', 'status'], 'integer'],
             [['actual_weight'], 'number'],
             [['fin_checker'], 'string', 'max' => 30],
             [['fin_remark'], 'string', 'max' => 255],
@@ -50,6 +51,7 @@ class WarehouseStoneBillGoodsW extends BaseModel
     {
         return [
             'id' => 'ID',
+            'actual_num' => '实盘重量',
             'actual_weight' => '实盘重量',
             'fin_status' => '财务审核状态',
             'fin_checker' => '财务确认人',

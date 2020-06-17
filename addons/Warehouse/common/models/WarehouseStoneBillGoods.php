@@ -89,4 +89,12 @@ class WarehouseStoneBillGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+    /**
+     * 盘点单明细附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsW()
+    {
+        return $this->hasOne(WarehouseStoneBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
 }
