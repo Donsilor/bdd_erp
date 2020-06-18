@@ -57,10 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                            <td><?= $model->pay_amount ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
                             <td><?= $model->delivery_no ?></td>
                         </tr>
