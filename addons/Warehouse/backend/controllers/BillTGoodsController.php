@@ -137,18 +137,24 @@ class BillTGoodsController extends BaseController
     {
         $ids = Yii::$app->request->post('ids');
         $field = Yii::$app->request->post('field');
-        $field_value = Yii::$app->request->post('field_value');
+        $text = Yii::$app->request->post('text');
         $model = new WarehouseBillTGoodsForm();
         $model->ids = $ids;
         $id_arr = $model->getIds();
         if(!$id_arr){
             return ResultHelper::json(422, "ID不能为空");
         }
+        if(!$field){
+            return ResultHelper::json(422, "字段错误");
+        }
+        if(!$text){
+            return ResultHelper::json(422, "输入值不能为空");
+        }
         try{
             $trans = Yii::$app->trans->beginTransaction();
             foreach ($id_arr as $id) {
                 $goods = WarehouseBillGoodsT::findOne(['id'=>$id]);
-                $goods->$field = $field_value;
+                $goods->$field = $text;
                 if(false === $goods->validate()) {
                     throw new \Exception($this->getError($goods));
                 }

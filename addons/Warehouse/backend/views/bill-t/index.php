@@ -53,9 +53,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'id',
-                            'filter' => Html::activeTextInput($searchModel, 'id', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
@@ -135,17 +133,13 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' =>false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [

@@ -723,6 +723,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function(){
-        $(".batch_full > a").after('&nbsp;<?php echo Html::batchFullButton("批量填充", ['data-grid'=>'grid', 'url'=>"/purchase/receipt-goods/batch-edit"]); ?>');
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton("批量填充", ['data-grid'=>'grid', 'url'=>"/purchase/receipt-goods/batch-edit"]); ?>');
     });
 </script>
