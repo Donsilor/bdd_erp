@@ -2,10 +2,12 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\IsApply;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\QibanAuditForm;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\Style;
+use common\enums\ConfirmEnum;
 use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
@@ -43,7 +45,6 @@ class QibanController extends BaseController
     */
     public function actionIndex()
     {
-        $cate_id = Yii::$app->request->get('cate_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -58,6 +59,7 @@ class QibanController extends BaseController
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['<','is_apply',IsApply::Wait]);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -69,6 +71,38 @@ class QibanController extends BaseController
             'searchModel' => $searchModel, 
         ]);
     }
+
+
+    public function actionApply()
+    {
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => ['style_name'], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+
+            ]
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['=','is_apply',IsApply::Wait]);
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+
     /**
      * 编辑/创建
      * @property PurchaseGoodsForm $model
@@ -266,6 +300,9 @@ class QibanController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if($model->audit_status == AuditStatusEnum::PASS){
+                    if($model->is_apply == IsApply::Wait){
+                        $model->is_apply = IsApply::Yes;
+                    }
                     $model->auditor_id = \Yii::$app->user->id;
                     $model->audit_time = time();
                     $model->status = StatusEnum::ENABLED;

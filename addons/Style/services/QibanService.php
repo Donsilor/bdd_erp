@@ -3,9 +3,12 @@
 namespace addons\Style\services;
 
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\IsApply;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\QibanAttribute;
 use common\components\Service;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 
 
@@ -19,6 +22,9 @@ class QibanService extends Service
     public function createQiban($goods ,$attr_list){
         $qiban = new Qiban();
         $qiban->qiban_sn = SnHelper::createQibanSn();
+        $qiban->audit_status = AuditStatusEnum::PENDING;
+        $qiban->status = StatusEnum::DISABLED;
+        $qiban->is_apply = IsApply::Wait;
         $qiban->attributes = $goods;
 
         if(false === $qiban->save()){

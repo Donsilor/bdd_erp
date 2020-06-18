@@ -57,10 +57,12 @@ class Qiban extends BaseModel
             [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price','qiban_name'],'required'],
             [['merchant_id', 'style_id','style_cate_id', 'product_type_id','is_inlay', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
-            [['qiban_name', 'audit_remark', 'remark','stone_info'], 'string', 'max' => 255],
-            [['style_sn','qiban_sn'], 'string', 'max' => 30],            
+            [['qiban_name', 'audit_remark', 'remark','stone_info','format_remark'], 'string', 'max' => 255],
+            [['style_sn','qiban_sn','format_sn'], 'string', 'max' => 30],
             [['style_images'],'parseStyleImages'],
+            [['format_images','format_video'], 'string', 'max' => 500],
             [['style_image'], 'safe'],
+            [['format_info'], 'string'],
         ];
     }
 
@@ -113,6 +115,11 @@ class Qiban extends BaseModel
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
+            'format_sn' => '图纸编号',
+            'format_images' => '版式图片',
+            'format_video' => '上传视频',
+            'format_remark' => '版式备注',
+            'is_apply' => '是否采购申请',
         ];
     }
 

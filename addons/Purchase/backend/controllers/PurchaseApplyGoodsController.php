@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\forms\PurchaseApplyFormatForm;
 use common\helpers\ArrayHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -95,9 +96,9 @@ class PurchaseApplyGoodsController extends BaseController
         $model = $model ?? new PurchaseApplyGoodsForm();
         if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {   
             return $return;
-        } 
+        }
 
-        if ($model->load(Yii::$app->request->post())) {  
+        if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
@@ -140,8 +141,24 @@ class PurchaseApplyGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseApplyFormatForm::className();
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseApplyGoodsForm();
+        $model = $model ?? new PurchaseApplyFormatForm();
+//        print_r(json_decode($model->format_info,true));
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            $format_info = Yii::$app->request->post('format_info');
+            $model->format_info = json_encode($format_info);
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            //前端提示
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }
 
         return $this->render($this->action->id, [
             'model' => $model,
@@ -299,7 +316,8 @@ class PurchaseApplyGoodsController extends BaseController
             }
         }
         $model->initApplyEdit();
-        return $this->render($this->action->id, [
+        $render = $model->goods_type == PurchaseGoodsTypeEnum::STYLE ? 'edit': 'edit-no-style';
+        return $this->render($render, [
                 'model' => $model,
         ]);
     }

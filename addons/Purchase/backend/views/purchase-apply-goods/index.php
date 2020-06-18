@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {audit} {format-edit} {delete}',
+                                'template' => '{view} {edit} {audit} {format-edit} {apply-edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'apply-edit' =>function($url, $model, $key) use($apply){
-                                        if($apply->apply_status != ApplyStatusEnum::SAVE) {
+                                        if($apply->apply_status == ApplyStatusEnum::AUDITED && $model->is_apply == \common\enums\ConfirmEnum::NO) {
                                             return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },

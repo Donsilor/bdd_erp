@@ -92,9 +92,6 @@ class PurchaseApplyGoodsService extends Service
                     'format_info' => $model->format_info,
                     'format_remark' => $model->format_remark,
 
-                    'audit_status' => AuditStatusEnum::PENDING,
-                    'status' => StatusEnum::DISABLED,
-                    'is_apply' => ConfirmEnum::YES,
                 ];
 
                 $goods_attrs = PurchaseApplyGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();

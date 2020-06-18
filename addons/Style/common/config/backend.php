@@ -37,6 +37,10 @@ return [
                                 'route' => 'qiban/index',
                             ],
                             [
+                                'title' => '待起版列表',
+                                'route' => 'qiban/apply',
+                            ],
+                            [
                                     'title' => '商品列表',
                                     'route' => 'style-goods/index',
                             ],

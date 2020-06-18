@@ -54,12 +54,12 @@ class PurchaseApplyGoods extends BaseModel
     {
         return [
             [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
-            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at','format_sn'], 'integer'],
+            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'stone_info', 'parts_info', 'remark','audit_remark','format_remark'], 'string', 'max' => 255],
-            [['style_sn', 'qiban_sn'], 'string', 'max' => 30],            
+            [['style_sn', 'qiban_sn','format_sn'], 'string', 'max' => 30],
             [['goods_image'], 'string', 'max' => 100],
             [['format_images','format_video'], 'string', 'max' => 500],
             [['goods_images'],'parseGoodsImages'],
@@ -120,6 +120,10 @@ class PurchaseApplyGoods extends BaseModel
             $this->goods_images = implode(',',$goods_images);            
         }
     }
+
+
+
+
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery

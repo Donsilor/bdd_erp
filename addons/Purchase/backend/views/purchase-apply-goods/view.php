@@ -140,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
         <?php }?>
         <?php
-        if($model->apply->apply_status != ApplyStatusEnum::SAVE) {
+        if($model->apply->apply_status == ApplyStatusEnum::AUDITED && $model->is_apply == \common\enums\ConfirmEnum::NO) {
             echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
         }
         ?>

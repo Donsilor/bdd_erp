@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             [
                                                 'name' =>'format_craft_images',
                                                 'title'=>'工艺图片',
-                                                'type' => \common\widgets\webuploader\Files::className(),
+
                                                 'options' => [
                                                     'config' =>[
                                                         'pick' => [
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <?= unclead\multipleinput\MultipleInput::widget([
                                         'name' => "format_info",
-                                        'value' =>[],
+                                        'value' =>json_decode($model->format_info,true),
                                         'columns' => $format_info,
                                     ]); ?>
                                 </div>
