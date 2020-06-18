@@ -21,6 +21,7 @@ use Yii;
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
+ * @property string $produce_sn 布产单号
  * @property string $gold_weight 金重
  * @property string $gold_loss 金损
  * @property string $suttle_weight 净重
@@ -78,18 +79,19 @@ use Yii;
  * @property string $second_stone_weight2 副石2重
  * @property string $second_stone_price2 副石2总计价
  * @property string $remark 备注
+ * @property int $status 状态
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class WarehouseBillGoodsT extends BaseModel
+class WarehouseBillGoodsL extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('warehouse_bill_goods_t');
+        return self::tableFullName('warehouse_bill_goods_l');
     }
 
     /**
@@ -99,9 +101,9 @@ class WarehouseBillGoodsT extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'suttle_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'bukou_fee', 'xianqian_fee', 'cert_fee', 'markup_rate', 'fense_fee', 'biaomiangongyi_fee', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
-            [['goods_id', 'bill_no', 'style_sn'], 'string', 'max' => 30],
+            [['goods_id', 'bill_no', 'style_sn', 'produce_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color'], 'string', 'max' => 100],
             [['gross_weight', 'diamond_cert_id', 'main_stone_sn'], 'string', 'max' => 20],
@@ -130,6 +132,7 @@ class WarehouseBillGoodsT extends BaseModel
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
+            'produce_sn' => '布产单号',
             'gold_weight' => '金重',
             'gold_loss' => '金损',
             'suttle_weight' => '净重',
@@ -187,6 +190,7 @@ class WarehouseBillGoodsT extends BaseModel
             'second_stone_weight2' => '副石2重',
             'second_stone_price2' => '副石2总计价',
             'remark' => '备注',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

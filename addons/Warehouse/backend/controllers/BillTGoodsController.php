@@ -2,16 +2,14 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Style\common\enums\AttrIdEnum;
-use common\helpers\ArrayHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\models\WarehouseBillGoodsT;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ResultHelper;
 use yii\base\Exception;
 
@@ -48,7 +46,7 @@ class BillTGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -70,7 +68,7 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsT();
+        $model = $model ?? new WarehouseBillGoodsL();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -104,7 +102,7 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         //$bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsT();
+        $model = $model ?? new WarehouseBillGoodsL();
         // ajax 校验
         //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -153,7 +151,7 @@ class BillTGoodsController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             foreach ($id_arr as $id) {
-                $goods = WarehouseBillGoodsT::findOne(['id'=>$id]);
+                $goods = WarehouseBillGoodsL::findOne(['id'=>$id]);
                 $goods->$field = $text;
                 if(false === $goods->validate()) {
                     throw new \Exception($this->getError($goods));

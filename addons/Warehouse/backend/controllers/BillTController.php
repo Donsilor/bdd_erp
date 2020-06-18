@@ -2,8 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\forms\WarehouseBillTForm;
-use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -11,22 +9,19 @@ use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\forms\WarehouseBillTForm;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\OrderTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use common\enums\AuditStatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use yii\db\Exception;
-
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -195,7 +190,7 @@ class BillTController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = Yii::$app->user->identity->getId();
 
-                \Yii::$app->warehouseService->billT->auditBillT($model);
+                \Yii::$app->warehouseService->billL->auditBillL($model);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -224,7 +219,7 @@ class BillTController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
             $model->bill_status = BillStatusEnum::CANCEL;
             //更新库存状态
-            $billGoods = WarehouseBillGoodsT::find()->where(['bill_id' => $id])->all();
+            $billGoods = WarehouseBillGoodsL::find()->where(['bill_id' => $id])->all();
             if(!$billGoods){
                 throw new \Exception("单据明细为空");
             }
@@ -232,7 +227,7 @@ class BillTController extends BaseController
                 throw new \Exception($this->getError($model));
             }
             $ids = ArrayHelper::getColumn($billGoods, 'id');
-            if(!WarehouseBillGoodsT::deleteAll(['id'=>$ids])){
+            if(!WarehouseBillGoodsL::deleteAll(['id'=>$ids])){
                 throw new \Exception("删除明细失败");
             }
             //日志
@@ -250,8 +245,6 @@ class BillTController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
-        return $this->message("取消失败", $this->redirect(['index']), 'error');
     }
 
     /**

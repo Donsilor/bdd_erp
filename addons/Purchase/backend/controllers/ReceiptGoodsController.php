@@ -374,39 +374,29 @@ class ReceiptGoodsController extends BaseController
     }
 
     /**
-     * IQC批量质检
+     * 批量申请入库-采购收货单
      *
      * @return mixed
      */
     public function actionWarehouse()
     {
-        $receipt_id = Yii::$app->request->get('receipt_id');
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * 批量申请入库-采购收货单
-     *
-     * @return mixed
-     */
-    public function actionAjaxWarehouse()
-    {
         $id = Yii::$app->request->get('id');
         $ids = Yii::$app->request->get('ids');
-        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $check = Yii::$app->request->get('check');
+        $model =PurchaseReceiptForm::findOne($id);
+        $model = $model ?? new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
+        if($check == 1){
+            try{
+                $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
