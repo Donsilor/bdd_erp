@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use common\helpers\Html;
 
 
-$this->title = '批量配石';
+$this->title = '批量配料';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -30,102 +30,56 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                             ], 
                             [
-                                    'attribute' => 'peishi_status',
+                                    'attribute' => 'peiliao_status',
                                     'value' => function ($model){
-                                        return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
+                                        return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
                                     },
                                     'filter' => false,
                                     'format' => 'raw',
                             ],
                             [
-                                    'attribute' => 'stone_position',
+                                    'attribute' => 'gold_type',
                                     'value'  => function($model) {
-                                         return \addons\Style\common\enums\StonePositionEnum::getValue($model->stone_position);
+                                        return $model->gold_type ?? '无';
                                     },
                                     'filter' => false,
                                     
                             ],
                             [
-                                    'attribute' => 'stone_type',
-                                    'value'  => function($model) {
-                                        return $model->stone_type ?? '无';
-                                    },
-                                    'filter' => false,
-                                    
-                            ],
-                            [
-                                    'attribute' => 'stone_num',
-                                    'value' => 'stone_num',
+                                    'attribute' => 'gold_weight',
+                                    'value' => 'gold_weight',
                                     'filter' => false,
 
-                            ],
+                            ],                          
                             [
-                                    'attribute' => 'shape',
-                                    'value' => function($model){
-                                        return $model->shape ?? '无';
-                                    },
-                                    'filter' => false,
-                                    
-                            ],
-                            [
-                                    'attribute' => 'color',
-                                    'value' => function($model){
-                                        return $model->color ?? '无';
-                                    },
-                                    'filter' => false,                                    
-                            ],
-                            [
-                                    'attribute' => 'clarity',
-                                    'value' => function($model){
-                                        return $model->clarity ?? '无';
-                                    },
-                                    'filter' => false,
-                                    
-                            ],
-                            [
-                                    'attribute' => 'stone_spec',
-                                    'value' => 'stone_spec',
-                                    'filter' => false,                                    
-                            ],                           
-                            [
-                                    'label' => '配石信息(石包编号/配石数量/配石总重)',
+                                    'label' => '配石信息(金料编号/金料总重)',
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:400px'],
                                     'value' => function($model) {
                                           return unclead\multipleinput\MultipleInput::widget([
-                                                'max'=>3,
-                                                'name' => "ProduceStone[{$model->id}][ProduceStoneGoods]",
-                                                'value' => $model->stoneGoods ??[],
+                                                'max'=>1,
+                                                'name' => "ProduceGold[{$model->id}][ProduceGoldGoods]",
+                                                'value' => $model->goldGoods ??[],
                                                 'columns' => [
                                                         [
-                                                                'name' => 'stone_sn',
+                                                                'name' => 'gold_sn',
                                                                 'title'=>false,
                                                                 'enableError'=>false,
                                                                 'options' => [
                                                                         'class' => 'input-priority',
-                                                                        'style'=>'width:150px',
-                                                                        'placeholder'=>'石包编号',
+                                                                        //'style'=>'width:150px',
+                                                                        'placeholder'=>'金料编号',
                                                                 ]
                                                         ],
                                                         [
-                                                                'name' =>'stone_num',
+                                                                'name' => "gold_weight",
                                                                 'title'=>false,
                                                                 'enableError'=>false,
                                                                 'options' => [
                                                                         'class' => 'input-priority',
                                                                         'style'=>'width:100px',
-                                                                        'placeholder'=>'领石数量',
-                                                                ]
-                                                        ],
-                                                        [
-                                                                'name' => "stone_weight",
-                                                                'title'=>false,
-                                                                'enableError'=>false,
-                                                                'options' => [
-                                                                        'class' => 'input-priority',
-                                                                        'style'=>'width:100px',
-                                                                        'placeholder'=>'领石总重',
+                                                                        'placeholder'=>'领料总重',
                                                                 ]
                                                         ]
                                                 ]

@@ -8,7 +8,7 @@
 
 namespace addons\Supply\services;
 
-
+use Yii;
 use addons\Supply\common\models\ProduceGold;
 use addons\Supply\common\models\ProduceGoldGoods;
 use common\components\Service;

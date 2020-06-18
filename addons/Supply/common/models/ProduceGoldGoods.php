@@ -18,7 +18,7 @@ class ProduceGoldGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('supply_produce_gold_goods');
+        return self::tableFullName('produce_gold_goods');
     }
     /**
      * @return array

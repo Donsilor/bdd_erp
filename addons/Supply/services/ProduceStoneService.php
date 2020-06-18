@@ -13,6 +13,7 @@ use addons\Supply\common\models\ProduceStone;
 use addons\Supply\common\models\ProduceStoneGoods;
 use common\components\Service;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
 
 class ProduceStoneService extends Service
 {
@@ -47,6 +48,7 @@ class ProduceStoneService extends Service
             $stone->attributes = $stoneData;
             $stone->peishi_time = time();
             $stone->peishi_user = Yii::$app->user->identity->username;
+            $stone->peishi_status = PeishiStatusEnum::IN_PEISHI;
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }

@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('批量配石', ['peishi','check'=>1],  [
+                        echo Html::a('批量配石', ['peiliao','check'=>1],  [
                             'class'=>'btn btn-success btn-xs',
-                            "onclick" => "batchPop2(this);return false;",
+                            "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
                             'data-width'=>'90%',
                             'data-height'=>'90%',
@@ -44,10 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'name'=>'id',  //设置每行数据的复选框属性
                                     'headerOptions' => ['width'=>'30'],
                             ],
-                                [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'visible' => true,
-                                ],
+                            [
+                                    'class' => 'yii\grid\SerialColumn',
+                                    'visible' => true,
+                            ],
                             [
                                     'attribute' => 'id',
                                     'value'  => 'id',
