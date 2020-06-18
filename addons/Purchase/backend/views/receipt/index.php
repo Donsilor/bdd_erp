@@ -79,13 +79,13 @@ $params = $params ? "&".http_build_query($params) : '';
                     'name'=>'SearchModel[supplier_id]',
                     'value'=>$searchModel->supplier_id,
                     'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-1'],
+                    'options' => ['placeholder' =>"请选择"],
                     'pluginOptions' => [
                         'allowClear' => true,
                     ],
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-3'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'put_in_type',
@@ -114,7 +114,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'value' => 'total_cost',
                 'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                     'class' => 'form-control',
-                    'style'=> 'width:60px;'
+                    'style'=> 'width:120px;'
                 ]),
                 'format' => 'raw',
                 'headerOptions' => [],
@@ -150,26 +150,13 @@ $params = $params ? "&".http_build_query($params) : '';
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
-            [
+            /*[
                 'attribute' => 'auditor_id',
                 'value' => 'auditor.username',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
-                    'class' => 'form-control',
-                    'style'=> 'width:100px;'
-                ]),
-            ],
-            [
-                'attribute' => 'audit_status',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
-                'value' => function ($model){
-                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                    'prompt' => '全部',
                     'class' => 'form-control',
                     'style'=> 'width:100px;'
                 ]),
@@ -198,6 +185,19 @@ $params = $params ? "&".http_build_query($params) : '';
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
+            ],*/
+            [
+                'attribute' => 'audit_status',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
             ],
             [
                 'attribute' => 'receipt_status',

@@ -35,9 +35,10 @@ class PurchaseReceiptForm extends PurchaseReceipt
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'produce_sns'=>'布产单号',
-            'receipt_num'=>'数量',
+            'supplier_id' => '工厂名称',
             'put_in_type'=>'采购方式',
-            'to_warehouse_id'=>'入库仓库',
+            'creator_id' => '制单人',
+            'created_at' => '制单时间',
         ]);
     }
     /**
