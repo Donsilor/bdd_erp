@@ -66,8 +66,10 @@ class ReceiptGoodsController extends BaseController
                 ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->key = "id";
         $dataProvider->query->andWhere(['=', 'receipt_id', $receipt_id]);
         $dataProvider->query->andWhere(['>', PurchaseReceiptGoods::tableName().'.status', -1]);
+
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -228,18 +230,24 @@ class ReceiptGoodsController extends BaseController
     {
         $ids = Yii::$app->request->post('ids');
         $field = Yii::$app->request->post('field');
-        $field_value = Yii::$app->request->post('field_value');
+        $text = Yii::$app->request->post('text');
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         $id_arr = $model->getIds();
         if(!$id_arr){
             return ResultHelper::json(422, "ID不能为空");
         }
+        if(!$field){
+            return ResultHelper::json(422, "字段错误");
+        }
+        if(!$text){
+            return ResultHelper::json(422, "输入值不能为空");
+        }
         try{
             $trans = Yii::$app->trans->beginTransaction();
             foreach ($id_arr as $id) {
                 $goods = PurchaseReceiptGoods::findOne(['id'=>$id]);
-                $goods->$field = $field_value;
+                $goods->$field = $text;
                 if(false === $goods->validate()) {
                     throw new \Exception($this->getError($goods));
                 }

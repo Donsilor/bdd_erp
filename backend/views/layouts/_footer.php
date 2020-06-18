@@ -496,4 +496,49 @@ $this->registerJs($script);
             }
         });
     }
+
+    //批量填充(文本)
+    function rfBatchFull(obj) {
+        let $e = $(obj);
+        let url = $e.attr('url');
+        let grid = $e.data('grid') || 'grid';
+        let id = $e.closest("tr").data("key");
+        let field = $e.parent().attr("attr-name");
+        let text = $e.prev().html();
+        let ids = [];
+        if(id) {
+            ids.push(id);
+        }
+        else if($("#"+grid).length>0) {
+            ids = $("#"+grid).yiiGridView("getSelectedRows");
+        }
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        if($.isArray(ids)){
+            ids = ids.join(',');
+        }
+        rfPrompt("请输入["+text+"]", function (fromValue) {
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids,
+                    field:field,
+                    text:fromValue,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+
+        });
+    }
+
 </script>

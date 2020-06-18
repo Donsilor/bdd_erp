@@ -18,17 +18,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
+            echo Html::create(['add', 'receipt_id' => $receipt->id], '添加货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '批量编辑', ['class'=>'btn btn-info btn-xs']);
         }
         if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
-            echo Html::a('批量申请入库', ['warehouse'], [
+            echo Html::a('批量入库', ['warehouse'], [
                 'class'=>'btn btn-success btn-xs',
                 "onclick" => "batchWarehouse(this);return false;",
             ]);

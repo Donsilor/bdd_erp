@@ -83,6 +83,23 @@ class Html extends BaseHtml
     }
 
     /**
+     * 批量填充按钮(文本)
+     *
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchFullButton($content = "批量填充", $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-default btn-xs",
+            'onclick' => "rfBatchFull(this)"
+        ], $options);
+
+        return self::button($content, $options);
+    }
+
+    /**
      * 状态标签
      *
      * @param int $status
