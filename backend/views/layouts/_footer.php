@@ -104,15 +104,30 @@ $this->registerJs($script);
 
 <script>
     //列表每行选中背景高亮
-    $("table tr > td  input[type='checkbox']").change(function () {
+    $("#grid table tr > td  input[type='checkbox']").change(function () {
         if($(this).is(':checked')) {
         	$(this).attr('checked', 'checked');        	
             $(this).parent().parent().css('background-color','#f5f5f5');
         }else{
-            $(this).removeAttr('checked');
+            $(this).attr('checked','');
             $(this).parent().parent().css('background-color','#fff');
         }
     });
+
+    //列表每行选中背景高亮
+     /* $("#grid table tr > td").click(function () {alert(1);
+        var checkbox = $(this).parent().find("input[type='checkbox'");
+        if(checkbox.length) {
+        	if(checkbox.is(':checked')) {
+        		checkbox.attr('checked','');
+        		$(this).parent().css('background-color','#fff');
+        	}else{
+            	checkbox.attr('checked', 'checked');  
+            	$(this).parent().css('background-color','#ecf0f5');	
+        	}
+        }
+        return false;
+    });  */
 </script>
 
 <script>
@@ -431,6 +446,51 @@ $this->registerJs($script);
                     var offset = "10%";
                     openIframe(title, width, height, href, offset);
                     e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    }
+
+    //批量操作弹框
+    function batchPop2(obj) {
+        let $e = $(obj);
+        let url = $e.attr('href');
+        let text = $e.text();
+        let grid = $e.data('grid') || 'grid';;
+        let id = $e.closest("tr").data("key");
+        let ids = [];
+        if(id) {
+            ids.push(id);
+        }
+        else if($("#"+grid).length>0) {
+            ids = $("#"+grid).yiiGridView("getSelectedRows");
+        }        
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        if($.isArray(ids)){
+            ids = ids.join(',');
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                if (parseInt(data.code) !== 200) {
+                    rfAffirm(data.message);
+                } else {
+                    var title = $e.data('title') || '基本信息';
+                    var width = $e.data('width') || '80%';
+                    var height = $e.data('height') || '80%';
+                    var offset = $e.data('offset') || '10%';
+                    url = data.data.url || url+"?ids="+ids;
+                    openIframe(title, width, height, url, offset);
+                    //$e.preventDefault();
                     return false;
                 }
             }

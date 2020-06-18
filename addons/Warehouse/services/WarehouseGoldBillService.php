@@ -259,7 +259,12 @@ class WarehouseGoldBillService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        $bill_detail_ids = [];
+        if(!$form->gold_sn) {
+            throw new \Exception("批次号不能为空");
+        }
+        if(!$form->gold_weight) {
+            throw new \Exception("金料重量不能为空");
+        }
         $billGoods = WarehouseGoldBillGoods::find()->where(['gold_sn'=>$form->gold_sn,'bill_id'=>$form->id])->one();
         if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
             //已盘点且正常的忽略
@@ -364,7 +369,7 @@ class WarehouseGoldBillService extends Service
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($form->to_warehouse_id);
         }else {
             $form->bill_status = GoldBillStatusEnum::CANCEL;
-            WarehouseGoods::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
+            WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_STOCK],['gold_sn'=>$subQuery,'gold_status'=>GoldStatusEnum::IN_PANDIAN]);
         }
         if(false === $form->save() ){
             throw new \Exception($this->getError($form));

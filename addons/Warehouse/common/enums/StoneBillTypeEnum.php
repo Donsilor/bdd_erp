@@ -19,6 +19,7 @@ class StoneBillTypeEnum extends \common\enums\BaseEnum
     const STONE_SY   = 'SY';
     const STONE_RK   = 'RK';
     const STONE_CK   = 'CK';
+    const STONE_W    = 'SW';
 
     /**
      * @return array
@@ -34,6 +35,7 @@ class StoneBillTypeEnum extends \common\enums\BaseEnum
             self::STONE_SY   => '损益单',
             self::STONE_RK   => '其它入库单',
             self::STONE_CK   => '其它出库单',
+            self::STONE_W    => '盘点单',
         ];
     }
 

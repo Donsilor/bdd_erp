@@ -51,7 +51,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
-            [['bill_no', 'stone_name', 'style_sn'], 'string', 'max' => 30],
+            [['bill_no', 'stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
         ];
     }
@@ -66,6 +66,7 @@ class WarehouseStoneBillGoods extends BaseModel
             'bill_id' => '单据ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
+            'stone_sn' => '石料编号',
             'stone_name' => '石料名称',
             'style_sn' => '石料款号',
             'stone_type' => '石料类型',
@@ -87,5 +88,13 @@ class WarehouseStoneBillGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 盘点单明细附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsW()
+    {
+        return $this->hasOne(WarehouseStoneBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
     }
 }
