@@ -469,7 +469,7 @@ class PurchaseReceiptService extends Service
                 $model = new PurchaseReceiptGoods();
             }
             foreach ($ids as $id) {
-                $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status'])->one();
+                $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status', 'xuhao'])->one();
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
                     throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
                 }
