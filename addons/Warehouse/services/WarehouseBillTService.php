@@ -72,7 +72,7 @@ class WarehouseBillTService extends Service
         if(!$style){
             throw new \Exception("款号不存在");
         }
-        //$bill = WarehouseBill::findOne(['id'=>$form->bill_id]);
+        $bill = WarehouseBill::findOne(['id'=>$form->bill_id]);
         $goodsM = new WarehouseBillGoodsT();
         $goods = [
             'goods_name' =>$style->style_name,
@@ -91,6 +91,8 @@ class WarehouseBillTService extends Service
         for ($i=0; $i<$form->goods_num; $i++){
             $goodsInfo[$i]= $goods;
             $goodsInfo[$i]['bill_id'] = $form->bill_id;
+            $goodsInfo[$i]['bill_no'] = $bill->bill_no;
+            $goodsInfo[$i]['bill_type'] = $bill->bill_type;
             $goodsInfo[$i]['goods_id'] = SnHelper::createGoodsId();
             $goodsM->setAttributes($goodsInfo[$i]);
             if(!$goodsM->validate()){
