@@ -28,6 +28,23 @@ class WarehouseBillLService extends Service
 {
 
     /**
+     * 收货单据汇总
+     * @param unknown $bill_id
+     */
+    public function warehouseBillLSummary($bill_id)
+    {
+        $result = false;
+        $sum = WarehouseBillGoodsL::find()
+            ->select(['sum(1) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
+            ->where(['bill_id'=>$bill_id])
+            ->asArray()->one();
+        if($sum) {
+            $result = WarehouseBill::updateAll(['goods_num'=>$sum['goods_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_market'=>$sum['total_market']/1],['id'=>$bill_id]);
+        }
+        return $result;
+    }
+
+    /**
      * 创建收货入库单
      *
      * @param array $bill
