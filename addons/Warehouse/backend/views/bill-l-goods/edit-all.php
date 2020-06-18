@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill_l_goods', '收货单详情');
+$this->title = Yii::t('warehouse_bill_l_goods', '入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
