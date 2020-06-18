@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
-            echo Html::create(['add', 'receipt_id' => $receipt->id], '新增货品', [
+            echo Html::create(['add', 'receipt_id' => $receipt->id], '添加货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
@@ -51,7 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -105,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'goods_name'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
                                 },
@@ -125,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'factory_mo',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_mo'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('factory_mo', $model->factory_mo, ['data-id'=>$model->id]);
                                 },
@@ -223,7 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gold_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_weight'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
                                 },
@@ -235,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gold_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_price'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
                                 },
@@ -247,7 +246,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gold_loss',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_loss'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_loss', $model->gold_loss, ['data-id'=>$model->id]);
                                 },
@@ -272,7 +271,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gross_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gross_weight'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gross_weight', $model->gross_weight, ['data-id'=>$model->id]);
                                 },
@@ -284,7 +283,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'suttle_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'suttle_weight'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('suttle_weight', $model->suttle_weight, ['data-id'=>$model->id]);
                                 },
@@ -296,7 +295,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
                                 },
@@ -311,7 +310,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('market_price', $model->market_price, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'market_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -323,7 +322,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('sale_price', $model->sale_price, ['data-id'=>$model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'sale_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'sale_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -357,7 +356,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'main_stone_num',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_num'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('main_stone_num', $model->main_stone_num, ['data-id'=>$model->id]);
                                 },
@@ -369,7 +368,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'main_stone_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_weight'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('main_stone_weight', $model->main_stone_weight, ['data-id'=>$model->id]);
                                 },
@@ -407,7 +406,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'main_stone_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_price'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('main_stone_price', $model->main_stone_price, ['data-id'=>$model->id]);
                                 },
@@ -432,7 +431,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'second_stone_weight1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight1'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_weight1', $model->second_stone_weight1, ['data-id'=>$model->id]);
                                 },
@@ -444,7 +443,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'second_stone_price1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price1'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_price1', $model->second_stone_price1, ['data-id'=>$model->id]);
                                 },
@@ -469,7 +468,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'second_stone_weight2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight2'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_weight2', $model->second_stone_weight2, ['data-id'=>$model->id]);
                                 },
@@ -481,7 +480,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'second_stone_price2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price2'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('second_stone_price2', $model->second_stone_price2, ['data-id'=>$model->id]);
                                 },
@@ -493,7 +492,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'markup_rate',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'markup_rate'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('markup_rate', $model->markup_rate, ['data-id'=>$model->id]);
                                 },
@@ -505,7 +504,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gong_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gong_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gong_fee', $model->gong_fee, ['data-id'=>$model->id]);
                                 },
@@ -517,7 +516,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_weight'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('parts_weight', $model->parts_weight, ['data-id'=>$model->id]);
                                 },
@@ -529,7 +528,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_price'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
                                 },
@@ -541,7 +540,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id]);
                                 },
@@ -553,7 +552,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'xianqian_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id'=>$model->id]);
                                 },
@@ -578,7 +577,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'biaomiangongyi_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id'=>$model->id]);
                                 },
@@ -590,7 +589,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'fense_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id'=>$model->id]);
                                 },
@@ -602,7 +601,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'bukou_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id'=>$model->id]);
                                 },
@@ -614,7 +613,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'cert_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('cert_fee', $model->cert_fee, ['data-id'=>$model->id]);
                                 },
@@ -626,7 +625,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'extra_stone_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'extra_stone_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('extra_stone_fee', $model->extra_stone_fee, ['data-id'=>$model->id]);
                                 },
@@ -638,7 +637,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'tax_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'tax_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('tax_fee', $model->tax_fee, ['data-id'=>$model->id]);
                                 },
@@ -650,7 +649,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'other_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('other_fee', $model->other_fee, ['data-id'=>$model->id]);
                                 },
@@ -682,6 +681,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'
                                 ]),
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -719,48 +722,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function(){
-        $(".batch_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs batch\" href=\"#\" role=\"button\">批量填充</a>");
-    });
-    //批量填充
-    $(document).on("click",'.batch',function(){
-        var fromValue = "";
-        var url = "/purchase/receipt-goods/batch-edit";
-        var name = $(this).parent().attr("data-sort");
-        var title = $(this).parent().html();
-        if(fromValue = prompt("<?= Yii::t("goods","请输入")?>", "0")){
-            var ids = new Array;
-            $('input[name="id[]"]').each(function(i){
-                var str = $(this).val();
-                var arr = jQuery.parseJSON(str)
-                ids[i] = arr.id;
-            });
-            if(ids.length===0) {
-                return false;
-            }
-            var ids = ids.join(',');
-            $.ajax({
-                type: "post",
-                url: url,
-                dataType: "json",
-                data: {
-                    ids: ids,
-                    field:name,
-                    field_value:fromValue,
-                },
-                success: function (data) {
-                    if (parseInt(data.code) !== 200) {
-                        rfAffirm(data.message);
-                    } else {
-                        //$("input[name='"+name+"']").each(function(){
-                            //$(this).val(fromValue);
-                            //$(this).focus();
-                        //});
-                        window.location.reload();
-                    }
-                }
-            });
-        }else{
-            return false;
-        }
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton("批量填充", ['data-grid'=>'grid', 'url'=>"/purchase/receipt-goods/batch-edit"]); ?>');
     });
 </script>

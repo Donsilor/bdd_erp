@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no?> - <?= \addons\Warehouse\common\enums\StoneBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
@@ -32,6 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
+                    <span class="summary" style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        石包总粒数：<span style="color:green;"><?= $bill->total_num?></span>
+                        石包总重：<span style="color:green;"><?= $bill->total_weight?>(ct)</span>
+                        石包总额：<span style="color:green;"><?= $bill->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

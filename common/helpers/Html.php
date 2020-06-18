@@ -206,6 +206,41 @@ class Html extends BaseHtml
     }
 
     /**
+     * 批量操作弹框
+     *
+     * @param $url
+     * @param array $options
+     * @param string $content
+     * @return string
+     */
+    public static function batchPopButton(array $url, $content, $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-success btn-sm",
+            'onclick' => "batchPop2(this);return false;"
+        ], $options);
+
+        return self::a($content, $url, $options);
+    }
+
+    /**
+     * 批量填充按钮(文本)
+     *
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchFullButton($content = "批量填充", $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-default btn-xs",
+            'onclick' => "rfBatchFull(this);return false;"
+        ], $options);
+
+        return self::button($content, $options);
+    }
+
+    /**
      * 是否标签
      *
      * @param int $status

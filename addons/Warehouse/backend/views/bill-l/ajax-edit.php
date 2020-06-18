@@ -17,26 +17,29 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'send_goods_sn')->textInput() ?>
+        <?= $form->field($model, 'send_goods_sn')->textInput(['readonly'=>'true']) ?>
         <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
             'data' => \Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
-                'allowClear' => false
+                'allowClear' => false,
+                'disabled'=>'disabled',
             ],
         ]);?>
         <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
             'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
-                'allowClear' => false
+                'allowClear' => false,
+                'disabled'=>'disabled',
             ],
         ]);?>
         <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
             'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
-                'allowClear' => false
+                'allowClear' => false,
+                'disabled'=>'disabled',
             ],
         ]);?>
         <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap())?>

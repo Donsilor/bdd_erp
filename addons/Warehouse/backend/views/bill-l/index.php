@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_l', '收货单列表');
+$this->title = Yii::t('bill_l', '入库单列表');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -34,7 +34,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:140%;'],
+                    'options' => ['style'=>' width:130%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -49,9 +49,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'id',
-                            'filter' => Html::activeTextInput($searchModel, 'id', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
@@ -66,15 +64,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'send_goods_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
+                        /*[
                             'attribute' => 'bill_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -82,16 +72,22 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
                             },
                             'filter' => false,
-                        ],
+                        ],*/
                         [
-                            'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
-                        //'to_company_id',
                         [
                             'attribute' => 'to_warehouse_id',
                             'value' =>"toWarehouse.name",
@@ -108,10 +104,34 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
-                            'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
+                            'attribute' => 'put_in_type',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'goods_num',
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'total_cost',
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'send_goods_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -145,7 +165,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             },
                         ],
-                        [
+                        /*[
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -176,6 +196,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->audit_time);
                             }
+                        ],*/
+                        [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
                         ],
                         [
                             'attribute' => 'bill_status',
@@ -188,19 +221,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
                         ],
                         [

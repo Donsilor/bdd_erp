@@ -2,31 +2,34 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\forms\WarehouseBillLGoodsForm;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use yii\base\Exception;
 
-
 /**
- * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
+ * 收货入库单明细
  */
 class BillLGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillGoods::class;
+    public $modelClass = WarehouseBillLGoodsForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_L;
     /**
-     * Lists all WarehouseBillGoods models.
+     * 收货单明细列表
      * @return mixed
      */
     public function actionIndex()
@@ -34,7 +37,7 @@ class BillLGoodsController extends BaseController
 
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-l-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -48,7 +51,7 @@ class BillLGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -65,10 +68,9 @@ class BillLGoodsController extends BaseController
      */
     public function actionEditAll()
     {
-
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-l-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -82,7 +84,7 @@ class BillLGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -91,6 +93,91 @@ class BillLGoodsController extends BaseController
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
+    }
+
+    /**
+     * ajax编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $id = \Yii::$app->request->get('id');
+        //$bill_id = Yii::$app->request->get('bill_id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillGoodsL();
+        // ajax 校验
+        //$this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                //$trans = \Yii::$app->db->beginTransaction();
+                //Yii::$app->warehouseService->billT->addBillTGoods($model);
+                //$trans->commit();
+                //更新收货单汇总：总金额和总数量
+                $res = \Yii::$app->warehouseService->billL->warehouseBillLSummary($model->bill_id);
+                if(false === $res){
+                    throw new \yii\db\Exception('更新单据汇总失败');
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                //$trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * ajax批量编辑
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchEdit()
+    {
+        $ids = Yii::$app->request->post('ids');
+        $field = Yii::$app->request->post('field');
+        $text = Yii::$app->request->post('text');
+        $model = new WarehouseBillLGoodsForm();
+        $model->ids = $ids;
+        $id_arr = $model->getIds();
+        if(!$id_arr){
+            return ResultHelper::json(422, "ID不能为空");
+        }
+        if(!$field){
+            return ResultHelper::json(422, "字段错误");
+        }
+        if(!$text){
+            return ResultHelper::json(422, "输入值不能为空");
+        }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            foreach ($id_arr as $id) {
+                $goods = WarehouseBillGoodsL::findOne(['id'=>$id]);
+                $goods->$field = $text;
+                if(false === $goods->validate()) {
+                    throw new \Exception($this->getError($goods));
+                }
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+            $trans->commit();
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
     /**
@@ -106,15 +193,10 @@ class BillLGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            //更新库存状态
+            if(false === $model->delete()){
+                throw new \Exception($this->getError($model));
+            }
             $bill = WarehouseBill::find()->where(['id' => $model->bill_id])->one();
-            $goods = WarehouseGoods::find()->where(['goods_id' => $model->goods_id, 'goods_status' => GoodsStatusEnum::RECEIVING])->one();
-            if(!$goods){
-                throw new \yii\db\Exception("商品{$goods->goods_id}不是收货中或者不存在，请查看原因");
-            }
-            if(false === $goods->delete()){
-                throw new \Exception($this->getError($goods));
-            }
             if($bill->order_type = OrderTypeEnum::ORDER_L && $model->source_detail_id){
                 $receipt_goods = PurchaseReceiptGoods::find()->where(['id'=>$model->source_detail_id])->one();
                 if($receipt_goods){
@@ -124,11 +206,8 @@ class BillLGoodsController extends BaseController
                     }
                 }
             }
-            if(false === $model->delete()){
-                throw new \Exception($this->getError($model));
-            }
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($bill->id);
+            $res = \Yii::$app->warehouseService->billL->warehouseBillLSummary($model->bill_id);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }

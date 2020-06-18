@@ -24,9 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('IQC批量质检', ['iqc'],  [
+                        echo Html::batchPopButton(['iqc','check'=>1],'IQC批量质检', [
                             'class'=>'btn btn-success btn-xs',
-                            "onclick" => "batchIqc(this);return false;",
                         ]);
                         echo '&nbsp;';
                         echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
@@ -231,45 +230,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- tab-content end -->
 </div>
 <script type="text/javascript">
-    //批量操作
-    function batchIqc(obj) {
-        let $e = $(obj);
-        let url = $e.attr('href');
-        var ids = new Array;
-        $('input[name="id[]"]:checked').each(function(i){
-            var str = $(this).val();
-            var arr = jQuery.parseJSON(str)
-            ids[i] = arr.id;
-        });
-        if(ids.length===0) {
-            rfInfo('未选中数据！','');
-            return false;
-        }
-        var ids = ids.join(',');
-        $.ajax({
-            type: "get",
-            url: url,
-            dataType: "json",
-            data: {
-                ids: ids
-            },
-            success: function (data) {
-                if (parseInt(data.code) !== 200) {
-                    rfAffirm(data.message);
-                } else {
-                    var href = data.data.url;
-                    var title = '基本信息';
-                    var width = '80%';
-                    var height = '80%';
-                    var offset = "10%";
-                    openIframe(title, width, height, href, offset);
-                    e.preventDefault();
-                    return false;
-                }
-            }
-        });
-    }
-
     //批量生成不良返厂单
     function batchDefective(obj) {
         let $e = $(obj);

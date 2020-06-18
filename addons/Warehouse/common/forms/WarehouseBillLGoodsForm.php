@@ -7,10 +7,10 @@ use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use common\helpers\StringHelper;
 
 /**
- * 其他收货单明细 Form
+ * 入库单明细 Form
  *
  */
-class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
+class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
 {
     public $ids;
     /**

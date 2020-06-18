@@ -89,7 +89,7 @@ class WarehouseGoldBill extends BaseModel
             'fin_check_time' => '财务确认时间',
             'fin_remark' => '财务确认备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
