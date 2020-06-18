@@ -19,27 +19,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'format_sn')->textInput() ?>
                             </div>
                         </div>
-                        <div class="row col-lg-9">
-                            <?php $model->format_images = !empty($model->format_images)?explode(',', $model->format_images):null;?>
-                            <?= $form->field($model, 'format_images')->widget(common\widgets\webuploader\Files::class, [
-                                'config' => [
-                                    'pick' => [
-                                        'multiple' => true,
-                                    ],
-                                ]
-                            ]); ?>
+
+                        <div class="row col-lg-12">
+                            <div class="col-lg-6" style="padding: 0px;">
+                                <?php $model->format_images = !empty($model->format_images)?explode(',', $model->format_images):null;?>
+                                <?= $form->field($model, 'format_images')->widget(common\widgets\webuploader\Files::class, [
+                                    'config' => [
+                                        'pick' => [
+                                            'multiple' => true,
+                                        ],
+                                    ]
+                                ]); ?>
+                            </div>
+                            <div class="col-lg-6" style="padding: 0px;">
+                                <?php $model->format_video = !empty($model->format_video)?explode(',', $model->format_video):null;?>
+                                <?= $form->field($model, 'format_video')->widget(common\widgets\webuploader\Files::class, [
+                                    'type'=>'videos',
+                                    'config' => [
+                                        'pick' => [
+                                            'multiple' => true,
+                                        ],
+                                    ]
+                                ]); ?>
+                            </div>
+
                         </div>
-                        <div class="row col-lg-9">
-                            <?php $model->format_video = !empty($model->format_video)?explode(',', $model->format_video):null;?>
-                            <?= $form->field($model, 'format_video')->widget(common\widgets\webuploader\Files::class, [
-                                'type'=>'videos',
-                                'config' => [
-                                'pick' => [
-                                    'multiple' => true,
-                                ],
-                                ]
-                            ]); ?>
-                        </div>
+
 
                         <div class="row col-lg-9" >
                             <h3 class="box-title"> 工艺信息</h3>
@@ -72,14 +77,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                             [
                                                 'name' =>'format_craft_images',
                                                 'title'=>'工艺图片',
-
-                                                'options' => [
-                                                    'config' =>[
+                                                'type' => common\widgets\webuploader\Files::class,
+                                                'options'=>[
+                                                    'theme'=>'default',
+                                                    'config' => [
                                                         'pick' => [
                                                             'multiple' => true,
                                                         ],
-                                                    ] ,
-                                                ],
+                                                    ]
+                                                ]
+
+
 
                                             ]
                                         ];

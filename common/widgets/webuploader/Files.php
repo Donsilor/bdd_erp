@@ -181,7 +181,7 @@ class Files extends InputWidget
             }
         }
 
-        $this->registerClientScript();
+//        $this->registerClientScript();
 
         return $this->render($this->theme, [
             'name' => $name,
