@@ -684,6 +684,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{edit} {delete}',

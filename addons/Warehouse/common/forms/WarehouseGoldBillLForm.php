@@ -30,7 +30,9 @@ class WarehouseGoldBillLForm extends WarehouseGoldBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'delivery_no' => '采购收货单号',
+            'creator_id' => '制单人',
+            'created_at' => '制单时间',
         ]);
     }
 

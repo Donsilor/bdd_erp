@@ -39,13 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        /*[
-                            'label' => '序号',
+                        [
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
-                        ],*/
+                        ],
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
@@ -81,7 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '石包总重量',
                             'attribute'=>'total_weight',
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',

@@ -14,12 +14,12 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l_goods', '金料入库单详情');
+$this->title = Yii::t('gold_bill_l_goods', '金料入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no?> - <?= \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -29,10 +29,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
+                    <span class="summary" style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        金料总重：<span style="color:green;"><?= $bill->total_weight?>/克</span>
+                        金料总额：<span style="color:green;"><?= $bill->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -125,7 +130,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill) {
                                         if($bill->bill_status == BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],
