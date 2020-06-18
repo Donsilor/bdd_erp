@@ -315,6 +315,9 @@ class PurchaseReceiptService extends Service
         if($form->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
+        if(!$form->to_warehouse_id){
+            throw new \Exception('入库仓库不能为空');
+        }
         if(!$detail_ids){
             $detail_ids = $form->getIds();
         }
