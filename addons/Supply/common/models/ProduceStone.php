@@ -10,12 +10,14 @@ use Yii;
  * @property int $id id主键
  * @property int $produce_id 布产id
  * @property string $order_sn 订单号
+ * @property string $delivery_no 送石单号
  * @property string $color 石头颜色
  * @property string $clarity 石头净度
  * @property string $shape 石头形状
  * @property string $cert_type 证书类型
  * @property string $cert_no 证书号
  * @property string $carat 石头大小
+ * @property int $stone_sn 石包编号
  * @property int $stone_num 石头数量(布产商品数量*石头粒数)
  * @property string $stone_type 石头类型
  * @property int $stone_position 石头位置 0：主石 ，1：副石1，2：副石2，3：副石3
@@ -48,10 +50,10 @@ class ProduceStone extends BaseModel
     public function rules()
     {
         return [
-            [['produce_id','from_type', 'stone_num', 'stone_position', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['from_order_sn','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user', 'creator_name'], 'string', 'max' => 30],
+            [['produce_id','from_type', 'stone_num', 'stone_position', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
             [['color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
-            [['remark','stone_spec'], 'string', 'max' => 255],
+            [['remark','stone_spec','audit_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -65,7 +67,8 @@ class ProduceStone extends BaseModel
             'produce_id' => '布产ID',
             'produce_sn' => '布产编号',
             'from_type' => '来源类型',
-            'from_order_sn' => '来源订单号',            
+            'from_order_sn' => '来源订单号', 
+            'delivery_no'=>'送石单',
             'color' => '石头颜色',
             'clarity' => '石头净度',
             'shape' => '石头形状',
@@ -76,18 +79,31 @@ class ProduceStone extends BaseModel
             'stone_num' => '石头数量',
             'stone_type' => '石头类型',
             'stone_position' => '石头位置',
+            'stone_sn' =>'石包编号',    
             'caigou_time' => '采购时间',
             'songshi_time' => '送石最新时间',
             'peishi_time' => '配石最新时间',
             'caigou_user' => '采购人',
             'songshi_user' => '送石人',
-            'remark' => '配石备注',
+            'audit_status' => '审核状态',
+            'audit_user' => '审核人',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',            
             'peishi_user' => '配石人',
             'peishi_status' => '配石状态',
+            'remark' => '配石备注',
             'creator_id' => '创建人ID',
             'creator_name' => '创建人',
             'created_at' => '添加时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 配石明细   一对多
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStoneGoods()
+    {
+        return $this->hasMany(ProduceStoneGoods::class, ['id'=>'id'])->alias('stoneGoods');
     }
 }

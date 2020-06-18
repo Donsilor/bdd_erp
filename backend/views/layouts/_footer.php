@@ -398,10 +398,10 @@ $this->registerJs($script);
 
     //批量操作弹框
     function batchPop(obj) {
-        let $e = $(obj);
+    	let $e = $(obj);
         let url = $e.attr('href');
         let text = $e.text();
-        let grid = $e.data('grid');
+        let grid = $e.data('grid') || 'grid';;
         let id = $e.closest("tr").data("key");
         let ids = [];
         if(id) {
@@ -409,18 +409,7 @@ $this->registerJs($script);
         }
         else if($("#"+grid).length>0) {
             ids = $("#"+grid).yiiGridView("getSelectedRows");
-        }
-        if(!id){
-            $('input[name="id[]"]:checked').each(function(i){
-                var str = $(this).val();
-                if($.isNumeric(str)){
-                    ids[i] = str;
-                }else{
-                    var arr = $.parseJSON(str);
-                    ids[i] = arr.id;
-                }
-            });
-        }
+        }        
         if(ids.length===0) {
             rfInfo('未选中数据！','');
             return false;
@@ -439,13 +428,13 @@ $this->registerJs($script);
                 if (parseInt(data.code) !== 200) {
                     rfAffirm(data.message);
                 } else {
-                    var href = data.data.url;
-                    var title = '基本信息';
-                    var width = '80%';
-                    var height = '80%';
-                    var offset = "10%";
-                    openIframe(title, width, height, href, offset);
-                    e.preventDefault();
+                    var title = $e.data('title') || '基本信息';
+                    var width = $e.data('width') || '90%';
+                    var height = $e.data('height') || '90%';
+                    var offset = $e.data('offset') || '20px';
+                    url = data.data.url || url+"?ids="+ids;
+                    openIframe(title, width, height, url, offset);
+                    //$e.preventDefault();
                     return false;
                 }
             }

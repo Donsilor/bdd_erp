@@ -19,18 +19,24 @@ class ProduceStoneGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('supply_produce_stone_goods');
+        return self::tableFullName('produce_stone_goods');
     }
-
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'stone_sn'], 'required'],
-            [['id', 'stone_num'], 'integer'],
-            [['stone_weight'], 'number'],
+            [['id', 'stone_sn','stone_num','stone_weight'], 'required'],
+            [['id', 'stone_num'], 'integer','min'=>0],
+            [['stone_weight'], 'number','min'=>0],
             [['stone_sn'], 'string', 'max' => 30],
             [['id', 'stone_sn'], 'unique', 'targetAttribute' => ['id', 'stone_sn']],
         ];
@@ -45,7 +51,7 @@ class ProduceStoneGoods extends BaseModel
             'id' => Yii::t('app', '配石id'),
             'stone_sn' => Yii::t('app', '石包号'),
             'stone_num' => Yii::t('app', '配石数量'),
-            'stone_weight' => Yii::t('app', '石料总重'),
+            'stone_weight' => Yii::t('app', '配石总重'),
         ];
     }
 }

@@ -11,9 +11,9 @@ use common\enums\BaseEnum;
 class PeishiStatusEnum extends BaseEnum
 {
     const PENDING = 1;
-    const DOING = 2;
-    const CONFIRM = 3;
-    const FINISH = 4;
+    const IN_PEISHI = 2;
+    const TO_CONFIRM = 3;
+    const FINISHED = 4;
     const NONE = 9;
     /**
      *
@@ -23,9 +23,9 @@ class PeishiStatusEnum extends BaseEnum
     {
         return [                
                 self::PENDING =>"待配石",
-                self::DOING => "配石中",
-                self::CONFIRM => "配石确认",
-                self::FINISH => "配石完成",
+                self::IN_PEISHI => "配石中",
+                self::TO_CONFIRM => "配石确认",
+                self::FINISHED => "配石完成",
                 self::NONE => "不需配石",
         ];
     }

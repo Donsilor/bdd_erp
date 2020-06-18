@@ -135,18 +135,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'stone_spec',
                                     'value' => 'stone_spec',
                                     'filter' => false,                                    
-                            ],
+                            ], 
                             [
-                                    'attribute' => 'songshi_user',
-                                    'filter' => false,
-                            ],
-                            [
-                                    'attribute' => 'songshi_time',
-                                    'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->songshi_time);
+                                    'label' => '配石信息(石头编号/数量/总重)',
+                                    'value' => function($model){
+                                         $str = '';
+                                         foreach ($model->stoneGoods ?? [] as $stone){
+                                             $str .='石头编号:'.$stone->stone_sn.' 数量:'.$stone->stone_num." 总重:".$stone->stone_weight."ct<br/>";
+                                         }
+                                         return $str;
                                     },
                                     'filter' => false,
-                            ],
+                                    'format' => 'raw',
+                            ], 
                             [
                                     'attribute' => 'peishi_user',
                                     'filter' => false,
@@ -163,20 +164,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],
-                            [
-                                'attribute' => 'created_at',
-                                'filter' => false,
-                                'value' => function($model){
-                                    return Yii::$app->formatter->asDatetime($model->created_at);
-                                }
-
-                            ],
-                            [
-                                'attribute' => 'creator_name',
-                                'filter' => false,
-                            ],
-
-
                         ]
                     ]); ?>
             </div>
