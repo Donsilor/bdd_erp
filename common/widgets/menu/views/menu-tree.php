@@ -6,7 +6,7 @@ use common\enums\StatusEnum;
 <?php 
 $menuOpens = [];
 foreach ($menus as $k=>$item) {     
-    if(empty($menuOpens[$item['cate_id']]) || count($menuOpens[$item['cate_id']]) <2) {
+    if(empty($menuOpens[$item['cate_id']]) || count($menuOpens[$item['cate_id']]) < 1) {
         $menuOpen = true;
         $menuOpens[$item['cate_id']][] = true;
     }else{

@@ -24,6 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {?>
                         <?= Html::create(['gold-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING) {?>
+                        <?= Html::batchAudit(['ajax-audit', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '批量审核', []); ?>
+                    <?php }?>
                     </div>
                </div>
             <div class="box-body table-responsive">  
@@ -38,6 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'class' => 'yii\grid\SerialColumn',
                                     'visible' => false,
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width'=>'30'],
                             ],
                             /*[
                                     'attribute' => 'id',
