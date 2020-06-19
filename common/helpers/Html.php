@@ -224,7 +224,7 @@ class Html extends BaseHtml
     }
 
     /**
-     * 批量填充按钮(文本)
+     * 批量填充按钮
      *
      * @param $url
      * @param string $content

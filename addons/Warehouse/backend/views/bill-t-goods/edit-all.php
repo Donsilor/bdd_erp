@@ -13,7 +13,7 @@ use addons\Style\common\enums\AttrIdEnum;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '其它收货单详情');
+$this->title = Yii::t('bill_t_goods', '其它收货单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -291,7 +291,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'material','attr-id'=>AttrIdEnum::MATERIAL],
                             ],
                             [
                                 'attribute' => 'material_type',
@@ -304,7 +304,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'material_type','attr-id'=>AttrIdEnum::MATERIAL_TYPE],
                             ],
                             [
                                 'attribute' => 'material_color',
@@ -317,7 +317,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'material_color','attr-id'=>AttrIdEnum::MATERIAL_COLOR],
                             ],
                             [
                                 'attribute'=>'diamond_carat',
@@ -342,7 +342,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_color','attr-id'=>AttrIdEnum::DIA_COLOR],
                             ],
                             [
                                 'attribute' => 'diamond_shape',
@@ -355,7 +355,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_shape','attr-id'=>AttrIdEnum::DIA_SHAPE],
                             ],
                             [
                                 'attribute' => 'diamond_clarity',
@@ -368,7 +368,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_clarity','attr-id'=>AttrIdEnum::DIA_CLARITY],
                             ],
                             [
                                 'attribute' => 'diamond_cut',
@@ -381,7 +381,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_cut','attr-id'=>AttrIdEnum::DIA_CUT],
                             ],
                             [
                                 'attribute' => 'diamond_polish',
@@ -394,7 +394,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_polish','attr-id'=>AttrIdEnum::DIA_POLISH],
                             ],
                             [
                                 'attribute' => 'diamond_symmetry',
@@ -407,7 +407,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_symmetry','attr-id'=>AttrIdEnum::DIA_SYMMETRY],
                             ],
                             [
                                 'attribute' => 'diamond_fluorescence',
@@ -420,7 +420,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_fluorescence','attr-id'=>AttrIdEnum::DIA_FLUORESCENCE],
                             ],
                             [
                                 'attribute'=>'diamond_discount',
@@ -445,7 +445,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'diamond_cert_type','attr-id'=>AttrIdEnum::DIA_CERT_TYPE],
                             ],
                             [
                                 'attribute'=>'diamond_cert_id',
@@ -561,7 +561,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'main_stone_type','attr-id'=>AttrIdEnum::MAIN_STONE_TYPE],
                             ],
                             [
                                 'attribute'=>'main_stone_num',
@@ -622,7 +622,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_type1','attr-id'=>AttrIdEnum::SIDE_STONE1_TYPE],
                             ],
                             [
                                 'attribute'=>'second_stone_num1',
@@ -671,7 +671,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_color1','attr-id'=>AttrIdEnum::SIDE_STONE1_COLOR],
                             ],
                             [
                                 'attribute' => 'second_stone_clarity1',
@@ -684,7 +684,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_clarity1','attr-id'=>AttrIdEnum::SIDE_STONE1_CLARITY],
                             ],
                             [
                                 'attribute' => 'second_stone_shape1',
@@ -697,7 +697,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_shape1','attr-id'=>AttrIdEnum::DIA_SHAPE],
                             ],
                             [
                                 'attribute' => 'second_stone_type2',
@@ -710,7 +710,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_type2','attr-id'=>AttrIdEnum::SIDE_STONE2_TYPE],
                             ],
                             [
                                 'attribute'=>'second_stone_num2',
