@@ -210,7 +210,7 @@ class GoldReceiptGoodsController extends BaseController
      * @return mixed
      * @throws
      */
-    public function actionAjaxWarehouse()
+    public function actionWarehouse()
     {
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check', null);
