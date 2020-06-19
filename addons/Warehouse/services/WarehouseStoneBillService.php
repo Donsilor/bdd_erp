@@ -187,7 +187,7 @@ class WarehouseStoneBillService extends Service
         $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建领石单单明细失败");
-        }
+        }        
         return $billM;
     }
     /**
