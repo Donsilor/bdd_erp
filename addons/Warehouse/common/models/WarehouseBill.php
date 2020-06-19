@@ -85,7 +85,7 @@ class WarehouseBill extends BaseModel
             'goods_num' => '货品数量',
             'total_cost' => '总成本',
             'total_sale' => '实际销售总额',
-            'total_market' => '市场名义总额',
+            'total_market' => '市场价总额',
             'to_warehouse_id' => '入库仓库',
             'to_company_id' => '入库公司',
             'from_company_id' => '出库公司',
