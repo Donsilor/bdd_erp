@@ -28,7 +28,7 @@ class StoneStyleService extends Service
             ->orderBy('sort asc')
             ->asArray()
             ->all();
-        return ArrayHelper::map($model,'id', 'style_sn');
+        return ArrayHelper::map($model,'style_sn', 'style_sn');
 
     }
 }

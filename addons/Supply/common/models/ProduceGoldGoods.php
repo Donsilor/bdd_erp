@@ -18,16 +18,22 @@ class ProduceGoldGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('supply_produce_gold_goods');
+        return self::tableFullName('produce_gold_goods');
     }
-
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [];
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'gold_sn'], 'required'],
+            [['id', 'gold_sn','gold_weight'], 'required'],
             [['id'], 'integer'],
             [['gold_weight'], 'number'],
             [['gold_sn'], 'string', 'max' => 30],

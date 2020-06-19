@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
@@ -78,6 +78,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                 ],
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_id',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'goods_name',
@@ -136,6 +144,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'produce_sn',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'gold_weight',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
@@ -147,6 +163,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'gold_loss',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'suttle_weight',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gold_price',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gold_amount',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
@@ -428,6 +468,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'parts_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'parts_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'main_stone_type',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->main_stone_type);
@@ -455,6 +513,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_sn1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_cert_id1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
                                 ]),
                             ],
                             [
@@ -567,6 +643,69 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'gong_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'bukou_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xianqian_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'cert_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'markup_rate',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'fense_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'biaomiangongyi_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),

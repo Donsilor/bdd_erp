@@ -2,16 +2,15 @@
 
 namespace addons\Warehouse\common\forms;
 
-
 use common\helpers\ArrayHelper;
-use addons\Warehouse\common\models\WarehouseBillGoodsT;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use common\helpers\StringHelper;
 
 /**
  * 其他收货单明细 Form
  *
  */
-class WarehouseBillTGoodsForm extends WarehouseBillGoodsT
+class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 {
     public $ids;
     /**

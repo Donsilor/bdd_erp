@@ -21,11 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-lg-4">
                     <?= $form->field($model, 'goods_name')->textInput() ?>
                 </div>
-                <div class="col-lg-4">
-                    <?= $form->field($model, 'goods_weight')->textInput() ?>
-                </div>
+                  <div class="col-lg-4">
+                      <?= $form->field($model, 'goods_sn')->dropDownList(Yii::$app->styleService->gold->getDropDown(),['prompt'=>'请选择']) ?>
+                  </div>
               </div>
 			   <div class="row">
+                   <div class="col-lg-4">
+                       <?= $form->field($model, 'goods_weight')->textInput() ?>
+                   </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>

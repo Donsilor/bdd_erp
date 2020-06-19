@@ -9,8 +9,10 @@ use Yii;
  *
  * @property int $id id主键
  * @property int $produce_id 布产id
- * @property string $order_sn 订单号
- * @property string $material_type 材质类型
+ * @property string $delivery_no 送料单号
+ * @property string $from_order_sn 来源单号
+ * @property string $from_type 来源类型
+ * @property string $gold_type 金料类型
  * @property int $caigou_time 采购时间（记录最新的一次采购时间）
  * @property int $songliao_time 已送生产部时间(已送生产部的最新一次时间)
  * @property int $peiliao_time 配料中时间（操作配料中的最新时间）
@@ -40,8 +42,8 @@ class ProduceGold extends BaseModel
     public function rules()
     {
         return [
-                [['produce_id', 'caigou_time', 'songliao_time', 'peiliao_time', 'peiliao_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-                [['order_sn', 'caigou_user', 'songliao_user', 'peiliao_user', 'creator_name'], 'string', 'max' => 30],
+                [['produce_id','from_type' ,'caigou_time', 'songliao_time', 'peiliao_time', 'peiliao_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+                [['from_order_sn','delivery_no', 'caigou_user', 'songliao_user', 'peiliao_user', 'creator_name'], 'string', 'max' => 30],
                 [['gold_type'], 'string', 'max' => 10],
                 [['gold_weight'], 'number'],
                 [['gold_spec','remark'], 'string', 'max' => 255],
@@ -57,7 +59,9 @@ class ProduceGold extends BaseModel
                 'id' => "ID",
                 'produce_id' => '布产ID',
                 'produce_sn' => '布产编号',
-                'order_sn' => '订单号',
+                'delivery_no'=> '送料单号',
+                'from_order_sn' => '来源单号',
+                'from_type' => '来源类型',
                 'gold_type' => '金料类型', 
                 'gold_weight' => '金料总重',
                 'gold_spec' => '金料规格',
@@ -74,5 +78,14 @@ class ProduceGold extends BaseModel
                 'created_at' => '添加时间',
                 'updated_at' => '更新时间',
         ];
+    }
+    
+    /**
+     * 配石明细   一对多
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoldGoods()
+    {
+        return $this->hasMany(ProduceGoldGoods::class, ['id'=>'id'])->alias('goldGoods');
     }
 }

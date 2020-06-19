@@ -17,8 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
-                        'tableOptions' => ['class' => 'table table-hover'],
-                        'showFooter' => false,//显示footer行
+                        'tableOptions' => ['class' => 'table'],
                         'id'=>'grid',
                         'columns' => [
                             [
@@ -87,31 +86,62 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'stone_spec',
                                     'value' => 'stone_spec',
                                     'filter' => false,                                    
-                            ], 
+                            ],                           
                             [
-                                    'attribute' => '配石信息',
-                                    'value' => function($model){
-                                        return '石包号：111111，数量：120，重量1.6ct<br/>'.'石包号：222222，数量：10，重量1.2ct<br/>';
-                                    },
+                                    'label' => '配石信息(石包编号/配石数量/配石总重)',
                                     'filter' => false,
                                     'format' => 'raw',
-                            ],                             
-                            [
-                                 'attribute'=>'remark',
-                                 'value'=>function($model){
-                                       
-                                 },
-                                 'filter' => false,
-                                 'headerOptions' => [],
+                                    'headerOptions' => ['style'=>'width:400px'],
+                                    'value' => function($model) {
+                                          return unclead\multipleinput\MultipleInput::widget([
+                                                'max'=>3,
+                                                'name' => "ProduceStone[{$model->id}][ProduceStoneGoods]",
+                                                'value' => $model->stoneGoods ??[],
+                                                'columns' => [
+                                                        [
+                                                                'name' => 'stone_sn',
+                                                                'title'=>false,
+                                                                'enableError'=>false,
+                                                                'options' => [
+                                                                        'class' => 'input-priority',
+                                                                        'style'=>'width:150px',
+                                                                        'placeholder'=>'石包编号',
+                                                                ]
+                                                        ],
+                                                        [
+                                                                'name' =>'stone_num',
+                                                                'title'=>false,
+                                                                'enableError'=>false,
+                                                                'options' => [
+                                                                        'class' => 'input-priority',
+                                                                        'style'=>'width:100px',
+                                                                        'placeholder'=>'领石数量',
+                                                                ]
+                                                        ],
+                                                        [
+                                                                'name' => "stone_weight",
+                                                                'title'=>false,
+                                                                'enableError'=>false,
+                                                                'options' => [
+                                                                        'class' => 'input-priority',
+                                                                        'style'=>'width:100px',
+                                                                        'placeholder'=>'领石总重',
+                                                                ]
+                                                        ]
+                                                ]
+                                          ]);
+                                    },
+                                    
                             ],
                             [
-                                    'class' => 'yii\grid\ActionColumn',
-                                    'header' => '操作',
-                                    'template' => '{edit}',
-                                    'buttons' => [
-                                            
-                                    ]
-                            ]
+                                     'attribute'=>'remark',
+                                     'value'=>function($model){
+                                            return Html::activeTextarea($model, "[{$model->id}]remark",['class' => 'form-control']);
+                                     },
+                                     'filter' => false,                                 
+                                     'headerOptions' => [],
+                                     'format' => 'raw',
+                            ]                            
                         ]
                     ]); ?>
             </div>

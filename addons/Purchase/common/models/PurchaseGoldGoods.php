@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Supply\common\models\Supplier;
 use Yii;
 
 /**
@@ -40,7 +41,7 @@ class PurchaseGoldGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id','goods_name','material_type','gold_price','goods_weight'], 'required'],
+            [['purchase_id','goods_name','goods_sn','material_type','gold_price','goods_weight'], 'required'],
             [['purchase_id', 'goods_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['apply_info'], 'string'],

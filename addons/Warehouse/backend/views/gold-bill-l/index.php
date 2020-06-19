@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:140%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'bill_type',
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
-                        [
+                        /*[
                             'attribute' => 'to_warehouse_id',
                             'value' =>"toWarehouse.name",
                             'filter'=>Select2::widget([
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
-                        /*[
+                        [
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',

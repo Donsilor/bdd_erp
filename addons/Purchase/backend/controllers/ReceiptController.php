@@ -195,39 +195,6 @@ class ReceiptController extends BaseController
     }
 
     /**
-     * 申请入库-采购收货单
-     *
-     * @return mixed
-     */
-    public function actionAjaxWarehouse()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model = $model ?? new PurchaseReceipt();
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                $model->is_to_warehouse = WhetherEnum::ENABLED;
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                //采购收货单同步至L单
-                Yii::$app->purchaseService->receipt->syncReceiptToBillL($model);
-                $trans->commit();
-                return $this->message("申请入库成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message("申请入库失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-        }
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * 详情展示页
      * @return string
      * @throws NotFoundHttpException

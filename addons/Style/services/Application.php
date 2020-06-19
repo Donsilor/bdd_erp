@@ -20,13 +20,15 @@ use common\components\Service;
  * @property \addons\Style\services\StyleAttributeService $styleAttribute 款和属性关系
  * @property \addons\Style\services\QibanService $qiban 起版和属性关系
  * @property \addons\Style\services\QibanAttributeService $qibanAttribute 起版和属性关系
+ * @property \addons\Style\services\GoldStyleService $gold 金料款式
+ * @property \addons\Style\services\StoneStyleService $stone 石料款式
  */
 class Application extends Service
 {
     /**
      * @var array
      */
-    public $childService = [       
+    public $childService = [
         /*********款号相关*********/
         'styleCate' => 'addons\Style\services\StyleCateService',
 		'productType' => 'addons\Style\services\ProductTypeService',
@@ -40,5 +42,7 @@ class Application extends Service
         'styleAttribute' => 'addons\Style\services\StyleAttributeService',
         'qiban' => 'addons\Style\services\QibanService',
         'qibanAttribute' => 'addons\Style\services\QibanAttributeService',
+        'gold' => 'addons\Style\services\GoldStyleService',
+        'stone' => 'addons\Style\services\StoneStyleService',
     ];
 }

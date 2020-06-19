@@ -61,7 +61,9 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
         ];
     }
 
-
+    /**
+     * @param
+     */
     public function behaviors()
     {
         return [
@@ -73,7 +75,6 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
             ],
         ];
     }
-
     /**
      * @param bool $insert
      * @return bool
@@ -87,7 +88,6 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
         }
         return parent::beforeSave($insert);
     }
-
     /**
      * 关联管理员一对一
      * @return \yii\db\ActiveQuery
