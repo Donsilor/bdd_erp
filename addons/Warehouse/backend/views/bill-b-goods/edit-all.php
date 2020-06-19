@@ -12,12 +12,12 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_l_goods', '收货单详情');
+$this->title = Yii::t('bill_b_goods', '退货返厂单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php

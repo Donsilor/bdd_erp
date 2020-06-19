@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false)?>
                 <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -99,11 +98,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],   
                             [
-                                    'label' => '配料信息(金料编号/金料类型/金重)',
+                                    'label' => '配料信息(金料编号/金重)',
                                     'value' => function($model){
                                         $str = '';
                                         foreach ($model->goldGoods ?? [] as $stone){
-                                            $str .=$stone->gold_sn.'/黄金/'.$stone->gold_weight."g<br/>";
+                                            $str .=$stone->gold_sn.'/'.$stone->gold_weight."g<br/>";
                                         }
                                         return $str;
                                     },
@@ -112,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                     'attribute' => 'peiliao_user',
-                                    'value' => 'songliao_user',
+                                    'value' => 'peiliao_user',
                                     'filter' => false,
                             ],
                             [

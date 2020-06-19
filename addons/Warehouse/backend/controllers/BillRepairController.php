@@ -129,6 +129,8 @@ class BillRepairController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l/index']));
         $model = $this->findModel($id);
         if($model->repair_act){
             $repair_act_arr = explode(',', $model->repair_act);
@@ -140,6 +142,8 @@ class BillRepairController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->repair->menuTabList($id, $returnUrl),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use common\helpers\Url;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 use addons\Warehouse\common\enums\BillStatusEnum;
@@ -52,9 +53,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'id',
-                            'filter' => Html::activeTextInput($searchModel, 'id', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
@@ -69,15 +68,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'bill_no',
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
+                        /*[
                             'attribute' => 'bill_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -85,19 +76,33 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
                             },
                             'filter' => false,
+                        ],*/
+                        [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
-                            'attribute' => 'bill_status',
+                            'attribute' => 'put_in_type',
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:80px;',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'goods_num',
@@ -112,6 +117,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'order_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -145,7 +158,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
                         ],
-                        [
+                        /*[
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -176,7 +189,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-                        ],
+                        ],*/
                         [
                             'attribute' => 'audit_status',
                             'format' => 'raw',
@@ -192,8 +205,22 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
+                            'attribute' => 'bill_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
+                            'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                             'template' => '{edit} {apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){

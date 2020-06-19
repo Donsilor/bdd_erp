@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use common\enums\AuditStatusEnum;
@@ -169,24 +170,30 @@ class ReceiptGoodsController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $from = Yii::$app->request->post('PurchaseReceiptGoodsForm');
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseReceiptGoods();
-        $model->ids = $id;
-        if($model->load(Yii::$app->request->post())){
-            try{
-                $model->goods_status = $from['goods_status']??"";
-                $model->iqc_reason = $from['iqc_reason']??"";
-                $model->iqc_remark = $from['iqc_remark']??"";
-                \Yii::$app->purchaseService->receipt->qcIqc($model, $this->purchaseType);
-                \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                return ResultHelper::json(422, '保存失败'.$e->getMessage());
-            }
-        }
         return $this->render($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 质检详情
+     * @property PurchaseApplyGoodsForm $model
+     * @return mixed
+     */
+    public function actionIqcView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $bill = PurchaseReceipt::find()->select(['receipt_no','receipt_status'])->where(['id'=>$model->receipt_id])->one();
+        $produce = Produce::find()->select(['id'])->where(['produce_sn'=>$model->produce_sn])->one();
+        $goods = $model->getGoodsView();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'bill' => $bill,
+            'goods' => $goods,
+            'produce' => $produce,
+            'returnUrl'=>$this->returnUrl
         ]);
     }
 
@@ -307,29 +314,20 @@ class ReceiptGoodsController extends BaseController
      */
     public function actionIqc()
     {
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/ajax-iqc?ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * IQC批量质检
-     *
-     * @return mixed
-     */
-    public function actionAjaxIqc()
-    {
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/iqc?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
@@ -380,13 +378,11 @@ class ReceiptGoodsController extends BaseController
      */
     public function actionWarehouse()
     {
-        $id = Yii::$app->request->get('id');
         $ids = Yii::$app->request->get('ids');
-        $check = Yii::$app->request->get('check');
-        $model =PurchaseReceiptForm::findOne($id);
-        $model = $model ?? new PurchaseReceiptGoodsForm();
+        $check = Yii::$app->request->get('check', null);
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
-        if($check == 1){
+        if($check){
             try{
                 $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
                 return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
@@ -394,6 +390,9 @@ class ReceiptGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $id = Yii::$app->request->get('id');
+        $model = PurchaseReceiptForm::findOne($id);
+        $model = $model ?? new PurchaseReceiptForm();
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();

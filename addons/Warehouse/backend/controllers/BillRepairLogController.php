@@ -31,10 +31,10 @@ class BillRepairLogController extends BaseController
     */
     public function actionIndex()
     {
-        $bill_id = Yii::$app->request->get('bill_id');
-        $billInfo = WarehouseBillRepair::find()->where(['id'=>$bill_id])->one();
+        $repair_id = Yii::$app->request->get('repair_id');
+        $billInfo = WarehouseBillRepair::find()->where(['id'=>$repair_id])->one();
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-repair-log/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -46,27 +46,21 @@ class BillRepairLogController extends BaseController
             'relations' => [
                 'member' => ['username']
             ]
-
         ]);
-
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['created_at']);
-
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseBillRepairLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseBillRepairLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
-        $dataProvider->query->andWhere(['=','bill_id',$bill_id]);
-
-        return $this->render('index', [
+        $dataProvider->query->andWhere(['=','repair_id',$repair_id]);
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'bill_id' => $bill_id,
             'billInfo' => $billInfo,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id,$billInfo->bill_type,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->repair->menuTabList($repair_id, $returnUrl),
         ]);
     }
 

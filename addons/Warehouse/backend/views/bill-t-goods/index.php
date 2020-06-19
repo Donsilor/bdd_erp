@@ -144,6 +144,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'order_sn',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'produce_sn',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'produce_sn', [

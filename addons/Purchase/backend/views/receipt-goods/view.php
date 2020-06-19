@@ -1,31 +1,12 @@
 <?php
 
-use common\helpers\Html;
-use addons\Purchase\common\enums\PurchaseStatusEnum;
 use yii\widgets\ActiveForm;
-
-$this->title = '查看';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 $form = ActiveForm::begin([]);
 ?>
 <div class="row">
-    <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="col-xs-12">
         <div class="box">
-            <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
-                <div class="col-lg-12">
-                    <?= $form->field($model, 'goods_status')->radioList(\addons\Supply\common\enums\QcTypeEnum::getMap())->label("是否质检通过")?>
-                    <div style="display: none" id="nopass_param">
-                        <?= $form->field($model, 'iqc_reason')->widget(\kartik\select2\Select2::class, [
-                            'data' => Yii::$app->purchaseService->fqc->getDropDown(),
-                            'options' => ['placeholder' => '请选择'],
-                            'pluginOptions' => [
-                                'allowClear' => false
-                            ],
-                        ]);?>
-                        <?= $form->field($model, 'iqc_remark')->textArea(['options'=>['maxlength' => true]])?>
-                    </div>
-                </div>
+            <div class="box-body table-responsive">
                 <div class="col-lg-12">
                     <table class="table table-hover">
                         <tr>
@@ -111,16 +92,3 @@ $form = ActiveForm::begin([]);
     </div>
 <!-- tab-content end -->
 </div>
-<?php ActiveForm::end(); ?>
-<script>
-    $("#purchasereceiptgoodsform-goods_status").change(function(){
-        var status = $(this).find(':checked').val();
-        if(status == 0){
-            $("#nopass_param").show();
-        }else {
-            $("#select2-purchasereceiptgoodsform-iqc_reason-container").find('select').find("option:first").prop("selected",true);
-            $("#purchasereceiptgoodsform-iqc_remark").val("");
-            $("#nopass_param").hide();
-        }
-    })
-</script>

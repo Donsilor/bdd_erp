@@ -47,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
                             <td><?= $model->total_sale ?></td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
                             <td><?= $model->total_market ?></td>

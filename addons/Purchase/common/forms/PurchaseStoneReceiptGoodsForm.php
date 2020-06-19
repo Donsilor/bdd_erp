@@ -71,18 +71,4 @@ class PurchaseStoneReceiptGoodsForm extends PurchaseStoneReceiptGoods
         }
         return [];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function checkDistinct($col, $ids){
-        $query = PurchaseStoneReceiptGoods::find();
-        $query->from(['rg'=> PurchaseStoneReceiptGoods::tableName()]);
-        $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
-        $query->select($col);
-        $query->where(['rg.id' => $ids]);
-        $query->distinct($col);
-        $res = $query->count(1);
-        return $res==1?:0;
-    }
 }

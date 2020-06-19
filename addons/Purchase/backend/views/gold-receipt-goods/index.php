@@ -28,9 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '批量编辑', ['class'=>'btn btn-info btn-xs']);
         }
         if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
-            echo Html::a('批量申请入库', ['warehouse'], [
+            echo Html::batchPopButton(['warehouse','check'=>1],'批量入库', [
                 'class'=>'btn btn-success btn-xs',
-                "onclick" => "batchWarehouse(this);return false;",
             ]);
         }
         ?>

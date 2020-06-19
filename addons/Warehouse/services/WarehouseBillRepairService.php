@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 
+use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use addons\Warehouse\common\forms\WarehouseBillRepairForm;
@@ -21,6 +22,21 @@ use yii\base\Exception;
  */
 class WarehouseBillRepairService extends Service
 {
+
+    /**
+     * 维修单详情 tab
+     * @param int $repair_id 维修
+     * @param string $returnUrl
+     * @return array
+     */
+    public function menuTabList($repair_id, $returnUrl = null)
+    {
+        return [
+            1=>['name'=>'维修单详情','url'=>Url::to(['bill-repair/view','id'=>$repair_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'维修日志','url'=>Url::to(['bill-repair-log/index','repair_id'=>$repair_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+    }
+
     /**
      * 创建维修单
      * @param WarehouseBillRepairForm $form

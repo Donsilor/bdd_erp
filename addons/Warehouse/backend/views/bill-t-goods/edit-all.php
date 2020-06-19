@@ -138,6 +138,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'order_sn',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'order_sn'],
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('order_sn', $model->order_sn, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'produce_sn',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'produce_sn'],
                                 'format' => 'raw',

@@ -183,29 +183,20 @@ class StoneReceiptGoodsController extends BaseController
      */
     public function actionIqc()
     {
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseStoneReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-iqc?ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * IQC批量质检
-     *
-     * @return mixed
-     */
-    public function actionAjaxIqc()
-    {
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check',null);
         $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/iqc?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
@@ -250,39 +241,30 @@ class StoneReceiptGoodsController extends BaseController
     }
 
     /**
-     * IQC批量质检
+     * 批量申请入库-采购收货单
      *
      * @return mixed
      */
     public function actionWarehouse()
     {
-        $receipt_id = Yii::$app->request->get('receipt_id');
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
         $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
+        if($check){
+            try{
+                $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
         }
-    }
-
-    /**
-     * 批量申请入库-采购收货单
-     *
-     * @return mixed
-     */
-    public function actionAjaxWarehouse()
-    {
         $id = Yii::$app->request->get('id');
-        $ids = Yii::$app->request->get('ids');
         $model = PurchaseReceiptForm::findOne(['id'=>$id]);
-        $model->ids = $ids;
+        $model = $model ?? new PurchaseReceiptForm();
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$model->is_to_warehouse = WhetherEnum::ENABLED;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }

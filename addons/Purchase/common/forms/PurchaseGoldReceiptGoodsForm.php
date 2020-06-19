@@ -55,18 +55,4 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
         }
         return [];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function checkDistinct($col, $ids){
-        $query = PurchaseGoldReceiptGoods::find();
-        $query->from(['rg'=> PurchaseGoldReceiptGoods::tableName()]);
-        $query->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id');
-        $query->select($col);
-        $query->where(['rg.id' => $ids]);
-        $query->distinct($col);
-        $num = $query->count(1);
-        return $num==1?:0;
-    }
 }

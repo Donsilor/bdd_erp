@@ -21,6 +21,8 @@ use Yii;
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
+ * @property int $order_detail_id 订单明细ID
+ * @property string $order_sn 订单编号
  * @property string $produce_sn 布产单号
  * @property string $gold_weight 金重
  * @property string $gold_loss 金损
@@ -104,9 +106,9 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'order_detail_id', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'suttle_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'bukou_fee', 'xianqian_fee', 'cert_fee', 'markup_rate', 'fense_fee', 'biaomiangongyi_fee', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
-            [['goods_id', 'bill_no', 'style_sn', 'produce_sn'], 'string', 'max' => 30],
+            [['goods_id', 'bill_no', 'style_sn', 'order_sn', 'produce_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color'], 'string', 'max' => 100],
             [['gross_weight', 'diamond_cert_id', 'main_stone_sn', 'second_stone_sn1', 'second_cert_id1'], 'string', 'max' => 20],
@@ -135,6 +137,8 @@ class WarehouseBillGoodsL extends BaseModel
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
+            'order_detail_id' => '订单明细ID',
+            'order_sn' => '订单号',
             'produce_sn' => '布产单号',
             'gold_weight' => '金重',
             'gold_loss' => '金损',

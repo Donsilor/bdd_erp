@@ -12,8 +12,9 @@ class PeishiStatusEnum extends BaseEnum
 {
     const PENDING = 1;
     const IN_PEISHI = 2;
-    const TO_CONFIRM = 3;
-    const FINISHED = 4;
+    const HAS_PEISHI = 3;
+    const TO_LINGSHI = 4;
+    const HAS_LINGSHI = 5;
     const NONE = 9;
     /**
      *
@@ -24,8 +25,9 @@ class PeishiStatusEnum extends BaseEnum
         return [                
                 self::PENDING =>"待配石",
                 self::IN_PEISHI => "配石中",
-                self::TO_CONFIRM => "配石确认",
-                self::FINISHED => "配石完成",
+                self::HAS_PEISHI => "已配石",
+                self::TO_LINGSHI => "待领石",
+                self::FINISHED => "已领石",
                 self::NONE => "不需配石",
         ];
     }

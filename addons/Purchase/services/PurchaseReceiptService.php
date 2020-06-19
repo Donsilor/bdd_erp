@@ -2,7 +2,7 @@
 
 namespace addons\Purchase\services;
 
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -23,6 +23,7 @@ use addons\Supply\common\models\ProduceShipment;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
@@ -195,7 +196,12 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
+                ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
+                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>ReceiptStatusEnum::CONFIRM,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->select(['r.id'])
+                ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
             if (!$the_num) {
                 throw new \Exception($message."没有可出货数量");
@@ -482,6 +488,19 @@ class PurchaseReceiptService extends Service
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function checkDistinct($model, $col, $ids){
+        $num = $model::find()->alias('rg')
+            ->leftJoin(['r' => PurchaseReceipt::tableName()], 'r.id = rg.receipt_id')
+            ->where(['rg.id' => $ids])
+            ->select($col)
+            ->distinct($col)
+            ->count(1);
+        return $num==1?:false;
+    }
+
+    /**
      *  批量生成不良返厂单
      * @param object $form
      * @param integer $purchase_type
@@ -489,22 +508,22 @@ class PurchaseReceiptService extends Service
      */
     public function batchDefective($form, $purchase_type)
     {
-        $ids = $form->getIds();
-        if(!count($ids)>1){
-            throw new Exception("至少选择一个货品");
-        }
-        if(!$form->checkDistinct('receipt_no', $ids)){
-            throw new Exception("不是同一个出货单号不允许制单");
-        }
-        if(!$form->checkDistinct('supplier_id', $ids)){
-            throw new Exception("不是同一个供应商不允许制单");
-        }
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
+        }
+        $ids = $form->ids;
+        if(!count($ids)){
+            throw new Exception("至少选择一个货品");
+        }
+        if(!$this->checkDistinct($model, 'receipt_no', $ids)){
+            throw new Exception("不是同一个出货单号不允许制单");
+        }
+        if(!$this->checkDistinct($model, 'supplier_id', $ids)){
+            throw new Exception("不是同一个供应商不允许制单");
         }
         $total_cost = 0;
         $receipt = $defect = $detail = [];
@@ -587,7 +606,7 @@ class PurchaseReceiptService extends Service
             'created_at' => time(),
         ];
         \Yii::$app->purchaseService->defective->createDefactiveBill($bill, $detail);
-        $res = PurchaseReceiptGoods::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
+        $res = $model::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
             throw new Exception("更新货品状态失败");
         }

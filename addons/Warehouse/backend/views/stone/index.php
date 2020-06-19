@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    //'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -159,6 +159,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute'=>'created_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'created_at',
+                                'value' => $searchModel->created_at,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'width:100px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            }
                         ],
                         /*[
                             'label' => '买入',
