@@ -356,8 +356,8 @@ $this->registerJs($script);
         }
 
         var val = $(obj).val();
-        var name = $(obj).attr('name')
-        var data = {'id':id}
+        var name = $(obj).attr('name');
+        var data = {'id':id};
         data[name] = val;
 
         if(type == 'number' && isNaN(val)){
@@ -390,7 +390,7 @@ $this->registerJs($script);
         var offset = "0";
         var btn = [];
         // var href = ds3;
-        var href = "https://spins0.arqspin.com/iframe.html?spin=" + ds3 + "&is=0.16"
+        var href = "https://spins0.arqspin.com/iframe.html?spin=" + ds3 + "&is=0.16";
         openIframe(title, width, height, href, offset,btn);
         e.preventDefault();
         return false;
@@ -401,7 +401,7 @@ $this->registerJs($script);
     	let $e = $(obj);
         let url = $e.attr('href');
         let text = $e.text();
-        let grid = $e.data('grid') || 'grid';;
+        let grid = $e.data('grid') || 'grid';
         let id = $e.closest("tr").data("key");
         let ids = [];
         if(id) {
@@ -446,7 +446,7 @@ $this->registerJs($script);
         let $e = $(obj);
         let url = $e.attr('href');
         let text = $e.text();
-        let grid = $e.data('grid') || 'grid';;
+        let grid = $e.data('grid') || 'grid';
         let id = $e.closest("tr").data("key");
         let ids = [];
         if(id) {
@@ -486,14 +486,15 @@ $this->registerJs($script);
         });
     }
 
-    //批量填充(文本)
+    //批量填充
     function rfBatchFull(obj) {
         let $e = $(obj);
-        let url = $e.attr('url');
+        let url = $e.attr('href');
+        let input_type = $e.attr('input_type');
         let grid = $e.data('grid') || 'grid';
         let id = $e.closest("tr").data("key");
-        let field = $e.parent().attr("attr-name");
-        let text = $e.prev().html();
+        let attr_name = $e.parent().attr("attr-name");
+        let name = $e.prev().text();
         let ids = [];
         if(id) {
             ids.push(id);
@@ -508,26 +509,55 @@ $this->registerJs($script);
         if($.isArray(ids)){
             ids = ids.join(',');
         }
-        rfPrompt("请输入["+text+"]", function (fromValue) {
+        if(input_type == 'select'){
+            let attr_id = $e.parent().attr("attr-id");
             $.ajax({
-                type: "post",
+                type: "get",
                 url: url,
                 dataType: "json",
                 data: {
                     ids: ids,
-                    field:field,
-                    text:fromValue,
+                    name:attr_name,
+                    attr_id:attr_id,
                 },
                 success: function (data) {
                     if (parseInt(data.code) !== 200) {
                         rfAffirm(data.message);
                     } else {
-                        window.location.reload();
+                        var title = $e.data('title') || '基本信息';
+                        var width = $e.data('width') || '60%';
+                        var height = $e.data('height') || '60%';
+                        var offset = $e.data('offset') || '10%';
+                        url = data.data.url || url+"?ids="+ids;
+                        openIframe(title, width, height, url, offset);
+                        //$e.preventDefault();
+                        return false;
                     }
                 }
             });
+        }else{
+            rfPrompt("请输入["+name+"]", function (fromValue) {
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    dataType: "json",
+                    data: {
+                        ids: ids,
+                        name:attr_name,
+                        value:fromValue,
+                    },
+                    success: function (data) {
+                        if (parseInt(data.code) !== 200) {
+                            rfAffirm(data.message);
+                        } else {
+                            window.location.reload();
+                        }
+                    }
+                });
 
-        });
+            });
+        }
+
     }
 
 </script>

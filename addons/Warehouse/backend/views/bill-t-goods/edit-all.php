@@ -863,27 +863,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function(){
-        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton("批量填充", ['data-grid'=>'grid', 'url'=>"/warehouse/bill-t-goods/batch-edit"]); ?>');
-        $(".batch_select_full > a").append("&nbsp;<a class=\"btn btn-default btn-xs batch-select-full\" href=\"<?php echo \common\helpers\Url::to(['batch-select'])?>\" role=\"button\">批量填充</a>");
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'],"批量填充"); ?>');
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit','check'=>1],"批量填充", ['input_type'=>'select']); ?>');
     });
-
-    $(document).on('click','a.batch-select-full',function (e) {
-        var name = $(this).parent().parent().attr('attr-name');
-        var attr_id = $(this).parent().parent().attr('attr-id');
-        var ids = $("#grid").yiiGridView("getSelectedRows");
-        if(ids.length === 0) {
-            rfMsg('请选中后操作');
-            return false;
-        }
-        var href = $(this).attr('href');
-        var ids = ids.join(',');
-        href += '?ids='+ids + "&name=" + name + "&attr_id=" + attr_id;
-        var title = '批量修改';
-        var width = '50%';
-        var height = '20%';
-        var offset = "10%";
-        openIframe(title, width, height, href, offset);
-        e.preventDefault();
-        return false;
-    })
 </script>
