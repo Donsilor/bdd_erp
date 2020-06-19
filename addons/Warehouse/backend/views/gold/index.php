@@ -52,31 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute'=>'gold_name',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_name', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'200'],
-                        ],
-                        [
-                            'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute' => 'gold_type',
-                            'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->gold_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -91,6 +66,31 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'gold_name',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'200'],
+                        ],
+                        [
+                            'attribute' => 'gold_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->gold_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         /*[
                             'attribute'=>'gold_num',
