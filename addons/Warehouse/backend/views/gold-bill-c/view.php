@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModalLg',
                 ]);
                 echo '&nbsp;';
-                echo Html::edit(['ajax-apply', 'id' => $model->id], '提交审核', [
+                echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
                     'class' => 'btn btn-success btn-ms',
                     'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                 ]);
