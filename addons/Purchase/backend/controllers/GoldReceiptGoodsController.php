@@ -148,26 +148,9 @@ class GoldReceiptGoodsController extends BaseController
     /**
      * IQC批量质检
      * @return mixed
-     */
-    public function actionIqc()
-    {
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseGoldReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-iqc?ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * IQC批量质检
-     * @return mixed
      * @throws
      */
-    public function actionAjaxIqc()
+    public function actionIqc()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
