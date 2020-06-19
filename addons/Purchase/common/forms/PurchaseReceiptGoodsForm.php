@@ -50,6 +50,18 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
     /**
      * {@inheritdoc}
      */
+    public function getGoodsView(){
+        $label = $this->attributeLabels();
+        $data = [];
+        foreach ($this->toArray() as $k => $item) {
+            $data[$label[$k]] = $item;
+        }
+        return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkDistinct($col, $ids){
         $query = PurchaseReceiptGoods::find();
         $query->from(['rg'=> PurchaseReceiptGoods::tableName()]);

@@ -2,7 +2,7 @@
 
 namespace addons\Purchase\services;
 
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -23,6 +23,7 @@ use addons\Supply\common\models\ProduceShipment;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
@@ -195,7 +196,12 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            $receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
+                ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
+                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>ReceiptStatusEnum::CONFIRM,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->select(['r.id'])
+                ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
             if (!$the_num) {
                 throw new \Exception($message."没有可出货数量");
