@@ -39,12 +39,12 @@ class StoneController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['updated_at']);
+            ->search(Yii::$app->request->queryParams,['created_at']);
 
-        $updated_at = $searchModel->updated_at;
-        if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseStone::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseStone::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',WarehouseStone::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseStone::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $dataProvider->query->andWhere(['>',WarehouseStone::tableName().'.status',-1]);
