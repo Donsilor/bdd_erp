@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsT;
 use common\enums\AuditStatusEnum;
@@ -377,13 +378,11 @@ class ReceiptGoodsController extends BaseController
      */
     public function actionWarehouse()
     {
-        $id = Yii::$app->request->get('id');
         $ids = Yii::$app->request->get('ids');
-        $check = Yii::$app->request->get('check');
-        $model =PurchaseReceiptForm::findOne($id);
-        $model = $model ?? new PurchaseReceiptGoodsForm();
+        $check = Yii::$app->request->get('check', null);
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
-        if($check == 1){
+        if($check){
             try{
                 $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
                 return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
@@ -391,6 +390,9 @@ class ReceiptGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $id = Yii::$app->request->get('id');
+        $model = PurchaseReceiptForm::findOne($id);
+        $model = $model ?? new PurchaseReceiptForm();
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();

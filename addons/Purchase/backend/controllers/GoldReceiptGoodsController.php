@@ -208,32 +208,25 @@ class GoldReceiptGoodsController extends BaseController
     /**
      * 申请入库
      * @return mixed
-     */
-    public function actionWarehouse()
-    {
-        $receipt_id = Yii::$app->request->get('receipt_id');
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseGoldReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/ajax-warehouse?id='.$receipt_id.'&ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * 申请入库
-     * @return mixed
      * @throws
      */
     public function actionAjaxWarehouse()
     {
-        $id = Yii::$app->request->get('id');
         $ids = Yii::$app->request->get('ids');
-        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $check = Yii::$app->request->get('check', null);
+        $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
+        if($check){
+            try{
+                $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        $id = Yii::$app->request->get('id');
+        $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $model = $model ?? new PurchaseReceiptForm();
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
