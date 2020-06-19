@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">供应商详情 - <?php echo $model->supplier_name?></h2>
+    <h2 class="page-header">供应商详情 - <?php echo $model->supplier_name?> - <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
 
     <div class="row">
@@ -147,8 +147,8 @@ $this->params['breadcrumbs'][] = $this->title;
          </div>
         <div class="box-footer text-center">
             <?php
-                echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                 if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                    echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                         'class'=>'btn btn-success btn-sm',

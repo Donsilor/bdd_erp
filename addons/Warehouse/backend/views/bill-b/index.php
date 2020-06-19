@@ -53,9 +53,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'id',
-                            'filter' => Html::activeTextInput($searchModel, 'id', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
