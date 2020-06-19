@@ -73,12 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                                 'headerOptions' => [],
                             ],
-                            /*[
-                                'label' => 'ID',
-                                'attribute' => 'id',
-                                'filter' => false,
-                                'format' => 'raw',
-                            ],*/
+                            [
+                                'attribute'=>'stone_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute'=>'stone_name',
                                 'filter' => true,

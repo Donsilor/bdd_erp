@@ -3,6 +3,7 @@
 namespace addons\Supply\common\models;
 
 use Yii;
+use addons\Warehouse\common\models\WarehouseStone;
 
 /**
  * This is the model class for table "supply_produce_stone_goods".
@@ -53,5 +54,13 @@ class ProduceStoneGoods extends BaseModel
             'stone_num' => Yii::t('app', '配石数量'),
             'stone_weight' => Yii::t('app', '配石总重'),
         ];
+    }
+    /**
+     * 石包现货  一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStone()
+    {
+        return $this->hasOne(WarehouseStone::class, ['stone_sn'=>'stone_sn'])->alias('stone');
     }
 }

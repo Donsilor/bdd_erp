@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('批量配石', ['peiliao','check'=>1],  [
+                        echo Html::a('批量配石', ['peishi','check'=>1],  [
                             'class'=>'btn btn-success btn-xs',
                             "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
@@ -24,6 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-height'=>'90%',
                             'data-offset'=>'20px',
                             'data-title'=>'批量配石',
+                        ]);
+                        echo '&nbsp;';                        
+                    ?>
+                    <?php
+                        echo Html::a('创建领石单', ['lingshi','check'=>1],  [
+                            'class'=>'btn btn-success btn-xs',
+                            "onclick" => "batchPop(this);return false;",
+                            'data-grid'=>'grid',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                            'data-title'=>'创建领石单-预览',
                         ]);
                         echo '&nbsp;';                        
                     ?>
@@ -35,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>' width:130%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -85,6 +98,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'style' => 'width:80px;',
                                     ]),
                                     'format' => 'raw',
+                            ],
+                            [
+                                    'label' => '领石单号',
+                                    'attribute' => 'delivery_no',
+                                    'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                                            'class' => 'form-control',
+                                            'style' =>'width:150px'
+                                    ]),
+                                    'format' => 'raw',
+                                    
                             ],
                             [
                                     'attribute' => 'stone_position',
@@ -141,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function($model){
                                          $str = '';
                                          foreach ($model->stoneGoods ?? [] as $stone){
-                                             $str .='石头编号:'.$stone->stone_sn.' 数量:'.$stone->stone_num." 总重:".$stone->stone_weight."ct<br/>";
+                                             $str .=$stone->stone_sn.'/'.$stone->stone_num."/".$stone->stone_weight."ct<br/>";
                                          }
                                          return $str;
                                     },

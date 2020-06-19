@@ -45,6 +45,7 @@ use addons\Warehouse\common\enums\OrderTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
+use addons\Supply\common\models\ProduceStone;
 
 /**
  * 石包单据
@@ -153,7 +154,42 @@ class WarehouseStoneBillService extends Service
         }
         return $result?:null;
     }
-
+    /**
+     * 领石单（送石单）
+     * @param array $bill
+     * @param array $details
+     */
+    public function createBillSs($bill,$details) 
+    {
+        $billM = new WarehouseStoneBill();
+        $billM->attributes = $bill;
+        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
+        $billM->bill_status = BillStatusEnum::SAVE;
+        if(false === $billM->save()){
+            throw new \Exception($this->getError($billM));
+        }
+        $goodsM = new WarehouseStoneBillGoods();
+        foreach ($details as &$good){
+            $good['bill_id'] = $billM->id;
+            $good['bill_type'] = $billM->bill_type;
+            $good['bill_no'] = $billM->bill_no;
+            $goodsM->setAttributes($good);
+            if(!$goodsM->validate()){
+                throw new \Exception($this->getError($goodsM));
+            }
+        }
+        $details = ArrayHelper::toArray($details);
+        $value = [];
+        $key = array_keys($details[0]);
+        foreach ($details as $detail) {
+            $value[] = array_values($detail);
+        }
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
+        if(false === $res){
+            throw new \Exception("创建领石单单明细失败");
+        }
+        return $billM;
+    }
     /**
      * 创建买石单
      * @param array $bill
