@@ -183,29 +183,20 @@ class StoneReceiptGoodsController extends BaseController
      */
     public function actionIqc()
     {
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseStoneReceiptGoodsForm();
-        $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/ajax-iqc?ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
-
-    /**
-     * IQC批量质检
-     *
-     * @return mixed
-     */
-    public function actionAjaxIqc()
-    {
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check',null);
         $model = new PurchaseStoneReceiptGoodsForm();
         $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/iqc?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();

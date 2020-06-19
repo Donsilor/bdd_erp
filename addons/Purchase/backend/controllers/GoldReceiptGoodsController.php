@@ -172,8 +172,17 @@ class GoldReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check',null);
         $model = new PurchaseGoldReceiptGoodsForm();
         $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/iqc?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();

@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo '&nbsp;';
                         echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
-                            'onclick' => 'batchDefective(this);return false;',
+                            'data-grid' => 'grid',
+                            'onclick' => 'batchAudit(this);return false;',
                         ]);
                     ?>
                 </div>
@@ -226,41 +227,3 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
-<script type="text/javascript">
-    //批量生成不良返厂单
-    function batchDefective(obj) {
-        let $e = $(obj);
-        let url = $e.attr('href');
-        var ids = new Array;
-        $('input[name="id[]"]:checked').each(function(i){
-            var str = $(this).val();
-            var arr = jQuery.parseJSON(str)
-            ids[i] = arr.id;
-        });
-        if(ids.length===0) {
-            rfInfo('未选中数据！','');
-            return false;
-        }
-        var ids = ids.join(',');
-        appConfirm("确定要生成不良返厂单吗?", '', function (code) {
-            if(code !== "defeat") {
-                return;
-            }
-            $.ajax({
-                type: "post",
-                url: url,
-                dataType: "json",
-                data: {
-                    ids: ids
-                },
-                success: function (data) {
-                    if (parseInt(data.code) !== 200) {
-                        rfAffirm(data.message);
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            });
-        });
-    }
-</script>

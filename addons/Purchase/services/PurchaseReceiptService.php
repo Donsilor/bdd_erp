@@ -508,7 +508,6 @@ class PurchaseReceiptService extends Service
      */
     public function batchDefective($form, $purchase_type)
     {
-        $ids = $form->getIds();
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
@@ -516,6 +515,7 @@ class PurchaseReceiptService extends Service
         }else{
             $model = new PurchaseReceiptGoods();
         }
+        $ids = $form->ids;
         if(!count($ids)){
             throw new Exception("至少选择一个货品");
         }

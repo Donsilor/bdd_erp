@@ -316,10 +316,10 @@ class ReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
-        $check = Yii::$app->request->get('check');
+        $check = Yii::$app->request->get('check', null);
         $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
-        if($check == 1){
+        if($check){
             try{
                 \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
                 return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/iqc?ids='.$ids]);
