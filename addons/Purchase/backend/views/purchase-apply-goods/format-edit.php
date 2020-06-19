@@ -18,6 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-4">
                                 <?= $form->field($model, 'format_sn')->textInput() ?>
                             </div>
+                            <div class="col-lg-8">
+                                <?= $form->field($model, 'format_remark')->textInput() ?>
+                            </div>
                         </div>
 
                         <div class="row col-lg-12">

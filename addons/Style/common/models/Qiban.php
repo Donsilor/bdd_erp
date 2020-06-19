@@ -119,6 +119,7 @@ class Qiban extends BaseModel
             'format_images' => '版式图片',
             'format_video' => '上传视频',
             'format_remark' => '版式备注',
+            'format_info' => '工艺信息',
             'is_apply' => '是否采购申请',
         ];
     }

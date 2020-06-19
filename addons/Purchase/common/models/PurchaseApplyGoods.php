@@ -74,7 +74,7 @@ class PurchaseApplyGoods extends BaseModel
         return [
             'id' => 'ID',
             'apply_id' => '采购单ID',
-            'goods_sn' => '款号',
+            'goods_sn' => '商品编号',
             'goods_num' => '商品数量',
             'goods_name' => '商品名称',
             'goods_type'=>'商品类型',
@@ -107,6 +107,7 @@ class PurchaseApplyGoods extends BaseModel
             'format_images' => '版式图片',
             'format_video' => '上传视频',
             'format_remark' => '版式备注',
+            'format_info' => '工艺信息',
         ];
     }
     /**

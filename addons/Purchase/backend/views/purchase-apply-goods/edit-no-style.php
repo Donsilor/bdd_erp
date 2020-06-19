@@ -84,9 +84,11 @@ $this->params['breadcrumbs'][] = $this->title;
                    </div>   
                   <?php }?>
                 <?php
-                $attr_list = $model->getAttrList(); 
+                $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
+                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
-                    $attr_field_name = "attr_custom[{$attr['id']}]";
+                    $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
+                    $attr_field_name = "{$attr_field}[{$attr['id']}]";
                     //通用属性值列表
                     $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
                     switch ($attr['input_type']){

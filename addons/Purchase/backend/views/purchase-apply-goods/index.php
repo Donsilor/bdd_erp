@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          }
                                     },
                                     'format-edit' =>function($url, $model, $key) use($apply){
-                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER && $model->audit_status == AuditStatusEnum::PASS) {
+                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER && $apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
                                             return Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
@@ -116,6 +116,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                 ]
                            ],
+                            [
+                                'attribute' => '申请修改',
+                                'value' => function ($model) {
+                                    if($model->is_apply == common\enums\ConfirmEnum::YES) {
+                                        return '已申请<br/>'.Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
+                                                'class' => 'btn btn-danger btn-xs',
+                                            ]);
+                                    }else{
+                                        return '未申请';
+                                    }
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_apply',common\enums\ConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'visible' => $apply->apply_status != ApplyStatusEnum::SAVE,
+                            ],
                             [
                                     'label' => '商品图片',
                                     'value' => function ($model) {
@@ -387,25 +406,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'80'],
                             ],
-                            [
-                                    'attribute' => '申请修改',
-                                    'value' => function ($model) {
-                                        if($model->is_apply == common\enums\ConfirmEnum::YES) {
-                                            return '已申请<br/>'.Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
-                                                    'class' => 'btn btn-danger btn-xs',
-                                            ]);
-                                        }else{
-                                            return '未申请';
-                                        }
-                                    },
-                                    'filter' => Html::activeDropDownList($searchModel, 'is_apply',common\enums\ConfirmEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
-                                    'visible' => $apply->apply_status != ApplyStatusEnum::SAVE,
-                            ],
+
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',

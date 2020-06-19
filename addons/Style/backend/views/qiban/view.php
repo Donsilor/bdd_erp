@@ -167,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-    <div class="col-xs-12">
+    <div class="col-xs-6">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
@@ -185,10 +185,91 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        if(empty($attr_value)) continue;
                         ?>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
                             <td><?= $attr_value ?></td>
                         </tr>
                     <?php } ?>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-qrcode"></i> 版式信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_sn') ?>：</td>
+                        <td><?= $model->format_sn; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_images') ?>：</td>
+                        <td>
+                            <?php
+                            $format_image_list = !empty($model->format_images)?explode(',', $model->format_images):[];
+                            foreach ($format_image_list as $img){
+                                ?>
+                                <?= \common\helpers\ImageHelper::fancyBox($img) ?>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_video') ?>：</td>
+                        <td>
+                            <?php
+                            $format_video = !empty($model->format_video)?explode(',', $model->format_video):null;
+                            if($format_video){
+                                echo common\widgets\webuploader\Files::widget([
+                                    'type'=>'videos',
+                                    'theme'=>'show',
+                                    'value'=> $format_video,
+                                    'name'=>'format_video',
+                                ]);
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_info') ?>：</td>
+                        <td>
+                            <?php
+                            $format_info = json_decode($model->format_info)?? [];
+                            if($format_info){
+                                ?>
+                                <table class="table">
+                                    <tr>
+                                        <th>特殊工艺</th>
+                                        <th>工艺描述</th>
+                                        <th>工艺图片</th>
+                                    </tr>
+                                    <?php
+
+                                    foreach ($format_info as $item){
+                                        ?>
+                                        <tr>
+                                            <td><?= \addons\Purchase\common\enums\SpecialCraftEnum::getValue($item->format_craft_type)?></td>
+                                            <td><?= \addons\Purchase\common\enums\SpecialCraftEnum::getValue($item->format_craft_desc)?></td>
+                                            <td>
+                                                <?php
+                                                foreach ($item->format_craft_images as $img){
+                                                    ?>
+                                                    <?= \common\helpers\ImageHelper::fancyBox($img) ?>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            <?php } ?>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_remark') ?>：</td>
+                        <td><?= $model->audit_remark ?></td>
+                    </tr>
                 </table>
             </div>
         </div>

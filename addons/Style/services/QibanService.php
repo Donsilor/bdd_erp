@@ -33,7 +33,10 @@ class QibanService extends Service
 
         foreach ($attr_list as $attr){
             $qibanAttr = new QibanAttribute();
-            $qibanAttr->attributes = $attr;
+            $qibanAttr->attr_id = $attr['attr_id'];
+            $qibanAttr->attr_values = $attr['attr_value'];
+            $qibanAttr->sort = $attr['sort'];
+
             $qibanAttr->qiban_id = $qiban->id;
             if(false === $qibanAttr->save()){
                 throw new \Exception($this->getError($qibanAttr));
