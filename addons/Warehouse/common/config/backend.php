@@ -122,7 +122,7 @@ return [
                             'route' => 'stone-bill-ss/index',
                         ],
                         [
-                            'title' => '返厂单',
+                            'title' => '工厂退石单',
                             'route' => 'stone-bill-ts/index',
                         ],
                         [
