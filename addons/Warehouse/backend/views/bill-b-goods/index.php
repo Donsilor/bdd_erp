@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php

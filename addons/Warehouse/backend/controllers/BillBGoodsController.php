@@ -36,7 +36,7 @@ class BillBGoodsController extends BaseController
     {
 
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-b/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -148,7 +148,7 @@ class BillBGoodsController extends BaseController
 
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill-b-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
