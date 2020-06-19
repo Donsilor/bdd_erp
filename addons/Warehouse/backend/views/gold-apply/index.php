@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function($model){
                                         $str = '';
                                         foreach ($model->goldGoods ?? [] as $stone){
-                                            $str .='金料编号:'.$stone->gold_sn.' 金料类型:黄金     总重:'.$stone->stone_weight."g<br/>";
+                                            $str .=$stone->gold_sn.'/黄金/'.$stone->gold_weight."g<br/>";
                                         }
                                         return $str;
                                     },

@@ -15,6 +15,7 @@ use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\enums\GoldStatusEnum;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
 
 class ProduceGoldService extends Service
 {
@@ -48,6 +49,9 @@ class ProduceGoldService extends Service
                 throw new \Exception("(ID={$id})配料单查询失败");
             }
             $gold->attributes = $goldData;
+            $stone->peiliao_time = time();
+            $stone->peiliao_user = Yii::$app->user->identity->username;
+            $stone->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
             if(false === $gold->save()) {
                 throw new \Exception($this->getError($gold));
             }
