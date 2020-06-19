@@ -8,17 +8,16 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('style_channel', '日志信息');
+$this->title = Yii::t('bill-repair-log', '维修出库单日志');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">单据日志 - <?php echo $billInfo->bill_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?>- <?= $billInfo->repair_no?> - <?= \addons\Warehouse\common\enums\RepairStatusEnum::getValue($billInfo->repair_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="row col-xs-12">
             <div class="box">
-
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -31,13 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\SerialColumn',
                                 'visible' => false,
                             ],
-
                             [
                                 'attribute'=>'log_msg',
                                 'filter' => true,
                                 'headerOptions' => [],
                             ],
-
                             [
                                 'attribute' => 'log_type',
                                 'format' => 'raw',
@@ -77,10 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=>function($model){
                                     return Yii::$app->formatter->asDatetime($model->created_at);
                                 }
-
                             ],
-
-
                             [
                                 'label' => '操作人',
                                 'attribute' => 'member.username',
@@ -90,8 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
 
                             ],
-
-
                         ]
                     ]); ?>
                 </div>

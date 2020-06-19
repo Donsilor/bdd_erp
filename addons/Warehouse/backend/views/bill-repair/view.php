@@ -14,7 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->repair_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $model->repair_no?> - <?= \addons\Warehouse\common\enums\RepairStatusEnum::getValue($model->repair_status)?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
     <div class="row">
          <div class="col-xs-12">
              <div class="box">
