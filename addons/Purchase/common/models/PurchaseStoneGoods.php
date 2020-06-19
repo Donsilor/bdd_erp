@@ -43,7 +43,7 @@ class PurchaseStoneGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id','goods_name','stone_type','cost_price','goods_weight','stone_num'], 'required'],
+            [['purchase_id','goods_name','goods_sn','stone_type','cost_price','goods_weight','stone_num'], 'required'],
             [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],

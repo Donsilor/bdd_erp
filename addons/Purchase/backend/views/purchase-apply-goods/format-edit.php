@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php $model->format_images = !empty($model->format_images)?explode(',', $model->format_images):null;?>
                                 <?= $form->field($model, 'format_images')->widget(common\widgets\webuploader\Files::class, [
                                     'config' => [
+                                        'theme'=>'default',
                                         'pick' => [
                                             'multiple' => true,
                                         ],
@@ -46,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
 
 
-                        <div class="row col-lg-9" >
+                        <div class="row col-lg-12" >
                             <h3 class="box-title"> 工艺信息</h3>
                         </div>
-                        <div class="row col-lg-9">
+                        <div class="row col-lg-12">
                             <div class="box-body table-responsive">
                                 <div class="tab-content">
                                     <?php
@@ -77,17 +78,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                             [
                                                 'name' =>'format_craft_images',
                                                 'title'=>'工艺图片',
-                                                'type' => common\widgets\webuploader\Files::class,
+                                                'type'=> common\widgets\webuploader\MultipleFiles::class,
                                                 'options'=>[
-                                                    'theme'=>'default',
                                                     'config' => [
                                                         'pick' => [
                                                             'multiple' => true,
                                                         ],
                                                     ]
                                                 ]
-
-
 
                                             ]
                                         ];

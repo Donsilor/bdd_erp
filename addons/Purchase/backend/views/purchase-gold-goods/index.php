@@ -4,6 +4,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\ConfirmEnum;
 use common\helpers\Html;
 use common\helpers\Url;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
@@ -71,12 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'300'],
                             ],
                             [
-                                    'attribute' => 'goods_sn',
-                                    'value' => function ($model) {
-                                        return $model->goods_sn ;
-                                    },
-                                    'filter' => false,
-                                    'headerOptions' => ['width'=>'100'],
+                                'attribute'=>'goods_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_sn;
+                                    return $str;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                     'attribute' => 'material_type',

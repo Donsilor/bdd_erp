@@ -144,7 +144,6 @@ class PurchaseApplyGoodsController extends BaseController
         $this->modelClass = PurchaseApplyFormatForm::className();
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseApplyFormatForm();
-//        print_r(json_decode($model->format_info,true));
 
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {

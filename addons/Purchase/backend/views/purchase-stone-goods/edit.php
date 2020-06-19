@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                  <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
                 </div>
-                <div class="col-lg-4">
-                  <?= $form->field($model, 'goods_sn')->textInput()?>
-                </div>
+                  <div class="col-lg-4">
+                      <?= $form->field($model, 'goods_sn')->dropDownList(Yii::$app->styleService->stone->getDropDown(),['prompt'=>'请选择']) ?>
+                  </div>
               </div>
               <div class="row">                        
                     <div class="col-lg-4">
