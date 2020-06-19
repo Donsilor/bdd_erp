@@ -66,6 +66,7 @@ class ReceiptGoodsController extends BaseController
                 ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->key = 'id';
         $dataProvider->query->andWhere(['=', 'receipt_id', $receipt_id]);
         $dataProvider->query->andWhere(['>', PurchaseReceiptGoods::tableName().'.status', -1]);
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
