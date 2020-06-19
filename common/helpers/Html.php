@@ -235,7 +235,7 @@ class Html extends BaseHtml
     {
         $options = ArrayHelper::merge([
             'data-grid'=>'grid',
-            'class' => "btn btn-default btn-xs",
+            'class' => "btn btn-info btn-xs",
             'onclick' => "rfBatchFull(this);return false;"
         ], $options);
 
