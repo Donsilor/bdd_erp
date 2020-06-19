@@ -19,7 +19,7 @@ $form = ActiveForm::begin([
     <div class="col-sm-12">
         <?= $form->field($model, 'style_sn')->textInput(["placeholder"=>"请输入款号"]) ?>
         <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
-        <?= $form->field($model, 'goods_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
+        <?= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
         <?= $form->field($model, 'order_sn')->textInput(["placeholder"=>"请输入订单号"]) ?>
     </div>
 </div>
