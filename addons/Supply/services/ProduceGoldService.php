@@ -49,9 +49,9 @@ class ProduceGoldService extends Service
                 throw new \Exception("(ID={$id})配料单查询失败");
             }
             $gold->attributes = $goldData;
-            $stone->peiliao_time = time();
-            $stone->peiliao_user = Yii::$app->user->identity->username;
-            $stone->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+            $gold->peiliao_time = time();
+            $gold->peiliao_user = Yii::$app->user->identity->username;
+            $gold->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
             if(false === $gold->save()) {
                 throw new \Exception($this->getError($gold));
             }
