@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $model->bill_no?> - <?= \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
+                            <td><?= \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
@@ -55,10 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                            <td><?= $model->pay_amount ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
