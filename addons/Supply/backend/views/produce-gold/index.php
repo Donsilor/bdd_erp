@@ -35,67 +35,78 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                             ],                            
                             [
+                                    'attribute' => 'peiliao_status',
+                                    'value' => function ($model){
+                                        return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
+                                    },
+                                    'filter' =>Html::activeDropDownList($searchModel, 'peiliao_status',\addons\Supply\common\enums\PeiliaoStatusEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style' => 'width:80px;',
+                                    ]),
+                                    'format' => 'raw',
+                            ],
+                            [
                                     'attribute' => 'gold_type',
                                     'value'  => function($model) {
-                                        return $model->gold_type ?? '无';
+                                            return $model->gold_type ?? '无';
                                     },
                                     'filter' => false,
-                                    
+                            
                             ],
                             [
                                     'attribute' => 'gold_weight',
                                     'value' => 'gold_weight',
                                     'filter' => false,
-
-                            ],               
-      
-                            [
-                                    'attribute' => 'gold_spec',
-                                    'value' => 'gold_spec',
-                                    'filter' => false,                                    
-                            ],                           
-                            [
-                                'attribute' => 'created_at',
-                                'filter' => false,
-                                'value' => function($model){
-                                    return Yii::$app->formatter->asDatetime($model->created_at);
-                                }
-
+                                    
                             ],
                             [
-                                    'attribute' => 'songliao_user',
-                                    'value' => 'songliao_user',
-                                    'filter' => false,
+                                    'label' => '领料单号',
+                                    'attribute' => 'delivery_no',
+                                    'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                                            'class' => 'form-control',
+                                            'style' =>'width:150px'
+                                    ]),
+                                    'format' => 'raw',
+                                    
                             ],
                             [
-                                    'attribute' => 'songliao_time',
-                                    'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->songliao_time);
+                                    'label' => '配料信息(金料编号/金料类型/金重)',
+                                    'value' => function($model){
+                                            $str = '';
+                                            foreach ($model->goldGoods ?? [] as $goldGoods){
+                                                $gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type ??'');
+                                                $str .= $goldGoods->gold_sn.'/'.$gold_type.'/'.$goldGoods->gold_weight."g<br/>";
+                                            }
+                                            return $str;
                                     },
                                     'filter' => false,
+                                    'format' => 'raw',
                             ],
                             [
                                     'attribute' => 'peiliao_user',
-                                    'value' => 'songliao_user',
+                                    'value' => 'peiliao_user',
                                     'filter' => false,
                             ],
                             [
                                     'attribute' => 'peiliao_time',
                                     'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->peiliao_time);
+                                            return Yii::$app->formatter->asDatetime($model->peiliao_time);
                                     },
                                     'filter' => false,
                             ],
                             [
                                     'attribute'=>'remark',
                                     'filter' => false,
-                            ],                            
-                            [
-                                'attribute' => 'creator_name',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => false,
-
                             ],
+                            [
+                                    'attribute' => 'created_at',
+                                    'filter' => false,
+                                    'value' => function($model){
+                                            return Yii::$app->formatter->asDatetime($model->created_at);
+                                    }
+                            
+                            ], 
                             
                         ]
                     ]); ?>

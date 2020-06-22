@@ -5,20 +5,20 @@ use common\enums\AuditStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
-/* @var $model addons
+/* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '单据详情';
+$this->title = '其他出库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-xs-12">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_no') ?>：</td>
@@ -26,7 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
+                            <td><?= $model->channel->name??"" ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
@@ -37,32 +41,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
-                            <td><?= $model->total_num ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
-                            <td><?= $model->total_weight ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\AccountTypeEnum::getValue($model->account_type) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
+                            <td><?= $model->goods_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                            <td><?= $model->pay_amount ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
+                            <td><?= $model->total_sale ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
-                            <td><?= $model->delivery_no ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
+                            <td><?= $model->total_market ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
+                            <td><?= $model->order_sn ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
@@ -126,9 +126,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
             ?>
+            <?= Html::a('打印',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-ms',
+            ]); ?>
+            <?= Html::button('导出', [
+                'class'=>'btn btn-success btn-ms',
+                'onclick' => 'batchExport()',
+            ]);?>
         </div>
 
         <!-- box end -->
     </div>
     <!-- tab-content end -->
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+</script>

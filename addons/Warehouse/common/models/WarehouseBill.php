@@ -2,12 +2,12 @@
 
 namespace addons\Warehouse\common\models;
 
-
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Style\common\models\StyleChannel;
 
 /**
  * This is the model class for table "warehouse_bill".
@@ -17,6 +17,7 @@ use addons\Style\common\models\StyleCate;
  * @property string $bill_no 单据编号
  * @property string $bill_type 单据类型
  * @property int $bill_status 仓储单据状态
+ * @property int $channel_id 渠道
  * @property int $supplier_id 供应商
  * @property int $put_in_type 入库方式
  * @property string $order_sn 订单号
@@ -29,6 +30,7 @@ use addons\Style\common\models\StyleCate;
  * @property int $to_company_id 入库公司
  * @property int $from_company_id 出库公司
  * @property int $from_warehouse_id 出库仓库
+ * @property int $delivery_type 出库类型
  * @property string $send_goods_sn 送货单号
  * @property int $is_settle_accounts 是否结价
  * @property int $auditor_id 审核人
@@ -58,7 +60,7 @@ class WarehouseBill extends BaseModel
     {
         return [
             //[['bill_status', 'audit_status','bill_no'], 'required'],
-            [['id', 'merchant_id', 'bill_status', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'bill_status', 'channel_id', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'delivery_type', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
             [['bill_no', 'order_sn', 'send_goods_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -78,6 +80,7 @@ class WarehouseBill extends BaseModel
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
             'bill_status' => '单据状态',
+            'channel_id' => '渠道',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
             'order_sn' => '订单号',
@@ -90,6 +93,7 @@ class WarehouseBill extends BaseModel
             'to_company_id' => '入库公司',
             'from_company_id' => '出库公司',
             'from_warehouse_id' => '出库仓库',
+            'delivery_type' => '出库类型',
             'send_goods_sn' => '送货单号',
             'is_settle_accounts' => '是否结价',
             'auditor_id' => '审核人',
@@ -117,7 +121,14 @@ class WarehouseBill extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-
+    /**
+     * 渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
+    }
     /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
@@ -126,7 +137,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
-
     /**
      * 出库仓库 一对一
      * @return \yii\db\ActiveQuery
@@ -135,7 +145,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
     }
-
     /**
      * 入库仓库 一对一
      * @return \yii\db\ActiveQuery
@@ -160,7 +169,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
-
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
@@ -169,7 +177,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias("productType");
     }
-
     /**
      * 关联款式分类一对一
      * @return \yii\db\ActiveQuery

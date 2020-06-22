@@ -12,6 +12,7 @@ use addons\Warehouse\common\models\WarehouseStone;
  * @property int $produce_id 布产id
  * @property string $order_sn 订单号
  * @property string $delivery_no 送石单号
+ * @property int $supplier_id 供应商
  * @property string $color 石头颜色
  * @property string $clarity 石头净度
  * @property string $shape 石头形状
@@ -30,6 +31,7 @@ use addons\Warehouse\common\models\WarehouseStone;
  * @property string $remark 配石备注
  * @property string $peishi_user 配石人（配石中操作人员）
  * @property int $peishi_status 配石状态（需建数据字典）
+ * @property string $peishi_remark 配石备注
  * @property int $creator_id 创建人ID
  * @property string $creator_name 创建人
  * @property int $created_at 添加时间
@@ -51,10 +53,10 @@ class ProduceStone extends BaseModel
     public function rules()
     {
         return [
-            [['produce_id','from_type', 'stone_num', 'stone_position', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['produce_id','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
             [['color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
-            [['remark','stone_spec','audit_remark'], 'string', 'max' => 255],
+            [['remark','stone_spec','audit_remark','peishi_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -70,6 +72,7 @@ class ProduceStone extends BaseModel
             'from_type' => '来源类型',
             'from_order_sn' => '来源订单号', 
             'delivery_no'=>'领(送)石单',
+            'supplier_id'=>'加工商',    
             'color' => '石头颜色',
             'clarity' => '石头净度',
             'shape' => '石头形状',
@@ -92,7 +95,8 @@ class ProduceStone extends BaseModel
             'audit_remark' => '审核备注',            
             'peishi_user' => '配石人',
             'peishi_status' => '配石状态',
-            'remark' => '配石备注',
+            'peishi_remark' => '配石备注',
+            'remark' => '采购备注',
             'creator_id' => '创建人ID',
             'creator_name' => '创建人',
             'created_at' => '添加时间',

@@ -50,7 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => 'gold_weight',
                                     'filter' => false,
 
-                            ],                          
+                            ], 
+                            [
+                                    'attribute' => 'remark',
+                                    'value' => 'remark',
+                                    'filter' => false,                                    
+                            ], 
                             [
                                     'label' => '配石信息(金料编号/金料总重)',
                                     'filter' => false,
@@ -88,9 +93,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                     'attribute'=>'remark',
+                                     'attribute'=>'peiliao_remark',
                                      'value'=>function($model){
-                                            return Html::activeTextarea($model, "[{$model->id}]remark",['class' => 'form-control']);
+                                            return Html::activeTextarea($model, "[{$model->id}]peiliao_remark",['class' => 'form-control']);
                                      },
                                      'filter' => false,                                 
                                      'headerOptions' => [],

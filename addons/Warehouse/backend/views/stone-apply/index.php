@@ -183,6 +183,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                             ],
                             [
+                                    'attribute'=>'peishi_remark',
+                                    'filter' => false,
+                                    'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'remark',
                                 'filter' => false,
                                 'headerOptions' => [],

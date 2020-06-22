@@ -21,6 +21,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
     const BILL_TYPE_WF  = 'WF';
     const BILL_TYPE_R   = 'R';
     const BILL_TYPE_WX  = 'WX';
+    const BILL_TYPE_C   = 'C';
 
     /**
      * @return array
@@ -38,6 +39,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
             self::BILL_TYPE_WF  => '维修调拨单',
             self::BILL_TYPE_R   => '维修发货单',
             self::BILL_TYPE_WX  => '维修单',
+            self::BILL_TYPE_C   => '其他出库单',
         ];
     }
 

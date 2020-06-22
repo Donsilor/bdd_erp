@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
-            <div class="box-body" style="padding:20px 50px">
+            <div class="box-body" style="padding:20px 20px">
                 <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -86,7 +86,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'stone_spec',
                                     'value' => 'stone_spec',
                                     'filter' => false,                                    
-                            ],                           
+                            ], 
+                            [
+                                    'attribute' => 'peishi_remark',
+                                    'value' => 'peishi_remark',
+                                    'filter' => false,
+                            ],
                             [
                                     'label' => '配石信息(石包编号/配石数量/配石总重)',
                                     'filter' => false,
@@ -134,9 +139,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                     'attribute'=>'remark',
+                                     'attribute'=>'peishi_remark',
                                      'value'=>function($model){
-                                            return Html::activeTextarea($model, "[{$model->id}]remark",['class' => 'form-control']);
+                                            return Html::activeTextarea($model, "[{$model->id}]peishi_remark",['class' => 'form-control']);
                                      },
                                      'filter' => false,                                 
                                      'headerOptions' => [],
