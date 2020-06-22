@@ -16,13 +16,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                     <?php
                         echo Html::a('批量配料', ['peiliao','check'=>1],  [
+                            'class'=>'btn btn-primary btn-xs',
+                            "onclick" => "batchPop(this);return false;",
+                            'data-grid'=>'grid',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                            'data-title'=>'批量配料',
+                        ]);
+                        echo '&nbsp;';                        
+                    ?>
+                    <?php
+                        echo Html::a('创建领料单', ['lingliao','check'=>1],  [
                             'class'=>'btn btn-success btn-xs',
                             "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
                             'data-width'=>'90%',
                             'data-height'=>'90%',
                             'data-offset'=>'20px',
-                            'data-title'=>'批量配石',
+                            'data-title'=>'创建领料单-预览',
                         ]);
                         echo '&nbsp;';                        
                     ?>

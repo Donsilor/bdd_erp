@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                     <?php
                         echo Html::a('批量配石', ['peishi','check'=>1],  [
-                            'class'=>'btn btn-success btn-xs',
+                            'class'=>'btn btn-primary btn-xs',
                             "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
                             'data-width'=>'90%',

@@ -3,6 +3,7 @@
 namespace addons\Supply\common\models;
 
 use Yii;
+use addons\Warehouse\common\models\WarehouseGold;
 
 /**
  * This is the model class for table "supply_produce_gold_goods".
@@ -51,5 +52,14 @@ class ProduceGoldGoods extends BaseModel
             'gold_sn' => Yii::t('app', '金料编号'),
             'gold_weight' => Yii::t('app', '领料重量'),
         ];
+    }
+    
+    /**
+     * 金料现货  一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGold()
+    {
+        return $this->hasOne(WarehouseGold::class, ['gold_sn'=>'gold_sn'])->alias('gold');
     }
 }

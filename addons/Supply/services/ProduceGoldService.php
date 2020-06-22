@@ -51,7 +51,7 @@ class ProduceGoldService extends Service
             $gold->attributes = $goldData;
             $gold->peiliao_time = time();
             $gold->peiliao_user = Yii::$app->user->identity->username;
-            $gold->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+            $gold->peiliao_status = PeiliaoStatusEnum::HAS_PEILIAO;
             if(false === $gold->save()) {
                 throw new \Exception($this->getError($gold));
             }

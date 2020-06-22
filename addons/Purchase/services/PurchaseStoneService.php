@@ -46,4 +46,6 @@ class PurchaseStoneService extends Service
             PurchaseStone::updateAll(['total_num'=>$sum['total_num'],'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
         }
     }
+    
+    
 }

@@ -15,6 +15,7 @@ use addons\Supply\common\models\ProduceStoneGoods;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
 
 
 
@@ -69,7 +70,7 @@ class StoneApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceStone::find()->where(['id'=>$id])->one();
                 if($model && $model->peishi_status != PeishiStatusEnum::PENDING) {
-                     return ResultHelper::json(422,"(ID={$id})配石单不是配石中状态");
+                     return ResultHelper::json(422,"(ID={$id})配石单状态不是配石中");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peishi','ids'=>implode(',',$ids)])]);
@@ -129,7 +130,7 @@ class StoneApplyController extends BaseController
                 if(empty($model)) {
                     return ResultHelper::json(422,"(ID={$id})配石单不存在");
                 }elseif($model->peishi_status != PeishiStatusEnum::HAS_PEISHI) {
-                    return ResultHelper::json(422,"(ID={$id})配石单不是已配石状态");
+                    return ResultHelper::json(422,"(ID={$id})配石单状态不是已配石");
                 }
                 $order_sn_array[$model->from_order_sn] = $model->from_order_sn;
             }
@@ -144,7 +145,8 @@ class StoneApplyController extends BaseController
                 $trans = \Yii::$app->trans->beginTransaction();
                 
                 $bill = [
-                        'bill_type' =>StoneBillTypeEnum::STONE_SS,
+                        'bill_type' => StoneBillTypeEnum::STONE_SS,
+                        'bill_status'=> GoldBillStatusEnum::SAVE,
                         'supplier_id' => $post['supplier_id'] ??'',
                         'remark' => $post['remark'] ??'',
                 ];
