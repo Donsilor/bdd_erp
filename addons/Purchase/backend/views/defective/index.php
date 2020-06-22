@@ -87,15 +87,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'receipt_no',
-                'value'=>function($model) {
-                    return Html::a($model->receipt_no, ['receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                },
-                'filter' => true,
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
-            ],
-            [
                 'attribute' => 'defective_num',
                 'value' => 'defective_num',
                 'filter' => Html::activeTextInput($searchModel, 'defective_num', [
@@ -112,6 +103,20 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                'attribute' => 'purchase_sn',
+                'value'=>'purchase_sn',
+                'filter' => true,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'120'],
+            ],
+            [
+                'attribute' => 'receipt_no',
+                'value'=>'receipt_no',
+                'filter' => true,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'120'],
             ],
             [
                 'label' => '制单人',
@@ -148,7 +153,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'200'],
             ],
-            [
+            /*[
                 'label' => '审核人',
                 'attribute' => 'auditor.username',
                 'headerOptions' => ['class' => 'col-md-1'],
@@ -182,7 +187,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 },
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'200'],
-            ],
+            ],*/
             [
                 'attribute' => 'audit_status',
                 'format' => 'raw',

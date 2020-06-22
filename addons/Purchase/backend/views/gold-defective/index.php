@@ -82,18 +82,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'purchase_sn',
-                'value' => 'purchase_sn',
-                'filter' => true,
-                'headerOptions' => ['width'=>'120'],
-            ],
-            [
-                'attribute' => 'receipt_no',
-                'value' => 'receipt_no',
-                'filter' => true,
-                'headerOptions' => ['width'=>'120'],
-            ],
-            [
                 'attribute' => 'defective_num',
                 'value' => 'defective_num',
                 'filter' => Html::activeTextInput($searchModel, 'defective_num', [
@@ -110,6 +98,18 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'80'],
+            ],
+            [
+                'attribute' => 'purchase_sn',
+                'value' => 'purchase_sn',
+                'filter' => true,
+                'headerOptions' => ['width'=>'120'],
+            ],
+            [
+                'attribute' => 'receipt_no',
+                'value' => 'receipt_no',
+                'filter' => true,
+                'headerOptions' => ['width'=>'120'],
             ],
             [
                 'label' => '制单人',
