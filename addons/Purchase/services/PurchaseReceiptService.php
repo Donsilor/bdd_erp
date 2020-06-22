@@ -712,7 +712,7 @@ class PurchaseReceiptService extends Service
             throw new \Exception('采购收货单没有待入库的货品');
         }
         $goods = $ids = [];
-        $total_weight= $market_price= $sale_price = 0;
+        $total_stone_num = $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
             $ids[] = $model->id;
             $goods[] = [
@@ -730,11 +730,12 @@ class PurchaseReceiptService extends Service
                 'source_detail_id' => $model->id,
                 'cost_price' => $model->cost_price,
                 'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
+                'stone_norms' => $model->goods_norms,
                 //'sale_price' => $model->sale_price,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
-
+            $total_stone_num = bcadd($total_stone_num, $model->goods_num);
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
         //批量更新采购收货单货品状态
@@ -749,6 +750,7 @@ class PurchaseReceiptService extends Service
             'put_in_type' => $form->put_in_type,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
+            'total_stone_num' => $total_stone_num,
             'total_weight' => $total_weight,
             'total_cost' => $form->total_cost,
             'pay_amount' => $form->total_cost,

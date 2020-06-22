@@ -24,6 +24,7 @@ use Yii;
  * @property string $symmetry 对称
  * @property int $stone_num 石包总粒数
  * @property string $stone_weight 石包总重量
+ * @property string $stone_norms 规格
  * @property string $cost_price 成本价
  * @property string $sale_price 销售价格
  * @property int $source_detail_id 来源明细ID
@@ -53,6 +54,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
             [['bill_no', 'stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
+            [['stone_norms'], 'string', 'max' => 255]
         ];
     }
 
@@ -80,6 +82,7 @@ class WarehouseStoneBillGoods extends BaseModel
             'symmetry' => '对称',
             'stone_num' => '石料粒数',
             'stone_weight' => '石料重量(ct)',
+            'stone_norms' => '规格',
             'cost_price' => '石料总额',
             'stone_price' => '石料单价(ct)',
             'sale_price' => '销售价',

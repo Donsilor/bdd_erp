@@ -48,7 +48,7 @@ class ProduceStoneService extends Service
             $stone->attributes = $stoneData;
             $stone->peishi_time = time();
             $stone->peishi_user = Yii::$app->user->identity->username;
-            $stone->peishi_status = PeishiStatusEnum::IN_PEISHI;
+            $stone->peishi_status = PeishiStatusEnum::HAS_PEISHI;
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }

@@ -68,92 +68,58 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '布产编号',
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:120px'],
+                                    'headerOptions' => ['style'=>'width:150px'],
                                     'value' => function($model) {
                                        return $model->produce_sn;
                                     },
                             
                             ],
                             [
-                                    'attribute' => 'peishi_status',
+                                    'attribute' => 'peiliao_status',
                                     'value' => function ($model){
-                                        return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
+                                        return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
                                     },
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
+                                    'headerOptions' => ['style'=>'width:120px'],
                             ], 
                             [
-                                    'label' => '石包编号',
+                                    'label' => '金料编号',
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
+                                    'headerOptions' => ['style'=>'width:150px'],
                                     'value' => function($model) {
-                                    
+                                        foreach ($model->goldGoods ?? [] as $_model){
+                                            return ($_model->gold->gold_sn ?? '')."<br/>";                                        
+                                        }
                                     },
                                     
                             ],
                             [
-                                    'label' => '石料类型',
+                                    'label' => '金料类型',
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
+                                    'headerOptions' => ['style'=>'width:120px'],
                                     'value' => function($model) {
-                                    
+                                        foreach ($model->goldGoods ?? [] as $_model){
+                                            return Yii::$app->attr->valueName($_model->gold->gold_type ?? '')."<br/>";
+                                        }
                                     },
                                     
                             ],
                             [
-                                    'label' => '领料数量',
+                                    'label' => '金料重量(g)',
                                     'filter' => false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
+                                    //'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                        foreach ($model->goldGoods ?? [] as $_model){
+                                            return ($_model->gold_weight ?? '')."<br/>";
+                                        }
                                     },
                                     
-                            ],
-                            [
-                                    'label' => '领料重量',
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
-                                    'value' => function($model) {
-                                    
-                                    },
-                                    
-                            ],
-                            [
-                                    'label' => '石料颜色',
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
-                                    'value' => function($model) {
-                                    
-                                    },
-                            
-                            ],
-                            [
-                                    'label' => '石料净度',
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
-                                    'value' => function($model) {
-                                          
-                                    },
-                                    
-                            ],
-                            [
-                                    'label' => '石料切工',
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['style'=>'width:100px'],
-                                    'value' => function($model) {
-                                    
-                                    },
-                                    
-                            ],   
-                        ]
+                            ],    
+                       ]
                     ]); ?>
             </div>
       

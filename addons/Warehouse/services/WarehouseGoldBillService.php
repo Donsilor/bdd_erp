@@ -111,7 +111,42 @@ class WarehouseGoldBillService extends Service
         }
         return $tabList;
     }
-
+    /**
+     * 创建金料领料单
+     * @param array $bill
+     * @param array $details
+     */
+    public function createGoldC($bill, $details){
+        $billM = new WarehouseGoldBill();
+        $billM->attributes = $bill;
+        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
+        if(false === $billM->save()){
+            throw new \Exception($this->getError($billM));
+        }
+        $goodsM = new WarehouseGoldBillGoods();
+        foreach ($details as &$good){
+            $good['bill_id'] = $billM->id;
+            $good['bill_no'] = $billM->bill_no;
+            $good['bill_type'] = $billM->bill_type;
+            $goodsM->setAttributes($good);
+            if(!$goodsM->validate()){
+                throw new \Exception($this->getError($goodsM));
+            }
+        }
+        $details = ArrayHelper::toArray($details);
+        $value = [];
+        $key = array_keys($details[0]);
+        foreach ($details as $detail) {
+            $value[] = array_values($detail);
+        }
+        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
+        if(false === $res){
+            throw new \Exception("创建收货单明细失败");
+        }
+        
+        return $billM;
+    }
+    
     /**
      * 创建金料收货单
      * @param array $bill

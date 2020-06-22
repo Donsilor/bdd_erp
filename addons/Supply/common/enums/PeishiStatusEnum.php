@@ -14,7 +14,7 @@ class PeishiStatusEnum extends BaseEnum
     const IN_PEISHI = 2;
     const HAS_PEISHI = 3;
     const TO_LINGSHI = 4;
-    const FINISHED = 5;
+    const HAS_LINGSHI = 5;
     const NONE = 9;
     /**
      *

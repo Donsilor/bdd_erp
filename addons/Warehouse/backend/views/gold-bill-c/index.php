@@ -72,15 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
+                            'value' =>function($model){
+                                return $model->supplier->supplier_name ??'';
+                            },
                             'filter'=>Select2::widget([
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                                'options' => ['placeholder' =>"请选择",'style'=>'width:200px'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
-                                    'width' => '120',
                                 ],
                             ]),
                             'format' => 'raw',

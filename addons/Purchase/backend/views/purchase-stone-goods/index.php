@@ -145,6 +145,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute' => 'spec_remark',
+                                'filter' => Html::activeTextInput($searchModel, 'spec_remark', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->spec_remark ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                 'attribute' => 'is_receipt',
                                 'value' => function ($model){
                                     return ConfirmEnum::getValue($model->is_receipt);

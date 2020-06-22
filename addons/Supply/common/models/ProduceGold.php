@@ -87,5 +87,21 @@ class ProduceGold extends BaseModel
     public function getGoldGoods()
     {
         return $this->hasMany(ProduceGoldGoods::class, ['id'=>'id'])->alias('goldGoods');
+    }    
+    /**
+     * 布产单   一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduce()
+    {
+        return $this->hasOne(Produce::class, ['id'=>'produce_id'])->alias('produce');
+    }
+    /**
+     * 对应供应商模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
 }

@@ -24,8 +24,8 @@ class PeiliaoStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [                
-                self::PENDING => "待申请",
-                self::IN_PEILIAO => "待配料",
+                self::PENDING => "待配料",
+                self::IN_PEILIAO => "配料中",
                 self::HAS_PEILIAO => "已配料",
                 self::TO_LINGLIAO => "待领料",
                 self::HAS_LINGLIAO => "已领料",

@@ -85,6 +85,26 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-3'],
             ],
             [
+                'attribute' => 'receipt_num',
+                'value' => 'receipt_num',
+                'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
+                    'class' => 'form-control',
+                    'style'=> 'width:60px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => [],
+            ],
+            [
+                'attribute' => 'total_cost',
+                'value' => 'total_cost',
+                'filter' => Html::activeTextInput($searchModel, 'total_cost', [
+                    'class' => 'form-control',
+                    'style'=> 'width:120px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => [],
+            ],
+            [
                 'attribute' => 'purchase_sn',
                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                     'class' => 'form-control',
@@ -103,26 +123,6 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                 ]),
                 'headerOptions' => ['class' => 'col-md-1'],
-            ],
-            [
-                'attribute' => 'receipt_num',
-                'value' => 'receipt_num',
-                'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
-                    'class' => 'form-control',
-                    'style'=> 'width:60px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => [],
-            ],
-            [
-                'attribute' => 'total_cost',
-                'value' => 'total_cost',
-                'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                    'class' => 'form-control',
-                    'style'=> 'width:60px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => [],
             ],
             [
                 'attribute' => 'creator_id',

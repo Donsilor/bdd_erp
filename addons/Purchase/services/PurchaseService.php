@@ -243,7 +243,7 @@ class PurchaseService extends Service
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_color'] = $model->stone_color;
                 $goods[$k]['goods_clarity'] = $model->stone_clarity;
-                //$goods[$k]['goods_norms'] =  $model->goods_norms;
+                $goods[$k]['goods_norms'] =  $model->spec_remark;
                 $goods[$k]['stone_price'] = $model->stone_price;
             }
             $total_cost = bcadd($total_cost, $model->cost_price, 2);

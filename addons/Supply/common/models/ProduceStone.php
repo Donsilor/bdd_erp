@@ -116,4 +116,12 @@ class ProduceStone extends BaseModel
     {
         return $this->hasOne(Produce::class, ['id'=>'produce_id'])->alias('produce');
     }
+    /**
+     * 对应供应商模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
 }
