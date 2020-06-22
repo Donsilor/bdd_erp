@@ -1,3 +1,6 @@
+<?php
+use yii\widgets\ActiveForm;
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,11 +14,11 @@
 			.fl {
 				float: left;
 			}
-			
+
 			.fr {
 				float: right;
 			}
-			
+
 			.clf::after {
 				display: block;
 				content: '.';
@@ -24,7 +27,7 @@
 				visibility: hidden;
 				clear: both;
 			}
-			
+
 			ul,
 			li {
 				list-style: none;
@@ -34,24 +37,24 @@
 			}
 			img {
 				width: 100%;
-				height: 100%;
+				/*height: 100%;*/
 			}
 			html{
 				font-size: 14px;
 			}
-			
+
 			table,tr,td{
 				table-layout:fixed;
 				box-sizing: border-box;
 			}
-			
+
 			.container{
 				width: 1310px;
 				border: 1px solid #777;
 				margin: 10px auto;
 				padding: 10px;
 			}
-			
+
 			.height-4rem{
 				height: 4rem;
 			}
@@ -64,7 +67,7 @@
 			.blod{
 				font-weight: bold;
 			}
-			
+
 			.factory-info{
 				width: 650px;
 				/* border: 2px solid #ccc; */
@@ -100,7 +103,7 @@
 			.table1 tr td:nth-child(4){
 				text-align: center;
 			}
-			
+
 			.table2 tr td:nth-child(1){
 				text-align: left;
 				font-weight: bold;
@@ -120,52 +123,52 @@
 			.table2 tr:nth-child(1) td:nth-child(3){
 				text-align: center;
 			}
-			
+
 			.table2 tr:first-child td:first-child{
 				padding: 4px;
 				box-sizing: border-box;
 			}
-			
+
 			.table3 td:first-child{
 				font-weight: bold;
 			}
-			
+
 			.goods-info{
 				width: 650px;
 				/* border: 2px solid #ccc; */
 				margin-left: 10px;
 			}
-			
+
 			.table4{
 				margin-top: 4rem;
 			}
-			
+
 			.table4 td{
 				text-align: center;
 			}
-			
+
 			.table4 tr:last-child td:nth-child(2n-1){
 				font-weight: bold;
 			}
-			
+
 			.table5{
 				text-align: center;
 			}
-			
+
 			.table6 td{
 				height: 3rem;
 			}
-			
+
 			.table6 td:first-child{
 				text-align: center;
 				font-weight: bold;
 			}
-			
+
 			td>div{
 				/* display: inline-block; */
 				/* white-space: wrap; */
 				/* word-break: break-all; */
-				max-height: 2rem;
+				/*max-height: 2rem;*/
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -180,8 +183,131 @@
 				white-space: inherit;
 			}
 
+
+
+
+
+            .form-control {
+                box-sizing: border-box;
+                border-color: #e4eaec;
+                box-shadow: none;
+                -webkit-transition: box-shadow .25s linear, border .25s linear, color .25s linear, background-color .25s linear;
+                transition: box-shadow .25s linear, border .25s linear, color .25s linear, background-color .25s linear;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -webkit-font-smoothing: auto;
+                color: #76838f;
+            }
+            .form-control {
+                color: #555555;
+            }
+            .form-control {
+                border-radius: 0;
+                box-shadow: none;
+                border-color: #d2d6de;
+            }
+            .form-control {
+                display: block;
+                width: 100%;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            }
+            button, input, select, textarea {
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+            }
+            input {
+                line-height: normal;
+            }
+
+            button, input, optgroup, select, textarea {
+                color: inherit;
+                font: inherit;
+                margin: 0;
+            }
+
+            user agent stylesheet
+            input {
+                -webkit-writing-mode: horizontal-tb !important;
+                text-rendering: auto;
+                color: initial;
+                letter-spacing: normal;
+                word-spacing: normal;
+                text-transform: none;
+                text-indent: 0px;
+                text-shadow: none;
+                display: inline-block;
+                text-align: start;
+                -webkit-appearance: textfield;
+                background-color: white;
+                -webkit-rtl-ordering: logical;
+                cursor: text;
+                margin: 0em;
+
+                padding: 1px 0px;
+                border-width: 2px;
+                border-style: inset;
+                border-color: initial;
+                border-image: initial;
+            }
+            button, input, select, textarea {
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+            }
+            textarea {
+                overflow: auto;
+            }
+            button, input, optgroup, select, textarea {
+                color: inherit;
+                font: inherit;
+                margin: 0;
+            }
+
+            user agent stylesheet
+            textarea {
+                -webkit-writing-mode: horizontal-tb !important;
+                text-rendering: auto;
+                color: initial;
+                letter-spacing: normal;
+                word-spacing: normal;
+                text-transform: none;
+                text-indent: 0px;
+                text-shadow: none;
+                display: inline-block;
+                text-align: start;
+                -webkit-appearance: textarea;
+                background-color: white;
+                -webkit-rtl-ordering: logical;
+                flex-direction: column;
+                resize: auto;
+                cursor: text;
+                white-space: pre-wrap;
+                overflow-wrap: break-word;
+                margin: 0em;
+                font: 400 13.3333px Arial;
+                border-width: 1px;
+                border-style: solid;
+                border-color: rgb(169, 169, 169);
+                border-image: initial;
+                padding: 2px;
+            }
 		</style>
-		
+
 		<script language="javascript">
 			function preview(fang) {
 				if (fang < 10) {
@@ -204,21 +330,21 @@
 		<div class="container clf">
 			<!-- 左 -->
 			<div class="factory-info fl">
-				<h2 class="title">中央生产制造单【<?= $model->purchase_goods->purchase->supplier->supplier_name ?? ''?>】</h2>
-				
+				<h2 class="title">中央生产制造单【<?= $model->supplier_name?>】</h2>
+                <?php $form = ActiveForm::begin([]); ?>
 				<table class="table1" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
 					<tr class="height-4rem">
 						<td width="14%">
 							<div>采购组：</div>
 						</td>
 						<td width="52%">
-							<div>201</div>
+							<div><?= $form->field($model, 'purchase_group')->textInput()->label(false) ?> </div>
 						</td>
 						<td width="14%">
 							<div>采购单号：</div>
 						</td>
-						<td width="20%">
-							<div>Data</div>
+						<td>
+							<div><?= $model->purchase_sn?></div>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -226,13 +352,13 @@
 							<div>物料描述：</div>
 						</td>
 						<td>
-							<div>G750钻石女戒</div>
+							<div><?= $model->goods_name?></div>
 						</td>
 						<td>
 							<div>发单时间：</div>
 						</td>
 						<td>
-							<div>2020/7/6</div>
+							<div><?= $model->created_at?></div>
 						</td>
 					</tr>
 					<tr>
@@ -240,13 +366,13 @@
 							<div>处理次序：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $form->field($model, 'processing_order')->textInput()->label(false) ?></div>
 						</td>
 						<td rowspan="2">
 							<div>交货时间：</div>
 						</td>
 						<td rowspan="2">
-							<div>2020/8/6</div>
+							<div><?= $model->delivery_time?></div>
 						</td>
 					</tr>
 					<tr>
@@ -254,7 +380,7 @@
 							<div>金料颜色：</div>
 						</td>
 						<td>
-							<div>18K白</div>
+							<div><?= $model->material?></div>
 						</td>
 					</tr>
 					<tr>
@@ -262,13 +388,13 @@
 							<div>件数：</div>
 						</td>
 						<td>
-							<div>5</div>
+							<div><?= $model->goods_num?></div>
 						</td>
 						<td>
 							<div>物料号：</div>
 						</td>
 						<td>
-							<div>90000</div>
+							<div><?= $form->field($model, 'item_number')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 				</table>
@@ -276,13 +402,13 @@
 				<table class="table2" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
 					<tr class="height-4rem">
 						<td rowspan="10" width="calc(54% + 2px)">
-							<img src="./logo.png" alt="">
+							<img src="<?= $model->image?>" alt="">
 						</td>
 						<td width="14%" height="">
 							<div>工厂模号：</div>
 						</td>
 						<td width="20%">
-							<div>G0000000</div>
+							<div><?= $form->field($model, 'factory_model')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -290,7 +416,7 @@
 							<div>单类：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'cate')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -298,7 +424,7 @@
 							<div>后加工：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'processing')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -306,7 +432,7 @@
 							<div>出数客户：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'customers')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -314,7 +440,7 @@
 							<div>项目号：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'number')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -322,7 +448,7 @@
 							<div>镶法：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'mounting_method')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -330,7 +456,7 @@
 							<div>圈口：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'circle')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -338,7 +464,7 @@
 							<div>可改蜡最大:</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'maximum')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -346,7 +472,7 @@
 							<div>可改蜡最小:</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'minimum')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -354,7 +480,7 @@
 							<div>重量：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'weight')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 				</table>
@@ -365,8 +491,7 @@
 							<div>工艺描述：</div>
 						</td>
 						<td width="86%">
-							<div>1.分件，车花片为CNC，模具号：</div>
-							<div>2.主石四爪镶</div>
+                            <?= $form->field($model, 'process_desc')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					<tr>
@@ -374,7 +499,7 @@
 							<div>特殊工艺：</div>
 						</td>
 						<td>
-							<div>分件，手镶车花片</div>
+                            <?= $form->field($model, 'special_process')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -382,7 +507,7 @@
 							<div>字印要求：</div>
 						</td>
 						<td>
-							<div></div>
+                            <?= $form->field($model, 'printing_req')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -390,7 +515,7 @@
 							<div>尺寸要求：</div>
 						</td>
 						<td>
-							<div>花车片外径：4.6mm，内径，厚度，内爪到中心点距离，爪大小</div>
+                            <?= $form->field($model, 'size_req')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					<tr>
@@ -398,7 +523,7 @@
 							<div>形式：</div>
 						</td>
 						<td>
-							<div>一子单一件制</div>
+                            <?= $form->field($model, 'form')->textInput()->label(false) ?>
 						</td>
 					</tr>
 					<tr class="height-2rem">
@@ -406,7 +531,7 @@
 							<div>配件要求：</div>
 						</td>
 						<td>
-							<div>K白 配车花片P18K143</div>
+                            <?= $form->field($model, 'accessories_req')->textarea()->label(false) ?>
 						</td>
 					</tr>
 				</table>
@@ -444,29 +569,28 @@
 							<div>主石</div>
 						</td>
 						<td style="height: 3rem;">
-							<div>钻石</div>
+							<div><?= $model->main_stone_type?></div>
 						</td>
 						<td>
-							<div>1</div>
+							<div><?= $model->main_stone_num?></div>
 						</td>
 						<td>
-							<div>0.13</div>
+							<div><?= $model->dia_carat?></div>
 						</td>
 						<td>
-							<div>1）0.130-0.149</div>
+							<div><?= $form->field($model, 'main_stone_priority')->textInput()->label(false) ?></div>
 						</td>
 						<td>
-							<div>0.130-0.149</div>
+							<div><?= $form->field($model, 'main_socket_range')->textInput()->label(false) ?></div>
 						</td>
 						<td>
-							<div>3.2-3.3</div>
+							<div><?= $form->field($model, 'main_diameter')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					
 					<tr class="height-5rem">
 						<td colspan="6">
-							<div>1.在颜色净度间等的情况下优先分数</div>
-							<div>2.吊坠拒绝用证书石</div>
+                            <?= $form->field($model, 'main_stone_remark')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					
@@ -499,28 +623,28 @@
 							<div>辅石</div>
 						</td>
 						<td style="height: 3rem;">
-							<div>钻石</div>
+							<div><?= $model->side_stone1_type?></div>
 						</td>
 						<td>
-							<div>9</div>
+							<div><?= $model->side_stone1_num?></div>
 						</td>
 						<td>
-							<div>0.004</div>
+							<div><?= $model->side_stone1_weight?></div>
 						</td>
 						<td>
-							<div>1）0.004-0.0053</div>
+							<div><?= $form->field($model, 'vice_stone_priority')->textInput()->label(false) ?></div>
 						</td>
 						<td>
-							<div>0.004-0.0053</div>
+							<div><?= $form->field($model, 'vice_socket_range')->textInput()->label(false) ?></div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $form->field($model, 'vice_diameter')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					
 					<tr>
 						<td colspan="6">
-							<div></div>
+                            <?= $form->field($model, 'vice_stone_remark')->textarea()->label(false) ?>
 						</td>
 					</tr>
 					
@@ -529,19 +653,19 @@
 							<div>总数：</div>
 						</td>
 						<td>
-							<div>10</div>
+							<div><?= $form->field($model, 'sum_num')->textInput()->label(false) ?></div>
 						</td>
 						<td>
 							<div>主石形状：</div>
 						</td>
 						<td>
-							<div>圆形</div>
+							<div><?= $form->field($model, 'main_stone_shape')->textInput()->label(false) ?></div>
 						</td>
 						<td>
 							<div>配石重量区间：</div>
 						</td>
 						<td colspan="2">
-							<div></div>
+							<div><?= $form->field($model, 'stone_weight_range')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 				</table>
@@ -555,39 +679,15 @@
 							<div>配石要求备注</div>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<div>1）SI-VVS/M-N</div>
+					<tr >
+						<td style="height: 200px;">
+							<div><?= $form->field($model, 'main_stone_spec')->textarea(['rows'=>8])->label(false) ?></div>
 						</td>
-						<td rowspan="6">
-							<div>副石用5厘</div>
+						<td>
+							<div><?= $form->field($model, 'accessories_remark')->textarea(['rows'=>8])->label(false) ?></div>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
+
 				</table>
 				
 				<table class="table6" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
@@ -596,7 +696,7 @@
 							<div>生产要求：</div>
 						</td>
 						<td>
-							<div>金副盈14</div>
+							<div><?= $form->field($model, 'product_req')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -604,7 +704,7 @@
 							<div>货品描述：</div>
 						</td>
 						<td>
-							<div>加盟发单需求</div>
+							<div><?= $form->field($model, 'product_desc')->textarea()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -612,7 +712,7 @@
 							<div>订单类型：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $form->field($model, 'order_type')->textInput()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -620,7 +720,7 @@
 							<div>配石要求：</div>
 						</td>
 						<td>
-							<div>按直径配石DE-KL（用石级别挑上限偏白石）</div>
+							<div><?= $form->field($model, 'with_stone_req')->textarea()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -628,7 +728,7 @@
 							<div>发单要求：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $form->field($model, 'billing_req')->textarea()->label(false) ?></div>
 						</td>
 					</tr>
 					<tr>
@@ -636,11 +736,12 @@
 							<div>备注：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $form->field($model, 'remark')->textarea()->label(false) ?></div>
 						</td>
 					</tr>
 				</table>
 			</div>
+            <?php ActiveForm::end(); ?>
 		</div>
 		<!--endprint1-->
 		

@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\forms\PurchaseGoodsPrintForm;
 use addons\Purchase\common\models\PurchaseGoodsPrint;
 use Yii;
 use common\traits\Curd;
@@ -23,7 +24,7 @@ class PurchaseGoodsPrintController extends BaseController
     /**
      * @var PurchaseGoodsForm
      */
-    public $modelClass = PurchaseGoodsPrint::class;
+    public $modelClass = PurchaseGoodsPrintForm::class;
     /**
      * 编辑/创建
      * @var PurchaseGoodsForm $model
@@ -35,10 +36,17 @@ class PurchaseGoodsPrintController extends BaseController
 
         $id = Yii::$app->request->get('purchase_goods_id');
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseGoodsPrintForm();
+        $model->purchase_goods_id = $id;
+        $model->getPurchaseInfo();
         if ($model->load(Yii::$app->request->post())) {  
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
+
+            return $model->save()
+                ? $this->redirect(Yii::$app->request->referrer)
+                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
 
         }
         
@@ -47,6 +55,30 @@ class PurchaseGoodsPrintController extends BaseController
                 'model' => $model,
         ]);
     }
+
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $lists = PurchaseGoodsPrintForm::find()->where(['purchase_goods_id'=>$id])->all();
+        if(empty($lists)) {
+            echo '没有内容';exit;
+        }
+        foreach ($lists as &$model){
+            $model->getPurchaseInfo();
+        }
+        return $this->render($this->action->id, [
+            'lists' => $lists,
+        ]);
+    }
+
+
     /**
      * 详情展示页
      * @return string

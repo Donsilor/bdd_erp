@@ -204,6 +204,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'remark')->textarea() ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_image')->widget(common\widgets\webuploader\Files::class, [
+                            'config' => [
+                            ]
+                        ]); ?>
+                    </div>
+                </div>
             	
             </div>
             <?php ActiveForm::end(); ?>
