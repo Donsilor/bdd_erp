@@ -78,21 +78,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => false,
                         ],*/
                         [
-                            'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[supplier_id]',
-                                'value'=>$searchModel->supplier_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
-                        [
                             'attribute' => 'delivery_type',
                             'format' => 'raw',
                             'value' => function ($model){
@@ -138,6 +123,21 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'attribute' => 'creator_id',
