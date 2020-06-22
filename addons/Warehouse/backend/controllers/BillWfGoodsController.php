@@ -98,10 +98,6 @@ class BillWfGoodsController extends BaseController
         $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
         $warehouse_goods = [];
         if($search == 1 && !empty($goods_ids)){
-            $goods_ids = str_replace(' ',',',$goods_ids);
-            $goods_ids = str_replace('，',',',$goods_ids);
-            $goods_ids = str_replace(array("\r\n", "\r", "\n"),',',$goods_ids);
-            $goods_id_arr = explode(",", $goods_ids);
             $billInfo = WarehouseBill::find()->where(['id'=>$bill_id])->one();
             try {
                 foreach ($goods_id_arr as $goods_id) {
