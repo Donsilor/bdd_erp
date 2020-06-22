@@ -14,6 +14,7 @@ use addons\Supply\common\models\Supplier;
  * @property int $supplier_id 供应商ID
  * @property string $total_cost 总成本
  * @property int $total_num 总数量
+ * @property int $total_stone_num 总粒数
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态：0待审核 1通过 2不通过
  * @property int $audit_time 审核时间
@@ -43,11 +44,10 @@ class PurchaseStone extends BaseModel
     public function rules()
     {
         return [
-            [['supplier_id', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'purchase_status', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'total_num', 'total_stone_num', 'auditor_id', 'audit_status', 'audit_time', 'delivery_time', 'purchase_status', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
-            ['delivery_time','safe']
         ];
     }
     /**
@@ -70,9 +70,10 @@ class PurchaseStone extends BaseModel
         return [
             'id' => 'ID',
             'purchase_sn' => '采购单号',
-            'supplier_id' => '供应商',
+            'supplier_id' => '供应商ID',
             'total_cost' => '总成本',
             'total_num' => '总数量',
+            'total_stone_num' => '总粒数',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
@@ -81,7 +82,7 @@ class PurchaseStone extends BaseModel
             'purchase_status' => '采购单状态',
             'status' => '状态',
             'remark' => '采购备注',
-            'follower_id' => '跟单人',
+            'follower_id' => '跟单人ID',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

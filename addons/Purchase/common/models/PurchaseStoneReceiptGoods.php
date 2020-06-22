@@ -53,9 +53,8 @@ class PurchaseStoneReceiptGoods extends BaseModel
             [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['purchase_sn', 'goods_sn'], 'string', 'max' => 30],
-            [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
+            [['goods_name', 'goods_norms', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_color', 'goods_clarity', 'material_type'], 'string', 'max' => 10],
-            [['goods_norms'], 'string', 'max' => 20],
             [['supplier_id', 'receipt_no'], 'safe'],
         ];
     }

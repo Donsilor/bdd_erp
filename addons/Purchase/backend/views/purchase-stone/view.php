@@ -32,10 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
                             <td><?= $model->supplier->supplier_name ?? '';  ?></td>
-                        </tr>                        
+                        </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
                             <td><?= $model->total_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_per') ?>：</td>
+                            <td><?= $model->total_stone_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>

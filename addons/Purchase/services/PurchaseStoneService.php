@@ -38,12 +38,12 @@ class PurchaseStoneService extends Service
     public function summary($purchase_id)
     {
         $sum = PurchaseStoneGoods::find()
-            ->select(['sum(goods_num) as total_num','sum(cost_price*goods_num) as total_cost'])
+            ->select(['sum(goods_num) as total_num','sum(stone_num) as total_stone_num','sum(cost_price*goods_num) as total_cost'])
             ->where(['purchase_id'=> $purchase_id,'status'=> StatusEnum::ENABLED])
             ->asArray()->one();
         
         if($sum) {
-            PurchaseStone::updateAll(['total_num'=>$sum['total_num'],'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
+            PurchaseStone::updateAll(['total_num'=>$sum['total_num'],'total_stone_num'=>$sum['total_stone_num']/1,'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
         }
     }
 }
