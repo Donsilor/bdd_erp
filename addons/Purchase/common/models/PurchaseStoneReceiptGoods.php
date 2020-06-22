@@ -15,7 +15,7 @@ use Yii;
  * @property int $goods_status 收货单货品状态
  * @property string $goods_name 商品名称
  * @property string $goods_sn 石料款号
- * @property int $goods_num 商品数量
+ * @property int $goods_num 石料粒数
  * @property string $material_type 商品类型
  * @property double $goods_weight 重量
  * @property string $goods_color 颜色
@@ -73,7 +73,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'goods_status' => '石料状态',
             'goods_name' => '石料名称',
             'goods_sn' => '石料款号',
-            'goods_num' => '石料数量',
+            'goods_num' => '石料粒数',
             'material_type' => '石料类型',
             'goods_weight' => '石料重量(ct)',
             'goods_color' => '颜色',
