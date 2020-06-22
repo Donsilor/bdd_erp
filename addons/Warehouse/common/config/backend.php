@@ -70,6 +70,11 @@ return [
                             'route' => 'bill-t/index',
 
                     ],
+                    [
+                            'title' => '其他出库单',
+                            'route' => 'bill-c/index',
+
+                    ],
                 ],
 
             ],
