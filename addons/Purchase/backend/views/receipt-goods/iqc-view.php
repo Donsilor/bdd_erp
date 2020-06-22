@@ -48,12 +48,126 @@ $this->params['breadcrumbs'][] = ['label' =>  $this->title];
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
-                    <?php foreach ($goods as $name => $value) {?>
-                        <tr>
-                            <td class="col-xs-2 nowrap text-right"><?php echo $name?>：</td>
-                            <td><?php echo $value??""?></td>
-                        </tr>
-                    <?php }?>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                        <td><?= $model->factory_mo ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('finger') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->finger)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xiangkou') ?>：</td>
+                        <td><?= $model->xiangkou ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->material)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>
+                        <td><?= $model->gold_weight ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_loss') ?>：</td>
+                        <td><?= $model->gold_loss ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
+                        <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gross_weight') ?>：</td>
+                        <td><?= $model->gross_weight ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('suttle_weight') ?>：</td>
+                        <td><?= $model->suttle_weight ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_id') ?>：</td>
+                        <td><?= $model->cert_id ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_size') ?>：</td>
+                        <td><?= $model->product_size ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->main_stone)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_cert_id') ?>：</td>
+                        <td><?= $model->main_cert_id ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_sn') ?>：</td>
+                        <td><?= $model->main_stone_sn ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>
+                        <td><?= $model->main_stone_num ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_weight') ?>：</td>
+                        <td><?= $model->main_stone_weight ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_color') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->main_stone_color)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_clarity') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->main_stone_clarity)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_cert_id1') ?>：</td>
+                        <td><?= $model->second_cert_id1 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_sn1') ?>：</td>
+                        <td><?= $model->second_stone_sn1 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone1') ?>：</td>
+                        <td><?= $model->second_stone1 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num1') ?>：</td>
+                        <td><?= $model->second_stone_num1 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight1') ?>：</td>
+                        <td><?= $model->second_stone_weight1 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone2') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->second_stone2)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num2') ?>：</td>
+                        <td><?= $model->second_stone_num2 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight2') ?>：</td>
+                        <td><?= $model->second_stone_weight2 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone3') ?>：</td>
+                        <td><?= Yii::$app->attr->valueName($model->second_stone3)??"" ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num3') ?>：</td>
+                        <td><?= $model->second_stone_num3 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight3') ?>：</td>
+                        <td><?= $model->second_stone_weight3 ?></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_weight') ?>：</td>
+                        <td><?= $model->parts_weight ?></td>
+                    </tr>
                 </table>
             </div>
         </div>

@@ -189,11 +189,11 @@ class ReceiptGoodsController extends BaseController
         $model = $this->findModel($id);
         $bill = PurchaseReceipt::find()->select(['receipt_no','receipt_status'])->where(['id'=>$model->receipt_id])->one();
         $produce = Produce::find()->select(['id'])->where(['produce_sn'=>$model->produce_sn])->one();
-        $goods = $model->getGoodsView();
+        //$goods = $model->getGoodsView();
         return $this->render($this->action->id, [
             'model' => $model,
             'bill' => $bill,
-            'goods' => $goods,
+            //'goods' => $goods,
             'produce' => $produce,
             'returnUrl'=>$this->returnUrl
         ]);
