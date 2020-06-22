@@ -2,8 +2,10 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
+use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
@@ -85,10 +87,10 @@ class BillCGoodsController extends BaseController
                 if(!$goods){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
-                if($goods->supplier_id != $bill->supplier_id){
+                if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
                     return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
-                if($goods->put_in_type != $bill->put_in_type){
+                if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
                     return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
                 $goods_info = [];
@@ -101,7 +103,8 @@ class BillCGoodsController extends BaseController
                 $goods_info['goods_name'] = $goods->goods_name;
                 $goods_info['goods_num'] = $goods->goods_num;
                 $goods_info['put_in_type'] = $goods->put_in_type;
-                $goods_info['warehouse_id'] = $bill->to_warehouse_id;
+                $goods_info['warehouse_id'] = $goods->warehouse_id;
+                $goods_info['from_warehouse_id'] = $goods->warehouse_id;
                 $goods_info['material'] = $goods->material;
                 $goods_info['gold_weight'] = $goods->gold_weight;
                 $goods_info['gold_loss'] = $goods->gold_loss;
@@ -122,7 +125,8 @@ class BillCGoodsController extends BaseController
                     \Yii::$app->warehouseService->billB->createBillGoodsB($bill, $bill_goods);
 
                     $trans->commit();
-                    $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
+                    \Yii::$app->getSession()->setFlash('success','保存成功');
+                    return $this->redirect(\Yii::$app->request->referrer);
                 }catch (\Exception $e){
                     $trans->rollBack();
                     return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -133,6 +137,49 @@ class BillCGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $bill,
             'warehouse_goods' => $warehouse_goods
+        ]);
+    }
+
+    /**
+     * 批量还货-借货单
+     *
+     * @return mixed
+     */
+    public function actionReturnGoods()
+    {
+        $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
+        $model = new WarehouseBillCGoodsForm();
+        $model->ids = $ids;
+        if($check){
+            try{
+                $bill_id = \Yii::$app->warehouseService->billC->returnGoodsValidate($model);
+                return ResultHelper::json(200, '', ['url'=>'/warehouse/bill-c-goods/return-goods?id='.$bill_id.'&ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        $id = Yii::$app->request->get('id');
+        $model = WarehouseBillCForm::findOne($id);
+        $model = $model ?? new WarehouseBillCForm();
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //同步采购收货单至L单
+                Yii::$app->warehouseService->billC->returnGoods($model);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
         ]);
     }
 

@@ -13,6 +13,7 @@ use common\helpers\StringHelper;
 class WarehouseBillCForm extends WarehouseBill
 {
     public $goods_ids;
+    public $goods_remark;
 
     /**
      * {@inheritdoc}
@@ -36,6 +37,7 @@ class WarehouseBillCForm extends WarehouseBill
             'goods_ids'=>'货号',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
+            'goods_remark' => '质检备注',
         ]);
     }
 

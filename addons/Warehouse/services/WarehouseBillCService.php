@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\LendStatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\Url;
 use Yii;
@@ -116,5 +117,37 @@ class WarehouseBillCService extends WarehouseBillService
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
+    }
+
+    /**
+     *  还货
+     * @param object $form
+     * @throws \Exception
+     */
+    public function returnGoods($form){
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        if(false === $form->save()){
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     *  还货验证
+     * @param object $form
+     * @throws \Exception
+     */
+    public function returnGoodsValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = WarehouseBillGoods::find()->where(['id'=>$id])->select(['status', 'bill_id', 'goods_id'])->one();
+                if($goods->status != LendStatusEnum::LEND){
+                    //throw new Exception("货号【{$goods->goods_id}】不是借货状态");
+                }
+            }
+        }
+        return $goods->bill_id??"";
     }
 }

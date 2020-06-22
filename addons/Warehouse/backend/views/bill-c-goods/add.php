@@ -235,7 +235,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     function searchWarehouseGoods() {
-        var goods_ids = $.trim($("#warehousebillbform-goods_ids").val());
+        var goods_ids = $.trim($("#warehousebillcform-goods_ids").val());
         if(!goods_ids) {
             rfMsg("请输入货号");
             return false;

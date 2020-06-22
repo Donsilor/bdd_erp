@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+        if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {
             echo Html::create(['add', 'receipt_id' => $receipt->id], '添加货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '批量编辑', ['class'=>'btn btn-info btn-xs']);
         }
-        if($receipt->receipt_status == BillStatusEnum::CONFIRM) {
+        if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['warehouse','check'=>1],'批量入库', [
                 'class'=>'btn btn-success btn-xs',
             ]);

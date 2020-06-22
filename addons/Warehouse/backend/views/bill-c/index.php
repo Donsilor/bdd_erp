@@ -93,12 +93,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
-                            'attribute' => 'put_in_type',
+                            'attribute' => 'delivery_type',
                             'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
+                                return \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'delivery_type',\addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
@@ -122,6 +122,18 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'order_sn',
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'channel_id',
+                            'value'=>function($model) {
+                                return $model->channel->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                                'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',

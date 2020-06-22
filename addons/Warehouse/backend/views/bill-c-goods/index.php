@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
@@ -11,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '退货返厂单明细');
+$this->title = Yii::t('bill_c_goods', '其他出库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+        if($bill->bill_status == BillStatusEnum::SAVE){
             echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
@@ -28,16 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
-
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        echo Html::a('导出', ['bill-b/export?ids='.$bill->id],[
+        if($bill->bill_status == BillStatusEnum::SAVE) {
+            echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
+                'class'=>'btn btn-success btn-xs',
+            ]);
+            echo '&nbsp;';
+        }
+        echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
         ]);
         ?>
     </div>
-    <div class="tab-content" style="padding-right: 10px;">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="tab-content">
+        <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -48,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:140%;white-space:nowrap;'],
+                        'options' => ['style'=>' width:130%;white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -147,7 +153,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods.finger',
                                 'filter' => false,
                             ],
-
                             [
                                 'attribute' => 'goods.cert_id',
                                 'filter' => false,
@@ -155,6 +160,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'cost_price',
                                 'filter' => false,
+                            ],
+                            [
+                                'label'=>'归还状态',
+                                'attribute' => 'status',
+                                'format' => 'raw',
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->status)??"初始化";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_remark',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

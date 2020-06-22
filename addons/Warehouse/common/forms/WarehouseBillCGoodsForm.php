@@ -4,6 +4,7 @@ namespace addons\Warehouse\common\forms;
 
 use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use common\helpers\StringHelper;
 
 /**
  * 其他出库单明细 Form
@@ -11,6 +12,7 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
  */
 class WarehouseBillCGoodsForm extends WarehouseBillGoods
 {
+    public $ids;
     /**
      * {@inheritdoc}
      */
@@ -32,5 +34,15 @@ class WarehouseBillCGoodsForm extends WarehouseBillGoods
             'from_warehouse_id'=>'出库仓库',
             'to_warehouse_id'=>'入库仓库'
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
     }
 }

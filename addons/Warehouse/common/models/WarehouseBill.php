@@ -7,6 +7,7 @@ use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Style\common\models\StyleChannel;
 
 /**
  * This is the model class for table "warehouse_bill".
@@ -120,7 +121,14 @@ class WarehouseBill extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-
+    /**
+     * 渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
+    }
     /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
@@ -129,7 +137,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
-
     /**
      * 出库仓库 一对一
      * @return \yii\db\ActiveQuery
@@ -138,7 +145,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
     }
-
     /**
      * 入库仓库 一对一
      * @return \yii\db\ActiveQuery
@@ -163,7 +169,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
-
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
@@ -172,7 +177,6 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias("productType");
     }
-
     /**
      * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
