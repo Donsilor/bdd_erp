@@ -27,7 +27,7 @@ class PeishiStatusEnum extends BaseEnum
                 self::IN_PEISHI => "配石中",
                 self::HAS_PEISHI => "已配石",
                 self::TO_LINGSHI => "待领石",
-                self::FINISHED => "已领石",
+                self::HAS_LINGSHI => "已领石",
                 self::NONE => "不需配石",
         ];
     }

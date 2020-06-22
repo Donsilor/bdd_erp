@@ -14,8 +14,8 @@ class PeiliaoStatusEnum extends BaseEnum
     const PENDING = 1;
     const IN_PEILIAO = 2;
     const HAS_PEILIAO = 3;
-    const TO_LINGLIAO = 3;
-    const HAS_LINGLIAO = 4;
+    const TO_LINGLIAO = 4;
+    const HAS_LINGLIAO = 5;
     const NONE = 9;
     /**
      *
@@ -24,8 +24,8 @@ class PeiliaoStatusEnum extends BaseEnum
     public static function getMap(): array
     {
         return [                
-                self::PENDING => "待配料",
-                self::IN_PEILIAO => "配料中",
+                self::PENDING => "待申请",
+                self::IN_PEILIAO => "待配料",
                 self::HAS_PEILIAO => "已配料",
                 self::TO_LINGLIAO => "待领料",
                 self::HAS_LINGLIAO => "已领料",

@@ -156,9 +156,11 @@ class ReceiptGoodsController extends BaseController
                 return ResultHelper::json(422, '保存失败'.$e->getMessage());
             }
         }
+        $num = count($goods_list);
         return $this->render($this->action->id, [
             'model' => $model,
-            'goods_list' => $goods_list
+            'goods_list' => $goods_list,
+            'num' => $num,
         ]);
     }
 

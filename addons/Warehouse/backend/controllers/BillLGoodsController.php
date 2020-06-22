@@ -144,40 +144,67 @@ class BillLGoodsController extends BaseController
      */
     public function actionBatchEdit()
     {
+        $this->layout = '@backend/views/layouts/iframe';
+
         $ids = Yii::$app->request->post('ids');
-        $field = Yii::$app->request->post('field');
-        $text = Yii::$app->request->post('text');
-        $model = new WarehouseBillLGoodsForm();
+        $ids = $ids ?? Yii::$app->request->get('ids');
+        $model = new WarehouseBillTGoodsForm();
         $model->ids = $ids;
         $id_arr = $model->getIds();
         if(!$id_arr){
             return ResultHelper::json(422, "ID不能为空");
         }
-        if(!$field){
+        $name = Yii::$app->request->post('name');
+        $name = $name ?? Yii::$app->request->get('name');
+        if(!$name){
             return ResultHelper::json(422, "字段错误");
         }
-        if(!$text){
-            return ResultHelper::json(422, "输入值不能为空");
-        }
-        try{
-            $trans = Yii::$app->trans->beginTransaction();
-            foreach ($id_arr as $id) {
-                $goods = WarehouseBillGoodsL::findOne(['id'=>$id]);
-                $goods->$field = $text;
-                if(false === $goods->validate()) {
-                    throw new \Exception($this->getError($goods));
-                }
-                if(false === $goods->save()) {
-                    throw new \Exception($this->getError($goods));
-                }
+        if(Yii::$app->request->isPost){
+            $value = Yii::$app->request->post('value');
+            if(!$value){
+                return ResultHelper::json(422, "输入值不能为空");
             }
-            $trans->commit();
-            Yii::$app->getSession()->setFlash('success','保存成功');
-            return ResultHelper::json(200, '保存成功');
-        }catch (\Exception $e){
-            $trans->rollBack();
-            return ResultHelper::json(422, $e->getMessage());
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                foreach ($id_arr as $id) {
+                    $goods = WarehouseBillGoodsL::findOne(['id'=>$id]);
+                    $goods->$name = $value;
+                    if(false === $goods->validate()) {
+                        throw new \Exception($this->getError($goods));
+                    }
+                    if(false === $goods->save()) {
+                        throw new \Exception($this->getError($goods));
+                    }
+                }
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
         }
+        $attr_id = Yii::$app->request->get('attr_id',0);
+        if(!$attr_id){
+            return ResultHelper::json(422, '参数错误');
+        }
+        $check = Yii::$app->request->get('check',null);
+        if($check){
+            return ResultHelper::json(200, '', ['url'=>'/warehouse/bill-t-goods/batch-edit?ids='.$ids.'&name='.$name."&attr_id=".$attr_id]);
+        }
+        $style_arr = $model::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
+        if(count($style_arr) != 1){
+            return ResultHelper::json(422, '请选择同款的商品进行操作');
+        }
+        $style_sn = $style_arr[0]['style_sn']??"";
+        $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn,$attr_id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'ids' => $ids,
+            'name'=> $name,
+            'attr_arr' =>$attr_arr
+        ]);
+
     }
 
     /**

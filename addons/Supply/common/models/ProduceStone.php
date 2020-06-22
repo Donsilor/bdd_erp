@@ -3,6 +3,7 @@
 namespace addons\Supply\common\models;
 
 use Yii;
+use addons\Warehouse\common\models\WarehouseStone;
 
 /**
  * This is the model class for table "produce_stone".
@@ -68,7 +69,7 @@ class ProduceStone extends BaseModel
             'produce_sn' => '布产编号',
             'from_type' => '来源类型',
             'from_order_sn' => '来源订单号', 
-            'delivery_no'=>'送石单',
+            'delivery_no'=>'领(送)石单',
             'color' => '石头颜色',
             'clarity' => '石头净度',
             'shape' => '石头形状',
@@ -105,5 +106,14 @@ class ProduceStone extends BaseModel
     public function getStoneGoods()
     {
         return $this->hasMany(ProduceStoneGoods::class, ['id'=>'id'])->alias('stoneGoods');
+    }
+    
+    /**
+     * 布产单   一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduce()
+    {
+        return $this->hasOne(Produce::class, ['id'=>'produce_id'])->alias('produce');
     }
 }

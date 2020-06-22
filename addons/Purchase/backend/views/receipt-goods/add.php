@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:26px;','onclick'=>"searchReceiptGoods()"]) ?>
                     </div>
                 </div>
+                <span>数量：<?= $num;?></span>
                 <div class="row">
                     <div class="box-body table-responsive">
                         <div class="tab-content">
@@ -129,12 +130,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'name' => "finger",
                                         'title'=>"指圈",
                                         'enableError'=>false,
-                                        'defaultValue' => 0,
+                                        'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
-                                            'type' => 'number',
-                                            'style'=>'width:80px'
-                                        ]
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'defaultValue' => 0,
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::FINGER)
                                     ],
                                     [
                                         'name' => "xiangkou",
@@ -155,6 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'options' => [
                                             'class' => 'input-priority',
                                             'style'=>'width:100px',
+                                            'disabled'=>'disabled',
                                             'prompt'=>'请选择',
                                         ],
                                         'defaultValue' => 0,
