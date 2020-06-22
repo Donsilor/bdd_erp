@@ -196,14 +196,14 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            $status = [ReceiptStatusEnum::CONFIRM];
             $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
                 ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
-                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>ReceiptStatusEnum::CONFIRM,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>$status,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
                 ->select(['r.id'])
                 ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
-            if (!$the_num) {
+            if ($the_num<=0) {
                 throw new \Exception($message."没有可出货数量");
             }
             $purchase = Purchase::findOne(['id' => $produce->from_order_id]);
@@ -221,6 +221,10 @@ class PurchaseReceiptService extends Service
                 $attr_arr[$attr['attr_id']]['attr_name'] = $attr_name;
                 $attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
                 $attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
+            }
+            $style_cate_id = $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '';
+            if($style_cate_id){
+                $style_cate_id = Yii::$app->attr->valueName($style_cate_id);
             }
             $goodsM = new PurchaseReceiptGoods();
             for ($i = 1; $i <= $the_num; $i++) {
