@@ -175,7 +175,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * ajax 退货返厂单-审核
+     * ajax 其他出库单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -198,7 +198,7 @@ class BillCController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->billB->auditBillB($model);
+                \Yii::$app->warehouseService->billC->auditBillC($model);
 
                 $trans->commit();
 
@@ -215,7 +215,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * 退货返厂单关闭
+     * 其他出库单关闭
      *
      * @param $id
      * @return mixed

@@ -122,7 +122,7 @@ class BillCGoodsController extends BaseController
                 try {
                     $trans = Yii::$app->db->beginTransaction();
 
-                    \Yii::$app->warehouseService->billB->createBillGoodsB($bill, $bill_goods);
+                    \Yii::$app->warehouseService->billC->createBillGoodsC($bill, $bill_goods);
 
                     $trans->commit();
                     \Yii::$app->getSession()->setFlash('success','保存成功');
@@ -168,7 +168,6 @@ class BillCGoodsController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                //同步采购收货单至L单
                 Yii::$app->warehouseService->billC->returnGoods($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -185,7 +184,7 @@ class BillCGoodsController extends BaseController
 
 
     /**
-     * 其他出库单-编辑
+     * 其他出库单-批量编辑
      * @return mixed
      */
     public function actionEditAll()

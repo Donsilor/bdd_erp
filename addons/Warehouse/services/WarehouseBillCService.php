@@ -2,17 +2,17 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\LendStatusEnum;
-use common\helpers\ArrayHelper;
-use common\helpers\Url;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\enums\LendStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\ArrayHelper;
+use common\helpers\Url;
 
 /**
  * 其他出库单
@@ -24,9 +24,9 @@ class WarehouseBillCService extends WarehouseBillService
 
     /**
      * 创建退货返厂单明细
-     * @param WarehouseBillBForm $form
+     * @param WarehouseBillCForm $form
      */
-    public function createBillGoodsB($form, $bill_goods)
+    public function createBillGoodsC($form, $bill_goods)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -53,7 +53,7 @@ class WarehouseBillCService extends WarehouseBillService
         \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
 
         //更新商品库存状态
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_RETURN_FACTORY],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_LEND],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
@@ -66,34 +66,37 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 退货返厂单审核
-     * @param WarehouseBillBForm $form
+     * 其他出库单审核
+     * @param WarehouseBillCForm $form
      */
-    public function auditBillB($form)
+    public function auditBillC($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
         if($form->audit_status == AuditStatusEnum::PASS){
-            //$form->status = StatusEnum::ENABLED;
             $form->bill_status = BillStatusEnum::CONFIRM;
         }else{
-            //$form->status = StatusEnum::DISABLED;
             $form->bill_status = BillStatusEnum::SAVE;
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
-        $billGoods = WarehouseBillGoods::find()->select('goods_id')->where(['bill_id' => $form->id])->asArray()->all();
+        $billGoods = WarehouseBillGoods::find()->select(['id', 'goods_id'])->where(['bill_id' => $form->id])->asArray()->all();
         if(empty($billGoods) && $form->audit_status == AuditStatusEnum::PASS){
             throw new \Exception("单据明细不能为空");
         }
         $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
-        $condition = ['goods_status' => GoodsStatusEnum::IN_RETURN_FACTORY, 'goods_id' => $goods_ids];
-        $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_RETURN_FACTORY : GoodsStatusEnum::IN_RETURN_FACTORY;
+        $condition = ['goods_status' => GoodsStatusEnum::IN_LEND, 'goods_id' => $goods_ids];
+        $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_LEND : GoodsStatusEnum::HAS_LEND;
         $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
         if(false === $res){
             throw new \Exception("更新货品状态失败");
+        }
+        $ids = ArrayHelper::getColumn($billGoods, 'id');
+        $res = WarehouseBillGoods::updateAll(['status' => LendStatusEnum::LEND], ['id' => $ids]);
+        if(false === $res){
+            throw new \Exception("更新明细商品状态失败");
         }
     }
 

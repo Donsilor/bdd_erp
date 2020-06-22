@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        if($bill->bill_status == BillStatusEnum::SAVE) {
+        if($bill->bill_status == BillStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
             ]);
