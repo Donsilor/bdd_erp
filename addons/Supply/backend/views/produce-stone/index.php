@@ -35,65 +35,88 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                             ],  
                             [
+                                    'attribute' => 'peishi_status',
+                                    'value' => function ($model){
+                                        return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
+                                    },
+                                    'filter' =>Html::activeDropDownList($searchModel, 'peishi_status',\addons\Supply\common\enums\PeishiStatusEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style' => 'width:80px;',
+                                    ]),
+                                    'format' => 'raw',
+                            ],
+                            [
+                                    'label' => '领石单号',
+                                    'attribute' => 'delivery_no',
+                                    'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                                            'class' => 'form-control',
+                                            'style' =>'width:150px'
+                                    ]),
+                                    'format' => 'raw',
+                                    
+                            ],
+                            [
                                     'attribute' => 'stone_position',
                                     'value'  => function($model) {
-                                         return \addons\Style\common\enums\StonePositionEnum::getValue($model->stone_position);
+                                        return \addons\Style\common\enums\StonePositionEnum::getValue($model->stone_position);
                                     },
                                     'filter' => false,
-                                    
+                            
                             ],
                             [
                                     'attribute' => 'stone_type',
                                     'value'  => function($model) {
-                                        return $model->stone_type ?? '无';
+                                            return $model->stone_type ?? '无';
                                     },
                                     'filter' => false,
-                                    
+                            
                             ],
                             [
                                     'attribute' => 'stone_num',
                                     'value' => 'stone_num',
                                     'filter' => false,
-
+                                    
                             ],
                             [
                                     'attribute' => 'shape',
                                     'value' => function($model){
-                                        return $model->shape ?? '无';
+                                            return $model->shape ?? '无';
                                     },
                                     'filter' => false,
-                                    
+                            
                             ],
                             [
                                     'attribute' => 'color',
                                     'value' => function($model){
-                                        return $model->color ?? '无';
+                                            return $model->color ?? '无';
                                     },
-                                    'filter' => false,                                    
+                                    'filter' => false,
                             ],
                             [
                                     'attribute' => 'clarity',
                                     'value' => function($model){
-                                        return $model->clarity ?? '无';
+                                    return $model->clarity ?? '无';
                                     },
                                     'filter' => false,
-                                    
+                            
                             ],
                             [
                                     'attribute' => 'stone_spec',
                                     'value' => 'stone_spec',
-                                    'filter' => false,                                    
-                            ],
-                            [
-                                    'attribute' => 'songshi_user',
                                     'filter' => false,
                             ],
                             [
-                                    'attribute' => 'songshi_time',
-                                    'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->songshi_time);
+                                    'label' => '配石信息(石头编号/数量/总重)',
+                                    'value' => function($model){
+                                        $str = '';
+                                        foreach ($model->stoneGoods ?? [] as $stone){
+                                            $str .=$stone->stone_sn.'/'.$stone->stone_num."/".$stone->stone_weight."ct<br/>";
+                                        }
+                                        return $str;
                                     },
                                     'filter' => false,
+                                    'format' => 'raw',
                             ],
                             [
                                     'attribute' => 'peishi_user',
@@ -102,26 +125,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                     'attribute' => 'peishi_time',
                                     'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->peishi_time);
+                                            return Yii::$app->formatter->asDatetime($model->peishi_time);
                                     },
                                     'filter' => false,
                             ],
                             [
-                                'attribute'=>'remark',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'created_at',
-                                'filter' => false,
-                                'value' => function($model){
-                                    return Yii::$app->formatter->asDatetime($model->created_at);
-                                }
-
-                            ],
-                            [
-                                'attribute' => 'creator_name',
-                                'filter' => false,
+                                    'attribute'=>'remark',
+                                    'filter' => false,
+                                    'headerOptions' => [],
                             ],
 
 

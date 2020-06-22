@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
    						 <td class="col-xs-1 text-right">来源类型：</td>
    						 <td><?php echo FromTypeEnum::getValue($model->from_type);?></td>
                          <td class="col-xs-1 text-right">单据备注：</td>
-                         <td><?php echo  Html::activeTextarea($model, "remark",['class' => 'form-control']);?></td>
+                         <td><?php echo  Html::activeTextarea($model, "peiliao_remark",['class' => 'form-control']);?></td>
                      </tr>                                                                           
                  </table>
              </div>

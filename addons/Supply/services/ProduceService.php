@@ -150,11 +150,11 @@ class ProduceService extends Service
         $form->bc_status = BuChanEnum::IN_PEILIAO;
 
         if($form->peiliao_status == PeiliaoStatusEnum::PENDING) {
-            $form->peiliao_status = PeiliaoStatusEnum::DOING;
+            $form->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
             $this->createPeiliao($form,$attrValues);
         }
         if($form->peishi_status == PeishiStatusEnum::PENDING) {
-            $form->peishi_status = PeishiStatusEnum::DOING;
+            $form->peishi_status = PeishiStatusEnum::IN_PEISHI;
             $this->createPeishi($form,$attrValues);
         }        
         if(false === $form->save()){
@@ -168,6 +168,7 @@ class ProduceService extends Service
     private function createPeiliao($form ,$attrValues)
     {        
         $gold = [
+                'supplier_id' => $form->supplier_id,
                 'gold_type' =>  $attrValues[AttrIdEnum::MATERIAL]??'',
                 'gold_weight' => $form->goods_num * ($attrValues[AttrIdEnum::JINZHONG]?? 0),
         ];
@@ -177,6 +178,10 @@ class ProduceService extends Service
             $model->attributes = $gold;
             $model->produce_id =  $form->id;
             $model->produce_sn =  $form->produce_sn;
+            $model->from_order_sn = $form->from_order_sn;
+            $model->from_type = $form->from_type;
+            $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+            
         }else {
             $model->attributes = ArrayHelper::merge($model->attributes, $gold);
         }
@@ -244,21 +249,35 @@ class ProduceService extends Service
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE3_SPEC]??'',
             ];
         }
-        $log_list = [];
+        $log_msgs = [];
         foreach ($stone_list as $position => $stone) {
-             
+             $is_new = false;
              $model = ProduceStone::find()->where(['produce_id'=>$form->id,'stone_position'=>$position])->one();
              if(!$model) {                 
                  $model = new ProduceStone();
                  $model->attributes = $stone;
                  $model->produce_id =  $form->id;
                  $model->produce_sn =  $form->produce_sn;
+                 $model->from_order_sn = $form->from_order_sn;
+                 $model->from_type = $form->from_type;
+                 $model->peishi_status =  PeishiStatusEnum::IN_PEISHI;
+                 $is_new = true;                 
              }else {
                  $model->attributes = ArrayHelper::merge($model->attributes, $stone);
              }
+             $model->supplier_id = $form->supplier_id;//加工商
              if(false === $model->save()) {
                  throw new \Exception($this->getError($model));
-             }             
+             }
+             if($is_new) {
+                 $log_msgs['生成配石单'][$model->id] = $model->id;
+             }else {
+                 $log_msgs['更新配石单'][$model->id] = $model->id;
+             }
+        }
+        $log_msg = '';
+        foreach ($log_msgs as $k=>$v) {
+            $log_msg .= "{$k}:".implode(",", array_keys($v)).' ';
         }
         //日志
         $log = [
@@ -267,20 +286,9 @@ class ProduceService extends Service
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'bc_status' => $form->bc_status,
                 'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
-                'log_msg' => "生成配石单:2222222,3333333"
+                'log_msg' => $log_msg
         ];
-        $this->createProduceLog($log);
-        /* foreach ($log_list as $log) {
-            $log = [
-                    'produce_id' => $form->id,
-                    'produce_sn' => $form->produce_sn,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'bc_status' => $form->bc_status,
-                    'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
-                    'log_msg' => "生成配石单:".$model->id
-            ];
-            $this->createProduceLog($log);
-        } */
+        $this->createProduceLog($log);        
     }
     /**
      * 创建布产日志

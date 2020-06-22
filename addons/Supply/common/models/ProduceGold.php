@@ -9,7 +9,8 @@ use Yii;
  *
  * @property int $id id主键
  * @property int $produce_id 布产id
- * @property string $delivery_no 送料单号
+ * @property string $delivery_no 领料单号
+ * @property string $supplier_id 供应商
  * @property string $from_order_sn 来源单号
  * @property string $from_type 来源类型
  * @property string $gold_type 金料类型
@@ -18,9 +19,10 @@ use Yii;
  * @property int $peiliao_time 配料中时间（操作配料中的最新时间）
  * @property string $caigou_user 采购人（操作采购中的人员）
  * @property string $songliao_user 送料人（已送生产部操作人员）
- * @property string $remark 备注
+ * @property string $remark 采购备注
  * @property string $peiliao_user 配料人（配料中操作人员）
  * @property int $peiliao_status 配料状态（需建数据字典）
+ * @property string $peiliao_remark 配料备注
  * @property int $creator_id 创建人ID
  * @property string $creator_name 创建人
  * @property int $created_at 添加时间
@@ -42,11 +44,11 @@ class ProduceGold extends BaseModel
     public function rules()
     {
         return [
-                [['produce_id','from_type' ,'caigou_time', 'songliao_time', 'peiliao_time', 'peiliao_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+                [['produce_id','from_type','supplier_id' ,'caigou_time', 'songliao_time', 'peiliao_time', 'peiliao_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
                 [['from_order_sn','delivery_no', 'caigou_user', 'songliao_user', 'peiliao_user', 'creator_name'], 'string', 'max' => 30],
                 [['gold_type'], 'string', 'max' => 10],
                 [['gold_weight'], 'number'],
-                [['gold_spec','remark'], 'string', 'max' => 255],
+                [['gold_spec','peiliao_remark','remark'], 'string', 'max' => 255],
         ];
     }
     
@@ -60,6 +62,7 @@ class ProduceGold extends BaseModel
                 'produce_id' => '布产ID',
                 'produce_sn' => '布产编号',
                 'delivery_no'=> '送料单号',
+                'supplier_id'=> '加工商',
                 'from_order_sn' => '来源单号',
                 'from_type' => '来源类型',
                 'gold_type' => '金料类型', 
@@ -72,7 +75,8 @@ class ProduceGold extends BaseModel
                 'songliao_user' => '送料人',                
                 'peiliao_user' => '配料人',
                 'peiliao_status' => '配料状态',
-                'remark' => '备注',                
+                'peiliao_remark' => '配料备注', 
+                'remark' => '采购备注',                
                 'creator_id' => '创建人ID',
                 'creator_name' => '创建人',
                 'created_at' => '添加时间',

@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <h3 class="box-title"><i class="fa fa-qrcode"></i> 单据明细</h3>
              </div>
                      
-            <div class="box-body" style="padding:20px 50px">
+            <div class="box-body" style="padding:20px 20px">
                 <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -89,7 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                          $str = '';
+                                          foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                              $str.= $stoneGoods->stone_sn.'<br/>';
+                                          }
+                                          return $str;
                                     },
                                     
                             ],
@@ -99,7 +103,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                        $str = '';
+                                        foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                            $str.= Yii::$app->attr->valueName($stoneGoods->stone->stone_type??'').'<br/>';
+                                        }
+                                        return $str;
                                     },
                                     
                             ],
@@ -109,7 +117,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                        $str = '';
+                                        foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                            $str.= ($stoneGoods->stone_num??'0').'<br/>';
+                                        }
+                                        return $str;
                                     },
                                     
                             ],
@@ -119,7 +131,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                        $str = '';
+                                        foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                            $str.= ($stoneGoods->stone_weight??'0').'ct<br/>';
+                                        }
+                                        return $str;
                                     },
                                     
                             ],
@@ -129,7 +145,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                    
+                                        $str = '';
+                                        foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                            $str.= Yii::$app->attr->valueName($stoneGoods->stone->stone_color??'').'<br/>';
+                                        }
+                                        return $str;
                                     },
                             
                             ],
@@ -139,7 +159,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:100px'],
                                     'value' => function($model) {
-                                          
+                                        $str = '';
+                                        foreach ($model->stoneGoods ??[] as $stoneGoods){
+                                            $str.= Yii::$app->attr->valueName($stoneGoods->stone->stone_clarity??'').'<br/>';
+                                        }
+                                        return $str;
                                     },
                                     
                             ],

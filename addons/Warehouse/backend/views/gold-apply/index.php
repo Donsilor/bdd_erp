@@ -108,13 +108,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => 'gold_weight',
                                     'filter' => false,
 
-                            ],   
+                            ],
                             [
-                                    'label' => '配料信息(金料编号/金重)',
+                                    'label' => '领料单号',
+                                    'attribute' => 'delivery_no',
+                                    'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                                            'class' => 'form-control',
+                                            'style' =>'width:150px'
+                                    ]),
+                                    'format' => 'raw',
+                                    
+                            ],
+                            [
+                                    'label' => '配料信息(金料编号/金料类型/金重)',
                                     'value' => function($model){
                                         $str = '';
-                                        foreach ($model->goldGoods ?? [] as $stone){
-                                            $str .=$stone->gold_sn.'/'.$stone->gold_weight."g<br/>";
+                                        foreach ($model->goldGoods ?? [] as $goldGoods){
+                                            $gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type ??'');
+                                            $str .= $goldGoods->gold_sn.'/'.$gold_type.'/'.$goldGoods->gold_weight."g<br/>";
                                         }
                                         return $str;
                                     },
@@ -131,6 +142,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' =>  function($model){
                                         return Yii::$app->formatter->asDatetime($model->peiliao_time);
                                     },
+                                    'filter' => false,
+                            ],
+                            [
+                                    'attribute'=>'peiliao_remark',
                                     'filter' => false,
                             ],
                             [
