@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {apply-edit} {delete}',
+                                'template' => '{view} {edit} {apply-edit} {print_edit} {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'purchase_id'=>$model->purchase_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -69,6 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                          if($purchase->purchase_status == PurchaseStatusEnum::SAVE) {
                                              return Html::edit(['edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }
+                                    },
+                                    'print_edit' => function($url, $model, $key) use($purchase){
+                                        return Html::edit(['purchase-goods-print/edit','purchase_goods_id' => $model->id],'制造单打印编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                     },
                                     'apply-edit' =>function($url, $model, $key) use($purchase){
                                         if(($purchase->purchase_status != PurchaseStatusEnum::SAVE) && (!$model->produce || $model->produce->bc_status < BuChanEnum::IN_PRODUCTION)) {
