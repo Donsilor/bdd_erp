@@ -163,6 +163,9 @@ class BillCGoodsController extends BaseController
         $model = WarehouseBillCForm::findOne($id);
         $model = $model ?? new WarehouseBillCForm();
         if ($model->load(Yii::$app->request->post())) {
+            $model->ids = $ids;
+            $from = Yii::$app->request->post('WarehouseBillCForm');
+            $model->goods_remark = $from['goods_remark']??"";
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()) {

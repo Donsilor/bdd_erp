@@ -12,6 +12,7 @@ use common\helpers\StringHelper;
  */
 class WarehouseBillCForm extends WarehouseBill
 {
+    public $ids;
     public $goods_ids;
     public $goods_remark;
 
@@ -25,7 +26,6 @@ class WarehouseBillCForm extends WarehouseBill
          ];
          return array_merge(parent::rules() , $rules);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +40,15 @@ class WarehouseBillCForm extends WarehouseBill
             'goods_remark' => '质检备注',
         ]);
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
+    }
     /**
      * 批量获取货号
      */

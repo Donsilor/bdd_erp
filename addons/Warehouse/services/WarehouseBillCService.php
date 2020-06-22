@@ -88,7 +88,7 @@ class WarehouseBillCService extends WarehouseBillService
         }
         $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
         $condition = ['goods_status' => GoodsStatusEnum::IN_LEND, 'goods_id' => $goods_ids];
-        $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::HAS_LEND : GoodsStatusEnum::HAS_LEND;
+        $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_LEND : GoodsStatusEnum::HAS_LEND;
         $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
         if(false === $res){
             throw new \Exception("更新货品状态失败");
@@ -101,8 +101,8 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 退货返厂单关闭
-     * @param WarehouseBillBForm $form
+     * 其他出库单关闭
+     * @param WarehouseBillCForm $form
      */
     public function closeBillB($form)
     {
@@ -128,11 +128,22 @@ class WarehouseBillCService extends WarehouseBillService
      * @throws \Exception
      */
     public function returnGoods($form){
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
+
+        $ids = $form->getIds();
+        if(empty($ids)) {
+            throw new \Exception("ID不能为空");
         }
-        if(false === $form->save()){
-            throw new \Exception($this->getError($form));
+        //更新库存状态
+        $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id'])->all();
+        foreach ($billGoods as $goods){
+            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::HAS_LEND]);
+            if(!$res){
+                throw new Exception("商品{$goods->goods_id}不是已借货状态或者不存在，请查看原因");
+            }
+        }
+        $execute_num = WarehouseBillGoods::updateAll(['status'=>LendStatusEnum::RETURN, 'goods_remark'=>$form->goods_remark], ['id'=>$ids]);
+        if($execute_num <> count($ids)){
+            throw new Exception("货品改变状态数量与明细数量不一致");
         }
     }
 
@@ -147,7 +158,7 @@ class WarehouseBillCService extends WarehouseBillService
             foreach ($ids as $id) {
                 $goods = WarehouseBillGoods::find()->where(['id'=>$id])->select(['status', 'bill_id', 'goods_id'])->one();
                 if($goods->status != LendStatusEnum::LEND){
-                    //throw new Exception("货号【{$goods->goods_id}】不是借货状态");
+                    throw new Exception("货号【{$goods->goods_id}】不是借货状态");
                 }
             }
         }
