@@ -183,21 +183,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute'=>'finger',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('finger', $model->finger, ['data-id'=>$model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'finger', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute'=>'xiangkou',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('xiangkou', $model->xiangkou, ['data-id'=>$model->id]);
                                 },
@@ -205,6 +192,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'xiangkou','attr-id'=>AttrIdEnum::XIANGKOU],
+                            ],
+                            [
+                                'attribute' => 'finger',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'finger','attr-id'=>AttrIdEnum::FINGER],
                             ],
                             [
                                 'attribute' => 'material',
@@ -217,7 +218,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'material','attr-id'=>AttrIdEnum::MATERIAL],
                             ],
                             [
                                 'attribute'=>'gold_weight',
@@ -351,7 +352,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'main_stone','attr-id'=>AttrIdEnum::MAIN_STONE_TYPE],
                             ],
                             [
                                 'attribute'=>'main_stone_num',
@@ -388,7 +389,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'main_stone_color','attr-id'=>AttrIdEnum::MAIN_STONE_COLOR],
                             ],
                             [
                                 'attribute' => 'main_stone_clarity',
@@ -401,7 +402,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'main_stone_clarity','attr-id'=>AttrIdEnum::MAIN_STONE_CLARITY],
                             ],
                             [
                                 'attribute'=>'main_stone_price',
@@ -426,7 +427,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone1','attr-id'=>AttrIdEnum::SIDE_STONE1_TYPE],
                             ],
                             [
                                 'attribute'=>'second_stone_weight1',
@@ -463,7 +464,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone2','attr-id'=>AttrIdEnum::SIDE_STONE2_TYPE],
                             ],
                             [
                                 'attribute'=>'second_stone_weight2',
@@ -572,7 +573,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'biaomiangongyi','attr-id'=>AttrIdEnum::FACEWORK],
                             ],
                             [
                                 'attribute'=>'biaomiangongyi_fee',
@@ -722,6 +723,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function(){
-        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton("批量填充", ['data-grid'=>'grid', 'url'=>"/purchase/receipt-goods/batch-edit"]); ?>');
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'],"批量填充"); ?>');
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit','check'=>1],"批量填充", ['input_type'=>'select']); ?>');
     });
 </script>

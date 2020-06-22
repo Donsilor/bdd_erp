@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              </tr>                             
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_order_sn') ?>：</td>
-                                 <td><?= $model->from_order_sn ?></td>
+                                 <td><?= Html::a($model->from_order_sn,['../purchase/purchase/view','id'=>$model->from_order_id],['target'=>'_blank'])?></td>
                              </tr>
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bc_status') ?>：</td>

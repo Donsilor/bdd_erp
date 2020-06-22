@@ -176,13 +176,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute'=>'finger',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'finger', [
+                                'attribute' => 'finger',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->finger);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'xiangkou',
@@ -198,7 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->material);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:150px;'

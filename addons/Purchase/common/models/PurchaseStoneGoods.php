@@ -48,7 +48,7 @@ class PurchaseStoneGoods extends BaseModel
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
-            [['goods_name', 'remark'], 'string', 'max' => 255],
+            [['goods_name', 'spec_remark', 'remark'], 'string', 'max' => 255],
             [['stone_color', 'stone_clarity'], 'string', 'max' => 10],
             [['put_in_type'], 'safe']
         ];
@@ -72,6 +72,7 @@ class PurchaseStoneGoods extends BaseModel
             'stone_num' => '石料粒数',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',
+            'spec_remark' => '规格备注',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
             'is_receipt' => '是否已收货',

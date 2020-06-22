@@ -30,8 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->supplier->supplier_name??"" ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
+                            <td><?= $model->purchase_sn??"" ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
-                            <td><?= Html::a($model->receipt_no, ['purchase-receipt/view', 'receipt_no' => $model->receipt_no, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]) ?></td>
+                            <td><?= $model->receipt_no??"" ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('defective_num') ?>：</td>

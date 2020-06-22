@@ -196,14 +196,14 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            //$receipt_num = PurchaseReceiptGoods::find()->where(['produce_sn' => $produce_sn])->count();
+            $status = [ReceiptStatusEnum::CONFIRM];
             $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
                 ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
-                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>ReceiptStatusEnum::CONFIRM,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>$status,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
                 ->select(['r.id'])
                 ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
-            if (!$the_num) {
+            if ($the_num<=0) {
                 throw new \Exception($message."没有可出货数量");
             }
             $purchase = Purchase::findOne(['id' => $produce->from_order_id]);
@@ -221,6 +221,10 @@ class PurchaseReceiptService extends Service
                 $attr_arr[$attr['attr_id']]['attr_name'] = $attr_name;
                 $attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
                 $attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
+            }
+            $style_cate_id = $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '';
+            if($style_cate_id){
+                $style_cate_id = Yii::$app->attr->valueName($style_cate_id);
             }
             $goodsM = new PurchaseReceiptGoods();
             for ($i = 1; $i <= $the_num; $i++) {
@@ -708,7 +712,7 @@ class PurchaseReceiptService extends Service
             throw new \Exception('采购收货单没有待入库的货品');
         }
         $goods = $ids = [];
-        $total_weight= $market_price= $sale_price = 0;
+        $total_stone_num = $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
             $ids[] = $model->id;
             $goods[] = [
@@ -726,11 +730,12 @@ class PurchaseReceiptService extends Service
                 'source_detail_id' => $model->id,
                 'cost_price' => $model->cost_price,
                 'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
+                'stone_norms' => $model->goods_norms,
                 //'sale_price' => $model->sale_price,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
-
+            $total_stone_num = bcadd($total_stone_num, $model->goods_num);
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
         //批量更新采购收货单货品状态
@@ -745,6 +750,7 @@ class PurchaseReceiptService extends Service
             'put_in_type' => $form->put_in_type,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
+            'total_stone_num' => $total_stone_num,
             'total_weight' => $total_weight,
             'total_cost' => $form->total_cost,
             'pay_amount' => $form->total_cost,
