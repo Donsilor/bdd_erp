@@ -84,7 +84,6 @@ class StoneBillWController extends BaseController
         
         
     }
-    
     /**
      * ajax编辑/创建 盘点单
      *
@@ -136,7 +135,6 @@ class StoneBillWController extends BaseController
                 'model' => $model,
         ]);
     }
-    
     /**
      * ajax 盘点结束
      *
@@ -160,7 +158,6 @@ class StoneBillWController extends BaseController
         }
 
     }
-    
     /**
      * ajax 盘点自动校正
      *
