@@ -21,9 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-lg-4">
                     <?= $form->field($model, 'goods_name')->textInput() ?>
                 </div>
-                  <div class="col-lg-4">
-                      <?= $form->field($model, 'goods_sn')->dropDownList(Yii::$app->styleService->gold->getDropDown(),['prompt'=>'请选择']) ?>
-                  </div>
+              <div class="col-lg-4">
+                  <?= $form->field($model, 'goods_sn')->widget(\kartik\select2\Select2::class, [
+                      'data' => Yii::$app->styleService->gold->getDropDown(),
+                      'options' => ['placeholder' => '请选择'],
+                      'pluginOptions' => [
+                          'allowClear' => false
+                      ],
+                  ]);?>
+              </div>
               </div>
 			   <div class="row">
                    <div class="col-lg-4">

@@ -92,7 +92,7 @@ class Purchase extends BaseModel
             'purchase_type' => '采购类型',
             'order_type' => '订单类型',
             'put_in_type' =>'采购方式',
-            'total_cost' => '总金额',
+            'total_cost' => '总成本',
             'total_num' => '总数量',  
             'follower_id' => '跟单人',
             'creator_id' => '创建人',

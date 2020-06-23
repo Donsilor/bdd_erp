@@ -317,9 +317,9 @@ class BillMController extends BaseController
 
         list($list,) = $this->getData($ids);
         $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据类型', 'bill_type' , 'text'],
-            ['单据状态', 'bill_status' , 'text'],
+//            ['单据编号', 'bill_no' , 'text'],
+//            ['单据类型', 'bill_type' , 'text'],
+//            ['单据状态', 'bill_status' , 'text'],
             ['货品名称', 'goods_name' , 'text'],
             ['条码号', 'goods_id' , 'text'],
             ['款号', 'style_sn' , 'text'],

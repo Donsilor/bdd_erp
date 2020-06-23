@@ -328,8 +328,8 @@ class BillWController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
+//            ['单据编号', 'bill_no' , 'text'],
+//            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
             ['货品名称', 'goods_name' , 'text'],
             ['条码号', 'goods_id' , 'text'],
             ['款号', 'style_sn' , 'text'],

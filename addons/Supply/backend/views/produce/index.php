@@ -60,6 +60,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'130'],
             ],
             [
+                'attribute' => 'supplier_id',
+                'value' => function($model){
+                    return $model->supplier->supplier_name ?? '';
+                },
+                'filter'=>\kartik\select2\Select2::widget([
+                    'name'=>'SearchModel[supplier_id]',
+                    'value'=>$searchModel->supplier_id,
+                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-1','style' => 'width:150px;',],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' =>'col-md-1'],
+            ],
+            [
                     'attribute' => 'from_type',
                     'value' => function ($model){
                         return \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type);
@@ -272,23 +289,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \Yii::$app->formatter->asDatetime($model->factory_delivery_time);
                 }
             ],
-            [
-                'attribute' => 'supplier_id',
-                'value' => function($model){
-                      return $model->supplier->supplier_name ?? '';
-                },
-                'filter'=>\kartik\select2\Select2::widget([
-                    'name'=>'SearchModel[supplier_id]',
-                    'value'=>$searchModel->supplier_id,
-                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                     'options' => ['placeholder' =>"请选择",'class' => 'col-md-1','style' => 'width:150px;',],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                    ],
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['class' =>'col-md-1'],
-            ],
+
             [
                 'attribute' => 'follower_name',
                 'value' => 'follower_name',

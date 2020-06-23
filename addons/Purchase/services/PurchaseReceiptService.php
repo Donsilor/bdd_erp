@@ -295,8 +295,8 @@ class PurchaseReceiptService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             array_push($key,'receipt_id', 'xuhao');
-            $xuhaoMax = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
-            $xuhao = $xuhaoMax->xuhao?:0;
+            $max = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
+            $xuhao = $max->xuhao??0;
             foreach ($goods as $good) {
                 $xuhao++;
                 array_push($good, $form->id, $xuhao);

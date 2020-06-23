@@ -56,6 +56,17 @@ $this->params['breadcrumbs'][] = $this->title;
                              <?= $form->field($model, 'cost_price')->textInput() ?>
                          </div>
                      </div>
+                     <div class="row">
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'goods_images')->widget(common\widgets\webuploader\Files::class, [
+                                 'config' => [
+                                     'pick' => [
+                                         'multiple' => true,
+                                     ],
+                                 ]
+                             ]); ?>
+                         </div>
+                     </div>
 
 
     			<?php }else{?>

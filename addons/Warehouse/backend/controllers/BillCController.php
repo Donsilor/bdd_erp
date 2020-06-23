@@ -251,9 +251,9 @@ class BillCController extends BaseController
         list($list,) = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
-            ['维修单号', 'bill_no', 'text'],
-            ['维修状态', 'bill_status', 'text'],
-            ['维修工厂', 'supplier_name', 'text'],
+//            ['维修单号', 'bill_no', 'text'],
+//            ['维修状态', 'bill_status', 'text'],
+//            ['维修工厂', 'supplier_name', 'text'],
             ['货品名称', 'goods_name', 'text'],
             ['条码号', 'goods_id', 'text'],
             ['款号', 'style_sn', 'text'],

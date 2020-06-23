@@ -44,10 +44,11 @@ class PurchaseStone extends BaseModel
     public function rules()
     {
         return [
-            [['supplier_id', 'total_num', 'total_stone_num', 'auditor_id', 'audit_status', 'audit_time', 'delivery_time', 'purchase_status', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'total_num', 'total_stone_num', 'auditor_id', 'audit_status', 'audit_time', 'purchase_status', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
+            ['delivery_time','safe']
         ];
     }
     /**
