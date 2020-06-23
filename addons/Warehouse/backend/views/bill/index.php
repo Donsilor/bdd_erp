@@ -5,11 +5,12 @@ use common\helpers\Url;
 use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('warehouse_bill', '单据列表');
+$this->title = Yii::t('bill', '单据列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -21,6 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
+                <?php $form = ActiveForm::begin([]); ?>
+                    <div class="col-xs-3">
+                        <?= $form->field($model, 'goods_id')->textInput(["placeholder"=>"请输入货号"]) ?>
+                    </div>
+                    <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
+                        <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
+                        <?= Html::resetButton('重置', ['class' => 'btn btn-success btn-sm']) ?>
+                    </div class="col-xs-3">
+                <?php ActiveForm::end(); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,

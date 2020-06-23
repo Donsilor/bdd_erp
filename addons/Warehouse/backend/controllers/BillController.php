@@ -2,14 +2,13 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
-use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
 use addons\Warehouse\common\models\WarehouseBill;
-
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use common\helpers\Url;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -64,12 +63,14 @@ class BillController extends BaseController
             $this->getExport($dataProvider);
         }
         //echo $this->action->id;
-        if($searchModel->bill_type) {
-            $this->action->id = '../bill-'.strtolower($searchModel->bill_type).'/index';
-        }       
+        //if($searchModel->bill_type) {
+        //    $this->action->id = '../bill-'.strtolower($searchModel->bill_type).'/index';
+        //}
+        $model = new WarehouseBillGoods();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'model' => $model,
         ]);
 
 
