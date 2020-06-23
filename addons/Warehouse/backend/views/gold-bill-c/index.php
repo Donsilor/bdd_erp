@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'bill_type',
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'bill_status',
                             'value' => function ($model){
