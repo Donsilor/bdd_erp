@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
                         <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
-                    </div class="col-sm-3">
+                    </div>
                 <?php ActiveForm::end(); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
