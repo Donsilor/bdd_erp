@@ -68,7 +68,7 @@ class GoldApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceGold::find()->where(['id'=>$id])->one();
                 if($model && $model->peiliao_status >= PeiliaoStatusEnum::TO_LINGLIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单状态允许批量配料");
+                    return ResultHelper::json(422,"(ID={$id})配料单不允许批量配料");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peiliao','ids'=>implode(',',$ids)])]);
@@ -127,8 +127,10 @@ class GoldApplyController extends BaseController
                 $model = ProduceGold::find()->where(['id'=>$id])->one();
                 if(empty($model)) {
                     return ResultHelper::json(422,"(ID={$id})配料单不存在");
+                }elseif($model->delivery_no != '') {
+                    return ResultHelper::json(422,"(ID={$id})配料单已绑定领料单");
                 }elseif($model->peiliao_status != PeiliaoStatusEnum::HAS_PEILIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单状态不允许创建领料单");
+                    return ResultHelper::json(422,"(ID={$id})配料单不允许创建领料单");
                 }
                 $order_sn_array[$model->from_order_sn] = $model->from_order_sn;
             }
@@ -174,10 +176,12 @@ class GoldApplyController extends BaseController
                         ];
                     }
                 }
+                //创建单据
                 $bill = Yii::$app->warehouseService->goldBill->createGoldC($bill,$details);
-                ProduceGold::updateAll(['delivery_no'=>$bill->bill_no,'peiliao_status'=>PeiliaoStatusEnum::TO_LINGLIAO],['id'=>$ids]);
-                $trans->commit();
+                //绑定领料单
+                ProduceGold::updateAll(['delivery_no'=>$bill->bill_no],['id'=>$ids]);
                 
+                $trans->commit();                
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200,"保存成功");
             } catch (\Exception $e){

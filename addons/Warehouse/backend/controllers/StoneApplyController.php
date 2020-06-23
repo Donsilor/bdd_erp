@@ -70,7 +70,7 @@ class StoneApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceStone::find()->where(['id'=>$id])->one();
                 if($model && $model->peishi_status >= PeishiStatusEnum::TO_LINGSHI) {
-                     return ResultHelper::json(422,"(ID={$id})配石单状态不允许批量配石");
+                     return ResultHelper::json(422,"(ID={$id})配石单状态不允许批量配石操作");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peishi','ids'=>implode(',',$ids)])]);
@@ -129,8 +129,10 @@ class StoneApplyController extends BaseController
                 $model = ProduceStone::find()->where(['id'=>$id])->one();
                 if(empty($model)) {
                     return ResultHelper::json(422,"(ID={$id})配石单不存在");
+                }elseif($model->delivery_no != '') {
+                    return ResultHelper::json(422,"(ID={$id})配石单已绑定领石单");
                 }elseif($model->peishi_status != PeishiStatusEnum::HAS_PEISHI) {
-                    return ResultHelper::json(422,"(ID={$id})配石单状态不允许创建领料单");
+                    return ResultHelper::json(422,"(ID={$id})配石单不允许创建领料单");
                 }
                 $order_sn_array[$model->from_order_sn] = $model->from_order_sn;
             }
@@ -183,8 +185,11 @@ class StoneApplyController extends BaseController
                         ];
                     }
                 }
+                //创建单据
                 $bill = Yii::$app->warehouseService->stoneBill->createBillSs($bill,$details);
-                ProduceStone::updateAll(['delivery_no'=>$bill->bill_no,'peishi_status'=>PeishiStatusEnum::TO_LINGSHI],['id'=>$ids]);
+               //绑定领石单
+                ProduceStone::updateAll(['delivery_no'=>$bill->bill_no],['id'=>$ids]);
+                
                 $trans->commit();               
                
                 Yii::$app->getSession()->setFlash('success','保存成功');

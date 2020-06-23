@@ -13,6 +13,9 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
@@ -94,19 +97,34 @@ class GoldBillCController extends GoldBillController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseGoldBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        if($model->bill_status != GoldBillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $goods = WarehouseGoldBillGoods::findOne(['bill_id'=>$id]);
-        if(!$goods){
+        if($model->total_num <= 0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            
+            $model->bill_status  = GoldBillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            
+            
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            
+            //更新配石状态
+            $subIdQuery = WarehouseGoldBillGoods::find()->select(['source_detail_id'])->where(['bill_id'=>$id]);
+            ProduceGold::updateAll(['peiliao_status'=>PeiliaoStatusEnum::TO_LINGLIAO],['id'=>$subIdQuery]);
+            
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch(\Exception $e) {
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
