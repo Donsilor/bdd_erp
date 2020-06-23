@@ -61,6 +61,7 @@ class WarehouseBillGoods extends BaseModel
             [['diamond_color', 'diamond_clarity'], 'string', 'max' => 10],
             [['goods_remark'], 'string', 'max' => 255],
             [['bill_id','goods_id'], 'unique','targetAttribute'=>['bill_id','goods_id']],
+            [['supplier_id','from_warehouse_id','to_warehouse_id','creator_id','auditor_id'], 'safe']
         ];
     }
 
@@ -147,6 +148,7 @@ class WarehouseBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
     }
+
     /**
      * 关联单据
      * @return \yii\db\ActiveQuery
