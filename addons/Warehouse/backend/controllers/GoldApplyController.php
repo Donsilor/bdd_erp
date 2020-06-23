@@ -68,7 +68,7 @@ class GoldApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceGold::find()->where(['id'=>$id])->one();
                 if($model && $model->peiliao_status >= PeiliaoStatusEnum::TO_LINGLIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单当前状态不是允许配料操作");
+                    return ResultHelper::json(422,"(ID={$id})配料单状态允许批量配料");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peiliao','ids'=>implode(',',$ids)])]);
@@ -128,7 +128,7 @@ class GoldApplyController extends BaseController
                 if(empty($model)) {
                     return ResultHelper::json(422,"(ID={$id})配料单不存在");
                 }elseif($model->peiliao_status != PeiliaoStatusEnum::HAS_PEILIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单状态不是已配料");
+                    return ResultHelper::json(422,"(ID={$id})配料单状态不允许创建领料单");
                 }
                 $order_sn_array[$model->from_order_sn] = $model->from_order_sn;
             }

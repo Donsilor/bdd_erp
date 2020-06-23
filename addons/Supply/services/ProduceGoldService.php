@@ -43,7 +43,7 @@ class ProduceGoldService extends Service
     public function batchPeiliao($data)
     {
         foreach ($data as $id => $goldData) {
-            
+            //1.更新配料状态
             $gold = ProduceGold::find()->where(['id'=>$id])->one();
             if(!$gold) {
                 throw new \Exception("(ID={$id})配料单查询失败");
@@ -55,8 +55,15 @@ class ProduceGoldService extends Service
             if(false === $gold->save()) {
                 throw new \Exception($this->getError($gold));
             }
-            
-            //金料校验 begin
+            //2.还原金料库存
+            if($gold->goldGoods) {
+                foreach ($gold->goldGoods as $goldGoods){
+                    Yii::$app->warehouseService->gold->adjustGoldStock($goldGoods->gold_sn,$goldGoods->gold_weight, AdjustTypeEnum::ADD);
+                }
+            }
+            //3.删除配料信息
+            ProduceGoldGoods::deleteAll(['id'=>$id]);
+            //4.金料校验 begin
             foreach ($goldData['ProduceGoldGoods'] as $goldGoodsData) {
                 $goldGoods = new ProduceGoldGoods();
                 $goldGoods->attributes = $goldGoodsData;
@@ -68,7 +75,7 @@ class ProduceGoldService extends Service
                 }elseif($goldGoods->gold->gold_status != GoldStatusEnum::IN_STOCK ) {
                     throw new \Exception("({$goldGoods->gold->gold_sn})金料编号不是库存状态");
                 }elseif($goldGoods->gold_weight > $goldGoods->gold->gold_weight) {
-                    throw new \Exception("(ID={$id})领取数量不能超过金料剩余重量({$goldGoods->gold->gold_weight})");
+                    throw new \Exception("(ID={$id})金料领取数量不能超过剩余总重({$goldGoods->gold->gold_weight}g)");
                 }elseif($gold->gold_type != ($gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type))) {
                     if(preg_match("/铂|PT/is", $gold->gold_type)) {
                         if (!preg_match("/铂|PT/is",$gold_type)){
@@ -86,9 +93,9 @@ class ProduceGoldService extends Service
                         throw new \Exception("(ID={$id})暂不支持当前金料类型");
                     }
                 }
-            }//金料校验 end
+            }
 
-            ProduceGoldGoods::deleteAll(['id'=>$id]);
+            //5.新增金料配料信息
             foreach ($goldData['ProduceGoldGoods'] as $goldGoodsData) {                
                 $goldGoods = new ProduceGoldGoods();
                 $goldGoods->attributes = $goldGoodsData;

@@ -42,6 +42,7 @@ class ProduceStoneService extends Service
     public function batchPeishi($data)
     {
         foreach ($data as $id => $stoneData) {
+            //1更新配石状态
             $stone = ProduceStone::find()->where(['id'=>$id])->one();
             if(!$stone) {
                 throw new \Exception("(ID={$id})配石单查询失败");
@@ -53,7 +54,17 @@ class ProduceStoneService extends Service
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }
-            //石包校验 begin
+            //2.还原石料库存
+            if($stone->stoneGoods) {
+                foreach ($stone->stoneGoods as $stoneGoods){                    
+                    //石料库存还原
+                    Yii::$app->warehouseService->stone->adjustStoneStock($stoneGoods->stone_sn, $stoneGoods->stone_num, $stoneGoods->stone_weight, AdjustTypeEnum::ADD);
+                }
+            }
+            //3.删除配石信息
+            ProduceStoneGoods::deleteAll(['id'=>$id]);
+            
+            //4.石包校验 begin
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                 $stoneGoods = new ProduceStoneGoods();
                 $stoneGoods->attributes = $stoneGoodsData;
@@ -69,9 +80,9 @@ class ProduceStoneService extends Service
                 }elseif($stoneGoods->stone_num > $stoneGoods->stone->stock_cnt) {
                     throw new \Exception("(ID={$id})领取数量不能超过石包剩余数量({$stoneGoods->stone->stock_cnt})");
                 }
-            }//石包校验 end
+            }          
             
-            ProduceStoneGoods::deleteAll(['id'=>$id]);
+            //5.新增配石信息
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                  $stoneGoods = new ProduceStoneGoods();                     
                  $stoneGoods->attributes = $stoneGoodsData;

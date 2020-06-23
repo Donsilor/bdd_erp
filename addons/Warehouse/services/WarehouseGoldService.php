@@ -95,19 +95,27 @@ class WarehouseGoldService extends Service
             throw new \Exception("({$gold_sn})金料编号不存在");
         }elseif ($model->gold_status != GoldStatusEnum::IN_STOCK) {
             throw new \Exception("({$gold_sn})金料不是库存中");
-        }elseif($model->gold_weight < $adjust_weight) {
-            throw new \Exception("({$gold_sn})金料库存不足");
-        }elseif($adjust_weight <= 0){
+        }elseif($adjust_type == AdjustTypeEnum::MINUS){
+            if($model->gold_weight < $adjust_weight) {
+                throw new \Exception("({$gold_sn})金料库存不足");
+            }
+        }
+        if($adjust_weight <= 0){
             throw new \Exception("({$gold_sn})金料调整重量不能为0");
         }
         if($adjust_type == AdjustTypeEnum::ADD) {
             $update = ['gold_weight'=>new Expression("gold_weight+{$adjust_weight}")];
+            $result = WarehouseGold::updateAll($update,new Expression("gold_sn='{$gold_sn}'"));
+            if(!$result) {
+                throw new \Exception("({$gold_sn})金料库存变更失败");
+            }
         }else{
             $update = ['gold_weight'=>new Expression("gold_weight-{$adjust_weight}")];
+            $result = WarehouseGold::updateAll($update,new Expression("gold_sn='{$gold_sn}' and gold_weight>={$adjust_weight}"));
+            if(!$result) {
+                throw new \Exception("({$gold_sn})金料库存不足");
+            }
         }
-        $result = WarehouseGold::updateAll($update,new Expression("gold_sn='{$gold_sn}' and gold_weight>={$adjust_weight}"));
-        if(!$result) {
-            throw new \Exception("({$gold_sn})金料库存不足");
-        }
+        
     }
 }

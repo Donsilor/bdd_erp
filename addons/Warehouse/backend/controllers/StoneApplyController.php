@@ -70,7 +70,7 @@ class StoneApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceStone::find()->where(['id'=>$id])->one();
                 if($model && $model->peishi_status >= PeishiStatusEnum::TO_LINGSHI) {
-                     return ResultHelper::json(422,"(ID={$id})配石单当前状态不允许配石操作");
+                     return ResultHelper::json(422,"(ID={$id})配石单状态不允许批量配石");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peishi','ids'=>implode(',',$ids)])]);
@@ -130,7 +130,7 @@ class StoneApplyController extends BaseController
                 if(empty($model)) {
                     return ResultHelper::json(422,"(ID={$id})配石单不存在");
                 }elseif($model->peishi_status != PeishiStatusEnum::HAS_PEISHI) {
-                    return ResultHelper::json(422,"(ID={$id})配石单状态不是已配石");
+                    return ResultHelper::json(422,"(ID={$id})配石单状态不允许创建领料单");
                 }
                 $order_sn_array[$model->from_order_sn] = $model->from_order_sn;
             }
