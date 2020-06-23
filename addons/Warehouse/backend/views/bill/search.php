@@ -54,9 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'60'],
                         ],
                         [
-                            'attribute'=>'goods_id',
-                            'filter' =>false,
-                            'headerOptions' => ['width'=>'120'],
+                            'attribute' => 'bill_type',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\BillTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'attribute' => 'bill_no',
@@ -70,16 +77,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'bill_type',
+                            'attribute' => 'bill.bill_status',
                             'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\BillTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'goods_id',
+                            'filter' =>false,
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'attribute' => 'bill.supplier_id',
@@ -214,18 +226,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'attribute' => 'bill.bill_status',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
                         ],
                         /* [
                              'attribute' => 'status',

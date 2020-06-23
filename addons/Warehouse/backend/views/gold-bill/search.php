@@ -55,9 +55,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute'=>'gold_sn',
-                            'filter' =>false,
-                            'headerOptions' => ['width'=>'100'],
+                            'attribute' => 'bill_type',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                         ],
                         [
                             'attribute'=>'bill_no',
@@ -71,18 +80,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'bill_type',
+                            'attribute' => 'bill.bill_status',
+                            'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'gold_sn',
+                            'filter' =>false,
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'attribute' => 'bill.supplier_id',
@@ -212,18 +224,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'attribute' => 'bill.bill_status',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
                         ],
                         /*[
                             'class' => 'yii\grid\ActionColumn',
