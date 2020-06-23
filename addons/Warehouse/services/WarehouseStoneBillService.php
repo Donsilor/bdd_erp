@@ -202,11 +202,11 @@ class WarehouseStoneBillService extends Service
         if(false === $billM->save()){
             throw new \Exception($this->getError($billM));
         }
-        $bill_id = $billM->attributes['id'];
         $goodsM = new WarehouseStoneBillGoods();
         foreach ($details as &$good){
-            $good['bill_id'] = $bill_id;
+            $good['bill_id'] = $billM->id;
             $good['bill_type'] = $billM->bill_type;
+            $good['bill_no'] = $billM->bill_no;
             $goodsM->setAttributes($good);
             if(!$goodsM->validate()){
                 throw new \Exception($this->getError($goodsM));
