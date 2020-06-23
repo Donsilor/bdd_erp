@@ -69,8 +69,8 @@ class StoneApplyController extends BaseController
             //数据校验
             foreach ($ids as $id) {
                 $model = ProduceStone::find()->where(['id'=>$id])->one();
-                if($model && $model->peishi_status != PeishiStatusEnum::IN_PEISHI) {
-                     return ResultHelper::json(422,"(ID={$id})配石单状态不是配石中");
+                if($model && $model->peishi_status >= PeishiStatusEnum::TO_LINGSHI) {
+                     return ResultHelper::json(422,"(ID={$id})配石单当前状态不允许配石操作");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peishi','ids'=>implode(',',$ids)])]);

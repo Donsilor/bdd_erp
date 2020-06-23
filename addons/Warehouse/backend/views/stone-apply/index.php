@@ -67,6 +67,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                             ], 
                             [
+                                    'attribute' => 'created_at',
+                                    'filter' => false,
+                                    'value' => function($model){
+                                         return Yii::$app->formatter->asDatetime($model->created_at);
+                                    }
+                            ], 
+                            [
                                     'attribute' => 'from_order_sn',
                                     'filter' => Html::activeTextInput($searchModel, 'from_order_sn', [
                                             'class' => 'form-control',

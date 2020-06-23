@@ -108,7 +108,6 @@ class WarehouseBill extends BaseModel
         ];
     }
 
-
     /**
      * @param bool $insert
      * @return bool

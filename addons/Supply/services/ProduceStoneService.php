@@ -14,6 +14,7 @@ use addons\Supply\common\models\ProduceStoneGoods;
 use common\components\Service;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
+use addons\Warehouse\common\enums\StoneStatusEnum;
 
 class ProduceStoneService extends Service
 {
@@ -52,11 +53,29 @@ class ProduceStoneService extends Service
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }
+            //石包校验 begin
+            foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
+                $stoneGoods = new ProduceStoneGoods();
+                $stoneGoods->attributes = $stoneGoodsData;
+                $stoneGoods->id = $id;
+                if(false === $stoneGoods->validate()) {
+                    throw new \Exception("(ID={$id})".$this->getError($stoneGoods));
+                }elseif(!$stoneGoods->stone) {
+                    throw new \Exception("({$stoneGoods->stone_sn})石包号不存在");
+                }elseif($stoneGoods->stone->stone_status != StoneStatusEnum::IN_STOCK ) {
+                    throw new \Exception("({$stoneGoods->stone->stone_sn})石包号不是库存状态");
+                }elseif($stone->stone_type != ($stone_type = Yii::$app->attr->valueName($stoneGoods->stone->stone_type))) {
+                    throw new \Exception("(ID={$id})石料类型不匹配：{$stone->stone_type}≠{$stone_type}");
+                }elseif($stoneGoods->stone_num > $stoneGoods->stone->stock_cnt) {
+                    throw new \Exception("(ID={$id})领取数量不能超过石包剩余数量({$stoneGoods->stone->stock_cnt})");
+                }
+            }//石包校验 end
+            
             ProduceStoneGoods::deleteAll(['id'=>$id]);
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                  $stoneGoods = new ProduceStoneGoods();                     
                  $stoneGoods->attributes = $stoneGoodsData;
-                 $stoneGoods->id = $id;
+                 $stoneGoods->id = $id;                 
                  if(false === $stoneGoods->save()) {
                      throw new \Exception("(ID={$id})".$this->getError($stoneGoods));
                  }
