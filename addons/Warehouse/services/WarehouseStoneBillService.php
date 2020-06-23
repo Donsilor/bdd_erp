@@ -235,20 +235,44 @@ class WarehouseStoneBillService extends Service
         if($form->audit_status == AuditStatusEnum::PASS){
             $form->bill_status = BillStatusEnum::CONFIRM;
 
-            $billGoods = WarehouseStoneBillGoods::find()->select(['stone_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
-            if(empty($billGoods)){
+            $billGoodsList = WarehouseStoneBillGoods::find()->where(['bill_id' => $form->id])->all();
+            if(empty($billGoodsList)){
                 throw new \Exception("单据明细不能为空");
             }
             //石包入库
-            \Yii::$app->warehouseService->stone->editStone($form);
-            if($form->audit_status == AuditStatusEnum::PASS){
-                //同步石料采购收货单货品状态
-                $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-                $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
-                if(false === $res) {
-                    throw new \Exception("同步石料采购收货单货品状态失败");
+            //\Yii::$app->warehouseService->stone->editStone($form);
+            foreach ($billGoodsList as $billGoods) {
+                $stoneM = new WarehouseStone();
+                $stoneData = [
+                        'stone_sn' => rand(10000000000,99999999999),//临时
+                        'stone_name' => $billGoods->stone_name,
+                        'stone_status' => StoneStatusEnum::IN_STOCK,
+                        'style_sn' => $billGoods->style_sn,
+                        'stone_type' => $billGoods->stone_type,
+                        'supplier_id' => $billGoods->supplier_id,
+                        'stone_color' => $billGoods->color,
+                        'stone_clarity' => $billGoods->clarity,
+                        'stock_cnt' => $billGoods->stone_num,
+                        'ms_cnt' => $billGoods->stone_num,
+                        'stock_weight' => $billGoods->stone_weight,
+                        'ms_weight' => $billGoods->stone_weight,
+                        'cost_price' => $billGoods->cost_price,
+                        'sale_price' => $billGoods->sale_price,
+                ];
+                $stoneM->attributes = $stoneData;
+                if(false === $stoneM->save()){
+                    throw new \Exception($this->getError($stoneM));
                 }
+                \Yii::$app->warehouseService->stone->createStoneSn($stoneM);
             }
+            //同步石料采购收货单货品状态
+            //$ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
+            $queryId = WarehouseStoneBillGoods::find()->select(['source_detail_id']);
+            $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$queryId]);
+            if(false === $res) {
+                throw new \Exception("同步石料采购收货单货品状态失败");
+            }
+            
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
         }

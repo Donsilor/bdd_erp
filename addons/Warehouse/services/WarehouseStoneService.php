@@ -23,15 +23,15 @@ class WarehouseStoneService extends Service
      * 创建/编辑-石包信息
      * @param $form
      */
-    public function editStone($form)
+    /* public function editStone($form)
     {
         $goods = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
-        $ids = [];
         foreach ($goods as $detail){
             $stoneM = new WarehouseStone();
             $stone = [
-                'stone_sn' => "---",//临时
+                'stone_sn' => rand(10000000000,99999999999),//临时
                 'stone_name' => $detail->stone_name,
+                'stone_status' => StoneStatusEnum::IN_STOCK,    
                 'style_sn' => $detail->style_sn,
                 'stone_type' => $detail->stone_type,
                 'supplier_id' => $form->supplier_id,
@@ -48,15 +48,10 @@ class WarehouseStoneService extends Service
             if(false === $stoneM->save()){
                 throw new \Exception($this->getError($stoneM));
             }
-            $ids[] = $stoneM->attributes['id'];
+            $this->createStoneSn($stoneM);
         }
-        if($ids){
-            foreach ($ids as $id){
-                $stone = WarehouseStone::findOne(['id'=>$id]);
-                $this->createStoneSn($stone);
-            }
-        }
-    }
+       
+    } */
 
     /**
      * 更新库存信息
