@@ -55,6 +55,39 @@ class ProduceGoldService extends Service
             if(false === $gold->save()) {
                 throw new \Exception($this->getError($gold));
             }
+            
+            //金料校验 begin
+            foreach ($goldData['ProduceGoldGoods'] as $goldGoodsData) {
+                $goldGoods = new ProduceGoldGoods();
+                $goldGoods->attributes = $goldGoodsData;
+                $goldGoods->id = $id;
+                if(false === $goldGoods->validate()) {
+                    throw new \Exception("(ID={$id})".$this->getError($goldGoods));
+                }elseif(!$goldGoods->gold) {
+                    throw new \Exception("({$goldGoods->gold_sn})金料编号不存在");
+                }elseif($goldGoods->gold->gold_status != GoldStatusEnum::IN_STOCK ) {
+                    throw new \Exception("({$goldGoods->gold->gold_sn})金料编号不是库存状态");
+                }elseif($goldGoods->gold_weight > $goldGoods->gold->gold_weight) {
+                    throw new \Exception("(ID={$id})领取数量不能超过金料剩余重量({$goldGoods->gold->gold_weight})");
+                }elseif($gold->gold_type != ($gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type))) {
+                    if(preg_match("/铂|PT/is", $gold->gold_type)) {
+                        if (!preg_match("/铂|PT/is",$gold_type)){
+                            throw new \Exception("(ID={$id})金料类型不匹配(需要配铂金)");
+                        }
+                    }elseif(preg_match("/黄金|足金/is", $gold->gold_type)) {
+                        if (!preg_match("/黄金|足金/is",$gold_type)){
+                            throw new \Exception("(ID={$id})金料类型不匹配(需要配黄金)");
+                        }
+                    }elseif(preg_match("/银/is", $gold->gold_type)) {
+                        if (!preg_match("/银/is",$gold_type)){
+                            throw new \Exception("(ID={$id})金料类型不匹配(需要配足银)");
+                        }
+                    }else{
+                        throw new \Exception("(ID={$id})暂不支持当前金料类型");
+                    }
+                }
+            }//金料校验 end
+
             ProduceGoldGoods::deleteAll(['id'=>$id]);
             foreach ($goldData['ProduceGoldGoods'] as $goldGoodsData) {                
                 $goldGoods = new ProduceGoldGoods();

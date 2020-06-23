@@ -141,7 +141,7 @@ class WarehouseGoldBillService extends Service
         }
         $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
-            throw new \Exception("创建收货单明细失败");
+            throw new \Exception("创建领料单明细失败");
         }
         
         return $billM;

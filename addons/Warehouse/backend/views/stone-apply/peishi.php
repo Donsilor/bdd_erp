@@ -88,8 +88,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,                                    
                             ], 
                             [
-                                    'attribute' => 'peishi_remark',
-                                    'value' => 'peishi_remark',
+                                    'attribute' => 'remark',
+                                    'value' => 'remark',
                                     'filter' => false,
                             ],
                             [
