@@ -49,14 +49,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'id',
-                            'filter' => true,
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'attribute'=>'goods_id',
+                            'filter' =>false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'bill_no',
                             'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->bill_no, ['view', 'id' => $model->bill_no,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
@@ -77,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'bill_status',
+                            'attribute' => 'bill.bill_status',
                             'format' => 'raw',
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
@@ -88,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -195,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
-                        /*[
+                        [
                             'label' => '审核人',
                             'attribute' => 'auditor.username',
                             'headerOptions' => ['class' => 'col-md-1'],

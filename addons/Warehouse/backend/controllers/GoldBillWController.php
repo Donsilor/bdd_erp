@@ -109,7 +109,7 @@ class GoldBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->goldBill->createBillW($model);
+                    $model = Yii::$app->warehouseService->goldBillW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -147,7 +147,7 @@ class GoldBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->goldBill->finishBillW($id);
+            \Yii::$app->warehouseService->goldBillW->finishBillW($id);
             
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -171,7 +171,7 @@ class GoldBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             //\Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->goldBill->billWSummary($id);
+            \Yii::$app->warehouseService->goldBillW->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -217,7 +217,7 @@ class GoldBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->goldBill->pandianGoods($model);
+                Yii::$app->warehouseService->goldBillW->pandianGoods($model);
                 
                 $trans->commit();
                 
@@ -259,7 +259,7 @@ class GoldBillWController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
-                \Yii::$app->warehouseService->goldBill->auditBillW($model);
+                \Yii::$app->warehouseService->goldBillW->auditBillW($model);
                 
                 $trans->commit();
                 
