@@ -128,7 +128,6 @@ class WarehouseGoldBillService extends Service
         $this->goldBillSummary($billM->id);
         return $billM;
     }
-    
     /**
      * 创建金料收货单
      * @param array $bill
@@ -163,7 +162,6 @@ class WarehouseGoldBillService extends Service
             throw new \Exception("创建收货单明细失败");
         }
     }
-
     /**
      * 金料收货单-审核
      * @param $form
@@ -196,7 +194,6 @@ class WarehouseGoldBillService extends Service
             throw new \Exception($this->getError($form));
         }
     }
-    
     /**
      * 单据汇总
      * @param integer $bill_id

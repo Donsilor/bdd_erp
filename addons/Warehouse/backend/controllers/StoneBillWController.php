@@ -111,7 +111,7 @@ class StoneBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->stoneBill->createBillW($model);
+                    $model = Yii::$app->warehouseService->stoneBillW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -149,7 +149,7 @@ class StoneBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->stoneBill->finishBillW($id);
+            \Yii::$app->warehouseService->stoneBillW->finishBillW($id);
             
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -173,7 +173,7 @@ class StoneBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             //\Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->stoneBill->billWSummary($id);
+            \Yii::$app->warehouseService->stoneBillW->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -220,7 +220,7 @@ class StoneBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->stoneBill->pandianGoods($model);
+                Yii::$app->warehouseService->stoneBillW->pandianGoods($model);
                 
                 $trans->commit();
                 
@@ -262,7 +262,7 @@ class StoneBillWController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
-                \Yii::$app->warehouseService->stoneBill->auditBillW($model);
+                \Yii::$app->warehouseService->stoneBillW->auditBillW($model);
                 
                 $trans->commit();
                 
