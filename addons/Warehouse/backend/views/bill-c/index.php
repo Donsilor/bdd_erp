@@ -261,7 +261,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['bill-b-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['bill-c-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);
