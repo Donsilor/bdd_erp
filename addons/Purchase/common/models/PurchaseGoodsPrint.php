@@ -68,7 +68,7 @@ class PurchaseGoodsPrint extends BaseModel
         return [
             [['purchase_goods_id'], 'required'],
             [['purchase_goods_id', 'sum_num','creator_id','updated_at'], 'integer'],
-            [['purchase_group', 'processing_order', 'item_number', 'cate', 'processing', 'customers', 'number', 'mounting_method', 'circle', 'maximum', 'minimum', 'weight', 'factory_model', 'main_stone_priority', 'main_socket_range', 'main_diameter', 'vice_stone_priority', 'vice_socket_range', 'vice_diameter', 'main_stone_shape', 'stone_weight_range', 'order_type', 'price_system', 'pricing_type'], 'string', 'max' => 30],
+            [['purchase_group', 'processing_order', 'item_number', 'cate', 'processing', 'customers', 'number', 'mounting_method', 'circle', 'maximum', 'minimum', 'weight', 'factory_model', 'main_stone_priority', 'main_socket_range', 'main_diameter', 'vice_stone_priority', 'vice_socket_range', 'vice_diameter', 'main_stone_shape', 'stone_weight_range', 'order_type'], 'string', 'max' => 30],
             [['image', 'special_process', 'printing_req', 'size_req', 'form', 'accessories_req'], 'string', 'max' => 100],
             [['process_desc', 'main_stone_remark', 'vice_stone_remark', 'main_stone_spec', 'accessories_remark', 'product_req', 'product_desc', 'with_stone_req', 'billing_req', 'remark'], 'string', 'max' => 200],
             [['purchase_goods_id'], 'unique'],
@@ -118,8 +118,6 @@ class PurchaseGoodsPrint extends BaseModel
             'product_req' => Yii::t('app', '生产要求'),
             'product_desc' => Yii::t('app', '货品描述'),
             'order_type' => Yii::t('app', '订单类型'),
-            'price_system' => Yii::t('app', '价格体系'),
-            'pricing_type' => Yii::t('app', '定价类型'),
             'with_stone_req' => Yii::t('app', '配石要求'),
             'billing_req' => Yii::t('app', '发单要求'),
             'remark' => Yii::t('app', '备注'),

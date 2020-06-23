@@ -25,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
         ?>
+        <?= Html::button('打印', [
+            'class'=>'btn btn-success btn-xs',
+            'onclick' => 'batchPrint()',
+        ]);?>
 
     </div>
     <div class="tab-content">
@@ -397,3 +401,13 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    function batchPrint() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            rfMsg('请选中打印项')
+        }
+        window.open("<?= Url::buildUrl('../purchase-goods-print/print',[],['id'])?>?id=" + ids,'_blank');
+    }
+
+</script>

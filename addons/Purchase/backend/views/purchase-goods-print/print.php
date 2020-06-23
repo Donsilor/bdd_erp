@@ -667,6 +667,7 @@
 			</div>
 		</div>
 		<!--endprint1-->
+       <div class="PageNext"></div>
        <?php } ?>
 		
 		<!-- 打印按钮 -->

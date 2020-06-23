@@ -66,7 +66,8 @@ class PurchaseGoodsPrintController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
-        $lists = PurchaseGoodsPrintForm::find()->where(['purchase_goods_id'=>$id])->all();
+        $ids = explode(',',$id);
+        $lists = PurchaseGoodsPrintForm::find()->where(['purchase_goods_id'=>$ids])->all();
         if(empty($lists)) {
             echo '没有内容';exit;
         }

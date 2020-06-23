@@ -2,6 +2,7 @@
 
 namespace common\widgets\webuploader;
 
+use function GuzzleHttp\Psr7\str;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -78,8 +79,15 @@ class MultipleFiles extends InputWidget
 
         // 默认配置信息
         $this->typeConfig = Yii::$app->params['uploadConfig'][$this->type];
+        $this->boxId = md5($this->name) . StringHelper::uuid();
 
-        $this->boxId = md5($this->name) . StringHelper::uuid('uniqid');
+        $name = $this->name;
+        echo $name;
+        echo '<br/>';
+        $a = md5($name);
+        print_r($a);
+        echo '<br/>';
+        print_r($name);
         $this->themeConfig = ArrayHelper::merge([
             'select' => true, // 显示选择文件
             'sortable' => true, // 是否开启排序
@@ -141,6 +149,7 @@ class MultipleFiles extends InputWidget
     {
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         $name = $this->hasModel() ? Html::getInputName($this->model, $this->attribute) : $this->name;
+        $boxId = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->boxId;
 
         empty($value) && $value = [];
         if ($this->config['pick']['multiple'] == true ) {
@@ -181,13 +190,13 @@ class MultipleFiles extends InputWidget
             }
         }
 
-        $this->registerClientScript($name);
+        $this->registerClientScript($name,$boxId);
 
         return $this->render($this->theme, [
             'name' => $name,
             'value' => $value,
             'type' => $this->type,
-            'boxId' => $this->boxId,
+            'boxId' => $boxId,
             'config' => $this->config,
             'themeConfig' => $this->themeConfig,
         ]);
@@ -196,11 +205,11 @@ class MultipleFiles extends InputWidget
     /**
      * 注册资源
      */
-    protected function registerClientScript($name)
+    protected function registerClientScript($name,$boxId)
     {
         $view = $this->getView();
         AppAsset::register($view);
-        $boxId = $this->boxId;
+//        $boxId = $this->boxId;
         $jsConfig = Json::encode($this->config);
         $disabled = $this->themeConfig['sortable'] ?? true;
 
@@ -231,7 +240,8 @@ class MultipleFiles extends InputWidget
     
     var boxId = "{$boxId}";
     var closeFiles = {};
-
+    var iss = null;
+    var isss = null;
     // 删除图片节点
     $(document).on("click", ".delimg", function() {
         let parentObj = $(this).parent().parent();
@@ -264,7 +274,6 @@ class MultipleFiles extends InputWidget
 
     // 上传成功
     $(document).on('upload-success-' + boxId, function(e, data, config){
-        let boxId = config.boxId;
         let multiple = config.pick.multiple;
         // 判断是否是多图上传
         let obj = $('#' + boxId + ' .upload-box');
@@ -369,9 +378,12 @@ class MultipleFiles extends InputWidget
             parentObj.find('.upload-progress').parent().removeClass('hide');
         }
     });
-
     // 选择回调
     $(document).on('select-file-' + boxId, function(e, boxId, data){
+   
+        
+        console.log(3333,boxId)
+        
         if (data.length === 0) {
             return;
         }
