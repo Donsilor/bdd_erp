@@ -65,7 +65,7 @@ class ProduceStoneService extends Service
                 }elseif($stoneGoods->stone->stone_status != StoneStatusEnum::IN_STOCK ) {
                     throw new \Exception("({$stoneGoods->stone->stone_sn})石包号不是库存状态");
                 }elseif($stone->stone_type != ($stone_type = Yii::$app->attr->valueName($stoneGoods->stone->stone_type))) {
-                    throw new \Exception("(ID={$id})石料类型不匹配：{$stone->stone_type}≠{$stone_type}");
+                    throw new \Exception("(ID={$id})石料类型不匹配(需要配{$stone->stone_type})");
                 }elseif($stoneGoods->stone_num > $stoneGoods->stone->stock_cnt) {
                     throw new \Exception("(ID={$id})领取数量不能超过石包剩余数量({$stoneGoods->stone->stock_cnt})");
                 }
