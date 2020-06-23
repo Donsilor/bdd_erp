@@ -94,7 +94,7 @@ class PurchaseApplyGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);        
         $model = $model ?? new PurchaseApplyGoodsForm();
-        if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {   
+        if($model->isNewRecord && ($return = $this->checkGoods($model)) !== true) {
             return $return;
         }
 
@@ -132,7 +132,7 @@ class PurchaseApplyGoodsController extends BaseController
 
 
     /**
-     * 有款添加/编辑
+     * 版式编辑
      * @var PurchaseApplyGoodsForm $model
      * @return mixed
      */
@@ -425,7 +425,7 @@ class PurchaseApplyGoodsController extends BaseController
                     $model->goods_sn = $goods_sn;
                     $model->goods_image = $qiban->style_image;
                     $model->qiban_sn = $goods_sn;
-                    $model->goods_type = PurchaseGoodsTypeEnum::QIBAN;
+                    $model->goods_type = PurchaseGoodsTypeEnum::STYLE;
                     $model->qiban_type = $qiban->qiban_type;
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
@@ -438,7 +438,8 @@ class PurchaseApplyGoodsController extends BaseController
                     $model->is_inlay = $qiban->is_inlay;
                     $model->stone_info = $qiban->stone_info;
                     $model->remark = $qiban->remark;
-                    
+                    $model->goods_images = $qiban->style_images;
+
                     $qibanForm = new QibanAttrForm();
                     $qibanForm->id = $qiban->id;
                     $qibanForm->initAttrs();
@@ -461,8 +462,10 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;
-                $model->is_inlay = $style->is_inlay;                
-            } 
+                $model->is_inlay = $style->is_inlay;
+                $images = Yii::$app->styleService->style->getStyleImages($goods_sn);
+                $model->goods_images = join(',',$images);
+            }
         }
         
         return true;

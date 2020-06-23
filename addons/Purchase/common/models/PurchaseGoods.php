@@ -80,8 +80,8 @@ class PurchaseGoods extends BaseModel
         return [
             [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price','peiliao_type'], 'required'],
 
-            [['purchase_id', 'style_id', 'qiban_type','peiliao_type', 'single_stone_weight','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['cost_price', 'main_stone_price', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
+            [['purchase_id', 'style_id', 'qiban_type','peiliao_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['cost_price', 'main_stone_price','single_stone_weight', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','parts_fee'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
@@ -112,7 +112,7 @@ class PurchaseGoods extends BaseModel
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
             'jintuo_type' => '金托类型',
-            'cost_price' => '采购成本价',
+            'cost_price' => '采购成本单价',
             'goods_num' => '商品数量',
             'is_inlay' => '是否镶嵌',
             'produce_id' => '布产ID',

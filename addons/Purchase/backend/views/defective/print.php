@@ -181,7 +181,7 @@
 						<div>净度</div>
 					</td>
 					<td>
-						<div>单价【单价】</div>
+						<div>单价</div>
 					</td>
 					<td>
 						<div>金额</div>
@@ -203,7 +203,7 @@
                         <div>净度</div>
                     </td>
                     <td>
-                        <div>单价【单价】</div>
+                        <div>单价</div>
                     </td>
                     <td>
                         <div>金额</div>

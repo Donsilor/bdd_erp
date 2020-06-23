@@ -214,16 +214,16 @@ class DefectiveController extends BaseController
 
         list($list,) = $this->getData($ids);
         $header = [
-            ['序号', 'xuhao' , 'text'],
-            ['条码号', 'defective_no' , 'text'],
-            ['工厂出货单号', 'receipt_no' , 'text'],
-            ['工厂名称', 'supplier_name' , 'text'],
-            ['模号', 'factory_mo' , 'text'],
-            ['布产单号', 'produce_sn' , 'text'],
+//            ['序号', 'xuhao' , 'text'],
+//            ['条码号', 'defective_no' , 'text'],
+//            ['工厂出货单号', 'receipt_no' , 'text'],
+//            ['工厂名称', 'supplier_name' , 'text'],
+//            ['模号', 'factory_mo' , 'text'],
+//            ['布产单号', 'produce_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
             ['货品名称', 'goods_name' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
             ['材质', 'material' , 'text'],
             ['成色', 'goods_color' ,  'text'],
             ['件数', 'goods_num' , 'text'],

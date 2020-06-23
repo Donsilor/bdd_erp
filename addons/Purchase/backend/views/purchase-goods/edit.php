@@ -181,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'product_size')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_color')->textInput() ?>
+                            <?= $form->field($model, 'factory_mo')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'single_stone_weight')->textInput() ?>
@@ -214,9 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cert_fee')->textInput() ?>
                         </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'factory_mo')->textInput() ?>
-                        </div>
+
                         <div class="col-lg-4">
 
                         </div>

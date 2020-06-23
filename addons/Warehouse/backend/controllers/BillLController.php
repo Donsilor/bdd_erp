@@ -274,11 +274,11 @@ class BillLController extends BaseController
 
         list($list,) = $this->getData($ids);
         $header = [
-            ['款号', 'style_sn' , 'text'],
             ['条码号', 'goods_id' , 'text'],
+            ['款号', 'style_sn' , 'text'],
             ['货品名称', 'goods_name' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
             ['材质', 'material' , 'text'],
             ['成色', 'goods_color' ,  'text'],
             ['件数', 'goods_num' , 'text'],

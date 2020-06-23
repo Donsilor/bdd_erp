@@ -34,6 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="no-border-top"><?= $model->produce_sn ?></td>
                              </tr>
                              <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                                 <td><?= $model->supplier->supplier_name ?? '' ?></td>
+                             </tr>
+                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('from_type') ?>：</td>
                                  <td><?= \addons\Supply\common\enums\FromTypeEnum::getValue($model->from_type) ?></td>
                              </tr>                             
@@ -65,10 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('shippent_num') ?>：</td>
                                  <td><?= Yii::$app->supplyService->produce->getShippentNum($model->id) ?></td>
                              </tr>
-                             <tr>
-                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                                 <td><?= $model->supplier->supplier_name ?? '' ?></td>
-                             </tr>
+
                              <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('follower_name') ?>：</td>
                                  <td><?=  $model->follower_name ?></td>
