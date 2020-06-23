@@ -3,22 +3,19 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\forms\WarehouseStoneBillSsForm;
-use addons\Warehouse\common\models\WarehouseBill;
+
 use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use addons\Supply\common\models\ProduceStone;
-use addons\Supply\common\enums\PeiliaoStatusEnum;
 use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 
@@ -143,17 +140,17 @@ class StoneBillSsController extends StoneBillController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        if($model->bill_status != StoneBillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        if($model->total_num< = 0){
+        if($model->total_num <= 0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
        
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            $model->bill_status  = BillStatusEnum::PENDING;
+            $model->bill_status  = StoneBillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             
             

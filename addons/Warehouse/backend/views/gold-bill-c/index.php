@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
-                                'style'=>'width:180px'
+                                'style'=>'width:170px'
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -65,13 +65,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
+                                'style' => 'width:80px;'
 
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                         ],
                         [
+                            'attribute' => 'bill_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\GoldBillStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                    
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' =>'加工商',    
                             'attribute' => 'supplier_id',
                             'value' =>function($model){
                                 return $model->supplier->supplier_name ??'';
@@ -80,13 +95,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'style'=>'width:150px'],
+                                'options' => ['placeholder' =>"请选择"],
                                 'pluginOptions' => [
                                     'allowClear' => true,
+                                    'width'=>'200'
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => [],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         /*[
                             'attribute'=>'total_num',
@@ -97,32 +113,37 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],*/
                         [
                             'attribute'=>'total_weight',
+                            'value'=>function($model){
+                                return $model->total_weight/1;
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
+                                'style' => 'width:100px;'
                             ]),
-                            'headerOptions' => ['width'=>'120'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
+                                'style' => 'width:100px;'
                             ]),
-                            'headerOptions' => ['width'=>'120'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'creator_id',
-                            'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'creator.username',                            
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'created_at',
@@ -145,7 +166,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
+                            },
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'audit_status',
@@ -159,26 +181,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
-                        ],
-                        [
-                            'attribute' => 'bill_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
-                        ],
+                        ],                        
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{apply} {goods} {delete}',
+                            'template' => '{apply} {goods}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
