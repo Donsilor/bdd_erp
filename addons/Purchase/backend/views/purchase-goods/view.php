@@ -175,6 +175,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
         }
         ?>
+        <?= Html::a('打印',['../purchase/purchase-goods-print/print','id'=>$model->id],[
+            'target'=>'_blank',
+            'class'=>'btn btn-info btn-ms',
+        ]); ?>
     </div>
 
     <div class="col-xs-12">

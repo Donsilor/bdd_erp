@@ -67,7 +67,7 @@ class PurchaseGoodsPrint extends BaseModel
     {
         return [
             [['purchase_goods_id'], 'required'],
-            [['purchase_goods_id', 'sum_num'], 'integer'],
+            [['purchase_goods_id', 'sum_num','creator_id','updated_at'], 'integer'],
             [['purchase_group', 'processing_order', 'item_number', 'cate', 'processing', 'customers', 'number', 'mounting_method', 'circle', 'maximum', 'minimum', 'weight', 'factory_model', 'main_stone_priority', 'main_socket_range', 'main_diameter', 'vice_stone_priority', 'vice_socket_range', 'vice_diameter', 'main_stone_shape', 'stone_weight_range', 'order_type', 'price_system', 'pricing_type'], 'string', 'max' => 30],
             [['image', 'special_process', 'printing_req', 'size_req', 'form', 'accessories_req'], 'string', 'max' => 100],
             [['process_desc', 'main_stone_remark', 'vice_stone_remark', 'main_stone_spec', 'accessories_remark', 'product_req', 'product_desc', 'with_stone_req', 'billing_req', 'remark'], 'string', 'max' => 200],
@@ -123,9 +123,28 @@ class PurchaseGoodsPrint extends BaseModel
             'with_stone_req' => Yii::t('app', '配石要求'),
             'billing_req' => Yii::t('app', '发单要求'),
             'remark' => Yii::t('app', '备注'),
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+            'creator_id' => '创建人',
         ];
     }
 
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+
+        }
+        $this->created_at = time();
+
+        return parent::beforeSave($insert);
+    }
 
     /**
      * 采购单一对一
@@ -133,6 +152,6 @@ class PurchaseGoodsPrint extends BaseModel
      */
     public function getPurchaseGoods()
     {
-        return $this->hasOne(Purchase::class, ['id'=>'purchase_goods_id'])->alias('purchase_goods');
+        return $this->hasOne(PurchaseGoods::class, ['id'=>'purchase_goods_id'])->alias('purchase_goods');
     }
 }

@@ -86,7 +86,7 @@ class PurchaseGoods extends BaseModel
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_info'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
-            [['product_size','goods_color'], 'string', 'max' => 100],
+            [['product_size','goods_color','goods_image'], 'string', 'max' => 100],
             [['style_sn', 'qiban_sn','factory_mo'], 'string', 'max' => 30],
         ];
     }
@@ -150,6 +150,7 @@ class PurchaseGoods extends BaseModel
             'bukou_fee' => '补口工费',
             'cert_fee' => '证书费',
             'factory_mo' => '工厂模号',
+            'goods_image' => '商品图片',
         ];
     }
     

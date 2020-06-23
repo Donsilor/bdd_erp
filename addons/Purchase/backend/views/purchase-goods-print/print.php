@@ -34,7 +34,7 @@
 			}
 			img {
 				width: 100%;
-				height: 100%;
+				/*height: 100%;*/
 			}
 			html{
 				font-size: 14px;
@@ -180,8 +180,50 @@
 				white-space: inherit;
 			}
 
+            .btn-ms {
+                display: inline-block;
+                color: #fff;
+                font-weight: 400;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                background-image: none;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857143;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -ms-touch-action: manipulation;
+                user-select: none;
+                margin-bottom: 3px !important;
+                border-radius: 3px;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                color: #fff;
+                background-color: #0bb2d4;
+                border-color: #0bb2d4;
+                border: 1px solid transparent;
+
+
+
+            }
+
+            .text-center{
+                padding: 20px 15px 20px 20px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 3px;
+                border-bottom-left-radius: 3px;
+                border-top: 1px solid #f4f4f4;
+                padding: 10px;
+                background-color: #fff;
+                text-align: center;
+            }
+
 		</style>
-		
 		<script language="javascript">
 			function preview(fang) {
 				if (fang < 10) {
@@ -198,13 +240,21 @@
 				}
 			}
 		</script>
+        <style media="print">
+            .Noprint {   DISPLAY:   none;}
+            .PageNext {   PAGE-BREAK-AFTER:   always   }
+        </style>
 	</head>
 	<body>
+
+       <?php
+       foreach ($lists as $model){
+       ?>
 		<!--startprint1-->
 		<div class="container clf">
 			<!-- 左 -->
 			<div class="factory-info fl">
-				<h2 class="title">中央生产制造单【工厂名称】</h2>
+				<h2 class="title">中央生产制造单【<?= $model->supplier_name?>】</h2>
 				
 				<table class="table1" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
 					<tr class="height-4rem">
@@ -212,13 +262,13 @@
 							<div>采购组：</div>
 						</td>
 						<td width="52%">
-							<div>201</div>
+							<div><?= $model->purchase_group?></div>
 						</td>
 						<td width="14%">
 							<div>采购单号：</div>
 						</td>
 						<td width="20%">
-							<div>Data</div>
+							<div><?= $model->purchase_sn?></div>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -226,13 +276,13 @@
 							<div>物料描述：</div>
 						</td>
 						<td>
-							<div>G750钻石女戒</div>
+							<div><?= $model->goods_name?></div>
 						</td>
 						<td>
 							<div>发单时间：</div>
 						</td>
 						<td>
-							<div>2020/7/6</div>
+							<div><?= $model->created_at?></div>
 						</td>
 					</tr>
 					<tr>
@@ -240,13 +290,13 @@
 							<div>处理次序：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $model->processing_order?></div>
 						</td>
 						<td rowspan="2">
 							<div>交货时间：</div>
 						</td>
 						<td rowspan="2">
-							<div>2020/8/6</div>
+							<div><?= $model->delivery_time?></div>
 						</td>
 					</tr>
 					<tr>
@@ -254,7 +304,7 @@
 							<div>金料颜色：</div>
 						</td>
 						<td>
-							<div>18K白</div>
+							<div><?= $model->material?></div>
 						</td>
 					</tr>
 					<tr>
@@ -262,13 +312,13 @@
 							<div>件数：</div>
 						</td>
 						<td>
-							<div>5</div>
+							<div><?= $model->goods_num?></div>
 						</td>
 						<td>
 							<div>物料号：</div>
 						</td>
 						<td>
-							<div>90000</div>
+							<div><?= $model->item_number?></div>
 						</td>
 					</tr>
 				</table>
@@ -276,13 +326,13 @@
 				<table class="table2" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
 					<tr class="height-4rem">
 						<td rowspan="10" width="calc(54% + 2px)">
-							<img src="./logo.png" alt="">
+							<img src="<?= $model->image?>" alt="">
 						</td>
 						<td width="14%" height="">
 							<div>工厂模号：</div>
 						</td>
 						<td width="20%">
-							<div>G0000000</div>
+							<div><?= $model->factory_model?></div>
 						</td>
 					</tr>
 					<tr>
@@ -290,7 +340,7 @@
 							<div>单类：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->cate?></div>
 						</td>
 					</tr>
 					<tr>
@@ -298,7 +348,7 @@
 							<div>后加工：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->processing?></div>
 						</td>
 					</tr>
 					<tr>
@@ -306,7 +356,7 @@
 							<div>出数客户：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->customers?></div>
 						</td>
 					</tr>
 					<tr>
@@ -314,7 +364,7 @@
 							<div>项目号：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->number?></div>
 						</td>
 					</tr>
 					<tr>
@@ -322,7 +372,7 @@
 							<div>镶法：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->mounting_method?></div>
 						</td>
 					</tr>
 					<tr>
@@ -330,7 +380,7 @@
 							<div>圈口：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->circle?></div>
 						</td>
 					</tr>
 					<tr>
@@ -338,7 +388,7 @@
 							<div>可改蜡最大:</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->maximum?></div>
 						</td>
 					</tr>
 					<tr>
@@ -346,7 +396,7 @@
 							<div>可改蜡最小:</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->minimum?></div>
 						</td>
 					</tr>
 					<tr>
@@ -354,7 +404,7 @@
 							<div>重量：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->weight?></div>
 						</td>
 					</tr>
 				</table>
@@ -365,8 +415,7 @@
 							<div>工艺描述：</div>
 						</td>
 						<td width="86%">
-							<div>1.分件，车花片为CNC，模具号：</div>
-							<div>2.主石四爪镶</div>
+                            <?= $model->process_desc?>
 						</td>
 					</tr>
 					<tr>
@@ -374,7 +423,7 @@
 							<div>特殊工艺：</div>
 						</td>
 						<td>
-							<div>分件，手镶车花片</div>
+							<div><?= $model->special_process?></div>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -382,7 +431,7 @@
 							<div>字印要求：</div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->printing_req?></div>
 						</td>
 					</tr>
 					<tr class="height-4rem">
@@ -390,7 +439,7 @@
 							<div>尺寸要求：</div>
 						</td>
 						<td>
-							<div>花车片外径：4.6mm，内径，厚度，内爪到中心点距离，爪大小</div>
+							<div><?= $model->size_req?></div>
 						</td>
 					</tr>
 					<tr>
@@ -398,7 +447,7 @@
 							<div>形式：</div>
 						</td>
 						<td>
-							<div>一子单一件制</div>
+							<div><?= $model->form?></div>
 						</td>
 					</tr>
 					<tr class="height-2rem">
@@ -406,7 +455,7 @@
 							<div>配件要求：</div>
 						</td>
 						<td>
-							<div>K白 配车花片P18K143</div>
+							<div><?= $model->accessories_req?></div>
 						</td>
 					</tr>
 				</table>
@@ -444,29 +493,28 @@
 							<div>主石</div>
 						</td>
 						<td style="height: 3rem;">
-							<div>钻石</div>
+							<div><?= $model->main_stone_type?></div>
 						</td>
 						<td>
-							<div>1</div>
+							<div><?= $model->main_stone_num?></div>
 						</td>
 						<td>
-							<div>0.13</div>
+							<div><?= $model->dia_carat?></div>
 						</td>
 						<td>
-							<div>1）0.130-0.149</div>
+							<div><?= $model->main_stone_priority?></div>
 						</td>
 						<td>
-							<div>0.130-0.149</div>
+							<div><?= $model->main_socket_range?></div>
 						</td>
 						<td>
-							<div>3.2-3.3</div>
+							<div><?= $model->main_diameter?></div>
 						</td>
 					</tr>
 					
 					<tr class="height-5rem">
 						<td colspan="6">
-							<div>1.在颜色净度间等的情况下优先分数</div>
-							<div>2.吊坠拒绝用证书石</div>
+                            <?= $model->main_stone_remark?>
 						</td>
 					</tr>
 					
@@ -499,28 +547,28 @@
 							<div>辅石</div>
 						</td>
 						<td style="height: 3rem;">
-							<div>钻石</div>
+							<div><?= $model->side_stone1_type?></div>
 						</td>
 						<td>
-							<div>9</div>
+							<div><?= $model->side_stone1_num?></div>
 						</td>
 						<td>
-							<div>0.004</div>
+							<div><?= $model->side_stone1_weight?></div>
 						</td>
 						<td>
-							<div>1）0.004-0.0053</div>
+							<div><?= $model->vice_stone_priority?></div>
 						</td>
 						<td>
-							<div>0.004-0.0053</div>
+							<div><?= $model->vice_socket_range?></div>
 						</td>
 						<td>
-							<div></div>
+							<div><?= $model->vice_diameter?></div>
 						</td>
 					</tr>
 					
 					<tr>
 						<td colspan="6">
-							<div></div>
+							<div><?= $model->vice_stone_remark?></div>
 						</td>
 					</tr>
 					
@@ -529,19 +577,19 @@
 							<div>总数：</div>
 						</td>
 						<td>
-							<div>10</div>
+							<div><?= $model->sum_num?></div>
 						</td>
 						<td>
 							<div>主石形状：</div>
 						</td>
 						<td>
-							<div>圆形</div>
+							<div><?= $model->main_stone_shape?></div>
 						</td>
 						<td>
 							<div>配石重量区间：</div>
 						</td>
 						<td colspan="2">
-							<div></div>
+							<div><?= $model->stone_weight_range?></div>
 						</td>
 					</tr>
 				</table>
@@ -556,38 +604,14 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
-							<div>1）SI-VVS/M-N</div>
+						<td style="height: 180px;">
+							<div><?= $model->main_stone_spec?></div>
 						</td>
-						<td rowspan="6">
-							<div>副石用5厘</div>
+						<td>
+							<div><?= $model->accessories_remark?></div>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>2）SI-VVS/K-L</div>
-						</td>
-					</tr>
+
 				</table>
 				
 				<table class="table6" border="1" bordercolor="#ccc" cellspacing="0" cellpadding="0" width="100%">
@@ -596,7 +620,7 @@
 							<div>生产要求：</div>
 						</td>
 						<td>
-							<div>金副盈14</div>
+							<div><?= $model->product_req?></div>
 						</td>
 					</tr>
 					<tr>
@@ -604,7 +628,7 @@
 							<div>货品描述：</div>
 						</td>
 						<td>
-							<div>加盟发单需求</div>
+							<div><?= $model->product_desc?></div>
 						</td>
 					</tr>
 					<tr>
@@ -612,7 +636,7 @@
 							<div>订单类型：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $model->order_type?></div>
 						</td>
 					</tr>
 					<tr>
@@ -620,7 +644,7 @@
 							<div>配石要求：</div>
 						</td>
 						<td>
-							<div>按直径配石DE-KL（用石级别挑上限偏白石）</div>
+							<div><?= $model->with_stone_req?></div>
 						</td>
 					</tr>
 					<tr>
@@ -628,7 +652,7 @@
 							<div>发单要求：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $model->billing_req?></div>
 						</td>
 					</tr>
 					<tr>
@@ -636,16 +660,20 @@
 							<div>备注：</div>
 						</td>
 						<td>
-							<div>Data</div>
+							<div><?= $model->remark?></div>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 		<!--endprint1-->
+       <?php } ?>
 		
 		<!-- 打印按钮 -->
-		<input style="margin: 40px;" type='button' name='button_export' title='打印1' onclick=preview(1) value='打印1'>
+        <div class="text-center">
+            <!-- 打印按钮 -->
+            <button type="button" class="btn-ms" target="_blank" onclick="preview(1)">打印</button>
+        </div>
 
 	</body>
 </html>

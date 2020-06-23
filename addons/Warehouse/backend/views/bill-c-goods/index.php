@@ -175,6 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label'=> '质检备注',
                                 'attribute' => 'goods_remark',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],

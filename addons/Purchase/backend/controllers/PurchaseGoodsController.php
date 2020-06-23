@@ -341,7 +341,8 @@ class PurchaseGoodsController extends BaseController
                     $model->is_inlay = $qiban->is_inlay;
                     $model->stone_info = $qiban->stone_info;
                     $model->remark = $qiban->remark;
-                    
+                    $model->goods_image = $qiban->style_image;
+
                     $qibanForm = new QibanAttrForm();
                     $qibanForm->id = $qiban->id;
                     $qibanForm->initAttrs();
@@ -363,7 +364,8 @@ class PurchaseGoodsController extends BaseController
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;
                 $model->is_inlay = $style->is_inlay;                
-            } 
+                $model->goods_image = $style->style_image;
+            }
         }
         
         return true;

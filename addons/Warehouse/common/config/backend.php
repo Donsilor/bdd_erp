@@ -29,51 +29,52 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                            'title' => '库存列表',
-                            'route' => 'warehouse-goods/index',
-                    ], 
-                    [
-                            'title' => '入库单',
-                            'route' => 'bill-l/index',
-
+                        'title' => '库存列表',
+                        'route' => 'warehouse-goods/index',
                     ],
                     [
-                            'title' => '调拨单',
-                            'route' => 'bill-m/index',
+                        'title' => '入库单',
+                        'route' => 'bill-l/index',
                     ],
                     [
-                            'title' => '盘点单',
-                            'route' => 'bill-w/index',
+                        'title' => '调拨单',
+                        'route' => 'bill-m/index',
+                    ],
+                    [
+                        'title' => '盘点单',
+                        'route' => 'bill-w/index',
                     ],
                     /*[
-                            'title' => '维修退货单',
-                            'route' => 'bill-o/index',
+                        'title' => '维修退货单',
+                        'route' => 'bill-o/index',
                     ],
                     [
-                            'title' => '维修调拨单',
-                            'route' => 'bill-wf/index',
+                        'title' => '维修调拨单',
+                        'route' => 'bill-wf/index',
                     ],
                     [
-                            'title' => '维修发货单',
-                            'route' => 'bill-r/index',
+                        'title' => '维修发货单',
+                        'route' => 'bill-r/index',
                     ],*/
                     [
-                            'title' => '维修出库单',
-                            'route' => 'bill-repair/index',
+                        'title' => '维修出库单',
+                        'route' => 'bill-repair/index',
                     ],
                     [
-                            'title' => '退货返厂单',
-                            'route' => 'bill-b/index',
+                        'title' => '退货返厂单',
+                        'route' => 'bill-b/index',
                     ],
                     [
-                            'title' => '其他收货单',
-                            'route' => 'bill-t/index',
-
+                        'title' => '其他收货单',
+                        'route' => 'bill-t/index',
                     ],
                     [
-                            'title' => '其他出库单',
-                            'route' => 'bill-c/index',
-
+                        'title' => '其他出库单',
+                        'route' => 'bill-c/index',
+                    ],
+                    [
+                        'title' => '单据列表',
+                        'route' => 'bill/index',
                     ],
                 ],
 
@@ -88,8 +89,8 @@ return [
                         'route' => 'gold/index',
                     ],
                     [
-                            'title' => '配料列表',
-                            'route' => 'gold-apply/index',
+                        'title' => '配料列表',
+                        'route' => 'gold-apply/index',
                     ],
                     [
                         'title' => '入库单',
@@ -103,38 +104,46 @@ return [
                         'title' => '盘点单',
                         'route' => 'gold-bill-w/index',
                     ],
+                    [
+                        'title' => '单据列表',
+                        'route' => 'gold-bill/index',
+                    ],
                 ],
             ],
             [
-                    'title' => '石料管理',
-                    'route' => 'indexStone',
-                    'icon' => 'fa fa-superpowers',
-                    'child' => [
-                        [
-                            'title' => '石料列表',
-                            'route' => 'stone/index',
-                        ],
-                        [
-                             'title' => '配石列表',
-                             'route' => 'stone-apply/index',
-                        ],
-                        [
-                            'title' => '入库单',
-                            'route' => 'stone-bill-ms/index',
-                        ],
-                        [
-                            'title' => '领石单',
-                            'route' => 'stone-bill-ss/index',
-                        ],
-                        [
-                            'title' => '工厂退石单',
-                            'route' => 'stone-bill-ts/index',
-                        ],
-                        [
-                            'title' => '盘点单',
-                            'route' => 'stone-bill-w/index',
-                        ],
+                'title' => '石料管理',
+                'route' => 'indexStone',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '石料列表',
+                        'route' => 'stone/index',
                     ],
+                    [
+                         'title' => '配石列表',
+                         'route' => 'stone-apply/index',
+                    ],
+                    [
+                        'title' => '入库单',
+                        'route' => 'stone-bill-ms/index',
+                    ],
+                    [
+                        'title' => '领石单',
+                        'route' => 'stone-bill-ss/index',
+                    ],
+                    [
+                        'title' => '工厂退石单',
+                        'route' => 'stone-bill-ts/index',
+                    ],
+                    [
+                        'title' => '盘点单',
+                        'route' => 'stone-bill-w/index',
+                    ],
+                    [
+                        'title' => '单据列表',
+                        'route' => 'stone-bill/index',
+                    ],
+                ],
             ],
             [
                 'title' => '功能配置',
@@ -142,12 +151,12 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                            'title' => '仓库管理',
-                            'route' => 'warehouse/index',
+                        'title' => '仓库管理',
+                        'route' => 'warehouse/index',
                     ],
                     [
-                            'title' => '柜位管理',
-                            'route' => 'warehouse-box/index',
+                        'title' => '柜位管理',
+                        'route' => 'warehouse-box/index',
                     ]
                 ],
 
