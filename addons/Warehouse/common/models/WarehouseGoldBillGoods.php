@@ -46,6 +46,7 @@ class WarehouseGoldBillGoods extends BaseModel
             [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
             [['bill_no', 'gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
+            [['supplier_id','creator_id','auditor_id'], 'safe']
         ];
     }
 
@@ -82,5 +83,13 @@ class WarehouseGoldBillGoods extends BaseModel
     public function getGoodsW()
     {
         return $this->hasOne(WarehouseGoldBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
+    /**
+     * 单据
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill()
+    {
+        return $this->hasOne(WarehouseGoldBill::class, ['id'=>'bill_id'])->alias('bill');
     }
 }

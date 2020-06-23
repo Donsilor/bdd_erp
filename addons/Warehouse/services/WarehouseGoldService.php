@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use common\enums\StatusEnum;
 use Yii;
 use addons\Warehouse\common\models\WarehouseStone;
@@ -27,7 +29,7 @@ class WarehouseGoldService extends Service
     public function editGold($form)
     {
         $gold = WarehouseGoldBillLGoodsForm::find()->where(['bill_id'=>$form->id])->all();
-        $ids = [];
+        $ids = $g_ids = [];
         foreach ($gold as $detail){
             $goldM = new WarehouseGold();
             $good = [
@@ -48,12 +50,22 @@ class WarehouseGoldService extends Service
             if(false === $goldM->save()){
                 throw new \Exception($this->getError($goldM));
             }
-            $ids[] = $goldM->attributes['id'];
+            $id = $goldM->attributes['id'];
+            $ids[] = $id;
+            $g_ids[$id] = $detail->id;
         }
         if($ids){
             foreach ($ids as $id){
                 $stone = WarehouseGold::findOne(['id'=>$id]);
-                $this->createGoldSn($stone);
+                $gold_sn = $this->createGoldSn($stone);
+                //回写收货单货品批次号
+                $g_id = $g_ids[$id]??"";
+                if($g_id){
+                    $res = WarehouseGoldBillGoods::updateAll(['gold_sn' => $gold_sn], ['id' => $g_id]);
+                    if(false === $res){
+                        throw new \Exception("回写收货单货品批次号失败");
+                    }
+                }
             }
         }
     }

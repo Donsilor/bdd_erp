@@ -85,6 +85,7 @@ class BillController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'bill' => [
+                    'id',
                     'bill_status',
                     'created_at',
                     'audit_status',
@@ -93,13 +94,21 @@ class BillController extends BaseController
             ]
         ]);
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams, ['supplier_id']);
+            ->search(\Yii::$app->request->queryParams, ['supplier_id','to_warehouse_id','from_warehouse_id']);
         if($model->goods_id){
             $dataProvider->query->andWhere(['=','goods_id', $model->goods_id]);
         }
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
             $dataProvider->query->andWhere(['=','bill.supplier_id', $supplier_id]);
+        }
+        $to_warehouse_id = $searchModel->to_warehouse_id;
+        if($to_warehouse_id){
+            $dataProvider->query->andWhere(['=','bill.to_warehouse_id', $to_warehouse_id]);
+        }
+        $from_warehouse_id = $searchModel->from_warehouse_id;
+        if($from_warehouse_id){
+            $dataProvider->query->andWhere(['=','bill.from_warehouse_id', $from_warehouse_id]);
         }
         return $this->render($this->action->id, [
             'model' => $model,
@@ -109,7 +118,7 @@ class BillController extends BaseController
     }
 
     /**
-     * 搜索
+     * 获取参数
      * @return string
      * @throws NotFoundHttpException
      */
