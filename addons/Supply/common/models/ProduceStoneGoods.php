@@ -11,7 +11,7 @@ use addons\Warehouse\common\models\WarehouseStone;
  * @property int $id 配石id
  * @property string $stone_sn 石包号
  * @property int $stone_num 配石数量
- * @property string $stone_weight 石料总重
+ * @property number $stone_weight 石料总重
  */
 class ProduceStoneGoods extends BaseModel
 {

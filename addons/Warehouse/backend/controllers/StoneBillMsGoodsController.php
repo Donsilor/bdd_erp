@@ -94,7 +94,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                \Yii::$app->warehouseService->stoneBill->purchaseStoneBillSummary($model->bill_id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
                 $trans->commit();
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){

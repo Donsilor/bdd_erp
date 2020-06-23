@@ -143,7 +143,7 @@ class WarehouseStoneBillService extends Service
      * @param integer $bill_id
      * @throws \Exception
      */
-    public function purchaseStoneBillSummary($bill_id)
+    public function stoneBillSummary($bill_id)
     {
         $sum = WarehouseStoneBillGoods::find()
             ->select(['sum(1) as total_num','sum(stone_weight) as total_weight','sum(cost_price) as total_cost'])
