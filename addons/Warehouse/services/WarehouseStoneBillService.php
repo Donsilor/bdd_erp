@@ -240,7 +240,6 @@ class WarehouseStoneBillService extends Service
                 throw new \Exception("单据明细不能为空");
             }
             //石包入库
-            //\Yii::$app->warehouseService->stone->editStone($form);
             foreach ($billGoodsList as $billGoods) {
                 $stoneM = new WarehouseStone();
                 $stoneData = [
@@ -264,9 +263,13 @@ class WarehouseStoneBillService extends Service
                     throw new \Exception($this->getError($stoneM));
                 }
                 \Yii::$app->warehouseService->stone->createStoneSn($stoneM);
+                //同步更新石料编号到单据明细
+                $billGoods->stone_sn = $stoneM->stone_sn;
+                if(false === $billGoods->save(true,['id','stone_sn'])) {
+                    throw new \Exception($this->getError($billGoods));
+                }
             }
             //同步石料采购收货单货品状态
-            //$ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
             $queryId = WarehouseStoneBillGoods::find()->select(['source_detail_id']);
             $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$queryId]);
             if(false === $res) {
