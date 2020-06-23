@@ -67,8 +67,8 @@ class GoldApplyController extends BaseController
             //数据校验
             foreach ($ids as $id) {
                 $model = ProduceGold::find()->where(['id'=>$id])->one();
-                if($model && $model->peiliao_status != PeiliaoStatusEnum::IN_PEILIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单状态不是配料中");
+                if($model && $model->peiliao_status >= PeiliaoStatusEnum::TO_LINGLIAO) {
+                    return ResultHelper::json(422,"(ID={$id})配料单当前状态不是允许配料操作");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peiliao','ids'=>implode(',',$ids)])]);

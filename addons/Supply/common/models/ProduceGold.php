@@ -78,8 +78,8 @@ class ProduceGold extends BaseModel
                 'peiliao_remark' => '配料备注', 
                 'remark' => '采购备注',                
                 'creator_id' => '创建人ID',
-                'creator_name' => '创建人',
-                'created_at' => '添加时间',
+                'creator_name' => '申请人',
+                'created_at' => '申请时间',
                 'updated_at' => '更新时间',
         ];
     }
