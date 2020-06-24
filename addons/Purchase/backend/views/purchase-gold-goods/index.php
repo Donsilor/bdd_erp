@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
             if($purchase->purchase_status == BillStatusEnum::CONFIRM) {
-                echo Html::batchPop(['warehouse'],'分批收货', [
+                echo Html::batchPop(['warehouse', 'check'=>1],'分批收货', [
                     'class'=>'btn btn-success btn-xs',
                 ]);
             }

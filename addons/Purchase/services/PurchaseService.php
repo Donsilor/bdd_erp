@@ -254,10 +254,11 @@ class PurchaseService extends Service
                 $goods[$k]['goods_norms'] =  $model->spec_remark;
                 $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
+
+                $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             }
             $total_weight = bcadd($total_weight, $model->goods_weight);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
-            $total_stone_num = bcadd($total_stone_num, $model->stone_num);
         }
         $bill = [
             'supplier_id' => $form->supplier_id,
