@@ -62,14 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;'
-
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                            'contentOptions' => ['style' => 'width:80px'],
+                            'headerOptions'  => ['style'=>'width:80px;'],
                         ],
                         [
                             'attribute' => 'bill_status',
@@ -82,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                     
                             ]),
-                            'format' => 'raw',
+                            'format' => 'raw',                            
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -130,16 +126,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        /* [
+                        [
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
+                                 'style' => 'width:150px;'
                             ]),
-                            'headerOptions' => ['width'=>'120'],
-                        ], */
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ], 
                         [
                             'attribute' => 'creator_id',
-                            'value' => 'creator.username',                            
+                            'value' => function($model){
+                                return $model->creator->username ??'';
+                            },                            
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
@@ -169,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute' => 'audit_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -181,12 +180,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
-                        ],                        
+                        ],    */                     
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{apply} {goods}',
+                            'template' => '{edit} {apply} {goods}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){

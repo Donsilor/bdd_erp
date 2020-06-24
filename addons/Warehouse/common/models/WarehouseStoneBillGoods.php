@@ -3,6 +3,7 @@
 namespace addons\Warehouse\common\models;
 
 use Yii;
+use addons\Supply\common\models\ProduceStone;
 
 /**
  * This is the model class for table "warehouse_stone_bill_goods".
@@ -99,5 +100,13 @@ class WarehouseStoneBillGoods extends BaseModel
     public function getGoodsW()
     {
         return $this->hasOne(WarehouseStoneBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
+    /**
+     * 配石记录
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceStone()
+    {
+        return $this->hasOne(ProduceStone::class, ['id'=>'source_detail_id'])->alias('produceStone');
     }
 }

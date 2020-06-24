@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -40,17 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'columns' => [
                             [
                                 'class' => 'yii\grid\SerialColumn',
-                                'visible' => false,
+                                'visible' => true,
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'class'=>'yii\grid\CheckboxColumn',
-                                'name'=>'id',  //设置每行数据的复选框属性
+                                'attribute'=>'gold_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            /*[
-                                'attribute' => 'id',
-                                'filter' => false,
-                                'format' => 'raw',
-                            ],*/
                             [
                                 'attribute'=>'gold_name',
                                 'filter' => true,
@@ -59,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'style_sn',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_type',
@@ -71,41 +67,52 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cost_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            /*[
-                                'attribute' => 'sale_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],*/
+                            [
+                                'label' => '布产编号',
+                                'value' => function ($model){
+                                    return $model->produceGold->produce_sn ?? '';
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '配料状态',
+                                'value' => function ($model){
+                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
 
                                     },
                                 ],
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                //'headerOptions' => ['class' => 'col-md-1'],
                             ]
                         ]
                     ]); ?>

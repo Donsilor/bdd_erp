@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use common\helpers\ArrayHelper;
 
@@ -18,7 +17,7 @@ class WarehouseStoneBillSsForm extends WarehouseStoneBill
     public function rules()
     {
          $rules = [
-             [['created_at', 'supplier_id'], 'required'],
+             [['supplier_id'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -30,7 +29,7 @@ class WarehouseStoneBillSsForm extends WarehouseStoneBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'created_at' => '日期',
+            
         ]);
     }
 

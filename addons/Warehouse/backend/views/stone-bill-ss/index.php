@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>                
             </div>
             <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false)?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
@@ -32,13 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
-                            'visible' => false,
+                            'visible' => true,
                         ],
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
-                        ],
+                        ], 
                         [
                                 'attribute' => 'id',
                                 'filter' => true,
@@ -52,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                  'class' => 'form-control',
-                                 'style' => 'width:170px;'
+                                 'style' => 'width:160px;'
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -62,12 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\StoneBillTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
@@ -128,18 +122,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ], */
-                       /*  [
-                            'label' => '纸质单号',
+                        [
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
+                                'style' => 'width:150px',
                             ]),
-                            'headerOptions' => ['width'=>'120'],
-                        ], */
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ], 
                         [
                             'attribute' => 'creator_id',
                             'value' => function($model){
-                                  $model->creator->username ??'';
+                                  return $model->creator->username ??'';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',

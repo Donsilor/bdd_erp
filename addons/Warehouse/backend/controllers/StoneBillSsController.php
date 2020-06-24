@@ -9,7 +9,6 @@ use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
@@ -92,9 +91,8 @@ class StoneBillSsController extends StoneBillController
         if ($model->load(\Yii::$app->request->post())) {
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
-                $model->bill_status = BillStatusEnum::SAVE;
+                $model->bill_status = StoneBillStatusEnum::SAVE;
             }
-            $model->created_at = strtotime($model->created_at);
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if(false === $model->save()) {
