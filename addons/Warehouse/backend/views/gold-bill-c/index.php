@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
-                                'style'=>'width:170px'
+                                'style'=>'width:160px'
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -63,9 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                             },
                             'filter' => false,
-                            'format' => 'raw',
-                            'contentOptions' => ['style' => 'width:80px'],
-                            'headerOptions'  => ['style'=>'width:80px;'],
+                            'contentOptions' => ['style' => 'width:100px'],
+                            'headerOptions'  => ['style'=>'width:100px;'],
                         ],
                         [
                             'attribute' => 'bill_status',
@@ -100,13 +99,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        /*[
+                        [
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
+                                'style' => 'width:100px;'
                             ]),
-                            'headerOptions' => ['width'=>'120'],
-                        ],*/
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute'=>'total_weight',
                             'value'=>function($model){

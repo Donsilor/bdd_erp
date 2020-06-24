@@ -55,7 +55,8 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_type', 'stone_type'], 'string', 'max' => 10],
             [['bill_no', 'stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
-            [['stone_norms'], 'string', 'max' => 255]
+            [['stone_norms'], 'string', 'max' => 255],
+            [['supplier_id','creator_id','auditor_id'], 'safe'],
         ];
     }
 
@@ -108,5 +109,13 @@ class WarehouseStoneBillGoods extends BaseModel
     public function getProduceStone()
     {
         return $this->hasOne(ProduceStone::class, ['id'=>'source_detail_id'])->alias('produceStone');
+    }
+	/**
+     * 单据
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill()
+    {
+        return $this->hasOne(WarehouseStoneBill::class, ['id'=>'bill_id'])->alias('bill');
     }
 }

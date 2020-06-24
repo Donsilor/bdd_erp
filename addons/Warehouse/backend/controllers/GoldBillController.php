@@ -88,13 +88,13 @@ class GoldBillController extends BaseController
                     'bill_status',
                     'created_at',
                     'audit_status',
-                    'audit_time'
+                    'audit_time',
                 ],
             ]
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['supplier_id']);
+            ->search(Yii::$app->request->queryParams, ['supplier_id']);
         $supplier_id = $searchModel->supplier_id;
         if($model->gold_sn){
             $dataProvider->query->andWhere(['=','gold_sn', $model->gold_sn]);

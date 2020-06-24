@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:130%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'label' => '单据类型',
                             'attribute' => 'bill_type',
                             'value' => function ($model){
@@ -78,22 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                        ],
-                        [
-                            'label' => '单据状态',
-                            'attribute' => 'bill_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
-                        ],
+                        ],*/
                         [
                             'label' => '加工商',
                             'attribute' => 'supplier_id',
@@ -102,13 +87,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                                'options' => ['placeholder' =>"请选择"],
                                 'pluginOptions' => [
                                     'allowClear' => true,
+                                    'width' => '200',
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2', 'style'=> 'width:120px;'],
+                            'headerOptions' => [],
                         ],
                         [
                             'label' => '石包总数',
@@ -190,6 +176,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'label' => '单据状态',
+                            'attribute' => 'bill_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
+                        ],
+                        /*[
                             'label' => '审核时间',
                             'attribute'=>'audit_time',
                             'filter' => DateRangePicker::widget([    // 日期组件
@@ -212,7 +213,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->audit_time);
                             }
-                        ],
+                        ],*/
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',

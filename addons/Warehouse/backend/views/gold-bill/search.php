@@ -48,12 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'bill_type',
                             'value' => function ($model){
