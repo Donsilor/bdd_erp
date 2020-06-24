@@ -66,6 +66,33 @@ class StoneStyleController extends BaseController
         ]);
     }
     /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->stone_weight_min>$model->stone_weight_max){
+                return $this->message('石重范围小不能大于石重范围大', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $model->status = StatusEnum::DISABLED;
+            return $model->save()
+                ? $this->redirect(Yii::$app->request->referrer)
+                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+    /**
      * @return mixed
      * 提交审核
      */
@@ -84,7 +111,7 @@ class StoneStyleController extends BaseController
     }
 
     /**
-     * 供应商-审核
+     * 审核
      *
      * @return mixed
      */

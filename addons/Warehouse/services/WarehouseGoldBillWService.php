@@ -109,7 +109,7 @@ class WarehouseGoldBillWService extends WarehouseBillService
             throw new \Exception("批次号不能为空");
         }
         if(!$form->gold_weight) {
-            throw new \Exception("金料重量不能为空");
+            throw new \Exception("金料总重不能为空");
         }
         $billGoods = WarehouseGoldBillGoods::find()->where(['gold_sn'=>$form->gold_sn,'bill_id'=>$form->id])->one();
         if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {

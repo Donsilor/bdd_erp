@@ -13,6 +13,8 @@ use Yii;
  * @property string $style_sn 款号
  * @property double $stone_weight_min 石重范围小
  * @property double $stone_weight_max 石重范围大
+ * @property int $cert_type 证书类型
+ * @property string $cert_id 证书号
  * @property string $product_size 尺寸
  * @property string $remark 备注
  * @property int $auditor_id 审核人
@@ -44,9 +46,9 @@ class StyleStoneStyle extends BaseModel
             [['style_sn'], 'unique'],
             [['stone_type', 'style_sn', 'stone_weight_min', 'stone_weight_max'], 'required'],
             [['stone_weight_min', 'stone_weight_max'], 'number'],
-            [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['cert_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['stone_type'], 'string', 'max' => 10],
-            [['style_sn'], 'string', 'max' => 30],
+            [['style_sn', 'cert_id'], 'string', 'max' => 30],
             [['product_size'], 'string', 'max' => 100],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
@@ -63,6 +65,8 @@ class StyleStoneStyle extends BaseModel
             'style_sn' => '款号',
             'stone_weight_min' => '石重范围小',
             'stone_weight_max' => '石重范围大',
+            'cert_type' => '证书类型',
+            'cert_id' => '证书号',
             'product_size' => '尺寸',
             'remark' => '备注',
             'auditor_id' => '审核人',

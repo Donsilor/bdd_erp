@@ -13,7 +13,7 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">货品盘点 - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header">石料盘点 - <?php echo $model->bill_no?></h2>
     <div class="box">
         <div class=" table-responsive">
             <table class="table table-hover">
@@ -22,11 +22,11 @@ $form = ActiveForm::begin([
                     <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_sn')->textInput()->label(false)?></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-1 text-right no-border-top">金料粒数：</td>
+                    <td class="col-xs-1 text-right no-border-top">石料粒数：</td>
                     <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_num')->textInput()->label(false)?></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-1 text-right no-border-top">金料总重：</td>
+                    <td class="col-xs-1 text-right no-border-top">石料总重：</td>
                     <td class="col-xs-4 text-left no-border-top"><?= $form->field($model, 'stone_weight')->textInput()->label(false)?></td>
                     <td class="text-left no-border-top"><button class="btn btn-primary" type="submit">盘点</button></td>
                 </tr>

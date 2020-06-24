@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>' width:120%;white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -71,20 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '石重范围',
                             'attribute' => 'stone_weight_min',
-                            'value' => 'stone_weight_min',
+                            'value' => function ($model){
+                                return $model->stone_weight_min." - ".$model->stone_weight_max;
+                            },
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'stone_weight_min', [
-                                'class' => 'form-control',
-                            ]),
-                        ],
-                        [
-                            'attribute' => 'stone_weight_max',
-                            'value' => 'stone_weight_max',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'stone_weight_max', [
-                                'class' => 'form-control',
-                            ]),
                         ],
                         [
                             'attribute' => 'remark',
@@ -226,7 +220,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'status' => function($url, $model, $key){
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
                                         return Html::status($model->status);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::SAVE) {

@@ -13,7 +13,7 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">货品盘点 - <?php echo $model->bill_no?></h2>
+    <h2 class="page-header">金料盘点 - <?php echo $model->bill_no?></h2>
     <div class="box">
         <div class=" table-responsive">
             <table class="table table-hover">
