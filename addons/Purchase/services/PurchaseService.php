@@ -141,9 +141,14 @@ class PurchaseService extends Service
                     //生产中之后的流程，禁止同步
                     continue;
                 }else {
-                    $goods['id'] = $model->produce->id;
-                    $goods['bc_status'] = $model->produce->bc_status;
-                    $goods['factory_distribute_time'] = $model->produce->factory_distribute_time;
+                    unset($goods['bc_status']);
+                    $goods['id'] = $model->produce->id;                    
+                    //如果是配料中的，不同步配料类型和配料状态
+                    if($model->produce->bc_status == BuChanEnum::IN_PEILIAO) {
+                        unset($goods['peiliao_type']);
+                        unset($goods['peishi_status']);
+                        unset($goods['peiliao_status']);
+                    }
                 }
             }
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();

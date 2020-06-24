@@ -15,6 +15,7 @@ use common\components\Service;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Warehouse\common\enums\StoneStatusEnum;
+use addons\Supply\common\models\Produce;
 
 class ProduceStoneService extends Service
 {
@@ -40,20 +41,27 @@ class ProduceStoneService extends Service
      * ]
      */
     public function batchPeishi($data)
-    {
+    {   
+        $produce_sns = [];
         foreach ($data as $id => $stoneData) {
             //1更新配石状态
             $stone = ProduceStone::find()->where(['id'=>$id])->one();
             if(!$stone) {
                 throw new \Exception("(ID={$id})配石单查询失败");
             }
-            $stone->attributes = $stoneData;
+            $stone->attributes = $stoneData;            
             $stone->peishi_time = time();
-            $stone->peishi_user = Yii::$app->user->identity->username;
-            $stone->peishi_status = PeishiStatusEnum::HAS_PEISHI;
+            $stone->peishi_user = Yii::$app->user->identity->username;            
+            //如果绑定了 领石单
+            if($stone->delivery_no) {
+                $stone->peishi_status = PeishiStatusEnum::TO_LINGSHI;
+            }else{
+                $stone->peishi_status = PeishiStatusEnum::HAS_PEISHI;
+            }
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }
+            $produce_sns[$stone->produce_sn] = $stone->produce_sn;            
             //2.还原石料库存
             if($stone->stoneGoods) {
                 foreach ($stone->stoneGoods as $stoneGoods){                    
@@ -94,6 +102,10 @@ class ProduceStoneService extends Service
                  Yii::$app->warehouseService->stone->adjustStoneStock($stoneGoods->stone_sn, $stoneGoods->stone_num, $stoneGoods->stone_weight, AdjustTypeEnum::MINUS);
             }
             
+        }
+        //同步更新布产单配石状态
+        if(!empty($produce_sns)) {
+            Yii::$app->supplyService->produce->autoPeishiStatus($produce_sns);
         }
     }
 }

@@ -149,8 +149,7 @@ class StoneBillSsController extends StoneBillController
             $trans = Yii::$app->trans->beginTransaction();
             
             $model->bill_status  = StoneBillStatusEnum::PENDING;
-            $model->audit_status = AuditStatusEnum::PENDING;
-            
+            $model->audit_status = AuditStatusEnum::PENDING;            
             
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
@@ -158,7 +157,14 @@ class StoneBillSsController extends StoneBillController
             
             //更新配石状态
             $subIdQuery = WarehouseStoneBillGoods::find()->select(['source_detail_id'])->where(['bill_id'=>$id]);
-            ProduceStone::updateAll(['peishi_status'=>PeishiStatusEnum::TO_LINGSHI],['id'=>$subIdQuery]);
+            $produce_sns = ProduceStone::find()->where(['id'=>$subIdQuery])->distinct('produce_sn')->asArray()->all();
+            if(!empty($produce_sns)) {
+                $produce_sns = array_column($produce_sns, 'produce_sn');
+                ProduceStone::updateAll(['peishi_status'=>PeishiStatusEnum::TO_LINGSHI],['id'=>$subIdQuery]);            
+                Yii::$app->supplyService->produce->autoPeishiStatus($produce_sns);
+            }else{
+                throw new \Exception("数据异常");
+            }
             
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');

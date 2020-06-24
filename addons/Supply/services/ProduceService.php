@@ -30,6 +30,7 @@ use addons\Supply\common\models\Peishi;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Supply\common\models\ProduceStone;
 use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
 
 
 class ProduceService extends Service
@@ -86,6 +87,7 @@ class ProduceService extends Service
             $produce = new Produce();
             $produce->produce_sn = SnHelper::createProduceSn();
         }
+        
         $produce->attributes = $goods;   
         
         if(false === $produce->save()){            
@@ -109,7 +111,10 @@ class ProduceService extends Service
         if(false === $produce->save(true)) {
             throw new \Exception($this->getError($produce));
         }
-        
+        if($is_new === false && $produce->peiliao_type != PeiliaoTypeEnum::None) {
+            //更新配石配料信息
+            $this->updatePeiliao($produce);
+        }
         if($is_new === true) {
             $follower_name = $produce->follower ? $produce->follower->username:'';
             $supplier_name = $produce->supplier ? $produce->supplier->supplier_name:'';
@@ -136,12 +141,12 @@ class ProduceService extends Service
     {
         return ProduceShipment::find()->where(['produce_id'=>$produce_id])->sum('shippent_num') ?? 0;
     }
+    
     /**
      * 创建配料单
      * @param Produce $form
-     */
-     
-    public function toPeiliao($form)
+     */     
+    public function createPeiliao($form)
     {
         if($form->bc_status != BuChanEnum::TO_PEILIAO){
             throw new \Exception('布产单不是'.BuChanEnum::getValue(BuChanEnum::TO_PEILIAO).'状态，不能操作');
@@ -151,22 +156,33 @@ class ProduceService extends Service
 
         if($form->peiliao_status == PeiliaoStatusEnum::PENDING) {
             $form->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
-            $this->createPeiliao($form,$attrValues);
+            $this->createProduceGold($form,$attrValues);
         }
         if($form->peishi_status == PeishiStatusEnum::PENDING) {
             $form->peishi_status = PeishiStatusEnum::IN_PEISHI;
-            $this->createPeishi($form,$attrValues);
+            $this->createProduceStone($form,$attrValues);
         }        
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
     }
     /**
+     * 更新配料单
+     * @param Produce $form
+     */
+    public function updatePeiliao($form) 
+    {       
+        $attrValues = ArrayHelper::map($form->attrs ?? [], 'attr_id', 'attr_value');        
+        $this->createProduceGold($form,$attrValues);
+        $this->createProduceStone($form,$attrValues);     
+    }
+    /**
      * 创建配料单
      * @param Produce $form
      */
-    private function createPeiliao($form ,$attrValues)
-    {        
+    private function createProduceGold($form ,$attrValues)
+    {   
+        $is_new = false;
         $gold = [
                 'supplier_id' => $form->supplier_id,
                 'gold_type' =>  $attrValues[AttrIdEnum::MATERIAL]??'',
@@ -181,13 +197,34 @@ class ProduceService extends Service
             $model->from_order_sn = $form->from_order_sn;
             $model->from_type = $form->from_type;
             $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
-            
-        }else {
+            $is_new =  true;
+        }else { 
+            if($model->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
+                //已领料禁止更新
+                return ;
+            }
+            $fields = ['gold_type','gold_weight'];
+            //如果有重要字段变动，配石状态还原成 配石中
+            foreach ($fields as $field) {
+                if($model->{$field} != $gold[$field]) {
+                    $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+                    $form->peiliao_status  = PeiliaoStatusEnum::IN_PEILIAO;
+                    $reset = true;
+                    break;
+                }
+            }
             $model->attributes = ArrayHelper::merge($model->attributes, $gold);
         }
         if(false === $model->save()) {
             throw new \Exception($this->getError($model));
-        }          
+        }
+        //重置配料单
+        if($reset === true){
+            if(false === $form->save(true,['id','peiliao_status'])){
+                throw new \Exception($this->getError($form));
+            }
+        }
+
         //日志
         $log = [
                 'produce_id' => $form->id,
@@ -195,7 +232,7 @@ class ProduceService extends Service
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'bc_status' => $form->bc_status,
                 'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
-                'log_msg' => "生成配料单:".$model->id,
+                'log_msg' => ($is_new ? "生成":"更新")."配料单:".$model->id,
         ];
         $this->createProduceLog($log);
     }
@@ -203,7 +240,7 @@ class ProduceService extends Service
      * 创建配石单
      * @param Produce $form
      */
-    private function createPeishi($form , $attrValues) 
+    private function createProduceStone($form , $attrValues) 
     {
         $stone_list =[];
         //主石
@@ -238,6 +275,8 @@ class ProduceService extends Service
                     'stone_position'=>StonePositionEnum::SECOND_STONE2,
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE2_NUM]??0),
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE2_SPEC]??'',
+                    'color' =>'',
+                    'clarity'=>'',
             ];
         }
         //副石3
@@ -247,9 +286,13 @@ class ProduceService extends Service
                     'stone_position'=>StonePositionEnum::SECOND_STONE3,
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE3_NUM]??0),
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE3_SPEC]??'',
+                    'color' =>'',
+                    'clarity'=>'',
             ];
         }
         $log_msgs = [];
+        $fields = ['stone_type','stone_num','color'];
+        $reset  = false;
         foreach ($stone_list as $position => $stone) {
              $is_new = false;
              $model = ProduceStone::find()->where(['produce_id'=>$form->id,'stone_position'=>$position])->one();
@@ -263,6 +306,19 @@ class ProduceService extends Service
                  $model->peishi_status =  PeishiStatusEnum::IN_PEISHI;
                  $is_new = true;                 
              }else {
+                 if($model->peishi_status == PeishiStatusEnum::HAS_LINGSHI) {
+                     //已领石，禁止更新
+                     return ;
+                 }
+                 //如果有重要字段变动，配石状态还原成 配石中
+                 foreach ($fields as $field) {
+                     if($model->{$field} != $stone[$field]) {
+                         $model->peishi_status = PeishiStatusEnum::IN_PEISHI;
+                         $form->peishi_status  = PeishiStatusEnum::IN_PEISHI; 
+                         $reset = true;
+                         break;
+                     }
+                 }
                  $model->attributes = ArrayHelper::merge($model->attributes, $stone);
              }
              $model->supplier_id = $form->supplier_id;//加工商
@@ -274,6 +330,12 @@ class ProduceService extends Service
              }else {
                  $log_msgs['更新配石单'][$model->id] = $model->id;
              }
+        }
+        //重置配石单
+        if($reset === true){
+            if(false === $form->save(true,['id','peishi_status'])){
+                throw new \Exception($this->getError($form));
+            }
         }
         $log_msg = '';
         foreach ($log_msgs as $k=>$v) {
@@ -306,6 +368,35 @@ class ProduceService extends Service
         }
         return $model ;
     }
+    /**
+     * 批量更新布产单，配石状态
+     * @param array $produce_sns
+     */
+    public function autoPeishiStatus(array $produce_sns)
+    {
+        if(!empty($produce_sns)) {
+            //同步更新布产单配石状态
+            $sql = "update ".Produce::tableName()." p set peishi_status = (select min(peishi_status) from ".ProduceStone::tableName()." ps where ps.produce_sn=p.produce_sn) where p.produce_sn in('".implode("','", $produce_sns)."')";
+            return \Yii::$app->db->createCommand($sql)->execute();
+        }        
+        return false;
+    }
+    
+    /**
+     * 批量更新布产单，配石状态
+     * @param array $produce_sns
+     */
+    public function autoPeiliaoStatus(array $produce_sns)
+    {
+        if(!empty($produce_sns)) {
+            //同步更新布产单配石状态
+            $sql = "update ".Produce::tableName()." p set peiliao_status = (select min(pg.peiliao_status) from ".ProduceGold::tableName()." pg where pg.produce_sn=p.produce_sn) where p.produce_sn in('".implode("','", $produce_sns)."')";
+            return \Yii::$app->db->createCommand($sql)->execute();
+        }
+        return false;
+    }
+    
+    
 
 
 }

@@ -117,8 +117,14 @@ class GoldBillCController extends GoldBillController
             
             //更新配石状态
             $subIdQuery = WarehouseGoldBillGoods::find()->select(['source_detail_id'])->where(['bill_id'=>$id]);
-            ProduceGold::updateAll(['peiliao_status'=>PeiliaoStatusEnum::TO_LINGLIAO],['id'=>$subIdQuery]);
-            
+            $produce_sns = ProduceGold::find()->where(['id'=>$subIdQuery])->distinct('produce_sn')->asArray()->all();
+            if(!empty($produce_sns)) {
+                $produce_sns = array_column($produce_sns, 'produce_sn');
+                ProduceGold::updateAll(['peiliao_status'=>PeiliaoStatusEnum::TO_LINGLIAO],['id'=>$subIdQuery]);
+                Yii::$app->supplyService->produce->autoPeiliaoStatus($produce_sns);
+            }else{
+                throw new \Exception("数据异常");
+            }
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch(\Exception $e) {

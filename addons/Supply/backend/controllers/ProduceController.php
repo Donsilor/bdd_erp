@@ -274,7 +274,7 @@ class ProduceController extends BaseController
      * 申请配料
      * @return mixed|string|\yii\web\Response
      */
-    public function actionToPeiliao(){
+    public function actionApplyPeiliao(){
         
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -283,7 +283,7 @@ class ProduceController extends BaseController
             
             $trans = Yii::$app->trans->beginTransaction();
             
-            Yii::$app->supplyService->produce->toPeiliao($model);
+            Yii::$app->supplyService->produce->createPeiliao($model);
             
             $trans->commit();
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success'); 
