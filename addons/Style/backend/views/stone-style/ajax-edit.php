@@ -23,7 +23,6 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'stone_weight_min')->textInput() ?>
         <?= $form->field($model, 'stone_weight_max')->textInput() ?>
         <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']);?>
-        <?= $form->field($model, 'cert_id')->textInput() ?>
         <?= $form->field($model, 'remark')->textarea() ?>
     </div>
     <div class="modal-footer">

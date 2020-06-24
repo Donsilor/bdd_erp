@@ -94,14 +94,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'cert_id',
-                            'value' => 'cert_id',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'cert_id', [
-                                'class' => 'form-control',
-                            ]),
-                        ],
-                        [
                             'attribute' => 'remark',
                             'value' => 'remark',
                             'headerOptions' => ['class' => 'col-md-1'],
