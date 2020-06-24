@@ -718,6 +718,7 @@ class PurchaseReceiptService extends Service
             $goods[] = [
                 'stone_name' => $model->goods_name,
                 'stone_type' => $model->material_type,
+                'style_sn' => $model->goods_sn,
                 'cert_type' => $model->cert_type,
                 'cert_id' => $model->cert_id,
                 'carat' => $model->goods_weight,

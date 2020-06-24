@@ -254,11 +254,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cert_id',
                                 'filter' => Html::activeTextInput($searchModel, 'cert_id', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:100px;'
                                 ]),
-                                'value' => function ($model) {
-                                    return $model->cert_id??"";
-                                },
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'stone_price',

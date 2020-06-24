@@ -217,7 +217,7 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         $goods = $bill = [];
-        $total_cost =$total_stone_num =0;
+        $total_cost =$total_weight= $total_stone_num =0;
         $i=1;
         foreach ($models as $k => $model){
             if($model->is_receipt){
@@ -255,6 +255,7 @@ class PurchaseService extends Service
                 $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
             }
+            $total_weight = bcadd($total_weight, $model->goods_weight);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
         }
@@ -266,6 +267,7 @@ class PurchaseService extends Service
             'put_in_type' => PutInTypeEnum::PURCHASE,
             'receipt_status' => BillStatusEnum::SAVE,
             'receipt_num' => count($goods),
+            'total_weight' => $total_weight,
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::SAVE,
             'creator_id' => \Yii::$app->user->identity->getId(),
