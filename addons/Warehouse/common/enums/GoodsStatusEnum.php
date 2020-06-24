@@ -22,6 +22,7 @@ class GoodsStatusEnum extends \common\enums\BaseEnum
     const IN_REFUND = 8;
     const IN_LEND = 9;
     const HAS_LEND = 10;
+    const IN_ADJUS = 11;
     const CANCEL = 99;
 
     /**
@@ -41,6 +42,7 @@ class GoodsStatusEnum extends \common\enums\BaseEnum
                 self::IN_REFUND => '退货中',
                 self::IN_LEND => '借货中',
                 self::HAS_LEND => '已借货',
+                self::IN_ADJUS => '调整中',
                 self::CANCEL => '作废',
         ];
     }

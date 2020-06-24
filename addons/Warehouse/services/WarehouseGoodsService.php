@@ -51,7 +51,6 @@ class WarehouseGoodsService extends Service
      * @return string
      */
     public function createGoodsId($model, $save = true) {
-        
         if(!$model->id) {
             throw new \Exception("编货号失败：id不能为空");
         }
@@ -83,7 +82,6 @@ class WarehouseGoodsService extends Service
         }
         return $model->goods_id;
     }
-
 
     //可编辑状态
     public function editStatus($model)

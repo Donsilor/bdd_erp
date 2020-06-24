@@ -16,34 +16,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">基本信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['disabled'=>true]) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
+                        <?= $form->field($model, 'goods_id')->textInput(['readonly'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'goods_name')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'material')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL),['prompt'=>'请选择']) ?>
+                        <?= $form->field($model, 'xiangkou')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'finger')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::FINGER),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'length')->textInput() ?>
+                        <?= $form->field($model, 'product_size')->textInput() ?>
                     </div>
+
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xiangkou')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU),['prompt'=>'请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'market_price')->textInput() ?>
+                        <?= $form->field($model, 'cost_price')->textInput() ?>
                     </div>
                 </div>
 
@@ -55,10 +44,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'gold_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_gold_weight')->textInput() ?>
+                        <?= $form->field($model, 'suttle_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_loss')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_amount')->textInput() ?>
                     </div>
                 </div>
 
@@ -67,22 +62,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">石头信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_id')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_num')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'diamond_shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'diamond_carat')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_num')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'diamond_color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR),['prompt'=>'请选择']) ?>
@@ -103,13 +98,31 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'diamond_fluorescence')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'diamond_cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'diamond_cert_id')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_type1')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_shape1')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_weight1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_color1')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_clarity1')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price1')->textInput() ?>
@@ -122,6 +135,35 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_weight2')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_price2')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="with-border">
+                        <h5 class="box-title" style="font-weight: bold">其他信息</h5>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_gold_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gong_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xianqian_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'cert_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
                     </div>
                 </div>
                <!-- ./box-body -->

@@ -2,7 +2,12 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\forms\WarehouseBillAForm;
+use addons\Warehouse\common\forms\WarehouseBillAGoodsForm;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillGoodsA;
+use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -17,11 +22,11 @@ use yii\base\Exception;
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
  */
-class BillTGoodsController extends BaseController
+class BillAGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillTGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_T;
+    public $modelClass = WarehouseBillGoodsA::class;
+    public $billType = BillTypeEnum::BILL_TYPE_A;
     /**
      * Lists all WarehouseBillGoods models.
      * @return mixed
@@ -40,14 +45,12 @@ class BillTGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'productType' => ['name'],
-                'styleCate' => ['name'],
+                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type']
             ]
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -68,18 +71,21 @@ class BillTGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
+        $this->modelClass = WarehouseBillAGoodsForm::class;
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsL();
-        // ajax 校验
-        $this->activeFormValidate($model);
+        $model = $model ?? new WarehouseBillAGoodsForm();
         if ($model->load(\Yii::$app->request->post())) {
+            $model->bill_id = $bill_id;
+            // ajax 校验
+            $this->activeFormValidate($model);
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                $model->bill_id = $bill_id;
-                Yii::$app->warehouseService->billT->addBillTGoods($model);
+                //字符串转数组
+                Yii::$app->warehouseService->billA->addBillGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
+                return $this->redirect(\Yii::$app->request->referrer);
+
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -87,6 +93,7 @@ class BillTGoodsController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+            'bill_id' => $bill_id
         ]);
     }
 
@@ -103,23 +110,13 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         //$bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsL();
-        // ajax 校验
-        //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
-            try{
-                //$trans = \Yii::$app->db->beginTransaction();
-                //Yii::$app->warehouseService->billT->addBillTGoods($model);
-                //$trans->commit();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
-            }catch (\Exception $e){
-                //$trans->rollBack();
-                return ResultHelper::json(422, $e->getMessage());
+            // ajax 校验
+            if(false === $model->save()) {
+                return ResultHelper::json(422, $this->getError($model));
             }
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
         }
         return $this->render($this->action->id, [
             'model' => $model,
@@ -157,12 +154,12 @@ class BillTGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 foreach ($id_arr as $id) {
-                    $goods = WarehouseBillTGoodsForm::findOne(['id'=>$id]);
+                    $goods = WarehouseBillGoodsL::findOne(['id'=>$id]);
                     $goods->$name = $value;
                     if(false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    if(false === $goods->save(true,[$name])) {
+                    if(false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
                 }
@@ -198,15 +195,15 @@ class BillTGoodsController extends BaseController
     }
 
     /**
-     * 收货单-编辑
+     * 调整单-编辑
      * @return mixed
      */
     public function actionEditAll()
     {
 
         $bill_id = Yii::$app->request->get('bill_id');
-        $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index']));
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-a-goods/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -215,12 +212,13 @@ class BillTGoodsController extends BaseController
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
-            'relations' => []
+            'relations' => [
+                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type']
+            ]
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -242,16 +240,31 @@ class BillTGoodsController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
         }
+        $bill_id = $model->bill_id;
+        $goods_id = $model->goods_id;
         try{
             $trans = \Yii::$app->db->beginTransaction();
+            //删除单据明细信息
+            $bill_goods_model = WarehouseBillGoods::find()->where(['bill_id'=>$bill_id,'goods_id'=>$goods_id])->one();
+            if(false === $bill_goods_model->delete()){
+                throw new \Exception($this->getError($model));
+            }
+
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));
             }
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+            $res = \Yii::$app->warehouseService->bill->warehouseBillSummary($bill_id);
             if(false === $res){
                 throw new \yii\db\Exception('更新单据汇总失败');
             }
+
+            //更新库存表商品状态为库存
+            $res = WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$goods_id,'goods_status'=>GoodsStatusEnum::IN_ADJUS]);
+            if($res == 0){
+                throw new Exception("商品不是调整中或者不存在，请查看原因");
+            }
+
             $trans->commit();
             \Yii::$app->getSession()->setFlash('success','删除成功');
             return $this->redirect(\Yii::$app->request->referrer);
