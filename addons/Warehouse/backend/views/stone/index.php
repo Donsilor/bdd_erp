@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:100%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -103,14 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-                        [
+                        /*[
                             'attribute'=>'stone_price',
                             'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
@@ -135,17 +135,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => ['width'=>'80'],
                         ],
-                        /*[
-                            'attribute' => 'stone_spec',
-                            'filter' => Html::activeTextInput($searchModel, 'stone_spec', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                            ]),
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_spec);
-                            },
-                            'headerOptions' => [],
-                        ],
                         [
                             'attribute' => 'stone_symmetry',
                             'value' => function($model){
@@ -169,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'80'],
-                        ],*/
+                        ],
                         [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件

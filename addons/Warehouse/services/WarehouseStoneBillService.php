@@ -249,12 +249,12 @@ class WarehouseStoneBillService extends Service
             foreach ($billGoodsList as $billGoods) {
                 $stoneM = new WarehouseStone();
                 $stoneData = [
-                        'stone_sn' => rand(10000000000,99999999999),//临时
+                        'stone_sn' => (string) rand(10000000000,99999999999),//临时
                         'stone_name' => $billGoods->stone_name,
                         'stone_status' => StoneStatusEnum::IN_STOCK,
                         'style_sn' => $billGoods->style_sn,
                         'stone_type' => $billGoods->stone_type,
-                        'supplier_id' => $billGoods->supplier_id,
+                        'supplier_id' => $form->supplier_id,
                         'stone_color' => $billGoods->color,
                         'stone_clarity' => $billGoods->clarity,
                         'stock_cnt' => $billGoods->stone_num,
