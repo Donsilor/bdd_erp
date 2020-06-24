@@ -133,6 +133,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'80'],
                             ],
+                            [
+                                'attribute'=>'remark',
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->remark;
+                                    return $str;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'300'],
+                            ],
                             /*[
                                     'attribute' => '申请修改',
                                     'value' => function ($model) {
