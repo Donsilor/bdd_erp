@@ -3,6 +3,7 @@
 namespace addons\Warehouse\common\models;
 
 use Yii;
+use addons\Supply\common\models\ProduceGold;
 
 /**
  * This is the model class for table "warehouse_gold_bill_goods".
@@ -46,6 +47,7 @@ class WarehouseGoldBillGoods extends BaseModel
             [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
             [['bill_no', 'gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
+            [['supplier_id','creator_id','auditor_id'], 'safe']
         ];
     }
 
@@ -59,17 +61,17 @@ class WarehouseGoldBillGoods extends BaseModel
             'bill_id' => '单据ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
-            'gold_sn' => '批次号',
+            'gold_sn' => '金料编号',
             'gold_name' => '金料名称',
             'style_sn' => '金料款号',
             'gold_type' => '金料类型',
             'gold_num' => '金料总数',
-            'gold_weight' => '金料总重/克',
+            'gold_weight' => '金料总重(g)',
             'cost_price' => '金料总额',
-            'gold_price' => '金料单价/克',
+            'gold_price' => '金料单价/g',
             'sale_price' => '销售价格',
             'source_detail_id' => '来源明细ID',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
@@ -82,5 +84,22 @@ class WarehouseGoldBillGoods extends BaseModel
     public function getGoodsW()
     {
         return $this->hasOne(WarehouseGoldBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
+    /**
+     * 单据
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill()
+    {
+        return $this->hasOne(WarehouseGoldBill::class, ['id'=>'bill_id'])->alias('bill');
+    }
+    
+    /**
+     * 配石记录
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceGold()
+    {
+        return $this->hasOne(ProduceGold::class, ['id'=>'source_detail_id'])->alias('produceGold');
     }
 }

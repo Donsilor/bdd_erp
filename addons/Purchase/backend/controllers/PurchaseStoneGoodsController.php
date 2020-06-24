@@ -263,33 +263,24 @@ class PurchaseStoneGoodsController extends BaseController
     }
 
     /**
-     * 分批收货弹框
+     * 分批收货
      *
      * @return mixed
      */
     public function actionWarehouse()
     {
         $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
         $model = new PurchaseStoneGoodsForm();
         $model->ids = $ids;
-        try{
-            \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_STONE);
-            return ResultHelper::json(200, '', ['url'=>'/purchase/purchase-stone-goods/ajax-warehouse?ids='.$ids]);
-        }catch (\Exception $e){
-            return ResultHelper::json(422, $e->getMessage());
+        if($check){
+            try{
+                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_STONE);
+                return ResultHelper::json(200, '', ['url'=>'/purchase/purchase-stone-goods/warehouse?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
         }
-    }
-
-    /**
-     * 分批收货
-     *
-     * @return mixed
-     */
-    public function actionAjaxWarehouse()
-    {
-        $ids = Yii::$app->request->get('ids');
-        $model = new PurchaseStoneGoodsForm();
-        $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();

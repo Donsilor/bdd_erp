@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
                         <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
-                    </div class="col-sm-3">
+                    </div>
                 <?php ActiveForm::end(); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -103,21 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'200'],
                         ],                        //'from_warehouse_id',
-                        [
-                            'attribute' => 'from_warehouse_id',
-                            'value' =>"fromWarehouse.name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[from_warehouse_id]',
-                                'value'=>$searchModel->from_warehouse_id,
-                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4','style'=> 'width:120px;'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'160'],
-                        ],
                         //'to_warehouse_id',
                         [
                             'attribute' => 'to_warehouse_id',
@@ -127,6 +112,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=>$searchModel->to_warehouse_id,
                                 'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
                                 'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'attribute' => 'from_warehouse_id',
+                            'value' =>"fromWarehouse.name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[from_warehouse_id]',
+                                'value'=>$searchModel->from_warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4','style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],

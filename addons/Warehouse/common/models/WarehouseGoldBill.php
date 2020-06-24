@@ -76,7 +76,7 @@ class WarehouseGoldBill extends BaseModel
             'to_warehouse_id' => '入库仓库',
             'account_type' => '结算方式',
             'adjust_type' => '调整类型 0扣减 1增加',
-            'total_num' => '金料总数量',
+            'total_num' => '明细数量',
             'total_weight' => '金料总重(g)',
             'total_cost' => '金料总额',
             'delivery_no' => '送货单号',

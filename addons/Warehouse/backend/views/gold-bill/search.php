@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_bill', '单据列表');
+$this->title = Yii::t('gold_bill', '单据列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo Html::batchButtons(false)?>
                 <?php $form = ActiveForm::begin(['action' => ['search'], 'method'=>'get']); ?>
                     <div class="col-xs-3">
-                        <?= $form->field($model, 'stone_sn')->textInput(["placeholder"=>"请输入石料编号"]) ?>
+                        <?= $form->field($model, 'gold_sn')->textInput(["placeholder"=>"请输入批次号"]) ?>
                     </div>
                     <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
                         <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:110%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -49,17 +49,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'30'],
                         ],
                         /*[
-                            'label' => '序号',
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],*/
                         [
-                            'label' => '单据编号',
+                            'attribute' => 'bill_type',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                        ],
+                        [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->bill_no, ['view', 'id' => $model->bill->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
@@ -68,23 +80,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '单据类型',
-                            'attribute' => 'bill_type',
+                            'attribute' => 'bill.bill_status',
+                            'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
+                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\StoneBillTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                        ],                        [
-                            'label' => '加工商',
-                            'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'gold_sn',
+                            'filter' =>false,
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'bill.supplier_id',
+                            'value' =>"bill.supplier.supplier_name",
                             'filter'=>Select2::widget([
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
@@ -92,135 +106,130 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
-                                    'width'=>'260px',
+                                    'width' => '120',
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
+                        /*[
+                            'attribute' => 'to_warehouse_id',
+                            'value' =>"toWarehouse.name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[to_warehouse_id]',
+                                'value'=>$searchModel->to_warehouse_id,
+                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => '200',
                                 ],
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
                         [
-                            'label' => '石包总数',
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
-                        ],
+                        ],*/
                         [
-                            'label' => '石包总重量',
-                            'attribute'=>'total_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'total_weight', [
+                            'attribute'=>'gold_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
-                            'label' => '石包总价',
-                            'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'label' => '纸质单号',
-                            'attribute'=>'delivery_no',
-                            'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                            'attribute'=>'cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'label' => '制单人',
-                            'attribute' => 'creator_id',
-                            'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
-                            ]),
+                            'attribute' => 'bill.creator_id',
+                            'value' =>"bill.creator.username",
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '制单时间',
-                            'attribute'=>'created_at',
+                            'attribute' => 'bill.created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
-                                'attribute' => 'created_at',
-                                'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                'attribute' => 'bill.created_at',
+                                'value' => '',
+                                'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
                                         'separator' => '/',
                                     ],
-                                    'endDate' => date('Y-m-d',time()),
+                                    'endDate' => date('Y-m-d', time()),
                                     'todayHighlight' => true,
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
                                 ],
                             ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->bill->created_at);
+                            },
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'160'],
                         ],
                         [
-                            'label' => '审核状态',
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
+                            'label' => '审核人',
+                            'attribute' => 'bill.auditor_id',
+                            'value' =>"bill.auditor.username",
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '单据状态',
-                            'attribute' => 'bill_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                            'attribute' => 'bill.audit_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'bill.audit_time',
+                                'value' => '',
+                                'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->bill->audit_time);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'160'],
+                        ],
+                        [
+                            'attribute' => 'bill.audit_status',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->bill->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'bill.audit_status',\common\enums\AuditStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:120px;'],
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         /*[
-                            'label' => '审核时间',
-                            'attribute'=>'audit_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'audit_time',
-                                'value' => $searchModel->audit_time,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->audit_time);
-                            }
-                        ],
-                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {delete}',
+                            'template' => '{apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
@@ -248,7 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['stone-bill-ms-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['gold-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {

@@ -23,15 +23,15 @@ class WarehouseStoneService extends Service
      * 创建/编辑-石包信息
      * @param $form
      */
-    public function editStone($form)
+    /* public function editStone($form)
     {
         $goods = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
-        $ids = [];
         foreach ($goods as $detail){
             $stoneM = new WarehouseStone();
             $stone = [
-                'stone_sn' => "---",//临时
+                'stone_sn' => rand(10000000000,99999999999),//临时
                 'stone_name' => $detail->stone_name,
+                'stone_status' => StoneStatusEnum::IN_STOCK,    
                 'style_sn' => $detail->style_sn,
                 'stone_type' => $detail->stone_type,
                 'supplier_id' => $form->supplier_id,
@@ -48,15 +48,10 @@ class WarehouseStoneService extends Service
             if(false === $stoneM->save()){
                 throw new \Exception($this->getError($stoneM));
             }
-            $ids[] = $stoneM->attributes['id'];
+            $this->createStoneSn($stoneM);
         }
-        if($ids){
-            foreach ($ids as $id){
-                $stone = WarehouseStone::findOne(['id'=>$id]);
-                $this->createStoneSn($stone);
-            }
-        }
-    }
+       
+    } */
 
     /**
      * 更新库存信息
@@ -102,7 +97,7 @@ class WarehouseStoneService extends Service
      * @param integer $adjust_type 调整类型 1增加 0减
      */
     public function adjustStoneStock($stone_sn,$adjust_num ,$adjust_weight, $adjust_type) {
-        
+
         $adjust_num = abs(floatval($adjust_num));
         $adjust_weight = abs(floatval($adjust_weight));
         
@@ -111,21 +106,31 @@ class WarehouseStoneService extends Service
             throw new \Exception("({$stone_sn})石包编号不存在");
         }elseif ($model->stone_status != StoneStatusEnum::IN_STOCK) {
             throw new \Exception("({$stone_sn})石包不是库存中".$model->stone_status);
-        }elseif($model->stock_cnt < $adjust_num) {
-            throw new \Exception("({$stone_sn})石包库存不足：数量不足");
-        }elseif($model->stock_weight < $adjust_weight) {
-            throw new \Exception("({$stone_sn})石包库存不足：重量不足");
-        }elseif($adjust_weight <= 0){
-            throw new \Exception("({$stone_sn})石包调整重量不能为0");
+        }elseif($adjust_type == AdjustTypeEnum::MINUS){
+            if($model->stock_cnt < $adjust_num) {
+                throw new \Exception("({$stone_sn})石包库存不足：数量不足");
+            }elseif($model->stock_weight < $adjust_weight) {
+                throw new \Exception("({$stone_sn})石包库存不足：重量不足");
+            }
+        }        
+        if($adjust_weight <= 0){
+            throw new \Exception("({$stone_sn})石包调整重量不能小于或等于0");
         }
         if($adjust_type == AdjustTypeEnum::ADD) {
             $update = ["stock_cnt"=>new Expression("stock_cnt+{$adjust_num}"), "stock_weight" =>new Expression("stock_weight+{$adjust_weight}")];
+            $where  = new Expression("stone_sn='{$stone_sn}'");
+            $result = WarehouseStone::updateAll($update,$where);
+            if(!$result) {
+                throw new \Exception("({$stone_sn})石包库存变更失败(新增)");
+            }
         }else{
             $update = ["stock_cnt"=>new Expression("stock_cnt-{$adjust_num}"), "stock_weight" =>new Expression("stock_weight-{$adjust_weight}")];
+            $where  = new Expression("stone_sn='{$stone_sn}' and stock_cnt >={$adjust_num} and stock_weight>={$adjust_weight}");
+            $result = WarehouseStone::updateAll($update,$where);
+            if(!$result) {
+                throw new \Exception("({$stone_sn})石包库存变更失败(库存不足)");
+            }
         }
-        $result = WarehouseStone::updateAll($update,new Expression("stone_sn='{$stone_sn}' and stock_cnt >={$adjust_num} and stock_weight>={$adjust_weight}"));
-        if(!$result) {
-            throw new \Exception("({$stone_sn})石包库存不足");
-        }
+        
     }
 }

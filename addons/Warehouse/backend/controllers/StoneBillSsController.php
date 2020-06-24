@@ -3,19 +3,20 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\forms\WarehouseStoneBillSsForm;
-use addons\Warehouse\common\models\WarehouseBill;
+
 use common\helpers\SnHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
 use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
+use addons\Supply\common\models\ProduceStone;
+use addons\Warehouse\common\enums\StoneBillStatusEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
 
 
 /**
@@ -90,9 +91,8 @@ class StoneBillSsController extends StoneBillController
         if ($model->load(\Yii::$app->request->post())) {
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
-                $model->bill_status = BillStatusEnum::SAVE;
+                $model->bill_status = StoneBillStatusEnum::SAVE;
             }
-            $model->created_at = strtotime($model->created_at);
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if(false === $model->save()) {
@@ -118,39 +118,60 @@ class StoneBillSsController extends StoneBillController
     public function actionView()
     {
         $bill_id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
         $model = $this->findModel($bill_id);
         $model = $model ?? new WarehouseStoneBill();
         return $this->render($this->action->id, [
             'model' => $model,
-            'tab'=>$tab,
+            'tab'=>Yii::$app->request->get('tab',1),
             'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
 
-    /**
-     * @return mixed
-     * 提交审核
-     */
+   /**
+    *  提交审核
+    * @throws \Exception
+    * @return mixed|string
+    */
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        if($model->bill_status != StoneBillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        if($model->total_num<=0){
+        if($model->total_num <= 0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+       
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            
+            $model->bill_status  = StoneBillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;            
+            
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            
+            //更新配石状态
+            $subIdQuery = WarehouseStoneBillGoods::find()->select(['source_detail_id'])->where(['bill_id'=>$id]);
+            $produce_sns = ProduceStone::find()->where(['id'=>$subIdQuery])->distinct('produce_sn')->asArray()->all();
+            if(!empty($produce_sns)) {
+                $produce_sns = array_column($produce_sns, 'produce_sn');
+                ProduceStone::updateAll(['peishi_status'=>PeishiStatusEnum::TO_LINGSHI],['id'=>$subIdQuery]);            
+                Yii::$app->supplyService->produce->autoPeishiStatus($produce_sns);
+            }else{
+                throw new \Exception("数据异常");
+            }
+            
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch(\Exception $e) {
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
     }
 
     /**
@@ -161,6 +182,8 @@ class StoneBillSsController extends StoneBillController
      */
     public function actionAjaxAudit()
     {
+        return $this->message("无权限审核", $this->redirect(Yii::$app->request->referrer), 'error');
+        
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         // ajax 校验
@@ -177,10 +200,10 @@ class StoneBillSsController extends StoneBillController
 
                 $trans->commit();
 
-                $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+                return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch(\Exception $e){
                 $trans->rollBack();
-                $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
         $model->audit_status = AuditStatusEnum::PASS;

@@ -70,7 +70,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'180'],
                         ],
-                        [
+                        /*[
                                 'attribute' => 'bill_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'120'],
@@ -78,7 +78,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                      return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                                 },
                                 'filter' => false,
-                        ],
+                        ],*/
                         [
                             'label' => '盘点仓库',
                             'attribute' => 'to_warehouse_id',

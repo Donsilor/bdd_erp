@@ -3,6 +3,7 @@
 use common\helpers\Html;
 
 use yii\grid\GridView;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-16" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive" >
-                    <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -111,8 +111,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
+                <div class="box-footer text-center">
+                  <?php 
+                  if($produce->peiliao_status == PeiliaoStatusEnum::TO_LINGLIAO) {
+                     echo Html::edit(['ajax-confirm','produce_id'=>$produce->id], '确认领料', [
+                        'class'=>'btn btn-primary btn-ms',
+                        'style'=>"margin-left:5px",
+                        'onclick' => 'rfTwiceAffirm(this,"确认领料","确定操作吗？");return false;',
+                    ]);                     
+                  }
+                 ?>
+                </div>
             </div>
-            <!-- box end -->
+            <!-- box end -->            
         </div>
     </div>
 </div>

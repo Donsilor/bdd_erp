@@ -27,7 +27,7 @@ class ReceiptLogController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['purchase-receipt/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['receipt/index']));
         
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
         $searchModel = new SearchModel([
@@ -47,7 +47,7 @@ class ReceiptLogController extends BaseController
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
-                'purchase_receipt' => $receipt,
+                'receipt' => $receipt,
                 'tab'=>$tab,
                 'tabList'=>\Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $receipt->purchase_type, $returnUrl),
         ]);

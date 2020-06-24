@@ -152,9 +152,9 @@ class PurchaseStoneController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
-                }
+                //if($model->audit_status == AuditStatusEnum::PASS){
+                    //Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
+                //}
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);

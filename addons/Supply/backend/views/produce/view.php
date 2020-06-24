@@ -172,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 break;
             //待配料    
             case BuChanEnum::TO_PEILIAO :
-                $buttonHtml .= Html::edit(['to-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
+                $buttonHtml .= Html::edit(['apply-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
                     'class'=>'btn btn-success btn-ms',
                     'style'=>"margin-left:5px",
                     'onclick' => 'rfTwiceAffirm(this,"开始配料","确定操作吗？");return false;',

@@ -25,7 +25,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseStoneBillService $stoneBill 石包单据
  * @property \addons\Warehouse\services\WarehouseGoldBillService $goldBill 金料单据
  * @property \addons\Warehouse\services\WarehouseGoldBillWService $goldBillW 金料盘点
- * @property \addons\Warehouse\services\WarehouseGoldBillWService $stoneBillW 金料盘点
+ * @property \addons\Warehouse\services\WarehouseStoneBillWService $stoneBillW 金料盘点
  *
  */
 class Application extends Service

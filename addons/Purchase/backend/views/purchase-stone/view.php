@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $model->purchase_sn?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $model->purchase_sn?> - <?php echo PurchaseStatusEnum::getValue($model->purchase_status);?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content" >
         <div class="col-xs-12">
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
                             <td><?= PurchaseStatusEnum::getValue($model->purchase_status)?></td>
-                        </tr>                        
+                        </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
                             <td><?= $model->supplier->supplier_name ?? '';  ?></td>
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->total_num ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_per') ?>：</td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_stone_num') ?>：</td>
                             <td><?= $model->total_stone_num ?></td>
                         </tr>
                         <tr>

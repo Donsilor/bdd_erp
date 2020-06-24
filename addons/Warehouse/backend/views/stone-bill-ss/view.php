@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
+                            <td><?= \addons\Warehouse\common\enums\StoneBillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
@@ -114,13 +114,13 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <?php
-            if($model->bill_status == BillStatusEnum::PENDING){
+           /*  if($model->bill_status == BillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
-            }
+            } */
             ?>
         </div>
 

@@ -22,56 +22,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+        /* if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
-        }
+        } */
         ?>
     </div>
     <div class="tab-content" style="padding-right: 10px;">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:130%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:100%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
                             [
                                 'class' => 'yii\grid\SerialColumn',
-                                'visible' => false,
-                            ],
-                            [
-                                'class'=>'yii\grid\CheckboxColumn',
-                                'name'=>'id',  //设置每行数据的复选框属性
-                            ],
-                            [
-                                'class' => 'yii\grid\ActionColumn',
-                                'header' => '操作',
-                                'template' => '{edit} {delete}',
-                                'buttons' => [
-                                    'edit' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {
-                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                                'class' => 'btn btn-info btn-xs',
-                                                'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
-                                            ]);
-                                        }
-                                    },
-                                    'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id],'删除', [
-                                                'class' => 'btn btn-danger btn-xs',
-                                            ]);
-                                        }
-
-                                    },
-                                ],
-                                'headerOptions' => [],
+                                'visible' => true,
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:50px'],
                             ],
                             [
                                 'attribute'=>'stone_sn',
@@ -110,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
+                            /* [
                                 'attribute' => 'stone_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -119,17 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'cert_id',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => true,
-                            ],
-                            /*[
-                                'attribute' => 'carat',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],*/
+                            ],      */                       
                             [
                                 'attribute' => 'color',
                                 'value' => function($model){
@@ -155,6 +116,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'label' => '布产编号',
+                                'value' => function ($model){
+                                    return $model->produceStone->produce_sn ?? '';
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '配石状态',
+                                'value' => function ($model){
+                                    return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->produceStone->peishi_status ??0);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            /* [
                                 'attribute' => 'cut',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cut);
@@ -201,11 +178,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                            ], */
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
+                                'template' => '',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {

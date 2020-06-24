@@ -2,22 +2,24 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\models\WarehouseStoneBill;
+use Yii;
+use addons\Warehouse\common\models\WarehouseGoldBill;
 use common\helpers\ArrayHelper;
 
 /**
- * 石包单据 Form
+ * 单据列表 Form
  *
  */
-class WarehouseStoneBillSsForm extends WarehouseStoneBill
+class WarehouseGoldBillForm extends WarehouseGoldBill
 {
+    public $gold_sn;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
          $rules = [
-             [['supplier_id'], 'required'],
+             [['gold_sn'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -29,8 +31,9 @@ class WarehouseStoneBillSsForm extends WarehouseStoneBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            
+            'gold_sn' => '批次号',
         ]);
     }
 
+   
 }

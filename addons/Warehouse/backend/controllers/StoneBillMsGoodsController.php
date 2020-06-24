@@ -31,10 +31,9 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
      */
     public function actionIndex()
     {
-
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
         $bill_id = Yii::$app->request->get('bill_id');
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index', 'bill_id' => $bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -117,7 +116,7 @@ class StoneBillMsGoodsController extends StoneBillGoodsController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-ms-goods/index', 'bill_id' => $bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

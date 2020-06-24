@@ -15,6 +15,7 @@ use common\components\Service;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Warehouse\common\enums\StoneStatusEnum;
+use addons\Supply\common\models\Produce;
 
 class ProduceStoneService extends Service
 {
@@ -40,20 +41,38 @@ class ProduceStoneService extends Service
      * ]
      */
     public function batchPeishi($data)
-    {
+    {   
+        $produce_sns = [];
         foreach ($data as $id => $stoneData) {
+            //1更新配石状态
             $stone = ProduceStone::find()->where(['id'=>$id])->one();
             if(!$stone) {
                 throw new \Exception("(ID={$id})配石单查询失败");
             }
-            $stone->attributes = $stoneData;
+            $stone->attributes = $stoneData;            
             $stone->peishi_time = time();
-            $stone->peishi_user = Yii::$app->user->identity->username;
-            $stone->peishi_status = PeishiStatusEnum::HAS_PEISHI;
+            $stone->peishi_user = Yii::$app->user->identity->username;            
+            //如果绑定了 领石单
+            if($stone->delivery_no) {
+                $stone->peishi_status = PeishiStatusEnum::TO_LINGSHI;
+            }else{
+                $stone->peishi_status = PeishiStatusEnum::HAS_PEISHI;
+            }
             if(false === $stone->save()) {
                  throw new \Exception($this->getError($stone));
             }
-            //石包校验 begin
+            $produce_sns[$stone->produce_sn] = $stone->produce_sn;            
+            //2.还原石料库存
+            if($stone->stoneGoods) {
+                foreach ($stone->stoneGoods as $stoneGoods){                    
+                    //石料库存还原
+                    Yii::$app->warehouseService->stone->adjustStoneStock($stoneGoods->stone_sn, $stoneGoods->stone_num, $stoneGoods->stone_weight, AdjustTypeEnum::ADD);
+                }
+            }
+            //3.删除配石信息
+            ProduceStoneGoods::deleteAll(['id'=>$id]);
+            
+            //4.石包校验 begin
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                 $stoneGoods = new ProduceStoneGoods();
                 $stoneGoods->attributes = $stoneGoodsData;
@@ -65,13 +84,13 @@ class ProduceStoneService extends Service
                 }elseif($stoneGoods->stone->stone_status != StoneStatusEnum::IN_STOCK ) {
                     throw new \Exception("({$stoneGoods->stone->stone_sn})石包号不是库存状态");
                 }elseif($stone->stone_type != ($stone_type = Yii::$app->attr->valueName($stoneGoods->stone->stone_type))) {
-                    throw new \Exception("(ID={$id})石料类型不匹配：{$stone->stone_type}≠{$stone_type}");
+                    throw new \Exception("(ID={$id})石料类型不匹配(需要配{$stone->stone_type})");
                 }elseif($stoneGoods->stone_num > $stoneGoods->stone->stock_cnt) {
                     throw new \Exception("(ID={$id})领取数量不能超过石包剩余数量({$stoneGoods->stone->stock_cnt})");
                 }
-            }//石包校验 end
+            }          
             
-            ProduceStoneGoods::deleteAll(['id'=>$id]);
+            //5.新增配石信息
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                  $stoneGoods = new ProduceStoneGoods();                     
                  $stoneGoods->attributes = $stoneGoodsData;
@@ -83,6 +102,10 @@ class ProduceStoneService extends Service
                  Yii::$app->warehouseService->stone->adjustStoneStock($stoneGoods->stone_sn, $stoneGoods->stone_num, $stoneGoods->stone_weight, AdjustTypeEnum::MINUS);
             }
             
+        }
+        //同步更新布产单配石状态
+        if(!empty($produce_sns)) {
+            Yii::$app->supplyService->produce->autoPeishiStatus($produce_sns);
         }
     }
 }

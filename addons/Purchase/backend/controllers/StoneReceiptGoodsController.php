@@ -45,7 +45,7 @@ class StoneReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt/index']));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -81,7 +81,7 @@ class StoneReceiptGoodsController extends BaseController
     public function actionIqcIndex()
     {
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -149,7 +149,7 @@ class StoneReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-receipt/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

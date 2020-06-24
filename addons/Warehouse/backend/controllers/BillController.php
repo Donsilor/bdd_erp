@@ -51,6 +51,8 @@ class BillController extends BaseController
         if(Yii::$app->request->get('action') === 'export'){
             $this->getExport($dataProvider);
         }
+        $data = $this->getParams();
+        $model->goods_id = $data['goods_id']??"";
         //echo $this->action->id;
         //if($searchModel->bill_type) {
         //    $this->action->id = '../bill-'.strtolower($searchModel->bill_type).'/index';
@@ -70,33 +72,60 @@ class BillController extends BaseController
     public function actionSearch()
     {
         $model = new WarehouseBillForm();
-        $this->modelClass = new WarehouseBillGoodsForm();
-        $params = \Yii::$app->request->queryParams;
-        $data = $params['WarehouseBillForm']??[];
-        $goods_id = $data['goods_id']??"";
-        $model->goods_id = $goods_id;
+        $this->modelClass = WarehouseBillGoodsForm::class;
+        $data = $this->getParams();
+        $model->goods_id = $data['goods_id']??"";
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['name'], // 模糊查询
+            'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'bill' => ['bill_status'],
+                'bill' => [
+                    'id',
+                    'bill_status',
+                    'created_at',
+                    'audit_status',
+                    'audit_time'
+                ],
             ]
         ]);
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams, ['bill_status']);
-        if($goods_id){
-            $dataProvider->query->andWhere(['=','goods_id', $goods_id]);
+            ->search(\Yii::$app->request->queryParams, ['supplier_id','to_warehouse_id','from_warehouse_id']);
+        if($model->goods_id){
+            $dataProvider->query->andWhere(['=','goods_id', $model->goods_id]);
+        }
+        $supplier_id = $searchModel->supplier_id;
+        if($supplier_id){
+            $dataProvider->query->andWhere(['=','bill.supplier_id', $supplier_id]);
+        }
+        $to_warehouse_id = $searchModel->to_warehouse_id;
+        if($to_warehouse_id){
+            $dataProvider->query->andWhere(['=','bill.to_warehouse_id', $to_warehouse_id]);
+        }
+        $from_warehouse_id = $searchModel->from_warehouse_id;
+        if($from_warehouse_id){
+            $dataProvider->query->andWhere(['=','bill.from_warehouse_id', $from_warehouse_id]);
         }
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    /**
+     * 获取参数
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function getParams(){
+        $params = \Yii::$app->request->queryParams;
+        $data = $params['WarehouseBillForm']??[];
+        return $data;
     }
 
     /**
@@ -108,7 +137,7 @@ class BillController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['warehouser-bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill/index']));
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,

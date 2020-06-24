@@ -44,6 +44,46 @@ class PurchaseStoneGoodsForm extends PurchaseStoneGoods
         return Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY);
     }
     /**
+     * 切工列表
+     * @return array
+     */
+    public static function getCutMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT);
+    }
+    /**
+     * 对称列表
+     * @return array
+     */
+    public static function getSymmetryMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY);
+    }
+    /**
+     * 抛光列表
+     * @return array
+     */
+    public static function getPolishMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH);
+    }
+    /**
+     * 荧光列表
+     * @return array
+     */
+    public static function getFluorescenceMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE);
+    }
+    /**
+     * 证书类型列表
+     * @return array
+     */
+    public static function getCertTypeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
+    }
+    /**
      * 石料采购商品申请编辑-创建
      */
     public function createApply()

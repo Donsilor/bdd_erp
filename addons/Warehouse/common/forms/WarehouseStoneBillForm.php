@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use common\helpers\ArrayHelper;
 
@@ -9,15 +10,16 @@ use common\helpers\ArrayHelper;
  * 石包单据 Form
  *
  */
-class WarehouseStoneBillSsForm extends WarehouseStoneBill
+class WarehouseStoneBillForm extends WarehouseStoneBill
 {
+    public $stone_sn;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
          $rules = [
-             [['supplier_id'], 'required'],
+             [['stone_sn'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -29,7 +31,7 @@ class WarehouseStoneBillSsForm extends WarehouseStoneBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            
+            'stone_sn' => '石料编号',
         ]);
     }
 

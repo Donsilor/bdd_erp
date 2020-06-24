@@ -18,6 +18,8 @@ use common\models\backend\Member;
  * @property int $purchase_type 采购类型
  * @property int $receipt_status 单据状态
  * @property int $receipt_num 出货数量
+ * @property int $total_stone_num 总粒数
+ * @property string $total_weight 总重量
  * @property string $total_cost 总金额（总成本）
  * @property int $put_in_type 入库方式
  * @property int $to_warehouse_id 入库仓库
@@ -49,9 +51,9 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'purchase_type', 'receipt_status', 'receipt_num', 'put_in_type', 'to_warehouse_id', 'is_to_warehouse', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'supplier_id', 'purchase_type', 'receipt_status', 'receipt_num', 'total_stone_num', 'put_in_type', 'to_warehouse_id', 'is_to_warehouse', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id', 'receipt_no'], 'required'],
-            [['total_cost'], 'number'],
+            [['total_weight', 'total_cost'], 'number'],
             [['receipt_no', 'purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             ['receipt_no', 'unique'],
@@ -65,14 +67,16 @@ class PurchaseReceipt extends BaseModel
     {
         return [
             'id' => 'ID',
-            'merchant_id' => 'Merchant ID',
+            'merchant_id' => '商户ID',
             'supplier_id' => '供应商',
             'receipt_no' => '工厂出货单号',
             'purchase_sn' => '采购单号',
             'purchase_type' => '采购类型',
             'receipt_status' => '单据状态',
             'receipt_num' => '出货数量',
-            'total_cost' => '总金额（总成本）',
+            'total_stone_num' => '总粒数',
+            'total_weight' => '总重量',
+            'total_cost' => '总成本',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'is_to_warehouse' => '是否入库',

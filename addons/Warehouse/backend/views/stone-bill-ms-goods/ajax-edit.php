@@ -27,7 +27,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'style_sn')->textInput()?>
+                   <?= $form->field($model, 'style_sn')->dropDownList($model->getStyleSnMap(),['prompt'=>'请选择']) ?>
                </div>
            </div>
            <div class="row">

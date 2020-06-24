@@ -169,4 +169,20 @@ class Produce extends BaseModel
     {
         return $this->hasMany(ProduceAttribute::class, ['produce_id'=>'id'])->alias('attrs')->orderBy("sort asc");
     }
+    /**
+     * 配料列表  一对多
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceGolds()
+    {
+        return $this->hasMany(ProduceGold::class, ['produce_id'=>'id'])->alias('gold');
+    }
+    /**
+     * 配石列表  一对多
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceStones()
+    {
+        return $this->hasMany(ProduceStone::class, ['produce_id'=>'id'])->alias('stone');
+    }
 }

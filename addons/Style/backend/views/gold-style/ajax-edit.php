@@ -9,7 +9,7 @@ $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
     'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
     'fieldConfig' => [
-        //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
+        'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]
 ]);
 ?>
@@ -21,7 +21,6 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'style_sn')->textInput() ?>
         <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'remark')->textarea() ?>
-        <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
