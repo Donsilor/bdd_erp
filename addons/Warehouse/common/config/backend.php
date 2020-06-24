@@ -73,6 +73,10 @@ return [
                         'route' => 'bill-c/index',
                     ],
                     [
+                        'title' => '调整单',
+                        'route' => 'bill-a/index',
+                    ],
+                    [
                         'title' => '单据列表',
                         'route' => 'bill/index',
                     ],

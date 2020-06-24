@@ -244,10 +244,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= \addons\Purchase\common\enums\SpecialCraftEnum::getValue($item->format_craft_desc)?></td>
                                         <td>
                                             <?php
-                                            foreach ($item->format_craft_images as $img){
-                                                ?>
-                                                <?= \common\helpers\ImageHelper::fancyBox($img) ?>
-                                            <?php } ?>
+                                              $format_craft_images = $item->format_craft_images ?? [];
+                                                foreach ($format_craft_images as $img){
+                                                    ?>
+                                                    <?= \common\helpers\ImageHelper::fancyBox($img) ?>
+                                                <?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
