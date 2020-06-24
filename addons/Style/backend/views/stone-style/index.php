@@ -81,6 +81,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '证书类型',
+                            'attribute' => 'cert_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->cert_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'cert_id',
+                            'value' => 'cert_id',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute' => 'remark',
                             'value' => 'remark',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -175,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                         ],
                         [
@@ -188,6 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;'
                             ]),
                         ],
                         [
