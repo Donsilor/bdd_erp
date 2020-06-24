@@ -63,6 +63,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             [['goods_name', 'goods_norms', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
             [['material_type', 'goods_color', 'goods_clarity', 'goods_cut', 'goods_symmetry', 'goods_polish', 'goods_fluorescence', 'cert_type'], 'string', 'max' => 10],
+            [['supplier_id','receipt_no','receipt_status'], 'safe']
         ];
     }
 
