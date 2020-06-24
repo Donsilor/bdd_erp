@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?> - <?php echo ReceiptStatusEnum::getValue($receipt->receipt_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -29,6 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
+                    <span class="summary" style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        石料总粒数：<span style="color:green;"><?= $receipt->total_stone_num?></span>
+                        石料总重：<span style="color:green;"><?= $receipt->total_weight?>(ct)</span>
+                        石料总额：<span style="color:green;"><?= $receipt->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -124,24 +130,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'goods_num',
+                                'attribute'=>'stone_num',
                                 'format' => 'raw',
-                                'headerOptions' => [],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_num', $model->goods_num, ['data-id'=>$model->id]);
-                                },
+                                'value' => 'stone_num',
                                 'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_weight', $model->goods_weight, ['data-id'=>$model->id]);
-                                },
+                                'value' => 'goods_weight',
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -174,6 +176,58 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute' => 'goods_cut',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'goods_cut', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_cut',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_symmetry',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'goods_symmetry', Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_polish',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'goods_polish', Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_fluorescence',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'goods_fluorescence', Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'goods_norms',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -182,16 +236,39 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'cert_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'cert_type', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'cert_id',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('cert_id', $model->cert_id, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'stone_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('stone_price', $model->stone_price, ['data-id'=>$model->id]);
-                                },
+                                'value' => 'stone_price',
                                 'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -201,9 +278,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },
+                                'value' => 'cost_price',
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'

@@ -19,6 +19,12 @@ use Yii;
  * @property int $stone_num 石料数量
  * @property string $stone_color 石料颜色
  * @property string $stone_clarity 石料净度
+ * @property string $stone_cut 切工
+ * @property string $stone_symmetry 对称
+ * @property string $stone_polish 抛光
+ * @property string $stone_fluorescence 荧光
+ * @property string $cert_type 证书类型
+ * @property string $cert_id 证书号
  * @property int $is_apply 是否申请修改
  * @property string $apply_info 申请信息
  * @property int $is_receipt 是否申请修改
@@ -49,7 +55,8 @@ class PurchaseStoneGoods extends BaseModel
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'spec_remark', 'remark'], 'string', 'max' => 255],
-            [['stone_color', 'stone_clarity'], 'string', 'max' => 10],
+            [['stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'cert_type'], 'string', 'max' => 10],
+            [['cert_id'], 'string', 'max' => 30],
             [['put_in_type'], 'safe']
         ];
     }
@@ -72,6 +79,12 @@ class PurchaseStoneGoods extends BaseModel
             'stone_num' => '石料粒数',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',
+            'stone_cut' => '切工',
+            'stone_symmetry' => '对称',
+            'stone_polish' => '抛光',
+            'stone_fluorescence' => '荧光',
+            'cert_type' => '证书类型',
+            'cert_id' => '证书号',
             'spec_remark' => '规格备注',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
