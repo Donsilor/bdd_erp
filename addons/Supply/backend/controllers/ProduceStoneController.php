@@ -72,7 +72,7 @@ class ProduceStoneController extends BaseController
         $produce = Produce::find()->where(['id'=>$produce_id])->one();
         //单据校验
         if($produce->peishi_status == PeishiStatusEnum::HAS_LINGSHI){
-            return $this->message('布产单已经确认过领石了！', $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message('布产单已经确认领石了！', $this->redirect(Yii::$app->request->referrer), 'error');
         }elseif($produce->peishi_status != PeishiStatusEnum::TO_LINGSHI) {
             return $this->message('布产单不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }

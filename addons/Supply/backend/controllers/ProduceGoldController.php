@@ -72,7 +72,7 @@ class ProduceGoldController extends BaseController
         $produce = Produce::find()->where(['id'=>$produce_id])->one();
         //单据校验
         if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO){
-            return $this->message('布产单已经确认过领料了！', $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message('布产单已经确认领料了！', $this->redirect(Yii::$app->request->referrer), 'error');
         } elseif($produce->peiliao_status != PeiliaoStatusEnum::TO_LINGLIAO) {
             return $this->message('布产单不是待领料状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }          
