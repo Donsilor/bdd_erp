@@ -13,6 +13,7 @@ use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\enums\ConfirmEnum;
+use common\helpers\ArrayHelper;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -221,20 +222,21 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         $goods = $bill = [];
-        $total_cost =0;
+        $total_cost =$total_weight= $total_stone_num =0;
         $i=1;
         foreach ($models as $k => $model){
             if($model->is_receipt){
                 throw new \Exception("【".$model->goods_name."】已收货，不能重复收货");
             }
             $goods[$k] = [
-                'purchase_sn' =>$form->purchase_sn,
                 'xuhao'=>$i++,
+                'purchase_sn' =>$form->purchase_sn,
                 'put_in_type' => $put_in_type,
                 'purchase_detail_id' => $model->id,
                 'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                 'goods_name'=>$model->goods_name,
-                'goods_num' => 1,
+                'goods_sn'=>$model->goods_sn,
+                'goods_num' => $model->goods_num,
                 'goods_weight'=>$model->goods_weight,
                 'cost_price' =>$model->cost_price,
                 'goods_remark'=>$model->remark,
@@ -248,9 +250,19 @@ class PurchaseService extends Service
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_color'] = $model->stone_color;
                 $goods[$k]['goods_clarity'] = $model->stone_clarity;
+                $goods[$k]['goods_cut'] = $model->stone_cut;
+                $goods[$k]['goods_symmetry'] = $model->stone_symmetry;
+                $goods[$k]['goods_polish'] = $model->stone_polish;
+                $goods[$k]['goods_fluorescence'] = $model->stone_fluorescence;
+                $goods[$k]['cert_type'] = $model->cert_type;
+                $goods[$k]['cert_id'] = $model->cert_id;
                 $goods[$k]['goods_norms'] =  $model->spec_remark;
+                $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
+
+                $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             }
+            $total_weight = bcadd($total_weight, $model->goods_weight);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
         }
         $bill = [
@@ -259,13 +271,17 @@ class PurchaseService extends Service
             'purchase_type' => $purchase_type,
             'to_warehouse_id' => 0,
             'put_in_type' => PutInTypeEnum::PURCHASE,
-            'receipt_status' => BillStatusEnum::PENDING,
+            'receipt_status' => BillStatusEnum::SAVE,
             'receipt_num' => count($goods),
+            'total_weight' => $total_weight,
             'total_cost' => $total_cost,
-            'audit_status' => AuditStatusEnum::PENDING,
+            'audit_status' => AuditStatusEnum::SAVE,
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
+        if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            $bill = ArrayHelper::merge($bill, ['total_stone_num' => $total_stone_num]);
+        }
         Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
         if(!empty($detail_ids)){
             $res = $model::updateAll(['is_receipt'=>ConfirmEnum::YES], ['id'=>$detail_ids]);

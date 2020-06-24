@@ -112,9 +112,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'goods_weight',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
+                                /*'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('goods_weight', $model->goods_weight, ['data-id'=>$model->id]);
-                                },
+                                },*/
                                 'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -124,9 +124,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'gold_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
+                                /*'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
-                                },
+                                },*/
                                 'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -136,9 +136,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
+                                /*'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },
+                                },*/
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'

@@ -70,6 +70,14 @@ class WarehouseStoneBillMsGoodsForm extends WarehouseStoneBillGoods
         return Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE);
     }
     /**
+     * 石料款号列表
+     * @return array
+     */
+    public static function getStyleSnMap()
+    {
+        return Yii::$app->styleService->stone->getDropDown();
+    }
+    /**
      * {@inheritdoc}
      */
     public function rules()

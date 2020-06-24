@@ -1,5 +1,6 @@
 <?php
 
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -8,7 +9,7 @@ $this->title = '采购收货单日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购收货单详情 - <?php echo $purchase_receipt->receipt_no?></h2>
+    <h2 class="page-header">采购收货单详情 - <?php echo $receipt->receipt_no?>- <?php echo ReceiptStatusEnum::getValue($receipt->receipt_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
@@ -38,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '采购收货单号',
-                                'value' => function($model) use($purchase_receipt){
-                                    return $purchase_receipt->receipt_no;
+                                'value' => function($model) use($receipt){
+                                    return $receipt->receipt_no;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],

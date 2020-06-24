@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no?> - <?php echo ReceiptStatusEnum::getValue($model->receipt_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
@@ -28,8 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->receipt_no ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_status') ?>：</td>
+                            <td><?= ReceiptStatusEnum::getValue($model->receipt_status); ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receipt_num') ?>：</td>
                             <td><?= $model->receipt_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_stone_num') ?>：</td>
+                            <td><?= $model->total_stone_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>

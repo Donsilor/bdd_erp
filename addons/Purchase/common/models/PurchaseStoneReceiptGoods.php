@@ -10,16 +10,22 @@ use Yii;
  * @property int $id ID
  * @property int $receipt_id 采购收货单ID
  * @property string $purchase_sn 采购单编号
- * @property int $xuhao 序号
  * @property int $purchase_detail_id 采购单商品明细ID
  * @property int $goods_status 收货单货品状态
  * @property string $goods_name 商品名称
  * @property string $goods_sn 石料款号
- * @property int $goods_num 石料粒数
+ * @property int $goods_num 数量
+ * @property int $stone_num 石料粒数
  * @property string $material_type 商品类型
  * @property double $goods_weight 重量
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
+ * @property string $goods_cut 切工
+ * @property string $goods_symmetry 对称
+ * @property string $goods_polish 抛光
+ * @property string $goods_fluorescence 荧光
+ * @property string $cert_type 证书类型
+ * @property string $cert_id 证书号
  * @property string $goods_norms 规格
  * @property string $cost_price 成本价
  * @property string $stone_price 石料单价/CT
@@ -28,6 +34,7 @@ use Yii;
  * @property int $to_warehouse_id 入库仓库
  * @property int $iqc_reason 质检未过原因
  * @property string $iqc_remark 质检备注
+ * @property int $xuhao 序号
  * @property int $sort 排序
  * @property int $status 状态 1启用 0禁用 -1 删除
  * @property int $created_at 创建时间
@@ -49,13 +56,14 @@ class PurchaseStoneReceiptGoods extends BaseModel
     public function rules()
     {
         return [
-            [['receipt_id', 'purchase_sn', 'goods_name', 'material_type', 'goods_num', 'goods_weight'], 'required'],
-            [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['receipt_id', 'purchase_sn'], 'required'],
+            [['id', 'receipt_id', 'goods_num', 'stone_num', 'put_in_type', 'to_warehouse_id', 'purchase_detail_id', 'goods_status', 'iqc_reason', 'xuhao', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
-            [['purchase_sn', 'goods_sn'], 'string', 'max' => 30],
+            [['purchase_sn', 'cert_id'], 'string', 'max' => 30],
             [['goods_name', 'goods_norms', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
-            [['goods_color', 'goods_clarity', 'material_type'], 'string', 'max' => 10],
-            [['supplier_id', 'receipt_no'], 'safe'],
+            [['goods_sn'], 'string', 'max' => 60],
+            [['material_type', 'goods_color', 'goods_clarity', 'goods_cut', 'goods_symmetry', 'goods_polish', 'goods_fluorescence', 'cert_type'], 'string', 'max' => 10],
+            [['supplier_id','receipt_no','receipt_status'], 'safe']
         ];
     }
 
@@ -68,17 +76,23 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'id' => 'ID',
             'receipt_id' => '采购收货单ID',
             'purchase_sn' => '采购单号',
-            'xuhao' => '石料序号',
             'purchase_detail_id' => '采购单明细ID',
             'goods_status' => '石料状态',
             'goods_name' => '石料名称',
             'goods_sn' => '石料款号',
-            'goods_num' => '石料粒数',
+            'goods_num' => '数量',
+            'stone_num' => '石料粒数',
             'material_type' => '石料类型',
             'goods_weight' => '石料重量(ct)',
             'goods_color' => '颜色',
             'goods_clarity' => '净度',
+            'goods_cut' => '切工',
+            'goods_symmetry' => '对称',
+            'goods_polish' => '抛光',
+            'goods_fluorescence' => '荧光',
             'goods_norms' => '规格',
+            'cert_type' => '证书类型',
+            'cert_id' => '证书号',
             'cost_price' => '石料总额',
             'stone_price' => '石料单价(ct)',
             'goods_remark' => '商品备注',
@@ -86,6 +100,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'to_warehouse_id' => '入库仓库',
             'iqc_reason' => '质检未过原因',
             'iqc_remark' => '质检备注',
+            'xuhao' => '石料序号',
             'sort' => '排序',
             'status' => '状态 1启用 0禁用 -1 删除',
             'created_at' => '创建时间',

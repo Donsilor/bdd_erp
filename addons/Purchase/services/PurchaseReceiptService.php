@@ -718,25 +718,28 @@ class PurchaseReceiptService extends Service
             $goods[] = [
                 'stone_name' => $model->goods_name,
                 'stone_type' => $model->material_type,
-                //'cert_id' => $model->cert_id,
+                'style_sn' => $model->goods_sn,
+                'cert_type' => $model->cert_type,
+                'cert_id' => $model->cert_id,
                 'carat' => $model->goods_weight,
                 'color' => $model->goods_color,
                 'clarity' => $model->goods_clarity,
-                //'cut' => $model->cut,
-                //'polish' => $model->polish,
-                //'fluorescence' =>$model->fluorescence,
-                //'symmetry' =>$model->symmetry,
-                'stone_num' => $model->goods_num,
+                'cut' => $model->goods_cut,
+                'polish' => $model->goods_polish,
+                'fluorescence' =>$model->goods_fluorescence,
+                'symmetry' =>$model->goods_symmetry,
+                'stone_num' => $model->stone_num,
                 'source_detail_id' => $model->id,
+                'stone_price' => $model->stone_price,
                 'cost_price' => $model->cost_price,
-                'stone_weight' => bcmul($model->goods_num, $model->goods_weight, 2),
+                'stone_weight' => $model->goods_weight,
                 'stone_norms' => $model->goods_norms,
-                //'sale_price' => $model->sale_price,
+                'sale_price' => $model->stone_price,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
-            $total_stone_num = bcadd($total_stone_num, $model->goods_num);
-            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
+            $total_stone_num = bcadd($total_stone_num, $model->stone_num);
+            $total_weight = bcadd($total_weight, $model->goods_weight, 2);
         }
         //批量更新采购收货单货品状态
         $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type],['id'=>$ids]);

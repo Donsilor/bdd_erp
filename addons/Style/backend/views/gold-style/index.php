@@ -210,7 +210,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'status' => function($url, $model, $key){
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
                                         return Html::status($model->status);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::SAVE) {

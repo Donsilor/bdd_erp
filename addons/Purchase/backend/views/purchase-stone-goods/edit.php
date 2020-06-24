@@ -55,6 +55,28 @@ $this->params['breadcrumbs'][] = $this->title;
 			   </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_cut')->dropDownList($model->getCutMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_symmetry')->dropDownList($model->getSymmetryMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_polish')->dropDownList($model->getPolishMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'cert_type')->dropDownList($model->getCertTypeMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'cert_id')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'spec_remark')->textarea() ?>
                     </div>
                     <div class="col-lg-4">

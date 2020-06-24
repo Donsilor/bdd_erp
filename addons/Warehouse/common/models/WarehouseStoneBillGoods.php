@@ -15,6 +15,7 @@ use addons\Supply\common\models\ProduceStone;
  * @property string $stone_name 石包名称
  * @property string $style_sn 石料款号
  * @property string $stone_type 商品类型
+ * @property string $cert_type 证书类型
  * @property string $cert_id 证书号
  * @property string $carat 石重
  * @property string $color 颜色
@@ -52,7 +53,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['bill_id', 'bill_type', 'stone_name'], 'required'],
             [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
-            [['bill_type', 'stone_type'], 'string', 'max' => 10],
+            [['bill_type', 'stone_type', 'cert_type'], 'string', 'max' => 10],
             [['bill_no', 'stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
             [['cert_id', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
             [['stone_norms'], 'string', 'max' => 255],
@@ -74,6 +75,7 @@ class WarehouseStoneBillGoods extends BaseModel
             'stone_name' => '石料名称',
             'style_sn' => '石料款号',
             'stone_type' => '石料类型',
+            'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'carat' => '石重',
             'color' => '颜色',

@@ -42,7 +42,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index', 'receipt_id' => $receipt_id]));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -77,7 +77,7 @@ class GoldReceiptGoodsController extends BaseController
     public function actionIqcIndex()
     {
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/iqc-index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -118,7 +118,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index', 'receipt_id' => $receipt_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
