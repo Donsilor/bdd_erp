@@ -106,10 +106,8 @@ class AttributeController extends BaseController
               ->search(Yii::$app->request->queryParams);
 
             $dataProvider->query->andWhere(['attr_id'=>$id]);
-            $dataProvider->query->andWhere(['>','status',-1]);            
+            $dataProvider->query->andWhere(['>','status',-1]);           
             
-            
-            $dataProvider->setSort(false);
         }
         return $this->render($this->action->id, [
             'model' => $model,
