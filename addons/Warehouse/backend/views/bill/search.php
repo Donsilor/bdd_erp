@@ -47,11 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'id',
                             'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'60'],
+                        ],*/
+                        [
+                            'attribute'=>'goods_id',
+                            'filter' =>false,
+                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'attribute' => 'bill_type',
@@ -87,11 +92,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute'=>'goods_id',
-                            'filter' =>false,
-                            'headerOptions' => ['width'=>'120'],
                         ],
                         [
                             'attribute' => 'bill.supplier_id',

@@ -209,7 +209,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             return Html::status($model['status']);
                         },
                     'delete' => function($url, $model, $key){
-                        if($model->defective_status != DefectiveStatusEnum::CONFIRM) {
+                        if($model->defective_status == DefectiveStatusEnum::SAVE) {
                             return Html::delete(['delete', 'id' => $model->id], '取消');
                         }
                     }

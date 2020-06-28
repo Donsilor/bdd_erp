@@ -1,5 +1,6 @@
 <?php
 
+use addons\Purchase\common\enums\DefectiveStatusEnum;
 use common\helpers\Html;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Url;
@@ -81,32 +82,37 @@ $this->params['breadcrumbs'][] = $this->title;
                     </table>
                 </div>
                 <div class="box-footer text-center"">
-                    <?php
-                    if($model->defective_status == BillStatusEnum::SAVE) {
-                        echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
-                            'data-toggle' => 'modal',
-                            'class' => 'btn btn-primary btn-ms',
-                            'data-target' => '#ajaxModalLg',
-                        ]);
-                    }
-                    ?>
                 <?php
-                if($model->defective_status == BillStatusEnum::SAVE){
+                if($model->defective_status == DefectiveStatusEnum::SAVE) {
+                    echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                        'data-toggle' => 'modal',
+                        'class' => 'btn btn-primary btn-ms',
+                        'data-target' => '#ajaxModalLg',
+                    ]);
+                }
+                ?>
+                <?php
+                if($model->defective_status == DefectiveStatusEnum::SAVE){
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                         'class'=>'btn btn-success btn-ms',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                     ]);
                 }
                 ?>
-                    <?php
-                    if($model->defective_status != BillStatusEnum::PENDING){
-                        echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                            'class'=>'btn btn-success btn-ms',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                    ?>
+                <?php
+                if($model->defective_status == DefectiveStatusEnum::PENDING){
+                    echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                        'class'=>'btn btn-success btn-ms',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]);
+                }
+                ?>
+                <?php
+                if($model->defective_status == DefectiveStatusEnum::SAVE){
+                    echo Html::delete(['delete', 'id' => $model->id], '取消');
+                }
+                ?>
                 </div>
             </div>
         </div>
