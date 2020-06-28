@@ -7,6 +7,7 @@ use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\models\QibanAttribute;
+use addons\Style\common\enums\AttrModuleEnum;
 
 
 /**
@@ -142,9 +143,11 @@ class QibanAttrForm extends Qiban
      */
     public function getAttrList()
     {
-        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
+       /*  $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
         $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
-        return $attr_list;
+        return $attr_list; */
+        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
+        return \Yii::$app->styleService->attribute->module(AttrModuleEnum::QIBAN)->getAttrListByCateId($this->style_cate_id,$attr_type,$this->is_inlay);
     }
 
 }

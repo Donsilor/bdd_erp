@@ -12,6 +12,7 @@ use addons\Style\common\enums\JintuoTypeEnum;
 use common\enums\InputTypeEnum;
 use common\enums\ConfirmEnum;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
+use addons\Style\common\enums\AttrModuleEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -258,12 +259,13 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function getAttrList()
     {
         $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
-        if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
+        return \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($this->style_cate_id,$attr_type,$this->is_inlay);
+        /* if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
             $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
         }else{
             $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);
         }
-        return $attr_list;
+        return $attr_list; */
     }
    
 }

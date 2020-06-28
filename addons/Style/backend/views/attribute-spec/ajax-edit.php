@@ -13,6 +13,7 @@ $form = ActiveForm::begin([
     ]
 ]);
 $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
+$model->modules = $model->modules ? explode(",",$model->modules) : \addons\Style\common\enums\AttrModuleEnum::getKeys();
 ?>
 
     <div class="modal-header">
@@ -50,7 +51,7 @@ $model->attr_values = $model->attr_values?explode(",",$model->attr_values):[];
                         'allowClear' => false
                     ],
             ]);?>  
-         
+            <?= $form->field($model, 'modules')->checkboxList(addons\Style\common\enums\AttrModuleEnum::getMap())?>
             <?= $form->field($model, 'input_type')->radioList(common\enums\InputTypeEnum::getMap()) ?>
             <?= $form->field($model, 'is_require')->radioList(common\enums\ConfirmEnum::getMap())?>
             <?= $form->field($model, 'is_inlay')->radioList(addons\Style\common\enums\InlayEnum::getMap())?>

@@ -11,6 +11,7 @@ use addons\Style\common\models\AttributeLang;
 use addons\Style\common\models\AttributeValue;
 use addons\Style\common\models\AttributeSpec;
 use addons\Style\common\enums\InlayEnum;
+use addons\Style\common\enums\AttrModuleEnum;
 
 
 /**
@@ -20,6 +21,7 @@ use addons\Style\common\enums\InlayEnum;
  */
 class AttributeService extends Service
 {
+    public $module = null;
     
     /**
      * 更新属性值
@@ -95,7 +97,16 @@ class AttributeService extends Service
             ->one();
         return $model ? $model->attr_name : '';
     }
-
+    /**
+     * 初始化属性模块
+     * @param unknown $modules
+     * @return AttributeService
+     */
+    public function module($module = null)
+    {
+        $this->module = $module;           
+        return $this; 
+    }
 
     /**
      * 查询款式属性列表（不按照属性类型分组）
@@ -112,7 +123,7 @@ class AttributeService extends Service
             $language = Yii::$app->params['language'];
         }
         $query = AttributeSpec::find()->alias("spec")
-            ->select(["attr.id","lang.attr_name","attr.code",'spec.attr_type','spec.input_type','spec.is_require'])
+            ->select(["attr.id","lang.attr_name","attr.code",'spec.attr_type','spec.input_type','spec.is_require','spec.modules'])
             ->innerJoin(Attribute::tableName()." attr",'spec.attr_id=attr.id')
             ->innerJoin(AttributeLang::tableName().' lang',"attr.id=lang.master_id and lang.language='".$language."'")
             ->where(['spec.style_cate_id'=>$style_cate_id]);
@@ -124,9 +135,16 @@ class AttributeService extends Service
         }
         if($is_inlay !== null && $is_inlay == InlayEnum::No) {
             $query->andWhere(['spec.is_inlay'=>$is_inlay]);
-        }
+        }        
+        $_models = $query->orderBy("spec.sort asc")->asArray()->all();
         
-        $models = $query->orderBy("spec.sort asc")->asArray()->all();
+        $models = [];
+        foreach ($_models as $model) {
+            $modules = !empty($model['modules']) ? explode(',', $model['modules']) :[]; 
+            if(!$this->module || in_array($this->module,$modules)){
+                $models[] = $model;
+            }            
+        }
         return $models;
     }
     /**
