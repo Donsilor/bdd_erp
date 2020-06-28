@@ -53,7 +53,7 @@ class PurchaseApplyGoods extends BaseModel
     public function rules()
     {
         return [
-            [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
+            [['apply_id','goods_sn','style_cate_id','product_type_id','style_sex','jintuo_type'], 'required'],
             [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],

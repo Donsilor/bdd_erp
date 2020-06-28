@@ -26,8 +26,15 @@ class QibanService extends Service
         $qiban->status = StatusEnum::DISABLED;
         $qiban->is_apply = IsApply::Wait;
         $qiban->attributes = $goods;
-//        print_r($qiban->attributes);exit();
+        $qiban->creator_id = \Yii::$app->user->identity->getId();
+        $qiban->created_at = time();
 
+//        try{
+//            $qiban->save();
+//        }catch (\Exception $e){
+//         echo $e->getMessage();
+//         exit();
+//        }
         if(false === $qiban->save()){
             throw new \Exception($this->getError($qiban));
         }

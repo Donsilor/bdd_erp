@@ -2,6 +2,8 @@
 
 namespace addons\Style\common\models;
 
+use addons\Purchase\common\models\PurchaseGoods;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -128,15 +130,12 @@ class Qiban extends BaseModel
      */
     public function beforeSave($insert)
     {
-        if ($this->isNewRecord) {
-            $insert->creator_id = Yii::$app->user->id;
-        }
-        $style_images = $insert->style_images;
+        $style_images = $this->style_images;
         if(is_array($style_images)){
-            $insert->style_image = $style_images[0] ?? '';
+            $this->style_image = $style_images[0] ?? '';
         }else{
             $style_images = explode(",", $style_images);
-            $insert->style_image = $style_images[0] ?? '';
+            $this->style_image = $style_images[0] ?? '';
         }
         return parent::beforeSave($insert);
     }
