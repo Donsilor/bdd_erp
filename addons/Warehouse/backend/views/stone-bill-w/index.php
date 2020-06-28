@@ -316,7 +316,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         }
                                     }, 
                                     'goods' => function($url, $model, $key){
-                                        return Html::edit(['gold-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
+                                        return Html::edit(['stone-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->bill_status == BillStatusEnum::PENDING){
