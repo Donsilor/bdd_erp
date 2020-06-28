@@ -2,14 +2,12 @@
 
 namespace addons\Supply\backend\controllers;
 
+use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use Yii;
-
 use addons\Supply\common\models\ProduceGold;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
-use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Supply\common\enums\BuChanEnum;
 
 /**
@@ -90,7 +88,7 @@ class ProduceGoldController extends BaseController
               }
               //2
               $produce->peiliao_status = PeiliaoStatusEnum::HAS_LINGLIAO;
-              if($produce->peishi_status == PeishiStatusEnum::HAS_LINGSHI) {
+              if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGSHI) {
                   $produce->bc_status = BuChanEnum::TO_PRODUCTION;
               }
               if(false === $produce->save(true,['peiliao_status','bc_status','updated_at'])){
@@ -98,6 +96,33 @@ class ProduceGoldController extends BaseController
               }
               $trans->commit();
               return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        
+    }
+    
+    /**
+     * 重置配料
+     */
+    public function actionAjaxReset()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        //单据校验
+        if($model->peiliao_status != PeiliaoStatusEnum::TO_LINGSHI) {
+            return $this->message('不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();
+            $model->peiliao_status = PeiliaoStatusEnum::IN_PEISHI;
+            if(false === $model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            Yii::$app->supplyService->produce->autoPeiliaoStatus([$model->produce_sn]);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollback();
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

@@ -104,6 +104,33 @@ class ProduceStoneController extends BaseController
         }
         
     }
+    
+    /**
+     * 重置配石
+     */
+    public function actionAjaxReset()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        //单据校验
+        if($model->peishi_status != PeishiStatusEnum::TO_LINGSHI) {
+            return $this->message('不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();
+            $model->peishi_status = PeishiStatusEnum::IN_PEISHI;
+            if(false === $model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            Yii::$app->supplyService->produce->autoPeishiStatus([$model->produce_sn]);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        
+    }
         
     
 }
