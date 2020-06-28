@@ -2,9 +2,7 @@
 
 namespace addons\Style\common\models;
 
-use addons\Purchase\common\models\PurchaseGoods;
 use Yii;
-use common\models\backend\Member;
 
 /**
  * This is the model class for table "style_qiban".
@@ -13,30 +11,41 @@ use common\models\backend\Member;
  * @property int $merchant_id 商户ID
  * @property string $qiban_name 起版名称
  * @property string $qiban_sn 起版编号
- * @property string $style_sn  款号
+ * @property int $qiban_type 1:有款起版；无款起版
+ * @property string $qiban_image_sn 图纸编号
  * @property int $style_id 款式ID
+ * @property string $style_sn  款号
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
+ * @property int $jintuo_type 金托类型
  * @property int $style_source_id 款式来源
  * @property int $style_channel_id 款式渠道
  * @property int $style_sex 款式性别 1男 2女 3通用款
  * @property string $style_image 商品主图
- * @property string $style_images 图片列表
+ * @property string $style_images 起版图库
  * @property string $sale_price 销售价
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
  * @property int $goods_num 商品数量
- * @property int $is_inlay 是否镶嵌
+ * @property int $is_inlay 是否镶嵌 1是 0否
  * @property int $audit_status 款式审核 0待审核，1通过，2不通过
  * @property string $audit_remark 审核失败原因
  * @property int $audit_time 审核时间
  * @property int $auditor_id 审核人
  * @property int $sort 排序
+ * @property string $stone_info 石料信息
+ * @property string $parts_info 配件信息
  * @property string $remark 款式备注
  * @property int $status 款式状态 0下架，1正常，-1删除
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
+ * @property string $format_sn 图纸编号
+ * @property string $format_images 图纸图片
+ * @property string $format_video 版式视频
+ * @property string $format_info 版式工艺信息
+ * @property string $format_remark 版式备注
+ * @property int $is_apply 是否采购申请 0：不是采购：1 是采购未审核，2是采购已审核
  */
 class Qiban extends BaseModel
 {
@@ -54,28 +63,14 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['qiban_sn','style_cate_id','product_type_id','jintuo_type','cost_price','qiban_name'],'required'],
-            [['merchant_id', 'style_id','style_cate_id', 'product_type_id','is_inlay', 'style_source_id','jintuo_type', 'style_channel_id','qiban_type', 'style_sex', 'goods_num', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at', 'is_apply'], 'integer'],
             [['sale_price', 'market_price', 'cost_price'], 'number'],
-            [['qiban_name', 'audit_remark', 'remark','stone_info','format_remark'], 'string', 'max' => 255],
-            [['style_sn','qiban_sn','format_sn'], 'string', 'max' => 30],
-            [['style_images'],'parseStyleImages'],
-            [['format_images','format_video'], 'string', 'max' => 500],
-            [['style_image'], 'safe'],
             [['format_info'], 'string'],
+            [['qiban_name', 'audit_remark', 'stone_info', 'parts_info', 'remark', 'format_remark'], 'string', 'max' => 255],
+            [['qiban_sn', 'qiban_image_sn', 'style_sn', 'format_sn'], 'string', 'max' => 30],
+            [['style_image', 'format_images', 'format_video'], 'string', 'max' => 500],
+            [['style_images'], 'string', 'max' => 2000],
         ];
-    }
-
-
-    /**
-     * 款式图库
-     */
-    public function parseStyleImages()
-    {
-        $style_images = $this->style_images;
-        if(is_array($style_images)){            
-            $this->style_images = implode(',',$style_images);
-        }
     }
 
     /**
@@ -84,43 +79,45 @@ class Qiban extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'merchant_id' => '商户ID',
-            'qiban_name' => '起版名称',
-            'qiban_sn' => '起版编号',
-            'style_sn' => '款式编号',
-            'style_id' => '款式ID',
-            'style_cate_id' => '款式分类',
-            'product_type_id' => '产品线',
-            'style_source_id' => '款式来源',
-            'style_channel_id' => '归属渠道',
-            'qiban_type' => '起版类型',
-            'style_sex' => '款式性别',
-            'style_image' => '起版主图',
-            'style_images' => '起版图片',
-            'sale_price' => '销售价',
-            'market_price' => '市场价',
-            'cost_price' => '成本价',
-            'jintuo_type' => '金托类型',
-            'goods_num' => '商品数量',
-            'is_inlay' => '是否镶嵌',
-            'audit_status' => '审核状态',
-            'audit_remark' => '审核失败原因',
-            'audit_time' => '审核时间',
-            'auditor_id' => '审核人',
-            'sort' => '排序',
-            'stone_info' => '石料信息',
-            'remark' => '起版备注',
-            'status' => '状态',
-            'creator_id' => '创建人',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
-            'format_sn' => '图纸编号',
-            'format_images' => '版式图片',
-            'format_video' => '上传视频',
-            'format_remark' => '版式备注',
-            'format_info' => '工艺信息',
-            'is_apply' => '是否采购申请',
+            'id' => Yii::t('app', '款式ID'),
+            'merchant_id' => Yii::t('app', '商户ID'),
+            'qiban_name' => Yii::t('app', '起版名称'),
+            'qiban_sn' => Yii::t('app', '起版编号'),
+            'qiban_type' => Yii::t('app', '起版类型'),
+            'qiban_image_sn' => Yii::t('app', '图纸编号'),
+            'style_id' => Yii::t('app', '款式ID'),
+            'style_sn' => Yii::t('app', ' 款号'),
+            'style_cate_id' => Yii::t('app', '款式分类'),
+            'product_type_id' => Yii::t('app', '产品线'),
+            'jintuo_type' => Yii::t('app', '金托类型'),
+            'style_source_id' => Yii::t('app', '款式来源'),
+            'style_channel_id' => Yii::t('app', '款式渠道'),
+            'style_sex' => Yii::t('app', '款式性别'),
+            'style_image' => Yii::t('app', '商品主图'),
+            'style_images' => Yii::t('app', '起版图库'),
+            'sale_price' => Yii::t('app', '销售价'),
+            'market_price' => Yii::t('app', '市场价'),
+            'cost_price' => Yii::t('app', '成本价'),
+            'goods_num' => Yii::t('app', '商品数量'),
+            'is_inlay' => Yii::t('app', '是否镶嵌'),
+            'audit_status' => Yii::t('app', '款式审核'),
+            'audit_remark' => Yii::t('app', '审核失败原因'),
+            'audit_time' => Yii::t('app', '审核时间'),
+            'auditor_id' => Yii::t('app', '审核人'),
+            'sort' => Yii::t('app', '排序'),
+            'stone_info' => Yii::t('app', '石料信息'),
+            'parts_info' => Yii::t('app', '配件信息'),
+            'remark' => Yii::t('app', '款式备注'),
+            'status' => Yii::t('app', '款式状态'),
+            'creator_id' => Yii::t('app', '创建人'),
+            'created_at' => Yii::t('app', '创建时间'),
+            'updated_at' => Yii::t('app', '更新时间'),
+            'format_sn' => Yii::t('app', '图纸编号'),
+            'format_images' => Yii::t('app', '图纸图片'),
+            'format_video' => Yii::t('app', '版式视频'),
+            'format_info' => Yii::t('app', '版式工艺信息'),
+            'format_remark' => Yii::t('app', '版式备注'),
+            'is_apply' => Yii::t('app', '是否采购申请'),
         ];
     }
 
@@ -132,14 +129,14 @@ class Qiban extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->id;
+            $insert->creator_id = Yii::$app->user->id;
         }
-        $style_images = $this->style_images;
+        $style_images = $insert->style_images;
         if(is_array($style_images)){
-            $this->style_image = $style_images[0] ?? '';
+            $insert->style_image = $style_images[0] ?? '';
         }else{
             $style_images = explode(",", $style_images);
-            $this->style_image = $style_images[0] ?? '';            
+            $insert->style_image = $style_images[0] ?? '';
         }
         return parent::beforeSave($insert);
     }

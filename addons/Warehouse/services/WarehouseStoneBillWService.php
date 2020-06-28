@@ -328,7 +328,7 @@ class WarehouseStoneBillWService extends Service
                 'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.stone_num,0)) as adjust_grain',
                 'sum(1) as goods_num',//明细总数量
                 'sum(g.stone_weight) as goods_weight',//明细总重量
-                'sum(g.stone_num) as goods_num',//明细总粒数
+                'sum(g.stone_num) as goods_grain',//明细总粒数
                 'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {

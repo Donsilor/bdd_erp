@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 
 use addons\Warehouse\common\forms\WarehouseBillAForm;
+use addons\Warehouse\common\forms\WarehouseBillAGoodsForm;
 use addons\Warehouse\common\models\WarehouseBillGoodsA;
 use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -73,54 +74,15 @@ class WarehouseBillAService extends Service
                 throw new \Exception($this->getError($warehouseBillGoods));
             }
 
-            //同步库存数据到调整表明细
             $warehouseBillGoodsA = new WarehouseBillGoodsA();
-            $warehouse_bill_goods_a = [
-                'goods_id' => $goods->goods_id,
-                'goods_name'=> $goods->goods_name,
-                'xiangkou'=> $goods->xiangkou,
-                'finger' => $goods->finger,
-                'product_size' => $goods->product_size,
-                'gold_weight' => $goods->gold_weight,
-                'suttle_weight' => $goods->suttle_weight,
-                'gold_loss' => $goods->gold_loss,
-                'gold_price' => $goods->gold_price,
-                'gold_amount' => $goods->gold_amount,
-                'main_stone_sn' => $goods->main_stone_sn,
-                'main_stone_num' => $goods->main_stone_num,
-                'main_stone_type' => $goods->main_stone_type,
-                'main_stone_price'=> $goods->main_stone_price,
-                'diamond_shape' => $goods->diamond_shape,
-                'diamond_carat' => $goods->diamond_carat,
-                'diamond_color' => $goods->diamond_color,
-                'diamond_clarity' => $goods->diamond_clarity,
-                'diamond_cut' => $goods->diamond_cut,
-                'diamond_polish' => $goods->diamond_polish,
-                'diamond_symmetry' => $goods->diamond_symmetry,
-                'diamond_fluorescence' => $goods->diamond_fluorescence,
-                'diamond_cert_type' => $goods->diamond_cert_type,
-                'diamond_cert_id' => $goods->diamond_cert_id,
-                'second_stone_sn1' => $goods->second_stone_sn1,
-                'second_stone_type1' => $goods->second_stone_type1,
-                'second_stone_shape1' => $goods->second_stone_shape1,
-                'second_stone_num1' => $goods->second_stone_num1,
-                'second_stone_weight1' => $goods->second_stone_weight1,
-                'second_stone_color1' => $goods->second_stone_color1,
-                'second_stone_clarity1' => $goods->second_stone_clarity1,
-                'second_stone_price1' => $goods->second_stone_price1,
-                'second_stone_type2' => $goods->second_stone_type2,
-                'second_stone_num2' => $goods->second_stone_num2,
-                'second_stone_weight2' => $goods->second_stone_weight2,
-                'second_stone_price2' => $goods->second_stone_price2,
-                'parts_gold_weight' => $goods->parts_gold_weight,
-                'parts_price' => $goods->parts_price,
-                'gong_fee' => $goods->gong_fee,
-                'bukou_fee' => $goods->bukou_fee,
-                'xianqian_fee' => $goods->xianqian_fee,
-                'cert_fee' => $goods->cert_fee,
-                'biaomiangongyi_fee' => $goods->biaomiangongyi_fee,
-                'cost_price' => $goods->cost_price,
-            ];
+            $fields_map = WarehouseBillAGoodsForm::getMap();
+            $warehouse_bill_goods_a = [];
+            foreach ($fields_map as $bill_goods_field => $goods_field){
+                $warehouse_bill_goods_a[$bill_goods_field] = $goods->$goods_field;
+            }
+            $warehouse_bill_goods_a['goods_id'] = $goods_id;
+            $warehouse_bill_goods_a['style_sn'] = $goods->style_sn;
+
 
             $warehouseBillGoodsA->attributes = $warehouse_bill_goods_a;
             $warehouseBillGoodsA->bill_id = $model->bill_id;

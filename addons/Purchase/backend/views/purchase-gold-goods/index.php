@@ -121,6 +121,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute'=>'incl_tax_price',
+                                'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->incl_tax_price??"0.00";
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                     'attribute' => 'is_receipt',
                                     'value' => function ($model){
                                         return ConfirmEnum::getValue($model->is_receipt);

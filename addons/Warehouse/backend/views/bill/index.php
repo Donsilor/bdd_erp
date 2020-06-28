@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill', '单据列表');
+$this->title = Yii::t('bill', '出入库列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
