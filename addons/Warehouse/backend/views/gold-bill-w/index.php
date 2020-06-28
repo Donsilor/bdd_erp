@@ -109,13 +109,22 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width' => '100'],
                         ],
                         [
-                                'label' => '应盘数量',
-                                'value' => function($model){
-                                    return $model->billW->should_num ?? 0;
-                                },
-                                'filter' => false,
-                                'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                            'label' => '应盘数量',
+                            'value' => function($model){
+                                return $model->billW->should_num ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                            'label' => '实盘数量',
+                            'value' => function($model){
+                                return $model->billW->actual_num ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'label' => '应盘重量/克',
@@ -125,15 +134,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
-                        ],
-                        [
-                                'label' => '实盘数量',
-                                'value' => function($model){
-                                    return $model->billW->actual_num ?? 0;
-                                },
-                                'filter' => false,                                
-                                'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'label' => '实盘重量/克',
@@ -233,6 +233,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                         ],
                         [
+                                'label' => '制单时间',
                                 'attribute' => 'created_at',
                                 'filter' => DateRangePicker::widget([    // 日期组件
                                     'model' => $searchModel,

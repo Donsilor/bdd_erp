@@ -100,7 +100,7 @@ class StoneBillWGoodsController extends BaseController
                 $model->fin_check_time = time();
                 $model->fin_checker = (string) \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldBill->auditFinW($model);
+                \Yii::$app->warehouseService->stoneBillW->auditFinW($model);
 
                 $trans->commit();
 
