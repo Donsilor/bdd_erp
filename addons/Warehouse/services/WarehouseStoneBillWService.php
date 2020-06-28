@@ -18,6 +18,7 @@ use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\enums\StoneStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillGoodsWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
@@ -196,19 +197,52 @@ class WarehouseStoneBillWService extends Service
     }
 
     /**
+     *  商品明细审核验证
+     * @param object $form
+     * @throws \Exception
+     */
+    public function auditGoodsValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = WarehouseStoneBillGoodsWForm::findOne(['id'=>$id]);
+                if($goods->fin_status != FinAuditStatusEnum::PENDING){
+                    $gold = WarehouseStoneBillGoods::findOne($id);
+                    throw new \Exception("石料编号【{$gold->stone_sn}】不是待审核状态");
+                }
+            }
+        }
+    }
+
+    /**
      * 财务盘点明细-审核
      * @param $form
      */
     public function auditFinW($form)
     {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-        if($form->fin_status != FinAuditStatusEnum::PASS){
-            $form->fin_status = FinAuditStatusEnum::UNPASS;
-        }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        $ids = $form->getIds();
+        if($ids && is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = WarehouseStoneBillGoodsWForm::findOne($id);
+                $goods->fin_status = $form->fin_status;
+                $goods->adjust_status = $form->adjust_status;
+                $goods->fin_remark = $form->fin_remark;
+                $goods->fin_check_time = time();
+                $goods->fin_checker = (string) \Yii::$app->user->identity->id;
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+        }else {
+            if (false === $form->validate()) {
+                throw new \Exception($this->getError($form));
+            }
+            if ($form->fin_status != FinAuditStatusEnum::PASS) {
+                $form->fin_status = FinAuditStatusEnum::UNPASS;
+            }
+            if (false === $form->save()) {
+                throw new \Exception($this->getError($form));
+            }
         }
     }
 

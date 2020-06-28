@@ -77,7 +77,7 @@ return [
                         'route' => 'bill-a/index',
                     ],
                     [
-                        'title' => '单据列表',
+                        'title' => '出入库列表',
                         'route' => 'bill/index',
                     ],
                 ],
@@ -109,7 +109,7 @@ return [
                         'route' => 'gold-bill-w/index',
                     ],
                     [
-                        'title' => '单据列表',
+                        'title' => '出入库列表',
                         'route' => 'gold-bill/index',
                     ],
                 ],
@@ -144,7 +144,7 @@ return [
                         'route' => 'stone-bill-w/index',
                     ],
                     [
-                        'title' => '单据列表',
+                        'title' => '出入库列表',
                         'route' => 'stone-bill/index',
                     ],
                 ],
