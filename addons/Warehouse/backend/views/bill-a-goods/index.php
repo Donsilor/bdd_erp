@@ -1,13 +1,9 @@
 <?php
 
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use common\enums\WhetherEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
+use common\enums\AuditStatusEnum;
 
 $this->title = Yii::t('bill_l_goods', '入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
@@ -26,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         echo '&nbsp;';
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '批量修改', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -54,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit} {ajax-apply} {apply-view} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
                                         if($bill->bill_status == BillStatusEnum::SAVE){
@@ -63,6 +59,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'data-width' => '90%',
                                                 'data-height' => '90%',
                                                 'data-offset' => '20px',
+                                            ]);
+                                        }
+                                    },
+                                    'ajax-apply' => function($url, $model, $key){
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
+                                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                                'class'=>'btn btn-success btn-xs',
+                                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                                            ]);
+                                        }
+                                    },
+                                    'apply-view' => function($url, $model, $key){
+                                        if($model->audit_status == AuditStatusEnum::PENDING){
+                                            return Html::edit(['apply-view','id'=>$model->id], '审批', [
+                                                'class'=>'btn btn-danger btn-xs',
                                             ]);
                                         }
                                     },
