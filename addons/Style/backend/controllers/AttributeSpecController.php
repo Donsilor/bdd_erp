@@ -126,7 +126,7 @@ class AttributeSpecController extends BaseController
      */
     private function editSpecValue($spec)
     {   
-        if(!$specModel->attr_values) {
+        if(!$spec->attr_values) {
             AttributeSpecValue::deleteAll(['spec_id'=>$spec->id]);
             return true;
         }
