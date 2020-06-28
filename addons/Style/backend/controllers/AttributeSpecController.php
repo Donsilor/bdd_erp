@@ -38,7 +38,7 @@ class AttributeSpecController extends BaseController
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
-                'partialMatchAttributes' => ['attr.attr_name'], // 模糊查询
+                'partialMatchAttributes' => ['attr.attr_name','modules'], // 模糊查询
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ],
@@ -86,7 +86,6 @@ class AttributeSpecController extends BaseController
             }catch (Exception $e){
                 $trans->rollBack();
                 $error = $e->getMessage();
-                \Yii::error($error);
                 return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
         }
@@ -129,8 +128,7 @@ class AttributeSpecController extends BaseController
         if(!$spec->attr_values) {
             AttributeSpecValue::deleteAll(['spec_id'=>$spec->id]);
             return true;
-        }
-        
+        }        
         $attr_values = explode(",",$spec->attr_values);
         AttributeSpecValue::deleteAll(['and',['spec_id'=>$spec->id],['not in','attr_value_id',$attr_values]]);
         foreach ($attr_values as $attr_value_id){

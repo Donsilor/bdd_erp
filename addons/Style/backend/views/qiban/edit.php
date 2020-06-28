@@ -5,6 +5,7 @@ use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\AttrModuleEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -71,10 +72,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                 <?php
-                $attr_list = $model->getAttrList();
+                //$attr_list = $model->getAttrList(); 
+                $attr_type = JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
+                $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::QIBAN)->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
-                    $attr_id  = $attr['attr_id'];//属性ID
-                    $attr_values = $attr['attr_values'];//属性值
+                    $attr_id  = $attr['id'];//属性ID
                     $is_require = $attr['is_require'];
                     $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
 

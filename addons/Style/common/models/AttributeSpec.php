@@ -35,19 +35,17 @@ class AttributeSpec extends BaseModel
     public function rules()
     {
         return [
-            [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_inlay', 'status'], 'required'],
+            [['style_cate_id', 'attr_id', 'attr_type','modules', 'input_type', 'is_require','is_inlay', 'status'], 'required'],
             [['style_cate_id', 'attr_id', 'attr_type', 'input_type', 'is_require','is_inlay' ,'status', 'sort', 'created_at', 'updated_at'], 'integer'],
             //[['attr_values'], 'string', 'max' => 500],
             [['attr_id'],'unique', 'targetAttribute'=>['style_cate_id','attr_id'],
               //'targetClass' => '\models\Dishes', // 模型，缺省时默认当前模型。
               'comboNotUnique' => '当前产品线已添加过该属性' //错误信息
             ],
-            [['attr_values'],'implodeArray','params'=>['split'=>',']],
+            [['attr_values','modules'],'implodeArray','params'=>['split'=>',']],
 //            [['attr_name','language'], 'safe'],
         ];
     }
-
-
     /**
      * {@inheritdoc}
      */
@@ -64,6 +62,7 @@ class AttributeSpec extends BaseModel
             'is_inlay' => '是否镶嵌',
             'status' => '状态',
             'sort' => '排序',
+            'modules' => '所属模块',
             'attr_name'=>  '属性名称',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',            

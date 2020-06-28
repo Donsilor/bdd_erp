@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
+use addons\Style\common\enums\AttrModuleEnum;
 
 
 /* @var $this yii\web\View */
@@ -61,13 +62,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                'attribute'=>'attr_values',
+                'attribute'=>'modules',
                 'value' => function($model){
-                    $attrValues = Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
-                    return implode(",",$attrValues);
+                    $modules = $model->modules ? explode(',',$model->modules ) : [];
+                    foreach ($modules as & $module) {
+                        $module = AttrModuleEnum::getValue($module);
+                    }
+                    return implode(",",$modules);
                 },                  
-                'filter' => false,
-                'contentOptions' => ['style' => 'word-break:break-all;'],
+                'filter' => Html::activeDropDownList($searchModel, 'modules',AttrModuleEnum::getMap(), [
+                        'prompt' => '全部',
+                        'class' => 'form-control',
+                ]),
+                'contentOptions' => [/*'style' => 'word-break:break-all;'*/],
             ],
             [
                 'attribute' => 'cate.name',

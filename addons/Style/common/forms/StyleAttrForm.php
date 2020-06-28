@@ -10,6 +10,7 @@ use yii\base\Model;
 use addons\Style\common\models\AttributeSpec;
 use common\enums\StatusEnum;
 use common\enums\InputTypeEnum;
+use addons\Style\common\enums\AttrModuleEnum;
 
 /**
  * 款式编辑-款式属性 Form
@@ -138,9 +139,9 @@ class StyleAttrForm extends Model
      * 获取款式属性列表
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getAttrList()
+    public function getAttrList($module = null)
     {   
-        return \Yii::$app->styleService->attribute->getAttrTypeListByCateId($this->style_cate_id,null,$this->is_inlay);
+        return \Yii::$app->styleService->attribute->module($module)->getAttrTypeListByCateId($this->style_cate_id,null,$this->is_inlay);
     }
     
 }

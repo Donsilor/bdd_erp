@@ -3,6 +3,7 @@ use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\enums\AttrModuleEnum;
 
 $this->title = '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -16,7 +17,8 @@ $model = $model ?? new StyleAttrForm();
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                  <?php               
-                    $attr_list_all = $model->getAttrList();
+                    //$attr_list_all = $model->getAttrList(AttrModuleEnum::STYLE);
+                    $attr_list_all = \Yii::$app->styleService->attribute->module(AttrModuleEnum::STYLE)->getAttrTypeListByCateId($model->style_cate_id,null,$model->is_inlay);
                     foreach ($attr_list_all as $attr_type=>$attr_list){  
                         ?>
                         <div class="box-header with-border">
