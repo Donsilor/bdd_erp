@@ -6,6 +6,7 @@ use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
 use addons\Style\common\enums\AttrModuleEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -78,7 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	  $attr_list = $model->getAttrList();
+            	  //$attr_list = $model->getAttrList();
+            	  $attr_type = JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
+            	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['id'];//属性ID                      
                       $is_require = $attr['is_require'];                     
@@ -90,13 +93,13 @@ $this->params['breadcrumbs'][] = $this->title;
                           case common\enums\InputTypeEnum::INPUT_TEXT :{
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
-                          }  
-                          case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE: {
-                              $input = $form->field($model,$field)->textInput()->label($attr_name);
-                              break;
                           }
                           default:{
-                              $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);                              
+                              if($model->qiban_type == QibanTypeEnum::NON_VERSION) {
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
+                              }else{
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);    
+                              }
                               $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                               break;
                           }
