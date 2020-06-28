@@ -18,6 +18,7 @@ use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\enums\StoneStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillGoodsWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
@@ -196,19 +197,52 @@ class WarehouseStoneBillWService extends Service
     }
 
     /**
+     *  商品明细审核验证
+     * @param object $form
+     * @throws \Exception
+     */
+    public function auditGoodsValidate($form){
+        $ids = $form->getIds();
+        if(is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = WarehouseStoneBillGoodsWForm::findOne(['id'=>$id]);
+                if($goods->fin_status != FinAuditStatusEnum::PENDING){
+                    $gold = WarehouseStoneBillGoods::findOne($id);
+                    throw new \Exception("石料编号【{$gold->stone_sn}】不是待审核状态");
+                }
+            }
+        }
+    }
+
+    /**
      * 财务盘点明细-审核
      * @param $form
      */
     public function auditFinW($form)
     {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-        if($form->fin_status != FinAuditStatusEnum::PASS){
-            $form->fin_status = FinAuditStatusEnum::UNPASS;
-        }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        $ids = $form->getIds();
+        if($ids && is_array($ids)){
+            foreach ($ids as $id) {
+                $goods = WarehouseStoneBillGoodsWForm::findOne($id);
+                $goods->fin_status = $form->fin_status;
+                $goods->adjust_status = $form->adjust_status;
+                $goods->fin_remark = $form->fin_remark;
+                $goods->fin_check_time = time();
+                $goods->fin_checker = (string) \Yii::$app->user->identity->id;
+                if(false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
+        }else {
+            if (false === $form->validate()) {
+                throw new \Exception($this->getError($form));
+            }
+            if ($form->fin_status != FinAuditStatusEnum::PASS) {
+                $form->fin_status = FinAuditStatusEnum::UNPASS;
+            }
+            if (false === $form->save()) {
+                throw new \Exception($this->getError($form));
+            }
         }
     }
 
@@ -276,27 +310,36 @@ class WarehouseStoneBillWService extends Service
         $sum = WarehouseStoneBillGoods::find()->alias("g")->innerJoin(WarehouseStoneBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
                 'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_num,0)) as actual_grain',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_weight,0)) as profit_weight',
+                'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_num,0)) as profit_grain',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',g.stone_weight,0)) as loss_weight',
+                'sum(if(g.status='.PandianStatusEnum::LOSS.',g.stone_num,0)) as loss_grain',
                 'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
                 'sum(if(g.status='.PandianStatusEnum::SAVE.',g.stone_weight,0)) as save_weight',
+                'sum(if(g.status='.PandianStatusEnum::SAVE.',g.stone_num,0)) as save_grain',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
                 'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.stone_weight,0)) as normal_weight',
+                'sum(if(g.status='.PandianStatusEnum::NORMAL.',g.stone_num,0)) as normal_grain',
                 'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
                 'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.stone_weight,0)) as adjust_weight',
+                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',g.stone_num,0)) as adjust_grain',
                 'sum(1) as goods_num',//明细总数量
+                'sum(g.stone_weight) as goods_weight',//明细总重量
+                'sum(g.stone_num) as goods_grain',//明细总粒数
                 'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {
-            $billUpdate = ['total_num'=>$sum['goods_num']];
+            $billUpdate = ['total_num'=>$sum['goods_num'], 'total_weight'=>$sum['goods_weight'], 'total_grain'=>['goods_grain']];
             $billWUpdate = [
                 'save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num'],
-                'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight']
+                'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight'],
+                'save_grain'=>$sum['save_grain'],'actual_grain'=>$sum['actual_grain'], 'loss_grain'=>$sum['loss_grain'], 'normal_grain'=>$sum['normal_grain'], 'adjust_grain'=>$sum['adjust_grain'],
             ];
-            $res1 = WarehouseGoldBill::updateAll($billUpdate,['id'=>$bill_id]);
-            $res2 = WarehouseGoldBillW::updateAll($billWUpdate,['id'=>$bill_id]);
+            $res1 = WarehouseStoneBill::updateAll($billUpdate,['id'=>$bill_id]);
+            $res2 = WarehouseStoneBillW::updateAll($billWUpdate,['id'=>$bill_id]);
             return $res1 && $res2;
         }
         return false;

@@ -72,7 +72,7 @@ class ProduceStoneController extends BaseController
         $produce = Produce::find()->where(['id'=>$produce_id])->one();
         //单据校验
         if($produce->peishi_status == PeishiStatusEnum::HAS_LINGSHI){
-            return $this->message('布产单已经确认过领石了！', $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message('布产单已经确认领石了！', $this->redirect(Yii::$app->request->referrer), 'error');
         }elseif($produce->peishi_status != PeishiStatusEnum::TO_LINGSHI) {
             return $this->message('布产单不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
@@ -96,6 +96,33 @@ class ProduceStoneController extends BaseController
             if(false === $produce->save(true,['peishi_status','bc_status','updated_at'])){
                 throw new \Exception("确认失败！code=2");
             }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        
+    }
+    
+    /**
+     * 重置配石
+     */
+    public function actionAjaxReset()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        //单据校验
+        if($model->peishi_status != PeishiStatusEnum::TO_LINGSHI) {
+            return $this->message('不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();
+            $model->peishi_status = PeishiStatusEnum::IN_PEISHI;
+            if(false === $model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            Yii::$app->supplyService->produce->autoPeishiStatus([$model->produce_sn]);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

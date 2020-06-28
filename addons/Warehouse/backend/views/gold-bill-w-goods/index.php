@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::create(['gold-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>
                     <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING) {?>
-                        <?= Html::batchAudit(['ajax-audit', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '批量审核', []); ?>
+                        <?= Html::batchPopButton(['batch-audit', 'check' => 1, 'id' => $bill->id, 'returnUrl'=>Url::getReturnUrl()], '批量审核', ['class'=>'btn btn-primary btn-xs','data-grid'=>'grid']); ?>
                     <?php }?>
                     </div>
                </div>
@@ -90,18 +90,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => '应盘重量',
-                                'attribute' => 'gold_weight',
-                                'filter' => true,
+                                'format' => 'raw',
+                                'value' => function($model){
+                                    return $model->goodsW->gold_weight ?? '0.00';
+                                },
+                                'filter' => false,
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
                                 'label' => '实盘重量',
+                                'format' => 'raw',
                                 'value' => function($model){
-                                    return $model->goodsW->actual_weight ?? 0;
+                                    return $model->goodsW->actual_weight ?? '0.00';
                                 },
                                 'filter' => false,
-                                'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:red'],
                             ],
@@ -161,14 +164,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'110'],
                             ],
                             [
+                                'label' => '调整状态',
+                                'attribute' => 'goodsW.adjust_status',
+                                'value' =>function($model){
+                                    return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status);
+                                },
+                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'110'],
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{audit}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key){
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PASS){
+                                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '调整', [
+                                                'class'=>'btn btn-success btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
+                                        }
+                                    },
                                     'audit' => function($url, $model, $key){
                                         if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                                'class'=>'btn btn-success btn-sm',
+                                                'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModal',
                                             ]);

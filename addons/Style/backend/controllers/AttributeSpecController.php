@@ -124,21 +124,25 @@ class AttributeSpecController extends BaseController
      * @param unknown $specModel
      * @throws Exception
      */
-    private function editSpecValue($specModel)
-    {
-        $spec_id = $specModel->id;
-        $attr_id = $specModel->attr_id;
-        $attr_values = explode(",",$specModel->attr_values);
+    private function editSpecValue($spec)
+    {   
+        if(!$spec->attr_values) {
+            AttributeSpecValue::deleteAll(['spec_id'=>$spec->id]);
+            return true;
+        }
         
-        AttributeSpecValue::deleteAll(['and',['spec_id'=>$spec_id],['not in','attr_value_id',$attr_values]]);
-        AttributeSpecValue::deleteAll(['and',['spec_id'=>$spec_id],['not in','attr_value_id',$attr_values]]);
-        foreach ($attr_values as $val_id){
-            $model = AttributeSpecValue::find()->where(['spec_id'=>$spec_id,'attr_value_id'=>$val_id])->one();
+        $attr_values = explode(",",$spec->attr_values);
+        AttributeSpecValue::deleteAll(['and',['spec_id'=>$spec->id],['not in','attr_value_id',$attr_values]]);
+        foreach ($attr_values as $attr_value_id){
+            if(!$attr_value_id) {
+                continue;
+            }
+            $model = AttributeSpecValue::find()->where(['spec_id'=>$spec->id,'attr_value_id'=>$attr_value_id])->one();
             if(!$model) {                
                 $model = new AttributeSpecValue();
-                $model->spec_id = $spec_id;
-                $model->attr_id = $attr_id;
-                $model->attr_value_id = $val_id;
+                $model->spec_id = $spec->id;
+                $model->attr_id = $spec->attr_id;
+                $model->attr_value_id = $attr_value_id;
             } 
             $model->status = StatusEnum::ENABLED;
             if(false === $model->save()){
@@ -155,7 +159,6 @@ class AttributeSpecController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl');
         $model = $this->findModel($id);     
         
         $this->activeFormValidate($model);
@@ -165,14 +168,14 @@ class AttributeSpecController extends BaseController
             try{
                 $trans = Yii::$app->db->beginTransaction();
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 $this->editSpecValue($model);
                 $trans->commit();
                 return $is_new ?
                 $this->message("添加成功", $this->redirect(Yii::$app->request->referrer), 'success'):
                 $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 $trans->rollBack();
                 $error = $e->getMessage();
                 \Yii::error($error);
@@ -202,7 +205,7 @@ class AttributeSpecController extends BaseController
         $values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
         foreach ($values as $key=>$val) {
             $checked = $checked_values === false || in_array($key,$checked_values)?" checked":'';
-            $html .= '<label style="color:#636f7a"><input type="checkbox" name="AttributeSpecValue[attr_values][]" value="'.$key.'"'.$checked.'>'.$val.'</label>&nbsp;';  
+            $html .= '<label style="color:#636f7a"><input type="checkbox" name="AttributeSpec[attr_values][]" value="'.$key.'"'.$checked.'>'.$val.'</label>&nbsp;';  
         } 
         return $html;
     }

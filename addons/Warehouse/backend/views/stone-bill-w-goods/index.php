@@ -24,6 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::SAVE) {?>
                         <?= Html::create(['stone-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::PENDING) {?>
+                        <?= Html::batchPopButton(['batch-audit', 'check' => 1, 'id' => $bill->id, 'returnUrl'=>Url::getReturnUrl()], '批量审核', ['class'=>'btn btn-primary btn-xs','data-grid'=>'grid']); ?>
+                    <?php }?>
                     </div>
                </div>
             <div class="box-body table-responsive">  
@@ -170,14 +173,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'110'],
                             ],
                             [
+                                'label' => '调整状态',
+                                'attribute' => 'goodsW.adjust_status',
+                                'value' =>function($model){
+                                    return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status);
+                                },
+                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'110'],
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{audit}',
                                 'buttons' => [
-                                    'audit' => function($url, $model, $key){
-                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
+                                    'audit' => function($url, $model, $key) use($bill) {
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING
+                                            && $bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                                'class'=>'btn btn-success btn-sm',
+                                                'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModal',
                                             ]);

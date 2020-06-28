@@ -40,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:130%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -118,6 +118,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width' => '100'],
                         ],
                         [
+                            'label' => '应盘粒数',
+                            'value' => function($model){
+                                return $model->billW->should_grain ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                             'label' => '应盘重量(ct)',
                             'value' => function($model){
                                 return $model->billW->should_weight ?? 0;
@@ -134,6 +143,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,                                
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                            'label' => '实盘粒数',
+                            'value' => function($model){
+                                return $model->billW->actual_grain ?? 0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'label' => '实盘重量(ct)',
@@ -298,7 +316,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         }
                                     }, 
                                     'goods' => function($url, $model, $key){
-                                        return Html::edit(['gold-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
+                                        return Html::edit(['stone-bill-w-goods/index','bill_id' => $model->id,'returnUrl' => Url::getReturnUrl()], '明细',['class'=>'btn btn-warning btn-sm']);
                                     }, 
                                     'audit' => function($url, $model, $key){
                                         if($model->bill_status == BillStatusEnum::PENDING){

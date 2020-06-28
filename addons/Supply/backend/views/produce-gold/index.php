@@ -107,6 +107,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                             
                             ], 
+                            [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'header' => '操作',
+                                    'template' => '{reset}',
+                                    'buttons' => [
+                                        'reset' =>function($url, $model, $key){
+                                            if($model->peiliao_status == PeiliaoStatusEnum::TO_LINGLIAO) {
+                                                return Html::edit(['ajax-reset','id'=>$model->id], '重置配料', [
+                                                        'class'=>'btn btn-primary btn-xs',
+                                                        'style'=>"margin-left:5px",
+                                                        'onclick' => 'rfTwiceAffirm(this,"重置配料","确定重置配料状态吗？");return false;',
+                                                ]);
+                                            }
+                                        }
+                                    ]
+                            ]
                             
                         ]
                     ]); ?>

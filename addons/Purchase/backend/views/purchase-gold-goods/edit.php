@@ -44,6 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
                </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'incl_tax_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'remark')->textarea() ?>
                     </div>
                 </div>

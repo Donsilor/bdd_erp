@@ -49,8 +49,9 @@ class AttributeService extends Service
             	attr_lang.master_id = t.attr_id
             AND attr_lang.`language` = t.`language`
             AND attr_lang.master_id = '.$attr_id.';';
-        
-        return \Yii::$app->db->createCommand($sql1)->execute() && \Yii::$app->db->createCommand($sql2)->execute();
+        $res1 = \Yii::$app->db->createCommand($sql1)->execute();
+        $res2 = \Yii::$app->db->createCommand($sql2)->execute();
+        return $res1 && $res2;
     }
     /**
      * 基础属性下拉列表

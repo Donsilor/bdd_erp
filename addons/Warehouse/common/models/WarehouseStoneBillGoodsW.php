@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\helpers\StringHelper;
 use common\models\backend\Member;
 use Yii;
 

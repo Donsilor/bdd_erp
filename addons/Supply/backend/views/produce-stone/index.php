@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="box-footer text-center">
                   <?php 
-                  if(true || $produce->peishi_status == PeishiStatusEnum::TO_LINGSHI) {
+                  if($produce->peishi_status == PeishiStatusEnum::TO_LINGSHI) {
                      echo Html::edit(['ajax-confirm','produce_id'=>$produce->id], '确认领石', [
                         'class'=>'btn btn-primary btn-ms',
                         'style'=>"margin-left:5px",

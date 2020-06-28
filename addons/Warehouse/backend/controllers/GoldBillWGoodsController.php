@@ -3,9 +3,11 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\FinAuditStatusEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
 use common\enums\AuditStatusEnum;
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -72,6 +74,39 @@ class GoldBillWGoodsController extends BaseController
     }
 
     /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $this->modelClass = new WarehouseGoldBillGoodsWForm();
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGoldBillGoodsWForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * ajax 审核
      *
      * @return mixed|string|\yii\web\Response
@@ -80,8 +115,8 @@ class GoldBillWGoodsController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = new WarehouseGoldBillGoodsW();
-        $model = $this->findModel($id) ?? new WarehouseGoldBillGoodsW();
+        $this->modelClass = new WarehouseGoldBillGoodsWForm();
+        $model = $this->findModel($id) ?? new WarehouseGoldBillGoodsWForm();
         //默认值
         if($model->fin_status == FinAuditStatusEnum::PENDING) {
             $model->fin_status = FinAuditStatusEnum::PASS;
@@ -95,7 +130,7 @@ class GoldBillWGoodsController extends BaseController
                 $model->fin_check_time = time();
                 $model->fin_checker = (string) \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldBill->auditFinW($model);
+                \Yii::$app->warehouseService->goldBillW->auditFinW($model);
 
                 $trans->commit();
 
@@ -109,5 +144,45 @@ class GoldBillWGoodsController extends BaseController
             'model' => $model,
         ]);
     }
-    
+
+    /**
+     * 批量审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchAudit()
+    {
+        $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
+        $model = new WarehouseGoldBillGoodsWForm();
+        $model->ids = $ids;
+        //默认值
+        if($model->fin_status == FinAuditStatusEnum::PENDING) {
+            $model->fin_status = FinAuditStatusEnum::PASS;
+        }
+        if($check){
+            try{
+                \Yii::$app->warehouseService->goldBillW->auditGoodsValidate($model);
+                return ResultHelper::json(200, '', ['url'=>'/warehouse/gold-bill-w-goods/batch-audit?ids='.$ids]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                \Yii::$app->warehouseService->goldBillW->auditFinW($model);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 }

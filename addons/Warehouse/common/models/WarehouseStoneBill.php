@@ -19,6 +19,7 @@ use Yii;
  * @property int $adjust_type 调整类型 0扣减 1增加
  * @property int $account_type 结算方式
  * @property int $total_num 石包总数
+ * @property int $total_grain 石包总粒数
  * @property string $total_weight 石包总重量
  * @property string $total_cost 石包总价
  * @property string $pay_amount 采购支付金额
@@ -54,7 +55,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'total_grain', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -79,6 +80,7 @@ class WarehouseStoneBill extends BaseModel
             'adjust_type' => '调整类型',
             'account_type' => '结算方式',
             'total_num' => '明细总数',
+            'total_grain' => '石料总粒数',
             'total_weight' => '石料总重(ct)',
             'total_cost' => '石料总成本',
             'pay_amount' => '采购支付金额',
