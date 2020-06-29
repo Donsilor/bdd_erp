@@ -124,12 +124,14 @@ class BillCGoodsController extends BaseController
                 if(!$goods){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
-                if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                    return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                if(in_array($bill->delivery_type, [DeliveryTypeEnum::PROXY_PRODUCE, DeliveryTypeEnum::PART_GOODS, DeliveryTypeEnum::ASSEMBLY])){
+                    if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
+                        return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                    }
+                    if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
+                        return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                    }
                 }
-                /*if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                    return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
-                }*/
                 $goods_info = [];
                 $goods_info['id'] = null;
                 $goods_info['goods_id'] = $goods_id;
