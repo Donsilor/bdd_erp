@@ -81,10 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-                $attr_list = $model->getAttrList();
+                $attr_list = \Yii::$app->styleService->attribute->module(\addons\Style\common\enums\AttrModuleEnum::STYLE)->getAttrListByCateId($model->style_cate_id,\addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
-                    $attr_id  = $attr['attr_id'];//属性ID
-                    $attr_values = $attr['attr_values'];//属性值
+                    $attr_id  = $attr['id'];//属性ID
                     $is_require = $attr['is_require'];
                     $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
 
@@ -96,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             break;
                         }
                         default:{
-                            $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                            $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
                             $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                             break;
                         }

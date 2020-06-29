@@ -84,20 +84,22 @@ $this->params['breadcrumbs'][] = $this->title;
                    </div>   
                   <?php }?>
                 <?php
-                $attr_type = \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
-                $attr_list = \Yii::$app->styleService->attribute->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
+                $attr_list = \Yii::$app->styleService->attribute->module(\addons\Style\common\enums\AttrModuleEnum::QIBAN)->getAttrListByCateId($model->style_cate_id,\addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
-                    $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';
-                    $attr_field_name = "{$attr_field}[{$attr['id']}]";
-                    //通用属性值列表
-                    $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);
+                    $attr_id  = $attr['id'];//属性ID
+                    $is_require = $attr['is_require'];
+                    $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
+
+                    $_field = $is_require == 1 ? 'attr_require':'attr_custom';
+                    $field = "{$_field}[{$attr_id}]";
                     switch ($attr['input_type']){
                         case common\enums\InputTypeEnum::INPUT_TEXT :{
-                            $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
+                            $input = $form->field($model,$field)->textInput()->label($attr_name);
                             break;
                         }
                         default:{
-                            $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
+                            $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);
+                            $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                             break;
                         }
                     }//end switch

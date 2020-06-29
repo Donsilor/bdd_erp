@@ -79,7 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	  $attr_type = JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
             	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['id'];//属性ID                      

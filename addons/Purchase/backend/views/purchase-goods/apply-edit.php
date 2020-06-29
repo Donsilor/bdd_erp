@@ -57,28 +57,28 @@ $this->params['breadcrumbs'][] = $this->title;
                  </div>
             	<?php
             	  $attr_list = $model->getAttrList();
-            	  foreach ($attr_list as $k=>$attr){ 
-                      $attr_id  = $attr['attr_id'];//属性ID                      
-                      $attr_values = $attr['attr_values'];//属性值
-                      $is_require = $attr['is_require'];                     
+            	  foreach ($attr_list as $k=>$attr){
+                      $attr_id  = $attr['id'];//属性ID
+                      $is_require = $attr['is_require'];
                       $attr_name = \Yii::$app->attr->attrName($attr_id);//属性名称
-                      
+
                       $_field = $is_require == 1 ? 'attr_require':'attr_custom';
                       $field = "{$_field}[{$attr_id}]";
                       switch ($attr['input_type']){
                           case common\enums\InputTypeEnum::INPUT_TEXT :{
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
-                          }  
-                          case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE: {
-                              $input = $form->field($model,$field)->textInput()->label($attr_name);
-                              break;
                           }
-                          default:{                               
-                              if($attr_values == '') {
+                          default:{
+                              if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NON_VERSION) {
+                                  //获取款式属性值列表
+                                  $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
+                              }else{
+                                  //获取起版属性值列表
+                                  $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);
+                              }
+                              if(empty($attr_values)) {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
-                              }else {
-                                  $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
                               }
                               $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                               break;
