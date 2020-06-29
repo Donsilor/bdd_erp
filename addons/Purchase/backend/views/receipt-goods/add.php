@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'produce_sns')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                     </div>
                     <div class="col-lg-1">

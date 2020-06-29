@@ -87,7 +87,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'attribute' => 'goods_num',

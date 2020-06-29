@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
@@ -31,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == \addons\Warehouse\common\enums\DeliveryTypeEnum::BORROW_GOODS) {
+        if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == DeliveryTypeEnum::BORROW_GOODS) {
             echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
             ]);
@@ -190,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                        if($bill->bill_status == BillStatusEnum::SAVE && $bill->delivery_type == DeliveryTypeEnum::QUICK_SALE) {
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',

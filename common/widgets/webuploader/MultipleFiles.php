@@ -131,7 +131,7 @@ class MultipleFiles extends InputWidget
 
         if (!empty($this->typeConfig['takeOverUrl']) && $this->config['independentUrl'] == false) {
             $this->config['server'] = $this->typeConfig['takeOverUrl'];
-        }
+        }        
     }
 
     /**
@@ -139,7 +139,7 @@ class MultipleFiles extends InputWidget
      * @throws \Exception
      */
     public function run()
-    {
+    {        
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         $name = $this->hasModel() ? Html::getInputName($this->model, $this->attribute) : $this->name;
         $boxId = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->boxId;
@@ -182,9 +182,7 @@ class MultipleFiles extends InputWidget
                 $datum = Json::encode($datum);
             }
         }
-
         $this->registerClientScript($name,$boxId);
-
         return $this->render($this->theme, [
             'name' => $name,
             'value' => $value,
@@ -207,6 +205,10 @@ class MultipleFiles extends InputWidget
         $disabled = $this->themeConfig['sortable'] ?? true;
 
         $view->registerJs(<<<Js
+    var uploadObj,uploadTrigers;
+    $(document).on("click", ".selectMuti",function(){
+        imageObj = $(this);
+    });
     var sortable = '{$disabled}';
     if (sortable) {
            // 拖动排序
@@ -264,12 +266,20 @@ class MultipleFiles extends InputWidget
 
         parentObj.remove();
     });
-
+    $(".upload-box").click(function(){
+          uploadObj = $(this);
+          uploadTrigers  = 0;
+    });
     // 上传成功
     $(document).on('upload-success-' + boxId, function(e, data, config){
+        if (uploadTrigers > 0) {
+            return;
+        }
+        uploadTrigers++;
+
         let multiple = config.pick.multiple;
         // 判断是否是多图上传
-        let obj = $('#' + boxId + ' .upload-box');
+        let obj = uploadObj;
         if (multiple === 'false' || multiple === false){
             $(obj).addClass('hide');
         }
@@ -373,16 +383,15 @@ class MultipleFiles extends InputWidget
     });
     // 选择回调
     $(document).on('select-file-' + boxId, function(e, boxId, data){
-   
-        
-        console.log(3333,boxId)
-        
-        if (data.length === 0) {
+       
+        if (uploadTrigers > 0 || data.length === 0) {
             return;
         }
+        uploadTrigers++;
         let multiple =  $('#' + boxId).data('multiple');
         // 判断是否是多图上传
-        let obj = $('#' + boxId + ' .upload-box');
+        let obj = uploadObj;
+        
         if (multiple === 'false' || multiple === false || multiple === ''){
             $(obj).addClass('hide');
             // 增加显示

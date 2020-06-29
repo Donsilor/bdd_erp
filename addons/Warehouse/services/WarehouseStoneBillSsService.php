@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -57,4 +58,24 @@ class WarehouseStoneBillSsService extends Service
         return $billM;
     }
 
+    /**
+     * 领石单-审核
+     * @param $form
+     */
+    public function auditBillSs($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+
+        if($form->audit_status == AuditStatusEnum::PASS){
+            $form->bill_status = BillStatusEnum::CONFIRM;
+        }else{
+            $form->bill_status = BillStatusEnum::SAVE;
+        }
+
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
 }
