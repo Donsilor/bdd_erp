@@ -65,4 +65,19 @@ class QibanAttributeService extends Service
         return QibanAttribute::find()->where(['qiban_id'=>$qiban_id,'attr_type'=>$attr_type])->asArray()->all();
     }
     
+    /**
+     * 起版属性值下拉列表
+     * @param unknown $style_id
+     * @param unknown $attr_id
+     * @return array|array
+     */
+    public function getDropdowns($qiban_id,$attr_id)
+    {
+        $model = QibanAttribute::find()->select(['attr_values'])->where(['qiban_id'=>$qiban_id,'attr_id'=>$attr_id])->one();
+        if(empty($model) || !$model->attr_values){
+            return [];
+        }
+        return Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
+    }
+    
 }

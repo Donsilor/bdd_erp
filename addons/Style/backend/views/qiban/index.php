@@ -226,7 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'edit' => function($url, $model, $key){
                         //审核后不能编辑
-                        if(!$model->purchaseGoods){
+                        //if(!$model->purchaseGoods){
                             if($model->qiban_type == QibanTypeEnum::HAVE_STYLE){
                                 return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
@@ -242,7 +242,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-offset'=>'20px',
                                 ]);
                             }
-                        }
+                        //}
 
                     },
                     'apply' => function($url, $model, $key){
