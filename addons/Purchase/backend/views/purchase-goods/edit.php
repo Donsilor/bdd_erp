@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                   $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);    
                               }
                               if(empty($attr_values)) {
-                                  $attr_values = Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getValuesByAttrId($attr_id);
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }
                               $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                               break;
