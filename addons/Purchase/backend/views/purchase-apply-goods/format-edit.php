@@ -87,7 +87,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         'pick' => [
                                                             'multiple' => true,
                                                         ],
-                                                    ]
+                                                    ],
+
                                                 ]
 
                                             ]

@@ -81,13 +81,6 @@ class MultipleFiles extends InputWidget
         $this->typeConfig = Yii::$app->params['uploadConfig'][$this->type];
         $this->boxId = md5($this->name) . StringHelper::uuid();
 
-        $name = $this->name;
-        echo $name;
-        echo '<br/>';
-        $a = md5($name);
-        print_r($a);
-        echo '<br/>';
-        print_r($name);
         $this->themeConfig = ArrayHelper::merge([
             'select' => true, // 显示选择文件
             'sortable' => true, // 是否开启排序
