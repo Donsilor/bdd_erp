@@ -76,18 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'stone_status',
-                            'value' => function ($model){
-                                return StoneStatusEnum::getValue($model->stone_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',StoneStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
                             'attribute'=>'stock_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
                                 'class' => 'form-control',
@@ -158,6 +146,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute'=>'created_at',
