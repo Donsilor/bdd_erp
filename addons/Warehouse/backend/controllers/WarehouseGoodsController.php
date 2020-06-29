@@ -38,7 +38,7 @@ class WarehouseGoodsController extends BaseController
             ],
             'pageSize' => $this->getPageSize(),
             'relations' => [
-                'productType' => ['name'],
+                'productType' => ['name','is_inlay'],
                 'styleCate' => ['name'],
                 'supplier' => ['supplier_name'],
                 'warehouse' => ['name'],

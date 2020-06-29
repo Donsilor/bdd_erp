@@ -33,10 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\SerialColumn',
                             'visible' => false,
                         ],
+//                        [
+//                            'class'=>'yii\grid\CheckboxColumn',
+//                            'name'=>'id',  //设置每行数据的复选框属性
+//                            'headerOptions' => ['width'=>'30'],
+//                        ],
                         [
-                            'class'=>'yii\grid\CheckboxColumn',
-                            'name'=>'id',  //设置每行数据的复选框属性
-                            'headerOptions' => ['width'=>'30'],
+                            'label' => '商品图片',
+                            'value' => function ($model) {
+                                return \common\helpers\ImageHelper::fancyBox($model->goods_image,90,90);
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'90'],
                         ],
                         [
                             'attribute' => 'goods_id',
@@ -87,6 +96,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'attribute' => 'style_cate_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => 'styleCate.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:120px;'
+
+                            ]),
+                        ],
+                        [
                             'attribute' => 'product_type_id',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -100,18 +121,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
+
                         [
-                            'attribute' => 'style_cate_id',
+                            'attribute' => 'productType.is_inlay',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => 'styleCate.name',
-                            'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate::getDropDown(), [
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\InlayEnum::getValue($model->productType->is_inlay);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'productType.is_inlay',\addons\Style\common\enums\InlayEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'style_channel_id',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function($model){
+                                return $model->channel->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:120px;'
 
                             ]),
                         ],
+
+
                         [
                             'attribute' => 'jintuo_type',
                             'format' => 'raw',
@@ -125,21 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                             ]),
                         ],
-                        [
-                            'attribute'=>'is_apply',
-                            'value'=>function($model){
-                                return \common\enums\ConfirmEnum::getValue($model->is_apply);
-                            },
-                            'filter' => false,
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'label' => '申请编辑人',
-                            'attribute' => 'apply.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'headerOptions' => ['width'=>'100'],
 
-                        ],
                         [
                             'attribute' => 'goods_status',
                             'format' => 'raw',
@@ -405,44 +430,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:150px;'
                             ]),
                         ],
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'header' => '操作',
-                            'template' => '{edit} {ajax-apply} {apply-view}',
-                            'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                    if(\Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
-                                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'class' => 'btn btn-primary btn-sm openIframe',
-                                            'data-width' => '90%',
-                                            'data-height' => '90%',
-                                            'data-offset' => '20px',
-                                        ]);
-                                    }
-                                },
-
-                                'ajax-apply' => function($url, $model, $key){
-                                    if(\Yii::$app->warehouseService->warehouseGoods->applyStatus($model)){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
-
-                                'apply-view' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                        return Html::edit(['apply-view','id'=>$model->id], '查看审批', [
-                                            'class'=>'btn btn-danger btn-sm',
-                                        ]);
-                                    }
-                                },
-                                'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
-                                },
-                            ],
-
-                        ]
+//                        [
+//                            'class' => 'yii\grid\ActionColumn',
+//                            'header' => '操作',
+//                            'template' => '{edit} {ajax-apply} {apply-view}',
+//                            'buttons' => [
+//                                'edit' => function($url, $model, $key){
+//                                    if(\Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
+//                                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+//                                            'class' => 'btn btn-primary btn-sm openIframe',
+//                                            'data-width' => '90%',
+//                                            'data-height' => '90%',
+//                                            'data-offset' => '20px',
+//                                        ]);
+//                                    }
+//                                },
+//
+//                                'ajax-apply' => function($url, $model, $key){
+//                                    if(\Yii::$app->warehouseService->warehouseGoods->applyStatus($model)){
+//                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+//                                            'class'=>'btn btn-success btn-sm',
+//                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+//                                        ]);
+//                                    }
+//                                },
+//
+//                                'apply-view' => function($url, $model, $key){
+//                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+//                                        return Html::edit(['apply-view','id'=>$model->id], '查看审批', [
+//                                            'class'=>'btn btn-danger btn-sm',
+//                                        ]);
+//                                    }
+//                                },
+//                                'delete' => function($url, $model, $key){
+//                                    return Html::delete(['delete', 'id' => $model->id]);
+//                                },
+//                            ],
+//
+//                        ]
                     ]
                 ]); ?>
             </div>

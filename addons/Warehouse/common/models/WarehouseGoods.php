@@ -4,6 +4,7 @@ namespace addons\Warehouse\common\models;
 
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
 use common\models\base\BaseModel;
@@ -90,10 +91,10 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['product_type_id','style_sex' ,'style_cate_id', 'goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2','gold_price','gold_amount'], 'number'],
-            [['goods_name', 'cert_id', 'length'], 'string', 'max' => 100],
+            [['goods_name', 'cert_id', 'length','kezi'], 'string', 'max' => 100],
             [['style_sn','goods_id'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn'], 'string', 'max' => 20],
             [['finger', 'order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
@@ -111,12 +112,13 @@ class WarehouseGoods extends BaseModel
     {
         return [
             'id' => 'ID',
-            'goods_id' => '库存货号',
+            'goods_id' => '商品编码',
             'goods_name' => '商品名称',
-            'style_sn' => '款号',
+            'style_sn' => '款式编号',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
+            'style_channel_id' => '所属渠道',
             'goods_status' => '商品状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
@@ -187,6 +189,7 @@ class WarehouseGoods extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
+            'kezi' => '刻字',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -200,7 +203,7 @@ class WarehouseGoods extends BaseModel
      */
     public function getProductType()
     {
-        return $this->hasOne(ProductType::class, ['id'=>'product_type_id']);
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('productType');
     }
 
     /**
@@ -212,6 +215,14 @@ class WarehouseGoods extends BaseModel
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
     }
 
+    /**
+     * 款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
+    }
     /**
      * 关联供应商一对一
      * @return \yii\db\ActiveQuery

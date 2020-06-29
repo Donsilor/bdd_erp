@@ -433,9 +433,9 @@ class PurchaseController extends BaseController
             $list['gold_weight_sum'] = $list['gold_weight'] * $list['goods_num'];
 
             //工厂总额
-            $list['factory_cost_price_sum'] = $list['factory_cost_price'] * $list['goods_num'];
+            $list['factory_cost_price_sum'] = $list['factory_total_price'];
             //公司成本总额
-            $list['company_unit_cost_sum'] = $list['company_unit_cost'] * $list['goods_num'];
+            $list['company_unit_cost_sum'] = $list['company_total_price'];
 
             //统计
             $total['goods_num_count'] += $list['goods_num'];  //件数
