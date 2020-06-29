@@ -66,6 +66,43 @@ class BillCGoodsController extends BaseController
     }
 
     /**
+     * ajax添加商品
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillCGoodsForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                //更新收货单汇总：总金额和总数量
+                $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
+                if(false === $res){
+                    throw new Exception('更新单据汇总失败');
+                }
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * 编辑/创建
      * @property WarehouseBillBForm $model
      * @return mixed
@@ -90,9 +127,9 @@ class BillCGoodsController extends BaseController
                 if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
                     return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
-                if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
+                /*if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
                     return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
-                }
+                }*/
                 $goods_info = [];
                 $goods_info['id'] = null;
                 $goods_info['goods_id'] = $goods_id;
@@ -194,7 +231,7 @@ class BillCGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -244,15 +281,12 @@ class BillCGoodsController extends BaseController
             $bill->save();
 
             //更新库存表商品状态为库存
-            $res = WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_RETURN_FACTORY]);
-            if($res == 0){
-                throw new Exception("商品不是返厂中或者不存在，请查看原因");
-            }
+            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['bill-b-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['bill-c-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['bill-b-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['bill-c-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
 
