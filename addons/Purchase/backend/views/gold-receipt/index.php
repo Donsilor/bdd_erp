@@ -59,6 +59,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => [],
             ],
             [
+                'label' => '采购收货单号',
                 'attribute' => 'receipt_no',
                 'value'=>function($model) {
                     return Html::a($model->receipt_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);

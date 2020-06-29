@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'stone_sn',
                             'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                 'class' => 'form-control',
-                                'style' => 'width:120px',
+                                'style' => 'width:100px',
                             ]),
                             'headerOptions' => [],
                         ],
