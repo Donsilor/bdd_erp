@@ -763,6 +763,6 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->stoneBill->createBillMs($bill, $goods);
+        Yii::$app->warehouseService->stoneMs->createBillMs($bill, $goods);
     }
 }

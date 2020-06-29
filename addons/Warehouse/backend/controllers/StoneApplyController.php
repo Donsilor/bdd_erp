@@ -186,7 +186,7 @@ class StoneApplyController extends BaseController
                     }
                 }
                 //创建单据
-                $bill = Yii::$app->warehouseService->stoneBill->createBillSs($bill,$details);
+                $bill = Yii::$app->warehouseService->stoneSs->createBillSs($bill,$details);
                //绑定领石单
                 ProduceStone::updateAll(['delivery_no'=>$bill->bill_no],['id'=>$ids]);
                 
