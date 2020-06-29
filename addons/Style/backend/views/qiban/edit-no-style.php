@@ -187,25 +187,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'type'  => 'dropDownList',
                                     'options' => [
                                         'class' => 'input-priority',
-                                        'style'=>'width:160px',
                                         'prompt'=>'请选择',
+                                        'style'=>'min-width:120px',
                                     ],
                                     'items' => \addons\Purchase\common\enums\SpecialCraftEnum::getMap()
                                 ],
                                 [
                                     'name' =>'format_craft_desc',
                                     'title'=>"工艺描述",
+                                    'type'  => 'textArea',
                                     'defaultValue' => '',
                                     'options' => [
                                         'class' => 'input-priority',
-                                        'style'=>'width:160px',
+                                        'style'=>'min-width:200px;height:80px',
                                     ],
                                 ],
                                 [
                                     'name' =>'format_craft_images',
                                     'title'=>'工艺图片',
                                     'type'=> common\widgets\webuploader\MultipleFiles::class,
-                                    'options'=>[
+                                    'options'=>[                                        
                                         'config' => [
                                             'pick' => [
                                                 'multiple' => true,
