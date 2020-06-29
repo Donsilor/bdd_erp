@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'stone_sn',
                             'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                 'class' => 'form-control',
-                                'style' => 'width:120px',
+                                'style' => 'width:100px',
                             ]),
                             'headerOptions' => [],
                         ],
@@ -74,18 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute' => 'stone_status',
-                            'value' => function ($model){
-                                return StoneStatusEnum::getValue($model->stone_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',StoneStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                            ]),
-                            'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'stock_cnt',
@@ -124,7 +112,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_color);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -132,7 +123,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_clarity);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -140,7 +134,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_symmetry);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -148,7 +145,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_polish);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -156,8 +156,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_fluorescence);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute'=>'created_at',
@@ -269,7 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],*/
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
@@ -280,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-                        ]
+                        ]*/
                     ]
                 ]); ?>
             </div>

@@ -121,6 +121,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
+                            'attribute' => 'gold_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,

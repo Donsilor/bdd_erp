@@ -51,7 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
                             ],
                             [
                                 'attribute'=>'id',
@@ -66,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:140px;'
+                                    'style'=> 'width:60px;'
                                 ]),
                             ],
                             [
@@ -80,6 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'goods_weight',

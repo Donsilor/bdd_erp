@@ -119,4 +119,12 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
     }
+    /**
+     * 关联采购收货明细
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecGoods()
+    {
+        return $this->hasOne(PurchaseReceiptGoods::class, ['id'=>'receipt_detail_id'])->alias('rec_goods');
+    }
 }

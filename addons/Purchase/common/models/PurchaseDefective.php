@@ -62,7 +62,7 @@ class PurchaseDefective extends BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户ID',
-            'defective_no' => '返厂单编号',
+            'defective_no' => '退石单编号',
             'supplier_id' => '工厂名称',
             'purchase_sn' => '采购单号',
             'purchase_type' => '采购类型',
