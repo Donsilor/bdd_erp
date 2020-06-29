@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -44,8 +45,8 @@ class WarehouseBillCService extends WarehouseBillService
             $goods['bill_id'] = $form->id;
             $goods['bill_no'] = $form->bill_no;
             $goods['bill_type'] = $form->bill_type;
-            $goods['warehouse_id'] = $form->to_warehouse_id;
-            $goods['put_in_type'] = $goods_info['put_in_type'];
+            $goods['warehouse_id'] = $goods_info->warehouse_id;
+            $goods['put_in_type'] = $goods_info->put_in_type;
             $goods_val[] = array_values($goods);
             $goods_id_arr[] = $goods_id;
         }
@@ -53,7 +54,15 @@ class WarehouseBillCService extends WarehouseBillService
         \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
 
         //更新商品库存状态
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_LEND],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+        if($form->delivery_type == DeliveryTypeEnum::BORROW_GOODS){
+            $status = GoodsStatusEnum::IN_LEND;
+        }elseif($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
+            $status = GoodsStatusEnum::IN_SALE;
+        }else{
+            //其他出库类型
+            $status = GoodsStatusEnum::IN_STOCK;//待定
+        }
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
@@ -86,17 +95,32 @@ class WarehouseBillCService extends WarehouseBillService
         if(empty($billGoods) && $form->audit_status == AuditStatusEnum::PASS){
             throw new \Exception("单据明细不能为空");
         }
-        $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
-        $condition = ['goods_status' => GoodsStatusEnum::IN_LEND, 'goods_id' => $goods_ids];
-        $status = $form->audit_status == AuditStatusEnum::PASS ? GoodsStatusEnum::IN_LEND : GoodsStatusEnum::HAS_LEND;
-        $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
-        if(false === $res){
-            throw new \Exception("更新货品状态失败");
+        if($form->audit_status == AuditStatusEnum::PASS){
+            $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
+            //更新商品库存状态
+            if($form->delivery_type == DeliveryTypeEnum::BORROW_GOODS){
+                $status = GoodsStatusEnum::HAS_LEND;
+                $conStatus = GoodsStatusEnum::IN_LEND;
+            }elseif($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
+                $status = GoodsStatusEnum::HAS_SOLD;
+                $conStatus = GoodsStatusEnum::IN_SALE;
+            }else{
+                //其他出库类型
+                $status = GoodsStatusEnum::IN_STOCK;//待定
+                $conStatus = GoodsStatusEnum::IN_STOCK;//待定
+            }
+            $condition = ['goods_status' => $conStatus, 'goods_id' => $goods_ids];
+            $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
+            if(false === $res){
+                throw new \Exception("更新货品状态失败");
+            }
         }
-        $ids = ArrayHelper::getColumn($billGoods, 'id');
-        $res = WarehouseBillGoods::updateAll(['status' => LendStatusEnum::LEND], ['id' => $ids]);
-        if(false === $res){
-            throw new \Exception("更新明细商品状态失败");
+        if($form->delivery_type == DeliveryTypeEnum::BORROW_GOODS){
+            $ids = ArrayHelper::getColumn($billGoods, 'id');
+            $res = WarehouseBillGoods::updateAll(['status' => LendStatusEnum::LEND], ['id' => $ids]);
+            if(false === $res){
+                throw new \Exception("更新明细商品状态失败");
+            }
         }
     }
 

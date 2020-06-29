@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        if($bill->bill_status == BillStatusEnum::CONFIRM) {
+        if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == \addons\Warehouse\common\enums\DeliveryTypeEnum::BORROW_GOODS) {
             echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
             ]);
@@ -162,7 +162,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'label'=>'归还状态',
+                                'attribute' => 'sale_price',
+                                'filter' => false,
+                            ],
+                            [
+                                'label'=>'状态',
                                 'attribute' => 'status',
                                 'format' => 'raw',
                                 'value' => function ($model){
@@ -172,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'label'=> '质检备注',
@@ -183,13 +187,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
-                                    'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                    'edit' => function($url, $model, $key) use($bill) {
+                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class'=>'btn btn-primary btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModal',
+                                            ]);
                                         }
-
+                                    },
+                                    'delete' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == BillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除',['class'=>'btn btn-danger btn-xs']);
+                                        }
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-3'],
