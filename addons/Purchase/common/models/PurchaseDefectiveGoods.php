@@ -125,6 +125,6 @@ class PurchaseDefectiveGoods extends BaseModel
      */
     public function getRecGoods()
     {
-        return $this->hasOne(PurchaseReceiptGoods::class, ['id'=>'receipt_detail_id'])->alias('rec_goods');
+        return $this->hasOne(PurchaseReceiptGoods::class, ['id'=>'receipt_detail_id'])->alias('recGoods');
     }
 }
