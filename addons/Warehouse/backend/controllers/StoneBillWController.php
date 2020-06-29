@@ -2,35 +2,29 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\StoneBillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
-use addons\Warehouse\common\forms\WarehouseStoneBillWForm;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\models\WarehouseStoneBill;
 use Yii;
 use common\traits\Curd;
+use common\enums\AuditStatusEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseStoneBillWForm;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\models\WarehouseStoneBill;
+use addons\Warehouse\common\models\WarehouseBillW;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\PageHelper;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
-use common\enums\AuditStatusEnum;
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\PandianStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseBillW;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
-use common\helpers\PageHelper;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -110,7 +104,7 @@ class StoneBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();               
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->stoneBillW->createBillW($model);
+                    $model = Yii::$app->warehouseService->stoneW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -147,7 +141,7 @@ class StoneBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->stoneBillW->finishBillW($id);
+            \Yii::$app->warehouseService->stoneW->finishBillW($id);
             
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -170,7 +164,7 @@ class StoneBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             //\Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->stoneBillW->billWSummary($id);
+            \Yii::$app->warehouseService->stoneW->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -217,7 +211,7 @@ class StoneBillWController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->stoneBillW->pandianGoods($model);
+                Yii::$app->warehouseService->stoneW->pandianGoods($model);
                 
                 $trans->commit();
                 
@@ -256,7 +250,7 @@ class StoneBillWController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
-                \Yii::$app->warehouseService->stoneBillW->auditBillW($model);
+                \Yii::$app->warehouseService->stoneW->auditBillW($model);
                 
                 $trans->commit();
                 

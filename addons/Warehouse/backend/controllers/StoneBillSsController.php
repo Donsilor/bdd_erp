@@ -175,15 +175,13 @@ class StoneBillSsController extends StoneBillController
     }
 
     /**
-     * ajax 买石单-审核
+     * ajax 领石单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
     public function actionAjaxAudit()
     {
-        return $this->message("无权限审核", $this->redirect(Yii::$app->request->referrer), 'error');
-        
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         // ajax 校验
@@ -196,7 +194,7 @@ class StoneBillSsController extends StoneBillController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->stoneBill->auditBillMs($model);
+                \Yii::$app->warehouseService->stoneSs->auditBillSs($model);
 
                 $trans->commit();
 

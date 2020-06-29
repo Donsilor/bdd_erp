@@ -2,20 +2,17 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\FinAuditStatusEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
-use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
-use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
-use common\enums\AuditStatusEnum;
-use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\enums\FinAuditStatusEnum;
+use common\helpers\ResultHelper;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -130,7 +127,7 @@ class GoldBillWGoodsController extends BaseController
                 $model->fin_check_time = time();
                 $model->fin_checker = (string) \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldBillW->auditFinW($model);
+                \Yii::$app->warehouseService->goldW->auditFinW($model);
 
                 $trans->commit();
 
@@ -163,7 +160,7 @@ class GoldBillWGoodsController extends BaseController
         }
         if($check){
             try{
-                \Yii::$app->warehouseService->goldBillW->auditGoodsValidate($model);
+                \Yii::$app->warehouseService->goldW->auditGoodsValidate($model);
                 return ResultHelper::json(200, '', ['url'=>'/warehouse/gold-bill-w-goods/batch-audit?ids='.$ids]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
@@ -172,7 +169,7 @@ class GoldBillWGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                \Yii::$app->warehouseService->goldBillW->auditFinW($model);
+                \Yii::$app->warehouseService->goldW->auditFinW($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

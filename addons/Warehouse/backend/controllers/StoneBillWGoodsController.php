@@ -102,7 +102,7 @@ class StoneBillWGoodsController extends BaseController
                 $model->fin_check_time = time();
                 $model->fin_checker = (string) \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->stoneBillW->auditFinW($model);
+                \Yii::$app->warehouseService->stoneW->auditFinW($model);
 
                 $trans->commit();
 
@@ -135,7 +135,7 @@ class StoneBillWGoodsController extends BaseController
         }
         if($check){
             try{
-                \Yii::$app->warehouseService->stoneBillW->auditGoodsValidate($model);
+                \Yii::$app->warehouseService->stoneW->auditGoodsValidate($model);
                 return ResultHelper::json(200, '', ['url'=>'/warehouse/stone-bill-w-goods/batch-audit?ids='.$ids]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
@@ -144,7 +144,7 @@ class StoneBillWGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                \Yii::$app->warehouseService->stoneBillW->auditFinW($model);
+                \Yii::$app->warehouseService->stoneW->auditFinW($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

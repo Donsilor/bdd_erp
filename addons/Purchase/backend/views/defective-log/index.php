@@ -4,11 +4,11 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 
-$this->title = '不良返厂单日志';
+$this->title = '日志信息';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">不良返厂单详情 - <?php echo $purchase_defective->defective_no?></h2>
+    <h2 class="page-header"><?= $this->title ?> - <?php echo $purchase_defective->defective_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">

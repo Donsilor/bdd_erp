@@ -51,7 +51,7 @@ class DefectiveGoodsController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                     'rec_goods' => ['style_sn']
+                     'recGoods' => ['style_sn']
                 ]
         ]);
 
