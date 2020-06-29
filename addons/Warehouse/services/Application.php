@@ -23,13 +23,13 @@ use common\components\Service;
  *
  * @property \addons\Warehouse\services\WarehouseGoldService $gold 金料库存
  * @property \addons\Warehouse\services\WarehouseGoldBillService $goldBill 金料单据
- * @property \addons\Warehouse\services\WarehouseGoldBillWService $goldBillW 金料盘点单
+ * @property \addons\Warehouse\services\WarehouseGoldBillWService $goldW 金料盘点单
  *
  * @property \addons\Warehouse\services\WarehouseStoneService $stone 石包库存
  * @property \addons\Warehouse\services\WarehouseStoneBillService $stoneBill 石包单据
  * @property \addons\Warehouse\services\WarehouseStoneBillMsService $stoneMs 入库单(买石单)
  * @property \addons\Warehouse\services\WarehouseStoneBillSsService $stoneSs 领石单(送石单)
- * @property \addons\Warehouse\services\WarehouseStoneBillWService $stoneBillW 石料盘点单
+ * @property \addons\Warehouse\services\WarehouseStoneBillWService $stoneW 石料盘点单
  *
  */
 class Application extends Service
@@ -54,12 +54,12 @@ class Application extends Service
 
         'gold' => 'addons\Warehouse\services\WarehouseGoldService',
         'goldBill' => 'addons\Warehouse\services\WarehouseGoldBillService',
-        'goldBillW' => 'addons\Warehouse\services\WarehouseGoldBillWService',
+        'goldW' => 'addons\Warehouse\services\WarehouseGoldBillWService',
 
         'stone' => 'addons\Warehouse\services\WarehouseStoneService',
         'stoneBill' => 'addons\Warehouse\services\WarehouseStoneBillService',
         'stoneSs' => 'addons\Warehouse\services\WarehouseStoneBillSsService',
         'stoneMs' => 'addons\Warehouse\services\WarehouseStoneBillMsService',
-        'stoneBillW' => 'addons\Warehouse\services\WarehouseStoneBillWService',
+        'stoneW' => 'addons\Warehouse\services\WarehouseStoneBillWService',
     ];
 }
