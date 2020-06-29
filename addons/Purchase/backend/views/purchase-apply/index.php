@@ -58,10 +58,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value'=>function($model) {
                         return Html::a($model->apply_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => Html::activeTextInput($searchModel, 'apply_sn', [
-                            'class' => 'form-control',
-                            'style'=> 'width:150px;'
-                    ]),
+                    'filter' =>true,
                     'format' => 'raw',
                     //'headerOptions' => ['width'=>'150'],
             ],
@@ -95,7 +92,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'remark',
                     'value' => "remark",
-                    'filter' => Html::activeTextInput($searchModel, 'apply_sn', [
+                    'filter' => Html::activeTextInput($searchModel, 'remark', [
                             'class' => 'form-control',
                             'style'=> 'width:200px;'
                     ]),
