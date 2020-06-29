@@ -84,6 +84,11 @@ class BillCGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+                //更新收货单汇总：总金额和总数量
+                $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
+                if(false === $res){
+                    throw new Exception('更新单据汇总失败');
+                }
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -226,7 +231,7 @@ class BillCGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
