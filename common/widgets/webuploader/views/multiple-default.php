@@ -30,8 +30,8 @@ use common\helpers\StringHelper;
                     <i class="fa fa-cloud-upload"></i>
                     <?php if ($themeConfig['select'] === true) {?>
                         <div class="upload-box-bg hide befor-upload">
-                            <a class="first" href="<?= Url::to(['/file/selector', 'boxId' => $boxId, 'upload_type' => $type, 'multiple' => $config['pick']['multiple'], 'upload_drive' => $config['formData']['drive']])?>" data-toggle='modal' data-target='#ajaxModalMax'>选择文件</a>
-                            <a class="second upload-box-immediately">立即上传</a>
+                            <a class="first selectMuti" href="<?= Url::to(['/file/selector', 'boxId' => $boxId, 'upload_type' => $type, 'multiple' => $config['pick']['multiple'], 'upload_drive' => $config['formData']['drive']])?>" data-toggle='modal' data-target='#ajaxModalMax'>选择文件</a>
+                            <a class="second upload-box-immediately selectMuti">立即上传</a>
                         </div>
                     <?php } ?>
                     <div class="upload-box-bg hide">
