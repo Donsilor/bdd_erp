@@ -112,7 +112,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_color);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -120,7 +123,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_clarity);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -128,7 +134,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_symmetry);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -136,7 +145,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_polish);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -144,7 +156,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->stone_fluorescence);
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
@@ -271,7 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'80'],
-                        ],*/
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
@@ -282,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-                        ]
+                        ]*/
                     ]
                 ]); ?>
             </div>
