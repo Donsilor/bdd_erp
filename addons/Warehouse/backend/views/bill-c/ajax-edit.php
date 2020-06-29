@@ -26,25 +26,23 @@ $form = ActiveForm::begin([
                 'allowClear' => false
             ],
         ]);?>
-        <div class="row">
-            <div class="col-sm-6">
-                <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ]);?>
-            </div>
-            <div class="col-sm-6">
-                <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);?>
-            </div>
+        <div style="display: none" id="supplier">
+            <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
+                'data' => \Yii::$app->supplyService->supplier->getDropDown(),
+                'options' => ['placeholder' => '请选择'],
+                'pluginOptions' => [
+                    'allowClear' => false
+                ],
+            ]);?>
+        </div>
+        <div style="display: none" id="channel">
+        <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+            'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+            'options' => ['placeholder' => '请选择'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);?>
         </div>
         <?= $form->field($model, 'order_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>
@@ -55,3 +53,20 @@ $form = ActiveForm::begin([
     <button class="btn btn-primary" type="submit">保存</button>
 </div>
 <?php ActiveForm::end(); ?>
+<script>
+    $("#warehousebillcform-delivery_type").change(function(){
+        var id = $(this).find(':checked').val();
+        if($.inArray(id,['3','4','5'])>=0){
+            $("#supplier").show();
+        }else {
+            $("#warehousebillcform-supplier_id").find('select').find("option:first").prop("selected",true);
+            $("#supplier").hide();
+        }
+        if($.inArray(id,['1','2'])>=0){
+            $("#channel").show();
+        }else {
+            $("#warehousebillcform-channel_id").find('select').find("option:first").prop("selected",true);
+            $("#channel").hide();
+        }
+    })
+</script>

@@ -79,7 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	  $attr_type = JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
             	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['id'];//属性ID                      
@@ -193,34 +192,36 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_cost_price')->textInput() ?>
                         </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'company_unit_cost')->textInput() ?>
-                        </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'gold_amount')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'parts_weight')->textInput() ?>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'parts_weight')->textInput() ?>
-                        </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'parts_price')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'parts_fee')->textInput() ?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cert_fee')->textInput() ?>
                         </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
-
+                            <?= $form->field($model, 'factory_total_price')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'company_total_price')->textInput() ?>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'stone_info')->textarea() ?>

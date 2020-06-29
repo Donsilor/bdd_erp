@@ -2,50 +2,21 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\BillWStatusEnum;
-use addons\Warehouse\common\enums\FinAuditStatusEnum;
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\GoldStatusEnum;
-use addons\Warehouse\common\enums\PandianAdjustEnum;
-use addons\Warehouse\common\enums\PandianStatusEnum;
-use addons\Warehouse\common\enums\StoneBillStatusEnum;
-use addons\Warehouse\common\enums\StoneBillTypeEnum;
-use addons\Warehouse\common\enums\StoneStatusEnum;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
-use addons\Warehouse\common\models\WarehouseBillW;
-use addons\Warehouse\common\models\WarehouseGold;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
-use addons\Warehouse\common\models\WarehouseGoldBillW;
-use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
-use addons\Warehouse\common\models\WarehouseStoneBillW;
-use common\enums\ConfirmEnum;
-use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Warehouse\common\models\WarehouseStone;
+use addons\Warehouse\common\models\WarehouseStoneBill;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\enums\StoneStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
-use addons\Supply\common\models\ProduceStone;
+use common\helpers\Url;
 
 /**
  * 石包单据
@@ -137,7 +108,6 @@ class WarehouseStoneBillService extends Service
         }
         return $tabList;
     }
-
     /**
      * 单据汇总
      * @param integer $bill_id
@@ -145,6 +115,7 @@ class WarehouseStoneBillService extends Service
      */
     public function stoneBillSummary($bill_id)
     {
+        $result = [];
         $sum = WarehouseStoneBillGoods::find()
             ->select(['sum(1) as total_num','sum(stone_weight) as total_weight','sum(cost_price) as total_cost'])
             ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
@@ -153,145 +124,6 @@ class WarehouseStoneBillService extends Service
             $result = WarehouseStoneBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
         }
         return $result?:null;
-    }
-    /**
-     * 领石单（送石单）
-     * @param array $bill
-     * @param array $details
-     */
-    public function createBillSs($bill,$details) 
-    {
-        $billM = new WarehouseStoneBill();
-        $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        $billM->bill_status = BillStatusEnum::SAVE;
-        if(false === $billM->save()){
-            throw new \Exception($this->getError($billM));
-        }
-        $goodsM = new WarehouseStoneBillGoods();
-        foreach ($details as &$good){
-            $good['bill_id'] = $billM->id;
-            $good['bill_type'] = $billM->bill_type;
-            $good['bill_no'] = $billM->bill_no;
-            $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
-                throw new \Exception($this->getError($goodsM));
-            }
-        }
-        $details = ArrayHelper::toArray($details);
-        $value = [];
-        $key = array_keys($details[0]);
-        foreach ($details as $detail) {
-            $value[] = array_values($detail);
-        }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建领石单单明细失败");
-        } 
-        
-        $this->stoneBillSummary($billM->id);
-        return $billM;
-    }
-    /**
-     * 创建买石单
-     * @param array $bill
-     * @param array $details
-     */
-    public function createBillMs($bill, $details){
-        $billM = new WarehouseStoneBill();
-        $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        if(false === $billM->save()){
-            throw new \Exception($this->getError($billM));
-        }
-        $goodsM = new WarehouseStoneBillGoods();
-        foreach ($details as &$good){
-            $good['bill_id'] = $billM->id;
-            $good['bill_type'] = $billM->bill_type;
-            $good['bill_no'] = $billM->bill_no;
-            $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
-                throw new \Exception($this->getError($goodsM));
-            }
-        }
-        $details = ArrayHelper::toArray($details);
-        $value = [];
-        $key = array_keys($details[0]);
-        foreach ($details as $detail) {
-            $value[] = array_values($detail);
-        }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建买石单明细失败");
-        }
-        
-        $this->stoneBillSummary($billM->id);
-        
-        return $billM;
-    }
-    /**
-     * 买石单-审核
-     * @param $form
-     */
-    public function auditBillMs($form)
-    {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-        if($form->audit_status == AuditStatusEnum::PASS){
-            $form->bill_status = BillStatusEnum::CONFIRM;
-
-            $billGoodsList = WarehouseStoneBillGoods::find()->where(['bill_id' => $form->id])->all();
-            if(empty($billGoodsList)){
-                throw new \Exception("单据明细不能为空");
-            }
-            //石包入库
-            foreach ($billGoodsList as $billGoods) {
-                $stoneM = new WarehouseStone();
-                $stoneData = [
-                        'stone_sn' => (string) rand(10000000000,99999999999),//临时
-                        'stone_name' => $billGoods->stone_name,
-                        'stone_status' => StoneStatusEnum::IN_STOCK,
-                        'style_sn' => $billGoods->style_sn,
-                        'stone_type' => $billGoods->stone_type,
-                        'supplier_id' => $form->supplier_id,
-                        'stone_color' => $billGoods->color,
-                        'stone_clarity' => $billGoods->clarity,
-                        'stone_cut' => $billGoods->cut,
-                        'stone_symmetry' => $billGoods->symmetry,
-                        'stone_polish' => $billGoods->polish,
-                        'stone_fluorescence' => $billGoods->fluorescence,
-                        'stock_cnt' => $billGoods->stone_num,
-                        'ms_cnt' => $billGoods->stone_num,
-                        'stock_weight' => $billGoods->stone_weight,
-                        'ms_weight' => $billGoods->stone_weight,
-                        'cost_price' => $billGoods->cost_price,
-                        'sale_price' => $billGoods->sale_price,
-                ];
-                $stoneM->attributes = $stoneData;
-                if(false === $stoneM->save()){
-                    throw new \Exception($this->getError($stoneM));
-                }
-                \Yii::$app->warehouseService->stone->createStoneSn($stoneM);
-                //同步更新石料编号到单据明细
-                $billGoods->stone_sn = $stoneM->stone_sn;
-                if(false === $billGoods->save(true,['id','stone_sn'])) {
-                    throw new \Exception($this->getError($billGoods));
-                }
-            }
-            //同步石料采购收货单货品状态
-            $queryId = WarehouseStoneBillGoods::find()->select(['source_detail_id']);
-            $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$queryId]);
-            if(false === $res) {
-                throw new \Exception("同步石料采购收货单货品状态失败");
-            }
-            
-        }else{
-            $form->bill_status = BillStatusEnum::SAVE;
-        }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
-        }
     }
     /**
      * 添加单据明细

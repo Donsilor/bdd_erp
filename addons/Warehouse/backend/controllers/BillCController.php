@@ -5,6 +5,7 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\Warehouse;
@@ -109,6 +110,9 @@ class BillCController extends BaseController
             $isNewRecord = $model->isNewRecord;
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
+            }
+            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE]) && !$model->channel_id){
+                return $this->message("渠道不能为空", $this->redirect(Yii::$app->request->referrer), 'error');
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();

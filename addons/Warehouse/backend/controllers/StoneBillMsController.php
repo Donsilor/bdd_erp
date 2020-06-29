@@ -133,7 +133,7 @@ class StoneBillMsController extends StoneBillController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->stoneBill->auditBillMs($model);
+                \Yii::$app->warehouseService->stoneMs->auditBillMs($model);
 
                 $trans->commit();
 

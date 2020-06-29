@@ -48,14 +48,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'id',  //设置每行数据的复选框属性
 
                             ],
-                            [
+                            /*[
                                 'attribute'=>'id',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'id', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'xuhao',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -75,6 +75,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'goods_weight',

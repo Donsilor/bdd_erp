@@ -117,28 +117,28 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-footer text-center">
                 <?php
-                    if(Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
-                        echo Html::edit(['edit', 'id' => $model->id], '编辑', [
-                            'class' => 'btn btn-primary btn-sm openIframe',
-                            'data-width' => '90%',
-                            'data-height' => '90%',
-                            'data-offset' => '20px'
-                        ]);
-                    }
-
-                if(Yii::$app->warehouseService->warehouseGoods->applyStatus($model)) {
-                    echo '&nbsp;';
-                    echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
-                        'class' => 'btn btn-success btn-sm',
-                        'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
-                    ]);
-                }
-                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
-                    echo '&nbsp;';
-                    echo Html::edit(['apply-view', 'id' => $model->id, 'returnUrl' => \common\helpers\Url::getReturnUrl()], '查看审批', [
-                        'class' => 'btn btn-danger btn-sm',
-                    ]);
-                }
+//                    if(Yii::$app->warehouseService->warehouseGoods->editStatus($model)) {
+//                        echo Html::edit(['edit', 'id' => $model->id], '编辑', [
+//                            'class' => 'btn btn-primary btn-sm openIframe',
+//                            'data-width' => '90%',
+//                            'data-height' => '90%',
+//                            'data-offset' => '20px'
+//                        ]);
+//                    }
+//
+//                if(Yii::$app->warehouseService->warehouseGoods->applyStatus($model)) {
+//                    echo '&nbsp;';
+//                    echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
+//                        'class' => 'btn btn-success btn-sm',
+//                        'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
+//                    ]);
+//                }
+//                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+//                    echo '&nbsp;';
+//                    echo Html::edit(['apply-view', 'id' => $model->id, 'returnUrl' => \common\helpers\Url::getReturnUrl()], '查看审批', [
+//                        'class' => 'btn btn-danger btn-sm',
+//                    ]);
+//                }
                 ?>
             </div>
         </div>
