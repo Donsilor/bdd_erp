@@ -79,9 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
     			<?php }?>        			 
 
             	<?php
-            	  //$attr_list = $model->getAttrList();
             	  $attr_type = JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap');
-            	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,$attr_type,$model->is_inlay);
+            	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
             	  foreach ($attr_list as $k=>$attr){ 
                       $attr_id  = $attr['id'];//属性ID                      
                       $is_require = $attr['is_require'];                     
@@ -96,9 +95,14 @@ $this->params['breadcrumbs'][] = $this->title;
                           }
                           default:{
                               if($model->qiban_type == QibanTypeEnum::NON_VERSION) {
-                                  $attr_values = Yii::$app->styleService->attribute->getValuesByValueIds($attr_values);
+                                  //获取款式属性值列表
+                                  $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
                               }else{
-                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);    
+                                  //获取起版属性值列表
+                                  $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);    
+                              }
+                              if(empty($attr_values)) {
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }
                               $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                               break;
