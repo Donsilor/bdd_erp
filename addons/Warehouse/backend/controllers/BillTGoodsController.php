@@ -180,7 +180,7 @@ class BillTGoodsController extends BaseController
         }
         $check = Yii::$app->request->get('check',null);
         if($check){
-            return ResultHelper::json(200, '', ['url'=>'/warehouse/bill-t-goods/batch-edit?ids='.$ids.'&name='.$name."&attr_id=".$attr_id]);
+            return ResultHelper::json(200, '', ['url'=>Url::to(['batch-edit', 'ids'=>$ids, 'name'=>$name, 'attr_id'=>$attr_id])]);
         }
         $style_arr = $model::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if(count($style_arr) != 1){

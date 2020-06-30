@@ -193,7 +193,7 @@ class BillCGoodsController extends BaseController
         if($check){
             try{
                 $bill_id = \Yii::$app->warehouseService->billC->returnGoodsValidate($model);
-                return ResultHelper::json(200, '', ['url'=>'/warehouse/bill-c-goods/return-goods?id='.$bill_id.'&ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to(['return-goods', 'id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
