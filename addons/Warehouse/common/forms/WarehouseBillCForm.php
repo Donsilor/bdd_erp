@@ -22,7 +22,7 @@ class WarehouseBillCForm extends WarehouseBill
     public function rules()
     {      
          $rules = [
-            [['delivery_type', 'order_sn'], 'required']
+            [['delivery_type'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }

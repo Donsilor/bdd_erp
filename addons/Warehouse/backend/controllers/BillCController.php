@@ -111,8 +111,13 @@ class BillCController extends BaseController
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
             }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE]) && !$model->channel_id){
-                return $this->message("渠道不能为空", $this->redirect(Yii::$app->request->referrer), 'error');
+            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE])){
+                if(!$model->channel_id){
+                    return $this->message("渠道不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                if(!$model->order_sn){
+                    return $this->message("订单号不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();
