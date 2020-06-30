@@ -66,7 +66,7 @@ class WarehouseGold extends BaseModel
             'style_sn' => '金料款号',
             'supplier_id' => '供应商',
             'gold_num' => '金料数量',
-            'gold_weight' => '库存重量/克',
+            'gold_weight' => '库存重量(g)',
             'cost_price' => '金料总额',
             'gold_price' => '金料单价/克',
             'sale_price' => '销售价',
