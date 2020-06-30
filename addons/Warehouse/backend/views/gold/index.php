@@ -46,10 +46,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],*/
                         [
                             'attribute'=>'gold_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'attribute' => 'supplier_id',

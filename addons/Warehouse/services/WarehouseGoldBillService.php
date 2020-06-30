@@ -26,11 +26,11 @@ use common\helpers\ArrayHelper;
  */
 class WarehouseGoldBillService extends Service
 {
-
     /**
      * 金料单据明细 tab
      * @param int $bill_id 单据ID
      * @param $returnUrl URL
+     * @param $tag
      * @return array
      */
     public function menuTabList($bill_id, $bill_type, $returnUrl = null, $tag = null)
@@ -93,111 +93,9 @@ class WarehouseGoldBillService extends Service
         return $tabList;
     }
     /**
-     * 创建金料领料单
-     * @param array $bill
-     * @param array $details
-     */
-    public function createGoldC($bill, $details){
-        $billM = new WarehouseGoldBill();
-        $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        if(false === $billM->save()){
-            throw new \Exception($this->getError($billM));
-        }
-        $goodsM = new WarehouseGoldBillGoods();
-        foreach ($details as &$good){
-            $good['bill_id'] = $billM->id;
-            $good['bill_no'] = $billM->bill_no;
-            $good['bill_type'] = $billM->bill_type;
-            $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
-                throw new \Exception($this->getError($goodsM));
-            }
-        }
-        $details = ArrayHelper::toArray($details);
-        $value = [];
-        $key = array_keys($details[0]);
-        foreach ($details as $detail) {
-            $value[] = array_values($detail);
-        }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建领料单明细失败");
-        }
-        //单据汇总
-        $this->goldBillSummary($billM->id);
-        return $billM;
-    }
-    /**
-     * 创建金料收货单
-     * @param array $bill
-     * @param array $details
-     */
-    public function createGoldL($bill, $details){
-        $billM = new WarehouseGoldBill();
-        $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        if(false === $billM->save()){
-            throw new \Exception($this->getError($billM));
-        }
-        $bill_id = $billM->attributes['id'];
-        $goodsM = new WarehouseGoldBillGoods();
-        foreach ($details as &$good){
-            $good['bill_id'] = $bill_id;
-            $good['bill_no'] = $billM->bill_no;
-            $good['bill_type'] = $billM->bill_type;
-            $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
-                throw new \Exception($this->getError($goodsM));
-            }
-        }
-        $details = ArrayHelper::toArray($details);
-        $value = [];
-        $key = array_keys($details[0]);
-        foreach ($details as $detail) {
-            $value[] = array_values($detail);
-        }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建收货单明细失败");
-        }
-    }
-    /**
-     * 金料收货单-审核
-     * @param $form
-     */
-    public function auditGoldL($form)
-    {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-        if($form->audit_status == AuditStatusEnum::PASS){
-            $form->bill_status = BillStatusEnum::CONFIRM;
-            $billGoods = WarehouseGoldBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
-            if(empty($billGoods)){
-                throw new \Exception("单据明细不能为空");
-            }
-            //金料入库
-            \Yii::$app->warehouseService->gold->editGold($form);
-            if($form->audit_status == AuditStatusEnum::PASS){
-                //同步金料采购收货单货品状态
-                $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-                $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
-                if(false === $res) {
-                    throw new \Exception("同步金料采购收货单货品状态失败");
-                }
-            }
-        }else{
-            $form->bill_status = BillStatusEnum::SAVE;
-        }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
-        }
-    }
-    /**
      * 单据汇总
      * @param integer $bill_id
-     * @throws \Exception
+     * @throws
      */
     public function goldBillSummary($bill_id)
     {
@@ -213,15 +111,15 @@ class WarehouseGoldBillService extends Service
     /**
      * 添加单据明细
      * @param $form
+     * @throws
      */
     public function createBillGoods($form)
     {
-        $stone = WarehouseStone::findOne(['stone_name'=>$form->stone_name]);
-        $bill = WarehouseStoneBill::findOne(['id'=>$form->bill_id]);
+        $stone = WarehouseStone::findOne(['stone_sn'=>$form->stone_sn]);
         $goods = [
             'bill_id' => $form->bill_id,
             'bill_no' => $form->bill_no,
-            'bill_type' => $bill->bill_type,
+            'bill_type' => $form->bill_type,
             'stone_name' => $stone->stone_name,
             'stone_type' => $stone->stone_type,
             'stone_num' => $form->stone_num,

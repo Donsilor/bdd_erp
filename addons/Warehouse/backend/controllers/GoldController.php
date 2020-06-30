@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\models\WarehouseGold;
+use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -62,6 +63,31 @@ class GoldController extends BaseController
 
     }
 
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseGold();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * 导出
+     * @return string
+     * @throws
+     */
     public function getExport($dataProvider)
     {
         $list = $dataProvider->models;

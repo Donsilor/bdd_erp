@@ -202,10 +202,15 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            $status = [ReceiptStatusEnum::CONFIRM];
+            $select = [
+                'rg.produce_sn'=>$produce_sn,
+                'r.receipt_status'=>[ReceiptStatusEnum::CONFIRM],
+                'r.status'=>StatusEnum::ENABLED,
+                'rg.status'=>StatusEnum::ENABLED
+            ];
             $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
                 ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
-                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>$status,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->where($select)
                 ->select(['r.id'])
                 ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
@@ -252,10 +257,22 @@ class PurchaseReceiptService extends Service
                     ->sum('gg.gold_weight');
                 $gold_weight = $gold_weight??0;
                 //石料信息
+                $select = [
+                    'ps.stone_position',
+                    'ws.stone_type',
+                    'sum(sg.stone_num) as stone_num',
+                    'sum(sg.stone_weight) as stone_weight',
+                    'ws.stone_color',
+                    'ws.stone_clarity',
+                    'ws.stone_cut',
+                    'ws.stone_symmetry',
+                    'ws.stone_polish',
+                    'ws.stone_fluorescence'
+                ];
                 $stone = ProduceStone::find()->alias('ps')
                     ->leftJoin(ProduceStoneGoods::tableName().' sg','ps.id=sg.id')
                     ->leftJoin(WarehouseStone::tableName().' ws', 'sg.stone_sn=ws.stone_sn')
-                    ->select(['ps.stone_position', 'ws.stone_type', 'sum(sg.stone_num) as stone_num', 'sum(sg.stone_weight) as stone_weight', 'ws.stone_color', 'ws.stone_clarity', 'ws.stone_cut', 'ws.stone_symmetry', 'ws.stone_polish', 'ws.stone_fluorescence'])
+                    ->select($select)
                     ->where(['ps.produce_id'=>$produce->id])
                     ->groupBy(['ps.stone_position'])
                     ->asArray()
@@ -315,20 +332,24 @@ class PurchaseReceiptService extends Service
                     'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
                     'product_size' => $purchaseGoods->product_size,
                     'put_in_type' =>$purchase->put_in_type,
+                    //主石
                     'main_stone' => $main_stone,
                     'main_stone_num' => $main_stone_num,
                     'main_stone_weight' => $main_stone_weight,
                     'main_stone_color' => $main_stone_color,
                     'main_stone_clarity' => $main_stone_clarity,
                     'main_stone_price' => 0,
+                    //副石1
                     'second_stone1' => $second_stone1,
                     'second_stone_num1' => $second_stone_num1,
                     'second_stone_weight1' => $second_stone_weight1,
                     'second_stone_price1' => 0,
+                    //副石2
                     'second_stone2' => $second_stone2,
                     'second_stone_num2' => $second_stone_num2,
                     'second_stone_weight2' => $second_stone_weight2,
                     'second_stone_price2' => 0,
+                    //工费
                     'gong_fee' => $purchaseGoods->gong_fee,
                     'xianqian_fee' => $purchaseGoods->xiangqian_fee,
                     'biaomiangongyi' => $attr_arr[AttrIdEnum::FACEWORK]['attr_value_id'] ?? '',
@@ -464,7 +485,12 @@ class PurchaseReceiptService extends Service
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
 
         //批量更新采购收货单货品状态
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+            'to_warehouse_id'=>$form->to_warehouse_id
+        ];
+        $res = PurchaseReceiptGoods::updateAll($data, ['id'=>$ids]);
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
@@ -721,12 +747,6 @@ class PurchaseReceiptService extends Service
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
-        //批量更新采购收货单货品状态
-        $data = ['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id];
-        $res = PurchaseGoldReceiptGoods::updateAll($data, ['id'=>$ids]);
-        if(false === $res){
-            throw new \Exception('更新采购收货单货品状态失败');
-        }
         $bill = [
             'bill_type' =>  GoldBillTypeEnum::GOLD_L,
             'bill_status' => GoldBillStatusEnum::SAVE,
@@ -744,7 +764,17 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->goldBill->createGoldL($bill, $goods);
+        Yii::$app->warehouseService->goldL->createGoldL($bill, $goods);
+        //批量更新采购收货单货品状态
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+            'to_warehouse_id'=>$form->to_warehouse_id
+        ];
+        $res = PurchaseGoldReceiptGoods::updateAll($data, ['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
     }
 
     /**
@@ -764,7 +794,8 @@ class PurchaseReceiptService extends Service
         if(!$detail_ids){
             $detail_ids = $form->getIds();
         }
-        $query = PurchaseStoneReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        $query = PurchaseStoneReceiptGoods::find()
+            ->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
@@ -802,11 +833,6 @@ class PurchaseReceiptService extends Service
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             $total_weight = bcadd($total_weight, $model->goods_weight, 2);
         }
-        //批量更新采购收货单货品状态
-        $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type],['id'=>$ids]);
-        if(false === $res){
-            throw new \Exception('更新采购收货单货品状态失败');
-        }
         $bill = [
             'bill_type' =>  StoneBillTypeEnum::STONE_MS,
             'bill_status' => BillStatusEnum::SAVE,
@@ -824,6 +850,15 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->stoneMs->createBillMs($bill, $goods);
+        \Yii::$app->warehouseService->stoneMs->createBillMs($bill, $goods);
+        //批量更新采购收货单货品状态
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+        ];
+        $res = PurchaseStoneReceiptGoods::updateAll($data, ['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
     }
 }

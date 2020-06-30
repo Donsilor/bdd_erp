@@ -2,18 +2,15 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use common\enums\StatusEnum;
 use Yii;
+use common\helpers\Url;
+use common\components\Service;
 use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Style\common\enums\AttrIdEnum;
-use common\components\Service;
 use addons\Warehouse\common\enums\GoldStatusEnum;
-use yii\db\Expression;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
+use yii\db\Expression;
 
 /**
  * Class TypeService
@@ -23,56 +20,24 @@ use addons\Warehouse\common\enums\AdjustTypeEnum;
 class WarehouseGoldService extends Service
 {
     /**
-     * 创建/编辑-金料信息
-     * @param $form
+     * 金料库存tab
+     * @param int $id ID
+     * @param $returnUrl URL
+     * @return array
      */
-    public function editGold($form)
+    public function menuTabList($id, $returnUrl = null)
     {
-        $gold = WarehouseGoldBillLGoodsForm::find()->where(['bill_id'=>$form->id])->all();
-        $ids = $g_ids = [];
-        foreach ($gold as $detail){
-            $goldM = new WarehouseGold();
-            $good = [
-                'gold_sn' => "---",//临时
-                'style_sn' => $detail->style_sn,
-                'gold_name' => $detail->gold_name,
-                'gold_type' => $detail->gold_type,
-                'supplier_id' => $form->supplier_id,
-                'gold_num' => 1,
-                'gold_weight' => $detail->gold_weight,
-                'cost_price' => $detail->cost_price,
-                'gold_price' => $detail->gold_price,
-                'warehouse_id' => $form->to_warehouse_id,
-                'status' => StatusEnum::ENABLED,
-                'created_at' => time(),
-            ];
-            $goldM->attributes = $good;
-            if(false === $goldM->save()){
-                throw new \Exception($this->getError($goldM));
-            }
-            $id = $goldM->attributes['id'];
-            $ids[] = $id;
-            $g_ids[$id] = $detail->id;
-        }
-        if($ids){
-            foreach ($ids as $id){
-                $stone = WarehouseGold::findOne(['id'=>$id]);
-                $gold_sn = $this->createGoldSn($stone);
-                //回写收货单货品批次号
-                $g_id = $g_ids[$id]??"";
-                if($g_id){
-                    $res = WarehouseGoldBillGoods::updateAll(['gold_sn' => $gold_sn], ['id' => $g_id]);
-                    if(false === $res){
-                        throw new \Exception("回写收货单货品批次号失败");
-                    }
-                }
-            }
-        }
+        $tabList = [
+            1=>['name'=>'金料详情','url'=>Url::to(['gold/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'领料信息','url'=>Url::to(['gold-bill-ss-goods/index','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+        return $tabList;
     }
     /**
      * 创建批次号
      * @param WarehouseStone $model
      * @param string $save
+     * @throws
      *
      */
     public function createGoldSn($model, $save = true)
@@ -97,6 +62,8 @@ class WarehouseGoldService extends Service
      * @param string $gold_sn
      * @param double $adjust_weight
      * @param integer $adjust_type
+     * @throws
+     *
      */
     public function adjustGoldStock($gold_sn, $adjust_weight, $adjust_type) {
         

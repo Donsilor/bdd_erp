@@ -177,7 +177,7 @@ class GoldApplyController extends BaseController
                     }
                 }
                 //创建单据
-                $bill = Yii::$app->warehouseService->goldBill->createGoldC($bill,$details);
+                $bill = Yii::$app->warehouseService->goldC->createGoldC($bill,$details);
                 //绑定领料单
                 ProduceGold::updateAll(['delivery_no'=>$bill->bill_no],['id'=>$ids]);
                 
