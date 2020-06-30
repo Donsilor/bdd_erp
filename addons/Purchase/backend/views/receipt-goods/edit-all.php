@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'xiangkou',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('xiangkou', $model->xiangkou, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'xiangkou', Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
                                     'class' => 'form-control',
@@ -430,6 +430,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone1','attr-id'=>AttrIdEnum::SIDE_STONE1_TYPE],
                             ],
                             [
+                                'attribute'=>'second_stone_num1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_num1'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_num1', $model->second_stone_num1, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'second_stone_weight1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight1'],
@@ -465,6 +477,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone2','attr-id'=>AttrIdEnum::SIDE_STONE2_TYPE],
+                            ],
+                            [
+                                'attribute'=>'second_stone_num2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_num2'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_num1', $model->second_stone_num2, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'second_stone_weight2',

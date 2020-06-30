@@ -3,6 +3,12 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\models\ProduceGoldGoods;
+use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\models\ProduceStoneGoods;
+use addons\Warehouse\common\models\WarehouseStone;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -214,6 +220,7 @@ class PurchaseReceiptService extends Service
             if(!$purchaseGoods){
                 throw new \Exception($message."未绑定采购单明细");
             }
+            //属性
             $produce_attr = ProduceAttribute::find()->where(['produce_id' => $produce->id])->asArray()->all();
             $attr_arr = [];
             foreach ($produce_attr as $attr) {
@@ -222,9 +229,63 @@ class PurchaseReceiptService extends Service
                 $attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
                 $attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
             }
-            $style_cate_id = $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '';
-            if($style_cate_id){
-                $style_cate_id = Yii::$app->attr->valueName($style_cate_id);
+            $gold_weight = $attr_arr[AttrIdEnum::JINZHONG]['attr_value']??0;
+            //主石
+            $main_stone = $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '';
+            $main_stone_num = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
+            $main_stone_weight = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
+            $main_stone_color = $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '';
+            $main_stone_clarity = $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '';
+            //副石1
+            $second_stone1 = $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '';
+            $second_stone_num1 = $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0';
+            $second_stone_weight1 = $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0';
+            //副石2
+            $second_stone2 = $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '';
+            $second_stone_num2 = $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0';
+            $second_stone_weight2 = $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0';
+            if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO){
+                //金料信息
+                $gold_weight = ProduceGold::find()->alias('pg')
+                    ->leftJoin(ProduceGoldGoods::tableName().' gg', 'pg.id=gg.id')
+                    ->where(['pg.produce_id'=>$produce->id])
+                    ->sum('gg.gold_weight');
+                $gold_weight = $gold_weight??0;
+                //石料信息
+                $stone = ProduceStone::find()->alias('ps')
+                    ->leftJoin(ProduceStoneGoods::tableName().' sg','ps.id=sg.id')
+                    ->leftJoin(WarehouseStone::tableName().' ws', 'sg.stone_sn=ws.stone_sn')
+                    ->select(['ps.stone_position', 'ws.stone_type', 'sum(sg.stone_num) as stone_num', 'sum(sg.stone_weight) as stone_weight', 'ws.stone_color', 'ws.stone_clarity', 'ws.stone_cut', 'ws.stone_symmetry', 'ws.stone_polish', 'ws.stone_fluorescence'])
+                    ->where(['ps.produce_id'=>$produce->id])
+                    ->groupBy(['ps.stone_position'])
+                    ->asArray()
+                    ->all();
+                if($stone){
+                    $stone = ArrayHelper::index($stone, 'stone_position');
+                    //主石
+                    if(isset($stone[1])){
+                        $stone1 = $stone[1];
+                        //$main_stone = $stone1['stone_type'] ?? $main_stone;
+                        $main_stone_num = $stone1['stone_num'] ?? $main_stone_num;
+                        $main_stone_weight = $stone1['stone_weight'] ?? $main_stone_weight;
+                        $main_stone_color = $stone1['stone_color'] ?? $main_stone_color;
+                        $main_stone_clarity = $stone1['stone_clarity'] ?? $main_stone_clarity;
+                    }
+                    //副石1
+                    if(isset($stone[2])){
+                        $stone2 = $stone[2];
+                        //$second_stone1 = $stone2['stone_type'] ?? $second_stone1;
+                        $second_stone_num1 = $stone2['stone_num'] ?? $second_stone_num1;
+                        $second_stone_weight1 = $stone2['stone_weight'] ?? $second_stone_weight1;
+                    }
+                    //副石2
+                    if(isset($stone[3])){
+                        $stone3 = $stone[3];
+                        //$second_stone2 = $stone3['stone_type'] ?? $second_stone2;
+                        $second_stone_num2 = $stone3['stone_num'] ?? $second_stone_num2;
+                        $second_stone_weight2 = $stone3['stone_weight'] ?? $second_stone_weight2;
+                    }
+                }
             }
             $goodsM = new PurchaseReceiptGoods();
             for ($i = 1; $i <= $the_num; $i++) {
@@ -237,14 +298,14 @@ class PurchaseReceiptService extends Service
                     'style_sn' => $produce->qiban_sn ?: $produce->style_sn,
                     'style_cate_id' => $produce->style_cate_id,
                     'product_type_id' => $produce->product_type_id,
-                    'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '',
-                    'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value'] ?? '',
+                    'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value_id'] ?? '',
+                    'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value_id'] ?? '',
                     'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
                     'jintuo_type' => $produce->jintuo_type,
                     'style_sex' => $produce->style_sex,
                     'style_channel_id' => $purchaseGoods->style_channel_id,
                     'factory_mo' => 1,
-                    'gold_weight' => $attr_arr[AttrIdEnum::JINZHONG]['attr_value'] ?? '0',
+                    'gold_weight' => $gold_weight,
                     'gold_price' => $purchaseGoods->gold_price,
                     'gold_loss' => $purchaseGoods->gold_loss,
                     'gold_amount' => $purchaseGoods->gold_amount,
@@ -254,19 +315,19 @@ class PurchaseReceiptService extends Service
                     'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
                     'product_size' => $purchaseGoods->product_size,
                     'put_in_type' =>$purchase->put_in_type,
-                    'main_stone' => $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '',
-                    'main_stone_num' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
-                    'main_stone_weight' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
-                    'main_stone_color' => $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '',
-                    'main_stone_clarity' => $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '',
+                    'main_stone' => $main_stone,
+                    'main_stone_num' => $main_stone_num,
+                    'main_stone_weight' => $main_stone_weight,
+                    'main_stone_color' => $main_stone_color,
+                    'main_stone_clarity' => $main_stone_clarity,
                     'main_stone_price' => 0,
-                    'second_stone1' => $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num1' => $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0',
-                    'second_stone_weight1' => $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0',
+                    'second_stone1' => $second_stone1,
+                    'second_stone_num1' => $second_stone_num1,
+                    'second_stone_weight1' => $second_stone_weight1,
                     'second_stone_price1' => 0,
-                    'second_stone2' => $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num2' => $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0',
-                    'second_stone_weight2' => $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0',
+                    'second_stone2' => $second_stone2,
+                    'second_stone_num2' => $second_stone_num2,
+                    'second_stone_weight2' => $second_stone_weight2,
                     'second_stone_price2' => 0,
                     'gong_fee' => $purchaseGoods->gong_fee,
                     'xianqian_fee' => $purchaseGoods->xiangqian_fee,

@@ -156,11 +156,10 @@ class ReceiptGoodsController extends BaseController
                 return ResultHelper::json(422, '保存失败'.$e->getMessage());
             }
         }
-        $num = count($goods_list);
         return $this->render($this->action->id, [
             'model' => $model,
             'goods_list' => $goods_list,
-            'num' => $num,
+            'num' => count($goods_list),
         ]);
     }
 
@@ -283,14 +282,14 @@ class ReceiptGoodsController extends BaseController
         }
         $check = Yii::$app->request->get('check',null);
         if($check){
-            return ResultHelper::json(200, '', ['url'=>'/purchase/receipt-goods/batch-edit?ids='.$ids.'&name='.$name."&attr_id=".$attr_id]);
+            return ResultHelper::json(200, '', ['url'=>Url::to(['batch-edit', 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
         }
         $style_arr = $model::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if(count($style_arr) != 1){
             return ResultHelper::json(422, '请选择同款的商品进行操作');
         }
         $style_sn = $style_arr[0]['style_sn']??"";
-        $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn,$attr_id);
+        $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id);
         return $this->render($this->action->id, [
             'model' => $model,
             'ids' => $ids,
