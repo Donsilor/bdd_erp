@@ -144,12 +144,15 @@ class PurchaseApplyGoodsController extends BaseController
         $this->modelClass = PurchaseApplyFormatForm::className();
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseApplyFormatForm();
-
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
             $format_info = Yii::$app->request->post('format_info');
+            if($model->format_creator_id == ''){
+                $model->format_creator_id = Yii::$app->user->identity->getId();
+                $model->format_created_at = time();
+            }
             $model->format_info = json_encode($format_info);
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));

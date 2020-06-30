@@ -66,10 +66,10 @@ class Qiban extends BaseModel
     {
         return [
             [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at', 'is_apply'], 'integer'],
-            [['sale_price', 'market_price', 'cost_price'], 'number'],
+            [['sale_price', 'market_price','kinto_price','starting_fee', 'cost_price'], 'number'],
             [['format_info'], 'string'],
             [['qiban_name', 'audit_remark', 'stone_info', 'parts_info', 'remark', 'format_remark'], 'string', 'max' => 255],
-            [['qiban_sn', 'qiban_image_sn', 'style_sn', 'format_sn'], 'string', 'max' => 30],
+            [['qiban_sn', 'style_sn', 'format_sn'], 'string', 'max' => 30],
             [['style_image', 'format_images', 'format_video'], 'string', 'max' => 500],
             [['style_images'], 'string', 'max' => 2000],
         ];
@@ -86,7 +86,6 @@ class Qiban extends BaseModel
             'qiban_name' => Yii::t('app', '起版名称'),
             'qiban_sn' => Yii::t('app', '起版编号'),
             'qiban_type' => Yii::t('app', '起版类型'),
-            'qiban_image_sn' => Yii::t('app', '图纸编号'),
             'style_id' => Yii::t('app', '款式ID'),
             'style_sn' => Yii::t('app', ' 款号'),
             'style_cate_id' => Yii::t('app', '款式分类'),
@@ -99,7 +98,7 @@ class Qiban extends BaseModel
             'style_images' => Yii::t('app', '起版图库'),
             'sale_price' => Yii::t('app', '销售价'),
             'market_price' => Yii::t('app', '市场价'),
-            'cost_price' => Yii::t('app', '成本价'),
+            'cost_price' => Yii::t('app', '单品单价'),
             'goods_num' => Yii::t('app', '商品数量'),
             'is_inlay' => Yii::t('app', '是否镶嵌'),
             'audit_status' => Yii::t('app', '款式审核'),
@@ -107,10 +106,10 @@ class Qiban extends BaseModel
             'audit_time' => Yii::t('app', '审核时间'),
             'auditor_id' => Yii::t('app', '审核人'),
             'sort' => Yii::t('app', '排序'),
-            'stone_info' => Yii::t('app', '石料信息'),
+            'stone_info' => Yii::t('app', '石料规格'),
             'parts_info' => Yii::t('app', '配件信息'),
-            'remark' => Yii::t('app', '款式备注'),
-            'status' => Yii::t('app', '款式状态'),
+            'remark' => Yii::t('app', '起版备注'),
+            'status' => Yii::t('app', '起版状态'),
             'creator_id' => Yii::t('app', '创建人'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
@@ -120,6 +119,9 @@ class Qiban extends BaseModel
             'format_info' => Yii::t('app', '版式工艺信息'),
             'format_remark' => Yii::t('app', '版式备注'),
             'is_apply' => Yii::t('app', '是否采购申请'),
+            'kinto_price' => Yii::t('app', '金托总价（含副石）'),
+            'starting_fee' => Yii::t('app', '起版费'),
+
         ];
     }
 

@@ -69,7 +69,7 @@ class GoldLossRate extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->id;
+            $this->creator_id = Yii::$app->user->identity->getId();
         }
 
         return parent::beforeSave($insert);

@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{edit} {ajax-apply} {apply-view} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE){
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
                                             return Html::edit(['edit', 'id' => $model->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'delete' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE){
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
@@ -614,15 +614,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
-
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit} {ajax-apply} {apply-view} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE){
-                                            return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
+                                            return Html::edit(['edit', 'id' => $model->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
                                                 'data-height' => '90%',
@@ -630,8 +629,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
+                                    'ajax-apply' => function($url, $model, $key){
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
+                                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                                'class'=>'btn btn-success btn-xs',
+                                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                                            ]);
+                                        }
+                                    },
+                                    'apply-view' => function($url, $model, $key){
+                                        if($model->audit_status == AuditStatusEnum::PENDING){
+                                            return Html::edit(['apply-view','id'=>$model->id], '审批', [
+                                                'class'=>'btn btn-danger btn-xs',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE){
+                                        if($model->audit_status == AuditStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
@@ -640,6 +654,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                                 'headerOptions' => [],
                             ]
+
                         ]
                     ]); ?>
                 </div>

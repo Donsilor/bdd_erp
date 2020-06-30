@@ -178,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material') ?>：</td>
-                            <td><?= $model->material ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->material) ?></td>
                         </tr>
 
 
@@ -188,16 +188,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_type') ?>：</td>
-                            <td><?= $model->material_type ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->material_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
-                            <td><?= $model->material_color ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->material_color) ?></td>
                         </tr>
 
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xiangkou') ?>：</td>
-                            <td><?= $model->xiangkou ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->xiangkou) ?></td>
                         </tr>
 
                         <tr>
@@ -237,7 +237,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_type') ?>：</td>
-                            <td><?= $model->main_stone_type ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->main_stone_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>
@@ -249,31 +249,31 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_shape') ?>：</td>
-                            <td><?= $model->diamond_shape ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_shape) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_color') ?>：</td>
-                            <td><?= $model->diamond_color ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_color) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_clarity') ?>：</td>
-                            <td><?= $model->diamond_clarity ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_clarity) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_cut') ?>：</td>
-                            <td><?= $model->diamond_cut ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_cut) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_polish') ?>：</td>
-                            <td><?= $model->diamond_polish ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_polish) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_symmetry') ?>：</td>
-                            <td><?= $model->diamond_symmetry ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_symmetry) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('diamond_fluorescence') ?>：</td>
-                            <td><?= $model->diamond_fluorescence ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->diamond_fluorescence) ?></td>
                         </tr>
 
                     </table>
@@ -284,7 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_type1') ?>：</td>
-                            <td><?= $model->second_stone_type1 ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_type1) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num1') ?>：</td>
@@ -300,19 +300,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_color1') ?>：</td>
-                            <td><?= $model->second_stone_color1 ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_color1) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_clarity1') ?>：</td>
-                            <td><?= $model->second_stone_clarity1 ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_clarity1) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_shape1') ?>：</td>
-                            <td><?= $model->second_stone_shape1 ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_shape1) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_type2') ?>：</td>
-                            <td><?= $model->second_stone_type2 ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_type2) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num2') ?>：</td>

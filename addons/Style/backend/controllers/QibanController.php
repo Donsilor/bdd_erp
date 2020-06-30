@@ -2,12 +2,11 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\forms\QibanFormatForm;
 use addons\Style\common\enums\IsApply;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\QibanAuditForm;
-use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\Style;
-use common\enums\ConfirmEnum;
 use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
@@ -99,6 +98,40 @@ class QibanController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+
+    /**
+     * 版式编辑
+     * @var PurchaseApplyGoodsForm $model
+     * @return mixed
+     */
+    public function actionFormatEdit()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = QibanFormatForm::className();
+        $model = $this->findModel($id);
+        $model = $model ?? new QibanFormatForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            $format_info = Yii::$app->request->post('format_info');
+            $model->format_info = json_encode($format_info);
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            //前端提示
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return ResultHelper::json(200, '保存成功');
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
         ]);
     }
 

@@ -317,7 +317,7 @@ class BillAGoodsController extends BaseController
                 return $this->message("操作成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){
                 $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
 
         }

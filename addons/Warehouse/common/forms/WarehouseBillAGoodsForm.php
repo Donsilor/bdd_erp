@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -111,11 +112,16 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         //更新单据状态
         $count = WarehouseBillGoodsA::find()->where(['bill_id'=>$this->bill_id])->andWhere(['<>','audit_status',AuditStatusEnum::PASS])
             ->count();
+        $warehouseBill = WarehouseBill::find()->where(['id'=>$this->bill_id])->one();
         if($count == 0){
-            $warehouseBill = WarehouseBill::find()->where(['id'=>$this->bill_id])->one();
+            $warehouseBill->bill_status = BillStatusEnum::CONFIRM;
             $warehouseBill->audit_status = AuditStatusEnum::PASS;
-            $warehouseBill->save(true,'audit_status');
+
+        }else{
+            $warehouseBill->bill_status = BillStatusEnum::PENDING;
+            $warehouseBill->audit_status = AuditStatusEnum::PENDING;
         }
+        $warehouseBill->save(true,['audit_status','bill_status']);
 
     }
 
@@ -127,7 +133,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
             'finger' => 'finger',
             'product_size' => 'product_size',
             'gold_weight'  => 'gold_weight',
-            'suttle_weight' =>'suttle_weight',
+            'suttle_weight' =>'gross_weight',
             'gold_loss'  =>'gold_loss',
             'gold_price'  => 'gold_price',
             'gold_amount'  => 'gold_amount',

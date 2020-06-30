@@ -65,6 +65,14 @@ class PurchaseApplyGoodsService extends Service
             }
             //起版商品同步到起版表中
             if($model->qiban_type != QibanTypeEnum::NON_VERSION){
+                //版式图片同步到商品图片中
+                if($model->qiban_type == QibanTypeEnum::NO_STYLE && $model->format_images != ''){
+                    $model->goods_images = $model->format_images;
+                    $format_images = explode(',', $model->format_images);
+                    $model->goods_image = $format_images[0];
+                }
+
+
                 $goods = [
                     'qiban_name' => $model->goods_name,
                     'qiban_type' => $model->qiban_type,
