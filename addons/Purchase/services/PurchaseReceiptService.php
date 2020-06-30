@@ -3,6 +3,12 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\models\ProduceGoldGoods;
+use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\models\ProduceStoneGoods;
+use addons\Warehouse\common\models\WarehouseStone;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -196,10 +202,15 @@ class PurchaseReceiptService extends Service
             if (!$shippent_num) {
                 throw new \Exception($message."未出货");
             }
-            $status = [ReceiptStatusEnum::CONFIRM];
+            $select = [
+                'rg.produce_sn'=>$produce_sn,
+                'r.receipt_status'=>[ReceiptStatusEnum::CONFIRM],
+                'r.status'=>StatusEnum::ENABLED,
+                'rg.status'=>StatusEnum::ENABLED
+            ];
             $receipt_num = PurchaseReceiptGoods::find()->alias('rg')
                 ->leftJoin(PurchaseReceipt::tableName().' r','r.id=rg.receipt_id')
-                ->where(['rg.produce_sn'=>$produce_sn,'r.receipt_status'=>$status,'r.status'=>StatusEnum::ENABLED,'rg.status'=>StatusEnum::ENABLED])
+                ->where($select)
                 ->select(['r.id'])
                 ->count()??"0";
             $the_num = bcsub($shippent_num, $receipt_num);
@@ -214,6 +225,7 @@ class PurchaseReceiptService extends Service
             if(!$purchaseGoods){
                 throw new \Exception($message."未绑定采购单明细");
             }
+            //属性
             $produce_attr = ProduceAttribute::find()->where(['produce_id' => $produce->id])->asArray()->all();
             $attr_arr = [];
             foreach ($produce_attr as $attr) {
@@ -222,9 +234,75 @@ class PurchaseReceiptService extends Service
                 $attr_arr[$attr['attr_id']]['attr_value'] = $attr['attr_value'];
                 $attr_arr[$attr['attr_id']]['attr_value_id'] = $attr['attr_value_id'];
             }
-            $style_cate_id = $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '';
-            if($style_cate_id){
-                $style_cate_id = Yii::$app->attr->valueName($style_cate_id);
+            $gold_weight = $attr_arr[AttrIdEnum::JINZHONG]['attr_value']??0;
+            //主石
+            $main_stone = $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '';
+            $main_stone_num = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
+            $main_stone_weight = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
+            $main_stone_color = $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '';
+            $main_stone_clarity = $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '';
+            //副石1
+            $second_stone1 = $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '';
+            $second_stone_num1 = $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0';
+            $second_stone_weight1 = $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0';
+            //副石2
+            $second_stone2 = $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '';
+            $second_stone_num2 = $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0';
+            $second_stone_weight2 = $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0';
+            if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO){
+                //金料信息
+                $gold_weight = ProduceGold::find()->alias('pg')
+                    ->leftJoin(ProduceGoldGoods::tableName().' gg', 'pg.id=gg.id')
+                    ->where(['pg.produce_id'=>$produce->id])
+                    ->sum('gg.gold_weight');
+                $gold_weight = $gold_weight??0;
+                //石料信息
+                $select = [
+                    'ps.stone_position',
+                    'ws.stone_type',
+                    'sum(sg.stone_num) as stone_num',
+                    'sum(sg.stone_weight) as stone_weight',
+                    'ws.stone_color',
+                    'ws.stone_clarity',
+                    'ws.stone_cut',
+                    'ws.stone_symmetry',
+                    'ws.stone_polish',
+                    'ws.stone_fluorescence'
+                ];
+                $stone = ProduceStone::find()->alias('ps')
+                    ->leftJoin(ProduceStoneGoods::tableName().' sg','ps.id=sg.id')
+                    ->leftJoin(WarehouseStone::tableName().' ws', 'sg.stone_sn=ws.stone_sn')
+                    ->select($select)
+                    ->where(['ps.produce_id'=>$produce->id])
+                    ->groupBy(['ps.stone_position'])
+                    ->asArray()
+                    ->all();
+                if($stone){
+                    $stone = ArrayHelper::index($stone, 'stone_position');
+                    //主石
+                    if(isset($stone[1])){
+                        $stone1 = $stone[1];
+                        //$main_stone = $stone1['stone_type'] ?? $main_stone;
+                        $main_stone_num = $stone1['stone_num'] ?? $main_stone_num;
+                        $main_stone_weight = $stone1['stone_weight'] ?? $main_stone_weight;
+                        $main_stone_color = $stone1['stone_color'] ?? $main_stone_color;
+                        $main_stone_clarity = $stone1['stone_clarity'] ?? $main_stone_clarity;
+                    }
+                    //副石1
+                    if(isset($stone[2])){
+                        $stone2 = $stone[2];
+                        //$second_stone1 = $stone2['stone_type'] ?? $second_stone1;
+                        $second_stone_num1 = $stone2['stone_num'] ?? $second_stone_num1;
+                        $second_stone_weight1 = $stone2['stone_weight'] ?? $second_stone_weight1;
+                    }
+                    //副石2
+                    if(isset($stone[3])){
+                        $stone3 = $stone[3];
+                        //$second_stone2 = $stone3['stone_type'] ?? $second_stone2;
+                        $second_stone_num2 = $stone3['stone_num'] ?? $second_stone_num2;
+                        $second_stone_weight2 = $stone3['stone_weight'] ?? $second_stone_weight2;
+                    }
+                }
             }
             $goodsM = new PurchaseReceiptGoods();
             for ($i = 1; $i <= $the_num; $i++) {
@@ -237,14 +315,14 @@ class PurchaseReceiptService extends Service
                     'style_sn' => $produce->qiban_sn ?: $produce->style_sn,
                     'style_cate_id' => $produce->style_cate_id,
                     'product_type_id' => $produce->product_type_id,
-                    'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value'] ?? '',
-                    'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value'] ?? '',
+                    'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value_id'] ?? '',
+                    'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value_id'] ?? '',
                     'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
                     'jintuo_type' => $produce->jintuo_type,
                     'style_sex' => $produce->style_sex,
                     'style_channel_id' => $purchaseGoods->style_channel_id,
                     'factory_mo' => 1,
-                    'gold_weight' => $attr_arr[AttrIdEnum::JINZHONG]['attr_value'] ?? '0',
+                    'gold_weight' => $gold_weight,
                     'gold_price' => $purchaseGoods->gold_price,
                     'gold_loss' => $purchaseGoods->gold_loss,
                     'gold_amount' => $purchaseGoods->gold_amount,
@@ -254,20 +332,24 @@ class PurchaseReceiptService extends Service
                     'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
                     'product_size' => $purchaseGoods->product_size,
                     'put_in_type' =>$purchase->put_in_type,
-                    'main_stone' => $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '',
-                    'main_stone_num' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
-                    'main_stone_weight' => $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0',
-                    'main_stone_color' => $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '',
-                    'main_stone_clarity' => $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '',
+                    //主石
+                    'main_stone' => $main_stone,
+                    'main_stone_num' => $main_stone_num,
+                    'main_stone_weight' => $main_stone_weight,
+                    'main_stone_color' => $main_stone_color,
+                    'main_stone_clarity' => $main_stone_clarity,
                     'main_stone_price' => 0,
-                    'second_stone1' => $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num1' => $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0',
-                    'second_stone_weight1' => $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0',
+                    //副石1
+                    'second_stone1' => $second_stone1,
+                    'second_stone_num1' => $second_stone_num1,
+                    'second_stone_weight1' => $second_stone_weight1,
                     'second_stone_price1' => 0,
-                    'second_stone2' => $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '',
-                    'second_stone_num2' => $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0',
-                    'second_stone_weight2' => $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0',
+                    //副石2
+                    'second_stone2' => $second_stone2,
+                    'second_stone_num2' => $second_stone_num2,
+                    'second_stone_weight2' => $second_stone_weight2,
                     'second_stone_price2' => 0,
+                    //工费
                     'gong_fee' => $purchaseGoods->gong_fee,
                     'xianqian_fee' => $purchaseGoods->xiangqian_fee,
                     'biaomiangongyi' => $attr_arr[AttrIdEnum::FACEWORK]['attr_value_id'] ?? '',
@@ -403,7 +485,12 @@ class PurchaseReceiptService extends Service
         Yii::$app->warehouseService->billL->createBillL($bill, $goods);
 
         //批量更新采购收货单货品状态
-        $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id],['id'=>$ids]);
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+            'to_warehouse_id'=>$form->to_warehouse_id
+        ];
+        $res = PurchaseReceiptGoods::updateAll($data, ['id'=>$ids]);
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
@@ -660,12 +747,6 @@ class PurchaseReceiptService extends Service
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
-        //批量更新采购收货单货品状态
-        $data = ['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type, 'to_warehouse_id'=>$form->to_warehouse_id];
-        $res = PurchaseGoldReceiptGoods::updateAll($data, ['id'=>$ids]);
-        if(false === $res){
-            throw new \Exception('更新采购收货单货品状态失败');
-        }
         $bill = [
             'bill_type' =>  GoldBillTypeEnum::GOLD_L,
             'bill_status' => GoldBillStatusEnum::SAVE,
@@ -683,7 +764,17 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->goldBill->createGoldL($bill, $goods);
+        Yii::$app->warehouseService->goldL->createGoldL($bill, $goods);
+        //批量更新采购收货单货品状态
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+            'to_warehouse_id'=>$form->to_warehouse_id
+        ];
+        $res = PurchaseGoldReceiptGoods::updateAll($data, ['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
     }
 
     /**
@@ -703,7 +794,8 @@ class PurchaseReceiptService extends Service
         if(!$detail_ids){
             $detail_ids = $form->getIds();
         }
-        $query = PurchaseStoneReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        $query = PurchaseStoneReceiptGoods::find()
+            ->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
         if(!empty($detail_ids)) {
             $query->andWhere(['id'=>$detail_ids]);
         }
@@ -741,11 +833,6 @@ class PurchaseReceiptService extends Service
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             $total_weight = bcadd($total_weight, $model->goods_weight, 2);
         }
-        //批量更新采购收货单货品状态
-        $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING, 'put_in_type'=>$form->put_in_type],['id'=>$ids]);
-        if(false === $res){
-            throw new \Exception('更新采购收货单货品状态失败');
-        }
         $bill = [
             'bill_type' =>  StoneBillTypeEnum::STONE_MS,
             'bill_status' => BillStatusEnum::SAVE,
@@ -763,6 +850,15 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->stoneMs->createBillMs($bill, $goods);
+        \Yii::$app->warehouseService->stoneMs->createBillMs($bill, $goods);
+        //批量更新采购收货单货品状态
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+        ];
+        $res = PurchaseStoneReceiptGoods::updateAll($data, ['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
     }
 }

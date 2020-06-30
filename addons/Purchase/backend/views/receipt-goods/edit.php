@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xiangkou')->textInput() ?>
+                        <?= $form->field($model, 'xiangkou')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput() ?>

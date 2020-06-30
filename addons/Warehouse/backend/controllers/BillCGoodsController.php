@@ -124,7 +124,12 @@ class BillCGoodsController extends BaseController
                 if(!$goods){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect(Yii::$app->request->referrer), 'error');
                 }
-                if(in_array($bill->delivery_type, [DeliveryTypeEnum::PROXY_PRODUCE, DeliveryTypeEnum::PART_GOODS, DeliveryTypeEnum::ASSEMBLY])){
+                $data = [
+                    DeliveryTypeEnum::PROXY_PRODUCE,
+                    DeliveryTypeEnum::PART_GOODS,
+                    DeliveryTypeEnum::ASSEMBLY,
+                ];
+                if(in_array($bill->delivery_type, $data)){
                     if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
                         return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
                     }
@@ -193,7 +198,7 @@ class BillCGoodsController extends BaseController
         if($check){
             try{
                 $bill_id = \Yii::$app->warehouseService->billC->returnGoodsValidate($model);
-                return ResultHelper::json(200, '', ['url'=>'/warehouse/bill-c-goods/return-goods?id='.$bill_id.'&ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to(['return-goods', 'id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }

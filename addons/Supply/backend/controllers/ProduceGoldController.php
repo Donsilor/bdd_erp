@@ -88,7 +88,7 @@ class ProduceGoldController extends BaseController
               }
               //2
               $produce->peiliao_status = PeiliaoStatusEnum::HAS_LINGLIAO;
-              if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGSHI) {
+              if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
                   $produce->bc_status = BuChanEnum::TO_PRODUCTION;
               }
               if(false === $produce->save(true,['peiliao_status','bc_status','updated_at'])){

@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone', '金料列表');
+$this->title = Yii::t('gold', '金料列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -46,26 +46,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],*/
                         [
                             'attribute'=>'gold_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[supplier_id]',
-                                'value'=>$searchModel->supplier_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                    'width' => '200',
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => [],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'attribute'=>'gold_name',
@@ -75,19 +63,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'attribute' => 'gold_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->gold_type);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                 'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
@@ -135,6 +123,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width' => '100'],
                         ],
                         [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => '200',
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
@@ -157,7 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
                         ],
-                        [
+                        /*[
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
@@ -167,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-                        ]
+                        ]*/
                     ]
                 ]); ?>
             </div>

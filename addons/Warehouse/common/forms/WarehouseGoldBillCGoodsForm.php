@@ -7,7 +7,7 @@ use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use common\helpers\ArrayHelper;
 
 /**
- * 石包单据明细 Form
+ * 领料单明细 Form
  *
  */
 class WarehouseGoldBillCGoodsForm extends WarehouseGoldBillGoods
@@ -30,6 +30,7 @@ class WarehouseGoldBillCGoodsForm extends WarehouseGoldBillGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
+
         ]);
     }
 

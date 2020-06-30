@@ -182,6 +182,7 @@ class StoneBillSsController extends StoneBillController
      */
     public function actionAjaxAudit()
     {
+        return $this->message("您没有操作权限", $this->redirect(Yii::$app->request->referrer), 'error');
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBillSsForm();

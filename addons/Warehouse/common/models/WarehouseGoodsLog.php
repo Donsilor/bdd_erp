@@ -90,7 +90,6 @@ class WarehouseGoodsLog extends BaseModel
         }
         return parent::beforeSave($insert);
     }
-
     /**
      * 关联管理员一对一
      * @return \yii\db\ActiveQuery
