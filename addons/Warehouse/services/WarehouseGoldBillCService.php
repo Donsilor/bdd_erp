@@ -10,14 +10,14 @@ use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use common\helpers\ArrayHelper;
 
 /**
- * 金料领料单据
+ * 领料单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
 class WarehouseGoldBillCService extends Service
 {
     /**
-     * 创建金料领料单
+     * 创建领料单
      * @param array $bill
      * @param array $details
      * @throws
@@ -45,12 +45,12 @@ class WarehouseGoldBillCService extends Service
         foreach ($details as $detail) {
             $value[] = array_values($detail);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
+        $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建领料单明细失败");
         }
         //单据汇总
-        Yii::$app->warehouseService->goldBill->goldBillSummary($billM->id);
+        \Yii::$app->warehouseService->goldBill->goldBillSummary($billM->id);
         return $billM;
     }
 

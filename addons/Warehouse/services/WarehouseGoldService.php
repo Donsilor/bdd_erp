@@ -29,7 +29,7 @@ class WarehouseGoldService extends Service
     {
         $tabList = [
             1=>['name'=>'金料详情','url'=>Url::to(['gold/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'领料信息','url'=>Url::to(['gold-bill-ss-goods/index','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'领料信息','url'=>Url::to(['gold/lingliao','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
         ];
         return $tabList;
     }

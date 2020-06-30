@@ -2,23 +2,23 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\GoldStatusEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
-use addons\Warehouse\common\models\WarehouseGold;
-use common\enums\StatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
+use addons\Warehouse\common\models\WarehouseGold;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
+use addons\Warehouse\common\enums\GoldStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 
 /**
- * 金料入库单据
+ * 金料入库单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
@@ -54,12 +54,12 @@ class WarehouseGoldBillLService extends Service
         foreach ($details as $detail) {
             $value[] = array_values($detail);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
+        $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建收货单明细失败");
         }
         //单据汇总
-        Yii::$app->warehouseService->goldBill->goldBillSummary($billM->id);
+        \Yii::$app->warehouseService->goldBill->goldBillSummary($billM->id);
         return $billM;
     }
     /**
