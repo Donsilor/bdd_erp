@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?= $this->title; ?> - <?= $gold->gold_sn?> - <?= GoldStatusEnum::getValue($gold->gold_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div class="tab-content" style="padding-right: 10px;">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="tab-content">
+        <div class="row col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
                     <?= GridView::widget([

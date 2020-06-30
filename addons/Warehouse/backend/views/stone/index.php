@@ -41,6 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'stone_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->stone_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                 'class' => 'form-control',
                                 'style' => 'width:100px',

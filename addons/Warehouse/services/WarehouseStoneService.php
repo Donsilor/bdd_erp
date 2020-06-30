@@ -2,15 +2,15 @@
 
 namespace addons\Warehouse\services;
 
+use phpDocumentor\Reflection\Types\Boolean;
 use Yii;
-use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\components\Service;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Warehouse\common\models\WarehouseGold;
+use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
-use yii\db\Expression;
 use addons\Warehouse\common\enums\StoneStatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
+use yii\db\Expression;
+use common\helpers\Url;
 
 /**
  * Class TypeService
@@ -20,56 +20,25 @@ use addons\Warehouse\common\enums\StoneStatusEnum;
 class WarehouseStoneService extends Service
 {
     /**
-     * 创建/编辑-石包信息
-     * @param $form
+     * 石料库存tab
+     * @param int $id ID
+     * @param $returnUrl URL
+     * @return array
      */
-    /* public function editStone($form)
+    public function menuTabList($id, $returnUrl = null)
     {
-        $goods = WarehouseStoneBillGoods::find()->where(['bill_id'=>$form->id])->all();
-        foreach ($goods as $detail){
-            $stoneM = new WarehouseStone();
-            $stone = [
-                'stone_sn' => rand(10000000000,99999999999),//临时
-                'stone_name' => $detail->stone_name,
-                'stone_status' => StoneStatusEnum::IN_STOCK,    
-                'style_sn' => $detail->style_sn,
-                'stone_type' => $detail->stone_type,
-                'supplier_id' => $form->supplier_id,
-                'stone_color' => $detail->color,
-                'stone_clarity' => $detail->clarity,
-                'stock_cnt' => $detail->stone_num,
-                'ms_cnt' => $detail->stone_num,
-                'stock_weight' => $detail->stone_weight,
-                'ms_weight' => $detail->stone_weight,
-                'cost_price' => $detail->cost_price,
-                'sale_price' => $detail->sale_price,
-            ];
-            $stoneM->attributes = $stone;
-            if(false === $stoneM->save()){
-                throw new \Exception($this->getError($stoneM));
-            }
-            $this->createStoneSn($stoneM);
-        }
-       
-    } */
-
-    /**
-     * 更新库存信息
-     * @param $stone
-     */
-    public function updateStockCnt($stone){
-        $stock_cnt = $stone->ms_cnt+$stone->fenbaoru_cnt-$stone->ss_cnt-$stone->fenbaochu_cnt+$stone->ts_cnt-$stone->ys_cnt-$stone->sy_cnt-$stone->th_cnt+$stone->rk_cnt-$stone->ck_cnt;
-        $stock_weight = $stone->ms_weight+$stone->fenbaoru_weight-$stone->ss_weight-$stone->fenbaochu_weight+$stone->ts_weight-$stone->ys_weight-$stone->sy_weight-$stone->th_weight+$stone->rk_weight-$stone->ck_weight;
-        $stone->stock_cnt = $stock_cnt;
-        $stone->ck_weight = $stock_weight;
-        if(false === $stone->save()){
-            throw new \Exception($this->getError($stone));
-        }
+        $tabList = [
+            1=>['name'=>'石料详情','url'=>Url::to(['stone/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'领石信息','url'=>Url::to(['stone/lingshi','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+        return $tabList;
     }
     /**
      * 创建石包号
      * @param WarehouseStone $model
-     * @param string $save
+     * @param Bool $save
+     * @throws
+     *
      */
     public function createStoneSn($model, $save = true)
     {
@@ -88,13 +57,48 @@ class WarehouseStoneService extends Service
         }
         return $stone_sn;
     }
-    
+    /**
+     * 更新库存信息
+     * @param int $id
+     * @throws
+     *
+     */
+    public function updateStockCnt($id){
+        $stone = WarehouseStone::findOne($id);
+        $stock_cnt = $stone->ms_cnt
+            +$stone->fenbaoru_cnt
+            -$stone->ss_cnt
+            -$stone->fenbaochu_cnt
+            +$stone->ts_cnt
+            -$stone->ys_cnt
+            -$stone->sy_cnt
+            -$stone->th_cnt
+            +$stone->rk_cnt
+            -$stone->ck_cnt;
+        $stock_weight = $stone->ms_weight
+            +$stone->fenbaoru_weight
+            -$stone->ss_weight
+            -$stone->fenbaochu_weight
+            +$stone->ts_weight
+            -$stone->ys_weight
+            -$stone->sy_weight
+            -$stone->th_weight
+            +$stone->rk_weight
+            -$stone->ck_weight;
+        $stone->stock_cnt = $stock_cnt;
+        $stone->ck_weight = $stock_weight;
+        if(false === $stone->save()){
+            throw new \Exception($this->getError($stone));
+        }
+    }
     /**
      * 更改石料库存
      * @param string $stone_sn
      * @param integer $adjust_num 调整数量
      * @param double $adjust_weight 调整重量
      * @param integer $adjust_type 调整类型 1增加 0减
+     * @throws
+     *
      */
     public function adjustStoneStock($stone_sn,$adjust_num ,$adjust_weight, $adjust_type) {
 

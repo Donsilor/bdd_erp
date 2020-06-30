@@ -87,7 +87,7 @@ class GoldController extends BaseController
     }
 
     /**
-     * 领料列表
+     * 领料信息
      * @return mixed
      */
     public function actionLingliao()
