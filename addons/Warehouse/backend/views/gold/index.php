@@ -161,7 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
                         ],
-                        [
+                        /*[
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-                        ]
+                        ]*/
                     ]
                 ]); ?>
             </div>

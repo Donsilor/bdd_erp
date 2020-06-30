@@ -1,19 +1,15 @@
 <?php
 
-use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\GoldStatusEnum;
+use addons\Warehouse\common\enums\AdjustTypeEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use kartik\select2\Select2;
-use yii\data\ActiveDataProvider;
-use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
-use yii\web\View;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold', '领料信息');
+$this->title = Yii::t('gold_log', '金料日志');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -37,26 +33,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'gold_name',
+                                'attribute'=>'order_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'style_sn',
+                                'attribute'=>'bill_no',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'adjust_type',
                                 'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                    return AdjustTypeEnum::getValue($model->adjust_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'adjust_type', AdjustTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -66,32 +57,42 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'gold_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '布产编号',
-                                'value' => function ($model){
-                                    return $model->produceGold->produce_sn ?? '';
-                                },
-                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label' => '配料状态',
-                                'value' => function ($model){
-                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
-                                },
-                                'filter' => false,
+                                'attribute' => 'stock_weight',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute'=>'created_at',
+                                'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'created_at',
+                                    'value' => $searchModel->created_at,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+                                    ],
+                                ]),
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->created_at);
+                                }
+                            ],
+                            [
+                                'label' => '操作人',
+                                'attribute' => 'member.username',
+                                'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                         ]
