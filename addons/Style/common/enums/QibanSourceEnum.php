@@ -10,9 +10,9 @@ namespace addons\Style\common\enums;
  */
 class QibanSourceEnum extends \common\enums\BaseEnum
 {
-  const TYPE_BASE = 1;  
-  const TYPE_COMBINE = 3;
-  const TYPE_SALE = 2;
+  const MANUAL_CREATE = 1;
+  const BUSINESS_APPLI = 2;
+  const OTHER = 3;
 
 
   /**
@@ -21,9 +21,9 @@ class QibanSourceEnum extends \common\enums\BaseEnum
   public static function getMap(): array
   {
     return [
-        self::TYPE_BASE => '基础属性',        
-        self::TYPE_COMBINE => '镶嵌属性',
-        self::TYPE_SALE => '销售属性',
+        self::MANUAL_CREATE => '手动创建',
+        self::BUSINESS_APPLI => '业务申请',
+        self::OTHER => '其他',
     ];
   }
    

@@ -56,6 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_source_id') ?>：</td>
+                            <td><?= \addons\Style\common\enums\QibanSourceEnum::getValue($model->qiban_source_id) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                             <td><?= $model->cate->name ?></td>
                         </tr>
