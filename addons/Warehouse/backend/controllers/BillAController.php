@@ -11,6 +11,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillAForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillGoodsA;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\helpers\ExcelHelper;
@@ -384,7 +385,10 @@ class BillAController extends BaseController
         return [$lists,$total];
     }
 
-
+    //获取已经调整的明细
+    public function getDjustNum($bill_id){
+        return WarehouseBillGoodsA::find()->where(['bill_id'=>$bill_id,'audit_status'=>AuditStatusEnum::PASS])->count();
+    }
 
 
 
