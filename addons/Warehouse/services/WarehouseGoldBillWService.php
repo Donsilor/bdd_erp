@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
+use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
 use Yii;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -120,6 +121,11 @@ class WarehouseGoldBillWService extends WarehouseBillService
         $goods = WarehouseGold::find()->where(['gold_sn'=>$form->gold_sn])->one();
         if(empty($goods)) {
             throw new \Exception("[{$form->gold_sn}]批次号不存在");
+        }else{
+            $modelW = WarehouseGoldBillW::findOne(['id'=>$form->id]);
+            if($goods->gold_type != $modelW->gold_type){
+                throw new \Exception("[{$form->gold_sn}]批次号材质不对");
+            }
         }
         if(!$billGoods) {
             $billGoods = new WarehouseGoldBillGoods();

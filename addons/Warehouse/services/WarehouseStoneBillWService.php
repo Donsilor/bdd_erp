@@ -129,6 +129,11 @@ class WarehouseStoneBillWService extends Service
         $goods = WarehouseStone::find()->where(['stone_sn'=>$form->stone_sn])->one();
         if(empty($goods)) {
             throw new \Exception("[{$form->stone_sn}]石料编号不存在");
+        }else{
+            $modelW = WarehouseStoneBillW::findOne(['id'=>$form->id]);
+            if($goods->stone_type != $modelW->stone_type){
+                throw new \Exception("[{$form->stone_sn}]石料编号材质不对");
+            }
         }
         if(!$billGoods) {
             $billGoods = new WarehouseStoneBillGoods();
