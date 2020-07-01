@@ -10,6 +10,7 @@ use common\helpers\Url;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="modal-body">
                 <div class="tab-content">
+                    <?= $form->field($model, 'status')->radioList(\addons\Warehouse\common\enums\LendStatusEnum::getMap()); ?>
                     <?= $form->field($model, 'goods_remark')->textArea(); ?>
                     <?php ActiveForm::end(); ?>
                 </div>

@@ -198,7 +198,7 @@ class BillCGoodsController extends BaseController
         if($check){
             try{
                 $bill_id = \Yii::$app->warehouseService->billC->returnGoodsValidate($model);
-                return ResultHelper::json(200, '', ['url'=>Url::to(['return-goods', 'id'=>$bill_id, 'ids'=>$ids])]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
@@ -209,6 +209,7 @@ class BillCGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $model->ids = $ids;
             $from = Yii::$app->request->post('WarehouseBillCForm');
+            $model->status = $from['status']??"";
             $model->goods_remark = $from['goods_remark']??"";
             try{
                 $trans = Yii::$app->trans->beginTransaction();

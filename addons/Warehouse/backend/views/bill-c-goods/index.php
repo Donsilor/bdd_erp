@@ -35,6 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
         if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == DeliveryTypeEnum::BORROW_GOODS) {
             echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
+                'data-width'=>'60%',
+                'data-height'=>'60%',
+                'data-offset'=>'10px',
             ]);
             echo '&nbsp;';
         }
