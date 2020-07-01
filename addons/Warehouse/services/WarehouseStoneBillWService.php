@@ -129,7 +129,7 @@ class WarehouseStoneBillWService extends Service
         }
         $goods = WarehouseStone::find()->where(['stone_sn'=>$form->stone_sn])->one();
         if(empty($goods)) {
-            throw new \Exception("[{$form->stone_sn}]批次号不存在");
+            throw new \Exception("[{$form->stone_sn}]石料编号不存在");
         }
         if(!$billGoods) {
             $billGoods = new WarehouseGoldBillGoods();

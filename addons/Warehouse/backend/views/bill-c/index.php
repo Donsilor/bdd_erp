@@ -38,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:130%;'],
+                    'options' => ['style'=>' width:135%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -117,7 +117,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'attribute' => 'channel_id',
@@ -246,7 +246,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
+                                            'data-target' => '#ajaxModal',
                                         ]);
                                     }
                                 },

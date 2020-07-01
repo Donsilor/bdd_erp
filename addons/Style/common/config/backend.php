@@ -57,11 +57,11 @@ return [
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
-                                    'title' => '金料款式列表',
+                                    'title' => '金料款式',
                                     'route' => 'gold-style/index',
                             ],
                             [
-                                    'title' => '石料款式列表',
+                                    'title' => '石料款式',
                                     'route' => 'stone-style/index',
                             ],
                     ],
