@@ -149,10 +149,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'created_at',
@@ -180,10 +180,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute' => 'lender_id',
                             'value' => 'lender.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'lender.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'restore_time',
