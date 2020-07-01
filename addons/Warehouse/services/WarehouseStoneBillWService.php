@@ -132,7 +132,7 @@ class WarehouseStoneBillWService extends Service
             throw new \Exception("[{$form->stone_sn}]石料编号不存在");
         }
         if(!$billGoods) {
-            $billGoods = new WarehouseGoldBillGoods();
+            $billGoods = new WarehouseStoneBillGoods();
             $billGoods->bill_id = $form->id;
             $billGoods->bill_no = $form->bill_no;
             $billGoods->bill_type = $form->bill_type;
