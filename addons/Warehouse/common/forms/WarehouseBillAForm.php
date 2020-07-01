@@ -26,6 +26,7 @@ class WarehouseBillAForm extends WarehouseBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
+            'from_warehouse_id'=> '调整仓库',
             'goods_num'=>'数量',
             'total_cost'=>'总金额',
 
