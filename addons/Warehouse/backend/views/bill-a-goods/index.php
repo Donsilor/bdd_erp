@@ -5,7 +5,7 @@ use common\helpers\Html;
 use yii\grid\GridView;
 use common\enums\AuditStatusEnum;
 
-$this->title = Yii::t('bill_l_goods', '入库单明细');
+$this->title = Yii::t('bill_a_goods', '调整单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -102,6 +102,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'audit_status',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return AuditStatusEnum::getValue($model->audit_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+
                                 ]),
                             ],
                             [

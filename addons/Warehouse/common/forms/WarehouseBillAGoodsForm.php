@@ -111,8 +111,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         }
 
         //更新单据状态
-        $count = WarehouseBillGoodsA::find()->where(['bill_id'=>$this->bill_id])->andWhere(['<>','audit_status',AuditStatusEnum::PASS])
-            ->count();
+        $count = WarehouseBillGoodsA::find()->where(['and',['bill_id'=>$this->bill_id],['<>','audit_status',AuditStatusEnum::PASS]])->count();
         $warehouseBill = WarehouseBill::find()->where(['id'=>$this->bill_id])->one();
         if($count == 0){
             $warehouseBill->bill_status = BillStatusEnum::CONFIRM;
