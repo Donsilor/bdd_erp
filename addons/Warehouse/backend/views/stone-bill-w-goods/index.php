@@ -42,6 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'yii\grid\SerialColumn',
                                     'visible' => false,
                             ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width'=>'30'],
+                            ],
                             /*[
                                     'attribute' => 'id',
                                     'filter' => false,

@@ -12,6 +12,7 @@ use addons\Supply\common\models\ProduceStone;
  * @property int $bill_id 单据ID
  * @property string $bill_no 单据编号
  * @property string $bill_type 单据类型
+ * @property string $stone_sn 石料编号
  * @property string $stone_name 石包名称
  * @property string $style_sn 石料款号
  * @property string $stone_type 商品类型

@@ -26,22 +26,28 @@ $form = ActiveForm::begin([
                 'disabled'=>'disabled',
             ],
         ]);?>
-        <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
-            'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false,
-                'disabled'=>'disabled',
-            ],
-        ]);?>
-        <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false,
-                'disabled'=>'disabled',
-            ],
-        ]);?>
+        <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false,
+                        'disabled'=>'disabled',
+                    ],
+                ]);?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
+                    'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false,
+                        'disabled'=>'disabled',
+                    ],
+                ]);?>
+            </div>
+        </div>
         <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap())?>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
