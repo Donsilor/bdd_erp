@@ -8,7 +8,6 @@ use common\enums\AuditStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\forms\WarehouseStoneBillGoodsWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
@@ -181,8 +180,8 @@ class WarehouseStoneBillWService extends Service
             foreach ($ids as $id) {
                 $goods = WarehouseStoneBillGoodsWForm::findOne(['id'=>$id]);
                 if($goods->fin_status != FinAuditStatusEnum::PENDING){
-                    $gold = WarehouseStoneBillGoods::findOne($id);
-                    throw new \Exception("石料编号【{$gold->stone_sn}】不是待审核状态");
+                    $stone = WarehouseStoneBillGoods::findOne($id);
+                    throw new \Exception("石料编号【{$stone->stone_sn}】不是待审核状态");
                 }
             }
         }
