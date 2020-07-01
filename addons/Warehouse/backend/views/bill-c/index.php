@@ -38,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:145%;'],
+                    'options' => ['style'=>' width:150%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -176,6 +176,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
+                        ],
+                        [
+                            'attribute' => 'lender_id',
+                            'value' => 'lender.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'lender.username', [
+                                'class' => 'form-control',
+                            ]),
                         ],
                         [
                             'attribute'=>'restore_time',

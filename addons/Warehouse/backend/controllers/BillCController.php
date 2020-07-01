@@ -53,6 +53,7 @@ class BillCController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
+                'lender' =>  ['username'],
             ]
         ]);
 
