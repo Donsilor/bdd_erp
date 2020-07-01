@@ -19,8 +19,8 @@ class AddonConfig extends BaseAddonConfig
      */
     public $info = [
         'name' => 'Supply',
-        'title' => '供应商管理',
-        'brief_introduction' => 'ERP-供应商管理',
+        'title' => '生产管理',
+        'brief_introduction' => 'ERP-生产管理',
         'description' => '',
         'author' => '小朋s',
         'version' => '1.0.0',
