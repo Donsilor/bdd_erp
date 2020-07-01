@@ -186,6 +186,14 @@ class WarehouseBill extends BaseModel
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
     /**
+     * 借货人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLender()
+    {
+        return $this->hasOne(Member::class, ['id'=>'lender_id'])->alias('lender');
+    }
+    /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
      */
