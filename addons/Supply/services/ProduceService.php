@@ -196,7 +196,7 @@ class ProduceService extends Service
             $model->produce_sn =  $form->produce_sn;
             $model->from_order_sn = $form->from_order_sn;
             $model->from_type = $form->from_type;
-            $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+            $model->peiliao_status = ($form->peiliao_status == PeiliaoStatusEnum::NONE) ? PeiliaoStatusEnum::NONE :PeiliaoStatusEnum::IN_PEILIAO;
             $is_new =  true;
         }else { 
             if($model->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
@@ -205,12 +205,17 @@ class ProduceService extends Service
             }
             $fields = ['gold_type','gold_weight'];
             //如果有重要字段变动，配石状态还原成 配石中
-            foreach ($fields as $field) {
-                if($model->{$field} != $gold[$field]) {
-                    $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
-                    $form->peiliao_status  = PeiliaoStatusEnum::IN_PEILIAO;
-                    $reset = true;
-                    break;
+            if($form->peiliao_status == PeiliaoStatusEnum::NONE) {
+                $model->peiliao_status = PeiliaoStatusEnum::NONE;
+                $form->peiliao_status  = PeiliaoStatusEnum::NONE;
+            }else{
+                foreach ($fields as $field) {
+                    if($model->{$field} != $gold[$field]) {
+                        $model->peiliao_status = PeiliaoStatusEnum::IN_PEILIAO;
+                        $form->peiliao_status  = PeiliaoStatusEnum::IN_PEILIAO;
+                        $reset = true;
+                        break;
+                    }
                 }
             }
             $model->attributes = ArrayHelper::merge($model->attributes, $gold);
@@ -303,7 +308,7 @@ class ProduceService extends Service
                  $model->produce_sn =  $form->produce_sn;
                  $model->from_order_sn = $form->from_order_sn;
                  $model->from_type = $form->from_type;
-                 $model->peishi_status =  PeishiStatusEnum::IN_PEISHI;
+                 $model->peishi_status = ($form->peishi_status == PeishiStatusEnum::NONE) ? PeishiStatusEnum::NONE :PeishiStatusEnum::IN_PEILIAO;
                  $is_new = true;                 
              }else {
                  if($model->peishi_status == PeishiStatusEnum::HAS_LINGSHI) {
@@ -311,12 +316,17 @@ class ProduceService extends Service
                      return ;
                  }
                  //如果有重要字段变动，配石状态还原成 配石中
-                 foreach ($fields as $field) {
-                     if($model->{$field} != $stone[$field]) {
-                         $model->peishi_status = PeishiStatusEnum::IN_PEISHI;
-                         $form->peishi_status  = PeishiStatusEnum::IN_PEISHI; 
-                         $reset = true;
-                         break;
+                 if($form->peishi_status == PeishiStatusEnum::NONE){
+                     $model->peishi_status = PeishiStatusEnum::NONE;
+                     $form->peishi_status  = PeishiStatusEnum::NONE; 
+                 }else{
+                     foreach ($fields as $field) {
+                         if($model->{$field} != $stone[$field]) {
+                             $model->peishi_status = PeishiStatusEnum::IN_PEISHI;
+                             $form->peishi_status  = PeishiStatusEnum::IN_PEISHI; 
+                             $reset = true;
+                             break;
+                         }
                      }
                  }
                  $model->attributes = ArrayHelper::merge($model->attributes, $stone);

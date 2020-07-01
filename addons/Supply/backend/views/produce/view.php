@@ -58,6 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <td><?= PeiliaoStatusEnum::getValue($model->peiliao_status) ?></td>
                              </tr>
                              <tr>
+                                 <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_type') ?>：</td>
+                                 <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->peishi_type) ?></td>
+                             </tr>
+                             <tr>
                                  <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_status') ?>：</td>
                                  <td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                              </tr>

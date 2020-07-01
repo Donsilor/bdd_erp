@@ -11,9 +11,7 @@ use common\enums\BaseEnum;
 class PeiliaoTypeEnum extends BaseEnum
 {
     const None = 1;
-    const PeiShi = 2;
-    const PeiLiao = 3;
-    const All = 4;  
+    const PeiLiao = 2;  
     
     /**
      *
@@ -22,24 +20,21 @@ class PeiliaoTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-                self::None => "不需配石配料",
-                self::PeiShi => "需配石",
-                self::PeiLiao => "需配料",
-                self::All => "需配石配料",                
+                self::None => "不需配金料",
+                self::PeiLiao => "需配金料",                
         ];
     }
     /**
      * 配石/配料状态
      * @return string[][]|number[][]
      */
-    public static function getStatusMap()
+    public static function getPeiliaoStatus($peiliao_type)
     {
-        return [
-                self::None=>[PeishiStatusEnum::NONE,PeiliaoStatusEnum::NONE],
-                self::PeiShi=>[PeishiStatusEnum::PENDING,PeiliaoStatusEnum::NONE],
-                self::PeiLiao=>[PeishiStatusEnum::NONE,PeiliaoStatusEnum::PENDING],
-                self::All=>[PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING],
+        $map = [
+                self::None=>PeiliaoStatusEnum::NONE,
+                self::PeiLiao=>PeiliaoStatusEnum::PENDING,
         ];
+        return $map[$peiliao_type] ?? PeiliaoStatusEnum::NONE;
     }
     /**
      * 是否配料

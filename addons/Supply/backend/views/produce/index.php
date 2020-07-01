@@ -7,6 +7,7 @@ use yii\grid\GridView;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -202,17 +203,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
+                    'attribute' => 'peishi_type',
+                    'value' => function($model){
+                        return PeishiTypeEnum::getValue($model->peishi_type);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'peishi_type',PeishiTypeEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                            'style' => 'width:130px;',
+                    ])
+            ],
+            [
                 'attribute' => 'peiliao_type',
                 'value' => function($model){
                     return PeiliaoTypeEnum::getValue($model->peiliao_type);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'inlay_type',PeiliaoTypeEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'peiliao_type',PeiliaoTypeEnum::getMap(), [
                         'prompt' => '全部',
                         'class' => 'form-control',
                         'style' => 'width:130px;',
-                ])
-                
-                ],
+                ])                
+            ],
             [
                 'attribute' => 'factory_distribute_time',
                 'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件

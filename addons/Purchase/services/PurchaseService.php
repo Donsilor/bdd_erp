@@ -31,6 +31,7 @@ use addons\Supply\common\enums\FromTypeEnum;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
 
 /**
  * Class PurchaseService
@@ -108,10 +109,13 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
-            $buchan_status = BuChanEnum::ASSIGNED;
-            list($peishi_status,$peiliao_status) = PeiliaoTypeEnum::getValue($model->peiliao_type,"getStatusMap") ?? [PeishiStatusEnum::PENDING,PeiliaoStatusEnum::PENDING];
-            if(PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
+            
+            $peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
+            $peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
+            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
                 $buchan_status = BuChanEnum::TO_PEILIAO;
+            } else {
+                $buchan_status = BuChanEnum::ASSIGNED;
             }
             $goods = [
                     'goods_name' =>$model->goods_name,
