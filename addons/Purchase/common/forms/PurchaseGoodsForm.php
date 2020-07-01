@@ -200,7 +200,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function createApply()
     {
         //主要信息
-        $fields = array('goods_name','cost_price','goods_num','peiliao_type');
+        $fields = array('goods_name','cost_price','goods_num','peiliao_type','peishi_type');
         $apply_info = array();
         foreach ($fields as $field) {
             $apply_info[] = array(

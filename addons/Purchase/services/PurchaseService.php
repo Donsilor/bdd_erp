@@ -126,6 +126,7 @@ class PurchaseService extends Service
                     'from_type' => FromTypeEnum::PURCHASE,
                     'style_sn' => $model->style_sn,
                     'peiliao_type'=>$model->peiliao_type,
+                    'peishi_type'=>$model->peishi_type,
                     'peishi_status'=>$peishi_status,
                     'peiliao_status'=>$peiliao_status,
                     'bc_status' => $buchan_status,

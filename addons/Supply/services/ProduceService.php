@@ -183,6 +183,7 @@ class ProduceService extends Service
     private function createProduceGold($form ,$attrValues)
     {   
         $is_new = false;
+        $reset  = false;
         $gold = [
                 'supplier_id' => $form->supplier_id,
                 'gold_type' =>  $attrValues[AttrIdEnum::MATERIAL]??'',
@@ -208,6 +209,7 @@ class ProduceService extends Service
             if($form->peiliao_status == PeiliaoStatusEnum::NONE) {
                 $model->peiliao_status = PeiliaoStatusEnum::NONE;
                 $form->peiliao_status  = PeiliaoStatusEnum::NONE;
+                $reset = true;
             }else{
                 foreach ($fields as $field) {
                     if($model->{$field} != $gold[$field]) {
@@ -308,7 +310,7 @@ class ProduceService extends Service
                  $model->produce_sn =  $form->produce_sn;
                  $model->from_order_sn = $form->from_order_sn;
                  $model->from_type = $form->from_type;
-                 $model->peishi_status = ($form->peishi_status == PeishiStatusEnum::NONE) ? PeishiStatusEnum::NONE :PeishiStatusEnum::IN_PEILIAO;
+                 $model->peishi_status = ($form->peishi_status == PeishiStatusEnum::NONE) ? PeishiStatusEnum::NONE :PeishiStatusEnum::IN_PEISHI;
                  $is_new = true;                 
              }else {
                  if($model->peishi_status == PeishiStatusEnum::HAS_LINGSHI) {
@@ -319,6 +321,7 @@ class ProduceService extends Service
                  if($form->peishi_status == PeishiStatusEnum::NONE){
                      $model->peishi_status = PeishiStatusEnum::NONE;
                      $form->peishi_status  = PeishiStatusEnum::NONE; 
+                     $reset = true;
                  }else{
                      foreach ($fields as $field) {
                          if($model->{$field} != $stone[$field]) {
