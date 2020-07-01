@@ -104,10 +104,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <!-- ./box-body -->
                 <?php if($model->style_sn) {?>
                     <div class="row">
-                        <?php if($model->is_inlay == InlayEnum::Yes && $model->jintuo_type == JintuoTypeEnum::Chengpin) {?>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'stone_info')->textarea() ?>
+                            <?= $form->field($model, 'kinto_price')->textInput() ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'starting_fee')->textInput() ?>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <?php if($model->is_inlay == InlayEnum::Yes && $model->jintuo_type == JintuoTypeEnum::Chengpin) {?>
+                            <div class="col-lg-4">
+                                <?= $form->field($model, 'stone_info')->textarea() ?>
+                            </div>
                         <?php }?>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'remark')->textarea() ?>

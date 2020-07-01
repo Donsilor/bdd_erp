@@ -133,7 +133,7 @@ class GoldBillLController extends GoldBillController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldBill->auditGoldL($model);
+                \Yii::$app->warehouseService->goldL->auditGoldL($model);
 
                 $trans->commit();
 

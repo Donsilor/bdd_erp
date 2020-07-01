@@ -87,8 +87,8 @@ class StoneBillWGoodsController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = new WarehouseStoneBillGoodsW();
-        $model = $this->findModel($id) ?? new WarehouseStoneBillGoodsW();
+        $this->modelClass = new WarehouseStoneBillGoodsWForm();
+        $model = $this->findModel($id) ?? new WarehouseStoneBillGoodsWForm();
         //默认值
         if($model->fin_status == FinAuditStatusEnum::PENDING) {
             $model->fin_status = FinAuditStatusEnum::PASS;
@@ -136,7 +136,7 @@ class StoneBillWGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->warehouseService->stoneW->auditGoodsValidate($model);
-                return ResultHelper::json(200, '', ['url'=>'/warehouse/stone-bill-w-goods/batch-audit?ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }

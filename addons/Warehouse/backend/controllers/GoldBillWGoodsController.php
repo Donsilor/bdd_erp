@@ -161,7 +161,7 @@ class GoldBillWGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->warehouseService->goldW->auditGoodsValidate($model);
-                return ResultHelper::json(200, '', ['url'=>'/warehouse/gold-bill-w-goods/batch-audit?ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids' =>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }

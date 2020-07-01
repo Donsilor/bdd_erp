@@ -56,6 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_source_id') ?>：</td>
+                            <td><?= \addons\Style\common\enums\QibanSourceEnum::getValue($model->qiban_source_id) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                             <td><?= $model->cate->name ?></td>
                         </tr>
@@ -127,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-footer text-center">
                 <?php
-                if(!$model->purchaseGoods){
+//                if(!$model->purchaseGoods){
                     if($model->qiban_type == 1){
                         echo Html::edit(['edit','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'编辑',[
                             'class' => 'btn btn-primary btn-sm openIframe',
@@ -143,9 +147,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset'=>'20px',
                         ]);
                     }
-                }
+//                }
                 ?>
-
+                <?php
+                    echo Html::edit(['format-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'版式编辑',[
+                        'class' => 'btn btn-primary btn-sm openIframe',
+                        'data-width'=>'90%',
+                        'data-height'=>'90%',
+                        'data-offset'=>'20px',
+                    ]);
+                ?>
                 <?php
                 if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
@@ -253,7 +264,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= \addons\Purchase\common\enums\SpecialCraftEnum::getValue($item->format_craft_desc)?></td>
                                             <td>
                                                 <?php
-                                                foreach ($item->format_craft_images as $img){
+                                                $format_craft_images = $item->format_craft_images ?? [];
+                                                foreach ($format_craft_images as $img){
                                                     ?>
                                                     <?= \common\helpers\ImageHelper::fancyBox($img) ?>
                                                 <?php } ?>

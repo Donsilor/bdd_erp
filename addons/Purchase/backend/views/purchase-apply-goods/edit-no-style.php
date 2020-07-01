@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             break;
                         }
                         default:{
-                            $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);
+                            $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                             $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                             break;
                         }
@@ -124,8 +124,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <?= $form->field($model, 'goods_images')->widget(common\widgets\webuploader\Files::class, [
+                                    'config' => [
+                                        'pick' => [
+                                            'multiple' => true,
+                                        ],
+                                    ]
+                                ]); ?>
+                            </div>
+                            <div class="col-lg-6" style="padding: 0px;">
+                                <?php $model->goods_video = !empty($model->goods_video)?explode(',', $model->goods_video):null;?>
+                                <?= $form->field($model, 'goods_video')->widget(common\widgets\webuploader\Files::class, [
+                                    'type'=>'videos',
                                     'config' => [
                                         'pick' => [
                                             'multiple' => true,

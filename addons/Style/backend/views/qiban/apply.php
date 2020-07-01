@@ -203,7 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {edit} {apply} {audit} {status}',
+                'template' => '{view} {edit} {format-edit} {apply} {audit} {status}',
                 'buttons' => [
                     'view'=> function($url, $model, $key){
                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -212,7 +212,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'edit' => function($url, $model, $key){
                         //审核后不能编辑
-                        if(!$model->purchaseGoods){
                             if($model->qiban_type == QibanTypeEnum::HAVE_STYLE){
                                 return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
@@ -228,8 +227,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-offset'=>'20px',
                                 ]);
                             }
-                        }
 
+                    },
+                    'format-edit' => function($url, $model, $key){
+                        return Html::edit(['format-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'版式编辑',[
+                            'class' => 'btn btn-primary btn-sm openIframe',
+                            'data-width'=>'90%',
+                            'data-height'=>'90%',
+                            'data-offset'=>'20px',
+                        ]);
                     },
                     'apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE){

@@ -38,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:130%;'],
+                    'options' => ['style'=>' width:150%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -117,7 +117,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'attribute' => 'channel_id',
@@ -149,10 +149,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'created_at',
@@ -174,7 +174,38 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            }
+                        ],
+                        [
+                            'attribute' => 'lender_id',
+                            'value' => 'lender.username',
+                            'filter' => Html::activeTextInput($searchModel, 'lender.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'restore_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'restore_time',
+                                'value' => $searchModel->restore_time,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDate($model->restore_time);
                             }
                         ],
                         /*[
@@ -246,7 +277,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
+                                            'data-target' => '#ajaxModal',
                                         ]);
                                     }
                                 },

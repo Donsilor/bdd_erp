@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
+use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
 use Yii;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -42,7 +43,11 @@ class WarehouseGoldBillWService extends WarehouseBillService
             throw new \Exception($this->getError($bill));
         }
         //批量创建单据明细
-        $goods_list = WarehouseGold::find()->where(['warehouse_id'=>$bill->to_warehouse_id, 'gold_type' => $form->gold_type])->asArray()->all();
+        $where = [
+            //'warehouse_id'=>$bill->to_warehouse_id,
+            'gold_type' => $form->gold_type
+        ];
+        $goods_list = WarehouseGold::find()->where($where)->asArray()->all();
         $gold_weight = 0;
         $bill_goods_values = [];
         if(!empty($goods_list)) {
@@ -71,6 +76,8 @@ class WarehouseGoldBillWService extends WarehouseBillService
             if(!$result) {
                 throw new \Exception('导入单据明细失败');
             }
+        }else{
+            throw new \Exception('库存中未查到材质为['.\Yii::$app->attr->valueName($form->gold_type).']的盘点数据');
         }
 
         //同步盘点明细关系表
@@ -120,6 +127,11 @@ class WarehouseGoldBillWService extends WarehouseBillService
         $goods = WarehouseGold::find()->where(['gold_sn'=>$form->gold_sn])->one();
         if(empty($goods)) {
             throw new \Exception("[{$form->gold_sn}]批次号不存在");
+        }else{
+            $modelW = WarehouseGoldBillW::findOne(['id'=>$form->id]);
+            if($goods->gold_type != $modelW->gold_type){
+                throw new \Exception("[{$form->gold_sn}]批次号材质不对");
+            }
         }
         if(!$billGoods) {
             $billGoods = new WarehouseGoldBillGoods();
@@ -265,7 +277,7 @@ class WarehouseGoldBillWService extends WarehouseBillService
     {
         $sum = WarehouseGoldBillGoods::find()->alias("g")->innerJoin(WarehouseGoldBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.gold_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_weight,0)) as actual_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.gold_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',

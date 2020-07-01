@@ -276,7 +276,8 @@ class MultipleFiles extends InputWidget
             return;
         }
         uploadTrigers++;
-
+        var name = uploadObj.parent().attr('data-name');
+        
         let multiple = config.pick.multiple;
         // 判断是否是多图上传
         let obj = uploadObj;
@@ -292,7 +293,7 @@ class MultipleFiles extends InputWidget
         callData["extend"] = '.' + arr[arr.length - 1];
         callData["upload_type"] = data.upload_type;
         callData["multiple"] = multiple;
-        let html = getTemplate(callData);
+        let html = getTemplate(callData,name);
 
         // 查找文本框并移除
         $(obj).parent().find('#hideInput-' + boxId).remove();
@@ -391,6 +392,7 @@ class MultipleFiles extends InputWidget
         let multiple =  $('#' + boxId).data('multiple');
         // 判断是否是多图上传
         let obj = uploadObj;
+        var name = uploadObj.parent().attr('data-name');
         
         if (multiple === 'false' || multiple === false || multiple === ''){
             $(obj).addClass('hide');
@@ -402,7 +404,7 @@ class MultipleFiles extends InputWidget
             callData["upload_type"] = data[0].upload_type;
             callData["extend"] = '.' + arr[arr.length - 1];
             callData["multiple"] = multiple;
-            let html = getTemplate(callData);
+            let html = getTemplate(callData,name);
             $(obj).before(html);
         } else {
             for (let i = 0; i < data.length; i++) {
@@ -414,7 +416,7 @@ class MultipleFiles extends InputWidget
                 callData["upload_type"] = data[i].upload_type;
                 callData["extend"] = '.' + arr[arr.length - 1];
                 callData["multiple"] = multiple;
-                let html = getTemplate(callData);
+                let html = getTemplate(callData,name);
                 $(obj).before(html);
             }
         }
@@ -430,8 +432,8 @@ class MultipleFiles extends InputWidget
     }
     
     
-   function getTemplate(callData) {
-       var template = '<li><input type="hidden" name="{$name}" value="'+ callData['value'] +'"><div class="img-box">';
+   function getTemplate(callData , name) {
+       var template = '<li><input type="hidden" name="'+ name +'" value="'+ callData['value'] +'"><div class="img-box">';
            if(callData["upload_type"] == 'images'){
                template += '<a href="' + callData['value'] + '" data-fancybox="rfUploadImg"><div class="bg-cover" style="background-image: url('+ callData['value'] +');"></div></a>';
            }else{

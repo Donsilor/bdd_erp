@@ -192,7 +192,7 @@ class StoneReceiptGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-                return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/iqc?ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to(['iqc', 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
@@ -254,7 +254,7 @@ class StoneReceiptGoodsController extends BaseController
         if($check){
             try{
                 $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
-                return ResultHelper::json(200, '', ['url'=>'/purchase/stone-receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$receipt_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }

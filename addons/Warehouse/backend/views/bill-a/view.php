@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('to_warehouse_id') ?>：</td>
-                            <td><?= $model->toWarehouse->name ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('from_warehouse_id') ?>：</td>
+                            <td><?= $model->fromWarehouse->name ?? '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -67,16 +67,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'=>'btn btn-primary btn-ms',
                     'data-target' => '#ajaxModalLg',
                 ]);
+//                echo '&nbsp;';
+//                echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+//                    'class'=>'btn btn-success btn-ms',
+//                    'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
+//                ]);
                 echo '&nbsp;';
-                echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                    'class'=>'btn btn-success btn-ms',
-                    'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
-                ]);
-                echo '&nbsp;';
-                echo Html::delete(['delete', 'id' => $model->id], '关闭',[
-                    'class'=>'btn btn-danger btn-ms',
-                ]);
-            }elseif ($model->bill_status == BillStatusEnum::PENDING){
                 echo Html::delete(['delete', 'id' => $model->id], '关闭',[
                     'class'=>'btn btn-danger btn-ms',
                 ]);

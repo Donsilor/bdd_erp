@@ -35,7 +35,7 @@ class BillAGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-t-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-a/index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -45,7 +45,7 @@ class BillAGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type']
+                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type'],
             ]
         ]);
 
@@ -287,9 +287,12 @@ class BillAGoodsController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try {
                 $trans = Yii::$app->trans->beginTransaction();
+
+                $model->auditor_id = Yii::$app->user->identity->getId();
+                $model->audit_time = time();
+                $model->save(true,['auditor_id','audit_status','audit_time','audit_remark']);
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->initSynch();
-
                     //日志
                     $log_msg = '审核通过；货号'.$model->goods_id;
                     $fields = $model->getMap();
@@ -309,15 +312,12 @@ class BillAGoodsController extends BaseController
                     \Yii::$app->warehouseService->billLog->realCreateBillLog($log);
                 }
 
-                $model->auditor_id = Yii::$app->user->identity->getId();
-                $model->audit_time = time();
-                $model->save(true,['auditor_id','audit_status','audit_time','audit_remark']);
                 $trans->commit();
                 $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-a-goods/index','bill_id'=>$model->bill_id,'tab'=>2]));
                 return $this->message("操作成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){
                 $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect($returnUrl), 'error');
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
 
         }

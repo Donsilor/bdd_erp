@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>  
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_status') ?>：</td>
-                            <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->apply_status)?></td>
+                            <td><?= ApplyStatusEnum::getValue($model->apply_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>

@@ -4,6 +4,7 @@ namespace addons\Style\services;
 
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\IsApply;
+use addons\Style\common\enums\QibanSourceEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\QibanAttribute;
 use common\components\Service;
@@ -26,6 +27,7 @@ class QibanService extends Service
         $qiban->status = StatusEnum::DISABLED;
         $qiban->is_apply = IsApply::Wait;
         $qiban->attributes = $goods;
+        $qiban->qiban_source_id = QibanSourceEnum::BUSINESS_APPLI;
         $qiban->creator_id = \Yii::$app->user->identity->getId();
         $qiban->created_at = time();
 

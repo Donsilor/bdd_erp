@@ -53,15 +53,15 @@ class PurchaseApplyGoods extends BaseModel
     public function rules()
     {
         return [
-            [['apply_id','goods_sn','style_cate_id','product_type_id','style_sex','jintuo_type'], 'required'],
-            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
+            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at','format_creator_id','format_created_at'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'stone_info', 'parts_info', 'remark','audit_remark','format_remark'], 'string', 'max' => 255],
             [['style_sn', 'qiban_sn','format_sn'], 'string', 'max' => 30],
             [['goods_image'], 'string', 'max' => 100],
-            [['format_images','format_video'], 'string', 'max' => 500],
+            [['format_images','format_video','goods_video'], 'string', 'max' => 500],
             [['goods_images'],'parseGoodsImages'],
         ];
     }
@@ -80,6 +80,7 @@ class PurchaseApplyGoods extends BaseModel
             'goods_type'=>'商品类型',
             'goods_image' => '商品图片',
             'goods_images' => '商品图库',
+            'goods_video' => '商品视频',
             'style_sn' => '款号',
             'qiban_sn' => '起版号',
             'qiban_type' => '起版类型',
@@ -100,7 +101,7 @@ class PurchaseApplyGoods extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
-            'creator_id' => '申请人',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'format_sn' => '图纸编号',
@@ -108,6 +109,8 @@ class PurchaseApplyGoods extends BaseModel
             'format_video' => '上传视频',
             'format_remark' => '版式备注',
             'format_info' => '工艺信息',
+            'format_creator_id' => '版式添加人',
+            'format_created_at' => '版式添加时间',
         ];
     }
     /**
@@ -164,6 +167,14 @@ class PurchaseApplyGoods extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFormatCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'format_creator_id'])->alias('formatCreator');
     }
     /**
      * 商品属性列表

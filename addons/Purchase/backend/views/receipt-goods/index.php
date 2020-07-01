@@ -190,8 +190,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'xiangkou',
                                 'format' => 'raw',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->xiangkou);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'xiangkou', [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
@@ -377,6 +381,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'second_stone_num1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'second_stone_weight1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -405,6 +418,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'second_stone_num2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'second_stone_weight2',

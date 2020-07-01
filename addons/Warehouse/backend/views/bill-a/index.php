@@ -172,14 +172,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                         ]);
                                     }
                                 },
-                                'ajax-apply' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
 
                                 'goods' => function($url, $model, $key){
                                     return Html::a('明细', ['bill-m-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);

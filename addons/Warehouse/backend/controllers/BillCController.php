@@ -53,6 +53,7 @@ class BillCController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
+                'lender' =>  ['username'],
             ]
         ]);
 
@@ -99,7 +100,7 @@ class BillCController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseBillCForm();
 
         if($model->isNewRecord){
             $model->bill_type = $this->billType;
@@ -111,8 +112,21 @@ class BillCController extends BaseController
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
             }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE]) && !$model->channel_id){
-                return $this->message("渠道不能为空", $this->redirect(Yii::$app->request->referrer), 'error');
+            if(in_array($model->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
+                if(!$model->lender_id){
+                    return $this->message("借货人不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                if(!$model->restore_time){
+                    return $this->message("预计还货日期不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+            }
+            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE])){
+                if(!$model->channel_id){
+                    return $this->message("渠道不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                if(!$model->order_sn){
+                    return $this->message("订单号不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();

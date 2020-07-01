@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -87,8 +88,8 @@ class WarehouseBillGoodsA extends BaseModel
             [['goods_name', 'product_size'], 'string', 'max' => 100],
             [['finger', 'main_stone_type', 'diamond_shape', 'diamond_color', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_cert_type', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_type2', 'second_stone_num2'], 'safe'],
             [['main_stone_sn', 'diamond_cert_id', 'second_stone_sn1'], 'string', 'max' => 20],
-            [['audit_remark'], 'string', 'max' => 255],
-            [['goods_id'], 'unique'],
+            [['audit_remark'], 'string', 'max' => 255]
+
         ];
     }
 
@@ -153,6 +154,14 @@ class WarehouseBillGoodsA extends BaseModel
     }
 
 
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
     /**
      * 关联款式分类一对一
      * @return \yii\db\ActiveQuery

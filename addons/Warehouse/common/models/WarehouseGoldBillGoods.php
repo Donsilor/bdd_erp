@@ -63,12 +63,12 @@ class WarehouseGoldBillGoods extends BaseModel
             'bill_type' => '单据类型',
             'gold_sn' => '金料编号',
             'gold_name' => '金料名称',
-            'style_sn' => '金料款号',
             'gold_type' => '金料类型',
+            'style_sn' => '金料款号',
             'gold_num' => '金料总数',
             'gold_weight' => '金料总重(g)',
-            'cost_price' => '金料总额',
             'gold_price' => '金料单价/g',
+            'cost_price' => '金料总额',
             'sale_price' => '销售价格',
             'source_detail_id' => '来源明细ID',
             'status' => '状态',
@@ -93,7 +93,6 @@ class WarehouseGoldBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseGoldBill::class, ['id'=>'bill_id'])->alias('bill');
     }
-    
     /**
      * 配石记录
      * @return \yii\db\ActiveQuery

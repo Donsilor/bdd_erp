@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\forms\PurchaseStoneReceiptGoodsForm;
+use common\helpers\Url;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -276,7 +277,7 @@ class PurchaseStoneGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_STONE);
-                return ResultHelper::json(200, '', ['url'=>'/purchase/purchase-stone-goods/warehouse?ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
