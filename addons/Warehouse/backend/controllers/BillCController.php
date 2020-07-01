@@ -99,7 +99,7 @@ class BillCController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseBillCForm();
 
         if($model->isNewRecord){
             $model->bill_type = $this->billType;

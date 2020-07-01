@@ -93,19 +93,20 @@ $form = ActiveForm::begin([
         if($.inArray(id,['3','4','5'])>=0){
             $("#div1").show();
         }else {
-            $("#warehousebillcform-supplier_id").find('select').find("option:first").prop("selected",true);
+            $("#warehousebillcform-supplier_id").select2("val",'');
             $("#div1").hide();
         }
-        if($.inArray(id,['2'])>=0){
+        if($.inArray(id,['1','2'])>=0){
             $("#div2").show();
         }else {
-            $("#warehousebillcform-channel_id").find('select').find("option:first").prop("selected",true);
+            $("#warehousebillcform-channel_id").select2("val",'');
             $("#div2").hide();
         }
         if($.inArray(id,['1'])>=0){
             $("#div3").show();
         }else {
-            $("#warehousebillcform-lender_id").find('select').find("option:first").prop("selected",true);
+            $("#warehousebillcform-restore_time").val("");
+            $("#warehousebillcform-lender_id").select2("val",'');
             $("#div3").hide();
         }
     }
