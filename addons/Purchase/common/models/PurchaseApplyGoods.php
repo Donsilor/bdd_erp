@@ -53,7 +53,7 @@ class PurchaseApplyGoods extends BaseModel
     public function rules()
     {
         return [
-            [['apply_id','goods_sn','style_cate_id','product_type_id','style_sex','jintuo_type'], 'required'],
+            [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
             [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at','format_creator_id','format_created_at'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],
@@ -101,7 +101,7 @@ class PurchaseApplyGoods extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
-            'creator_id' => '申请人',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'format_sn' => '图纸编号',
@@ -167,6 +167,14 @@ class PurchaseApplyGoods extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFormatCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'format_creator_id'])->alias('formatCreator');
     }
     /**
      * 商品属性列表

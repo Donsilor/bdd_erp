@@ -27,17 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->goods_sn ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
-                                    <td><?= $model->qiban_sn ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
-                                    <td><?= PurchaseGoodsTypeEnum::getValue($model->goods_type) ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_type') ?>：</td>
+                                    <td><?= \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?></td>
                                 </tr>  
-                                <?php if($model->goods_type != PurchaseGoodsTypeEnum::OTHER) {?>
+                                <?php if($model->qiban_type != \addons\Style\common\enums\QibanTypeEnum::NO_STYLE) {?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
+                                </tr>
+                                <?php }?>
+                                <?php if($model->qiban_type != \addons\Style\common\enums\QibanTypeEnum::NON_VERSION) {?>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('qiban_sn') ?>：</td>
+                                    <td><?= $model->qiban_sn ?></td>
                                 </tr>
                                 <?php }?>
                                 <tr>
@@ -76,26 +78,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-2 text-right">采购总额：</td>
                                     <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                    <td><?= $model->remark ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right">商品图片：</td>
-                                    <td>
-                                     <?php 
-                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER) {
-                                             $model->goods_images = $model->goods_images ? explode(',', $model->goods_images) :[];                                    
-                                             foreach ($model->goods_images as $goods_image) {
-                                            	echo \common\helpers\ImageHelper::fancyBox($goods_image,90,90); 
-                                             } 	
-                                        }else {
-                                        	echo \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); 
-                                        }
-                                      ?>
-                                    </td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
+                                    <td><?= $model->channel->name ?></td>
                                 </tr>
+
+
                             </table>
                         </div>
 
@@ -105,7 +94,48 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-xs-6">
                     <div class="box">
                         <div class="table-responsive">
-                            <table class="table table-hover">                                
+                            <table class="table table-hover">
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                    <td><?=  $model->creator->username ?? ''  ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                                    <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                                    <td><?= $model->auditor->username ?? ''  ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                    <td><?= $model->audit_remark ?></td>
+                                </tr>
+                                <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NO_STYLE){ ?>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('format_creator_id') ?>：</td>
+                                    <td><?= $model->formatCreator->username ?? ''  ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('format_created_at') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->format_created_at) ?></td>
+                                </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                    <td><?= $model->remark ?></td>
+                                </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
                                     <td><?= $model->stone_info ?></td>
@@ -114,7 +144,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_info') ?>：</td>
                                     <td><?= $model->parts_info ?></td>
                                 </tr>
-
+                                <tr>
+                                    <td class="col-xs-2 text-right">商品图片：</td>
+                                    <td>
+                                        <?php
+                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER) {
+                                            $model->goods_images = $model->goods_images ? explode(',', $model->goods_images) :[];
+                                            foreach ($model->goods_images as $goods_image) {
+                                                echo \common\helpers\ImageHelper::fancyBox($goods_image,90,90);
+                                            }
+                                        }else {
+                                            echo \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90);
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

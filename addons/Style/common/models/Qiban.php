@@ -65,7 +65,7 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at', 'is_apply'], 'integer'],
+            [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at', 'is_apply'], 'integer'],
             [['sale_price', 'market_price','kinto_price','starting_fee', 'cost_price'], 'number'],
             [['format_info'], 'string'],
             [['qiban_name', 'audit_remark', 'stone_info', 'parts_info', 'remark', 'format_remark'], 'string', 'max' => 255],
@@ -92,6 +92,7 @@ class Qiban extends BaseModel
             'product_type_id' => Yii::t('app', '产品线'),
             'jintuo_type' => Yii::t('app', '金托类型'),
             'style_source_id' => Yii::t('app', '款式来源'),
+            'qiban_source_id' => Yii::t('app', '起版来源'),
             'style_channel_id' => Yii::t('app', '款式渠道'),
             'style_sex' => Yii::t('app', '款式性别'),
             'style_image' => Yii::t('app', '商品主图'),

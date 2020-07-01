@@ -349,12 +349,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
                                     }
                             ],
-                            [
-                                    'label'=>' format_sn',
-                                    'value'=> function($model){
-                                        return $model->attr[AttrIdEnum::DIA_CERT_NO] ?? "";
-                                    }
-                            ],
                             'format_sn',
                             [
                                 'attribute'=>'audit_time',

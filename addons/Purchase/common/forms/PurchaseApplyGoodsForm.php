@@ -33,6 +33,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     public function rules()
     {
         $rules = [
+                [['style_sex'],'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     if(!empty($value)) {
                         foreach ($value as $k=>$v) {

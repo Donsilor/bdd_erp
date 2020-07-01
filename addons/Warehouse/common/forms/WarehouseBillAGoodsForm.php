@@ -89,6 +89,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         foreach ($fields as $bill_goods_field => $goods_field){
             $goods -> $goods_field = $this -> $bill_goods_field;
         }
+        $goods->goods_status = GoodsStatusEnum::IN_STOCK;
         //$goods->save();
         if(false === $goods->save()) {
             throw new \Exception($this->getErrors($goods));
