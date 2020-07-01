@@ -96,7 +96,7 @@ $form = ActiveForm::begin([
             $("#warehousebillcform-supplier_id").find('select').find("option:first").prop("selected",true);
             $("#div1").hide();
         }
-        if($.inArray(id,['2'])>=0){
+        if($.inArray(id,['1','2'])>=0){
             $("#div2").show();
         }else {
             $("#warehousebillcform-channel_id").find('select').find("option:first").prop("selected",true);
