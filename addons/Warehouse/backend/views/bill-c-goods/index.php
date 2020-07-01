@@ -35,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
         if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == DeliveryTypeEnum::BORROW_GOODS) {
             echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
-                'data-width'=>'60%',
-                'data-height'=>'60%',
+                'data-width'=>'40%',
+                'data-height'=>'85%',
                 'data-offset'=>'10px',
             ]);
             echo '&nbsp;';
@@ -187,6 +187,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_remark',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute'=>'returned_time',
+                                'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'returned_time',
+                                    'value' => $searchModel->returned_time,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+                                    ],
+                                ]),
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDate($model->returned_time);
+                                }
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

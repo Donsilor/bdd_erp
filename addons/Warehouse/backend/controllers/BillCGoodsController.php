@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use addons\Warehouse\common\enums\LendStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use common\helpers\ResultHelper;
@@ -211,11 +212,9 @@ class BillCGoodsController extends BaseController
             $from = Yii::$app->request->post('WarehouseBillCForm');
             $model->status = $from['status']??"";
             $model->goods_remark = $from['goods_remark']??"";
+            $model->returned_time = $from['returned_time']??"";
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
                 Yii::$app->warehouseService->billC->returnGoods($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -225,6 +224,7 @@ class BillCGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $model->status = LendStatusEnum::LEND;
         return $this->render($this->action->id, [
             'model' => $model,
         ]);

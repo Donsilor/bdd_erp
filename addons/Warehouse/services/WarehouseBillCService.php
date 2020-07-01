@@ -165,7 +165,12 @@ class WarehouseBillCService extends WarehouseBillService
                 throw new Exception("商品{$goods->goods_id}不是已借货状态或者不存在，请查看原因");
             }
         }
-        WarehouseBillGoods::updateAll(['status'=>$form->status, 'goods_remark'=>$form->goods_remark], ['id'=>$ids]);
+        $returned_time = empty($form->returned_time)?0:strtotime($form->returned_time);
+        WarehouseBillGoods::updateAll(['status'=>$form->status, 'goods_remark'=>$form->goods_remark, 'returned_time'=>$returned_time], ['id'=>$ids]);
+
+        //if(false === $form->save()) {
+        //    throw new \Exception($this->getError($form));
+        //}
         //$execute_num = WarehouseBillGoods::updateAll(['status'=>$form->status, 'goods_remark'=>$form->goods_remark], ['id'=>$ids]);
         //if($execute_num <> count($ids)){
         //    throw new Exception("货品改变状态数量与明细数量不一致");
