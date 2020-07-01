@@ -68,6 +68,7 @@ class WarehouseBill extends BaseModel
             [['bill_type'], 'string', 'max' => 3],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['bill_no'], 'unique'],
+            [['restore_time'], 'safe'],
         ];
     }
 
@@ -103,7 +104,7 @@ class WarehouseBill extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'lender_id' => '借货人',
-            'restore_time' => '预计还货时间',
+            'restore_time' => '预计还货日期',
             'remark' => '单据备注',
             'status' => '状态',
             'creator_id' => '创建人',
