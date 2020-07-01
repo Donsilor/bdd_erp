@@ -277,7 +277,7 @@ class WarehouseGoldBillWService extends WarehouseBillService
     {
         $sum = WarehouseGoldBillGoods::find()->alias("g")->innerJoin(WarehouseGoldBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.gold_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_weight,0)) as actual_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.gold_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
