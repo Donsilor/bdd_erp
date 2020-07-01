@@ -84,7 +84,7 @@ class WarehouseStoneBillWService extends Service
                 throw new \Exception('导入单据明细失败');
             }
         }else{
-            throw new \Exception('库存中未查到石料类型为['.\Yii::$app->attr->valueName($form->stone_type).']的盘点数据');
+            throw new \Exception('库存中未查到石料为['.\Yii::$app->attr->valueName($form->stone_type).']的盘点数据');
         }
         //同步盘点明细关系表
         $sql = "insert into ".WarehouseStoneBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseStoneBillGoods::tableName()." where bill_id=".$bill->id;
@@ -295,8 +295,8 @@ class WarehouseStoneBillWService extends Service
     {
         $sum = WarehouseStoneBillGoods::find()->alias("g")->innerJoin(WarehouseStoneBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_weight,0)) as actual_weight',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_num,0)) as actual_grain',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_grain',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_num,0)) as profit_grain',

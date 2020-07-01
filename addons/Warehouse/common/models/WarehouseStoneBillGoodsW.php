@@ -52,7 +52,7 @@ class WarehouseStoneBillGoodsW extends BaseModel
     {
         return [
             'id' => 'ID',
-            'actual_num' => '实盘重量',
+            'actual_num' => '实盘数量',
             'actual_weight' => '实盘重量',
             'fin_status' => '财务审核状态',
             'fin_checker' => '财务确认人',
