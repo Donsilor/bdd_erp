@@ -252,11 +252,14 @@ class ProduceService extends Service
         $stone_list =[];
         //主石
         if(!empty($attrValues[AttrIdEnum::MAIN_STONE_TYPE])) {
+            $stone_weight = $form->goods_num * ($attrValues[AttrIdEnum::MAIN_STONE_NUM]??0)*($attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??0);
             $stone_list[StonePositionEnum::MAIN_STONE] = [
                     'stone_type'=>$attrValues[AttrIdEnum::MAIN_STONE_TYPE]??'',
                     'stone_position'=>StonePositionEnum::MAIN_STONE,                    
                     'stone_num'=> $form->goods_num * ($attrValues[AttrIdEnum::MAIN_STONE_NUM]??0),
+                    'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::DIA_SPEC]??'',
+                    'carat'=>$attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??0,
                     'color' =>$attrValues[AttrIdEnum::DIA_COLOR]??'',
                     'clarity'=>$attrValues[AttrIdEnum::DIA_CLARITY]??'',
                     'shape'=>$attrValues[AttrIdEnum::DIA_SHAPE]??'',                    
@@ -266,33 +269,42 @@ class ProduceService extends Service
         }
         //副石1
         if(!empty($attrValues[AttrIdEnum::SIDE_STONE1_TYPE])) {
+            $stone_weight = $form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??0);
             $stone_list[StonePositionEnum::SECOND_STONE1] = [
                     'stone_type'=>$attrValues[AttrIdEnum::SIDE_STONE1_TYPE]??'',
                     'stone_position'=>StonePositionEnum::SECOND_STONE1,                    
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE1_NUM]??0),
+                    'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE1_SPEC]??'',
+                    'carat'=>$attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??0,
                     'color' =>$attrValues[AttrIdEnum::SIDE_STONE1_COLOR]??'',
                     'clarity'=>$attrValues[AttrIdEnum::SIDE_STONE1_CLARITY]??'',
             ];
         }
         //副石2
         if(!empty($attrValues[AttrIdEnum::SIDE_STONE2_TYPE])) {
+            $stone_weight = $form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??0);
             $stone_list[StonePositionEnum::SECOND_STONE2] = [
                     'stone_type'=>$attrValues[AttrIdEnum::SIDE_STONE2_TYPE]??'',
                     'stone_position'=>StonePositionEnum::SECOND_STONE2,
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE2_NUM]??0),
+                    'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE2_SPEC]??'',
+                    'carat'=>$attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??0,
                     'color' =>'',
                     'clarity'=>'',
             ];
         }
         //副石3
         if(!empty($attrValues[AttrIdEnum::SIDE_STONE3_TYPE])) {
+            $stone_weight = $form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE3_WEIGHT]??0);
             $stone_list[StonePositionEnum::SECOND_STONE3] = [
                     'stone_type'=>$attrValues[AttrIdEnum::SIDE_STONE3_TYPE]??'',
                     'stone_position'=>StonePositionEnum::SECOND_STONE3,
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE3_NUM]??0),
+                    'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE3_SPEC]??'',
+                    'carat'=>$attrValues[AttrIdEnum::SIDE_STONE3_WEIGHT]??0,
                     'color' =>'',
                     'clarity'=>'',
             ];

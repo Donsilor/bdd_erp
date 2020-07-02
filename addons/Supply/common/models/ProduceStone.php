@@ -53,6 +53,7 @@ class ProduceStone extends BaseModel
     public function rules()
     {
         return [
+            [['stone_weight'], 'number'],
             [['produce_id','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
             [['color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
@@ -72,15 +73,16 @@ class ProduceStone extends BaseModel
             'from_type' => '来源类型',
             'from_order_sn' => '来源订单号', 
             'delivery_no'=>'领(送)石单',
-            'supplier_id'=>'加工商',    
+            'supplier_id'=>'加工商', 
+            'carat' => '石头重量(ct)',
             'color' => '石头颜色',
             'clarity' => '石头净度',
             'shape' => '石头形状',
             'cert_type' => '证书类型',
-            'cert_no' => '证书号',
-            'carat' => '石头大小',
+            'cert_no' => '证书号',            
             'stone_spec'=>'石头规格',
             'stone_num' => '石头数量',
+            'stone_weight' => '石头总重(ct)',
             'stone_type' => '石头类型',
             'stone_position' => '石头位置',
             'stone_sn' =>'石包编号',    

@@ -79,6 +79,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
+                                    'attribute' => 'stone_weight',
+                                    'value' => 'stone_weight',
+                                    'filter' => false,                                    
+                            ],
+                            [
                                     'attribute' => 'shape',
                                     'value' => function($model){
                                             return $model->shape ?? '无';

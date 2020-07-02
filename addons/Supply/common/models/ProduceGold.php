@@ -66,7 +66,7 @@ class ProduceGold extends BaseModel
                 'from_order_sn' => '来源单号',
                 'from_type' => '来源类型',
                 'gold_type' => '金料类型', 
-                'gold_weight' => '金料总重',
+                'gold_weight' => '金料总重(g)',
                 'gold_spec' => '金料规格',
                 'caigou_time' => '采购时间',
                 'songliao_time' => '送料最新时间',
