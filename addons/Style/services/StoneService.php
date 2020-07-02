@@ -4,7 +4,7 @@ namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
-use addons\Style\common\models\StyleStoneStyle;
+use addons\Style\common\models\StoneStyle;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 
@@ -21,7 +21,7 @@ class StoneService extends Service
      */
     public static function getDropDown($stone_type = null)
     {
-        $model = StyleStoneStyle::find()
+        $model = StoneStyle::find()
             ->where(['=', 'status', StatusEnum::ENABLED])
             ->andFilterWhere(['=', 'stone_type', $stone_type])
             ->select(['id', 'style_sn'])

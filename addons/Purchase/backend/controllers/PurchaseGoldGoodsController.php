@@ -4,7 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\forms\PurchaseStoneGoodsForm;
-use addons\Style\common\models\StyleGoldStyle;
+use addons\Style\common\models\GoldStyle;
 use common\helpers\Url;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -89,7 +89,7 @@ class PurchaseGoldGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$stone = StyleGoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
+                //$stone = GoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
                 //$model->goods_sn = $stone->style_sn??"";
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){

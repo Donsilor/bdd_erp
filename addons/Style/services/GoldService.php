@@ -4,7 +4,7 @@ namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
-use addons\Style\common\models\StyleGoldStyle;
+use addons\Style\common\models\GoldStyle;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 
@@ -21,7 +21,7 @@ class GoldService extends Service
      */
     public static function getDropDown($gold_type = null)
     {
-        $model = StyleGoldStyle::find()
+        $model = GoldStyle::find()
             ->where(['=', 'status', StatusEnum::ENABLED])
             ->andFilterWhere(['=', 'gold_type', $gold_type])
             ->select(['id', 'style_sn'])

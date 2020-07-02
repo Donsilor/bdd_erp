@@ -5,19 +5,19 @@ namespace addons\Style\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Style\common\models\StyleStoneStyle;
+use addons\Style\common\models\StoneStyle;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
 /**
- * StoneStyleController implements the CRUD actions for StyleStoneStyle model.
+ * StoneStyleController implements the CRUD actions for StoneStyle model.
  */
 class StoneStyleController extends BaseController
 {
     use Curd;
-    public $modelClass = StyleStoneStyle::class;
+    public $modelClass = StoneStyle::class;
     /**
-     * Lists all StyleStoneStyle models.
+     * Lists all StoneStyle models.
      * @return mixed
      */
     public function actionIndex()
@@ -41,24 +41,24 @@ class StoneStyleController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',StyleStoneStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',StyleStoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
         $stone_weight_min = $searchModel->stone_weight_min;
         if (!empty($stone_weight_min)) {
-            $dataProvider->query->andFilterWhere(['>=',StyleStoneStyle::tableName().'.stone_weight_min', $stone_weight_min] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.stone_weight_min', $stone_weight_min] );//结束时间
         }
         $stone_weight_max = $searchModel->stone_weight_max;
         if (!empty($stone_weight_max)) {
-            $dataProvider->query->andFilterWhere(['<=',StyleStoneStyle::tableName().'.stone_weight_max', $stone_weight_max] );//结束时间
+            $dataProvider->query->andFilterWhere(['<=',StoneStyle::tableName().'.stone_weight_max', $stone_weight_max] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',StyleStoneStyle::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',StoneStyle::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -99,7 +99,7 @@ class StoneStyleController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new StyleStoneStyle();
+        $model = $model ?? new StoneStyle();
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -119,7 +119,7 @@ class StoneStyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new StyleStoneStyle();
+        $model = $model ?? new StoneStyle();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
