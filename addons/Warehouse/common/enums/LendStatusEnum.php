@@ -11,8 +11,10 @@ namespace addons\Warehouse\common\enums;
  */
 class LendStatusEnum extends \common\enums\BaseEnum
 {
-    const LEND = 2;
-    const RETURN = 3;
+    const SAVE = 0;
+    const IN_RECEIVE = 1;
+    const HAS_LEND = 2;
+    const HAS_RETURN = 3;
 
     /**
      * @return array
@@ -20,8 +22,10 @@ class LendStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::LEND => '借货',
-            self::RETURN => '还货',
+            self::SAVE => '保存',
+            self::IN_RECEIVE => '待接收',
+            self::HAS_LEND => '已借货',
+            self::HAS_RETURN  => '已还货',
         ];
     }
 

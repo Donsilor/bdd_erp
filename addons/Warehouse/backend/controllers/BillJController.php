@@ -11,6 +11,7 @@ use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseBillJForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseBillJ;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\PageHelper;
@@ -53,8 +54,9 @@ class BillJController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
-                'auditor' => ['username'],
+                //'auditor' => ['username'],
                 'lender' =>  ['username'],
+                'billJ' => ['lender_id', 'est_restore_time'],
             ]
         ]);
 
@@ -92,7 +94,7 @@ class BillJController extends BaseController
     }
 
     /**
-     * ajax编辑/创建 其他出库单
+     * ajax编辑/创建 借货单
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -102,40 +104,19 @@ class BillJController extends BaseController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillJForm();
-
-        if($model->isNewRecord){
-            $model->bill_type = $this->billType;
-        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
-            if($model->isNewRecord){
+            if($isNewRecord){
+                $model->bill_type = $this->billType;
                 $model->bill_no = SnHelper::createBillSn($this->billType);
-            }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                if(!$model->lender_id){
-                    return $this->message("借货人不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-                if(!$model->restore_time){
-                    return $this->message("预计还货日期不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-            }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE])){
-                if(!$model->channel_id){
-                    return $this->message("渠道不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-                if(!$model->order_sn){
-                    return $this->message("订单号不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $trans->commit();
+                \Yii::$app->warehouseService->billJ->createBillJ($model);
 
+                $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else {
@@ -178,6 +159,7 @@ class BillJController extends BaseController
      */
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
+        $this->modelClass = WarehouseBill::class;
         $model = $this->findModel($id);
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -194,14 +176,14 @@ class BillJController extends BaseController
     }
 
     /**
-     * ajax 其他出库单-审核
+     * ajax 借货单-审核
+     * @throws
      *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
      */
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
+        $this->modelClass = WarehouseBill::class;
         $model = $this->findModel($id);
 
         if($model->audit_status == AuditStatusEnum::PENDING) {

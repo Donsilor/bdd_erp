@@ -13,7 +13,8 @@ use common\helpers\StringHelper;
 class WarehouseBillJForm extends WarehouseBill
 {
     public $ids;
-    public $goods_ids;
+    public $lender_id;
+    public $est_restore_time;
     public $returned_time;
     public $goods_remark;
 
@@ -21,9 +22,9 @@ class WarehouseBillJForm extends WarehouseBill
      * {@inheritdoc}
      */
     public function rules()
-    {      
+    {
          $rules = [
-            [['delivery_type'], 'required']
+            [['channel_id', 'lender_id', 'est_restore_time'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }
@@ -34,10 +35,10 @@ class WarehouseBillJForm extends WarehouseBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'order_sn'=>'参考编号/订单号',
-            'goods_ids'=>'货号',
+            'order_sn'=>'参考编号',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
+            'est_restore_time' => '预计还货日期',
             'returned_time' => '还货日期',
             'goods_remark' => '质检备注',
         ]);
@@ -50,12 +51,5 @@ class WarehouseBillJForm extends WarehouseBill
             return StringHelper::explode($this->ids);
         }
         return [];
-    }
-    /**
-     * 批量获取货号
-     */
-    public function getGoodsIds()
-    {
-        return StringHelper::explodeIds($this->goods_ids);
     }
 }

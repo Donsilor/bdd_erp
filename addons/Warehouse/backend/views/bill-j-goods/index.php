@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_c_goods', '其他出库单明细');
+$this->title = Yii::t('bill_j_goods', '借货单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -31,9 +31,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+//            echo '&nbsp;';
         }
-        if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == DeliveryTypeEnum::BORROW_GOODS) {
-            echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
+        if($bill->bill_status == BillStatusEnum::CONFIRM) {
+            echo Html::batchPopButton(['batch-receive', 'bill_id'=>$bill->id, 'check'=>1],'批量接收', [
+                'class'=>'btn btn-success btn-xs',
+                'data-width'=>'50%',
+                'data-height'=>'60%',
+                'data-offset'=>'10px',
+            ]);
+            echo '&nbsp;';
+            echo Html::batchPopButton(['batch-return', 'bill_id'=>$bill->id,'check'=>1],'批量还货', [
                 'class'=>'btn btn-success btn-xs',
                 'data-width'=>'40%',
                 'data-height'=>'85%',
@@ -41,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo '&nbsp;';
         }
-        echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
+        echo Html::a('导出', ['bill-j/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
         ]);
         ?>
@@ -166,24 +174,48 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'sale_price',
+                                'label' => '接收人',
+                                'value' => function($model){
+                                    return $model->goodsJ->receive->username ?? "";
+                                },
                                 'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label'=>'状态',
-                                'attribute' => 'status',
+                                'label' => '接收时间',
+                                'value' => function($model){
+                                    if($model->goodsJ->receive_time){
+                                        return Yii::$app->formatter->asDatetime($model->goodsJ->receive_time) ?? "";
+                                    }
+                                    return "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '接收备注',
+                                'value' => function($model){
+                                    return $model->goodsJ->receive_remark ?? "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goodsJ.lend_status',
                                 'format' => 'raw',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->status)??"初始化";
+                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->goodsJ->lend_status)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'goodsJ.lend_status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label'=> '质检备注',
                                 'attribute' => 'goods_remark',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
@@ -214,10 +246,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
+                                'template' => '{delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE && $bill->delivery_type == DeliveryTypeEnum::QUICK_SALE) {
+                                        if($model->goodsJ->lend_status == \addons\Warehouse\common\enums\LendStatusEnum::IN_RECEIVE) {
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
@@ -225,7 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'delete' => function($url, $model, $key) use($bill){
+                                    'delete' => function($url, $model, $key) use($bill) {
                                         if($bill->bill_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除',['class'=>'btn btn-danger btn-xs']);
                                         }

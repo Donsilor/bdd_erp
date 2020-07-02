@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'goods_ids')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
                      </div>
                      <div class="col-lg-1">
-                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchWarehouseGoods()"]) ?>
+                        <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
                      </div>
                  </div>
                 <div class="box-body table-responsive">
@@ -222,7 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= unclead\multipleinput\MultipleInput::widget([
                             'name' => "bill_goods",
                             'addButtonOptions'=>['label'=>'','class'=>''],
-                            'value' => $warehouse_goods,
+                            'value' => $goods_list,
                             'columns' => $warehouseColomns,
                         ]) ?>
                     </div>
@@ -234,8 +234,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
-    function searchWarehouseGoods() {
-        var goods_ids = $.trim($("#warehousebillcform-goods_ids").val());
+    function searchGoods() {
+        var goods_ids = $.trim($("#warehousebilljgoodsform-goods_ids").val());
         if(!goods_ids) {
             rfMsg("请输入货号");
             return false;

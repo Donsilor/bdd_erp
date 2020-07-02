@@ -10,7 +10,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_c', '其他出库单列表');
+$this->title = Yii::t('bill_j', '借货单列表');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -38,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:150%;'],
+                    'options' => ['style'=>' width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -66,7 +66,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         /*[
                             'attribute' => 'bill_type',
@@ -77,18 +77,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             },
                             'filter' => false,
                         ],*/
-                        [
-                            'attribute' => 'delivery_type',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'delivery_type',\addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
                         [
                             'attribute' => 'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
@@ -105,21 +93,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute'=>'total_sale',
-                            'filter' => Html::activeTextInput($searchModel, 'total_sale', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'order_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
-                        [
                             'attribute' => 'channel_id',
                             'value'=>function($model) {
                                 return $model->channel->name ?? '';
@@ -132,16 +105,40 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[supplier_id]',
-                                'value'=>$searchModel->supplier_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
+                            'attribute' => 'lender_id',
+                            'value' => 'billJ.lender.username',
+                            'filter' => Html::activeTextInput($searchModel, 'lender_id', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'est_restore_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'est_restore_time',
+                                'value' => $searchModel->est_restore_time,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                                 'pluginOptions' => [
-                                    'allowClear' => true,
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
                                 ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDate($model->billJ->est_restore_time);
+                            }
+                        ],
+                        [
+                            'attribute'=>'order_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
@@ -175,37 +172,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
-                        ],
-                        [
-                            'attribute' => 'lender_id',
-                            'value' => 'lender.username',
-                            'filter' => Html::activeTextInput($searchModel, 'lender.username', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'restore_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'restore_time',
-                                'value' => $searchModel->restore_time,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDate($model->restore_time);
                             }
                         ],
                         /*[
@@ -299,7 +265,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['bill-c-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['bill-j-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);

@@ -217,4 +217,12 @@ class WarehouseBill extends BaseModel
     {
         return $this->hasOne(WarehouseBillW::class, ['id'=>'id'])->alias('billW');
     }
+    /**
+     * 借货单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBillJ()
+    {
+        return $this->hasOne(WarehouseBillJ::class, ['id'=>'id'])->alias('billJ');
+    }
 }

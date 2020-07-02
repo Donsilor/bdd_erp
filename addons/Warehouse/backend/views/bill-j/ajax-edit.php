@@ -21,46 +21,31 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-        <?= $form->field($model, 'delivery_type')->widget(\kartik\select2\Select2::class, [
-            'data' => \addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(),
+        <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+            'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
-                'allowClear' => false
+                'allowClear' => true
             ],
         ]);?>
-        <div style="display: none" id="div1">
-            <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                'data' => \Yii::$app->supplyService->supplier->getDropDown(),
-                'options' => ['placeholder' => '请选择'],
-                'pluginOptions' => [
-                    'allowClear' => false
-                ],
-            ]);?>
-        </div>
-        <div style="display: none" id="div2">
-            <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
-                'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
-                'options' => ['placeholder' => '请选择'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);?>
-        </div>
-        <div style="display: none" id="div3" class="row">
+        <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'lender_id')->widget(kartik\select2\Select2::class, [
                     'data' => Yii::$app->services->backendMember->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
+                    'options' => [
+                            'placeholder' => '请选择',
+                            'value' => $model->billJ->lender_id??'',
+                    ],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
                 ]);?>
             </div>
             <div class="col-sm-6">
-                <?= $form->field($model, 'restore_time')->widget(DatePicker::class, [
+                <?= $form->field($model, 'est_restore_time')->widget(DatePicker::class, [
                     'language' => 'zh-CN',
                     'options' => [
-                        'value' => $model->restore_time ? date('Y-m-d', $model->restore_time) :'',
+                        'value' => $model->billJ->est_restore_time ? date('Y-m-d', $model->billJ->est_restore_time) :'',
                     ],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',

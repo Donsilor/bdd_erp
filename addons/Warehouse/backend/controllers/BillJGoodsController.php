@@ -4,11 +4,13 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\LendStatusEnum;
+use addons\Warehouse\common\enums\QcStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseBillJForm;
 use addons\Warehouse\common\forms\WarehouseBillJGoodsForm;
+use addons\Warehouse\common\models\WarehouseBillGoodsJ;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -51,7 +53,15 @@ class BillJGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'goodsJ' => [
+                    'lend_status',
+                    'receive_id',
+                    'receive_time',
+                    'receive_remark',
+                    'restore_time',
+                    'qc_status',
+                    'qc_remark',
+                ],
             ]
         ]);
 
@@ -70,44 +80,7 @@ class BillJGoodsController extends BaseController
     }
 
     /**
-     * ajax添加商品
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillCGoodsForm();
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(\Yii::$app->request->post())) {
-            try{
-                $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }
-                //更新收货单汇总：总金额和总数量
-                $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
-                if(false === $res){
-                    throw new Exception('更新单据汇总失败');
-                }
-                $trans->commit();
-                \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
-        }
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * 编辑/创建
+     * 添加明细
      * @property WarehouseBillBForm $model
      * @return mixed
      */
@@ -115,62 +88,24 @@ class BillJGoodsController extends BaseController
     {
         $this->layout = '@backend/views/layouts/iframe';
 
-        $search = Yii::$app->request->get('search');
-        $bill_id = Yii::$app->request->get('bill_id');
-        $goods_ids = Yii::$app->request->get('goods_ids');
-        $bill = WarehouseBillJForm::find()->where(['id' => $bill_id])->one();
-        $bill->goods_ids = $goods_ids;
-        $warehouse_goods = [];
-        if($search == 1 && !empty($goods_ids)){
-            $goods_id_arr = $bill->getGoodsIds();
-            foreach ($goods_id_arr as $goods_id) {
-                $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
-                if(!$goods){
-                    return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect(Yii::$app->request->referrer), 'error');
-                }
-                $data = [
-                    DeliveryTypeEnum::PROXY_PRODUCE,
-                    DeliveryTypeEnum::PART_GOODS,
-                    DeliveryTypeEnum::ASSEMBLY,
-                ];
-                if(in_array($bill->delivery_type, $data)){
-                    if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                        return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
-                    }
-                    if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                        return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
-                    }
-                }
-                $goods_info = [];
-                $goods_info['id'] = null;
-                $goods_info['goods_id'] = $goods_id;
-                $goods_info['bill_id'] = $bill_id;
-                $goods_info['bill_no'] = $bill->bill_no;
-                $goods_info['bill_type'] = $bill->bill_type;
-                $goods_info['style_sn'] = $goods->style_sn;
-                $goods_info['goods_name'] = $goods->goods_name;
-                $goods_info['goods_num'] = $goods->goods_num;
-                $goods_info['put_in_type'] = $goods->put_in_type;
-                $goods_info['warehouse_id'] = $goods->warehouse_id;
-                $goods_info['from_warehouse_id'] = $goods->warehouse_id;
-                $goods_info['material'] = $goods->material;
-                $goods_info['gold_weight'] = $goods->gold_weight;
-                $goods_info['gold_loss'] = $goods->gold_loss;
-                $goods_info['diamond_carat'] = $goods->diamond_carat;
-                $goods_info['diamond_color'] = $goods->diamond_color;
-                $goods_info['diamond_clarity'] = $goods->diamond_clarity;
-                $goods_info['diamond_cert_id'] = $goods->diamond_cert_id;
-                $goods_info['cost_price'] = $goods->cost_price;
-                $goods_info['sale_price'] = $goods->market_price;
-                $goods_info['market_price'] = $goods->market_price;
-                $warehouse_goods[] = $goods_info;
-            }
-            $bill_goods = Yii::$app->request->post('bill_goods');
-            if($bill->load(\Yii::$app->request->post()) && !empty($bill_goods)){
+        $search = \Yii::$app->request->get('search');
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $goods_ids = \Yii::$app->request->get('goods_ids');
+        $model = new WarehouseBillJGoodsForm();
+        $model->bill_id = $bill_id;
+        $model->goods_ids = $goods_ids;
+        try {
+            $goods_list = $model->getGoodsList();
+        }catch (\Exception $e){
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        if($search == 1 && !empty($model->getGoodsIds())){
+            $bill_goods = \Yii::$app->request->post('bill_goods');
+            if($model->load(\Yii::$app->request->post()) && !empty($bill_goods)){
                 try {
                     $trans = Yii::$app->db->beginTransaction();
 
-                    \Yii::$app->warehouseService->billJ->createBillGoodsJ($bill, $bill_goods);
+                    \Yii::$app->warehouseService->billJ->createBillGoodsJ($model, $bill_goods);
 
                     $trans->commit();
                     \Yii::$app->getSession()->setFlash('success','保存成功');
@@ -183,58 +118,92 @@ class BillJGoodsController extends BaseController
         }
 
         return $this->render($this->action->id, [
-            'model' => $bill,
-            'warehouse_goods' => $warehouse_goods
+            'model' => $model,
+            'goods_list' => $goods_list,
         ]);
     }
 
     /**
-     * 批量还货-借货单
+     * 批量接收
      *
      * @return mixed
+     * @throws \yii\base\ExitException
      */
-    public function actionReturnGoods()
+    public function actionBatchReceive()
     {
-        $ids = Yii::$app->request->get('ids');
-        $check = Yii::$app->request->get('check', null);
+        $ids = \Yii::$app->request->get('ids');
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $check = \Yii::$app->request->get('check', null);
         $model = new WarehouseBillJGoodsForm();
         $model->ids = $ids;
         if($check){
             try{
-                $bill_id = \Yii::$app->warehouseService->billJ->returnGoodsValidate($model);
+                \Yii::$app->warehouseService->billJ->receiveValidate($model);
                 return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        $id = Yii::$app->request->get('id');
-        $model = WarehouseBillJForm::findOne($id);
-        $model = $model ?? new WarehouseBillJForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->ids = $ids;
-            $from = Yii::$app->request->post('WarehouseBillCForm');
-            $model->status = $from['status']??"";
-            $model->goods_remark = $from['goods_remark']??"";
-            $model->returned_time = $from['returned_time']??"";
+        if ($model->load(\Yii::$app->request->post())) {
             try{
-                $trans = Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
 
-                Yii::$app->warehouseService->billJ->returnGoods($model);
+                \Yii::$app->warehouseService->billJ->receiveGoods($model);
 
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
+                \Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        $model->status = LendStatusEnum::LEND;
+
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }
 
+    /**
+     * 批量还货
+     *
+     * @return mixed
+     * @throws \yii\base\ExitException
+     */
+    public function actionBatchReturn()
+    {
+        $ids = \Yii::$app->request->get('ids');
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $check = \Yii::$app->request->get('check', null);
+        $model = new WarehouseBillJGoodsForm();
+        $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->warehouseService->billJ->returnValidate($model);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$bill_id, 'ids'=>$ids])]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->warehouseService->billJ->returnGoods($model);
+
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        $model->qc_status = QcStatusEnum::PASS;
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * 其他出库单-批量编辑
@@ -286,6 +255,9 @@ class BillJGoodsController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             //删除
             $billGoods->delete();
+            //删除明细关系表
+            $goodJ = WarehouseBillGoodsJ::findOne($billGoods->id);
+            $goodJ->delete();
             //更新单据数量和金额
             $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
             $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);

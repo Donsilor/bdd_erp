@@ -11,11 +11,11 @@ use common\helpers\Url;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="modal-body">
                 <div class="tab-content">
-                    <?= $form->field($model, 'status')->radioList(\addons\Warehouse\common\enums\LendStatusEnum::getMap()); ?>
-                    <?= $form->field($model, 'returned_time')->widget(DatePicker::class, [
+                    <?= $form->field($model, 'qc_status')->radioList(\addons\Warehouse\common\enums\QcStatusEnum::getMap()); ?>
+                    <?= $form->field($model, 'restore_time')->widget(DatePicker::class, [
                         'language' => 'zh-CN',
                         'options' => [
-                            'value' => $model->returned_time ? date('Y-m-d', $model->returned_time) :'',
+                            'value' => date('Y-m-d', time()),
                         ],
                         'pluginOptions' => [
                             'format' => 'yyyy-mm-dd',
@@ -24,7 +24,7 @@ use common\helpers\Url;
                             'todayBtn' => true,//今日按钮显示
                         ]
                     ]);?>
-                    <?= $form->field($model, 'goods_remark')->textArea(); ?>
+                    <?= $form->field($model, 'qc_remark')->textArea(); ?>
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>
