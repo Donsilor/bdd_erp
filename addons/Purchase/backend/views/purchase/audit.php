@@ -32,9 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
   .time-line li.grey div{
     color: grey;
   }
-  .time-line li.red1 div.mbox{
-      border: 1px solid red;
-  }
 
 
 
@@ -51,45 +48,42 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">
                 <div class="col-md-12 changelog-info">
                     <ul class="time-line">
-                        <li class="red1">
+                        <?php
+                         $user_id = \Yii::$app->user->identity->getId();
+                         foreach ($flow_detail as $flow){
+                             if(in_array($user_id, $current_users_arr) && $user_id === $flow->user_id){
+                        ?>
+                        <li>
                             <div class="mbox">
                                 <div>
-                                    <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  高朋</div>
-                                    <div class="right">审核时间：2020-07-02 13:12:55</div>
+                                    <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  <?= $flow->member->username ?? ''?></div>
                                 </div>
                                 <div class="clear">
                                     <div class="left">审核状态：</div><div class="left"><?= $form->field($model, 'audit_status')->radioList(\common\enums\AuditStatusEnum::getAuditMap())->label(false); ?></div>
                                 </div>
                                 <div class="clear">
-                                    <div class="left">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</div><div class="left"><?= $form->field($model, 'audit_remark')->textArea()->label(false); ?></div>
+                                    <div class="left">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</div><div class="left"><?= $form->field($model, 'audit_remark')->textArea(['cols'=>60])->label(false); ?></div>
                                 </div>
                                 <div class="clear"></div>
                             </div>
                         </li>
-                        <li class="grey">
-                            <div class="mbox">
-                                <div class="one">
-                                    <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  高朋</div>
-                                    <div class="right">审核时间：2020-07-02 13:12:55</div>
+                         <?php }else{ ?>
+                            <li class="grey">
+                                <div class="mbox">
+                                    <div class="one">
+                                        <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  <?= $flow->member->username ?? ''?></div>
+                                        <?php if($model->audit_status == \common\enums\AuditStatusEnum::PASS){ ?>
+                                            <div class="right">审核时间：<?= \Yii::$app->formatter->asDatetime($flow->audit_time) ?></div>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="clear">
+                                        审核状态：<?= \common\enums\AuditStatusEnum::getValue($flow->audit_status);?>
+                                    </div>
+                                    <div>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：<?= $flow->audit_remark?></div>
                                 </div>
-                                <div class="clear">
-                                    审核状态：未审核
-                                </div>
-                                <div>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：高朋高朋高朋高朋</div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="mbox">
-                                <div class="one">
-                                    <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  高朋</div>
-                                    <div class="right">审核时间：2020-07-02 13:12:55</div>
-                                </div>
-                                <div class="clear">
-                                    审核状态：未审核
-                                </div>
-                                <div>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：高朋高朋高朋高朋</div>
-                            </div>
-                        </li>
+                            </li>
+                         <?php } ?>
+                       <?php } ?>
 
 
 
@@ -97,10 +91,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <!-- /.widget-user -->
                 </div>
             </div>
+            <?php
+                if(in_array($user_id, $current_users_arr)){
+            ?>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                 <button class="btn btn-primary" type="submit">保存</button>
             </div>
+            <?php } ?>
             <?php ActiveForm::end(); ?>
         </div>
     </div>

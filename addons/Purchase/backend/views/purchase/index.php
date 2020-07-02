@@ -225,7 +225,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
+                                    'data-target' => '#ajaxModalLg',
                              ]); 
                         }
                     },
