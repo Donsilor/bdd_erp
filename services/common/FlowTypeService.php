@@ -68,7 +68,7 @@ class FlowTypeService extends Service
     }
 
     public function getFlowDetals($flow_type_id,$target_id){
-        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->one();
+        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
             throw new \Exception('参数错误');
         }
@@ -80,7 +80,7 @@ class FlowTypeService extends Service
 
     public function flowAudit($flow_type_id,$target_id, $audit){
         $user_id = \Yii::$app->user->identity->id;
-        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->one();
+        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
             throw new \Exception('参数错误');
         }
