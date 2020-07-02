@@ -272,6 +272,27 @@ class WarehouseBillJService extends WarehouseBillService
                 throw new \Exception("商品{$goods->goods_id}状态不是已借货或者不存在，请查看原因");
             }
         }
+
+        //同步更新借货单附表
+        $this->goodsJSummary($form->bill_id);
     }
 
+    /**
+     *  明细汇总
+     * @param int $bill_id
+     * @throws \Exception
+     */
+    public function goodsJSummary($bill_id)
+    {
+        $goods = WarehouseBillGoods::find()->select(['id'])->where(['bill_id' => $bill_id])->all();
+        if ($goods) {
+            $ids = ArrayHelper::getColumn($goods, 'id');
+            $restore_num = WarehouseBillGoodsJ::find()->where(['id' => $ids, 'lend_status' => LendStatusEnum::IN_RECEIVE])->count();
+            $billJ = WarehouseBillJ::findOne($bill_id);
+            $billJ->restore_num = $restore_num??0;
+            if (false === $billJ->save(true, ['restore_num'])) {
+                throw new \Exception($this->getError($billJ));
+            }
+        }
+    }
 }

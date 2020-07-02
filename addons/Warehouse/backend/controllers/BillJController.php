@@ -56,7 +56,7 @@ class BillJController extends BaseController
                 'creator' => ['username'],
                 //'auditor' => ['username'],
                 'lender' =>  ['username'],
-                'billJ' => ['lender_id', 'est_restore_time'],
+                'billJ' => ['lender_id', 'restore_num', 'est_restore_time'],
             ]
         ]);
 

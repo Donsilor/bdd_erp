@@ -11,6 +11,8 @@ use addons\Warehouse\common\forms\WarehouseBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseBillJForm;
 use addons\Warehouse\common\forms\WarehouseBillJGoodsForm;
 use addons\Warehouse\common\models\WarehouseBillGoodsJ;
+use addons\Warehouse\common\models\WarehouseBillJ;
+use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -188,9 +190,9 @@ class BillJGoodsController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
+                $model->bill_id = $bill_id;
 
                 \Yii::$app->warehouseService->billJ->returnGoods($model);
-
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

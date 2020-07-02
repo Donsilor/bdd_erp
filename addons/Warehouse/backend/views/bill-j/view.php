@@ -49,6 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->goods_num ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('restore_num') ?>：</td>
+                            <td><?= $model->billJ->restore_num??0; ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>

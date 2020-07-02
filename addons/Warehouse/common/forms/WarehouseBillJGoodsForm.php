@@ -2,12 +2,10 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillJ;
-use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use common\helpers\StringHelper;
 
 /**

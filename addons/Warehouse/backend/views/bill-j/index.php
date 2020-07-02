@@ -86,6 +86,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'restore_num',
+                            'value'=>function($model) {
+                                return $model->billJ->restore_num??0;
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
