@@ -231,13 +231,14 @@ class BillCController extends BaseController
      */
     public function actionDelete($id)
     {
+        $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model->bill_status = BillStatusEnum::CANCEL;
-            \Yii::$app->warehouseService->billB->closeBillB($model);
+
+            \Yii::$app->warehouseService->billC->closeBillC($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

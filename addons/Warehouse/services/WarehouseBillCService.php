@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use addons\Warehouse\common\models\WarehouseBill;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -116,22 +117,23 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 其他出库单关闭
-     * @param WarehouseBillCForm $form
+     * 其他出库单-关闭
+     * @param WarehouseBill $form
+     * @throws
      */
-    public function closeBillB($form)
+    public function closeBillC($form)
     {
-        if(false === $form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
         //更新库存状态
         $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
-        foreach ($billGoods as $goods){
-            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_RETURN_FACTORY]);
-            if(!$res){
-                throw new Exception("商品{$goods->goods_id}不是返厂中或者不存在，请查看原因");
+        if($billGoods){
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id]);
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不存在，请查看原因");
+                }
             }
         }
+        $form->bill_status = BillStatusEnum::CANCEL;
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }

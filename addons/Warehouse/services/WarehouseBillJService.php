@@ -145,13 +145,13 @@ class WarehouseBillJService extends WarehouseBillService
 
     /**
      * 借货单-关闭
-     * @param WarehouseBillJForm $form
+     * @param WarehouseBill $form
      * @throws
      */
     public function closeBillJ($form)
     {
         //更新库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['id', 'goods_id'])->all();
+        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
         if($billGoods){
             foreach ($billGoods as $goods){
                 $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_LEND]);
