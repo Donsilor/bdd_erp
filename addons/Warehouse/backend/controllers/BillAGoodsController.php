@@ -45,7 +45,7 @@ class BillAGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type'],
+                'goods'=>['style_sn','product_type_id','style_cate_id','style_sex','produce_sn','material','jintuo_type']
             ]
         ]);
 

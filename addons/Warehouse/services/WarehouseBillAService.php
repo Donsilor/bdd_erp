@@ -10,6 +10,7 @@ use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use common\enums\AuditStatusEnum;
 use common\helpers\StringHelper;
 
 
@@ -94,6 +95,12 @@ class WarehouseBillAService extends Service
 
         //汇总
         \Yii::$app->warehouseService->bill->warehouseBillSummary($model->bill_id);
+    }
+
+
+    //获取已经调整的明细
+    public function getDjustNum($bill_id){
+        return WarehouseBillGoodsA::find()->where(['bill_id'=>$bill_id,'audit_status'=>AuditStatusEnum::PASS])->count();
     }
 
 }

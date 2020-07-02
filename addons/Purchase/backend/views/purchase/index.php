@@ -209,7 +209,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{goods} {edit} {audit} {apply} {follower} {close}',
+                'template' => '{goods} {edit} {ajax-audit} {apply} {follower} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
@@ -220,7 +220,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },                    
-                    'audit' => function($url, $model, $key){
+                    'ajax-audit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::PENDING){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',

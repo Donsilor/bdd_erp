@@ -3,6 +3,8 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use common\enums\TargetType;
+use common\enums\TargetTypeEnum;
 use common\helpers\PageHelper;
 use Yii;
 use common\helpers\ArrayHelper;
@@ -147,13 +149,22 @@ class PurchaseController extends BaseController
         if($model->purchase_status != PurchaseStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
         }
-        $model->purchase_status = PurchaseStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
-        }
-        return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            //审批流程
+            Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_MENT,$id,$model->purchase_sn);
 
+            $model->purchase_status = PurchaseStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
     }
 
 
@@ -186,8 +197,18 @@ class PurchaseController extends BaseController
 
     }
 
+
+    public function actionAudit(){
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
     /**
-     * ajax 批量审核
+     * ajax 审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -227,7 +248,7 @@ class PurchaseController extends BaseController
 
         }
 
-        return $this->renderAjax($this->action->id, [
+        return $this->renderAjax('audit', [
             'model' => $model,
         ]);
     }

@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function($model){
-                                    return $model->productType->name ?? '';
+                                    return $model->goods->productType->name ?? '';
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'goods.product_type_id',Yii::$app->styleService->productType::getDropDown(), [
                                     'prompt' => '全部',
@@ -157,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => function ($model){
-                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->goods->style_sex);
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->goods->style_sex ?? '');
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'goods.style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
                                     'prompt' => '全部',

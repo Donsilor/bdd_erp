@@ -3,7 +3,9 @@
 namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsA;
 use addons\Warehouse\common\models\WarehouseBillLog;
+use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -272,4 +274,7 @@ class WarehouseBillService extends Service
     public function sumMarketPrice($bill_id){
         return WarehouseBillGoods::find()->where(['bill_id' => $bill_id])->sum('market_price');
     }
+
+
+
 }

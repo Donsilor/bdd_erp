@@ -108,6 +108,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '审批数量',
+                            'value' => function($model){
+                                return \Yii::$app->warehouseService->billA->getDjustNum($model->id);
+                            }
+                        ],
+                        [
                             'attribute' => 'bill_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
