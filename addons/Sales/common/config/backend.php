@@ -56,6 +56,10 @@ return [
                                     'title' => '销售渠道',
                                     'route' => 'sale-channel/index',
                             ],
+                            [
+                                    'title' => '快递公司',
+                                    'route' => 'express/index',
+                            ],
                     ],
                     
             ],
