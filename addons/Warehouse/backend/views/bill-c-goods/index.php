@@ -32,15 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
-        if($bill->bill_status == BillStatusEnum::CONFIRM && $bill->delivery_type == DeliveryTypeEnum::BORROW_GOODS) {
-            echo Html::batchPopButton(['return-goods','check'=>1],'批量还货', [
-                'class'=>'btn btn-success btn-xs',
-                'data-width'=>'40%',
-                'data-height'=>'85%',
-                'data-offset'=>'10px',
-            ]);
-            echo '&nbsp;';
-        }
         echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
         ]);
@@ -58,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:130%;white-space:nowrap;'],
+                        'options' => ['style'=>' width:120%;white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -168,48 +159,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'sale_price',
                                 'filter' => false,
-                            ],
-                            [
-                                'label'=>'状态',
-                                'attribute' => 'status',
-                                'format' => 'raw',
-                                'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->status)??"初始化";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'label'=> '质检备注',
-                                'attribute' => 'goods_remark',
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'attribute'=>'returned_time',
-                                'filter' => DateRangePicker::widget([    // 日期组件
-                                    'model' => $searchModel,
-                                    'attribute' => 'returned_time',
-                                    'value' => $searchModel->returned_time,
-                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'locale' => [
-                                            'separator' => '/',
-                                        ],
-                                        'endDate' => date('Y-m-d',time()),
-                                        'todayHighlight' => true,
-                                        'autoclose' => true,
-                                        'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-                                    ],
-                                ]),
-                                'value'=>function($model){
-                                    return Yii::$app->formatter->asDate($model->returned_time);
-                                }
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

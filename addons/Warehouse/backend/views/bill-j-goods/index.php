@@ -35,14 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         if($bill->bill_status == BillStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['batch-receive', 'bill_id'=>$bill->id, 'check'=>1],'批量接收', [
-                'class'=>'btn btn-success btn-xs',
+                'class'=>'btn btn-primary btn-xs',
                 'data-width'=>'50%',
                 'data-height'=>'60%',
                 'data-offset'=>'10px',
             ]);
             echo '&nbsp;';
             echo Html::batchPopButton(['batch-return', 'bill_id'=>$bill->id,'check'=>1],'批量还货', [
-                'class'=>'btn btn-success btn-xs',
+                'class'=>'btn btn-info btn-xs',
                 'data-width'=>'40%',
                 'data-height'=>'85%',
                 'data-offset'=>'10px',
@@ -174,6 +174,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'attribute' => 'goodsJ.lend_status',
+                                'format' => 'raw',
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->goodsJ->lend_status)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goodsJ.lend_status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'label' => '接收人',
                                 'value' => function($model){
                                     return $model->goodsJ->receive->username ?? "";
@@ -201,47 +213,45 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'goodsJ.lend_status',
+                                'attribute' => 'goodsJ.qc_status',
                                 'format' => 'raw',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->goodsJ->lend_status)??"";
+                                    return \addons\Warehouse\common\enums\QcStatusEnum::getValue($model->goodsJ->qc_status)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goodsJ.lend_status',\addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'goodsJ.qc_status',\addons\Warehouse\common\enums\QcStatusEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'goods_remark',
+                                'label' => '质检备注',
+                                'value' => function($model){
+                                    return $model->goodsJ->qc_remark ?? "";
+                                },
                                 'filter' => false,
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'returned_time',
-                                'filter' => DateRangePicker::widget([    // 日期组件
-                                    'model' => $searchModel,
-                                    'attribute' => 'returned_time',
-                                    'value' => $searchModel->returned_time,
-                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'locale' => [
-                                            'separator' => '/',
-                                        ],
-                                        'endDate' => date('Y-m-d',time()),
-                                        'todayHighlight' => true,
-                                        'autoclose' => true,
-                                        'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-                                    ],
-                                ]),
-                                'value'=>function($model){
-                                    return Yii::$app->formatter->asDate($model->returned_time);
-                                }
+                                'label' => '还货时间',
+                                'value' => function($model){
+                                    if($model->goodsJ->restore_time){
+                                        return Yii::$app->formatter->asDatetime($model->goodsJ->restore_time) ?? "";
+                                    }
+                                    return "";
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_remark',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

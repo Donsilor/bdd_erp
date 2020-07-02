@@ -177,37 +177,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
                         ],
-                        [
-                            'attribute' => 'lender_id',
-                            'value' => 'lender.username',
-                            'filter' => Html::activeTextInput($searchModel, 'lender.username', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'restore_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'restore_time',
-                                'value' => $searchModel->restore_time,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDate($model->restore_time);
-                            }
-                        ],
                         /*[
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
@@ -271,7 +240,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {close}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -304,10 +273,17 @@ $params = $params ? "&".http_build_query($params) : '';
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },*/
+                                'close' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                        return Html::delete(['close', 'id' => $model->id], '关闭',[
+                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        ]);
+                                    }
+                                },
                                 'delete' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
-                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        return Html::delete(['delete', 'id' => $model->id], '删除',[
+                                            'onclick' => 'rfTwiceAffirm(this,"删除单据", "确定删除吗？");return false;',
                                         ]);
                                     }
                                 },

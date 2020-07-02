@@ -46,31 +46,6 @@ $form = ActiveForm::begin([
                 ],
             ]);?>
         </div>
-        <div style="display: none" id="div3" class="row">
-            <div class="col-sm-6">
-                <?= $form->field($model, 'lender_id')->widget(kartik\select2\Select2::class, [
-                    'data' => Yii::$app->services->backendMember->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);?>
-            </div>
-            <div class="col-sm-6">
-                <?= $form->field($model, 'restore_time')->widget(DatePicker::class, [
-                    'language' => 'zh-CN',
-                    'options' => [
-                        'value' => $model->restore_time ? date('Y-m-d', $model->restore_time) :'',
-                    ],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'todayHighlight' => true,//今日高亮
-                        'autoclose' => true,//选择后自动关闭
-                        'todayBtn' => true,//今日按钮显示
-                    ]
-                ]);?>
-            </div>
-        </div>
         <?= $form->field($model, 'order_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
@@ -90,24 +65,17 @@ $form = ActiveForm::begin([
         })
     });
     function load(id) {
-        if($.inArray(id,['3','4','5'])>=0){
+        if($.inArray(id,['2','3','4'])>=0){
             $("#div1").show();
         }else {
             $("#warehousebillcform-supplier_id").select2("val",'');
             $("#div1").hide();
         }
-        if($.inArray(id,['1','2'])>=0){
+        if($.inArray(id,['1'])>=0){
             $("#div2").show();
         }else {
             $("#warehousebillcform-channel_id").select2("val",'');
             $("#div2").hide();
-        }
-        if($.inArray(id,['1'])>=0){
-            $("#div3").show();
-        }else {
-            $("#warehousebillcform-restore_time").val("");
-            $("#warehousebillcform-lender_id").select2("val",'');
-            $("#div3").hide();
         }
     }
 </script>

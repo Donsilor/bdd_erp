@@ -36,7 +36,7 @@ class BillJGoodsController extends BaseController
     public $billType = BillTypeEnum::BILL_TYPE_J;
 
     /**
-     * Lists all WarehouseBillBGoods models.
+     * 单据明细列表
      * @return mixed
      */
     public function actionIndex()

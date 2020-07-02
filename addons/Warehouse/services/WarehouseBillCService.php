@@ -99,10 +99,7 @@ class WarehouseBillCService extends WarehouseBillService
         if($form->audit_status == AuditStatusEnum::PASS){
             $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
             //更新商品库存状态
-            if($form->delivery_type == DeliveryTypeEnum::BORROW_GOODS){
-                $status = GoodsStatusEnum::HAS_LEND;
-                $conStatus = GoodsStatusEnum::IN_LEND;
-            }elseif($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
+            if($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
                 $status = GoodsStatusEnum::HAS_SOLD;
                 $conStatus = GoodsStatusEnum::IN_SALE;
             }else{
@@ -114,13 +111,6 @@ class WarehouseBillCService extends WarehouseBillService
             $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
             if(false === $res){
                 throw new \Exception("更新货品状态失败");
-            }
-        }
-        if($form->delivery_type == DeliveryTypeEnum::BORROW_GOODS){
-            $ids = ArrayHelper::getColumn($billGoods, 'id');
-            $res = WarehouseBillGoods::updateAll(['status' => LendStatusEnum::LEND], ['id' => $ids]);
-            if(false === $res){
-                throw new \Exception("更新明细商品状态失败");
             }
         }
     }
