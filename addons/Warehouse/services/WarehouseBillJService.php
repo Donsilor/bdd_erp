@@ -2,12 +2,13 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillJGoodsForm;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\LendStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
@@ -16,21 +17,21 @@ use common\helpers\ArrayHelper;
 use common\helpers\Url;
 
 /**
- * 其他出库单
+ * 借货单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillCService extends WarehouseBillService
+class WarehouseBillJService extends WarehouseBillService
 {
 
     /**
-     * 创建其他出库单明细
+     * 创建借货单明细
      * @param object $form
      * @param array $bill_goods
      * @throws
      *
      */
-    public function createBillGoodsC($form, $bill_goods)
+    public function createBillGoodsJ($form, $bill_goods)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -54,16 +55,10 @@ class WarehouseBillCService extends WarehouseBillService
             $goods_id_arr[] = $goods_id;
         }
         $goods_key = array_keys($bill_goods[0]);
-        \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
+        \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
 
         //更新商品库存状态
-        if($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
-            $status = GoodsStatusEnum::IN_SALE;
-        }else{
-            //其他出库类型
-            $status = GoodsStatusEnum::IN_STOCK;//待定
-        }
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_LEND],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
@@ -129,7 +124,7 @@ class WarehouseBillCService extends WarehouseBillService
      * 其他出库单关闭
      * @param WarehouseBillCForm $form
      */
-    public function closeBillB($form)
+    public function closeBillJ($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
