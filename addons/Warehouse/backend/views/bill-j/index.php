@@ -44,19 +44,19 @@ $params = $params ? "&".http_build_query($params) : '';
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
-                            'visible' => false,
+                            'visible' => true,
                         ],
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => [],
                         ],
-                        [
+                        /*[
                             'attribute' => 'id',
                             'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
@@ -66,7 +66,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         /*[
                             'attribute' => 'bill_type',
@@ -79,17 +79,20 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],*/
                         [
                             'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'restore_num',
+                            'value'=>function($model) {
+                                return $model->billJ->restore_num??0;
+                            },
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [

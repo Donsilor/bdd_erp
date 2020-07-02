@@ -10,6 +10,7 @@ use common\models\backend\Member;
  *
  * @property int $id 单据ID
  * @property int $lender_id 借货人
+ * @property int $restore_num 还货数量
  * @property int $est_restore_time 预计还货时间
  */
 class WarehouseBillJ extends BaseModel
@@ -29,7 +30,7 @@ class WarehouseBillJ extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'lender_id', 'est_restore_time'], 'integer'],
+            [['id', 'lender_id', 'restore_num', 'est_restore_time'], 'integer'],
             [['id'], 'unique'],
         ];
     }
@@ -42,6 +43,7 @@ class WarehouseBillJ extends BaseModel
         return [
             'id' => '单据ID',
             'lender_id' => '借货人',
+            'restore_num' => '还货数量',
             'est_restore_time' => '预计还货时间',
         ];
     }

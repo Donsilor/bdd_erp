@@ -47,7 +47,7 @@ class BillJController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['order_sn'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -55,8 +55,7 @@ class BillJController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 //'auditor' => ['username'],
-                'lender' =>  ['username'],
-                'billJ' => ['lender_id', 'est_restore_time'],
+                'billJ' => ['lender_id', 'restore_num', 'est_restore_time'],
             ]
         ]);
 
@@ -65,7 +64,7 @@ class BillJController extends BaseController
 
         $lender_id = $searchModel->lender_id;
         if (!empty($lender_id)) {
-            $dataProvider->query->andWhere(['like', 'lender.username', $lender_id]);
+            $dataProvider->query->andWhere(['like', 'creator.username', $lender_id]);
         }
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {

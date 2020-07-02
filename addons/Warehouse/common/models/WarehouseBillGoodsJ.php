@@ -58,6 +58,14 @@ class WarehouseBillGoodsJ extends BaseModel
     }
 
     /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [];
+    }
+
+    /**
      * 接收人
      * @return \yii\db\ActiveQuery
      */
