@@ -38,6 +38,7 @@ class WarehouseBillJForm extends WarehouseBill
         return ArrayHelper::merge(parent::attributeLabels() , [
             'order_sn'=>'参考编号',
             'goods_num'=>'借货数量',
+            'channel_id'=>'借货人渠道',
             'restore_num'=>'还货数量',
             'creator_id'=>'制单人',
             'created_at'=>'制单时间',
