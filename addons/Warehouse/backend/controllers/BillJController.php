@@ -55,7 +55,6 @@ class BillJController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 //'auditor' => ['username'],
-                'lender' =>  ['username'],
                 'billJ' => ['lender_id', 'restore_num', 'est_restore_time'],
             ]
         ]);
@@ -65,7 +64,7 @@ class BillJController extends BaseController
 
         $lender_id = $searchModel->lender_id;
         if (!empty($lender_id)) {
-            $dataProvider->query->andWhere(['like', 'lender.username', $lender_id]);
+            $dataProvider->query->andWhere(['like', 'creator.username', $lender_id]);
         }
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
