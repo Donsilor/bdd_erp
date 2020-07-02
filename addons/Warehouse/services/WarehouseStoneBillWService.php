@@ -43,8 +43,12 @@ class WarehouseStoneBillWService extends Service
             throw new \Exception($this->getError($bill));
         }
         //批量创建单据明细
-        $goods_list = WarehouseStone::find()->where(['warehouse_id'=>$bill->to_warehouse_id, 'stone_type' => $form->stone_type])->asArray()->all();
-        $stock_weight = 0;
+        $where = [
+            //'warehouse_id'=>$bill->to_warehouse_id,
+            'stone_type' => $form->stone_type,
+        ];
+        $goods_list = WarehouseStone::find()->where($where)->asArray()->all();
+        $stock_weight = $should_grain = 0;
         $bill_goods_values = [];
         if(!empty($goods_list)) {
             $bill_goods= [];
@@ -68,6 +72,7 @@ class WarehouseStoneBillWService extends Service
                     'status'=> PandianStatusEnum::SAVE,
                 ];
                 $bill_goods_values[] = array_values($bill_goods);
+                $should_grain = bcadd($should_grain, $goods['stock_cnt']);
                 $stock_weight = bcadd($stock_weight, $goods['stock_weight'], 3);
             }
             if(empty($bill_goods_keys)) {
@@ -78,6 +83,8 @@ class WarehouseStoneBillWService extends Service
             if(!$result) {
                 throw new \Exception('导入单据明细失败');
             }
+        }else{
+            throw new \Exception('库存中未查到石料为['.\Yii::$app->attr->valueName($form->stone_type).']的盘点数据');
         }
         //同步盘点明细关系表
         $sql = "insert into ".WarehouseStoneBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseStoneBillGoods::tableName()." where bill_id=".$bill->id;
@@ -90,6 +97,7 @@ class WarehouseStoneBillWService extends Service
         $billW->id = $bill->id;
         $billW->stone_type = $form->stone_type;
         $billW->should_num = $should_num;
+        $billW->should_grain = $should_grain;
         $billW->should_weight = $stock_weight;
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
@@ -287,8 +295,8 @@ class WarehouseStoneBillWService extends Service
     {
         $sum = WarehouseStoneBillGoods::find()->alias("g")->innerJoin(WarehouseStoneBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_weight,0)) as actual_weight',
-                'sum(if(gw.status='.ConfirmEnum::YES.',g.stone_num,0)) as actual_grain',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_weight,0)) as actual_weight',
+                'sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_grain',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_weight,0)) as profit_weight',
                 'sum(if(g.status='.PandianStatusEnum::PROFIT.',g.stone_num,0)) as profit_grain',

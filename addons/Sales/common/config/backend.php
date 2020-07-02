@@ -22,8 +22,47 @@ return [
 
     // ----------------------- 菜单配置 ----------------------- //
 
-    'menu' => [
-
+    'menu' => [            
+            [
+                    'title' => '订单管理',
+                    'route' => 'indexPurchase',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '订单列表',
+                                    'route' => 'order/index',
+                            ],
+                    ],
+                    
+            ],
+            [
+                    'title' => '客户管理',
+                    'route' => 'indexPurchase',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '客户列表',
+                                    'route' => 'customer/index',
+                            ],
+                    ],
+                    
+            ],
+            [
+                    'title' => '功能配置',
+                    'route' => 'indexPurchase',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '销售渠道',
+                                    'route' => 'sale-channel/index',
+                            ],
+                            [
+                                    'title' => '快递公司',
+                                    'route' => 'express/index',
+                            ],
+                    ],
+                    
+            ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //

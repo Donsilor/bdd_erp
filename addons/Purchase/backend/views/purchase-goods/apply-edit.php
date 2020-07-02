@@ -48,9 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
         			 </div> 
     			 </div>
     			 <div class="row">
-    			 	 <div class="col-lg-4">
-                            <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
-            		 </div>
+    			     <div class="col-lg-4">
+                        <?= $form->field($model, 'peishi_type')->dropDownList(addons\Supply\common\enums\PeishiTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+        			 </div>
+        			 <div class="col-lg-4">
+                        <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+        			 </div>  
             	 </div>
     			 <div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>

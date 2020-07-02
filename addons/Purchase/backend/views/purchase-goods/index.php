@@ -154,6 +154,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                    'attribute' => 'peishi_type',
+                                    'value' => function($model){
+                                        return \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->peishi_type);
+                                    },
+                                    'filter' => Html::activeDropDownList($searchModel, 'peishi_type',\addons\Supply\common\enums\PeishiTypeEnum::getMap(), [
+                                            'prompt' => '全部',
+                                            'class' => 'form-control',
+                                            'style'=>'width:100px'
+                                    ]),
+                                    'format' => 'raw',
+                                    'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                     'attribute' => 'peiliao_type',
                                     'value' => function($model){
                                         return \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type);

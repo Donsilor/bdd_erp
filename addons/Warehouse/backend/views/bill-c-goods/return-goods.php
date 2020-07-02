@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 
@@ -10,6 +11,19 @@ use common\helpers\Url;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="modal-body">
                 <div class="tab-content">
+                    <?= $form->field($model, 'status')->radioList(\addons\Warehouse\common\enums\LendStatusEnum::getMap()); ?>
+                    <?= $form->field($model, 'returned_time')->widget(DatePicker::class, [
+                        'language' => 'zh-CN',
+                        'options' => [
+                            'value' => $model->returned_time ? date('Y-m-d', $model->returned_time) :'',
+                        ],
+                        'pluginOptions' => [
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,//今日高亮
+                            'autoclose' => true,//选择后自动关闭
+                            'todayBtn' => true,//今日按钮显示
+                        ]
+                    ]);?>
                     <?= $form->field($model, 'goods_remark')->textArea(); ?>
                     <?php ActiveForm::end(); ?>
                 </div>

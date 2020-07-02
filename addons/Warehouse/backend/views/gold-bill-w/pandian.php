@@ -36,12 +36,20 @@ $form = ActiveForm::begin([
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">应盘数量：</td>
-                    <td><?= $model->billW->should_num ?? 0;?></td>
+                    <td style='color:green'><?= $model->billW->should_num ?? 0;?></td>
                 </tr>
                 <tr>
                     <td class="col-xs-1 text-right">实盘数量：</td>
-                    <td> <?= $model->billW->actual_num ?? 0;?> </td>
-                </tr>                  
+                    <td style='color:red'> <?= $model->billW->actual_num ?? 0;?> </td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right">应盘重量：</td>
+                    <td style='color:green'><?= $model->billW->should_weight ?? 0;?></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-1 text-right">实盘重量：</td>
+                    <td style='color:red'> <?= $model->billW->actual_weight ?? 0;?> </td>
+                </tr>
             </table>
         </div>                
     </div>

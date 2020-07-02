@@ -20,7 +20,7 @@ use common\models\backend\Member;
  * @property string $from_order_sn 来源订单编号
  * @property int $from_detail_id 订单明细ID
  * @property string $qiban_sn 起版编号
- * @property int $qiban_type 起版类型 1有款起版 2无款起版 0 非起版
+ * @property int $qiban_type 起版类型
  * @property string $style_sn 款号
  * @property string $goods_name 商品名称
  * @property int $goods_num 商品数量
@@ -32,6 +32,7 @@ use common\models\backend\Member;
  * @property int $is_inlay 是否镶嵌
  * @property int $inlay_type 镶嵌方式
  * @property int $peiliao_type 配料类型
+ * @property int $peishi_type 配石类型
  * @property int $peiliao_status 配料状态
  * @property int $peishi_status 配石状态
  * @property int $bc_status 布产状态 1初始化 2待确认 3待生产 4生产中 5待出厂 6部分出厂 7已出厂
@@ -62,7 +63,7 @@ class Produce extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id','is_inlay','peiliao_type','peishi_status','peiliao_status', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
+            [['merchant_id','is_inlay','peiliao_type','peishi_type','peishi_status','peiliao_status', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
             [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
             [['goods_name','audit_followe_remark'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
@@ -99,6 +100,7 @@ class Produce extends BaseModel
             'is_inlay' => '是否镶嵌',
             'inlay_type' => '镶嵌方式',
             'peiliao_type' => '配料类型',
+            'peishi_type' => '配石类型',
             'peiliao_status' => '配料状态',
             'peishi_status' => '配石状态',
             'bc_status' => '布产状态',

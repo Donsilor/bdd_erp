@@ -44,6 +44,10 @@ return [
                         'title' => '盘点单',
                         'route' => 'bill-w/index',
                     ],
+                    [
+                        'title' => '借货单',
+                        'route' => 'bill-j/index',
+                    ],
                     /*[
                         'title' => '维修退货单',
                         'route' => 'bill-o/index',

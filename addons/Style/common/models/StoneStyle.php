@@ -6,11 +6,15 @@ use common\models\backend\Member;
 use Yii;
 
 /**
- * This is the model class for table "style_gold_style".
+ * This is the model class for table "style_stone_style".
  *
  * @property int $id ID
- * @property string $gold_type 金料材质
+ * @property string $stone_type 石料类型
  * @property string $style_sn 款号
+ * @property double $stone_weight_min 石重范围小
+ * @property double $stone_weight_max 石重范围大
+ * @property int $cert_type 证书类型
+ * @property string $product_size 尺寸
  * @property string $remark 备注
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -22,14 +26,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class StyleGoldStyle extends BaseModel
+class StoneStyle extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('gold');
+        return self::tableFullName('stone');
     }
 
     /**
@@ -39,10 +43,12 @@ class StyleGoldStyle extends BaseModel
     {
         return [
             [['style_sn'], 'unique'],
-            [['gold_type', 'style_sn'], 'required'],
-            [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['gold_type'], 'string', 'max' => 10],
+            [['stone_type', 'style_sn', 'stone_weight_min', 'stone_weight_max'], 'required'],
+            [['stone_weight_min', 'stone_weight_max'], 'number'],
+            [['cert_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['stone_type'], 'string', 'max' => 10],
             [['style_sn'], 'string', 'max' => 30],
+            [['product_size'], 'string', 'max' => 100],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
     }
@@ -54,8 +60,12 @@ class StyleGoldStyle extends BaseModel
     {
         return [
             'id' => 'ID',
-            'gold_type' => '金料材质',
+            'stone_type' => '石料类型',
             'style_sn' => '款号',
+            'stone_weight_min' => '石重范围小',
+            'stone_weight_max' => '石重范围大',
+            'cert_type' => '证书类型',
+            'product_size' => '尺寸',
             'remark' => '备注',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',

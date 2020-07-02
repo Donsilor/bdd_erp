@@ -32,6 +32,7 @@ use Yii;
  * @property string $market_price 市场价
  * @property double $markup_rate 加价率
  * @property string $goods_remark 商品备注
+ * @property int $returned_time 还货日期
  * @property int $status 单据明细状态
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -61,7 +62,7 @@ class WarehouseBillGoods extends BaseModel
             [['diamond_color', 'diamond_clarity'], 'string', 'max' => 10],
             [['goods_remark'], 'string', 'max' => 255],
             [['bill_id','goods_id'], 'unique','targetAttribute'=>['bill_id','goods_id']],
-            [['supplier_id','from_warehouse_id','to_warehouse_id','creator_id','auditor_id'], 'safe']
+            [['returned_time', 'supplier_id', 'from_warehouse_id', 'to_warehouse_id', 'creator_id', 'auditor_id'], 'safe']
         ];
     }
 
@@ -97,6 +98,7 @@ class WarehouseBillGoods extends BaseModel
             'market_price' => '市场价',
             'markup_rate' => '加价率',
             'goods_remark' => '商品备注',
+            'returned_time' => '还货日期',
             'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
@@ -105,23 +107,13 @@ class WarehouseBillGoods extends BaseModel
     }
 
     /**
-     * 出库仓库 一对一
+     * 仓库 一对一
      * @return \yii\db\ActiveQuery
      */
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
     }
-
-    /**
-     * 出库仓库 一对一
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFromWarehouse()
-    {
-        return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
-    }
-
     /**
      * 入库仓库 一对一
      * @return \yii\db\ActiveQuery
@@ -130,7 +122,21 @@ class WarehouseBillGoods extends BaseModel
     {
         return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
-
+    /**
+     * 出库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'from_warehouse_id'])->alias('fromWarehouse');
+    }
+    /**
+     * 单据
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill(){
+        return $this->hasOne(WarehouseBill::class, ['id'=>'bill_id'])->alias('bill');
+    }
     /**
      * 库存 一对一
      * @return \yii\db\ActiveQuery
@@ -139,7 +145,6 @@ class WarehouseBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseGoods::class, ['goods_id'=>'goods_id'])->alias('goods');
     }
-    
     /**
      * 盘点单附属表
      * @return \yii\db\ActiveQuery
@@ -148,12 +153,12 @@ class WarehouseBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
     }
-
     /**
-     * 关联单据
+     * 借货单附属表
      * @return \yii\db\ActiveQuery
      */
-    public function getBill(){
-        return $this->hasOne(WarehouseBill::class, ['id'=>'bill_id'])->alias('bill');
+    public function getGoodsJ()
+    {
+        return $this->hasOne(WarehouseBillGoodsJ::class, ['id'=>'id'])->alias('goodsJ');
     }
 }
