@@ -6,7 +6,7 @@ use common\models\backend\Member;
 use Yii;
 
 /**
- * This is the model class for table "style_gold_style".
+ * This is the model class for table "style_gold".
  *
  * @property int $id ID
  * @property string $gold_type 金料材质

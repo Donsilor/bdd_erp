@@ -4,26 +4,26 @@ namespace addons\Style\services;
 
 use Yii;
 use common\components\Service;
-use addons\Style\common\models\StyleStoneStyle;
+use addons\Style\common\models\StyleGoldStyle;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 
 /**
- * Class StoneStyleService
+ * Class GoldService
  * @package addons\Style\services
  * @author jianyan74 <751393839@qq.com>
  */
-class StoneStyleService extends Service
+class GoldService extends Service
 {
     /**
-     * @param int $stone_type;
+     * @param int $gold_type;
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getDropDown($stone_type = null)
+    public static function getDropDown($gold_type = null)
     {
-        $model = StyleStoneStyle::find()
+        $model = StyleGoldStyle::find()
             ->where(['=', 'status', StatusEnum::ENABLED])
-            ->andFilterWhere(['=', 'stone_type', $stone_type])
+            ->andFilterWhere(['=', 'gold_type', $gold_type])
             ->select(['id', 'style_sn'])
             ->orderBy('sort asc')
             ->asArray()

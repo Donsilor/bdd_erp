@@ -42,7 +42,7 @@ class Application extends Service
         'styleAttribute' => 'addons\Style\services\StyleAttributeService',
         'qiban' => 'addons\Style\services\QibanService',
         'qibanAttribute' => 'addons\Style\services\QibanAttributeService',
-        'gold' => 'addons\Style\services\GoldStyleService',
-        'stone' => 'addons\Style\services\StoneStyleService',
+        'gold' => 'addons\Style\services\GoldService',
+        'stone' => 'addons\Style\services\StoneService',
     ];
 }
