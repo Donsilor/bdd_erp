@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <div class="box-header">
                 <h3 class="box-title"><?= $this->title; ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
+                    <?= Html::create(['edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]) ?>
@@ -65,38 +65,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         [
                             'attribute' => 'mobile',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'label' => '账户金额',
-                            'filter' => false, //不显示搜索框
-                            'value' => function ($model) {
-                                return "剩余：" . $model->account->user_money . '<br>' .
-                                    "累计：" . $model->account->accumulate_money . '<br>' .
-                                    "累计消费：" . abs($model->account->consume_money);
-                            },
-                            'format' => 'raw',
-                        ],
-                        [
-                            'label' => '账户积分',
-                            'filter' => false, //不显示搜索框
-                            'value' => function ($model) {
-                                return "剩余：" . $model->account->user_integral . '<br>' .
-                                    "累计：" . $model->account->accumulate_integral . '<br>' .
-                                    "累计消费：" . abs($model->account->consume_integral);
-                            },
-                            'format' => 'raw',
-                        ],
-                        [
-                            'label' => '最后登录',
-                            'filter' => false, //不显示搜索框
-                            'value' => function ($model) {
-                                return "最后访问IP：" . $model->last_ip . '<br>' .
-                                    "最后访问：" . Yii::$app->formatter->asDatetime($model->last_time) . '<br>' .
-                                    "登录次数：" . $model->visit_count . '<br>' .
-                                    "注册时间：" . Yii::$app->formatter->asDatetime($model->created_at) . '<br>';
-                            },
-                            'format' => 'raw',
-                        ],
+                        ],                        
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',

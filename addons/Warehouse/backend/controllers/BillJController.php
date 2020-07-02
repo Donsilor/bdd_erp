@@ -38,7 +38,7 @@ class BillJController extends BaseController
     public $billType = BillTypeEnum::BILL_TYPE_J;
 
     /**
-     * 列表
+     * 单据列表
      * @return mixed
      */
     public function actionIndex()
@@ -47,7 +47,7 @@ class BillJController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['order_sn'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -55,24 +55,27 @@ class BillJController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 //'auditor' => ['username'],
-                'lender' =>  ['username'],
-                'billJ' => ['lender_id', 'est_restore_time'],
+                'billJ' => ['lender_id', 'restore_num', 'est_restore_time'],
             ]
         ]);
 
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['created_at', 'audit_time']);
+            ->search(\Yii::$app->request->queryParams,['lender_id', 'est_restore_time']);
 
+        $lender_id = $searchModel->lender_id;
+        if (!empty($lender_id)) {
+            $dataProvider->query->andWhere(['like', 'creator.username', $lender_id]);
+        }
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseBillJForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseBillJForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $audit_time = $searchModel->audit_time;
-        if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseBillJForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseBillJForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        $est_restore_time = $searchModel->est_restore_time;
+        if (!empty($est_restore_time)) {
+            $dataProvider->query->andFilterWhere(['>=','billJ.est_restore_time', strtotime(explode('/', $est_restore_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<','billJ.est_restore_time', (strtotime(explode('/', $est_restore_time)[1]) + 86400)] );//结束时间
         }
 
         $dataProvider->query->andWhere(['>',WarehouseBillJForm::tableName().'.status', -1]);
@@ -216,20 +219,21 @@ class BillJController extends BaseController
     }
 
     /**
-     * 其他出库单关闭
+     * 借货单-关闭
      *
      * @param $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionClose($id)
     {
+        $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model->bill_status = BillStatusEnum::CANCEL;
-            \Yii::$app->warehouseService->billJ->closeBillB($model);
+
+            \Yii::$app->warehouseService->billJ->closeBillJ($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

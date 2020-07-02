@@ -53,7 +53,6 @@ class BillCController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
-                'lender' =>  ['username'],
             ]
         ]);
 
@@ -111,14 +110,6 @@ class BillCController extends BaseController
             $isNewRecord = $model->isNewRecord;
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
-            }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                if(!$model->lender_id){
-                    return $this->message("借货人不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-                if(!$model->restore_time){
-                    return $this->message("预计还货日期不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
             }
             if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE])){
                 if(!$model->channel_id){
@@ -240,13 +231,14 @@ class BillCController extends BaseController
      */
     public function actionDelete($id)
     {
+        $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model->bill_status = BillStatusEnum::CANCEL;
-            \Yii::$app->warehouseService->billB->closeBillB($model);
+
+            \Yii::$app->warehouseService->billC->closeBillC($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

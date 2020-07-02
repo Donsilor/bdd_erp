@@ -44,19 +44,19 @@ $params = $params ? "&".http_build_query($params) : '';
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
-                            'visible' => false,
+                            'visible' => true,
                         ],
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => [],
                         ],
-                        [
+                        /*[
                             'attribute' => 'id',
                             'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
@@ -66,7 +66,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         /*[
                             'attribute' => 'bill_type',
@@ -79,17 +79,20 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],*/
                         [
                             'attribute' => 'goods_num',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'restore_num',
+                            'value'=>function($model) {
+                                return $model->billJ->restore_num??0;
+                            },
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'total_cost',
-                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -237,7 +240,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {close}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -266,6 +269,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                                 'goods' => function($url, $model, $key){
                                     return Html::a('明细', ['bill-j-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
+                                'close' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                        return Html::delete(['close', 'id' => $model->id], '关闭',[
+                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        ]);
+                                    }
                                 },
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);

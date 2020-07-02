@@ -14,7 +14,6 @@ class LogTypeEnum extends BaseEnum
     
     /**
      * @return array
-     *光面，磨砂，拉丝，光面+磨砂
      */
     public static function getMap(): array
     {

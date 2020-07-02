@@ -268,7 +268,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($model->peiliao_status != PeiliaoStatusEnum::NONE) {?>
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 金料信息</h3>
+                <h3 class="box-title"><i class="fa fa-info"></i> 金料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>】</font></h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
@@ -291,7 +291,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($model->peishi_status != PeishiStatusEnum::NONE) {?>
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 石料信息</h3>
+                <h3 class="box-title"><i class="fa fa-info"></i> 石料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>，主石石重=单颗石重，副石石重=副石总重】</font></h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
