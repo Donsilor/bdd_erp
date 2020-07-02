@@ -167,6 +167,40 @@ class WarehouseBillJService extends WarehouseBillService
     }
 
     /**
+     * 借货单-删除
+     * @param WarehouseBill $form
+     * @throws
+     */
+    public function deleteBillJ($form)
+    {
+        //更新库存状态
+        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->all();
+        if($billGoods){
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id]);//'goods_status' => GoodsStatusEnum::IN_LEND
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不是借货中或者不存在，请查看原因");
+                }
+            }
+        }
+        $ids = ArrayHelper::getColumn($billGoods, 'id');
+        $execute_num = WarehouseBillGoodsJ::deleteAll(['id'=>$ids]);
+        if($execute_num <> count($ids)){
+            throw new Exception("删除单据明细失败1");
+        }
+        if(false === WarehouseBillGoods::deleteAll(['bill_id' => $form->id])){
+            throw new \Exception("删除单据明细失败2");
+        }
+        $billJ = WarehouseBillJ::findOne($form->id);
+        if(false === $billJ->delete()){
+            throw new \Exception($this->getError($billJ));
+        }
+        if(false === $form->delete()){
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
      *  接收验证
      * @param object $form
      * @throws \Exception

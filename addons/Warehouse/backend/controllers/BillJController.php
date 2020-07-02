@@ -138,7 +138,7 @@ class BillJController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
@@ -234,6 +234,30 @@ class BillJController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
 
             \Yii::$app->warehouseService->billJ->closeBillJ($model);
+            $trans->commit();
+            $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     * 借货单-删除
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->modelClass = WarehouseBill::class;
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+
+            \Yii::$app->warehouseService->billJ->deleteBillJ($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
