@@ -152,6 +152,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
+                                    'attribute' => 'secai',
+                                    'value' => function($model){
+                                        return $model->secai ?? '无';
+                                    },
+                                    'filter' => false,
+                                    
+                            ],
+                            [
                                     'attribute' => 'color',
                                     'value' => function($model){
                                         return $model->color ?? '无';

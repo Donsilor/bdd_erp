@@ -39,21 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model){
                                         return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
                                     },
-                                    'filter' =>Html::activeDropDownList($searchModel, 'peishi_status',\addons\Supply\common\enums\PeishiStatusEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',
-                                            'style' => 'width:80px;',
-                                    ]),
+                                    'filter' =>false,
                                     'format' => 'raw',
                             ],
                             [
                                     'label' => '领石单号',
                                     'attribute' => 'delivery_no',
-                                    'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
-                                            'class' => 'form-control',
-                                            'style' =>'width:150px'
-                                    ]),
+                                    'filter' => false,
                                     'format' => 'raw',
+                                    'headerOptions' => ['class' =>'col-md-1'],
                                     
                             ],
                             [
@@ -90,6 +84,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'filter' => false,
                             
+                            ],
+                            [
+                                    'attribute' => 'secai',
+                                    'value' => function($model){
+                                        return $model->secai ?? '无';
+                                    },
+                                    'filter' => false,                                    
+                                    
                             ],
                             [
                                     'attribute' => 'color',

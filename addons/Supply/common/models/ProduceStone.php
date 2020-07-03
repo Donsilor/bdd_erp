@@ -13,6 +13,7 @@ use addons\Warehouse\common\models\WarehouseStone;
  * @property string $order_sn 订单号
  * @property string $delivery_no 送石单号
  * @property int $supplier_id 供应商
+ * @property string $secai 石头色彩
  * @property string $color 石头颜色
  * @property string $clarity 石头净度
  * @property string $shape 石头形状
@@ -56,7 +57,7 @@ class ProduceStone extends BaseModel
             [['stone_weight'], 'number'],
             [['produce_id','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
-            [['color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
+            [['secai','color', 'clarity', 'shape', 'cert_type', 'carat', 'stone_type'], 'string', 'max' => 10],
             [['remark','stone_spec','audit_remark','peishi_remark'], 'string', 'max' => 255],
         ];
     }
@@ -74,6 +75,7 @@ class ProduceStone extends BaseModel
             'from_order_sn' => '来源订单号', 
             'delivery_no'=>'领(送)石单',
             'supplier_id'=>'加工商', 
+            'secai' => '石头色彩',
             'carat' => '石头重量(ct)',
             'color' => '石头颜色',
             'clarity' => '石头净度',
