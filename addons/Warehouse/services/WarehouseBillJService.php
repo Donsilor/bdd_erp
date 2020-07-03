@@ -321,7 +321,7 @@ class WarehouseBillJService extends WarehouseBillService
         $goods = WarehouseBillGoods::find()->select(['id'])->where(['bill_id' => $bill_id])->all();
         if ($goods) {
             $ids = ArrayHelper::getColumn($goods, 'id');
-            $restore_num = WarehouseBillGoodsJ::find()->where(['id' => $ids, 'lend_status' => LendStatusEnum::IN_RECEIVE])->count();
+            $restore_num = WarehouseBillGoodsJ::find()->where(['id' => $ids, 'lend_status' => LendStatusEnum::HAS_RETURN])->count();
             $billJ = WarehouseBillJ::findOne($bill_id);
             $billJ->restore_num = $restore_num??0;
             if (false === $billJ->save(true, ['restore_num'])) {
