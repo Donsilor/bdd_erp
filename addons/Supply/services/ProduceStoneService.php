@@ -73,6 +73,7 @@ class ProduceStoneService extends Service
             ProduceStoneGoods::deleteAll(['id'=>$id]);
             
             //4.石包校验 begin
+            $stone_num = 0;
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                 $stoneGoods = new ProduceStoneGoods();
                 $stoneGoods->attributes = $stoneGoodsData;
@@ -88,8 +89,11 @@ class ProduceStoneService extends Service
                 }elseif($stoneGoods->stone_num > $stoneGoods->stone->stock_cnt) {
                     throw new \Exception("(ID={$id})领取数量不能超过石包剩余数量({$stoneGoods->stone->stock_cnt})");
                 }
+                $stone_num += $stoneGoods->stone_num;
             }          
-            
+            if($stone_num < $stone->stone_num) {
+                throw new \Exception("(ID={$id})石料领取总数量不能小于{$stone->stone_num}");
+            }
             //5.新增配石信息
             foreach ($stoneData['ProduceStoneGoods'] as $stoneGoodsData) {
                  $stoneGoods = new ProduceStoneGoods();                     

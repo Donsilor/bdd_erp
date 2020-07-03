@@ -55,13 +55,16 @@ class AttrIdEnum
     
     //副石1信息
     const SIDE_STONE1_TYPE = 60;//副石1类型
-    const SIDE_STONE1_COLOR = 46;//副石1颜色
+    const SIDE_STONE1_SHAPE = 84;//副石1形状
+    const SIDE_STONE1_COLOR = 46;//副石1颜色 88
     const SIDE_STONE1_CLARITY = 47;//副石1净度    
     const SIDE_STONE1_WEIGHT = 44;//副石1重量(ct)
     const SIDE_STONE1_NUM = 45;//副石1数量    
     const SIDE_STONE1_SPEC = 999;//副石1规格
     //副石2信息
     const SIDE_STONE2_TYPE = 64;//副石2类型
+    const SIDE_STONE2_SHAPE = 85;//副石1形状
+    const SIDE_STONE2_COLOR = 89;//副石2颜色
     const SIDE_STONE2_WEIGHT = 63;//副石2重量(ct)
     const SIDE_STONE2_NUM = 62;//副石2数量
     const SIDE_STONE2_SPEC = 999;//副石2规格

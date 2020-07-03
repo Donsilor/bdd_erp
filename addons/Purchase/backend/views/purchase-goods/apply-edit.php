@@ -5,6 +5,8 @@ use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\enums\AttrModuleEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
 
 $this->title = '申请编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -52,14 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'peishi_type')->dropDownList(addons\Supply\common\enums\PeishiTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
         			 </div>
         			 <div class="col-lg-4">
-                        <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+                        <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?> 
         			 </div>  
             	 </div>
     			 <div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
                  </div>
             	<?php
-            	  $attr_list = $model->getAttrList();
+            	  $attr_list = \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
             	  foreach ($attr_list as $k=>$attr){
                       $attr_id  = $attr['id'];//属性ID
                       $is_require = $attr['is_require'];
