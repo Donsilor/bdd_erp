@@ -21,9 +21,9 @@ class WarehouseBillCForm extends WarehouseBill
      * {@inheritdoc}
      */
     public function rules()
-    {      
+    {
          $rules = [
-            [['delivery_type'], 'required']
+            [['delivery_type', 'order_sn'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }

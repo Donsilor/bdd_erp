@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:26px;','onclick'=>"searchReceiptGoods()"]) ?>
                     </div>
                 </div>
-                <span>数量：<?= $num;?></span>
+                <span>提示：一次最多添加50个商品，可分多次添加，已添加数量：<?= $num;?></span>
                 <div class="row">
                     <div class="box-body table-responsive">
                         <div class="tab-content">
@@ -143,12 +143,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'name' => "xiangkou",
                                         'title'=>"镶口",
                                         'enableError'=>false,
-                                        'defaultValue' => 0,
+                                        'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
-                                            'type' => 'number',
-                                            'style'=>'width:80px'
-                                        ]
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'defaultValue' => 0,
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU)
                                     ],
                                     [
                                         'name' => "material",

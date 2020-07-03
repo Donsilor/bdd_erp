@@ -37,14 +37,28 @@ $form = ActiveForm::begin([
                 ],
             ]);?>
         </div>
-        <div style="display: none" id="div2">
-            <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
-                'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
-                'options' => ['placeholder' => '请选择'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);?>
+        <div class="row" style="display: none" id="div2">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'salesman_id')->widget(kartik\select2\Select2::class, [
+                    'data' => Yii::$app->services->backendMember->getDropDown(),
+                    'options' => [
+                        'placeholder' => '请选择',
+                        'value' => $model->salesman_id??'',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);?>
+            </div>
         </div>
         <?= $form->field($model, 'order_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>

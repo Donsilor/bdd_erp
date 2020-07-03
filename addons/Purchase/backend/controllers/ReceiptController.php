@@ -97,25 +97,27 @@ class ReceiptController extends BaseController
      * ajax编辑/创建
      *
      * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * @throws
      */
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseReceipt();
+        $model = $model ?? new PurchaseReceiptForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->creator_id  = \Yii::$app->user->identity->id;
             $isNewRecord = $model->isNewRecord;
+            if($isNewRecord){
+                $model->creator_id  = \Yii::$app->user->identity->getId();
+            }
             if(false === $model->save()){
-                throw new \Exception($this->getError($model));
+                $this->message('保存失败：'.$this->getError($model), $this->redirect(['index']), 'error');
             }
             if($isNewRecord) {
                 return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
             }else{
-                $this->message($this->getError($model), $this->redirect(['index']), 'error');
+                $this->message('保存成功', $this->redirect(['index']), 'success');
             }
         }
 

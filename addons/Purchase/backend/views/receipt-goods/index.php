@@ -58,6 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {
@@ -114,6 +115,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute'=>'style_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
@@ -163,14 +177,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'goods_status',
+                                'attribute' => 'style_sex',
                                 'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'style_channel_id',
+                                'value' => function($model){
+                                    return $model->channel->name ?? '';
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=>'width:100px'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
@@ -596,6 +622,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {

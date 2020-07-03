@@ -2,13 +2,6 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\enums\ReceiptStatusEnum;
-use addons\Supply\common\enums\PeiliaoStatusEnum;
-use addons\Supply\common\models\ProduceGold;
-use addons\Supply\common\models\ProduceGoldGoods;
-use addons\Supply\common\models\ProduceStone;
-use addons\Supply\common\models\ProduceStoneGoods;
-use addons\Warehouse\common\models\WarehouseStone;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -23,6 +16,14 @@ use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Purchase\common\forms\PurchaseReceiptForm;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\models\ProduceGoldGoods;
+use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\models\ProduceStoneGoods;
+use addons\Warehouse\common\models\WarehouseStone;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceShipment;
@@ -32,7 +33,6 @@ use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
@@ -321,7 +321,7 @@ class PurchaseReceiptService extends Service
                     'jintuo_type' => $produce->jintuo_type,
                     'style_sex' => $produce->style_sex,
                     'style_channel_id' => $purchaseGoods->style_channel_id,
-                    'factory_mo' => 1,
+                    'factory_mo' => "",
                     'gold_weight' => $gold_weight,
                     'gold_price' => $purchaseGoods->gold_price,
                     'gold_loss' => $purchaseGoods->gold_loss,
@@ -367,7 +367,7 @@ class PurchaseReceiptService extends Service
 
     /**
      * 添加采购收货单商品明细
-     * @param PurchaseReceiptGoodsForm $form
+     * @param PurchaseReceiptForm $form
      * @throws \Exception
      */
     public function addReceiptGoods($form)

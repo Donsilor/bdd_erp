@@ -45,7 +45,7 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'est_restore_time')->widget(DatePicker::class, [
                     'language' => 'zh-CN',
                     'options' => [
-                        'value' => $model->billJ->est_restore_time ? date('Y-m-d', $model->billJ->est_restore_time) :'',
+                        'value' => isset($model->billJ->est_restore_time) ? date('Y-m-d', $model->billJ->est_restore_time) :'',
                     ],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',

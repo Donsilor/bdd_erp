@@ -3,25 +3,17 @@
 namespace addons\Purchase\backend\controllers;
 
 
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoodsT;
-use common\enums\AuditStatusEnum;
-use common\enums\WhetherEnum;
-use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Supply\common\enums\QcTypeEnum;
+use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Supply\common\models\Produce;
-use addons\Supply\common\models\ProduceAttribute;
-use addons\Supply\common\models\ProduceShipment;
+use addons\Supply\common\enums\QcTypeEnum;
+use common\helpers\ResultHelper;
 use common\helpers\Url;
 use common\traits\Curd;
 use yii\base\Exception;
@@ -72,7 +64,7 @@ class ReceiptGoodsController extends BaseController
         $dataProvider->query->andWhere(['>', PurchaseReceiptGoods::tableName().'.status', -1]);
 
         $receipt = PurchaseReceipt::find()->where(['id'=>$receipt_id])->one();
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tabList' => \Yii::$app->purchaseService->receipt->menuTabList($receipt_id, $this->purchaseType, $returnUrl),
@@ -106,7 +98,7 @@ class ReceiptGoodsController extends BaseController
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
         $dataProvider->query->andWhere(['>',PurchaseReceiptGoods::tableName().'.status',-1]);
-        $dataProvider->query->andWhere(['=','receipt.receipt_status', BillStatusEnum::CONFIRM]);
+        $dataProvider->query->andWhere(['=','receipt.receipt_status', ReceiptStatusEnum::CONFIRM]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
             $dataProvider->query->andWhere(['=','receipt.supplier_id', $supplier_id]);
@@ -115,7 +107,7 @@ class ReceiptGoodsController extends BaseController
         if($receipt_no){
             $dataProvider->query->andWhere(['=','receipt.receipt_no', $receipt_no]);
         }
-        return $this->render('iqc-index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'returnUrl' => $returnUrl,
@@ -179,13 +171,13 @@ class ReceiptGoodsController extends BaseController
 
     /**
      * 质检详情
-     * @property PurchaseApplyGoodsForm $model
      * @return mixed
      */
     public function actionIqcView()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceiptGoodsForm();
         $bill = PurchaseReceipt::find()->select(['receipt_no','receipt_status'])->where(['id'=>$model->receipt_id])->one();
         $produce = Produce::find()->select(['id'])->where(['produce_sn'=>$model->produce_sn])->one();
         //$goods = $model->getGoodsView();
@@ -282,7 +274,7 @@ class ReceiptGoodsController extends BaseController
         }
         $check = Yii::$app->request->get('check',null);
         if($check){
-            return ResultHelper::json(200, '', ['url'=>Url::to(['batch-edit', 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
+            return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
         }
         $style_arr = $model::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if(count($style_arr) != 1){
@@ -408,7 +400,7 @@ class ReceiptGoodsController extends BaseController
     {
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check', null);
-        $model = new PurchaseGoldReceiptGoodsForm();
+        $model = new PurchaseReceiptGoodsForm();
         $model->ids = $ids;
         if($check){
             try{
