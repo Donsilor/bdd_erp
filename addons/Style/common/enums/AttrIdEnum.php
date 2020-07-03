@@ -51,12 +51,14 @@ class AttrIdEnum
     const MAIN_STONE_WEIGHT = 59;//主石大小
     const MAIN_STONE_NUM = 65;//主石数量
     const MAIN_STONE_COLOR = 7;//主石颜色
+    const MAIN_STONE_SECAI = 87;//主石颜色
     const MAIN_STONE_CLARITY = 2;//主石净度
     
     //副石1信息
     const SIDE_STONE1_TYPE = 60;//副石1类型
     const SIDE_STONE1_SHAPE = 84;//副石1形状
-    const SIDE_STONE1_COLOR = 46;//副石1颜色 88
+    const SIDE_STONE1_COLOR = 46;//副石1颜色
+    const SIDE_STONE1_SECAI = 88;//副石1色彩
     const SIDE_STONE1_CLARITY = 47;//副石1净度    
     const SIDE_STONE1_WEIGHT = 44;//副石1重量(ct)
     const SIDE_STONE1_NUM = 45;//副石1数量    
@@ -64,7 +66,8 @@ class AttrIdEnum
     //副石2信息
     const SIDE_STONE2_TYPE = 64;//副石2类型
     const SIDE_STONE2_SHAPE = 85;//副石1形状
-    const SIDE_STONE2_COLOR = 89;//副石2颜色
+    const SIDE_STONE2_COLOR = 999;//副石2颜色
+    const SIDE_STONE2_SECAI = 89;//副石2色彩
     const SIDE_STONE2_WEIGHT = 63;//副石2重量(ct)
     const SIDE_STONE2_NUM = 62;//副石2数量
     const SIDE_STONE2_SPEC = 999;//副石2规格

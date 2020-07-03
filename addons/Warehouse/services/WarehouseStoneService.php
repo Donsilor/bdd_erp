@@ -135,6 +135,7 @@ class WarehouseStoneService extends Service
             if(!$result) {
                 throw new \Exception("({$stone_sn})石包库存变更失败(库存不足)");
             }
+            //更新为已售馨
             if($model->stock_cnt <= $adjust_num) {
                 WarehouseStone::updateAll(['stone_status'=>StoneStatusEnum::SOLD_OUT],new Expression("stone_sn='{$stone_sn}' and stock_cnt <= 0"));
             }
