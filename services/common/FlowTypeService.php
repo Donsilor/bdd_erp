@@ -171,7 +171,7 @@ class FlowTypeService extends Service
             return '';
         }
         $member = \Yii::$app->services->backendMember->findByIdWithAssignment($flow->current_users);
-        return $member->username;
+        return $member->username ?? '';
     }
 
 

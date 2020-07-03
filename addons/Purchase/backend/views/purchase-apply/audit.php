@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                          $user_id = \Yii::$app->user->identity->getId();
                          foreach ($flow_detail as $flow){
-                             $flow_current = $flow->flow_method == \common\enums\FlowMethodEnum::NO_ORDER || ($flow->flow_method == \common\enums\FlowMethodEnum::IN_ORDER && $flow->id == $current_detail_id);
+                             $flow_current = $current_detail_id == '' || $flow->id == $current_detail_id;
                              if(in_array($user_id, $current_users_arr) && $user_id === $flow->user_id && $flow_current){
                         ?>
                         <li>
