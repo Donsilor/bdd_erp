@@ -162,6 +162,18 @@ class PurchaseController extends BaseController
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
             }
+
+
+            //日志
+            $log = [
+                'purchase_id' => $id,
+                'purchase_sn' => $model->purchase_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "申请审核",
+                'log_msg' => "申请审核"
+            ];
+            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+
             $trans->commit();
             return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
         }catch (\Exception $e){
@@ -249,6 +261,18 @@ class PurchaseController extends BaseController
                         Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
                     }
                 }
+
+                //日志
+                $log = [
+                    'purchase_id' => $id,
+                    'purchase_sn' => $model->purchase_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => "单据审核",
+                    'log_msg' => "审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                ];
+                Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+
+
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -259,6 +283,7 @@ class PurchaseController extends BaseController
 
         }
         try {
+            $current_detail_id = Yii::$app->services->flowType->getCurrentDetailId($this->targetType, $id);
             list($current_users_arr, $flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetType, $id);
         }catch (\Exception $e){
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -266,7 +291,8 @@ class PurchaseController extends BaseController
         return $this->renderAjax('audit', [
             'model' => $model,
             'current_users_arr' => $current_users_arr,
-            'flow_detail' => $flow_detail
+            'flow_detail' => $flow_detail,
+            'current_detail_id'=> $current_detail_id
         ]);
     }
     /**

@@ -55,6 +55,7 @@ class FlowTypeService extends Service
         }
 
 
+        $flow_detail_id = null;
         foreach ($users_arr as $user_id){
             $flow_detail = new FlowDetails();
             $flow_detail->flow_id = $flow->id;
@@ -62,8 +63,19 @@ class FlowTypeService extends Service
             if(false === $flow_detail->save()){
                 throw new \Exception($this->getError($flow_detail));
             }
+            if($flow_detail_id == null){
+                $flow_detail_id = $flow_detail->id;
+            }
 
         }
+
+        //更新第一个审核人明细ID到流程中
+        $flow->flow_detail_id = $flow_detail_id;
+        if(false === $flow->save(true,['flow_detail_id'])){
+            throw new \Exception($this->getError($flow));
+        }
+
+
         return $flow ;
     }
 
@@ -79,13 +91,14 @@ class FlowTypeService extends Service
     }
 
     public function flowAudit($flow_type_id,$target_id, $audit){
-        $user_id = \Yii::$app->user->identity->id;
+
         $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
             throw new \Exception('参数错误');
         }
 
         //同步流程明细
+        $user_id = \Yii::$app->user->identity->id;
         $flow_detail = FlowDetails::find()->where(['flow_id'=>$flow->id,'user_id'=>$user_id])->one();
         $flow_detail->attributes = $audit;
         if($flow_detail->audit_remark == ''){
@@ -111,6 +124,7 @@ class FlowTypeService extends Service
 
             if($flow_method == FlowMethodEnum::IN_ORDER){
                 //有序取下一个
+                $flow->flow_detail_id = $current_flow_detail[0]['id'];
                 $flow->current_users = (string)$current_flow_detail[0]['user_id'];
             }else{
                 //无序显示所有的未审批的
@@ -125,10 +139,39 @@ class FlowTypeService extends Service
             throw new \Exception($this->getError($flow));
         }
 
-
         return $flow;
 
+    }
 
+    public function isAudit($flow_type_id,$target_id){
+        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
+        $current_users = $flow->current_users ?? '';
+        if($current_users){
+            $user_id = \Yii::$app->user->identity->id;
+            $user_ids = explode(',',$current_users);
+            return in_array($user_id,$user_ids);
+        }else{
+            return false;
+        }
+
+    }
+
+    public function getCurrentDetailId($flow_type_id,$target_id){
+        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
+        if(empty($flow) || $flow->flow_method == FlowMethodEnum::NO_ORDER){
+            return '';
+        }
+        return $flow->flow_detail_id;
+    }
+
+
+    public function getCurrentUsersName($flow_type_id,$target_id){
+        $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
+        if(empty($flow) || $flow->flow_method == FlowMethodEnum::NO_ORDER){
+            return '';
+        }
+        $member = \Yii::$app->services->backendMember->findByIdWithAssignment($flow->current_users);
+        return $member->username ?? '';
     }
 
 

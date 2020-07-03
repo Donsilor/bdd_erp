@@ -42,7 +42,7 @@ class Flow extends BaseModel
     public function rules()
     {
         return [
-            [['cate', 'flow_type', 'flow_method', 'target_id', 'target_type',  'flow_status', 'flow_total', 'flow_num', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['cate', 'flow_type', 'flow_method', 'target_id','flow_detail_id', 'target_type',  'flow_status', 'flow_total', 'flow_num', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['current_users','flow_name', 'flow_remark'], 'string', 'max' => 255],
             [['target_no'], 'string', 'max' => 30],
         ];
@@ -60,6 +60,7 @@ class Flow extends BaseModel
             'flow_type' => '流程类型',
             'flow_method' => '流程方式',
             'target_id' => '目标ID',
+            'flow_detail_id' => '当前明细ID',
             'target_no' => '目标编号',
             'target_type' => '目标类型',
             'current_users' => '当前审批人',

@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'cate')->dropDownList(\common\enums\FlowCateEnum::getMap(),['prompt'=>'请选择']) ?>
         <?= $form->field($model, 'method')->dropDownList(\common\enums\FlowMethodEnum::getMap(),['prompt'=>'请选择']) ?>
         <?= $form->field($model, 'users')->widget(unclead\multipleinput\MultipleInput::class, [
-            'max' => 6,
+            'max' => 15,
             'value' => $user_id_arr,
             'allowEmptyList'=>false,
             'enableGuessTitle'=>true,
