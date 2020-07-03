@@ -226,6 +226,11 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
                             ]);
+                        }elseif($model->apply_status == ApplyStatusEnum::AUDITED && $model->creator_id == \Yii::$app->user->identity->id){
+                            return Html::edit(['affirm','id'=>$model->id], '确认', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
+                            ]);
                         }
                     },
                     'goods' => function($url, $model, $key){

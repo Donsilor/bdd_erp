@@ -46,6 +46,8 @@ class PurchaseController extends BaseController
      * @var int
      */
     public $purchaseType = PurchaseTypeEnum::GOODS;
+    //审批流程
+    public $targetType = TargetTypeEnum::PURCHASE_MENT;
 
     /**
      * 首页
@@ -153,7 +155,7 @@ class PurchaseController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_MENT,$id,$model->purchase_sn);
+            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn);
 
             $model->purchase_status = PurchaseStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
@@ -230,7 +232,7 @@ class PurchaseController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit(TargetTypeEnum::PURCHASE_MENT,$id,$audit);
+                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
                 //审批完结才会走下面
                 if($res->flow_status == FlowStatusEnum::COMPLETE){
                     $model->audit_time = time();
@@ -257,7 +259,7 @@ class PurchaseController extends BaseController
 
         }
         try {
-            list($current_users_arr, $flow_detail) = \Yii::$app->services->flowType->getFlowDetals(TargetTypeEnum::PURCHASE_MENT, $id);
+            list($current_users_arr, $flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetType, $id);
         }catch (\Exception $e){
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }

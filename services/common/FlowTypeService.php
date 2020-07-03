@@ -88,6 +88,9 @@ class FlowTypeService extends Service
         //同步流程明细
         $flow_detail = FlowDetails::find()->where(['flow_id'=>$flow->id,'user_id'=>$user_id])->one();
         $flow_detail->attributes = $audit;
+        if($flow_detail->audit_remark == ''){
+            $flow_detail->audit_remark = $flow_detail->audit_status == AuditStatusEnum::PASS ? '同意':'不同意';
+        }
         if(false === $flow_detail->save()){
             throw new \Exception($this->getError($flow_detail));
         }
