@@ -240,7 +240,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {close}',
+                            'template' => '{edit} {apply} {audit} {goods} {close} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -281,9 +281,9 @@ $params = $params ? "&".http_build_query($params) : '';
                                     return Html::status($model->status);
                                 },*/
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
-                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                    if($model->bill_status == BillStatusEnum::CANCEL) {
+                                        return Html::delete(['delete', 'id' => $model->id], '删除',[
+                                            'onclick' => 'rfTwiceAffirm(this,"删除单据", "确定删除吗？");return false;',
                                         ]);
                                     }
                                 },
