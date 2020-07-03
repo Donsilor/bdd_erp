@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
+                            'data-target' => '#ajaxModalLg',
                         ]);
                     }
                     ?>
@@ -139,9 +139,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
+        <div id="flow">
 
-
-    <!-- box end -->
+        </div>
+        <!-- box end -->
 </div>
 <!-- tab-content end -->
 </div>
@@ -149,5 +150,6 @@ $this->params['breadcrumbs'][] = $this->title;
     function batchExport() {
         window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
     }
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> \common\enums\TargetTypeEnum::PURCHASE_MENT,'target_id'=>$model->id])?>")
 
 </script>

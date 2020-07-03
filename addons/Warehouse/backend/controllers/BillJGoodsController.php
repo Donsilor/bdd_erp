@@ -141,7 +141,7 @@ class BillJGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->warehouseService->billJ->receiveValidate($model);
-                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$bill_id, 'ids'=>$ids])]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'bill_id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
@@ -149,7 +149,6 @@ class BillJGoodsController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
-
                 \Yii::$app->warehouseService->billJ->receiveGoods($model);
 
                 $trans->commit();
@@ -182,7 +181,7 @@ class BillJGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->warehouseService->billJ->returnValidate($model);
-                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id'=>$bill_id, 'ids'=>$ids])]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'bill_id'=>$bill_id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
@@ -191,7 +190,6 @@ class BillJGoodsController extends BaseController
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
                 $model->bill_id = $bill_id;
-
                 \Yii::$app->warehouseService->billJ->returnGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');

@@ -4,6 +4,9 @@ namespace addons\Purchase\backend\controllers;
 
 
 
+use addons\Purchase\common\models\PurchaseApplyGoods;
+use common\enums\FlowStatusEnum;
+use common\enums\TargetTypeEnum;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
@@ -42,6 +45,8 @@ class PurchaseApplyController extends BaseController
      * @var Purchase
      */     
     public $modelClass = PurchaseApply::class;
+
+    public $targetSType = TargetTypeEnum::PURCHASE_APPLY_S_MENT;
     
     /**
      * 首页
@@ -153,12 +158,31 @@ class PurchaseApplyController extends BaseController
         if($model->apply_status != ApplyStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
         }
-        $model->apply_status = ApplyStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
+
+        $count = PurchaseApplyGoods::find()->where(['apply_id'=>$model->id])->count();
+        if($count == 0){
+            return $this->message('没有单据明细', $this->redirect($this->returnUrl), 'error');
         }
-        return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
+
+
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            //审批流程
+            Yii::$app->services->flowType->createFlow($this->getTargetYType($model->channel_id),$id,$model->apply_sn);
+            Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
+
+            $model->apply_status = ApplyStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
 
     }
 
@@ -181,16 +205,26 @@ class PurchaseApplyController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->apply_status = ApplyStatusEnum::CONFIRM;
-                }else{
-                    $model->apply_status = ApplyStatusEnum::SAVE;
+
+                $audit = [
+                    'audit_status' =>  $model->audit_status ,
+                    'audit_time' => time(),
+                    'audit_remark' => $model->audit_remark
+                ];
+                $res = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit);
+                //审批完结才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE) {
+                    $model->audit_time = time();
+                    $model->auditor_id = \Yii::$app->user->identity->id;
+                    if ($model->audit_status == AuditStatusEnum::PASS) {
+                        $model->apply_status = ApplyStatusEnum::CONFIRM;
+                    } else {
+                        $model->apply_status = ApplyStatusEnum::SAVE;
+                    }
+                    if (false === $model->save()) {
+                        throw new \Exception($this->getError($model));
+                    }
                 }
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }                
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -200,9 +234,18 @@ class PurchaseApplyController extends BaseController
             }
 
         }
+        try {
+            list($current_users_arr, $yw_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->getTargetYType($model->channel_id), $id);
+            list(, $sp_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetSType, $id);
+            $flow_detail = array_merge($yw_flow_detail,$sp_flow_detail);
+        }catch (\Exception $e){
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
 
-        return $this->renderAjax($this->action->id, [
+        return $this->renderAjax('audit', [
             'model' => $model,
+            'current_users_arr' => $current_users_arr,
+            'flow_detail' => $flow_detail
         ]);
     }
 
@@ -225,16 +268,30 @@ class PurchaseApplyController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->final_audit_time = time();
-                $model->final_auditor_id = \Yii::$app->user->identity->id;
-                if($model->final_audit_status == AuditStatusEnum::PASS){
-                    $model->apply_status = ApplyStatusEnum::AUDITED;
 
-                    //同步数据到待起版
-                    Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model->id);
+                $count = PurchaseApplyGoods::find()->where(['and',['=','apply_id',$model->id],['<>','audit_status',AuditStatusEnum::PASS]])->count();
+                if($count){
+                    throw new \Exception("有明细没有审核");
                 }
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
+
+                $audit = [
+                    'audit_status' =>  $model->audit_status ,
+                    'audit_time' => time(),
+                    'audit_remark' => $model->audit_remark
+                ];
+                $res = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit);
+                //审批完结才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE) {
+
+                    $model->final_audit_time = time();
+                    $model->final_auditor_id = \Yii::$app->user->identity->id;
+                    if ($model->final_audit_status == AuditStatusEnum::PASS) {
+                        $model->apply_status = ApplyStatusEnum::AUDITED;
+
+                    }
+                    if (false === $model->save()) {
+                        throw new \Exception($this->getError($model));
+                    }
                 }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -246,11 +303,60 @@ class PurchaseApplyController extends BaseController
 
         }
 
-        return $this->renderAjax($this->action->id, [
+        try {
+            list($current_users_arr, $yw_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->getTargetYType($model->channel_id), $id);
+            list(, $sp_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetSType, $id);
+            $flow_detail = array_merge($yw_flow_detail,$sp_flow_detail);
+        }catch (\Exception $e){
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
+        return $this->renderAjax('audit', [
             'model' => $model,
+            'current_users_arr' => $current_users_arr,
+            'flow_detail' => $flow_detail
         ]);
     }
-    
+
+
+    /**
+     * 确认
+     * @return mixed
+     */
+    public function actionAffirm(){
+
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->apply_status != ApplyStatusEnum::AUDITED){
+            return $this->message('单据不是商品部审核状态', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try {
+            $trans = Yii::$app->db->beginTransaction();
+
+            Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model->id);
+
+            $model->apply_status = ApplyStatusEnum::AFFIRM;
+            if (false === $model->save()) {
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'apply_id' => $id,
+                'apply_sn' => $model->apply_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "确认单据",
+                'log_msg' => "确认单据"
+            ];
+            Yii::$app->purchaseService->apply->createApplyLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
+    }
+
     /**
      * 关闭
      * @return mixed
@@ -466,5 +572,14 @@ class PurchaseApplyController extends BaseController
         ]);
     }
 
+    public function getTargetYType($channel_id){
+        if(in_array($channel_id,[1,2,5,6,7,8,9,10])){
+            return TargetTypeEnum::PURCHASE_APPLY_T_MENT;
+        }elseif (in_array($channel_id,[3])){
+            return TargetTypeEnum::PURCHASE_APPLY_F_MENT;
+        }elseif (in_array($channel_id,[4])){
+            return TargetTypeEnum::PURCHASE_APPLY_Z_MENT;
+        }
+    }
 
 }

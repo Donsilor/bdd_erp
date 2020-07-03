@@ -167,6 +167,40 @@ class WarehouseBillJService extends WarehouseBillService
     }
 
     /**
+     * 借货单-删除
+     * @param WarehouseBill $form
+     * @throws
+     */
+    public function deleteBillJ($form)
+    {
+        //更新库存状态
+        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->all();
+        if($billGoods){
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id]);//'goods_status' => GoodsStatusEnum::IN_LEND
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不是借货中或者不存在，请查看原因");
+                }
+            }
+        }
+        $ids = ArrayHelper::getColumn($billGoods, 'id');
+        $execute_num = WarehouseBillGoodsJ::deleteAll(['id'=>$ids]);
+        if($execute_num <> count($ids)){
+            throw new Exception("删除单据明细失败1");
+        }
+        if(false === WarehouseBillGoods::deleteAll(['bill_id' => $form->id])){
+            throw new \Exception("删除单据明细失败2");
+        }
+        $billJ = WarehouseBillJ::findOne($form->id);
+        if(false === $billJ->delete()){
+            throw new \Exception($this->getError($billJ));
+        }
+        if(false === $form->delete()){
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
      *  接收验证
      * @param object $form
      * @throws \Exception
@@ -257,7 +291,7 @@ class WarehouseBillJService extends WarehouseBillService
             'lend_status'=>LendStatusEnum::HAS_RETURN,
             'qc_status'=>$form->qc_status,
             'restore_time'=>$form->restore_time?strtotime($form->restore_time):0,
-            'receive_remark'=>$form->receive_remark,
+            'qc_remark'=>$form->qc_remark,
         ];
         $execute_num = WarehouseBillGoodsJ::updateAll($update, ['id'=>$ids, 'lend_status'=>LendStatusEnum::HAS_LEND]);
         if($execute_num <> count($ids)){
@@ -287,7 +321,7 @@ class WarehouseBillJService extends WarehouseBillService
         $goods = WarehouseBillGoods::find()->select(['id'])->where(['bill_id' => $bill_id])->all();
         if ($goods) {
             $ids = ArrayHelper::getColumn($goods, 'id');
-            $restore_num = WarehouseBillGoodsJ::find()->where(['id' => $ids, 'lend_status' => LendStatusEnum::IN_RECEIVE])->count();
+            $restore_num = WarehouseBillGoodsJ::find()->where(['id' => $ids, 'lend_status' => LendStatusEnum::HAS_RETURN])->count();
             $billJ = WarehouseBillJ::findOne($bill_id);
             $billJ->restore_num = $restore_num??0;
             if (false === $billJ->save(true, ['restore_num'])) {

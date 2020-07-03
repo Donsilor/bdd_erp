@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {
@@ -114,6 +115,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute'=>'style_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
@@ -144,40 +158,52 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '款式分类',
                                 'attribute' => 'cate.name',
-                                'value' => function ($model, $key, $index, $column){
+                                /*'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
-                                },
+                                },*/
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:150px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'label' => '产品线',
                                 'attribute' => 'type.name',
-                                'value' => function ($model, $key, $index, $column){
+                                /*'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxSelect($model,'product_type_id', \Yii::$app->styleService->productType->getDropDown(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
-                                },
+                                },*/
                                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:150px;'
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute' => 'goods_status',
+                                'attribute' => 'style_sex',
                                 'value' => function ($model){
-                                    return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'style_channel_id',
+                                'value' => function($model){
+                                    return $model->channel->name ?? '';
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=>'width:100px'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
@@ -260,7 +286,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'jintuo_type', \addons\Style\common\enums\JintuoTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                        return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type)??"";
+                                    //return  Html::ajaxSelect($model,'jintuo_type', \addons\Style\common\enums\JintuoTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                                     'prompt' => '全部',
@@ -714,6 +741,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt) {

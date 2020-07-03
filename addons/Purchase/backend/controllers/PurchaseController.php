@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 
+use common\enums\FlowStatusEnum;
 use common\enums\TargetType;
 use common\enums\TargetTypeEnum;
 use common\helpers\PageHelper;
@@ -45,6 +46,8 @@ class PurchaseController extends BaseController
      * @var int
      */
     public $purchaseType = PurchaseTypeEnum::GOODS;
+    //审批流程
+    public $targetType = TargetTypeEnum::PURCHASE_MENT;
 
     /**
      * 首页
@@ -152,7 +155,7 @@ class PurchaseController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_MENT,$id,$model->purchase_sn);
+            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn);
 
             $model->purchase_status = PurchaseStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
@@ -217,26 +220,34 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if($model->audit_status != AuditStatusEnum::UNPASS) {
-            $model->audit_status = AuditStatusEnum::PASS;
-        }
+        $model->audit_status = AuditStatusEnum::PASS;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->purchase_status = PurchaseStatusEnum::CONFIRM;
-                }else{
-                    $model->purchase_status = PurchaseStatusEnum::SAVE;
-                }
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
+
+                $audit = [
+                    'audit_status' =>  $model->audit_status ,
+                    'audit_time' => time(),
+                    'audit_remark' => $model->audit_remark
+                ];
+                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                //审批完结才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE){
+                    $model->audit_time = time();
+                    $model->auditor_id = \Yii::$app->user->identity->id;
+                    if($model->audit_status == AuditStatusEnum::PASS){
+                        $model->purchase_status = PurchaseStatusEnum::CONFIRM;
+                    }else{
+                        $model->purchase_status = PurchaseStatusEnum::SAVE;
+                    }
+                    if(false === $model->save()){
+                        throw new \Exception($this->getError($model));
+                    }
+                    if($model->audit_status == AuditStatusEnum::PASS){
+                        Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
+                    }
                 }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -247,9 +258,15 @@ class PurchaseController extends BaseController
             }
 
         }
-
+        try {
+            list($current_users_arr, $flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetType, $id);
+        }catch (\Exception $e){
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
         return $this->renderAjax('audit', [
             'model' => $model,
+            'current_users_arr' => $current_users_arr,
+            'flow_detail' => $flow_detail
         ]);
     }
     /**

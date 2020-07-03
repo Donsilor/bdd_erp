@@ -114,7 +114,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'value' => 'total_cost',
                 'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                     'class' => 'form-control',
-                    'style'=> 'width:120px;'
+                    'style'=> 'width:80px;'
                 ]),
                 'format' => 'raw',
                 'headerOptions' => [],
@@ -133,7 +133,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'options' => ['readonly' => false, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
