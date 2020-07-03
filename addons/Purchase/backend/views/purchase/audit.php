@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="mbox">
                                     <div class="one">
                                         <div class="left">审&nbsp;&nbsp;核&nbsp;&nbsp;人:  <?= $flow->member->username ?? ''?></div>
-                                        <?php if($model->audit_status == \common\enums\AuditStatusEnum::PASS){ ?>
+                                        <?php if($flow->audit_status == \common\enums\AuditStatusEnum::PASS){ ?>
                                             <div class="right">审核时间：<?= \Yii::$app->formatter->asDatetime($flow->audit_time) ?></div>
                                         <?php } ?>
                                     </div>
