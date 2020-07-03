@@ -204,7 +204,11 @@ class PurchaseReceiptService extends Service
             }
             $select = [
                 'rg.produce_sn'=>$produce_sn,
-                'r.receipt_status'=>[ReceiptStatusEnum::CONFIRM],
+                'r.receipt_status'=>[
+                    ReceiptStatusEnum::SAVE,
+                    ReceiptStatusEnum::PENDING,
+                    ReceiptStatusEnum::CONFIRM
+                ],
                 'r.status'=>StatusEnum::ENABLED,
                 'rg.status'=>StatusEnum::ENABLED
             ];
@@ -372,21 +376,32 @@ class PurchaseReceiptService extends Service
      */
     public function addReceiptGoods($form)
     {
-        $goods = $form->getGoods();
+        $goods = $form->goods;
         if(!empty($goods)){
             $value = [];
             $key = array_keys($goods[0]);
-            array_push($key,'receipt_id', 'xuhao');
             $max = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
-            $xuhao = $max->xuhao??0;
+            $xuhao = $max->xuhao??1;
             foreach ($goods as $good) {
-                $xuhao++;
-                array_push($good, $form->id, $xuhao);
+                $good['receipt_id'] = $form->id;
+                $good['xuhao'] = $xuhao++;
+                $good['goods_status'] =ReceiptGoodsStatusEnum::SAVE;
+                $good['status'] = StatusEnum::ENABLED;
+                $good['created_at'] = time();
                 $value[] = array_values($good);
+                if(count($value) >= 2){
+                    $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $key, $value)->execute();
+                    if(false === $res){
+                        throw new \yii\base\Exception("保存失败");
+                    }
+                    $value = [];
+                }
             }
-            $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $key, $value)->execute();
-            if(false === $res){
-                throw new \yii\base\Exception("保存失败");
+            if(!empty($value)){
+                $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \yii\base\Exception("保存失败");
+                }
             }
             //更新采购收货单汇总：总金额和总数量
             $this->purchaseReceiptSummary($form->id, PurchaseTypeEnum::GOODS);
