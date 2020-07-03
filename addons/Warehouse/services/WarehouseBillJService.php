@@ -291,7 +291,7 @@ class WarehouseBillJService extends WarehouseBillService
             'lend_status'=>LendStatusEnum::HAS_RETURN,
             'qc_status'=>$form->qc_status,
             'restore_time'=>$form->restore_time?strtotime($form->restore_time):0,
-            'receive_remark'=>$form->receive_remark,
+            'qc_remark'=>$form->qc_remark,
         ];
         $execute_num = WarehouseBillGoodsJ::updateAll($update, ['id'=>$ids, 'lend_status'=>LendStatusEnum::HAS_LEND]);
         if($execute_num <> count($ids)){

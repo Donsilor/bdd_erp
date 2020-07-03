@@ -149,7 +149,6 @@ class BillJGoodsController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
-
                 \Yii::$app->warehouseService->billJ->receiveGoods($model);
 
                 $trans->commit();
@@ -191,7 +190,6 @@ class BillJGoodsController extends BaseController
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
                 $model->bill_id = $bill_id;
-
                 \Yii::$app->warehouseService->billJ->returnGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
