@@ -39,7 +39,7 @@ class WarehouseBillJForm extends WarehouseBill
             'order_sn'=>'参考编号',
             'goods_num'=>'借货数量',
             'lender_id'=>'借货人',
-            'channel_id'=>'借货人渠道',
+            'channel_id'=>'借货渠道',
             'restore_num'=>'还货数量',
             'creator_id'=>'制单人',
             'created_at'=>'制单时间',

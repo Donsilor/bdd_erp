@@ -4,6 +4,7 @@ namespace addons\Purchase\common\models;
 
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Style\common\models\StyleChannel;
 use Yii;
 
 /**
@@ -210,12 +211,20 @@ class PurchaseReceiptGoods extends BaseModel
         return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
     }
     /**
-     * 款式分类一对一
+     * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
     public function getCate()
     {
         return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+    /**
+     * 关联款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
     }
     /**
      * 关联质检未过原因
