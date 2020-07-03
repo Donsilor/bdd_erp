@@ -171,12 +171,12 @@ class WarehouseBill extends BaseModel
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
     /**
-     * 借货人
+     * 销售人
      * @return \yii\db\ActiveQuery
      */
-    public function getLender()
+    public function getSalesman()
     {
-        return $this->hasOne(Member::class, ['id'=>'lender_id'])->alias('lender');
+        return $this->hasOne(Member::class, ['id'=>'salesman_id'])->alias('salesman');
     }
     /**
      * 关联产品线分类一对一

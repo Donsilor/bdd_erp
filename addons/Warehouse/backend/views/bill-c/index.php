@@ -120,6 +120,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'salesman_id',
+                            'value' => 'salesman.username',
+                            'filter' => Html::activeTextInput($searchModel, 'salesman.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'channel_id',
                             'value'=>function($model) {
                                 return $model->channel->name ?? '';

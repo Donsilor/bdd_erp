@@ -52,7 +52,7 @@ $form = ActiveForm::begin([
                     'data' => Yii::$app->services->backendMember->getDropDown(),
                     'options' => [
                         'placeholder' => '请选择',
-                        'value' => $model->billJ->salesman_id??'',
+                        'value' => $model->salesman_id??'',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true
