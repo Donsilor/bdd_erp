@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
+use common\enums\TargetTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -196,7 +197,9 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'purchase_status',                    
                 'value' => function ($model){
-                    return PurchaseStatusEnum::getValue($model->purchase_status);
+                    $audit_name = Yii::$app->services->flowType->getCurrentUsersName(TargetTypeEnum::PURCHASE_MENT,$model->id);
+                    $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    return PurchaseStatusEnum::getValue($model->purchase_status).$audit_name_str;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'purchase_status',PurchaseStatusEnum::getMap(), [
                     'prompt' => '全部',
@@ -221,7 +224,8 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },                    
                     'ajax-audit' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::PENDING){
+                        $isAudit = Yii::$app->services->flowType->isAudit(TargetTypeEnum::PURCHASE_MENT,$model->id);
+                        if($model->purchase_status == PurchaseStatusEnum::PENDING && $isAudit){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',

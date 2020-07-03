@@ -119,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if($model->purchase_status == BillStatusEnum::PENDING){
+                    $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::PURCHASE_MENT,$model->id);
+                    if($model->purchase_status == BillStatusEnum::PENDING && $isAudit){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
