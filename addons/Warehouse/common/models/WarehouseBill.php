@@ -31,6 +31,7 @@ use addons\Style\common\models\StyleChannel;
  * @property int $from_company_id 出库公司
  * @property int $from_warehouse_id 出库仓库
  * @property int $delivery_type 出库类型
+ * @property int $salesman_id 销售人
  * @property string $send_goods_sn 送货单号
  * @property int $is_settle_accounts 是否结价
  * @property int $auditor_id 审核人
@@ -60,7 +61,7 @@ class WarehouseBill extends BaseModel
     {
         return [
             //[['bill_status', 'audit_status','bill_no'], 'required'],
-            [['id', 'merchant_id', 'bill_status', 'channel_id', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'delivery_type', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'bill_status', 'channel_id', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'delivery_type', 'salesman_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
             [['bill_no', 'order_sn', 'send_goods_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -94,6 +95,7 @@ class WarehouseBill extends BaseModel
             'from_company_id' => '出库公司',
             'from_warehouse_id' => '出库仓库',
             'delivery_type' => '出库类型',
+            'salesman_id' => '销售人',
             'send_goods_sn' => '送货单号',
             'is_settle_accounts' => '是否结价',
             'auditor_id' => '审核人',
