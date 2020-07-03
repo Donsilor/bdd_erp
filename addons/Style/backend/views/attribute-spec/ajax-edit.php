@@ -67,9 +67,7 @@ $model->modules = $model->modules ? explode(",",$model->modules) : \addons\Style
 
 <script>
 $("#attributespec-attr_id").change(function(){
-
 	$("#box-attributespec-attr_values").hide();
-
 	var attr_id = $(this).val();	
 	if(attr_id){
         $.post("<?php echo Url::to(['ajax-attr-values'])?>",{'id':'<?= $model->id ?>','attr_id':attr_id},function(data){

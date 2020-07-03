@@ -237,12 +237,12 @@ class StyleGoodsForm extends Model
     public function getSKuTableInputs()
     {
         $config = [
-                'gold_price'=>['name'=>'gold_price','title'=>"金托成本",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
-                'gold_weight'=>['name'=>'gold_weight','title'=>'金托重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
-                'gold_weight_diff'=>['name'=>'gold_weight_diff','title'=>'金托上下公差','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
-                'second_stone_weight1'=>['name'=>'second_stone_weight1','title'=>'副石1重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'gold_price'=>['name'=>'gold_price','title'=>"金托成本(￥)",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+                'gold_weight'=>['name'=>'gold_weight','title'=>'金托重量(g)','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'gold_weight_diff'=>['name'=>'gold_weight_diff','title'=>'金托上下公差(g)','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'second_stone_weight1'=>['name'=>'second_stone_weight1','title'=>'副石1重量(ct)','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
                 'second_stone_num1'=>['name'=>'second_stone_num1','title'=>'副石1数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
-                'second_stone_weight2'=>['name'=>'second_stone_weight2','title'=>'副石2重量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
+                'second_stone_weight2'=>['name'=>'second_stone_weight2','title'=>'副石2重量(ct)','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:70px'],
                 'second_stone_num2'=>['name'=>'second_stone_num2','title'=>'副石2数量','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
                 'finger_range'=>['name'=>'finger_range','title'=>'改圈范围','require'=>0,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:50px'],
                 'remark'=>['name'=>'remark','title'=>'备注','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:200px'],
@@ -250,7 +250,7 @@ class StyleGoodsForm extends Model
         $inputs =  [
                 ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
                 ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
-                ['name'=>'cost_price','title'=>"总成本",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
+                ['name'=>'cost_price','title'=>"总成本(￥)",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
         ];
         $maps = [
                 //女戒-镶嵌

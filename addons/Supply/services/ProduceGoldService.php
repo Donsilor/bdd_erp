@@ -87,18 +87,18 @@ class ProduceGoldService extends Service
                 }elseif($gold->gold_type != ($gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type))) {
                     if(preg_match("/铂|PT/is", $gold->gold_type)) {
                         if (!preg_match("/铂|PT/is",$gold_type)){
-                            throw new \Exception("(ID={$id})金料类型不匹配(需要配铂金)");
+                            throw new \Exception("(ID={$id})金料类型不一致(需要配铂金)");
                         }
                     }elseif(preg_match("/黄金|足金/is", $gold->gold_type)) {
                         if (!preg_match("/黄金|足金/is",$gold_type)){
-                            throw new \Exception("(ID={$id})金料类型不匹配(需要配黄金)");
+                            throw new \Exception("(ID={$id})金料类型不一致(需要配黄金)");
                         }
                     }elseif(preg_match("/银|Ag/is", $gold->gold_type)) {
-                        if (!preg_match("/银|Ag/is",$gold_type)){
-                            throw new \Exception("(ID={$id})金料类型不匹配(需要配足银)");
+                        if (!preg_match("/银|Ag/is", $gold_type)){
+                            throw new \Exception("(ID={$id})金料类型不一致(需要配足银)");
                         }
-                    }else{
-                        throw new \Exception("(ID={$id})暂不支持当前金料类型");
+                    }else {
+                        throw new \Exception("(ID={$id})金料类型不一致(暂不支持当前金料类型)");
                     }
                 }
             }

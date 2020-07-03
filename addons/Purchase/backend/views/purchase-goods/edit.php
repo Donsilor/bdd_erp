@@ -61,11 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div> 
         			 </div>
 					<div class="row">
-						<div class="col-lg-4">
+						 <div class="col-lg-4">
                             <?= $form->field($model, 'peishi_type')->dropDownList(PeishiTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
             			 </div>
             			 <div class="col-lg-4">
-                            <?= $form->field($model, 'peiliao_type')->dropDownList(PeiliaoTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+                            <?= $form->field($model, 'peiliao_type')->dropDownList(PeiliaoTypeEnum::getMap(),['prompt'=>'请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?> 
             			 </div>            			 
         			 </div>
 					<div style="margin-bottom:20px;">

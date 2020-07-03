@@ -178,13 +178,13 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
                 $model->attr_value_id  = $attr_value_id; 
                 $model->attr_value = $attr_value;
-                $pices = explode('-',$attr_value);
+                /* $pices = explode('-',$attr_value);
                 if(count($pices)==2) {
                     if(is_numeric($pices[0]) && is_numeric($pices[1])) {
                         $model->attr_value_min = $pices[0];
                         $model->attr_value_max = $pices[1];
                     }
-                }
+                } */
             }else{
                 continue;
             }   
@@ -205,7 +205,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         foreach ($fields as $field) {
             $apply_info[] = array(
                     'code'=>$field,
-                    'value'=>$this->$field,
+                    'value'=>$this->$field ??'',
                     'label'=>$this->getAttributeLabel($field),
                     'group'=>'base',
             );
@@ -240,7 +240,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         foreach ($fields as $field) {
             $apply_info[] = array(
                     'code'=>$field,
-                    'value'=>$this->$field,
+                    'value'=>$this->$field ?? '',
                     'label'=>$this->getAttributeLabel($field),
                     'group'=>'base',
             );
@@ -251,21 +251,6 @@ class PurchaseGoodsForm extends PurchaseGoods
             throw new \Exception("保存失败",500);
         }
         
-    }
-    /**
-     * 获取款式属性列表
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function getAttrList()
-    {
-        $attr_type = JintuoTypeEnum::getValue($this->jintuo_type,'getAttrTypeMap');
-        return \Yii::$app->styleService->attribute->module(AttrModuleEnum::PURCHASE)->getAttrListByCateId($this->style_cate_id,$attr_type,$this->is_inlay);
-        /* if($this->qiban_type == QibanTypeEnum::NON_VERSION) {
-            $attr_list = \Yii::$app->styleService->styleAttribute->getStyleAttrList($this->style_id, $attr_type);
-        }else{
-            $attr_list = \Yii::$app->styleService->qibanAttribute->getQibanAttrList($this->style_id, $attr_type);
-        }
-        return $attr_list; */
-    }
+    }    
    
 }
