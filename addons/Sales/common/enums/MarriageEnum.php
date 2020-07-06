@@ -23,5 +23,5 @@ class MarriageEnum extends \common\enums\BaseEnum
             self::UNKNOWN => '未知',
         ];
     }
-    
+
 }

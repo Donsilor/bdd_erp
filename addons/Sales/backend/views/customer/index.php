@@ -13,12 +13,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><?= $this->title; ?></h3>
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
-                    ]) ?>
+                    <?= Html::create(['edit']) ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
