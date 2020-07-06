@@ -83,6 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute' => 'jintuo_type',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],

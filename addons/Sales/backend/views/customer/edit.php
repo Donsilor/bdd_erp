@@ -1,53 +1,135 @@
 <?php
 
+use common\helpers\Html;
+use common\widgets\webuploader\Files;
+use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
-use common\enums\GenderEnum;
-use common\enums\StatusEnum;
+use common\helpers\Url;
+//use common\enums\AreaEnum;
 
-$this->title = '编辑';
-$this->params['breadcrumbs'][] = ['label' => '会员信息', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $this->title];
+/* @var $this yii\web\View */
+/* @var $model addons\Sales\common\models\Customer */
+/* @var $form yii\widgets\ActiveForm */
+
+$this->title = $model->id?\Yii::t('customer', '编辑客户'):\Yii::t('customer', '新增客户');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('customer', 'Sales'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">基本信息</h3>
-            </div>
-            <?php $form = ActiveForm::begin([
-                'fieldConfig' => [
-                    'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}{hint}{error}</div>",
-                ],
-            ]); ?>
-            <div class="box-body">
-                <?= $form->field($model, 'realname')->textInput() ?>
-                <?= $form->field($model, 'nickname')->textInput() ?>
-                <?= $form->field($model, 'mobile')->textInput() ?>
-                <?= $form->field($model, 'gender')->radioList(GenderEnum::getMap()) ?>
-                <?= $form->field($model, 'head_portrait')->widget(\common\widgets\cropper\Cropper::class, []); ?>
-                <?= $form->field($model, 'qq')->textInput() ?>
-                <?= $form->field($model, 'email')->textInput() ?>
-                <?= $form->field($model, 'birthday')->widget('kartik\date\DatePicker', [
-                    'language' => 'zh-CN',
-                    'layout' => '{picker}{input}',
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'todayHighlight' => true,// 今日高亮
-                        'autoclose' => true,// 选择后自动关闭
-                        'todayBtn' => true,// 今日按钮显示
-                    ],
-                    'options' => [
-                        'class' => 'form-control no_bor',
-                    ]
-                ]); ?>
-                <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()) ?>
-            </div>
-            <div class="box-footer text-center">
-                <button class="btn btn-primary" type="submit">保存</button>
-                <span class="btn btn-white" onclick="history.go(-1)">返回</span>
-            </div>
-            <?php ActiveForm::end(); ?>
-        </div>
+<?php $form = ActiveForm::begin([
+         'id' => $model->formName(),
+        'enableAjaxValidation' => true,
+        'validationUrl' => Url::to(['edit', 'id' => $model['id']]),
+        'fieldConfig' => [
+            //'template' => "{label}{input}{hint}",
+        ],
+]); ?>
+<div class="box-body nav-tabs-custom">
+     <h2 class="page-header"><?php echo $this->title;?></h2>
+      <?php $tab_list = [0=>'全部',1=>'基本信息',2=>'联系方式',3=>'客户地址'];?>
+     <?php echo Html::tab($tab_list,0,'tab')?>
+     <div class="tab-content">
+           <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
+                <ul class="nav nav-tabs pull-right">
+                  <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[1]??''?></li>
+                </ul>
+                <div class="box-body col-lg-12" style="padding-left:30px">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'gender')->dropDownList(\common\enums\GenderEnum::getMap()) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'marriage')->dropDownList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'source')->dropDownList(\addons\Sales\common\enums\SourceEnum::getMap()) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'birthday')->widget(DatePicker::class, [
+                                'language' => 'zh-CN',
+                                'options' => [
+                                    'value' => $model->birthday??'',
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true,//今日高亮
+                                    'autoclose' => true,//选择后自动关闭
+                                    'todayBtn' => true,//今日按钮显示
+                                ]
+                            ]);?>
+                        </div>
+                    </div>
+                </div>
+           </div>
+          <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_2">
+                <ul class="nav nav-tabs pull-right">
+                  <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[2]??''?></li>
+                </ul>
+                <div class="box-body col-lg-12" style="padding-left:30px">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'home_phone')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'qq')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'google_account')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'facebook_account')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                </div>
+             <!-- ./box-body -->
+          </div>
+          <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_3">
+                <ul class="nav nav-tabs pull-right">
+                  <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[3]??''?></li>
+                </ul>
+                <div class="box-body col-lg-12" style="padding-left:30px">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'country_id')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-9">
+                            <?= \common\widgets\provinces\Provinces::widget([
+                                'form' => $form,
+                                'model' => $model,
+                                'provincesName' => 'province_id',// 省字段名
+                                'cityName' => 'city_id',// 市字段名
+                                'areaName' => 'area_id',// 区字段名
+                                'template' => 'short' //合并为一行显示
+                            ]); ?>
+                        </div>
+                    </div>
+                </div>
+              <!-- ./box-body -->
+          </div>
+      <!-- ./row -->
     </div>
+    <div class="modal-footer">
+        <div class="col-sm-12 text-center">
+            <button class="btn btn-primary" type="submit">保存</button>
+            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
+        </div>
+	</div>
 </div>
+
+<?php ActiveForm::end(); ?>
