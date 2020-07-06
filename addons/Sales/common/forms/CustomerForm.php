@@ -17,9 +17,9 @@ class CustomerForm extends Customer
     public function rules()
     {
         $rules = [
-            [['firstname','lastname'], 'required'],
+            [['firstname', 'lastname', 'mobile'], 'required'],
             ['mobile', 'filter', 'filter' => 'trim'],
-            ['mobile','match','pattern'=>'/^[1][34578][0-9]{9}$/'],
+            ['mobile', 'match', 'pattern'=>'/^[1][34578][0-9]{9}$/'],
             ['email', 'email'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
