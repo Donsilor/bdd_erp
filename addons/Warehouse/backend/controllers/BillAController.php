@@ -98,7 +98,7 @@ class BillAController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseBillAForm();
 
         // ajax 校验
         $this->activeFormValidate($model);

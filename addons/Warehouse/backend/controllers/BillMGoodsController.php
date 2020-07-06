@@ -100,6 +100,9 @@ class BillMGoodsController extends BaseController
                 if(empty($goods)){
                     return $this->message("货号{$goods_id}不存在或者不是库存中", $this->redirect($skiUrl), 'error');
                 }
+                if($goods->warehouse_id != $billInfo->from_warehouse_id){
+                    return $this->message("货号{$goods_id}仓库与单据出库仓库不一致", $this->redirect($skiUrl), 'error');
+                }
                 $goods->put_in_type = \addons\Warehouse\common\enums\PutInTypeEnum::getValue($goods->put_in_type);
                 $goods->warehouse_id = $goods->warehouse->name ?? '';
                 $goods->material = Yii::$app->attr->valueName($goods->material);

@@ -100,8 +100,8 @@ class BillMController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
-        $to_warehouse_id = $model->to_warehouse_id;
+        $model = $model ?? new WarehouseBillMForm();
+        $to_warehouse_id = $model->to_warehouse_id; //更改前的仓库
 
         // ajax 校验
         $this->activeFormValidate($model);
@@ -112,9 +112,9 @@ class BillMController extends BaseController
                 if($isNewRecord){
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
-                    $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
+                    $log_msg = "创建调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name},出库仓库{$model->fromWarehouse->name}";
                 }else{
-                    $log_msg = "修改调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name}";
+                    $log_msg = "修改调拨单{$model->bill_no}，入库仓库为{$model->toWarehouse->name},出库仓库{$model->fromWarehouse->name}";
                 }
 
                 if(false === $model->save()){
