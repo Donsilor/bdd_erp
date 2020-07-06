@@ -67,13 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {apply-edit} {format-edit} {audit}   {delete}',
+                                'template' => '{edit} {apply-edit} {format-edit} {audit}   {delete}',
                                 'buttons' => [
-                                    'view'=> function($url, $model, $key){
-                                        return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
-                                            'class' => 'btn btn-info btn-xs',
-                                        ]);
-                                    },
                                     'edit' => function($url, $model, $key) use($apply){
                                          if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
                                              $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
@@ -145,7 +140,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                     'attribute'=>'goods_name',                                
-                                    'value' => "goods_name",
+                                    'value' => function($model){
+                                        return Html::a($model->goods_name, ['view', 'id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    },
                                     'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                             'class' => 'form-control',
                                     ]),
@@ -270,8 +267,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                     'label'=>'手寸',
+                                    'format' => 'raw',
                                     'value'=> function($model){
-                                        return $model->attr[AttrIdEnum::FINGER] ?? "";
+                                        $str = '';
+                                        if(isset($model->attr[AttrIdEnum::FINGER])){
+                                            $str .= $model->attr[AttrIdEnum::FINGER]."/美号";
+                                            $str .= "<br/>";
+                                        }
+                                        if(isset($model->attr[AttrIdEnum::PORT_NO])){
+                                            $str .= $model->attr[AttrIdEnum::PORT_NO]."/港号";
+                                        }
+                                        return $str;
                                     }
                             ],
                             [

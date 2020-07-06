@@ -140,10 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_goods_time') ?>：</td>
                                     <td><?= \Yii::$app->formatter->asDatetime($model->confirm_goods_time) ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                                    <td><?= $model->audit_remark ?></td>
-                                </tr>
+
                                 <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NO_STYLE){ ?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_creator_id') ?>：</td>
@@ -318,7 +315,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <tr>
                         <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_remark') ?>：</td>
-                        <td><?= $model->audit_remark ?></td>
+                        <td><?= $model->format_remark ?></td>
                     </tr>
                 </table>
             </div>

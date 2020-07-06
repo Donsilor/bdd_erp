@@ -53,7 +53,7 @@ class PurchaseApplyGoods extends BaseModel
     public function rules()
     {
         return [
-            [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
+            [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type','goods_name'], 'required'],
             [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply',
                 'status', 'created_at', 'updated_at','format_creator_id','format_created_at','is_design_qiban','confirm_status','confirm_design_id','confirm_design_time','confirm_goods_id','confirm_goods_time'], 'integer'],
             [['cost_price'], 'number'],
@@ -90,7 +90,7 @@ class PurchaseApplyGoods extends BaseModel
             'product_type_id' => '产品线',            
             'style_sex' => '款式性别',
             'jintuo_type' => '金托类型',
-            'cost_price' => '成本价',
+            'cost_price' => '成本价（¥）',
             'is_inlay' => '是否镶嵌',            
             'is_apply' => '是否申请修改',
             'apply_info' => '修改数据',
