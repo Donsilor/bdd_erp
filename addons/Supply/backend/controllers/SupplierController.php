@@ -81,7 +81,7 @@ class SupplierController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
 
         $model = $this->findModel($id);
-        $model = $model ?? new Supplier();
+        $model = $model ?? new SupplierForm();
 
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {

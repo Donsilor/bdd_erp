@@ -17,8 +17,10 @@ class CustomerForm extends Customer
     public function rules()
     {
         $rules = [
-            //[['supplier_code','supplier_name','supplier_tag'], 'unique'],
-            //[['supplier_name'], 'match', 'pattern' => '/[^a-z\d\x{4e00}-\x{9fa5}\(\)]/ui', 'message'=>'只能填写字母数字汉字和小括号'],
+            [['firstname','lastname','realname'], 'required'],
+            ['mobile', 'filter', 'filter' => 'trim'],
+            ['mobile','match','pattern'=>'/^[1][34578][0-9]{9}$/'],
+            ['email', 'email'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

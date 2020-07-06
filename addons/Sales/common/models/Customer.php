@@ -87,4 +87,5 @@ class Customer extends BaseModel
             'updated_at' => '修改时间',
         ];
     }
+
 }

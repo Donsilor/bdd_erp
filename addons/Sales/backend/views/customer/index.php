@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\Html;
 use common\helpers\ImageHelper;
@@ -31,7 +32,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         ],
                         [
                             'attribute' => 'id',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'head_portrait',
@@ -45,11 +46,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'format' => 'raw',
                         ],
                         [
-                            'attribute' => 'lastname',
+                            'attribute' => 'firstname',
                             'filter' => true,
                         ],
                         [
-                            'attribute' => 'firstname',
+                            'attribute' => 'lastname',
                             'filter' => true,
                         ],
                         [
@@ -95,7 +96,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{ajax-edit} {address} {recharge} {edit} {status} {destroy}',
+                            'contentOptions' => ['style' => ['white-space' => 'nowrap']],
+                            'template' => '{edit} {view} {status}',
                             'buttons' => [
                                 'ajax-edit' => function ($url, $model, $key) {
                                     return Html::linkButton(['ajax-edit', 'id' => $model->id], '账号密码', [
@@ -114,6 +116,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 },
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['edit', 'id' => $model->id]);
+                                },
+                                'view' => function ($url, $model, $key) {
+                                    return Html::a('查看', ['view', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function ($url, $model, $key) {
                                     return Html::status($model->status);
