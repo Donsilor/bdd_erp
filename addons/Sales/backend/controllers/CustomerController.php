@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use common\helpers\Url;
 use Yii;
 use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
@@ -97,6 +98,26 @@ class CustomerController extends BaseController
 
         return $this->render($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new CustomerForm();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->customer->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }

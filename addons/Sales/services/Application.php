@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\Style\services;
+namespace addons\Sales\services;
 
 use common\components\Service;
 
