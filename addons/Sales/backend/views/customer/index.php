@@ -4,7 +4,7 @@ use yii\grid\GridView;
 use common\helpers\Html;
 use common\helpers\ImageHelper;
 
-$this->title = '会员信息';
+$this->title = '客户列表';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
@@ -48,24 +48,53 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'format' => 'raw',
                         ],
                         [
-                            'attribute' => 'username',
-                            'filter' => false, //不显示搜索框
+                            'attribute' => 'lastname',
+                            'filter' => true,
                         ],
                         [
-                            'attribute' => 'level.name',
-                            'value' => function ($model) {
-                                return Html::tag('span', $model->level->name ?? '', [
-                                        'class' => 'label label-primary'
-                                ]);
-                            },
-                            'filter' => false,
-                            'format' => 'raw',
+                            'attribute' => 'firstname',
+                            'filter' => true,
                         ],
-                        'realname',
+                        [
+                            'attribute' => 'realname',
+                            'filter' => true,
+                        ],
+                        [
+                            'attribute' => 'gender',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \common\enums\GenderEnum::getValue($model->gender);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'gender',\common\enums\GenderEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'marriage',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\MarriageEnum::getValue($model->marriage);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'marriage',\addons\Sales\common\enums\MarriageEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute' => 'mobile',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],                        
+                        ],
+                        [
+                            'attribute' => 'home_phone',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'qq',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
