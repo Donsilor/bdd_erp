@@ -39,7 +39,7 @@ class CountryController extends yii\web\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $str = "-- 请选择省份 --";
-        $model = Yii::$app->services->provinces->getCityMapByPid($pid);
+        $model = Yii::$app->services->country->getProvinceByPid($pid);
         if ($type_id == 1 && !$pid) {
             return Html::tag('option', '-- 请选择省份 --', ['value' => '']);
         } elseif ($type_id == 2 && !$pid) {
