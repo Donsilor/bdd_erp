@@ -249,7 +249,7 @@ class StyleGoodsForm extends Model
         ];
         $inputs =  [
                 ['name'=>'status','title'=>'操作','require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"integer"],
-                ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:150px','attrs'=>'disabled placeholder=\'系统自动生成\''],
+                ['name'=>'goods_sn','title'=>"商品编号",'require'=>0,'batch'=>0,'unique'=>0,'dtype'=>"string",'style'=>'width:180px','attrs'=>'disabled placeholder=\'系统自动生成\''],
                 ['name'=>'cost_price','title'=>"总成本(￥)",'require'=>1,'batch'=>1,'unique'=>0,'dtype'=>"double",'style'=>'width:100px'],
         ];
         $maps = [

@@ -296,7 +296,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <thead>
-                    	<tr><th>石头位置</th><th>石头类型</th><th>数量</th><th>石重</th><th>证书类型</th><th>规格(颜色/净度/切工/对称/荧光)</th><th>状态</th></tr>
+                    	<tr><th>石头位置</th><th>石头类型</th><th>数量</th><th>石重</th><th>证书类型</th><th>规格(形状/色彩/颜色/净度/切工/对称/荧光)</th><th>状态</th></tr>
                     </thead>
                     <tbody>
                         <?php if(!empty($attrValues[AttrIdEnum::MAIN_STONE_TYPE])) {?>
@@ -306,7 +306,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_NUM]??'0'?></td>
                         	<td><?= $attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??'0'?>ct</td>
                         	<td><?= $attrValues[AttrIdEnum::DIA_CERT_TYPE]??'无'?></td>
-                        	<td><?= ($attrValues[AttrIdEnum::DIA_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CLARITY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CUT] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_SYMMETRY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_FLUORESCENCE] ?? '无')?></td>
+                        	<td><?= ($attrValues[AttrIdEnum::DIA_SHAPE] ?? '无').'/'.($attrValues[AttrIdEnum::MAIN_STONE_SECAI] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CLARITY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_CUT] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_SYMMETRY] ?? '无').'/'.($attrValues[AttrIdEnum::DIA_FLUORESCENCE] ?? '无')?></td>
                         	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>                    	
@@ -317,7 +317,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_NUM]??'0'?></td>
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??'0'?>ct</td>
                         	<td>无</td>
-                        	<td><?= ($attrValues[AttrIdEnum::SIDE_STONE1_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_CLARITY] ?? '无').'/无/无/无'?></td>
+                        	<td><?= ($attrValues[AttrIdEnum::SIDE_STONE1_SHAPE] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_SECAI] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE1_CLARITY] ?? '无').'/无/无/无'?></td>
                         	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>                    	
@@ -328,7 +328,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_NUM]??'0'?></td>
                         	<td><?= $attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??'0'?>ct</td>
                         	<td>无</td>
-                        	<td></td>
+                        	<td><?=($attrValues[AttrIdEnum::SIDE_STONE2_SHAPE] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE2_SECAI] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE2_COLOR] ?? '无').'/'.($attrValues[AttrIdEnum::SIDE_STONE2_CLARITY] ?? '无').'/无/无/无'?></td>
                         	<td><?= PeishiStatusEnum::getValue($model->peishi_status) ?></td>
                     	</tr>
                     	<?php }?>

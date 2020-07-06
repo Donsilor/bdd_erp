@@ -259,6 +259,7 @@ class ProduceService extends Service
                     'stone_num'=> $form->goods_num * ($attrValues[AttrIdEnum::MAIN_STONE_NUM]??0),
                     'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::DIA_SPEC]??'',
+                    'secai'=>$attrValues[AttrIdEnum::MAIN_STONE_SECAI]??'',
                     'carat'=>$attrValues[AttrIdEnum::MAIN_STONE_WEIGHT]??0,
                     'color' =>$attrValues[AttrIdEnum::DIA_COLOR]??'',
                     'clarity'=>$attrValues[AttrIdEnum::DIA_CLARITY]??'',
@@ -276,6 +277,8 @@ class ProduceService extends Service
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE1_NUM]??0),
                     'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE1_SPEC]??'',
+                    'shape'=>$attrValues[AttrIdEnum::SIDE_STONE1_SHAPE]??'',
+                    'secai'=>$attrValues[AttrIdEnum::SIDE_STONE1_SECAI]??'',
                     'carat'=>$attrValues[AttrIdEnum::SIDE_STONE1_WEIGHT]??0,
                     'color' =>$attrValues[AttrIdEnum::SIDE_STONE1_COLOR]??'',
                     'clarity'=>$attrValues[AttrIdEnum::SIDE_STONE1_CLARITY]??'',
@@ -290,9 +293,11 @@ class ProduceService extends Service
                     'stone_num'=>$form->goods_num * ($attrValues[AttrIdEnum::SIDE_STONE2_NUM]??0),
                     'stone_weight'=>$stone_weight,
                     'stone_spec'=>$attrValues[AttrIdEnum::SIDE_STONE2_SPEC]??'',
+                    'shape'=>$attrValues[AttrIdEnum::SIDE_STONE2_SHAPE]??'',
+                    'secai'=>$attrValues[AttrIdEnum::SIDE_STONE2_SECAI]??'',
                     'carat'=>$attrValues[AttrIdEnum::SIDE_STONE2_WEIGHT]??0,
-                    'color' =>'',
-                    'clarity'=>'',
+                    'color' =>$attrValues[AttrIdEnum::SIDE_STONE2_COLOR]??'',
+                    'clarity'=>$attrValues[AttrIdEnum::SIDE_STONE2_CLARITY]??'',
             ];
         }
         //副石3
