@@ -26,8 +26,6 @@ class Application extends Service
             'customer' => 'addons\Sales\services\CustomerService',
             'order' => 'addons\Sales\services\OrderService',
             'orderGoods' => 'addons\Sales\services\OrderGoodsService',
-            'orderLog' => 'addons\Sales\services\OrderLogService',        
-            
-            
+            'orderLog' => 'addons\Sales\services\OrderLogService',
     ];
 }

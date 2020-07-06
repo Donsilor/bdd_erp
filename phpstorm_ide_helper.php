@@ -30,7 +30,6 @@ class Yii
  * @property \addons\Purchase\services\Application $purchaseService
  * @property \addons\Warehouse\services\Application $warehouseService
  * @property \addons\Sales\services\Application $salesService
- * @property \addons\RfOnlineDoc\services\Application $rfOnlineDocService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat
  * @property \Da\QrCode\Component\QrCodeComponent $qr

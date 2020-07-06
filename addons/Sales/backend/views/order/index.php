@@ -53,6 +53,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],  
             [
                     'attribute'=>'created_at',
+                    'value'=>function($model){
+                           return Yii::$app->formatter->asDatetime($model->created_at);
+                     },
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                             'model' => $searchModel,
                             'attribute' => 'created_at',
@@ -69,10 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
                             ],
-                    ]),
-                    'value'=>function($model){
-                            return Yii::$app->formatter->asDatetime($model->created_at);
-                    }
+                    ]),                    
+                    'headerOptions' => ['class' => 'col-md-1'],
             
             ],
             [
@@ -81,135 +82,137 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                            'class' => 'form-control',
-                            'style'=> 'width:150px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
-            ],
-            [
-                    'attribute' => 'orer_type',
-                    'value' =>function($model){
-                
-                    },
-                    'filter'=> false,
-                    'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
-            ],
-            [
-                    'attribute' => 'follower_id',
-                    'value' => function($model){
-                        
-                    },
-                    'filter' => Html::activeTextInput($searchModel, 'follower.username', [
                         'class' => 'form-control',
                         'style'=> 'width:150px;'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                    'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                    'attribute' => 'total_num',
-                    'value' => "total_num",
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
-            [
-                    'attribute' => 'total_cost',
-                    'value' => 'total_cost',
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'creator_id',
-                    'value' => function($model){
-                        return $model->creator->username ?? '';
+                    'attribute' => 'order_type',
+                    'value' =>function($model){
+                          return \addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type);
                     },
-                    'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                        'class' => 'form-control',
-                        'style'=> 'width:80px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
-            [
-                    'attribute' => 'audit_status',
-                    'value' => function ($model){
-                        return AuditStatusEnum::getValue($model->audit_status);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Sales\common\enums\OrderTypeEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            'style'=> 'width:80px;'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ],            
+            [
+                    'attribute' => 'goods_num',
+                    'value' => "goods_num",
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'80'],
+            ],
+            [
+                    'attribute' => 'account.order_amount',
+                    'value' => function(){
+                         return $model->account->order_amount ?? '';
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute' => 'sale_channel_id',
+                    'value' => function ($model){
+                        return $model->saleChannel->name ?? '';
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],            
+            ],  
             [
-                'attribute' => 'purchase_status',                    
-                'value' => function ($model){
-                    return PurchaseStatusEnum::getValue($model->purchase_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',PurchaseStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style'=> 'width:80px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],            
+                    'attribute' => 'pay_status',
+                    'value' => function ($model){
+                        return \addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'pay_status',\addons\Sales\common\enums\PayStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],  
+            [
+                    'attribute' => 'distribute_status',
+                    'value' => function ($model){
+                        return \addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'distribute_status',\addons\Sales\common\enums\DistributeStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+           ],  
+            [
+                    'attribute' => 'delivery_status',
+                    'value' => function ($model){
+                        return \addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'delivery_status',\addons\Sales\common\enums\DeliveryStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],  
+            [
+                    'attribute' => 'order_status',
+                    'value' => function ($model){
+                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'order_status',\addons\Sales\common\enums\OrderStatusEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],  
+            [
+                    'attribute' => 'follower_id',
+                    'value' => function($model){
+                        return $model->follower->username ?? '';
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{goods} {edit} {ajax-audit} {apply} {follower} {close}',
+                'template' => '{edit} {audit} {apply} {follower} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModalLg',
                                     'class'=>'btn btn-primary btn-sm',
                             ]);
-                        }
+
                     },                    
-                    'ajax-audit' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::PENDING){
+                    'audit' => function($url, $model, $key){
+                        
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
                              ]); 
-                        }
-                    },
-                    'goods' => function($url, $model, $key){
-                        return Html::a('商品列表', ['purchase-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                    },
 
-                    'apply' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                'class'=>'btn btn-success btn-sm',
-                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                            ]);
-                        }
-                    },
-                    'follower' => function($url, $model, $key){
-                        if($model->purchase_status <= PurchaseStatusEnum::PENDING){
-                            return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
-                                'class'=>'btn btn-info btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
-                            ]);
-                        }
-                    },
+                    },                    
                     'close' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
-                            return Html::delete(['close', 'id' => $model->id],'关闭',[
+                       
+                            return Html::delete(['delete', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);
-                        }
+
                     },                    
                 ]
             ]
