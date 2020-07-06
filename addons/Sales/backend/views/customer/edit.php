@@ -45,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'realname')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'gender')->dropDownList(\common\enums\GenderEnum::getMap()) ?>
+                            <?= $form->field($model, 'gender')->radioList(\common\enums\GenderEnum::getMap()) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'marriage')->dropDownList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
+                            <?= $form->field($model, 'marriage')->radioList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
                         </div>
                     </div>
                     <div class="row">
