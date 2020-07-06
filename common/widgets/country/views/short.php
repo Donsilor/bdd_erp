@@ -7,7 +7,7 @@ $col =  12 / $level;
 <div class="row">
     <?php if ($level >= 1){ ?>
         <div class="col-lg-<?= $col; ?>">
-            <?= $form->field($model, $countryName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid([1,2,3,4,5,6],2), [
+            <?= $form->field($model, $countryName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid(), [
                     'prompt' => '-- 请选择国家 --',
                     'onchange' => 'widget_country(this, 1,"' . Html::getInputId($model, $provinceName) . '","' . Html::getInputId($model, $cityName) . '")',
                 ]); ?>
