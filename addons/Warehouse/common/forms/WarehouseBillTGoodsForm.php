@@ -19,7 +19,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function rules()
     {
         $rules = [
-            [['goods_sn', 'goods_num'], 'required']
+            [['goods_sn', 'is_wholesale', 'goods_num'], 'required']
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -31,6 +31,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
+            'is_wholesale' => '是否批发(批发入库时出库销售不可拆分)'
         ]);
     }
 
