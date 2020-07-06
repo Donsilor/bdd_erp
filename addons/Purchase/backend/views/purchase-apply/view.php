@@ -98,14 +98,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if($model->apply_status == ApplyStatusEnum::PENDING){
+                    $isAudit = Yii::$app->services->flowType->isAudit(Yii::$app->purchaseService->apply->getTargetYType($model->channel_id),$model->id);
+                    $isAudit1 = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::PURCHASE_APPLY_S_MENT,$model->id);
+                    if($model->apply_status == ApplyStatusEnum::PENDING && $isAudit){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
-                    }elseif($model->apply_status == ApplyStatusEnum::CONFIRM){
-                        echo Html::edit(['final-audit','id'=>$model->id], '商品部审核', [
+                    }elseif($model->apply_status == ApplyStatusEnum::CONFIRM && $isAudit1){
+                        echo Html::edit(['final-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-sm',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',

@@ -313,17 +313,18 @@ class PurchaseApplyController extends BaseController
         }
 
         try {
-            list($current_users_arr, $yw_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->getTargetYType($model->channel_id), $id);
-            list(, $sp_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetSType, $id);
+            $current_detail_id = Yii::$app->services->flowType->getCurrentDetailId($this->targetSType, $id);
+            list(, $yw_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->getTargetYType($model->channel_id), $id);
+            list($current_users_arr, $sp_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetSType, $id);
             $flow_detail = array_merge($yw_flow_detail,$sp_flow_detail);
         }catch (\Exception $e){
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-
         return $this->renderAjax('audit', [
             'model' => $model,
             'current_users_arr' => $current_users_arr,
-            'flow_detail' => $flow_detail
+            'flow_detail' => $flow_detail,
+            'current_detail_id' => $current_detail_id
         ]);
     }
 
