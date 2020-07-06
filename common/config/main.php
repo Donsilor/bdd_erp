@@ -122,6 +122,9 @@ return [
                         ],
                 ],
         ],
+        'country' => [
+             'class' => 'common\components\Country',
+        ],
 		'attr' => [
             'class' => 'common\components\Attribute',
         ],

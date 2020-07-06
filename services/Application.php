@@ -49,8 +49,9 @@ use common\components\Service;
  * @property \services\common\AuthService $auth 权限验证
  * @property \services\common\ConfigService $config 基础配置
  * @property \services\common\ConfigCateService $configCate 基础配置分类
- * @property \services\common\ProvincesService $provinces ip黑名单
- * @property \services\common\IpBlacklistService $ipBlacklist 省市区
+ * @property \services\common\ProvincesService $provinces ip黑名单省市区
+ * @property \services\common\CountryService $country 国家地区
+ * @property \services\common\IpBlacklistService $ipBlacklist ip黑名单
  * @property \services\rbac\AuthItemService $rbacAuthItem 权限
  * @property \services\rbac\AuthItemChildService $rbacAuthItemChild 授权的权限
  * @property \services\rbac\AuthRoleService $rbacAuthRole 角色
@@ -119,6 +120,7 @@ class Application extends Service
         'actionBehavior' => 'services\common\ActionBehaviorService',
         'ipBlacklist' => 'services\common\IpBlacklistService',
         'provinces' => 'services\common\ProvincesService',
+        'country' => 'services\common\CountryService',
         'attachment' => 'services\common\AttachmentService',
         'addons' => 'services\common\AddonsService',
         'addonsConfig' => 'services\common\AddonsConfigService',

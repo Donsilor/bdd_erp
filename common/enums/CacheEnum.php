@@ -28,6 +28,8 @@ class CacheEnum
             'addons' => '', // 插件
             'addonsName' => '', // 插件名称
             'provinces' => '', // 省市区
+            'countries' => '', // 国家省市区 总数据
+            'countryRow' => '', // 国家省市区 单行
             'ipBlacklist' => '', // ip黑名单
             'actionBehavior' => '', // 需要被记录的行为
             
