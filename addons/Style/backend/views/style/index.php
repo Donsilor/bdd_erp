@@ -156,12 +156,14 @@ $this->params['breadcrumbs'][] = $this->title;
            [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
-                        return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName(\common\enums\TargetTypeEnum::STYLE_STYLE,$model->id);
+                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                        return \common\enums\AuditStatusEnum::getValue($model->audit_status).$audit_name_str;
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            'style'=>'width:80px'
+                            'style'=>'width:120px'
                     ]),
                     'format' => 'raw',
                     //'headerOptions' => ['class' => 'col-md-1'],
@@ -228,7 +230,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
 
                     'audit' => function($url, $model, $key){
-                        if($model->audit_status == AuditStatusEnum::PENDING){
+                        $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_STYLE,$model->id);
+                        if($model->audit_status == AuditStatusEnum::PENDING && $isAudit){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',

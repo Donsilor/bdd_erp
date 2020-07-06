@@ -18,6 +18,7 @@ class TargetTypeEnum extends BaseEnum
     const PURCHASE_APPLY_F_MENT = 3;//采购申请单（国际批发）审批流程
     const PURCHASE_APPLY_Z_MENT = 4;//采购申请单（高端珠宝）审批流程
     const PURCHASE_APPLY_S_MENT = 5;//采购申请单（商品部）审批流程
+    const STYLE_STYLE = 6;//款式
 
     
     /**
@@ -31,6 +32,7 @@ class TargetTypeEnum extends BaseEnum
                 self::PURCHASE_APPLY_F_MENT => "采购申请单（国际批发）审批流程",
                 self::PURCHASE_APPLY_Z_MENT => "采购申请单（高端珠宝）审批流程",
                 self::PURCHASE_APPLY_S_MENT => "采购申请单（商品部）审批流程",
+                self::STYLE_STYLE => "款式审批流程",
         ];
     }
 

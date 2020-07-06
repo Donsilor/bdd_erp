@@ -128,7 +128,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 ?>
                 <?php
-                if($model->audit_status == AuditStatusEnum::PENDING){
+                $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_STYLE,$model->id);
+                if($model->audit_status == AuditStatusEnum::PENDING && $isAudit){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-ms',
                         'data-toggle' => 'modal',
@@ -141,4 +142,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
 
-</div>    
+</div>
+        <div id="flow">
+
+        </div>
+        <script>
+            $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> \common\enums\TargetTypeEnum::STYLE_STYLE,'target_id'=>$model->id])?>")
+
+        </script>
