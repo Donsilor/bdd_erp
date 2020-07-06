@@ -34,5 +34,17 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
                 self::CANCEL => '已取消',
         ];
     }
+
+    public static function getMapList(): array
+    {
+        return [
+            self::SAVE    => '已保存',
+            self::PENDING => '待审核',
+            self::CONFIRM => '待审核',
+            self::AUDITED => '已审核',
+            self::AFFIRM => '已确认',
+            self::CANCEL => '已取消',
+        ];
+    }
     
 }

@@ -82,7 +82,7 @@ class FlowTypeService extends Service
     public function getFlowDetals($flow_type_id,$target_id){
         $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
-            throw new \Exception('参数错误');
+            return[[],[]];
         }
         $current_users = $flow->current_users;
         $current_users_arr = explode(',',$current_users);

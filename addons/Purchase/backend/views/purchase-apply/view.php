@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
-                            <td><?= Yii::$app->formatter->asDate($model->delivery_time);  ?></td>
+                            <td><?= $model->delivery_time ? Yii::$app->formatter->asDate($model->delivery_time) : '';  ?></td>
                         </tr>  
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_status') ?>：</td>
@@ -118,6 +118,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
+        <?php
+        if(!empty($flow_detail)){
+        ?>
+
         <style>
             .time-line li div.mbox{
                 border: 1px solid #f0f0f0;
@@ -177,6 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
+        <?php } ?>
 
 
 

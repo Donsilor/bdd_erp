@@ -89,15 +89,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
-            [
-                    'attribute' => 'remark',
-                    'value' => "remark",
-                    'filter' => Html::activeTextInput($searchModel, 'remark', [
-                            'class' => 'form-control',
-                            'style'=> 'width:200px;'
-                    ]),
-                    'format' => 'raw',
-            ],
+
             [
                 'attribute'=>'created_at',
                 'filter' => DateRangePicker::widget([    // 日期组件
@@ -189,7 +181,15 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'apply_status',                    
                 'value' => function ($model){
-                    return ApplyStatusEnum::getValue($model->apply_status);
+                    $audit_name_str = '';
+                    if($model->apply_status == ApplyStatusEnum::PENDING){
+                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName(Yii::$app->purchaseService->apply->getTargetYType($model->channel_id),$model->id);
+                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    }elseif($model->apply_status == ApplyStatusEnum::CONFIRM){
+                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName(\common\enums\TargetTypeEnum::PURCHASE_APPLY_S_MENT,$model->id);
+                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    }
+                    return ApplyStatusEnum::getValue($model->apply_status,'getMapList') .$audit_name_str;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'apply_status',ApplyStatusEnum::getMap(), [
                     'prompt' => '全部',

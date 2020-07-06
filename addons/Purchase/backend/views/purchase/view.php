@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->delivery_time) ?></td>
+                            <td><?= $model->delivery_time ? \Yii::$app->formatter->asDatetime($model->delivery_time) : '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_sn') ?>：</td>
