@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => false,
                             'format' => 'raw',
                         ],
-                        [
+                        /*[
                             'attribute' => 'firstname',
                             'filter' => true,
                         ],
                         [
                             'attribute' => 'lastname',
                             'filter' => true,
-                        ],
+                        ],*/
                         [
                             'attribute' => 'realname',
                             'filter' => true,
@@ -70,6 +70,18 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'mobile',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'home_phone',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'qq',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'marriage',
                             'format' => 'raw',
                             'value' => function ($model){
@@ -82,15 +94,15 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'mobile',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'home_phone',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'qq',
+                            'attribute' => 'source',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\SourceEnum::getValue($model->source);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'source',\addons\Sales\common\enums\SourceEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [

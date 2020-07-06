@@ -2,8 +2,8 @@
 
 namespace addons\Sales\common\models;
 
-use common\helpers\RegularHelper;
 use Yii;
+use common\helpers\RegularHelper;
 
 /**
  * This is the model class for table "sales_customer".
@@ -28,6 +28,7 @@ use Yii;
  * @property int $province_id 省
  * @property int $city_id 城市
  * @property int $area_id 地区
+ * @property string $address 详细地址
  * @property int $status 状态[-1:删除;0:禁用;1启用]
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
@@ -54,6 +55,7 @@ class Customer extends BaseModel
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email'], 'string', 'max' => 150],
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
+            [['address'], 'string', 'max' => 255],
         ];
     }
 
@@ -81,8 +83,9 @@ class Customer extends BaseModel
             'home_phone' => '家庭号码',
             'country_id' => '所属国家',
             'province_id' => '省',
-            'city_id' => '城市',
+            'city_id' => '城市/地区',
             'area_id' => '地区',
+            'address' => '详细地址',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
@@ -94,7 +97,7 @@ class Customer extends BaseModel
      * @return bool
      * @throws \yii\base\Exception
      */
-    public function beforeSave($insert)
+    /*public function beforeSave($insert)
     {
 
         if(RegularHelper::verify('chineseCharacters',$this->lastname.''.$this->firstname)){
@@ -107,6 +110,6 @@ class Customer extends BaseModel
         }
 
         return parent::beforeSave($insert);
-    }
+    }*/
 
 }

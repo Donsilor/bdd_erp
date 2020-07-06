@@ -98,6 +98,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('area_id') ?>：</td>
                                      <td><?= $model->area_id ?></td>
                                  </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
+                                     <td><?= $model->address ?></td>
+                                 </tr>
                              </table>
                          </div>
                      </div>

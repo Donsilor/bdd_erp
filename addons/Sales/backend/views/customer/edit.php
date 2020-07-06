@@ -35,11 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 </ul>
                 <div class="box-body col-lg-12" style="padding-left:30px">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <!--<div class="col-lg-3">
                             <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
+                        </div>-->
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'realname')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'gender')->dropDownList(\common\enums\GenderEnum::getMap()) ?>
@@ -115,6 +118,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'areaName' => 'area_id',// 区字段名
                                 'template' => 'short' //合并为一行显示
                             ]); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
                 </div>
