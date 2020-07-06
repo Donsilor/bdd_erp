@@ -9,21 +9,26 @@ use Yii;
 /**
  * This is the model class for table "warehouse_bill_goods_l".
  *
- * @property int $id
- * @property string $goods_id 货号
+ * @property int $id ID
  * @property int $bill_id 单据ID
  * @property string $bill_no 单据编号
  * @property string $bill_type 单据类型
+ * @property string $goods_id 货号
  * @property string $goods_name 商品名称
+ * @property string $goods_sn 款号/起版号
  * @property string $goods_image 商品图片
- * @property string $product_size 尺寸
+ * @property int $style_id 款式ID/起版ID
  * @property string $style_sn 款号
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
+ * @property int $style_channel_id 款式渠道
+ * @property string $qiban_sn 起版号
+ * @property int $qiban_type 起版类型
  * @property int $order_detail_id 订单明细ID
- * @property string $order_sn 订单编号
+ * @property string $order_sn 订单号
  * @property string $produce_sn 布产单号
+ * @property int $is_wholesale 是否批发
  * @property string $gold_weight 金重
  * @property string $gold_loss 金损
  * @property string $suttle_weight 净重
@@ -31,6 +36,8 @@ use Yii;
  * @property string $gold_amount 金料额
  * @property string $gross_weight 毛重
  * @property string $finger 手寸
+ * @property string $product_size 尺寸
+ * @property string $kezi 刻字
  * @property string $cert_type 证书类别
  * @property string $cert_id 证书号
  * @property int $goods_num 商品数量
@@ -106,14 +113,15 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'goods_num', 'order_detail_id', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'style_id', 'qiban_type', 'order_detail_id', 'is_wholesale', 'goods_num', 'jintuo_type', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'suttle_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'bukou_fee', 'xianqian_fee', 'cert_fee', 'markup_rate', 'fense_fee', 'biaomiangongyi_fee', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2'], 'number'],
-            [['goods_id', 'bill_no', 'style_sn', 'order_sn', 'produce_sn'], 'string', 'max' => 30],
+            [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color'], 'string', 'max' => 100],
+            [['order_sn'], 'string', 'max' => 40],
             [['gross_weight', 'diamond_cert_id', 'main_stone_sn', 'second_stone_sn1', 'second_cert_id1'], 'string', 'max' => 20],
             [['finger', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'main_stone_type', 'second_stone_type1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2'], 'string', 'max' => 10],
-            [['cert_type'], 'string', 'max' => 50],
+            [['cert_type', 'kezi'], 'string', 'max' => 50],
             [['remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
         ];
@@ -126,20 +134,25 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             'id' => 'ID',
-            'goods_id' => '货号',
             'bill_id' => '单据ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
+            'goods_id' => '货号',
             'goods_name' => '商品名称',
+            'goods_sn' => '款号/起版号',
             'goods_image' => '商品图片',
-            'product_size' => '尺寸',
+            'style_id' => '款式ID/起版ID',
             'style_sn' => '款号',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
+            'style_channel_id' => '款式渠道',
+            'qiban_sn' => '起版号',
+            'qiban_type' => '起版类型',
             'order_detail_id' => '订单明细ID',
             'order_sn' => '订单号',
             'produce_sn' => '布产单号',
+            'is_wholesale' => '是否批发',
             'gold_weight' => '金重',
             'gold_loss' => '金损',
             'suttle_weight' => '净重',
@@ -147,6 +160,8 @@ class WarehouseBillGoodsL extends BaseModel
             'gold_amount' => '金料额',
             'gross_weight' => '毛重',
             'finger' => '手寸',
+            'product_size' => '尺寸',
+            'kezi' => '刻字',
             'cert_type' => '证书类别',
             'cert_id' => '证书号',
             'goods_num' => '商品数量',
