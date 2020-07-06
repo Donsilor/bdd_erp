@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 
+use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\models\PurchaseApplyGoods;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
@@ -278,9 +279,9 @@ class PurchaseApplyController extends BaseController
             try{
                 $trans = Yii::$app->db->beginTransaction();
 
-                $count = PurchaseApplyGoods::find()->where(['and',['=','apply_id',$model->id],['<>','audit_status',AuditStatusEnum::PASS]])->count();
+                $count = PurchaseApplyGoods::find()->where(['and',['=','apply_id',$model->id],['<>','confirm_status',ApplyConfirmEnum::CONFIRM]])->count();
                 if($count){
-                    throw new \Exception("有明细没有审核");
+                    throw new \Exception("有明细没有被确认");
                 }
 
                 $audit = [

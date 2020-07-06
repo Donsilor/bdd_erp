@@ -2,7 +2,9 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
+use common\enums\ConfirmEnum;
 use common\helpers\ArrayHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -17,7 +19,6 @@ use addons\Purchase\common\forms\PurchaseApplyGoodsForm;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
 use common\enums\StatusEnum;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Style\common\enums\QibanTypeEnum;
@@ -61,6 +62,8 @@ class PurchaseApplyGoodsController extends BaseController
                 'pageSize' => $this->pageSize,
                 'relations' => [
                     'auditor' => ['username'],
+                    'designMember' => ['username'],
+                    'goodsMember' => ['username'],
                 ]
         ]);
         
@@ -105,6 +108,7 @@ class PurchaseApplyGoodsController extends BaseController
             try{                
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->audit_status = AuditStatusEnum::SAVE;
+                $model->confirm_status = ApplyConfirmEnum::GOODS;
 
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
@@ -202,6 +206,7 @@ class PurchaseApplyGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->audit_status = AuditStatusEnum::SAVE;
+                $model->confirm_status = ApplyConfirmEnum::DESIGN;
                 //申请单里无款默认为起版
                 $model->qiban_type = QibanTypeEnum::NO_STYLE;
 
@@ -474,14 +479,75 @@ class PurchaseApplyGoodsController extends BaseController
         return true;
     }
 
-
     /**
-     * ajax 设计审核
+     * ajax 设计确认
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionDesignAudit()
+    public function actionDesignConfirm()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model->confirm_status = ApplyConfirmEnum::CONFIRM;
+        $model->confirm_design_time = time();
+        $model->confirm_design_id = \Yii::$app->user->identity->id;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
+    /**
+     * ajax 商品确认
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionGoodsConfirm()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if($model->is_design_qiban == ConfirmEnum::YES){
+                    $model->confirm_status = ApplyConfirmEnum::DESIGN;
+                }else{
+                    $model->confirm_status = ApplyConfirmEnum::CONFIRM;
+                }
+                $model->confirm_goods_time = time();
+                $model->confirm_goods_id = \Yii::$app->user->identity->id;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * ajax 商品审核（旧）
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionGoodsAudit()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -512,13 +578,15 @@ class PurchaseApplyGoodsController extends BaseController
             'model' => $model,
         ]);
     }
+
+
     /**
-     * ajax 商品审核
+     * ajax 设计审核（旧）
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionGoodsAudit()
+    public function actionDesignAudit()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);

@@ -2,11 +2,15 @@
 
 namespace addons\Sales\backend\controllers;
 
+use common\helpers\Url;
 use Yii;
+use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\forms\CustomerForm;
+use common\enums\StatusEnum;
 use common\traits\Curd;
+use yii\db\Exception;
 
 /**
  * 客户管理
@@ -50,11 +54,70 @@ class CustomerController extends BaseController
             $dataProvider->query->andFilterWhere(['<',Customer::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Customer::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',Customer::tableName().'.status',-1]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * 编辑/创建
+     *
+     * @return mixed
+     */
+    public function actionEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
+
+        $model = $this->findModel($id);
+        $model = $model ?? new CustomerForm();
+
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if(false === $model->save()){
+                    throw new Exception($this->getError($model));
+                }
+                $trans->commit();
+            }catch (Exception $e){
+                $trans->rollBack();
+                //$error = $e->getMessage();
+                //\Yii::error($error);
+                return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+            }
+
+            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new CustomerForm();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->customer->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }

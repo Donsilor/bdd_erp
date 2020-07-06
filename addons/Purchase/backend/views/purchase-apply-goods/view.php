@@ -83,67 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
                                     <td><?= $model->channel->name ?? '' ?></td>
                                 </tr>
-
-
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-xs-6">
-                    <div class="box">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                                    <td><?=  $model->creator->username ?? ''  ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                                    <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                                    <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                                    <td><?= $model->auditor->username ?? ''  ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
-                                    <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                                    <td><?= $model->audit_remark ?></td>
-                                </tr>
-                                <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NO_STYLE){ ?>
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('format_creator_id') ?>：</td>
-                                    <td><?= $model->formatCreator->username ?? ''  ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('format_created_at') ?>：</td>
-                                    <td><?= \Yii::$app->formatter->asDatetime($model->format_created_at) ?></td>
-                                </tr>
-                                <?php } ?>
-                                <tr>
-                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                    <td><?= $model->remark ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
-                                    <td><?= $model->stone_info ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_info') ?>：</td>
-                                    <td><?= $model->parts_info ?></td>
-                                </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right">商品图片：</td>
                                     <td>
@@ -159,35 +98,94 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ?>
                                     </td>
                                 </tr>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-6">
+                    <div class="box">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                    <td><?=  $model->creator->username ?? ''  ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_status') ?>：</td>
+                                    <td><?= \addons\Purchase\common\enums\ApplyConfirmEnum::getValue($model->confirm_status)?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_design_id') ?>：</td>
+                                    <td><?= $model->designMember->username ?? ''  ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_design_time') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->confirm_design_time) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_goods_id') ?>：</td>
+                                    <td><?= $model->goodsMember->username ?? ''  ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_goods_time') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->confirm_goods_time) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                    <td><?= $model->audit_remark ?></td>
+                                </tr>
+                                <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NO_STYLE){ ?>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('format_creator_id') ?>：</td>
+                                    <td><?= $model->formatCreator->username ?? ''  ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('format_created_at') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->format_created_at) ?></td>
+                                </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                    <td><?= $model->remark ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
+                                    <td><?= $model->stone_info ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_info') ?>：</td>
+                                    <td><?= $model->parts_info ?></td>
+                                </tr>
+
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="box-footer text-center">
-                <?php
-                if($model->apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == \common\enums\AuditStatusEnum::SAVE){
-                    if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
-                        echo Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
-                            'class'=>'btn btn-success btn-ms',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
-                        echo Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
-                            'class'=>'btn btn-success btn-ms',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                }
-                ?>
+
                 <?php
                 if($model->apply->apply_status <= ApplyStatusEnum::CONFIRM) {
                     $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
                     ?>
                     <?= Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);?>
                 <?php }?>
+                <?php
+                if($model->apply->apply_status <= ApplyStatusEnum::CONFIRM  && $model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN) {
+                    echo Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                }
+                ?>
                 <?php
                 if($model->apply->apply_status == ApplyStatusEnum::AUDITED && $model->is_apply == \common\enums\ConfirmEnum::NO) {
                     echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
@@ -198,6 +196,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[
                         'class' => 'btn btn-danger btn-ms',
                     ]);
+                }
+                ?>
+                <?php
+                if($model->apply->apply_status == ApplyStatusEnum::CONFIRM ){
+                    if($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN){
+                        echo Html::edit(['design-confirm','id'=>$model->id], '设计部确认', [
+                            'class'=>'btn btn-success btn-ms',
+                            'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
+                        ]);
+                    }elseif ($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::GOODS){
+                        echo Html::edit(['goods-confirm','id'=>$model->id], '商品部确认', [
+                            'class'=>'btn btn-success btn-ms',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
                 }
                 ?>
             </div>

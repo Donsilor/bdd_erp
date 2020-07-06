@@ -131,16 +131,14 @@ class Qiban extends BaseModel
      * @return bool
      * @throws \yii\base\Exception
      */
-    public function beforeSave($insert)
+    public function beforeValidate()
     {
         $style_images = $this->style_images;
-        if(is_array($style_images)){
+        if($style_images){
             $this->style_image = $style_images[0] ?? '';
-        }else{
-            $style_images = explode(",", $style_images);
-            $this->style_image = $style_images[0] ?? '';
+            $this->style_images = join(',',$style_images);
         }
-        return parent::beforeSave($insert);
+        return parent::beforeValidate();
     }
 
 

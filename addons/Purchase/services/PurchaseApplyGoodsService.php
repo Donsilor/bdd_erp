@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\models\PurchaseApplyGoods;
 use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
 use addons\Style\common\enums\QibanTypeEnum;
@@ -60,8 +61,8 @@ class PurchaseApplyGoodsService extends Service
     public function syncApplyToQiban($apply_id){
         $apply_goods = PurchaseApplyGoods::find()->where(['apply_id'=>$apply_id])->all();
         foreach ($apply_goods as $model){
-            if($model->audit_status != AuditStatusEnum::PASS){
-                throw new \Exception("明细{$model->id}没有审核");
+            if($model->confirm_status != ApplyConfirmEnum::CONFIRM){
+                throw new \Exception("明细{$model->id}没有被确认");
             }
             //起版商品同步到起版表中
             if($model->qiban_type != QibanTypeEnum::NON_VERSION){

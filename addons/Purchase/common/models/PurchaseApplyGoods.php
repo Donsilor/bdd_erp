@@ -54,7 +54,8 @@ class PurchaseApplyGoods extends BaseModel
     {
         return [
             [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type'], 'required'],
-            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply', 'status', 'created_at', 'updated_at','format_creator_id','format_created_at'], 'integer'],
+            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply',
+                'status', 'created_at', 'updated_at','format_creator_id','format_created_at','is_design_qiban','confirm_status','confirm_design_id','confirm_design_time','confirm_goods_id','confirm_goods_time'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
@@ -111,6 +112,12 @@ class PurchaseApplyGoods extends BaseModel
             'format_info' => '工艺信息',
             'format_creator_id' => '版式添加人',
             'format_created_at' => '版式添加时间',
+            'is_design_qiban' => '是否设计师起版',
+            'confirm_status' => '确认',
+            'confirm_design_id' => '设计师',
+            'confirm_design_time' => '确认时间（设计师）',
+            'confirm_goods_id' => '商品部',
+            'confirm_goods_time' => '确认时间（商品部）',
         ];
     }
     /**
@@ -184,5 +191,25 @@ class PurchaseApplyGoods extends BaseModel
     {
         return $this->hasMany(PurchaseApplyGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
     }
-    
+
+    /**
+     * 商品部
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'confirm_goods_id'])->alias('goodsMember');
+    }
+
+
+    /**
+     * 设计师
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDesignMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'confirm_design_id'])->alias('designMember');
+    }
+
+
 }

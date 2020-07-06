@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {audit} {format-edit} {apply-edit} {delete}',
+                                'template' => '{view} {edit} {apply-edit} {format-edit} {audit}   {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          }
                                     },
                                     'format-edit' =>function($url, $model, $key) use($apply){
-                                        if($model->goods_type == PurchaseGoodsTypeEnum::OTHER && $apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
+                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM  && $model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN) {
                                             return Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
@@ -92,15 +92,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
 
                                     'audit' => function($url, $model, $key) use($apply){
-                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == AuditStatusEnum::SAVE){
-                                            if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
-                                                return Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
+                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM){
+                                            if($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN){
+                                                return Html::edit(['design-confirm','id'=>$model->id], '设计部确认', [
                                                     'class'=>'btn btn-success btn-xs',
-                                                    'data-toggle' => 'modal',
-                                                    'data-target' => '#ajaxModal',
+                                                    'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
                                                 ]);
-                                            }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
-                                                return Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                                            }elseif ($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::GOODS){
+                                                return Html::edit(['goods-confirm','id'=>$model->id], '商品部确认', [
                                                     'class'=>'btn btn-success btn-xs',
                                                     'data-toggle' => 'modal',
                                                     'data-target' => '#ajaxModal',
@@ -350,12 +349,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                             ],
                             'format_sn',
+
+
                             [
-                                'attribute'=>'audit_time',
+                                'attribute' => 'confirm_status',
+                                'value' => function ($model){
+                                    return \addons\Purchase\common\enums\ApplyConfirmEnum::getValue($model->confirm_status);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'confirm_status',\addons\Purchase\common\enums\ApplyConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'confirm_design_id',
+                                'value' => "designMember.username",
+                                'filter' => Html::activeTextInput($searchModel, 'designMember.username', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute'=>'confirm_design_time',
                                 'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                                     'model' => $searchModel,
-                                    'attribute' => 'audit_time',
-                                    'value' => $searchModel->audit_time,
+                                    'attribute' => 'confirm_design_time',
+                                    'value' => $searchModel->confirm_design_time,
                                     'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                                     'pluginOptions' => [
                                         'format' => 'yyyy-mm-dd',
@@ -373,28 +397,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 ]),
                                 'value'=>function($model){
-                                    return Yii::$app->formatter->asDatetime($model->audit_time);
+                                    return Yii::$app->formatter->asDatetime($model->confirm_design_time);
                                 }
 
                             ],
-
                             [
-                                'attribute' => 'audit_status',
-                                'value' => function ($model){
-                                    return AuditStatusEnum::getValue($model->audit_status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'auditor_id',
-                                'value' => "auditor.username",
-                                'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
+                                'attribute' => 'confirm_goods_id',
+                                'value' => "goodsMember.username",
+                                'filter' => Html::activeTextInput($searchModel, 'designMember.username', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
@@ -403,10 +413,38 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
 
                             [
+                                'attribute'=>'confirm_goods_time',
+                                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'confirm_goods_time',
+                                    'value' => $searchModel->confirm_goods_time,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d',time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+
+
+                                    ],
+
+                                ]),
+                                'value'=>function($model){
+                                    return Yii::$app->formatter->asDatetime($model->confirm_goods_time);
+                                }
+
+                            ],
+
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {audit}  {delete}',
+                                'template' => '{view} {edit} {apply-edit} {format-edit} {audit}   {delete}',
                                 'buttons' => [
                                     'view'=> function($url, $model, $key){
                                         return Html::edit(['view','id' => $model->id, 'apply_id'=>$model->apply_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -414,26 +452,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                     'edit' => function($url, $model, $key) use($apply){
-                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM) {
+                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
                                             $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
                                             return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
+                                    'format-edit' =>function($url, $model, $key) use($apply){
+                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM  && $model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN) {
+                                            return Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                        }
+                                    },
                                     'apply-edit' =>function($url, $model, $key) use($apply){
-                                        if($apply->apply_status != ApplyStatusEnum::SAVE) {
+                                        if($apply->apply_status == ApplyStatusEnum::AUDITED && $model->is_apply == \common\enums\ConfirmEnum::NO) {
                                             return Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
+
                                     'audit' => function($url, $model, $key) use($apply){
-                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM && $model->audit_status == AuditStatusEnum::SAVE){
-                                            if($model->goods_type == PurchaseGoodsTypeEnum::OTHER){
-                                                return Html::edit(['design-audit','id'=>$model->id], '设计部审核', [
+                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM){
+                                            if($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN){
+                                                return Html::edit(['design-confirm','id'=>$model->id], '设计部确认', [
                                                     'class'=>'btn btn-success btn-xs',
-                                                    'data-toggle' => 'modal',
-                                                    'data-target' => '#ajaxModal',
+                                                    'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
                                                 ]);
-                                            }elseif ($model->goods_type == PurchaseGoodsTypeEnum::STYLE){
-                                                return Html::edit(['goods-audit','id'=>$model->id], '商品部审核', [
+                                            }elseif ($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::GOODS){
+                                                return Html::edit(['goods-confirm','id'=>$model->id], '商品部确认', [
                                                     'class'=>'btn btn-success btn-xs',
                                                     'data-toggle' => 'modal',
                                                     'data-target' => '#ajaxModal',
