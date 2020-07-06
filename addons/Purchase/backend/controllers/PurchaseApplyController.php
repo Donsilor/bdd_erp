@@ -96,9 +96,16 @@ class PurchaseApplyController extends BaseController
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
         
-        $model = $this->findModel($id);     
+        $model = $this->findModel($id);
+
+        list($current_users_arr, $yw_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->getTargetYType($model->channel_id), $id);
+        list(, $sp_flow_detail) = \Yii::$app->services->flowType->getFlowDetals($this->targetSType, $id);
+        $flow_detail = array_merge($yw_flow_detail,$sp_flow_detail);
+
+
         return $this->render($this->action->id, [
             'model' => $model,
+            'flow_detail'=>$flow_detail,
             'tab'=>$tab,
             'tabList'=>Yii::$app->purchaseService->apply->menuTabList($id,$this->returnUrl),
             'returnUrl'=>$this->returnUrl,
@@ -575,13 +582,7 @@ class PurchaseApplyController extends BaseController
     }
 
     public function getTargetYType($channel_id){
-        if(in_array($channel_id,[1,2,5,6,7,8,9,10])){
-            return TargetTypeEnum::PURCHASE_APPLY_T_MENT;
-        }elseif (in_array($channel_id,[3])){
-            return TargetTypeEnum::PURCHASE_APPLY_F_MENT;
-        }elseif (in_array($channel_id,[4])){
-            return TargetTypeEnum::PURCHASE_APPLY_Z_MENT;
-        }
+        return Yii::$app->purchaseService->apply->getTargetYType($channel_id);
     }
 
 }

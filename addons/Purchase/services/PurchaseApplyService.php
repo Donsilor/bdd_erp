@@ -3,6 +3,7 @@
 namespace addons\Purchase\services;
 
 
+use common\enums\TargetTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -69,5 +70,17 @@ class PurchaseApplyService extends Service
     }
 
 
- 
+    public function getTargetYType($channel_id){
+        if(in_array($channel_id,[1,2,5,6,7,8,9,10])){
+            return TargetTypeEnum::PURCHASE_APPLY_T_MENT;
+        }elseif (in_array($channel_id,[3])){
+            return TargetTypeEnum::PURCHASE_APPLY_F_MENT;
+        }elseif (in_array($channel_id,[4])){
+            return TargetTypeEnum::PURCHASE_APPLY_Z_MENT;
+        }
+    }
+
+
+
+
 }
