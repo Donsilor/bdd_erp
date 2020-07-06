@@ -7,7 +7,7 @@ $col =  12 / $level;
 <div class="row">
     <?php if ($level >= 1){ ?>
         <div class="col-lg-<?= $col; ?>">
-            <?= $form->field($model, $countryName)->dropDownList(Yii::$app->services->country->getCityMapByPid(), [
+            <?= $form->field($model, $countryName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid([1,2,3,4,5,6],2), [
                     'prompt' => '-- 请选择国家 --',
                     'onchange' => 'widget_country(this, 1,"' . Html::getInputId($model, $provinceName) . '","' . Html::getInputId($model, $cityName) . '")',
                 ]); ?>
@@ -15,7 +15,7 @@ $col =  12 / $level;
     <?php }?>
     <?php if ($level >= 2){ ?>
         <div class="col-lg-<?= $col; ?>">
-            <?= $form->field($model, $provinceName)->dropDownList(Yii::$app->services->country->getCityMapByPid($model->$countryName, 2), [
+            <?= $form->field($model, $provinceName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid($model->$countryName, 3), [
                     'prompt' => '-- 请选择省份 --',
                     'onchange' => 'widget_country(this,2,"' . Html::getInputId($model, $cityName) . '","'.Html::getInputId($model, $cityName) . '")',
                 ]); ?>
@@ -23,7 +23,7 @@ $col =  12 / $level;
     <?php }?>
     <?php if ($level >= 3){ ?>
         <div class="col-lg-<?= $col; ?>">
-            <?= $form->field($model, $cityName)->dropDownList(Yii::$app->services->country->getCityMapByPid($model->$provinceName, 3), [
+            <?= $form->field($model, $cityName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid($model->$provinceName, 4), [
                 'prompt' => '-- 请选择城市 --',
             ]) ?>
         </div>

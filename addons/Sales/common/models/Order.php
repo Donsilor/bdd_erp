@@ -11,6 +11,7 @@ use common\models\common\PayLog;
  * @property int $id ID
  * @property int $merchant_id 商户
  * @property string $language 订单语言
+ * @property string $currency 订单货币
  * @property string $order_sn 订单编号
  * @property string $pay_sn 支付单号
  * @property int $pay_type 支付方式 0待支付 1微信 2支付宝 3银联 6Paypal 100线下
@@ -62,9 +63,11 @@ class Order extends BaseModel
     public function rules()
     {
         return [
+            [['sale_channel_id','language','currency','customer_mobile'], 'required'],
             [['merchant_id', 'goods_num','sale_channel_id','customer_from','pay_type', 'pay_status', 'pay_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['order_sn'], 'required'],
             [['language'], 'string', 'max' => 5],
+            [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
             [['pay_sn'], 'string', 'max' => 32],
             [['express_no', 'out_trade_no'], 'string', 'max' => 50],
@@ -86,6 +89,7 @@ class Order extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户',
             'language' => '订单语言',
+            'currency' => '订单货币',
             'order_sn' => '订单编号',
             'sale_channel_id' => '销售渠道',
             'pay_sn' => '支付单号',
