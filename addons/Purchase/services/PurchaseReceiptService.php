@@ -389,7 +389,7 @@ class PurchaseReceiptService extends Service
                 $good['status'] = StatusEnum::ENABLED;
                 $good['created_at'] = time();
                 $value[] = array_values($good);
-                if(count($value) >= 2){
+                if(count($value) >= 10){
                     $res= \Yii::$app->db->createCommand()->batchInsert(PurchaseReceiptGoods::tableName(), $key, $value)->execute();
                     if(false === $res){
                         throw new \yii\base\Exception("保存失败");

@@ -120,7 +120,7 @@ class PurchaseGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        
+        //var_dump(1);die;
         $model->initAttrs();
         return $this->render($this->action->id, [
                 'model' => $model,

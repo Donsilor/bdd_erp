@@ -91,9 +91,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'style_sn',
+                                'attribute'=>'goods_num',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'goods_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
@@ -132,6 +140,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'qiban_type',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -270,14 +299,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'cert_id', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
                                 ]),
                             ],
                             [

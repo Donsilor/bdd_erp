@@ -69,7 +69,7 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsL();
+        $model = $model ?? new WarehouseBillTGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
