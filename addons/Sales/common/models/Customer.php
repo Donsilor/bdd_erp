@@ -2,6 +2,7 @@
 
 namespace addons\Sales\common\models;
 
+use common\helpers\RegularHelper;
 use Yii;
 
 /**
@@ -86,6 +87,26 @@ class Customer extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+
+        if(RegularHelper::verify('chineseCharacters',$this->lastname.''.$this->firstname)){
+            $realname  = $this->lastname.''.$this->firstname;
+        }else {
+            $realname  = $this->firstname.' '.$this->lastname;
+        }
+        if(trim($realname) != '' && $realname != $this->realname){
+            $this->realname = $realname;
+        }
+
+        return parent::beforeSave($insert);
     }
 
 }

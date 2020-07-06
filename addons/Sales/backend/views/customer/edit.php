@@ -42,13 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'realname')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'gender')->dropDownList(\common\enums\GenderEnum::getMap()) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'gender')->dropDownList(\common\enums\GenderEnum::getMap()) ?>
+                            <?= $form->field($model, 'marriage')->dropDownList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'source')->dropDownList(\addons\Sales\common\enums\SourceEnum::getMap()) ?>
+                        </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'birthday')->widget(DatePicker::class, [
                                 'language' => 'zh-CN',
@@ -62,12 +65,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'todayBtn' => true,//今日按钮显示
                                 ]
                             ]);?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?= $form->field($model, 'marriage')->dropDownList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?= $form->field($model, 'source')->dropDownList(\addons\Sales\common\enums\SourceEnum::getMap()) ?>
                         </div>
                     </div>
                 </div>

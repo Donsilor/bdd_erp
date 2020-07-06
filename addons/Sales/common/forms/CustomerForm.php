@@ -17,7 +17,7 @@ class CustomerForm extends Customer
     public function rules()
     {
         $rules = [
-            [['firstname','lastname','realname'], 'required'],
+            [['firstname','lastname'], 'required'],
             ['mobile', 'filter', 'filter' => 'trim'],
             ['mobile','match','pattern'=>'/^[1][34578][0-9]{9}$/'],
             ['email', 'email'],
