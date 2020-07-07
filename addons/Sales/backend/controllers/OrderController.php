@@ -195,8 +195,8 @@ class OrderController extends BaseController
         $this->modelClass = OrderAddress::class;
         $model = $this->findModel($id);
         if($model->isNewRecord) {
-            $model->order_id = $id;            
-        }
+            $model->order_id = $id;     
+        }        
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -213,7 +213,15 @@ class OrderController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        
+        if(!$model->realname) {
+            $model->realname = $model->order->customer_name ?? null;
+        }
+        if(!$model->mobile) {
+            $model->mobile = $model->order->customer_mobile ?? null;
+        }
+        if(!$model->email) {
+            $model->email = $model->order->customer_email ?? null;
+        }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
