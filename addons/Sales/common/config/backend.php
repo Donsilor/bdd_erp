@@ -57,6 +57,10 @@ return [
                                     'route' => 'sale-channel/index',
                             ],
                             [
+                                    'title' => '客户来源',
+                                    'route' => 'customer-sources/index',
+                            ],
+                            [
                                     'title' => '快递公司',
                                     'route' => 'express/index',
                             ],

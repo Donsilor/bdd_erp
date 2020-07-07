@@ -5,26 +5,27 @@ namespace addons\Sales\common\models;
 use Yii;
 
 /**
- * This is the model class for table "sales_express".
+ * This is the model class for table "sales_customer_sources".
  *
  * @property int $id
- * @property string $code 快递编码
- * @property string $cover 快递公司logo
- * @property string $name 快递名称
- * @property int $status 状态 1启用 0禁用
+ * @property int $merchant_id 商户ID
+ * @property string $code 来源编码
+ * @property string $tag 标签
+ * @property string $name 来源名称
+ * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $sort
- * @property int $creator_id 创建人
+ * @property int $creator_id 创建人ID
  * @property int $created_at
  * @property int $updated_at
  */
-class Express extends BaseModel
+class CustomerSources extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('express');
+        return self::tableFullName('customer_sources');
     }
 
     /**
@@ -33,10 +34,9 @@ class Express extends BaseModel
     public function rules()
     {
         return [
-            [['status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['code'], 'string', 'max' => 25],
-            [['cover'], 'string', 'max' => 100],
-            [['name'], 'string', 'max' => 50],
+            [['merchant_id', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['code', 'tag'], 'string', 'max' => 10],
+            [['name'], 'string', 'max' => 100],
         ];
     }
 
@@ -47,12 +47,13 @@ class Express extends BaseModel
     {
         return [
             'id' => 'ID',
-            'code' => '快递编码',
-            'cover' => '快递公司logo',
-            'name' => '快递名称',
+            'merchant_id' => '商户ID',
+            'code' => '来源编码',
+            'tag' => '标签',
+            'name' => '来源名称',
             'status' => '状态',
             'sort' => '排序',
-            'creator_id' => '创建人',
+            'creator_id' => '创建人ID',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

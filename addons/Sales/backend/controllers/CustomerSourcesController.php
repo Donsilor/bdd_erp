@@ -4,24 +4,24 @@ namespace addons\Sales\backend\controllers;
 
 use Yii;
 use common\traits\Curd;
-use addons\Sales\common\models\Express;
-use addons\Sales\common\forms\ExpressForm;
+use addons\Sales\common\models\CustomerSources;
+use addons\Sales\common\forms\CustomerSourcesForm;
 use common\models\base\SearchModel;
 
 /**
- * 物流快递
+ * 客户来源
  *
- * Class ExpressController
+ * Class CustomerSourcesController
  * @package addons\Sales\backend\controllers
  */
-class ExpressController extends BaseController
+class CustomerSourcesController extends BaseController
 {
     use Curd;
 
     /**
-     * @var Express
+     * @var CustomerSources
      */
-    public $modelClass = ExpressForm::class;
+    public $modelClass = CustomerSourcesForm::class;
     /**
      * 首页
      *
@@ -48,11 +48,11 @@ class ExpressController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Express::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Express::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',CustomerSources::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',CustomerSources::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        //$dataProvider->query->andWhere(['>',SaleChannel::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',CustomerSources::tableName().'.status',-1]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
