@@ -12,6 +12,7 @@ use common\components\Service;
  * @property \addons\Sales\services\CustomerSourcesService $sources 客户来源
  * @property \addons\Sales\services\ExpressService $express 快递
  * @property \addons\Sales\services\CustomerService $customer 客户
+ * @property \addons\Sales\services\PaymentService $payment 支付方式
  * @property \addons\Sales\services\OrderService $order 订单
  * @property \addons\Sales\services\OrderGoodsService $orderGoods 订单明细
  * @property \addons\Sales\services\OrderLogService $orderLog 订单日志
@@ -25,6 +26,7 @@ class Application extends Service
             'saleChannel' => 'addons\Sales\services\SaleChannelService',
             'sources' => 'addons\Sales\services\CustomerSourcesService',
             'express' => 'addons\Sales\services\ExpressService',
+            'payment' => 'addons\Sales\services\PaymentService',
             'customer' => 'addons\Sales\services\CustomerService',
             'order' => 'addons\Sales\services\OrderService',
             'orderGoods' => 'addons\Sales\services\OrderGoodsService',
