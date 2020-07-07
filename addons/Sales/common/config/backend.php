@@ -64,6 +64,10 @@ return [
                                     'title' => '快递公司',
                                     'route' => 'express/index',
                             ],
+                            [
+                                    'title' => '支付方式',
+                                    'route' => 'payment/index',
+                            ],
                     ],
                     
             ],

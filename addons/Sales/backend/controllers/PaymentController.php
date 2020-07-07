@@ -4,24 +4,24 @@ namespace addons\Sales\backend\controllers;
 
 use Yii;
 use common\traits\Curd;
-use addons\Sales\common\models\Express;
-use addons\Sales\common\forms\ExpressForm;
+use addons\Sales\common\models\Payment;
+use addons\Sales\common\forms\PaymentForm;
 use common\models\base\SearchModel;
 
 /**
- * 物流快递
+ * 支付方式
  *
  * Class ExpressController
  * @package addons\Sales\backend\controllers
  */
-class ExpressController extends BaseController
+class PaymentController extends BaseController
 {
     use Curd;
 
     /**
-     * @var Express
+     * @var Payment
      */
-    public $modelClass = ExpressForm::class;
+    public $modelClass = PaymentForm::class;
     /**
      * 首页
      *
@@ -48,11 +48,11 @@ class ExpressController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Express::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Express::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',Payment::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Payment::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        //$dataProvider->query->andWhere(['>',Express::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',Payment::tableName().'.status',-1]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
