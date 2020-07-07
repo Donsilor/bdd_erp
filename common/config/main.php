@@ -122,8 +122,8 @@ return [
                         ],
                 ],
         ],
-        'country' => [
-             'class' => 'common\components\Country',
+        'area' => [
+             'class' => 'common\components\Area',
         ],
 		'attr' => [
             'class' => 'common\components\Attribute',

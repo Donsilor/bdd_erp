@@ -196,8 +196,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class=" table-responsive" >
                 <table class="table table-hover">
                     <thead>
-                    	<tr><th>收货人</th><th>联系方式</th><th>国家</th><th>省份</th><th>城市</th><th>邮编</th><th>详细地址</th><th>操作</th></tr>
-                    </thead>
+                    	<tr><th>收货人</th><th>联系方式</th><th>国家</th><th>省份</th><th>城市</th><th>详细地址</th><th>邮编</th><th>操作</th></tr>
+                    </thead>                    
                     <tbody>
                     	<tr>
                     		<td><?= $model->address->realname ?? '' ?></td>
@@ -206,7 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     		$str = '';
                     		if($model->address) {
                     		    if($model->address->mobile) {
-                    		        $str .= $model->address->mobile_code.'-'.$model->address->mobile.'<br/>';
+                    		        $str .= $model->address->mobile.'<br/>';
                     		    }
                     		    if($model->address->email) {
                     		        $str .= $model->address->email;
@@ -217,16 +217,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             </td>
                         	<td><?= $model->address->country_name ??''?></td>
                         	<td><?= $model->address->province_name ??'' ?></td>
-                        	<td><?= $model->address->city_name ??'' ?></td>
-                        	<td><?= $model->address->zip_code ??'' ?></td>
+                        	<td><?= $model->address->city_name ??'' ?></td>                        	
                         	<td><?= $model->address->address_details ??'' ?></td> 
+                        	<td><?= $model->address->zip_code ??'' ?></td> 
                         	<td><?= Html::edit(['ajax-edit-address','id'=>$model->id ,'returnUrl'=>$returnUrl], '编辑', [
                                         'class'=>'btn btn-primary btn-ms',
                                         'style'=>"margin-left:5px",
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModal',
                                     ]);?>
-                            </td>                       	
+                            </td> 
+                                                 	
                     	</tr>
                     </tbody>
                 </table>                
@@ -251,8 +252,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= $model->invoice->invoice_title ??''?></td>
                         	<td><?= $model->invoice->tax_number ??''?></td>
                         	<td><?= addons\Sales\common\enums\InvoiceElectronicEnum::getValue($model->invoice->is_electronic ??'') ?></td>
-                        	<td><?= $model->address->email ??'' ?></td>
-                        	<td><?= $model->address->send_num ??'0' ?></td>
+                        	<td><?= $model->invoice->email ??'' ?></td>
+                        	<td><?= $model->invoice->send_num ??'' ?></td>
                         	<td><?= Html::edit(['ajax-edit-invoice','id'=>$model->id ,'returnUrl'=>$returnUrl], '编辑', [
                                         'class'=>'btn btn-primary btn-ms',
                                         'style'=>"margin-left:5px",

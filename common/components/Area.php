@@ -12,7 +12,7 @@ use common\models\common\Country;
  * @package common\components
  * @author gaopeng
  */
-class Country
+class Area
 {
     /**
      * 国家/省份/城市名称
@@ -39,7 +39,7 @@ class Country
     public function getModel($id , $noCache = false , $merchant_id = '')
     {
         $cacheKey = CacheEnum::getPrefix('countryRow',$merchant_id).':'.$id;
-        if (!($info = Yii::$app->cache->get($cacheKey)) || $noCache == true) {
+        if (!($model = Yii::$app->cache->get($cacheKey)) || $noCache == true) {
             $model = Country::find()->where(['id'=>$id])->asArray()->one();
             if($model) {            
                 $duration = (int) rand(3600*24,3600*24+3600);//防止缓存穿透

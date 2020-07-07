@@ -194,6 +194,9 @@ class OrderController extends BaseController
         $id = Yii::$app->request->get('id');
         $this->modelClass = OrderAddress::class;
         $model = $this->findModel($id);
+        if($model->isNewRecord) {
+            $model->order_id = $id;            
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -225,10 +228,12 @@ class OrderController extends BaseController
         $id = Yii::$app->request->get('id');
         $this->modelClass = OrderInvoice::class;
         $model = $this->findModel($id);
+        if($model->isNewRecord) {
+            $model->order_id = $id;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()) {

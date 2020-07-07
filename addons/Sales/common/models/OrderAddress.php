@@ -28,12 +28,13 @@ use Yii;
  */
 class OrderAddress extends \addons\Sales\common\models\BaseModel
 {
+    public $language = null;
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'sales_order_address';
+        return self::tableFullName('order_address');
     }
 
     /**
@@ -42,7 +43,7 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
     public function rules()
     {
         return [
-            [['order_id'], 'required'],
+            [['order_id','realname','mobile','country_id','province_id','city_id','address_details'], 'required'],
             [['order_id', 'member_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'city_name'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
@@ -62,10 +63,10 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
     {
         return [
             'order_id' => '订单ID',
-            'member_id' => '用户id',
-            'country_id' => '国家ID',
-            'province_id' => '省id',
-            'city_id' => '市id',
+            'customer_id' => '客户',
+            'country_id' => '国家',
+            'province_id' => '省份',
+            'city_id' => '城市',
             'firstname' => '名字',
             'lastname' => '姓氏',
             'realname' => '收货人',
@@ -80,5 +81,30 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];
+    }    
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {  
+        if($this->language == null){
+            $this->language = $this->order->language ?? null;
+        }
+        //更新地区名称
+        $this->country_name = Yii::$app->area->name($this->country_id,$this->language);
+        $this->province_name = Yii::$app->area->name($this->province_id,$this->language);
+        $this->city_name = Yii::$app->area->name($this->city_id,$this->language);
+
+        return parent::beforeSave($insert);
+    }
+    
+    /**
+     * 对应订单商品信息模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class,['id'=>'order_id']);
     }
 }
