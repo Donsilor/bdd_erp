@@ -4,6 +4,7 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
@@ -53,13 +54,19 @@ class GoldBillWController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                        
+                    'creator' => ['username'],
+                    'billW' => ['gold_type'],
                 ]
         ]);
         
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['updated_at','created_at']);
-        
+            ->search(Yii::$app->request->queryParams,['gold_type','updated_at','created_at']);
+
+        $gold_type = $searchModel->gold_type;
+        if (!empty($gold_type)) {
+            $dataProvider->query->andWhere(['=', 'billW.gold_type', $gold_type]);
+        }
+
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -91,25 +98,25 @@ class GoldBillWController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
+        $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseGoldBillWForm();
-        if($model->isNewRecord){
-            $from = Yii::$app->request->post('WarehouseGoldBillWForm');
-            $model->gold_type = $from['gold_type']??"";
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord){
             $model->bill_type = $this->billType;
+        }else{
+            $model->gold_type = false;
         }
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
+        if ($model->load(\Yii::$app->request->post())) {
             if($isNewRecord){
-                $model->bill_no   = SnHelper::createBillSn($this->billType);
+                $model->bill_no = SnHelper::createBillSn($this->billType);
             }
             try{
-                $trans = Yii::$app->trans->beginTransaction();               
+                $trans = \Yii::$app->trans->beginTransaction();
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->goldW->createBillW($model);
+                    $model = \Yii::$app->warehouseService->goldW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -122,8 +129,6 @@ class GoldBillWController extends BaseController
                 }else{
                     return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 }
-
-                
             }catch (\Exception $e) {   
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

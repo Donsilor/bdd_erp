@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
 use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
 use Yii;
@@ -39,6 +40,7 @@ class WarehouseGoldBillWService extends WarehouseBillService
         $bill = new WarehouseGoldBill();
         $bill->attributes = $form->toArray();
         $bill->bill_status = BillStatusEnum::SAVE;
+        $bill->to_warehouse_id = WarehouseIdEnum::GOLD;//金料库
         if(false === $bill->save() ) {
             throw new \Exception($this->getError($bill));
         }

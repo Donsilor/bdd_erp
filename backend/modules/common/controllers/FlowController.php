@@ -23,7 +23,7 @@ use backend\controllers\BaseController;
 class FlowController extends BaseController
 {
     use Curd;
-
+    protected $authOptional = ['audit-site'];
     /**
      * @var ConfigCate
      */
@@ -57,7 +57,7 @@ class FlowController extends BaseController
 
 
     /**
-     * ajax 审核
+     * ajax 审核流程
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
