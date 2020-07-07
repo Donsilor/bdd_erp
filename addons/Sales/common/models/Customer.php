@@ -130,4 +130,29 @@ class Customer extends BaseModel
     {
         return $this->hasOne(CustomerSources::class, ['id'=>'source_id'])->alias('source');
     }
+
+    /**
+     * 国家 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCountry()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'country_id'])->alias('country');
+    }
+    /**
+     * 省份 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProvince()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'province_id'])->alias('province');
+    }
+    /**
+     * 城市/区 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'city_id'])->alias('city');
+    }
 }

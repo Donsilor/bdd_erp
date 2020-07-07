@@ -88,15 +88,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('country_id') ?>：</td>
-                                     <td><?= $model->country_id ?></td>
+                                     <td><?= $model->country->title ?? "" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('province_id') ?>：</td>
-                                     <td><?= $model->province_id ?></td>
+                                     <td><?= $model->province->title ?? "" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('city_id') ?>：</td>
-                                     <td><?= $model->city_id ?></td>
+                                     <td><?= $model->city->title ?? "" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('area_id') ?>：</td>
