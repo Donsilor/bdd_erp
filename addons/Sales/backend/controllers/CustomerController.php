@@ -2,20 +2,19 @@
 
 namespace addons\Sales\backend\controllers;
 
-use common\helpers\Url;
 use Yii;
+use common\helpers\Url;
 use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\forms\CustomerForm;
-use common\enums\StatusEnum;
 use common\traits\Curd;
 use yii\db\Exception;
 
 /**
  * 客户管理
  *
- * Class DefaultController
+ * Class CustomerController
  * @package addons\Sales\backend\controllers
  */
 class CustomerController extends BaseController
