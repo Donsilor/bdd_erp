@@ -31,5 +31,6 @@ return [
         '/main/system',// 系统首页
         '/main/member-between-count',
         '/main/member-credits-log-between-count',
+        '/common/flow/audit-view'  //审批流程
     ],
 ];

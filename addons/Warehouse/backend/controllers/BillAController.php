@@ -8,6 +8,7 @@ use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillAForm;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -308,27 +309,58 @@ class BillAController extends BaseController
 
         list($list,) = $this->getData($ids);
         $header = [
-//            ['单据编号', 'bill_no' , 'text'],
-//            ['单据类型', 'bill_type' , 'text'],
-//            ['单据状态', 'bill_status' , 'text'],
-            ['货品名称', 'goods_name' , 'text'],
             ['条码号', 'goods_id' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['产品分类', 'product_type_name' , 'text'],
-            ['商品类型', 'style_cate_name' , 'text'],
-            ['出库仓库', 'from_warehouse_name' , 'text'],
-            ['入库仓库', 'to_warehouse_name' , 'text'],
+            ['商品名称', 'goods_name' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['金托类型', 'product_type_name' , 'text'],
+            ['款式性别', 'style_sex' , 'text'],
             ['材质', 'material' , 'text'],
-            ['金重', 'gold_weight' , 'text'],
-            ['成本价', 'cost_price' , 'text'],
+            ['材质颜色', 'goods_color' ,  'text'],
+            ['镶口', 'xiangkou' ,  'text'],
+            ['手寸类型', 'finger' ,  'text'],
+            ['手寸号', 'finger' , 'text'],
+            ['尺寸', 'product_size' , 'text'],
+            ['货重', 'gold_weight' , 'text'],
+            ['净重', 'suttle_weight' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['含耗重', 'gold_weight_sum' , 'text'],
+            ['金价', 'gold_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
+            ['石号', 'main_stone_sn' , 'text'],
+            ['粒数', 'main_stone_num' , 'text'],
             ['主石类型', 'main_stone_type' , 'text'],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
-            ['主石粒数', 'main_stone_num' , 'text'],
-            ['副石重（ct）', 'second_stone_weight1' , 'text'],
-            ['副石粒数', 'second_stone_num1' , 'text'],
-            ['总重', 'gross_weight' , 'text'],
-            ['手寸	', 'finger' , 'text'],
-            ['货品尺寸	', 'product_size' , 'text'],
+            ['主石形状', 'main_stone_num' , 'text'],
+            ['石重', 'diamond_carat' , 'text'],
+            ['颜色', 'main_stone_color' ,'text'],
+            ['净度', 'main_stone_clarity' , 'text'],
+            ['切工', 'main_stone_clarity' , 'text'],
+            ['抛光', 'main_stone_clarity' , 'text'],
+            ['对称', 'main_stone_clarity' , 'text'],
+            ['荧光', 'main_stone_clarity' , 'text'],
+            ['单价', 'main_stone_price' , 'text'],
+            ['金额', 'main_stone_price_sum','text'],
+            ['钻石证书类型', 'main_stone_price_sum','text'],
+            ['钻石证书号', 'main_stone_price_sum','text'],
+            ['副石1类型	', 'second_stone_sn1' , 'text'],
+            ['副石1粒数', 'second_stone_num1' , 'text'],
+            ['副石1石重', 'second_stone_weight1' , 'text'],
+            ['副石1颜色', 'second_stone_color1' , 'text'],
+            ['副石1净度', 'second_stone_clarity1' , 'text'],
+            ['副石1形状', 'second_stone_clarity1' , 'text'],
+            ['副石1总计价', 'second_stone_price1' , 'text'],
+            ['副石2类型', 'second_stone_price1_sum' , 'text'],
+            ['副石2形状', 'second_stone_price1_sum' , 'text'],
+            ['副石2粒数', 'second_stone_price1_sum' , 'text'],
+            ['副石2重', 'second_stone_price1_sum' , 'text'],
+            ['工费', 'gong_fee' , 'text'],
+            ['补口费', 'bukou_fee' , 'text'],
+            ['镶石费', 'xianqian_fee' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
+            ['工艺费', 'biaomiangongyi_fee' , 'text'],
+            ['单价', 'price' , 'text'],
+            ['备注', 'goods_remark' , 'text']
 
         ];
 
@@ -355,9 +387,9 @@ class BillAController extends BaseController
 
 
     private function getData($ids){
-        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','wg.id as wg_id','wg.from_warehouse_id','wg.to_warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
+        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.goods_num','wg.put_in_type'
             ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','type.name as product_type_name','cate.name as style_cate_name'];
+            'wg.cost_price','wg.diamond_cert_id','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name'];
         $query = WarehouseBill::find()->alias('w')
             ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
@@ -368,18 +400,70 @@ class BillAController extends BaseController
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-            'cost_price_count' => 0,
+            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'suttle_weight_count' => 0,
+            'gold_amount_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight1_count' => 0,
+            'second_stone_price1_sum_count' => 0,
+            'price_count' => 0,
+            'price_sum_count' => 0,
+            'cert_fee_count' => 0,
+
         ];
         foreach ($lists as &$list){
-            $bill_goods = WarehouseBillGoods::find()->where(['id'=>$list['wg_id']])->one();
-            $list['bill_type'] = BillTypeEnum::getValue($list['bill_type']);
+            //成色
+            $material = empty($list['material']) ? 0 : $list['material'];
+            $list['material'] = \Yii::$app->attr->valueName($material);
+            //单据状态
             $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
-            $list['from_warehouse_name'] = $bill_goods->fromWarehouse->name ?? '';
-            $list['to_warehouse_name'] = $bill_goods->toWarehouse->name ?? '';
-            $list['material'] = \Yii::$app->attr->valueName($list['material']);
-            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+            //入库方式
+            $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
+            //主石颜色
+            $main_stone_color = empty($list['main_stone_color']) ? 0 : $list['main_stone_color'];
+            $list['main_stone_color'] = \Yii::$app->attr->valueName($main_stone_color);
+            //主石净度
+            $main_stone_clarity = empty($list['main_stone_clarity']) ? 0 : $list['main_stone_clarity'];
+            $list['main_stone_clarity'] = \Yii::$app->attr->valueName($main_stone_clarity);
+            //主石类型
+            $main_stone_type = empty($list['main_stone_type']) ? 0 : $list['main_stone_type'];
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
+            //主石金额
+            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
+            $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
+            //副石颜色
+            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
+            $list['second_stone_color1'] = \Yii::$app->attr->valueName($second_stone_color1);
+            //副石净度
+            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
+            $list['second_stone_clarity1'] = \Yii::$app->attr->valueName($second_stone_clarity1);
+            //副石金额
+            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
+            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+            //单价
+            $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
+                + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            //总额
+            $list['price_sum'] = $list['price'] * $list['goods_num'];
+            //含耗重
+            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
+            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
+            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
-            $total['cost_price_count'] += $list['cost_price'];
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['gold_weight_count'] += $list['gold_weight']; //货重
+            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+            $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+            $total['price_count'] += $list['price']; //单价
+            $total['price_sum_count'] += $list['price_sum']; //总额
+            $total['cert_fee_count'] += $list['price_sum']; //证书费
 
         }
         return [$lists,$total];
