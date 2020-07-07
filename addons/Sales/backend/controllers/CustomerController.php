@@ -63,7 +63,41 @@ class CustomerController extends BaseController
     }
 
     /**
-     * 编辑/创建
+     * 创建客户
+     * @return array|mixed
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $isNewRecord = $model->isNewRecord;
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $isNewRecord
+                    ? $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success')
+                    : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+
+    }
+
+    /**
+     * 编辑客户
      *
      * @return mixed
      */
