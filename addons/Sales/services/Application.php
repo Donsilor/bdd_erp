@@ -9,6 +9,7 @@ use common\components\Service;
  *
  * @package addons\Sales\services
  * @property \addons\Sales\services\SaleChannelService $saleChannel 销售渠道
+ * @property \addons\Sales\services\CustomerSourcesService $sources 客户来源
  * @property \addons\Sales\services\ExpressService $express 快递
  * @property \addons\Sales\services\CustomerService $customer 客户
  * @property \addons\Sales\services\OrderService $order 订单
@@ -22,6 +23,7 @@ class Application extends Service
      */
     public $childService = [
             'saleChannel' => 'addons\Sales\services\SaleChannelService',
+            'sources' => 'addons\Sales\services\CustomerSourcesService',
             'express' => 'addons\Sales\services\ExpressService',
             'customer' => 'addons\Sales\services\CustomerService',
             'order' => 'addons\Sales\services\OrderService',

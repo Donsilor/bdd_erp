@@ -11,7 +11,6 @@ $form = ActiveForm::begin([
         ]
 ]);
 ?>
-
 <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         <h4 class="modal-title">基本信息</h4>
@@ -22,15 +21,24 @@ $form = ActiveForm::begin([
             	<div class="col-lg-12"><?= $form->field($model, 'realname')->textInput()?></div>
             </div>
            <div class="row">
-                <div class="col-lg-12"><?= $form->field($model, 'mobile')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'mobile')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'email')->textInput() ?></div>
            </div>
            <div class="row">
-                <div class="col-lg-12"><?= $form->field($model, 'email')->textInput() ?></div>
+               <div class="col-lg-12">
+                   <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+                       'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => true
+                       ],
+                   ]);?>
+               </div>
            </div>
            <div class="row">
                 <div class="col-lg-12">
-                    <?= $form->field($model, 'source')->widget(\kartik\select2\Select2::class, [
-                        'data' => \addons\Sales\common\enums\SourceEnum::getMap(),
+                    <?= $form->field($model, 'source_id')->widget(\kartik\select2\Select2::class, [
+                        'data' => \Yii::$app->salesService->sources->getDropDown(),
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => true
@@ -38,9 +46,7 @@ $form = ActiveForm::begin([
                     ]);?>
                 </div>
            </div>
-            </div>
-        </div>    
-                   
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

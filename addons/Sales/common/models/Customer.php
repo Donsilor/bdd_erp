@@ -13,7 +13,7 @@ use common\helpers\RegularHelper;
  * @property string $firstname 名
  * @property string $lastname 姓
  * @property string $realname 真实姓名
- * @property int $source 客户来源 (1BDD官网,2KAD官网)
+ * @property int $source_id 客户来源
  * @property string $head_portrait 头像
  * @property int $gender 性别[0:未知;1:男;2:女]
  * @property int $marriage 婚姻 1已婚 2未婚 0保密
@@ -49,7 +49,7 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'source', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['birthday'], 'safe'],
             [['firstname', 'lastname'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
@@ -70,7 +70,8 @@ class Customer extends BaseModel
             'firstname' => '名',
             'lastname' => '姓',
             'realname' => '真实姓名',
-            'source' => '客户来源',
+            'channel_id' => '销售渠道',
+            'source_id' => '客户来源',
             'head_portrait' => '头像',
             'gender' => '性别',
             'marriage' => '婚姻',
@@ -112,4 +113,46 @@ class Customer extends BaseModel
         return parent::beforeSave($insert);
     }*/
 
+    /**
+     * 销售渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
+    }
+
+    /**
+     * 客户来源 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSource()
+    {
+        return $this->hasOne(CustomerSources::class, ['id'=>'source_id'])->alias('source');
+    }
+
+    /**
+     * 国家 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCountry()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'country_id'])->alias('country');
+    }
+    /**
+     * 省份 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProvince()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'province_id'])->alias('province');
+    }
+    /**
+     * 城市/区 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(\common\models\common\Country::class, ['id'=>'city_id'])->alias('city');
+    }
 }
