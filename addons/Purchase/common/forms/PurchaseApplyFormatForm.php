@@ -17,7 +17,7 @@ class PurchaseApplyFormatForm extends PurchaseApplyGoods
     public function rules()
     {
         $rules = [
-            [['format_sn', 'format_images'], 'required'],
+            [['format_sn'], 'required'],
         ];
         return array_merge(parent::rules() , $rules);
     }
