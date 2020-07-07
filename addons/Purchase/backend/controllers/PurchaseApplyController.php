@@ -281,7 +281,7 @@ class PurchaseApplyController extends BaseController
 
                 $count = PurchaseApplyGoods::find()->where(['and',['=','apply_id',$model->id],['<>','confirm_status',ApplyConfirmEnum::CONFIRM]])->count();
                 if($count){
-                    throw new \Exception("有明细没有被确认");
+                    throw new \Exception("需先确认采购商品明细，才可审核");
                 }
 
                 $audit = [

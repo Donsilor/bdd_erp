@@ -195,6 +195,7 @@ class PurchaseApplyGoodsController extends BaseController
             $model->apply_id = $apply_id;
             $model->goods_type = PurchaseGoodsTypeEnum::OTHER;
             $model->qiban_type = QibanTypeEnum::NON_VERSION;
+            $model->style_channel_id = $model->apply->channel_id;
         }  
         $model->style_cate_id = $style_cate_id ?? $model->style_cate_id;
         $model->product_type_id = $product_type_id ?? $model->product_type_id;
@@ -223,7 +224,7 @@ class PurchaseApplyGoodsController extends BaseController
                 
                 $trans->commit();
                 if($isNewRecord) {
-                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
                 }else{
                     //前端提示
                     Yii::$app->getSession()->setFlash('success','保存成功');
@@ -414,6 +415,7 @@ class PurchaseApplyGoodsController extends BaseController
         if($model->isNewRecord) {
             $model->apply_id = $apply_id;
         }
+        $apply = PurchaseApply::find()->where(['id'=>$apply_id])->one();
         if($model->isNewRecord && $search && $goods_sn) {
             
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
@@ -438,7 +440,7 @@ class PurchaseApplyGoodsController extends BaseController
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
                     $model->product_type_id = $qiban->product_type_id;
-                    $model->style_channel_id = $qiban->style_channel_id;
+                    $model->style_channel_id = $apply->channel_id;
                     $model->style_sex = $qiban->style_sex;
                     $model->goods_name = $qiban->qiban_name;
                     $model->cost_price  = $qiban->cost_price;
@@ -466,7 +468,7 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;
-                $model->style_channel_id = $style->style_channel_id;
+                $model->style_channel_id = $apply->channel_id;
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
                 $model->cost_price = $style->cost_price;
