@@ -83,13 +83,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'160'],
                             ],
                             [
-                                    'attribute' => 'style_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'120'],
+                                'attribute' => 'style_sn',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '应盘重量',
+                                'label' => '应盘重量(g)',
                                 'format' => 'raw',
                                 'value' => function($model){
                                     return $model->goodsW->gold_weight ?? '0.00';
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
-                                'label' => '实盘重量',
+                                'label' => '实盘重量(g)',
                                 'format' => 'raw',
                                 'value' => function($model){
                                     return $model->goodsW->actual_weight ?? '0.00';

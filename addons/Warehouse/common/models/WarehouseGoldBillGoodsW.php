@@ -52,7 +52,7 @@ class WarehouseGoldBillGoodsW extends BaseModel
     {
         return [
             'id' => 'ID',
-            'actual_weight' => '实盘重量',
+            'actual_weight' => '实盘重量(g)',
             'fin_status' => '财务审核状态',
             'fin_checker' => '财务确认人',
             'fin_check_time' => '财务确认时间',
