@@ -43,12 +43,13 @@ class GoldBillWGoodsController extends BaseController
                 'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
                     "goodsW"=> [
-                        "adjust_status",
+                        "adjust_reason",
                         "actual_weight",
                         "fin_status",
                         "fin_checker",
                         "fin_check_time",
                         "fin_remark",
+                        "fin_adjust_status",
                     ]
                 ]
         ]);
