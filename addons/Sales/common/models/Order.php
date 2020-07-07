@@ -4,6 +4,7 @@ namespace addons\Sales\common\models;
 
 use Yii;
 use common\models\common\PayLog;
+use common\helpers\RegularHelper;
 
 /**
  * This is the model class for table "sales_order".
@@ -73,6 +74,7 @@ class Order extends BaseModel
             [['customer_name'], 'string', 'max' => 60],
             [['customer_mobile'], 'string', 'max' => 30],
             [['customer_email'], 'string', 'max' => 120],
+            ['customer_email', 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
             [['customer_message', 'store_remark'], 'string', 'max' => 500],
             [['remark'], 'string', 'max' => 255],
             [['order_sn'], 'unique'],

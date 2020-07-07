@@ -3,6 +3,7 @@
 namespace addons\Sales\common\models;
 
 use Yii;
+use common\helpers\RegularHelper;
 
 /**
  * This is the model class for table "sales_order_address".
@@ -52,6 +53,7 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
             [['zip_code', 'mobile'], 'string', 'max' => 20],
             [['mobile_code'], 'string', 'max' => 10],
             [['email'], 'string', 'max' => 150],
+            ['email', 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
             [['order_id'], 'unique'],
         ];
     }
