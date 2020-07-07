@@ -20,7 +20,7 @@ class WarehouseGoldBillWForm extends WarehouseGoldBill
     {
         $rules = [
             [['gold_type'], 'required'],
-            [['gold_sn'], 'filter', 'filter' => 'trim'],
+            [['gold_sn', 'gold_weight'], 'filter', 'filter' => 'trim'],
             [['gold_sn'], 'string', 'max'=>30],
             [['gold_weight'], 'number'],
         ];

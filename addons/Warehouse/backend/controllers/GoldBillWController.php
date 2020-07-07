@@ -214,7 +214,7 @@ class GoldBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
-        var_dump($model->gold_sn);die;
+        $model->gold_type = false;
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{

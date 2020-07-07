@@ -21,6 +21,7 @@ use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\enums\GoldStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
+use yii\db\Exception;
 
 /**
  * 盘点单
@@ -51,10 +52,10 @@ class WarehouseGoldBillWService extends WarehouseBillService
         ];
         $goods_list = WarehouseGold::find()->where($where)->asArray()->all();
         $gold_weight = 0;
-        $bill_goods_values = [];
+        $bill_goods_values = $bill_goods_keys = $ids = [];
         if(!empty($goods_list)) {
-            $bill_goods= [];
             foreach ($goods_list as $goods) {
+                $ids[] = $goods['id'];
                 $bill_goods = [
                     'bill_id'=>$bill->id,
                     'bill_type'=>$bill->bill_type,
@@ -69,14 +70,27 @@ class WarehouseGoldBillWService extends WarehouseBillService
                 ];
                 $bill_goods_values[] = array_values($bill_goods);
                 $gold_weight = bcadd($gold_weight, $goods['gold_weight'], 3);
-            }
-            if(empty($bill_goods_keys)) {
                 $bill_goods_keys = array_keys($bill_goods);
+                if(count($bill_goods_values)>=10){
+                    //导入明细
+                    $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                    if(!$result) {
+                        throw new \Exception('导入单据明细失败1');
+                    }
+                    $bill_goods_values = [];
+                }
             }
-            //导入明细
-            $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
-            if(!$result) {
-                throw new \Exception('导入单据明细失败');
+            if(!empty($bill_goods)){
+                //导入明细
+                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                if(!$result) {
+                    throw new \Exception('导入单据明细失败2');
+                }
+            }
+            //更新仓库所选材质货品 盘点中
+            $execute_num = WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_PANDIAN],['id'=>$ids,'gold_status'=>GoldStatusEnum::IN_STOCK]);
+            if($execute_num <> count($ids)){
+                throw new Exception("货品改变状态数量与明细数量不一致");
             }
         }else{
             throw new \Exception('库存中未查到材质为['.\Yii::$app->attr->valueName($form->gold_type).']的盘点数据');
