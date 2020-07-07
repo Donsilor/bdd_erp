@@ -62,7 +62,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'source')->dropDownList(\addons\Sales\common\enums\SourceEnum::getMap()) ?>
+                            <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+                                'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'source_id')->widget(\kartik\select2\Select2::class, [
+                                'data' => \Yii::$app->salesService->sources->getDropDown(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'birthday')->widget(DatePicker::class, [

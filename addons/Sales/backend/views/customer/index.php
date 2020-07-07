@@ -101,12 +101,24 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'source',
+                            'attribute' => 'channel_id',
                             'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Sales\common\enums\SourceEnum::getValue($model->source);
+                                return $model->channel->name ?? '';
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'source',\addons\Sales\common\enums\SourceEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',\Yii::$app->salesService->saleChannel->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'source_id',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return $model->source->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'source_id',\Yii::$app->salesService->sources->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),

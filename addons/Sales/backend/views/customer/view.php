@@ -38,8 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->realname ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('source') ?>：</td>
-                                     <td><?= \addons\Sales\common\enums\SourceEnum::getValue($model->source) ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
+                                     <td><?= $model->channel->name ?? '' ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('source_id') ?>：</td>
+                                     <td><?= $model->source->name ?? '' ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gender') ?>：</td>
