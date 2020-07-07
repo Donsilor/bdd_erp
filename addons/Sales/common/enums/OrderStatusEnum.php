@@ -8,7 +8,7 @@ namespace addons\Sales\common\enums;
  */
 class OrderStatusEnum extends \common\enums\BaseEnum
 {
-
+    const SAVE = 0;
     const PENDIGN = 1;
     const CONFORMED = 2;
     const CLOSE = 3;
@@ -18,7 +18,8 @@ class OrderStatusEnum extends \common\enums\BaseEnum
      */
     public static function getMap(): array
     {
-        return [               
+        return [     
+               self::SAVE => "保存",
                self::PENDIGN => "待审核",
                self::CONFORMED => "已审核", 
                self::CANCAEL => "已关闭", 

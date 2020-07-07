@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'id',
                     'filter' => true,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
+                    'headerOptions' => ['width'=>'30'],
             ],  
             [
                     'attribute'=>'created_at',
@@ -89,28 +89,40 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
-                    'attribute' => 'order_type',
-                    'value' =>function($model){
-                          return \addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Sales\common\enums\OrderTypeEnum::getMap(), [
-                            'prompt' => '全部',
+                    'attribute' => 'customer_name',
+                    'value' => 'customer_name',                    
+                    'filter' => Html::activeTextInput($searchModel, 'customer_name', [
                             'class' => 'form-control',
+                            'style'=> 'width:100px;'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
-            ],            
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'label' => '联系方式',
+                    'attribute' => 'customer_mobile',
+                    'value' => function($model){
+                          $str = '';
+                          $str .= $model->customer_mobile ? $model->customer_mobile."<br/>":'';
+                          $str .= $model->customer_email ? $model->customer_email."<br/>":'';
+                          return $str;
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'80'],
+            ],
+/*                
             [
                     'attribute' => 'goods_num',
                     'value' => "goods_num",
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
-            ],
+            ], */
             [
                     'attribute' => 'account.order_amount',
-                    'value' => function(){
-                         return $model->account->order_amount ?? '';
+                    'value' => function($model){
+                         return \common\helpers\AmountHelper::outputAmount($model->account->order_amount??0,2,$model->currency);
                     },
                     'filter' => false,
                     'format' => 'raw',
@@ -124,10 +136,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style'=> 'width:120px;'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                    'headerOptions' => [],
             ],  
+            [
+                    'attribute' => 'order_type',
+                    'value' =>function($model){
+                         return \addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Sales\common\enums\OrderTypeEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                            'style'=> 'width:80px;'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => [],
+            ],         
             [
                     'attribute' => 'pay_status',
                     'value' => function ($model){
