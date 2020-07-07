@@ -65,7 +65,6 @@ class Order extends BaseModel
         return [
             [['sale_channel_id','language','currency','customer_mobile'], 'required'],
             [['merchant_id', 'goods_num','sale_channel_id','customer_from','pay_type', 'pay_status', 'pay_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['order_sn'], 'required'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],

@@ -19,7 +19,6 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
             <div class="row">
-            	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()->label("客户手机或邮箱")?></div>
                 <div class="col-lg-6">
                 <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
@@ -29,6 +28,11 @@ $form = ActiveForm::begin([
                     ],
                 ]);?>              
                 </div>
+                <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput()?></div>
+            </div>
+            <div class="row">
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput()?></div>                
             </div>
             <div class="row">
                 <div class="col-lg-6">
@@ -39,11 +43,8 @@ $form = ActiveForm::begin([
                </div>
             </div>
             <div class="row">
-   			    <div class="col-lg-6"><?= $form->field($model, 'out_trade_no')->textInput()?></div>	
-   			    <div class="col-lg-4"><?= $form->field($model, 'is_invoice')->radioList(\addons\Sales\common\enums\InvoiceEnum::getMap())?></div>	    
-            </div>
-            <div class="row">
-                <div class="col-lg-12"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>
+            	<div class="col-lg-6"><?= $form->field($model, 'out_trade_no')->textArea(['options'=>['maxlength' => true]])?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>
             </div>
         </div>    
                    

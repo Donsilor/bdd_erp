@@ -3,10 +3,10 @@
 namespace addons\Sales\common\enums;
 
 /**
- * 客户来源
+ * 是否赠品
  * @package common\enums
  */
-class InvoiceEnum extends \common\enums\BaseEnum
+class IsGiftEnum extends \common\enums\BaseEnum
 {
     
     const YES = 1;
@@ -17,8 +17,8 @@ class InvoiceEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::NO => '不开发票',
-                self::YES => '开发票',                
+                self::NO => '非赠品',
+                self::YES => '赠品',
         ];
     }
     

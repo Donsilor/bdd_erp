@@ -3,23 +3,23 @@
 namespace addons\Sales\common\enums;
 
 /**
- * 客户来源
+ * 是否现货
  * @package common\enums
  */
-class SourceEnum extends \common\enums\BaseEnum
+class IsStockEnum extends \common\enums\BaseEnum
 {
-
-    const BBD = 1;
-    const KAD = 2;
+    
+    const YES = 1;
+    const NO = 0;
     /**
      * @return array
      */
     public static function getMap(): array
     {
         return [
-            self::BBD => 'BDD官网',
-            self::KAD => 'KAD官网',
+                self::NO => '期货',
+                self::YES => '现货',
         ];
     }
-
+    
 }
