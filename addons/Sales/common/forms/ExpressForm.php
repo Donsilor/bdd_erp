@@ -3,13 +3,13 @@
 namespace addons\Sales\common\forms;
 
 use Yii;
-use addons\Sales\common\models\Salechannel;
+use addons\Sales\common\models\Express;
 use common\helpers\ArrayHelper;
 
 /**
- * 销售渠道 Form
+ * 物流快递 Form
  */
-class SaleChannelForm extends Salechannel
+class ExpressForm extends Express
 {
     /**
      * {@inheritdoc}
