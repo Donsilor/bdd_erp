@@ -19,8 +19,7 @@ class WarehouseGoldBillWForm extends WarehouseGoldBill
     public function rules()
     {
         $rules = [
-                [['to_warehouse_id'], 'required'],
-                [['gold_type'], 'integer'],
+                [['gold_type'], 'required'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

@@ -40,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    //'options' => ['style'=>'width:110%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -78,7 +78,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                      return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
                                 },
                                 'filter' => false,
-                        ],*/
+                        ],
                         [
                             'label' => '盘点仓库',
                             'attribute' => 'to_warehouse_id',
@@ -95,7 +95,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'label' => '盘点材质',
                             'value' => function($model){
@@ -104,7 +104,11 @@ $params = $params ? "&".http_build_query($params) : '';
                                 }
                                 return "";
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',\Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+
+                            ]),
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
@@ -115,7 +119,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             },
                             'filter' => false,
                             'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
+                            'headerOptions' => ['width' => '80'],
                         ],
                         [
                             'label' => '实盘数量',
@@ -124,7 +128,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             },
                             'filter' => false,
                             'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
+                            'headerOptions' => ['width' => '80'],
                         ],
                         [
                             'label' => '应盘重量/克',
@@ -224,12 +228,15 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],*/
                         [
                                 'label' => '制单人',
-                                'attribute' => 'creator_id',
+                                'attribute' => 'creator.username',
                                 'value' => function ($model) {
                                      return $model->creator->username ??'';
-                                 },
-                                 'headerOptions' => ['width' => '100'],
-                                 'filter' => false,
+                                     },
+                                'headerOptions' => ['width' => '100'],
+                                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
 
                         ],
                         [
@@ -294,7 +301,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         if($model->bill_status == BillStatusEnum::SAVE){
                                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModalLg',
+                                                'data-target' => '#ajaxModal',
                                             ]);
                                         }
                                     }, 
