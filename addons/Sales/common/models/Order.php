@@ -100,7 +100,7 @@ class Order extends BaseModel
             'finished_time' => '订单完成时间',
             'order_status' => '订单状态',
             'refund_status' => '退款状态',
-            'express_id' => '快递方式',
+            'express_id' => '快递公司',
             'express_no' => '物流单号',
             'distribute_status' => '配货状态',
             'delivery_status' => '发货状态',
