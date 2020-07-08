@@ -1,19 +1,23 @@
 <?php
 
+use common\enums\GenderEnum;
 use common\helpers\Html;
-use addons\Warehouse\common\enums\GoldStatusEnum;
 use common\helpers\Url;
+use yii\web\View;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model addons
+/* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = '石料详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+//
 ?>
+
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $model->stone_sn?> - <?= GoldStatusEnum::getValue($model->stone_status)?></h2>
+    <h2 class="page-header"><?php echo $this->title;?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
 
     <div class="row">
@@ -107,44 +111,120 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('fenbaochu_weight') ?>：</td>
                                     <td><?= $model->fenbaochu_weight ?></td>
                                 </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ms_cnt') ?>：</td>
+                                    <td><?= $model->ms_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ms_weight') ?>：</td>
+                                    <td><?= $model->ms_weight ?></td>
+                                </tr>
                             </table>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-xs-6" style="padding: 0px;">
-                        <div class="box" style="margin-bottom: 0px;">
-                            <div class="box-body table-responsive">
-                                <table class="table table-hover">
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                                        <td><?= $model->supplier->supplier_name??"" ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
-                                        <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
-                                        <td><?= $model->warehouse->name??""?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                                        <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                                        <td><?= $model->creator ? $model->creator->username:''  ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                                        <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                        <td><?= $model->remark ?></td>
-                                    </tr>
-                                </table>
-                            </div>
+                <div class="col-xs-6" style="padding: 0px;">
+                    <div class="box" style="margin-bottom: 0px;">
+                        <div class="box-body table-responsive" >
+                            <table class="table table-hover">
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ss_cnt') ?>：</td>
+                                    <td><?= $model->ss_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ss_weight') ?>：</td>
+                                    <td><?= $model->ss_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('hs_cnt') ?>：</td>
+                                    <td><?= $model->hs_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('hs_weight') ?>：</td>
+                                    <td><?= $model->hs_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ts_cnt') ?>：</td>
+                                    <td><?= $model->ts_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ts_weight') ?>：</td>
+                                    <td><?= $model->ts_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ys_cnt') ?>：</td>
+                                    <td><?= $model->ys_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ys_weight') ?>：</td>
+                                    <td><?= $model->ys_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('sy_cnt') ?>：</td>
+                                    <td><?= $model->sy_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('sy_weight') ?>：</td>
+                                    <td><?= $model->sy_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('th_cnt') ?>：</td>
+                                    <td><?= $model->th_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('th_weight') ?>：</td>
+                                    <td><?= $model->th_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('sy_cnt') ?>：</td>
+                                    <td><?= $model->sy_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('rk_cnt') ?>：</td>
+                                    <td><?= $model->rk_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('rk_weight') ?>：</td>
+                                    <td><?= $model->rk_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ck_cnt') ?>：</td>
+                                    <td><?= $model->ck_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ck_weight') ?>：</td>
+                                    <td><?= $model->ck_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                                    <td><?= $model->supplier->supplier_name??"" ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
+                                    <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
+                                    <td><?= $model->warehouse->name??""?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                                    <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                    <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                    <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                    <td><?= $model->remark ?></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -153,7 +233,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
-        <!-- box end -->
     </div>
-    <!-- tab-content end -->
 </div>
+
+
