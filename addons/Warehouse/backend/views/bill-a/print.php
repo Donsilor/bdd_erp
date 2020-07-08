@@ -66,16 +66,25 @@
 						<div>产品线</div>
 					</td>
                     <td rowspan="2">
-                        <div>材质</div>
+                        <div>金托类型</div>
                     </td>
                     <td rowspan="2">
-                        <div>成色</div>
+                        <div>款式性别</div>
                     </td>
                     <td rowspan="2">
-                        <div>件数</div>
+                        <div>材质颜色</div>
                     </td>
                     <td rowspan="2">
-                        <div>指圈</div>
+                        <div>材质颜色</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>镶口</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>手寸类型</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>手寸号</div>
                     </td>
                     <td rowspan="2">
                         <div>尺寸</div>
@@ -83,54 +92,37 @@
                     <td class="bg-blue bold" colspan="6">
                         <div>金料</div>
                     </td>
-                    <td class="bg-blue bold" colspan="7">
+                    <td class="bg-blue bold" colspan="15">
                         <div>主石</div>
                     </td>
                     <td class="bg-blue bold" colspan="7">
-                        <div>副石</div>
+                        <div>副石1</div>
                     </td>
-                    <td rowspan="2">
-                        <div>配件(g)</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>配件额</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>配件工费</div>
+                    <td class="bg-blue bold" colspan="3">
+                        <div>副石2</div>
                     </td>
                     <td rowspan="2">
                         <div>工费</div>
                     </td>
                     <td rowspan="2">
-                        <div>镶石费</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>工艺费用</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>分色/分件</div>
-                    </td>
-                    <td rowspan="2">
                         <div>补口费</div>
                     </td>
                     <td rowspan="2">
-                        <div>单价</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>总额</div>
+                        <div>镶石费</div>
                     </td>
                     <td rowspan="2">
                         <div>证书费</div>
                     </td>
                     <td rowspan="2">
+                        <div>工艺费用</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>总单价</div>
+                    </td>
+                    <td rowspan="2">
                         <div>备注</div>
                     </td>
-                    <td rowspan="2">
-                        <div>倍率</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>标签价</div>
-                    </td>
+
                 </tr>
                 <tr class="t-head bg-blue">
                     <td>
@@ -157,6 +149,12 @@
 					<td>
 						<div>粒数</div>
 					</td>
+                    <td>
+                        <div>主石类型</div>
+                    </td>
+                    <td>
+                        <div>主石形状</div>
+                    </td>
 					<td>
 						<div>石重</div>
 					</td>
@@ -166,15 +164,35 @@
 					<td>
 						<div>净度</div>
 					</td>
+                    <td>
+                        <div>切工</div>
+                    </td>
+                    <td>
+                        <div>抛光</div>
+                    </td>
+                    <td>
+                        <div>对称</div>
+                    </td>
+                    <td>
+                        <div>荧光</div>
+                    </td>
 					<td>
 						<div>单价【单价】</div>
 					</td>
 					<td>
 						<div>金额</div>
 					</td>
-
                     <td>
-                        <div>石号</div>
+                        <div>钻石证书类型</div>
+                    </td>
+                    <td>
+                        <div>钻石证书号</div>
+                    </td>
+                    <td>
+                        <div>石头类型</div>
+                    </td>
+                    <td>
+                        <div>石头形状</div>
                     </td>
                     <td>
                         <div>粒数</div>
@@ -189,10 +207,16 @@
                         <div>净度</div>
                     </td>
                     <td>
-                        <div>单价【单价】</div>
+                        <div>金额</div>
                     </td>
                     <td>
-                        <div>金额</div>
+                        <div>石头类型</div>
+                    </td>
+                    <td>
+                        <div>粒数</div>
+                    </td>
+                    <td>
+                        <div>石重</div>
                     </td>
 				</tr>
 				
@@ -221,13 +245,22 @@
 						<div><?= $val['product_type_name'] ?></div>
 					</td>
                     <td>
+                        <div><?= $val['jintuo_type'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['style_sex'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['material'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['goods_color'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['goods_num'] ?></div>
+                        <div><?= $val['xiangkou'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['finger'] ?></div>
                     </td>
 					<td>
 						<div><?= $val['finger'] ?></div>
@@ -260,13 +293,31 @@
                         <div><?= $val['main_stone_num'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['main_stone_type'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_shape'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['diamond_carat'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['main_stone_color'] ?></div>
+                        <div><?= $val['diamond_color'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['main_stone_clarity'] ?></div>
+                        <div><?= $val['diamond_clarity'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_cut'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_polish'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_symmetry'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_fluorescence'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['main_stone_price'] ?></div>
@@ -275,7 +326,16 @@
                         <div><?= $val['main_stone_price_sum'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['second_stone_sn1'] ?></div>
+                        <div><?= $val['diamond_cert_type'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diamond_cert_id'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_type1'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_shape1'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['second_stone_num1'] ?></div>
@@ -289,55 +349,39 @@
                     <td>
                         <div><?= $val['second_stone_clarity1'] ?></div>
                     </td>
-
                     <td>
                         <div><?= $val['second_stone_price1'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['second_stone_price1_sum'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['parts_gold_weight'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['parts_price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['parts_fee'] ?></div>
+                        <div><?= $val['second_stone_type2'] ?></div>
                     </td>
 
                     <td>
+                        <div><?= $val['second_stone_num2'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['second_stone_weight2'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['gong_fee'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['xianqian_fee'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['biaomiangongyi_fee'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['fense_fee'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['bukou_fee'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['price_sum'] ?></div>
+                        <div><?= $val['xianqian_fee'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['cert_fee'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['biaomiangongyi_fee'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['price_sum'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['goods_remark'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['markup_rate'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['market_price'] ?></div>
                     </td>
 
 				</tr>
@@ -365,16 +409,25 @@
                         <div>产品线</div>
                     </td>
                     <td rowspan="2">
-                        <div>材质</div>
+                        <div>金托类型</div>
                     </td>
                     <td rowspan="2">
-                        <div>成色</div>
+                        <div>款式性别</div>
                     </td>
                     <td rowspan="2">
-                        <div>件数</div>
+                        <div>材质颜色</div>
                     </td>
                     <td rowspan="2">
-                        <div>指圈</div>
+                        <div>材质颜色</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>镶口</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>手寸类型</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>手寸号</div>
                     </td>
                     <td rowspan="2">
                         <div>尺寸</div>
@@ -382,54 +435,37 @@
                     <td class="bg-blue bold" colspan="6">
                         <div>金料</div>
                     </td>
-                    <td class="bg-blue bold" colspan="7">
+                    <td class="bg-blue bold" colspan="15">
                         <div>主石</div>
                     </td>
                     <td class="bg-blue bold" colspan="7">
-                        <div>副石</div>
+                        <div>副石1</div>
                     </td>
-                    <td rowspan="2">
-                        <div>配件(g)</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>配件额</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>配件工费</div>
+                    <td class="bg-blue bold" colspan="3">
+                        <div>副石2</div>
                     </td>
                     <td rowspan="2">
                         <div>工费</div>
                     </td>
                     <td rowspan="2">
-                        <div>镶石费</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>工艺费用</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>分色/分件</div>
-                    </td>
-                    <td rowspan="2">
                         <div>补口费</div>
                     </td>
                     <td rowspan="2">
-                        <div>单价</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>总额</div>
+                        <div>镶石费</div>
                     </td>
                     <td rowspan="2">
                         <div>证书费</div>
                     </td>
                     <td rowspan="2">
+                        <div>工艺费用</div>
+                    </td>
+                    <td rowspan="2">
+                        <div>总单价</div>
+                    </td>
+                    <td rowspan="2">
                         <div>备注</div>
                     </td>
-                    <td rowspan="2">
-                        <div>倍率</div>
-                    </td>
-                    <td rowspan="2">
-                        <div>标签价</div>
-                    </td>
+
                 </tr>
                 <tr class="t-head bg-blue">
                     <td>
@@ -457,6 +493,12 @@
                         <div>粒数</div>
                     </td>
                     <td>
+                        <div>主石类型</div>
+                    </td>
+                    <td>
+                        <div>主石形状</div>
+                    </td>
+                    <td>
                         <div>石重</div>
                     </td>
                     <td>
@@ -466,14 +508,34 @@
                         <div>净度</div>
                     </td>
                     <td>
+                        <div>切工</div>
+                    </td>
+                    <td>
+                        <div>抛光</div>
+                    </td>
+                    <td>
+                        <div>对称</div>
+                    </td>
+                    <td>
+                        <div>荧光</div>
+                    </td>
+                    <td>
                         <div>单价【单价】</div>
                     </td>
                     <td>
                         <div>金额</div>
                     </td>
-
                     <td>
-                        <div>石号</div>
+                        <div>钻石证书类型</div>
+                    </td>
+                    <td>
+                        <div>钻石证书号</div>
+                    </td>
+                    <td>
+                        <div>石头类型</div>
+                    </td>
+                    <td>
+                        <div>石头形状</div>
                     </td>
                     <td>
                         <div>粒数</div>
@@ -488,10 +550,16 @@
                         <div>净度</div>
                     </td>
                     <td>
-                        <div>单价【单价】</div>
+                        <div>金额</div>
                     </td>
                     <td>
-                        <div>金额</div>
+                        <div>石头类型</div>
+                    </td>
+                    <td>
+                        <div>粒数</div>
+                    </td>
+                    <td>
+                        <div>石重</div>
                     </td>
                 </tr>
                 <?php
@@ -505,7 +573,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['goods_num_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td><div><?= $total['gold_weight_count']?></div></td>
@@ -516,15 +587,23 @@
                     <td><div><?= $total['gold_amount_count']?></div></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                     <td><div><?= $total['main_stone_weight_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td><div><?= $total['main_stone_price_sum_count']?></div></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['second_stone_weight1_count']?></div></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['second_stone_weight1_count']?></div></td>
                     <td></td>
                     <td></td>
                     <td><div><?= $total['second_stone_price1_sum_count']?></div></td>
@@ -536,13 +615,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['price_count']?></div></td>
                     <td><div><?= $total['price_sum_count']?></div></td>
-                    <td><div><?= $total['cert_fee_count']?></div></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-
                 </tr>
 			</table>
             <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">签收人：</span></div>
