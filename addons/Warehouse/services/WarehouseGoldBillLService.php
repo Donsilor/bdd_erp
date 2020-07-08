@@ -89,14 +89,18 @@ class WarehouseGoldBillLService extends Service
                     'style_sn' => $detail->style_sn,
                     'gold_name' => $detail->gold_name,
                     'gold_type' => $detail->gold_type,
+                    'put_in_type' => $form->put_in_type,
                     'supplier_id' => $form->supplier_id,
                     'gold_num' => $detail->gold_num,
                     'gold_weight' => $detail->gold_weight,
                     'cost_price' => $detail->cost_price,
                     'gold_price' => $detail->gold_price,
                     'warehouse_id' => $form->to_warehouse_id,
+                    'remark' => $detail->remark,
                     'status' => StatusEnum::ENABLED,
+                    'creator_id'=>\Yii::$app->user->identity->getId(),
                     'created_at' => time(),
+
                 ];
                 $goldM->attributes = $good;
                 if(false === $goldM->save()){

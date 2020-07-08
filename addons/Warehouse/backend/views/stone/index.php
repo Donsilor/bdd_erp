@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'width:160%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => 'width:150px',
                             ]),
                             'headerOptions' => [],
-                        ],                        
+                        ],
                         [
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
@@ -78,6 +78,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'stone_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute'=>'stock_cnt',
@@ -110,11 +124,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
-                        ],                        
+                        ],
+                        [
+                            'attribute' => 'stone_shape',
+                            'value' => function ($model) {
+                                return Yii::$app->attr->valueName($model->stone_shape)??"";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
                         [
                             'attribute' => 'stone_color',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_color);
+                                return Yii::$app->attr->valueName($model->stone_color)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
                                 'prompt' => '全部',
@@ -125,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'stone_clarity',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_clarity);
+                                return Yii::$app->attr->valueName($model->stone_clarity)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
                                 'prompt' => '全部',
@@ -136,7 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'stone_symmetry',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_symmetry);
+                                return Yii::$app->attr->valueName($model->stone_symmetry)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
                                 'prompt' => '全部',
@@ -147,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'stone_polish',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_polish);
+                                return Yii::$app->attr->valueName($model->stone_polish)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
                                 'prompt' => '全部',
@@ -158,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'stone_fluorescence',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_fluorescence);
+                                return Yii::$app->attr->valueName($model->stone_fluorescence)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
                                 'prompt' => '全部',
@@ -167,17 +192,55 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute' => 'stone_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
+                            'attribute' => 'stone_colour',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->stone_colour)??"";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
                             ]),
-                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'stone_norms',
+                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //    'class' => 'form-control',
+                            //]),
+                            'value' => function ($model) {
+                                return $model->stone_norms??"";
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'stone_size',
+                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //    'class' => 'form-control',
+                            //]),
+                            'value' => function ($model) {
+                                return $model->stone_size??"";
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'remark',
+                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //    'class' => 'form-control',
+                            //]),
+                            'value' => function ($model) {
+                                return $model->remark??"";
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'value' => 'creator.username',
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width' => '100'],
                         ],
                         [

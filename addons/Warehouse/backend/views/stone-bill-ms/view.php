@@ -126,9 +126,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
             ?>
+            <?= Html::a('打印',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-ms',
+            ]); ?>
+            <?= Html::button('导出', [
+                'class'=>'btn btn-success btn-ms',
+                'onclick' => 'batchExport()',
+            ]);?>
         </div>
 
         <!-- box end -->
     </div>
     <!-- tab-content end -->
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+</script>

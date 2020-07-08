@@ -36,7 +36,7 @@ class StoneController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'creator' => ['username'],
             ]
         ]);
 

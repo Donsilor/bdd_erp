@@ -3,6 +3,8 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\models\Warehouse;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -61,6 +63,68 @@ class WarehouseController extends BaseController
 
 
     }
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->audit_status != AuditStatusEnum::SAVE && $model->audit_status != AuditStatusEnum::UNPASS ){
+            return $this->message('仓库不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
+
+    /**
+     * ajax 审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->status = StatusEnum::ENABLED; //状态改成启用
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                \Yii::$app->getSession()->setFlash('success','保存成功');
+                $trans->commit();
+                return $this->redirect(\Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
 
 
     public function getExport($dataProvider)

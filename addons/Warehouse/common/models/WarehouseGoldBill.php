@@ -132,6 +132,14 @@ class WarehouseGoldBill extends BaseModel
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
     /**
+     * 仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
+    /**
      * 入库仓库 一对一
      * @return \yii\db\ActiveQuery
      */

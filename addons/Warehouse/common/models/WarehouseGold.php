@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\models\backend\Member;
 use Yii;
 use addons\Supply\common\models\Supplier;
 
@@ -20,9 +21,11 @@ use addons\Supply\common\models\Supplier;
  * @property string $cost_price 金料总额
  * @property string $gold_price 金料单价/克
  * @property string $sale_price 销售价
+ * @property int $put_in_type 入库方式
  * @property int $warehouse_id 所在仓库
  * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
+ * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -43,7 +46,7 @@ class WarehouseGold extends BaseModel
     {
         return [
             [['gold_sn', 'gold_name', 'gold_type'], 'required'],
-            [['supplier_id', 'gold_num', 'warehouse_id', 'gold_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'gold_num', 'warehouse_id', 'put_in_type', 'gold_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
             [['gold_type'], 'string', 'max' => 10],
@@ -64,15 +67,17 @@ class WarehouseGold extends BaseModel
             'gold_type' => '金料类型',
             'gold_status' => '金料状态',
             'style_sn' => '金料款号',
-            'supplier_id' => '供应商',
             'gold_num' => '金料数量',
             'gold_weight' => '库存重量(g)',
             'cost_price' => '金料总额',
             'gold_price' => '金料单价/克',
             'sale_price' => '销售价',
+            'supplier_id' => '供应商',
+            'put_in_type' => '入库方式',
             'warehouse_id' => '所在仓库',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
@@ -84,5 +89,13 @@ class WarehouseGold extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
 }
