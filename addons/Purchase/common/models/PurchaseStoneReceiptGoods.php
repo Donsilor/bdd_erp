@@ -101,7 +101,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'cost_price' => '石料总额',
-            'stone_price' => '石料单价(ct)',
+            'stone_price' => '石料单价/ct',
             'goods_remark' => '商品备注',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',

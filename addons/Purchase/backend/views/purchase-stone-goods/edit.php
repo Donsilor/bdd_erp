@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			   </div>
 			   <div class="row">
                    <div class="col-lg-4">
-                       <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+                       <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
                    </div>
                    <div class="col-lg-4">
                        <?= $form->field($model, 'stone_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>

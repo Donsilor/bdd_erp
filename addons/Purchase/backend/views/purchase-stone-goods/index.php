@@ -28,6 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
             if($purchase->purchase_status == BillStatusEnum::CONFIRM) {
                 echo Html::batchPop(['warehouse', 'check' => 1],'分批收货', [
                     'class'=>'btn btn-success btn-xs',
+                    'data-width'=>'40%',
+                    'data-height'=>'60%',
+                    'data-offset'=>'20px',
                 ]);
             }
         ?>
@@ -42,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'tableOptions' => ['class' => 'table table-hover'],
                         'showFooter' => true,//显示footer行
                         'options' => ['style'=>' width:150%; white-space:nowrap;'],
-                        'id'=>'grid', 
+                        'id'=>'grid',
                         'columns' => [
                             [
                                 'class' => 'yii\grid\SerialColumn',
@@ -289,6 +292,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 //'headerOptions' => ['width' => '150'],
                                 'template' => '{edit} {apply-edit} {delete}',
                                 'buttons' => [ 
