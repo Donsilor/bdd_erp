@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         'showFooter' => true,//显示footer行
-                        'options' => ['style'=>' width:130%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:150%; white-space:nowrap;'],
                         'id'=>'grid', 
                         'columns' => [
                             [
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'form-control',
                                     ]),
                                     'value' => function ($model) {
-                                        return $model->goods_name;
+                                        return $model->goods_name??"";
                                     },
                                     'format' => 'raw',
                                     'headerOptions' => ['width'=>'300'],
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                 ]),
                                 'value' => function ($model) {
-                                    return $model->goods_sn;
+                                    return $model->goods_sn??"";
                                 },
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'150'],
@@ -91,23 +91,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                             [
                                     'attribute' => 'stone_num',
-                                    'filter' => Html::activeTextInput($searchModel, 'stone_num', [
-                                         'class' => 'form-control',
-                                    ]),
+                                    //'filter' => Html::activeTextInput($searchModel, 'stone_num', [
+                                    //     'class' => 'form-control',
+                                    //]),
                                     'value' => function ($model) {
-                                        return $model->stone_num ;
+                                        return $model->stone_num??"0";
                                     },
+                                    'filter' => false,
                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                     'attribute' => 'goods_weight',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
-                                        'class' => 'form-control',
-                                    ]),
+                                    //'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
+                                    //   'class' => 'form-control',
+                                    //]),
                                     'value' => function ($model) {
-                                        return $model->goods_weight ;
+                                        return $model->goods_weight??"0.00";
                                     },
+                                    'filter' => false,
                                     'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'attribute' => 'stone_shape',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->stone_shape) ;
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                 'attribute' => 'stone_color',
@@ -176,6 +189,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'150'],
                             ],
                             [
+                                'attribute' => 'stone_colour',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->stone_colour);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'attribute' => 'stone_size',
+                                //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                                //    'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->stone_size??"";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                 'attribute' => 'cert_type',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->cert_type);
@@ -198,23 +233,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'stone_price',
-                                'filter' => Html::activeTextInput($searchModel, 'stone_price', [
-                                    'class' => 'form-control',
-                                ]),
+                                //'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                //   'class' => 'form-control',
+                                //]),
                                 'value' => function ($model) {
-                                    return $model->stone_price ;
+                                    return $model->stone_price??"0.00";
                                 },
+                                'filter' => false,
                                 'headerOptions' => ['width'=>'150'],
                             ],
                             [
-                                    'attribute'=>'cost_price',
-                                    'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                        return $model->cost_price ;
-                                    },
-                                    'headerOptions' => ['width'=>'150'],
+                                'attribute'=>'cost_price',
+                                //'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                //        'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->cost_price??"0.00";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                 'attribute' => 'spec_remark',
@@ -222,7 +259,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                 ]),
                                 'value' => function ($model) {
-                                    return $model->spec_remark ;
+                                    return $model->spec_remark??"";
+                                },
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->remark??"";
                                 },
                                 'headerOptions' => ['width'=>'150'],
                             ],

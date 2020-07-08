@@ -17,6 +17,7 @@ use Yii;
  * @property string stone_type 石料类型
  * @property string $stone_price 石料价格/克拉
  * @property int $stone_num 石料数量
+ * @property string $stone_shape 石料形状
  * @property string $stone_color 石料颜色
  * @property string $stone_clarity 石料净度
  * @property string $stone_cut 切工
@@ -55,8 +56,9 @@ class PurchaseStoneGoods extends BaseModel
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'spec_remark', 'remark'], 'string', 'max' => 255],
-            [['stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'cert_type'], 'string', 'max' => 10],
+            [['stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour', 'cert_type'], 'string', 'max' => 10],
             [['cert_id'], 'string', 'max' => 30],
+            [['stone_size'], 'string', 'max' => 100],
             [['put_in_type'], 'safe']
         ];
     }
@@ -75,14 +77,17 @@ class PurchaseStoneGoods extends BaseModel
             'goods_num' => '石料数量',
             'cost_price' => '石料总额',
             'stone_type' => '石料类型',
-            'stone_price' => '石料单价(ct)',
+            'stone_price' => '石料单价/ct',
             'stone_num' => '石料粒数',
+            'stone_shape' => '石料形状',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',
             'stone_cut' => '切工',
             'stone_symmetry' => '对称',
             'stone_polish' => '抛光',
             'stone_fluorescence' => '荧光',
+            'stone_colour' => '石料色彩',
+            'stone_size' => '石料尺寸(mm)',
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'spec_remark' => '规格备注',

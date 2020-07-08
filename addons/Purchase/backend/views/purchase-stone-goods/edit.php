@@ -69,10 +69,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'stone_fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_colour')->dropDownList($model->getColourMap(),['prompt'=>'请选择']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'cert_type')->dropDownList($model->getCertTypeMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cert_id')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_size')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
