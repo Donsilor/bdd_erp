@@ -2,7 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\enums\BillStatusEnum;
@@ -314,7 +316,7 @@ class BillAController extends BaseController
             ['商品名称', 'goods_name' , 'text'],
             ['产品分类', 'style_cate_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
-            ['金托类型', 'product_type_name' , 'text'],
+            ['金托类型', 'jintuo_type' , 'text'],
             ['款式性别', 'style_sex' , 'text'],
             ['材质', 'material' , 'text'],
             ['材质颜色', 'goods_color' ,  'text'],
@@ -331,35 +333,34 @@ class BillAController extends BaseController
             ['石号', 'main_stone_sn' , 'text'],
             ['粒数', 'main_stone_num' , 'text'],
             ['主石类型', 'main_stone_type' , 'text'],
-            ['主石形状', 'main_stone_num' , 'text'],
+            ['主石形状', 'diamond_shape' , 'text'],
             ['石重', 'diamond_carat' , 'text'],
-            ['颜色', 'main_stone_color' ,'text'],
-            ['净度', 'main_stone_clarity' , 'text'],
-            ['切工', 'main_stone_clarity' , 'text'],
-            ['抛光', 'main_stone_clarity' , 'text'],
-            ['对称', 'main_stone_clarity' , 'text'],
-            ['荧光', 'main_stone_clarity' , 'text'],
+            ['颜色', 'diamond_color' ,'text'],
+            ['净度', 'diamond_clarity' , 'text'],
+            ['切工', 'diamond_cut' , 'text'],
+            ['抛光', 'diamond_polish' , 'text'],
+            ['对称', 'diamond_symmetry' , 'text'],
+            ['荧光', 'diamond_fluorescence' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
             ['金额', 'main_stone_price_sum','text'],
-            ['钻石证书类型', 'main_stone_price_sum','text'],
-            ['钻石证书号', 'main_stone_price_sum','text'],
-            ['副石1类型	', 'second_stone_sn1' , 'text'],
+            ['钻石证书类型', 'diamond_cert_type','text'],
+            ['钻石证书号', 'diamond_cert_id','text'],
+            ['副石1类型	', 'second_stone_type1' , 'text'],
+            ['副石1形状', 'second_stone_shape1' , 'text'],
             ['副石1粒数', 'second_stone_num1' , 'text'],
             ['副石1石重', 'second_stone_weight1' , 'text'],
             ['副石1颜色', 'second_stone_color1' , 'text'],
             ['副石1净度', 'second_stone_clarity1' , 'text'],
-            ['副石1形状', 'second_stone_clarity1' , 'text'],
             ['副石1总计价', 'second_stone_price1' , 'text'],
-            ['副石2类型', 'second_stone_price1_sum' , 'text'],
-            ['副石2形状', 'second_stone_price1_sum' , 'text'],
-            ['副石2粒数', 'second_stone_price1_sum' , 'text'],
-            ['副石2重', 'second_stone_price1_sum' , 'text'],
+            ['副石2类型', 'second_stone_type2' , 'text'],
+            ['副石2粒数', 'second_stone_num2' , 'text'],
+            ['副石2重', 'second_stone_weight2' , 'text'],
             ['工费', 'gong_fee' , 'text'],
             ['补口费', 'bukou_fee' , 'text'],
             ['镶石费', 'xianqian_fee' , 'text'],
             ['证书费', 'cert_fee' , 'text'],
             ['工艺费', 'biaomiangongyi_fee' , 'text'],
-            ['单价', 'price' , 'text'],
+            ['总单价', 'price_sum' , 'text'],
             ['备注', 'goods_remark' , 'text']
 
         ];
@@ -421,27 +422,64 @@ class BillAController extends BaseController
             $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
             //入库方式
             $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
-            //主石颜色
-            $main_stone_color = empty($list['main_stone_color']) ? 0 : $list['main_stone_color'];
-            $list['main_stone_color'] = \Yii::$app->attr->valueName($main_stone_color);
-            //主石净度
-            $main_stone_clarity = empty($list['main_stone_clarity']) ? 0 : $list['main_stone_clarity'];
-            $list['main_stone_clarity'] = \Yii::$app->attr->valueName($main_stone_clarity);
+            //金托类型
+            $list['jintuo_type'] = JintuoTypeEnum::getValue($list['jintuo_type']);
+            //款式性别
+            $list['style_sex'] = StyleSexEnum::getValue($list['style_sex']);
+            //钻石颜色
+            $material_color = empty($list['material_color']) ? 0 : $list['material_color'];
+            $list['material_color'] = \Yii::$app->attr->valueName($material_color);
+            //钻石净度
+            $diamond_clarity = empty($list['diamond_clarity']) ? 0 : $list['diamond_clarity'];
+            $list['diamond_clarity'] = \Yii::$app->attr->valueName($diamond_clarity);
+            //钻石形状
+            $diamond_shape = empty($list['diamond_shape']) ? 0 : $list['diamond_shape'];
+            $list['diamond_shape'] = \Yii::$app->attr->valueName($diamond_shape);
+            //钻石切工
+            $diamond_cut = empty($list['diamond_cut']) ? 0 : $list['diamond_cut'];
+            $list['diamond_cut'] = \Yii::$app->attr->valueName($diamond_cut);
+            //钻石抛光
+            $diamond_polish = empty($list['diamond_polish']) ? 0 : $list['diamond_polish'];
+            $list['diamond_polish'] = \Yii::$app->attr->valueName($diamond_polish);
+            //钻石对称
+            $diamond_symmetry = empty($list['diamond_symmetry']) ? 0 : $list['diamond_symmetry'];
+            $list['diamond_symmetry'] = \Yii::$app->attr->valueName($diamond_symmetry);
+            //钻石荧光
+            $diamond_fluorescence = empty($list['diamond_fluorescence']) ? 0 : $list['diamond_fluorescence'];
+            $list['diamond_fluorescence'] = \Yii::$app->attr->valueName($diamond_fluorescence);
+            //钻石证书类型
+            $diamond_cert_type = empty($list['diamond_cert_type']) ? 0 : $list['diamond_cert_type'];
+            $list['diamond_cert_type'] = \Yii::$app->attr->valueName($diamond_cert_type);
             //主石类型
             $main_stone_type = empty($list['main_stone_type']) ? 0 : $list['main_stone_type'];
             $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
             //主石金额
             $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
             $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
-            //副石颜色
+            //副石1类型
+            $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
+            $list['second_stone_type1'] = \Yii::$app->attr->valueName($second_stone_type1);
+            //副石1颜色
             $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
             $list['second_stone_color1'] = \Yii::$app->attr->valueName($second_stone_color1);
-            //副石净度
+            //副石1净度
             $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
             $list['second_stone_clarity1'] = \Yii::$app->attr->valueName($second_stone_clarity1);
-            //副石金额
+            //副石1形状
+            $second_stone_shape1 = empty($list['second_stone_shape1']) ? 0 : $list['second_stone_shape1'];
+            $list['second_stone_shape1'] = \Yii::$app->attr->valueName($second_stone_shape1);
+            //副石1金额
             $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
             $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+            //副石2类型
+            $second_stone_type2 = empty($list['second_stone_type2']) ? 0 : $list['second_stone_type2'];
+            $list['second_stone_type2'] = \Yii::$app->attr->valueName($second_stone_type2);
+            //副石2重
+            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
+            //副石1形状
+            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
             //单价
             $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
                 + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
