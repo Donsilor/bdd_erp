@@ -49,7 +49,7 @@ class CacheEnum
         if (empty($prefix)) {
             $prefix = static::getMap()[$key] ?? '';
         }
-
-        return $prefix . $key;
+        $cachePrefix = \Yii::$app->params['cachePrefix'];
+        return $cachePrefix . $prefix . $key;
     }
 }

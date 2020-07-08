@@ -5,6 +5,7 @@ namespace common\components;
 use Yii;
 use yii\web\UnprocessableEntityHttpException;
 use common\enums\AppEnum;
+use common\enums\CacheEnum;
 
 /**
  * Class Debris
@@ -63,8 +64,9 @@ class Debris
      */
     public function backendConfig($name, $noCache = false)
     {
+        $merchant_id = Yii::$app->services->merchant->getId();
         // 获取缓存信息
-        $info = $this->getConfigInfo($noCache, AppEnum::BACKEND);
+        $info = $this->getConfigInfo($noCache, AppEnum::BACKEND,$merchant_id);
 
         return isset($info[$name]) ? trim($info[$name]) : null;
     }
@@ -77,8 +79,8 @@ class Debris
      */
     public function backendConfigAll($noCache = false)
     {
-        $info = $this->getConfigInfo($noCache, AppEnum::BACKEND);
-
+        $merchant_id = Yii::$app->services->merchant->getId();
+        $info = $this->getConfigInfo($noCache, AppEnum::BACKEND,$merchant_id);
         return $info ? $info : [];
     }
 
@@ -126,7 +128,7 @@ class Debris
     protected function getConfigInfo($noCache, $app_id, $merchant_id = '')
     {
         // 获取缓存信息
-        $cacheKey = 'config:' . $merchant_id . $app_id;
+        $cacheKey = CacheEnum::getPrefix('config',$merchant_id . $app_id);
         if ($noCache == false && !empty($this->config[$cacheKey])) {
             return $this->config[$cacheKey];
         }
