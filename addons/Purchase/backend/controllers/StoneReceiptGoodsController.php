@@ -122,7 +122,7 @@ class StoneReceiptGoodsController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new PurchaseStoneReceiptGoodsForm();
 
         // ajax 校验
         $this->activeFormValidate($model);
@@ -131,7 +131,8 @@ class StoneReceiptGoodsController extends BaseController
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }
-            Yii::$app->getSession()->setFlash('success','保存成功');
+            \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
+            \Yii::$app->getSession()->setFlash('success','保存成功');
             return $this->redirect(Yii::$app->request->referrer);
         }
 

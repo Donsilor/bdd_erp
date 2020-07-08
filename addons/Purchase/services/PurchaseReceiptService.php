@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -115,19 +116,33 @@ class PurchaseReceiptService extends Service
      */
     public function purchaseReceiptSummary($receipt_id, $purchase_type)
     {
+        $select = [
+            'sum(1) as receipt_num',
+            'sum(goods_weight) as total_weight',
+            'sum(cost_price) as total_cost',
+        ];
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
+            $select[] = "sum(stone_num) as total_stone_num";
         }else{
             $model = new PurchaseReceiptGoods();
         }
         $sum = $model::find()
-            ->select(['sum(1) as receipt_num','sum(cost_price) as total_cost'])
+            ->select($select)
             ->where(['receipt_id'=>$receipt_id, 'status'=>StatusEnum::ENABLED])
             ->asArray()->one();
         if($sum) {
-            $result = PurchaseReceipt::updateAll(['receipt_num'=>$sum['receipt_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$receipt_id]);
+            $data = [
+                'receipt_num'=>$sum['receipt_num']/1,
+                'total_weight'=>$sum['total_weight']/1,
+                'total_cost'=>$sum['total_cost']/1,
+            ];
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $data['total_stone_num'] = $sum['total_stone_num']/1;
+            }
+            $result = PurchaseReceipt::updateAll($data, ['id'=>$receipt_id]);
         }
         return $result??"";
     }
@@ -743,6 +758,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
+        $form->to_warehouse_id = WarehouseIdEnum::GOLD;//金料库
         $goods = $ids = [];
         $total_weight = $total_cost = $sale_price = 0;
         foreach ($models as $model){
@@ -818,6 +834,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
+        $form->to_warehouse_id = WarehouseIdEnum::STONE;//石料库
         $goods = $ids = [];
         $total_stone_num = $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
@@ -829,33 +846,38 @@ class PurchaseReceiptService extends Service
                 'cert_type' => $model->cert_type,
                 'cert_id' => $model->cert_id,
                 'carat' => $model->goods_weight,
+                'shape' => $model->goods_shape,
                 'color' => $model->goods_color,
                 'clarity' => $model->goods_clarity,
                 'cut' => $model->goods_cut,
                 'polish' => $model->goods_polish,
                 'fluorescence' =>$model->goods_fluorescence,
                 'symmetry' =>$model->goods_symmetry,
+                'stone_colour' => $model->goods_colour,
                 'stone_num' => $model->stone_num,
                 'source_detail_id' => $model->id,
                 'stone_price' => $model->stone_price,
                 'cost_price' => $model->cost_price,
                 'stone_weight' => $model->goods_weight,
                 'stone_norms' => $model->goods_norms,
+                'stone_size' => $model->goods_size,
                 'sale_price' => $model->stone_price,
+                'remark' => $model->goods_remark,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
-            $total_weight = bcadd($total_weight, $model->goods_weight, 2);
+            $total_weight = bcadd($total_weight, $model->goods_weight, 3);
         }
         $bill = [
             'bill_type' =>  StoneBillTypeEnum::STONE_MS,
             'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
+            'to_warehouse_id' => $form->to_warehouse_id,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
-            'total_stone_num' => $total_stone_num,
+            'total_grain' => $total_stone_num,
             'total_weight' => $total_weight,
             'total_cost' => $form->total_cost,
             'pay_amount' => $form->total_cost,

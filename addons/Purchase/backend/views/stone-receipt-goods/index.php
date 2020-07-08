@@ -25,6 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
         if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['warehouse','check'=>1],'批量入库', [
                 'class'=>'btn btn-success btn-xs',
+                'data-width'=>'40%',
+                'data-height'=>'60%',
+                'data-offset'=>'20px',
             ]);
         }
         ?>
@@ -60,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
@@ -67,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },
@@ -158,6 +162,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_shape',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->goods_shape) ;
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute' => 'goods_color',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->goods_color);
@@ -230,11 +246,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute' => 'goods_colour',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_colour);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'goods_norms',
                                 'format' => 'raw',
                                 'filter' => Html::activeTextInput($searchModel, 'goods_norms', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:80px;'
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
@@ -288,6 +325,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
@@ -295,7 +333,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },

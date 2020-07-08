@@ -18,6 +18,7 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
+            <?= $form->field($model, 'customer_id')->hiddenInput()->label(false)?>
             <div class="row">
                 <div class="col-lg-6">
                 <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
@@ -28,11 +29,11 @@ $form = ActiveForm::begin([
                     ],
                 ]);?>              
                 </div>
-                <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>
             </div>
             <div class="row">
             	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
-            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput()?></div>                
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>                
             </div>
             <div class="row">
                 <div class="col-lg-6">
@@ -54,3 +55,37 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+var formId = 'order';
+function fillCustomerForm(){
+	var customer_mobile = $("#"+formId+"-customer_mobile").val();
+    var customer_name  = $("#"+formId+"-customer_name").val();
+    var customer_email = $("#"+formId+"-customer_email").val();
+    var sale_channel_id = $("#"+formId+"-sale_channel_id").val();
+    if(customer_mobile != '' && sale_channel_id ) {
+        if((customer_name=='' || customer_email == '')) {
+        	$.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-customer'])?>',
+                dataType: "json",
+                data: {
+                    'mobile': customer_mobile,
+                    'channel_id':sale_channel_id
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {                       
+                 	   $("#"+formId+"-customer_name").val(data.data.realname).attr("readonly",false);
+                 	   $("#"+formId+"-customer_email").val(data.data.email).attr("readonly",false);
+                    }
+                }
+            });
+        }	   
+    }
+}
+$("#"+formId+"-customer_mobile").blur(function(){
+	fillCustomerForm();
+});
+$("#"+formId+"-sale_channel_id").change(function(){
+	fillCustomerForm();
+});
+</script>

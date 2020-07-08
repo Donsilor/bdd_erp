@@ -27,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                         echo Html::batchPopButton(['iqc','check'=>1],'IQC批量质检', [
                             'class'=>'btn btn-success btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                         echo '&nbsp;';
                         echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
@@ -154,6 +157,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'goods_shape',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->goods_shape) ;
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute' => 'goods_color',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->goods_color);
@@ -226,6 +241,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute' => 'goods_colour',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_colour);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'goods_norms',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -233,6 +260,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute' => 'cert_type',

@@ -80,6 +80,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
+                        [
+                            'attribute' => 'gold_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
                         /*[
                             'attribute'=>'gold_num',
                             'filter' => Html::activeTextInput($searchModel, 'gold_num', [
@@ -109,20 +123,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
-                            'attribute' => 'gold_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
+                            'attribute' => 'remark',
+                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //    'class' => 'form-control',
+                            //]),
+                            'value' => function ($model) {
+                                return $model->remark??"";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px;'
-
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
+                            'attribute' => 'creator_id',
+                            'value' => 'creator.username',
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        /*[
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -137,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件

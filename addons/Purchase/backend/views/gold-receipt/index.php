@@ -187,7 +187,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {apply} {audit} {delete}',
+                'template' => '{edit} {apply} {audit} {goods} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                     'edit' => function($url, $model, $key){

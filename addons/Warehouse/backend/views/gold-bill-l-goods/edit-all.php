@@ -1,9 +1,11 @@
 <?php
 
 
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
+use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
 
@@ -67,14 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
                                 'attribute' => 'gold_type',
                                 'format' => 'raw',
                                 'value' => function ($model){
@@ -88,46 +82,80 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                                'attribute'=>'gold_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'gold_weight',
+                                'format' => 'raw',
+                                //'value' => function ($model, $key, $index, $column){
+                                //    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
+                                //},
+                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_price',
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
-                                },
+                                //'value' => function ($model, $key, $index, $column){
+                                //    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
+                                //},
                                 'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cost_price',
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },
+                                //'value' => function ($model, $key, $index, $column){
+                                //    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
+                                //},
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('remark', $model->remark, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($bill) {
                                         if($bill->bill_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除', [

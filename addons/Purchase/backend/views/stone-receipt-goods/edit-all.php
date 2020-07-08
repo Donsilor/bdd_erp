@@ -54,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
@@ -61,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },
@@ -120,7 +121,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return Yii::$app->attr->valueName($model->material_type)??"";
+                                    //return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
@@ -128,6 +130,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_sn',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute'=>'stone_num',
@@ -148,6 +159,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'goods_shape',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'goods_shape', Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'attribute' => 'goods_color',
@@ -240,6 +264,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute' => 'cert_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
@@ -299,6 +335,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
@@ -306,7 +343,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },

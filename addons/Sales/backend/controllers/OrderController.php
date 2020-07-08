@@ -10,6 +10,7 @@ use addons\Sales\common\models\OrderGoods;
 use common\helpers\ResultHelper;
 use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\models\OrderAddress;
+use addons\Sales\common\models\Customer;
 
 /**
  * Default controller for the `order` module
@@ -82,15 +83,10 @@ class OrderController extends BaseController
             $isNewRecord = $model->isNewRecord;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                //自动创建款号
-                Yii::$app->salesService->order->createOrderSn($model,true);
-                
+                $model = Yii::$app->salesService->order->createOrder($model);                
                 $trans->commit();
                 return $isNewRecord  
-                    ? $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success')
+                    ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
                     : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
                 
             }catch (\Exception $e) {
@@ -103,7 +99,20 @@ class OrderController extends BaseController
                 'model' => $model,
         ]);
         
-    }    
+    }   
+    /**
+     * 查询客户信息
+     * @return array|\yii\db\ActiveRecord|NULL
+     */
+    public function actionAjaxGetCustomer()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $mobile = Yii::$app->request->get('mobile');
+        $channel_id = Yii::$app->request->get('channel_id');
+        $model = Customer::find()->select(['id','realname','mobile','email'])->where(['mobile'=>$mobile,'channel_id'=>$channel_id])->asArray()->one();
+        return ResultHelper::json(200,'查询成功',$model);
+    }
     /**
      * 详情展示页
      * @return string
@@ -221,6 +230,12 @@ class OrderController extends BaseController
         }
         if(!$model->email) {
             $model->email = $model->order->customer_email ?? null;
+        }
+        if(!$model->country_id) {
+            $model->country_id = $model->customer->country_id ?? null;
+            $model->province_id = $model->customer->province_id ?? null;
+            $model->city_id = $model->customer->city_id ?? null;
+            $model->address_details = $model->customer->address_details ?? null;
         }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,

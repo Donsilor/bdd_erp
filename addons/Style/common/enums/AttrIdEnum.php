@@ -37,6 +37,7 @@ class AttrIdEnum
     const DIA_FLUORESCENCE = 8;//荧光
     const DIA_CERT_NO = 31;//证书编号
     const DIA_CERT_TYPE = 48;//证书类型
+    const DIA_COLOUR = 87;//石料色彩
     const DIA_CUT_DEPTH = 32;//切割深度（%）
     const DIA_TABLE_LV = 33;//台宽比（%）
     const DIA_LENGTH = 34;//长度（mm）
