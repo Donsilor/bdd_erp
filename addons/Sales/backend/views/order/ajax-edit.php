@@ -29,11 +29,11 @@ $form = ActiveForm::begin([
                     ],
                 ]);?>              
                 </div>
-                <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput(['readonly'=>$model->isNewRecord ?'true':'false'])?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>
             </div>
             <div class="row">
             	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
-            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput(['readonly'=>$model->isNewRecord ?'true':'false'])?></div>                
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>                
             </div>
             <div class="row">
                 <div class="col-lg-6">
@@ -63,7 +63,7 @@ function fillCustomerForm(){
     var customer_email = $("#"+formId+"-customer_email").val();
     var sale_channel_id = $("#"+formId+"-sale_channel_id").val();
     if(customer_mobile != '' && sale_channel_id ) {
-        if(customer_name=='' || customer_email == '') {
+        if((customer_name=='' || customer_email == '')) {
         	$.ajax({
                 type: "get",
                 url: '<?php echo Url::to(['ajax-get-customer'])?>',

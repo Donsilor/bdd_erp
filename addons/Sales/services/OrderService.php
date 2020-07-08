@@ -56,6 +56,14 @@ class OrderService extends Service
             if(false == $customer->save()) {
                 throw new \Exception("创建用户失败：".$this->getError($customer));
             }
+        }else{
+            //更新用户信息
+            $customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
+            $customer->mobile = $customer->mobile ? $customer->mobile: $order->customer_mobile;
+            $customer->email = $customer->email ? $customer->email : $order->customer_email;
+            if(false == $customer->save()) {
+                throw new \Exception("更新用户失败：".$this->getError($customer));
+            }
         }
         $order->customer_id = $customer->id;
         if($form->isNewRecord){
