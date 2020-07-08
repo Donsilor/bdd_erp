@@ -9,7 +9,7 @@ use common\helpers\RegularHelper;
  * This is the model class for table "sales_order_address".
  *
  * @property int $order_id 订单ID
- * @property int $member_id 用户id
+ * @property int $customer_id 客户id
  * @property int $country_id 国家ID
  * @property int $province_id 省id
  * @property int $city_id 市id
@@ -45,7 +45,7 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
     {
         return [
             [['order_id','realname','mobile','country_id','province_id','city_id','address_details'], 'required'],
-            [['order_id', 'member_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'customer_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'city_name'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['country_name', 'province_name'], 'string', 'max' => 60],
@@ -108,5 +108,13 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
     public function getOrder()
     {
         return $this->hasOne(Order::class,['id'=>'order_id']);
+    }
+    /**
+     * 客户信息 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::class,['id'=>'customer_id']);
     }
 }

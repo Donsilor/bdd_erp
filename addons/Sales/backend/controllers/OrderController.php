@@ -222,6 +222,12 @@ class OrderController extends BaseController
         if(!$model->email) {
             $model->email = $model->order->customer_email ?? null;
         }
+        if(!$model->country_id) {
+            $model->country_id = $model->customer->country_id ?? null;
+            $model->province_id = $model->customer->province_id ?? null;
+            $model->city_id = $model->customer->city_id ?? null;
+            $model->address_details = $model->customer->address_details ?? null;
+        }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
