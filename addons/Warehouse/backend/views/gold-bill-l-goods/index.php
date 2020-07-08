@@ -62,11 +62,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
                                 'attribute' => 'gold_type',
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->gold_type);
@@ -79,25 +74,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute'=>'gold_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cost_price',
                                 'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             /*[
                                 'attribute' => 'sale_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],*/
+                            [
+                                'attribute' => 'remark',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',

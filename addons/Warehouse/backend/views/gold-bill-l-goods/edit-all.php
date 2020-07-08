@@ -69,14 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:200px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
                                 'attribute' => 'gold_type',
                                 'format' => 'raw',
                                 'value' => function ($model){
@@ -90,6 +82,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute'=>'gold_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'gold_weight',
                                 'format' => 'raw',
                                 //'value' => function ($model, $key, $index, $column){
@@ -97,9 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //},
                                 'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'gold_price',
@@ -109,9 +116,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //},
                                 'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'cost_price',
@@ -121,7 +127,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //},
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:200px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('remark', $model->remark, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
