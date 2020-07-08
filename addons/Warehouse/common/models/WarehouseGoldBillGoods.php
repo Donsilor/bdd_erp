@@ -22,6 +22,7 @@ use addons\Supply\common\models\ProduceGold;
  * @property string $gold_price 单价
  * @property string $sale_price 销售价格
  * @property int $source_detail_id 来源明细ID
+ * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -47,6 +48,7 @@ class WarehouseGoldBillGoods extends BaseModel
             [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
             [['bill_no', 'gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
+            [['remark'], 'string', 'max' => 255],
             [['supplier_id','creator_id','auditor_id'], 'safe']
         ];
     }
@@ -71,6 +73,7 @@ class WarehouseGoldBillGoods extends BaseModel
             'cost_price' => '金料总额',
             'sale_price' => '销售价格',
             'source_detail_id' => '来源明细ID',
+            'remark' => '备注',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

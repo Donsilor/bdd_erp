@@ -64,7 +64,7 @@ class SupplierFollower extends BaseModel
      */
     public function getMember()
     {
-        return $this->hasOne(Member::class, ['id'=>'member_id']);
+        return $this->hasOne(Member::class, ['id'=>'member_id'])->alias('member');
     }
 
     /**
@@ -73,7 +73,7 @@ class SupplierFollower extends BaseModel
      */
     public function getSupplier()
     {
-        return $this->hasOne(Supplier::class, ['id'=>'supplier_id']);
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
     }
 
 }

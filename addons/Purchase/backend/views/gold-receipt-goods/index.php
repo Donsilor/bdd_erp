@@ -30,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['warehouse','check'=>1],'批量入库', [
                 'class'=>'btn btn-success btn-xs',
+                'data-width'=>'40%',
+                'data-height'=>'60%',
+                'data-offset'=>'20px',
             ]);
         }
         ?>
@@ -161,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },
@@ -184,47 +187,3 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
-<script type="text/javascript">
-    //批量操作
-    function batchWarehouse(obj) {
-        let $e = $(obj);
-        let url = $e.attr('href');
-        var receipt_id = '';
-        var ids = new Array;
-        $('input[name="id[]"]:checked').each(function(i){
-            var str = $(this).val();
-            var arr = jQuery.parseJSON(str)
-            receipt_id = arr.receipt_id;
-            ids[i] = arr.id;
-        });
-        if(ids.length===0) {
-            rfInfo('未选中数据！','');
-            return false;
-        }
-        var ids = ids.join(',');
-        $.ajax({
-            type: "get",
-            url: url,
-            dataType: "json",
-            data: {
-                receipt_id:receipt_id,
-                ids: ids
-            },
-            success: function (data) {
-                console.log(data);
-                if (parseInt(data.code) !== 200) {
-                    rfAffirm(data.message);
-                } else {
-                    var href = data.data.url;
-                    var title = '基本信息';
-                    var width = '80%';
-                    var height = '80%';
-                    var offset = "10%";
-                    openIframe(title, width, height, href, offset);
-                    e.preventDefault();
-                    return false;
-                }
-            }
-        });
-    }
-</script>

@@ -18,15 +18,18 @@ use Yii;
  * @property int $stone_num 石料粒数
  * @property string $material_type 商品类型
  * @property double $goods_weight 重量
+ * @property string $goods_shape 形状
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
  * @property string $goods_cut 切工
  * @property string $goods_symmetry 对称
  * @property string $goods_polish 抛光
  * @property string $goods_fluorescence 荧光
+ * @property string $goods_colour 色彩
  * @property string $cert_type 证书类型
  * @property string $cert_id 证书号
  * @property string $goods_norms 规格
+ * @property string $goods_size 尺寸
  * @property string $cost_price 成本价
  * @property string $stone_price 石料单价/CT
  * @property string $goods_remark 商品备注
@@ -62,7 +65,8 @@ class PurchaseStoneReceiptGoods extends BaseModel
             [['purchase_sn', 'cert_id'], 'string', 'max' => 30],
             [['goods_name', 'goods_norms', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
-            [['material_type', 'goods_color', 'goods_clarity', 'goods_cut', 'goods_symmetry', 'goods_polish', 'goods_fluorescence', 'cert_type'], 'string', 'max' => 10],
+            [['goods_size'], 'string', 'max' => 100],
+            [['material_type', 'goods_shape', 'goods_color', 'goods_clarity', 'goods_cut', 'goods_symmetry', 'goods_polish', 'goods_fluorescence', 'goods_colour', 'cert_type'], 'string', 'max' => 10],
             [['supplier_id','receipt_no','receipt_status'], 'safe']
         ];
     }
@@ -84,17 +88,20 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'stone_num' => '石料粒数',
             'material_type' => '石料类型',
             'goods_weight' => '石料重量(ct)',
+            'goods_shape' => '形状',
             'goods_color' => '颜色',
             'goods_clarity' => '净度',
             'goods_cut' => '切工',
             'goods_symmetry' => '对称',
             'goods_polish' => '抛光',
             'goods_fluorescence' => '荧光',
+            'goods_colour' => '色彩',
             'goods_norms' => '规格',
+            'goods_size' => '尺寸',
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'cost_price' => '石料总额',
-            'stone_price' => '石料单价(ct)',
+            'stone_price' => '石料单价/ct',
             'goods_remark' => '商品备注',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',

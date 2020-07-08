@@ -2,19 +2,16 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseBillW;
+use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
@@ -330,29 +327,22 @@ class GoldBillWController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
-            ['货品名称', 'goods_name' , 'text'],
-            ['条码号', 'goods_id' , 'text'],
+            ['产品名称', 'gold_name' , 'text'],
+            ['条码号', 'gold_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['产品分类', 'product_type_name' , 'text'],
-            ['商品类型', 'style_cate_name' , 'text'],
+            ['商品类型', 'goods_type' , 'text'],
+            ['原料类型', 'gold_type' , 'text'],
             ['仓库', 'warehouse_name' , 'text'],
             ['材质', 'material' , 'text', ],
-            ['金重', 'gold_weight' , 'text'],
-            ['深圳最低价格', 'poll_price' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
-            ['主石形状', 'diamond_shape' , 'text'],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
-            ['配石重（ct)', 'second_stone_weight1' , 'text'],
-            ['总重(g)', 'diamond_carat_sum' , 'text'],
-            ['手寸	', 'finger' , 'text'],
-            ['货品尺寸	', 'product_size' , 'text'],
-            ['库存数	', 'goods_num' , 'text'],
-            ['实盘数', 'actual_num' , 'text'],
-            ['盘盈数', 'profit_num' , 'text'],
-            ['盘亏数', 'loss_num' , 'text'],
-            ['盘点类型', 'status' , 'text'],
+            ['重量', 'gold_weight' , 'text'],
+            ['石头类型', 'main_stone_type' , 'text'],
+            ['石头形状', 'diamond_shape' , 'text'],
+            ['石重（ct)', 'diamond_carat' , 'text'],
+            ['尺寸	', 'finger' , 'text'],
+            ['库存(数量)	', 'product_size' , 'text'],
+            ['实盘(数量)	', 'goods_num' , 'text'],
+            ['实盘(重量)', 'actual_num' , 'text'],
+            ['差异(数量)', 'profit_num' , 'text'],
             ['备注', 'goods_remark' , 'text'],
 
         ];
@@ -362,16 +352,10 @@ class GoldBillWController extends BaseController
 
 
     private function getData($ids){
-        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','w.from_warehouse_id','wg.bill_id','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
-            ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','wg.status','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name',
-            'ww.actual_num','ww.profit_num','ww.loss_num'];
-        $query = WarehouseBill::find()->alias('w')
-            ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
-            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
-            ->leftJoin(WarehouseBillW::tableName()." ww",'ww.id=w.id')
-            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
+        $query = WarehouseGoldBillWForm::find()->alias('w')
+            ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(WarehouseGoldBillGoodsW::tableName().' wbg','wbg.id=wg.id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);

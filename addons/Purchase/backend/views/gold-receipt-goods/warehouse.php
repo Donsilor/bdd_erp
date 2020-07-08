@@ -13,14 +13,7 @@ $form = ActiveForm::begin([]);
             'pluginOptions' => [
                 'allowClear' => false
             ],
-        ]);?>
-        <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false
-            ],
-        ]);?>
+        ])->label("入库方式");?>
         <!-- /.tab-pane -->
     </div>
     <!-- /.tab-content -->

@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use kartik\date\DatePicker;
@@ -21,18 +22,26 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
            <div class="row">
                <div class="col-lg-6">
-                   <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择','disabled'=>true]) ?>
+                   <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
                <div class="col-lg-6">
-                   <?= $form->field($model, 'goods_sn')->textInput(['disabled'=>true]) ?>
+                   <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
                </div>
            </div>
            <div class="row">
                <div class="col-lg-6">
-                   <?= $form->field($model, 'goods_name')->textInput() ?>
+                   <?= $form->field($model, 'gold_name')->textInput() ?>
                </div>
                <div class="col-lg-6">
-                   <?= $form->field($model, 'goods_weight')->textInput() ?>
+                   <?= $form->field($model, 'gold_sn')->textInput(['disabled'=>true]) ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-6">
+                   <?= $form->field($model, 'gold_num')->textInput(['disabled'=>true]) ?>
+               </div>
+               <div class="col-lg-6">
+                   <?= $form->field($model, 'gold_weight')->textInput() ?>
                </div>
            </div>
            <div class="row">
@@ -45,7 +54,7 @@ $form = ActiveForm::begin([
            </div>
            <div class="row">
                <div class="col-lg-12">
-                   <?= $form->field($model, 'goods_remark')->textarea() ?>
+                   <?= $form->field($model, 'remark')->textarea() ?>
                </div>
            </div>
        </div>

@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -110,6 +111,36 @@ class GoldReceiptGoodsController extends BaseController
     }
 
     /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new PurchaseGoldReceiptGoodsForm();
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
+            if(false == $model->save()){
+                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
+            }
+
+            \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
+
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * 编辑
      * @return string
      * @throws
@@ -161,7 +192,7 @@ class GoldReceiptGoodsController extends BaseController
         if($check){
             try{
                 \Yii::$app->purchaseService->receipt->iqcValidate($model, $this->purchaseType);
-                return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/iqc?ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids' => $ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
@@ -219,7 +250,7 @@ class GoldReceiptGoodsController extends BaseController
         if($check){
             try{
                 $receipt_id = \Yii::$app->purchaseService->receipt->warehouseValidate($model, $this->purchaseType);
-                return ResultHelper::json(200, '', ['url'=>'/purchase/gold-receipt-goods/warehouse?id='.$receipt_id.'&ids='.$ids]);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'id' => $receipt_id, 'ids' => $ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
             }
