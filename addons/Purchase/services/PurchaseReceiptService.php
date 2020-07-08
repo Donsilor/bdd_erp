@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -743,6 +744,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
+        $form->to_warehouse_id = WarehouseIdEnum::GOLD;
         $goods = $ids = [];
         $total_weight = $total_cost = $sale_price = 0;
         foreach ($models as $model){
@@ -818,6 +820,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
+        $form->to_warehouse_id = WarehouseIdEnum::STONE;
         $goods = $ids = [];
         $total_stone_num = $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
@@ -853,6 +856,7 @@ class PurchaseReceiptService extends Service
             'bill_status' => BillStatusEnum::SAVE,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
+            'to_warehouse_id' => $form->to_warehouse_id,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
             'total_stone_num' => $total_stone_num,

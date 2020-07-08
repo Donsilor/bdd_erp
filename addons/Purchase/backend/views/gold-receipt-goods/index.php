@@ -30,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         if($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['warehouse','check'=>1],'批量入库', [
                 'class'=>'btn btn-success btn-xs',
+                'data-width'=>'40%',
+                'data-height'=>'60%',
+                'data-offset'=>'20px',
             ]);
         }
         ?>

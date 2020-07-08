@@ -185,7 +185,7 @@ class PurchaseService extends Service
             foreach ($ids as $id) {
                 $goods = $model::findOne(['id'=>$id]);
                 if($goods->is_receipt){
-                    throw new Exception("【".$goods->goods_name."】已收货，不能重复收货");
+                    throw new Exception("商品【".$goods->goods_name."】已收货，不能重复收货");
                 }
             }
         }
