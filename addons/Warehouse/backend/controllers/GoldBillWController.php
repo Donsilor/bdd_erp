@@ -240,9 +240,9 @@ class GoldBillWController extends BaseController
         $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
         $model->gold_type = false;
         //默认值
-        if($model->audit_status == AuditStatusEnum::PENDING) {
+        /*if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
-        }
+        }*/
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -262,7 +262,7 @@ class GoldBillWController extends BaseController
                 $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }            
         }
-        
+        $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
