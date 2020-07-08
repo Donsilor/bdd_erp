@@ -20,8 +20,11 @@ class WarehouseStoneBillWForm extends WarehouseStoneBill
     public function rules()
     {
         $rules = [
-                [['to_warehouse_id'], 'required'],
-                [['stone_type'], 'integer'],
+            [['stone_type'], 'required'],
+            [['stone_sn', 'stone_num', 'stone_weight'], 'filter', 'filter' => 'trim'],
+            [['stone_sn'], 'string', 'max'=>30],
+            [['stone_num'], 'integer'],
+            [['stone_weight'], 'number'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -32,7 +35,7 @@ class WarehouseStoneBillWForm extends WarehouseStoneBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'stone_type' => '盘点石料',
         ]);
     }
     /**

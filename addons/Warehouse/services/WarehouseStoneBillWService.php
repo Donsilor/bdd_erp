@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use Yii;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -20,6 +21,7 @@ use addons\Warehouse\common\enums\PandianStatusEnum;
 use addons\Warehouse\common\enums\StoneBillStatusEnum;
 use addons\Warehouse\common\enums\StoneStatusEnum;
 use common\enums\ConfirmEnum;
+use yii\db\Exception;
 
 /**
  * 盘点单
@@ -39,6 +41,7 @@ class WarehouseStoneBillWService extends Service
         $bill = new WarehouseStoneBill();
         $bill->attributes = $form->toArray();
         $bill->bill_status = StoneBillStatusEnum::SAVE;
+        $bill->to_warehouse_id = WarehouseIdEnum::STONE;//石料库
         if(false === $bill->save() ) {
             throw new \Exception($this->getError($bill));
         }
@@ -49,10 +52,10 @@ class WarehouseStoneBillWService extends Service
         ];
         $goods_list = WarehouseStone::find()->where($where)->asArray()->all();
         $stock_weight = $should_grain = 0;
-        $bill_goods_values = [];
+        $bill_goods_values = $bill_goods_keys = $ids = [];
         if(!empty($goods_list)) {
-            $bill_goods= [];
             foreach ($goods_list as $goods) {
+                $ids[] = $goods['id'];
                 $bill_goods = [
                     'bill_id'=>$bill->id,
                     'bill_type'=>$bill->bill_type,
@@ -74,18 +77,32 @@ class WarehouseStoneBillWService extends Service
                 $bill_goods_values[] = array_values($bill_goods);
                 $should_grain = bcadd($should_grain, $goods['stock_cnt']);
                 $stock_weight = bcadd($stock_weight, $goods['stock_weight'], 3);
-            }
-            if(empty($bill_goods_keys)) {
                 $bill_goods_keys = array_keys($bill_goods);
+                if(count($bill_goods_values)>=10){
+                    //导入明细
+                    $result = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                    if(!$result) {
+                        throw new \Exception('导入单据明细失败1');
+                    }
+                    $bill_goods_values = [];
+                }
             }
-            //导入明细
-            $result = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
-            if(!$result) {
-                throw new \Exception('导入单据明细失败');
+            if(!empty($bill_goods_values)){
+                //导入明细
+                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                if(!$result) {
+                    throw new \Exception('导入单据明细失败2');
+                }
+            }
+            //更新仓库所选材质货品 盘点中
+            $execute_num = WarehouseStone::updateAll(['stone_status'=>StoneStatusEnum::IN_PANDIAN],['id'=>$ids,'stone_status'=>StoneStatusEnum::IN_STOCK]);
+            if($execute_num <> count($ids)){
+                throw new \Exception("货品改变状态数量与明细数量不一致");
             }
         }else{
             throw new \Exception('库存中未查到石料为['.\Yii::$app->attr->valueName($form->stone_type).']的盘点数据');
         }
+
         //同步盘点明细关系表
         $sql = "insert into ".WarehouseStoneBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehouseStoneBillGoods::tableName()." where bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
@@ -163,12 +180,12 @@ class WarehouseStoneBillWService extends Service
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
         }else {
             if($form->to_warehouse_id == $goods->warehouse_id
-                && bccomp($billGoods->stone_num,$form->stone_num,2)==0
-                && bccomp($billGoods->stone_weight,$form->stone_weight,2)==0) {
+                && bccomp($billGoods->stone_num,$form->stone_num)==0
+                && bccomp($billGoods->stone_weight,$form->stone_weight,3)==0) {
                 $billGoods->status = PandianStatusEnum::NORMAL;//正常
             }elseif($form->to_warehouse_id != $goods->warehouse_id
-                || bccomp($billGoods->stone_num,$form->stone_num,2)!=0
-                || bccomp($billGoods->stone_weight,$form->stone_weight,2)!=0){
+                || bccomp($billGoods->stone_num,$form->stone_num)!=0
+                || bccomp($billGoods->stone_weight,$form->stone_weight,3)!=0){
                 $billGoods->status = PandianStatusEnum::LOSS;//盘亏
             }
         }
@@ -272,6 +289,10 @@ class WarehouseStoneBillWService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        /*$count = WarehouseStoneBillGoodsW::find()->where(['fin_status'=>FinAuditStatusEnum::PENDING])->count();
+        if($count) {
+            throw new \Exception("盘点明细还有财务未审核的商品，盘点不能审核");
+        }*/
         $subQuery = WarehouseStoneBillGoods::find()->select(['stone_sn'])->where(['bill_id'=>$form->id]);
         if($form->audit_status == AuditStatusEnum::PASS) {
             $form->bill_status = StoneBillStatusEnum::CONFIRM;
