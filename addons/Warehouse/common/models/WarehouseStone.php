@@ -12,17 +12,18 @@ use addons\Supply\common\models\Supplier;
  * @property string $stone_sn 石料编号
  * @property string $stone_name 石料名称
  * @property string $stone_type 石料类型
- * @property int $stone_status 石料状态
- * @property int $supplier_id 供应商
  * @property string $style_sn 石料款号
  * @property int $stock_cnt 库存数量
  * @property string $stock_weight 库存重量(ct)
+ * @property string $stone_shape 石料形状
  * @property string $stone_color 颜色
  * @property string $stone_clarity 净度
  * @property string $stone_cut 切工
  * @property string $stone_symmetry 对称
  * @property string $stone_polish 抛光
  * @property string $stone_fluorescence 荧光
+ * @property string $stone_colour 石料色彩
+ * @property double $stone_size 石料尺寸
  * @property int $fenbaoru_cnt 分包转入数量
  * @property string $fenbaoru_weight 分包转入重量(ct)
  * @property int $fenbaochu_cnt 分包转出数量
@@ -45,12 +46,17 @@ use addons\Supply\common\models\Supplier;
  * @property string $rk_weight 其他入库重量(ct)
  * @property int $ck_cnt 其他出库数量
  * @property string $ck_weight 其他出库重量(ct)
+ * @property string $stone_price 石料单价/ct
  * @property string $cost_price 石料总额
- * @property string $stone_price 石料单价(ct)
  * @property string $sale_price 销售价
+ * @property string $stone_norms 石料规格
+ * @property int $stone_status 石料状态
+ * @property int $supplier_id 供应商
+ * @property int $put_in_type 入库方式
  * @property int $warehouse_id 所在仓库
  * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
+ * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -71,10 +77,11 @@ class WarehouseStone extends BaseModel
     {
         return [
             [['stone_sn', 'stone_name', 'stone_type'], 'required'],
-            [['supplier_id', 'stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'warehouse_id', 'stone_status', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['stock_weight', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
+            [['stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'stone_status', 'supplier_id', 'put_in_type', 'warehouse_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['stock_weight', 'stone_size', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'stone_price', 'cost_price', 'sale_price'], 'number'],
             [['stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
-            [['stone_type', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence'], 'string', 'max' => 10],
+            [['stone_type', 'stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour'], 'string', 'max' => 10],
+            [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],
         ];
     }
@@ -89,17 +96,18 @@ class WarehouseStone extends BaseModel
             'stone_sn' => '石料编号',
             'stone_name' => '石料名称',
             'stone_type' => '石料类型',
-            'stone_status' => '石料状态',
-            'supplier_id' => '供应商',
             'style_sn' => '石料款号',
             'stock_cnt' => '库存数量',
             'stock_weight' => '库存重量(ct)',
+            'stone_shape' => '石料形状',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',
             'stone_cut' => '切工',
             'stone_symmetry' => '对称',
             'stone_polish' => '抛光',
             'stone_fluorescence' => '荧光',
+            'stone_colour' => '石料色彩',
+            'stone_size' => '石料尺寸',
             'fenbaoru_cnt' => '分包转入数量',
             'fenbaoru_weight' => '分包转入重量(ct)',
             'fenbaochu_cnt' => '分包转出数量',
@@ -122,12 +130,17 @@ class WarehouseStone extends BaseModel
             'rk_weight' => '其他入库重量(ct)',
             'ck_cnt' => '其他出库数量',
             'ck_weight' => '其他出库重量(ct)',
+            'stone_price' => '石料单价/ct',
             'cost_price' => '石料总额',
-            'stone_price' => '石料单价(ct)',
             'sale_price' => '销售价',
+            'stone_norms' => '石料规格',
+            'stone_status' => '石料状态',
+            'supplier_id' => '供应商',
+            'put_in_type' => '入库方式',
             'warehouse_id' => '所在仓库',
             'remark' => '备注',
             'status' => '状态 1启用 0禁用 -1删除',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
