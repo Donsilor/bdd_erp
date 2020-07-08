@@ -24,10 +24,10 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'stone_name')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择', 'disabled'=>true]) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'style_sn')->dropDownList($model->getStyleSnMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'style_sn')->dropDownList($model->getStyleSnMap(),['prompt'=>'请选择', 'disabled'=>true]) ?>
                </div>
            </div>
            <div class="row">
@@ -61,6 +61,33 @@ $form = ActiveForm::begin([
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'stone_colour')->dropDownList($model->getColourMap(),['prompt'=>'请选择']) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'cert_type')->dropDownList($model->getCertTypeMap(),['prompt'=>'请选择']) ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'cert_id')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'stone_size')->textInput() ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'stone_norms')->textarea() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'remark')->textarea() ?>
                </div>
            </div>
        </div>

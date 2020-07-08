@@ -22,6 +22,14 @@ class WarehouseStoneBillMsGoodsForm extends WarehouseStoneBillGoods
         return Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE);
     }
     /**
+     * 石料形状列表
+     * @return array
+     */
+    public static function getShapeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE);
+    }
+    /**
      * 石料颜色列表
      * @return array
      */
@@ -68,6 +76,22 @@ class WarehouseStoneBillMsGoodsForm extends WarehouseStoneBillGoods
     public static function getFluorescenceMap()
     {
         return Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE);
+    }
+    /**
+     * 证书类型列表
+     * @return array
+     */
+    public static function getCertTypeMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
+    }
+    /**
+     * 石料色彩列表
+     * @return array
+     */
+    public static function getColourMap()
+    {
+        return Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR);
     }
     /**
      * 石料款号列表

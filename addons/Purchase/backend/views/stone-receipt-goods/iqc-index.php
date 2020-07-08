@@ -27,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                         echo Html::batchPopButton(['iqc','check'=>1],'IQC批量质检', [
                             'class'=>'btn btn-success btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                         echo '&nbsp;';
                         echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
