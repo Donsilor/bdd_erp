@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '应盘重量(g)',
                                 'format' => 'raw',
                                 'value' => function($model){
-                                    return $model->goodsW->gold_weight ?? '0.00';
+                                    return $model->gold_weight ?? '0.00';
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['width' => '100'],
@@ -203,8 +203,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'audit' => function($url, $model, $key){
-                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
+                                    'audit' => function($url, $model, $key) use($bill) {
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING && $bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',

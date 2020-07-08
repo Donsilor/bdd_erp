@@ -218,7 +218,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'audit' => function($url, $model, $key) use($bill) {
-                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING && $bill->bill_status == \addons\Warehouse\common\enums\StoneBillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
