@@ -334,9 +334,9 @@ class GoldBillWController extends BaseController
             ['原料类型', 'gold_type' , 'text'],
             ['仓库', 'warehouse_name' , 'text'],
             ['材质', 'material' , 'text', ],
-            ['金重', 'gold_weight' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
-            ['主石形状', 'diamond_shape' , 'text'],
+            ['重量', 'gold_weight' , 'text'],
+            ['石头类型', 'main_stone_type' , 'text'],
+            ['石头形状', 'diamond_shape' , 'text'],
             ['石重（ct)', 'diamond_carat' , 'text'],
             ['尺寸	', 'finger' , 'text'],
             ['库存(数量)	', 'product_size' , 'text'],
@@ -352,7 +352,7 @@ class GoldBillWController extends BaseController
 
 
     private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id','wbg.gold_weight'];
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
         $query = WarehouseGoldBillWForm::find()->alias('w')
             ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoldBillGoodsW::tableName().' wbg','wbg.id=wg.id')
