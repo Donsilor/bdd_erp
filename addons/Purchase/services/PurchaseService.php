@@ -253,21 +253,24 @@ class PurchaseService extends Service
                 $goods[$k]['gold_price'] = $model->gold_price;
             }else{
                 $goods[$k]['material_type'] = $model->stone_type;
+                $goods[$k]['goods_shape'] = $model->stone_shape;
                 $goods[$k]['goods_color'] = $model->stone_color;
                 $goods[$k]['goods_clarity'] = $model->stone_clarity;
                 $goods[$k]['goods_cut'] = $model->stone_cut;
                 $goods[$k]['goods_symmetry'] = $model->stone_symmetry;
                 $goods[$k]['goods_polish'] = $model->stone_polish;
                 $goods[$k]['goods_fluorescence'] = $model->stone_fluorescence;
+                $goods[$k]['goods_colour'] = $model->stone_colour;
                 $goods[$k]['cert_type'] = $model->cert_type;
                 $goods[$k]['cert_id'] = $model->cert_id;
                 $goods[$k]['goods_norms'] =  $model->spec_remark;
+                $goods[$k]['goods_size'] =  $model->stone_size;
                 $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
 
                 $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             }
-            $total_weight = bcadd($total_weight, $model->goods_weight);
+            $total_weight = bcadd($total_weight, $model->goods_weight, 3);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
         }
         $bill = [
@@ -287,7 +290,7 @@ class PurchaseService extends Service
         if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $bill = ArrayHelper::merge($bill, ['total_stone_num' => $total_stone_num]);
         }
-        Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
+        \Yii::$app->purchaseService->receipt->createReceipt($bill ,$goods);
         if(!empty($detail_ids)){
             $res = $model::updateAll(['is_receipt'=>ConfirmEnum::YES], ['id'=>$detail_ids]);
             if(false === $res){

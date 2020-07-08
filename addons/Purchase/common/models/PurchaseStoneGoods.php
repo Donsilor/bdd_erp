@@ -24,6 +24,9 @@ use Yii;
  * @property string $stone_symmetry 对称
  * @property string $stone_polish 抛光
  * @property string $stone_fluorescence 荧光
+ * @property string $stone_colour 石料色彩
+ * @property string $stone_size 石料尺寸
+ * @property string $spec_remark 规格备注
  * @property string $cert_type 证书类型
  * @property string $cert_id 证书号
  * @property int $is_apply 是否申请修改
