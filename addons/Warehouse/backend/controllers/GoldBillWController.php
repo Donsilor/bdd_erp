@@ -2,33 +2,29 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\WarehouseIdEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
-use common\helpers\SnHelper;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
+use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use common\enums\AuditStatusEnum;
+use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
+use common\helpers\StringHelper;
+use common\helpers\SnHelper;
+use common\helpers\Url;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -226,9 +222,7 @@ class GoldBillWController extends BaseController
                 
                 return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
             }catch(\Exception $e) {
-                
                 $trans->rollback();
-
                 return $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer),'error');
             }
         }
@@ -246,8 +240,8 @@ class GoldBillWController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        
+        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
+        $model->gold_type = false;
         //默认值
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;

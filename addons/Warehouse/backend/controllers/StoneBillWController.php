@@ -50,12 +50,18 @@ class StoneBillWController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                        
+                    'creator' => ['username'],
+                    'billW' => ['stone_type'],
                 ]
         ]);
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['updated_at','created_at']);
-        
+            ->search(Yii::$app->request->queryParams,['stone_type','updated_at','created_at']);
+
+        $stone_type = $searchModel->stone_type;
+        if (!empty($stone_type)) {
+            $dataProvider->query->andWhere(['=', 'billW.stone_type', $stone_type]);
+        }
+
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -89,15 +95,15 @@ class StoneBillWController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBillWForm();
-        if($model->isNewRecord){
-            $from = Yii::$app->request->post('WarehouseStoneBillWForm');
-            $model->stone_type = $from['stone_type']??"";
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord){
             $model->bill_type = $this->billType;
+        }else{
+            $model->stone_type = false;
         }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
             if($isNewRecord){
                 $model->bill_no   = SnHelper::createBillSn($this->billType);
             }
@@ -117,8 +123,6 @@ class StoneBillWController extends BaseController
                 }else{
                     return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 }
-
-                
             }catch (\Exception $e) {   
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -202,10 +206,7 @@ class StoneBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new WarehouseStoneBillWForm();
-        $from = Yii::$app->request->post('WarehouseStoneBillWForm');
-        $model->stone_sn = $from['stone_sn']??"";
-        $model->stone_num = $from['stone_num']??"";
-        $model->stone_weight = $from['stone_weight']??"";
+        $model->stone_type = false;
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
@@ -234,8 +235,8 @@ class StoneBillWController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        
+        $model = $this->findModel($id) ?? new WarehouseStoneBillWForm();
+        $model->stone_type = false;
         //默认值
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
