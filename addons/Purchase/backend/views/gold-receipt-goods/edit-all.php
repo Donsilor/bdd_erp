@@ -99,7 +99,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return Yii::$app->attr->valueName($model->material_type)??"";
+                                    //return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                     'prompt' => '全部',
@@ -180,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },

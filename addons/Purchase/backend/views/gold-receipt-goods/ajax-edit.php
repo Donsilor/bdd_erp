@@ -21,15 +21,15 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
            <div class="row">
                <div class="col-lg-6">
-                   <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
                <div class="col-lg-6">
-                   <?= $form->field($model, 'goods_name')->textInput() ?>
+                   <?= $form->field($model, 'goods_sn')->textInput(['disabled'=>true]) ?>
                </div>
            </div>
            <div class="row">
                <div class="col-lg-6">
-                   <?= $form->field($model, 'goods_sn')->textInput() ?>
+                   <?= $form->field($model, 'goods_name')->textInput() ?>
                </div>
                <div class="col-lg-6">
                    <?= $form->field($model, 'goods_weight')->textInput() ?>
@@ -40,7 +40,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'gold_price')->textInput() ?>
                </div>
                <div class="col-lg-6">
-                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
                </div>
            </div>
            <div class="row">
