@@ -203,6 +203,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'attribute' => 'cert_id',
+                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //    'class' => 'form-control',
+                            //]),
+                            'value' => function ($model) {
+                                return $model->cert_id??"";
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'cert_type',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->cert_type)??"";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
                             'attribute' => 'stone_norms',
                             //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                             //    'class' => 'form-control',

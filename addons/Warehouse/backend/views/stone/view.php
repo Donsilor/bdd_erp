@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title;?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?= $model->stone_sn?> - <?= \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
 
     <div class="row">
@@ -82,6 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_colour') ?>：</td>
                                     <td><?= Yii::$app->attr->valueName($model->stone_colour)??"" ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cert_id') ?>：</td>
+                                    <td><?= $model->cert_id ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cert_type') ?>：</td>
+                                    <td><?= Yii::$app->attr->valueName($model->cert_type)??"" ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_size') ?>：</td>

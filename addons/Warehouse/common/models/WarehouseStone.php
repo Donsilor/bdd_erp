@@ -50,6 +50,8 @@ use addons\Supply\common\models\Supplier;
  * @property string $stone_price 石料单价/ct
  * @property string $cost_price 石料总额
  * @property string $sale_price 销售价
+ * @property string $cert_id 证书号
+ * @property string $cert_type 证书类型
  * @property string $stone_norms 石料规格
  * @property int $stone_status 石料状态
  * @property int $supplier_id 供应商
@@ -80,8 +82,8 @@ class WarehouseStone extends BaseModel
             [['stone_sn', 'stone_name', 'stone_type'], 'required'],
             [['stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'stone_status', 'supplier_id', 'put_in_type', 'warehouse_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['stock_weight', 'stone_size', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'stone_price', 'cost_price', 'sale_price'], 'number'],
-            [['stone_sn', 'stone_name', 'style_sn'], 'string', 'max' => 30],
-            [['stone_type', 'stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour'], 'string', 'max' => 10],
+            [['stone_sn', 'stone_name', 'style_sn', 'cert_id'], 'string', 'max' => 30],
+            [['stone_type', 'stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour', 'cert_type'], 'string', 'max' => 10],
             [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],
         ];
@@ -134,6 +136,8 @@ class WarehouseStone extends BaseModel
             'stone_price' => '石料单价/ct',
             'cost_price' => '石料总额',
             'sale_price' => '销售价',
+            'cert_type' => '证书类型',
+            'cert_id' => '证书号',
             'stone_norms' => '石料规格',
             'stone_status' => '石料状态',
             'supplier_id' => '供应商',
