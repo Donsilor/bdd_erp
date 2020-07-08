@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
+use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
 use Yii;
 use common\traits\Curd;
 use common\enums\AuditStatusEnum;
@@ -316,7 +318,7 @@ class StoneBillWController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '盘点单明细';
+        $name = '石料盘点单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -325,30 +327,22 @@ class StoneBillWController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['单据编号', 'bill_no' , 'text'],
-            ['单据状态', 'bill_status' , 'selectd',BillStatusEnum::getMap()],
-            ['货品名称', 'goods_name' , 'text'],
-            ['条码号', 'goods_id' , 'text'],
+            ['石头类型', 'stone_type' , 'text'],
+            ['名称', 'stone_name' , 'text'],
+            ['石包号', 'stone_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['产品分类', 'product_type_name' , 'text'],
-            ['商品类型', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_name' , 'text'],
-            ['材质', 'material' , 'text', ],
-            ['金重', 'gold_weight' , 'text'],
-            ['深圳最低价格', 'poll_price' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
-            ['主石形状', 'diamond_shape' , 'text'],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
-            ['配石重（ct)', 'second_stone_weight1' , 'text'],
-            ['总重(g)', 'diamond_carat_sum' , 'text'],
-            ['手寸	', 'finger' , 'text'],
-            ['货品尺寸	', 'product_size' , 'text'],
-            ['库存数	', 'goods_num' , 'text'],
-            ['实盘数', 'actual_num' , 'text'],
-            ['盘盈数', 'profit_num' , 'text'],
-            ['盘亏数', 'loss_num' , 'text'],
-            ['盘点类型', 'status' , 'text'],
-            ['备注', 'goods_remark' , 'text'],
+            ['色彩', 'color' , 'text'],
+            ['形状', 'shape' , 'text'],
+            ['重量（ct）', 'stone_weight' , 'text'],
+            ['库存数量（个）', 'stone_num' , 'text'],
+            ['单价/ct', 'stone_price' , 'text'],
+            ['尺寸', 'stone_size' , 'text'],
+            ['规格(颜色/净度/切工/石重)', 'spec' , 'text'],
+            ['实盘(数量)', 'actual_num' , 'text'],
+            ['实盘(重量)', 'actual_weight' , 'text'],
+            ['差异(数量)', 'diff_num' , 'text'],
+            ['差异(重量)', 'diff_weight' , 'text'],
+            ['备注', 'remark' , 'text'],
 
         ];
 
@@ -357,40 +351,36 @@ class StoneBillWController extends BaseController
 
 
     private function getData($ids){
-        $select = ['g.*','w.bill_no','w.bill_type','w.bill_status','w.from_warehouse_id','wg.bill_id','wg.warehouse_id','wg.style_sn','wg.goods_name','wg.put_in_type'
-            ,'wg.material','wg.gold_weight','wg.gold_loss','wg.diamond_carat','wg.diamond_color','wg.diamond_clarity',
-            'wg.cost_price','wg.diamond_cert_id','wg.status','wg.goods_remark','type.name as product_type_name','cate.name as style_cate_name',
-            'ww.actual_num','ww.profit_num','ww.loss_num'];
-        $query = WarehouseBill::find()->alias('w')
-            ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
-            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
-            ->leftJoin(WarehouseBillW::tableName()." ww",'ww.id=w.id')
-            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','wbg.actual_num','wbg.actual_weight'];
+        $query = WarehouseStoneBillWForm::find()->alias('w')
+            ->leftJoin(WarehouseStoneBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(WarehouseStoneBillGoodsW::tableName().' wbg','wbg.id=wg.id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-            'goods_num_count' => 0,
+            'stone_weight_count' => 0,
+            'stone_num_count' => 0,
+            'actual_weight_count' => 0,
+            'actual_num_count' => 0,
         ];
         foreach ($lists as &$list){
-            $bill = WarehouseBill::find()->where(['id'=>$list['bill_id']])->one();
-            $list['warehouse_name'] = $bill->toWarehouse->name ?? '';
-            $list['material'] = \Yii::$app->attr->valueName($list['material']);
-            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
-            $list['diamond_shape'] = \Yii::$app->attr->valueName($list['diamond_shape']);
+            $list['stone_type'] = \Yii::$app->attr->valueName($list['stone_type']);
+            $clarity = \Yii::$app->attr->valueName($list['clarity']);
+            $cut = $list['carat'];
+            $color = \Yii::$app->attr->valueName($list['color']);
+            $list['color'] = $color;
+            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $list['diff_weight'] = $list['stone_weight'] - $list['actual_weight'];
+            $list['diff_num'] = $list['stone_num'] - $list['actual_num'];
+            $list['spec'] = $color.'/'.$clarity.'/'
+                .$cut.'/'.$list['carat'];
 
-            $list['poll_price'] = '';
-
-            $diamond_carat = empty($list['diamond_carat']) ? 0 :$list['diamond_carat'];
-            $second_stone_weight1 = empty($list['second_stone_weight1']) ? 0 :$list['second_stone_weight1'];
-            $list['diamond_carat_sum'] =  $diamond_carat + $second_stone_weight1;
-
-            $list['status'] = PandianStatusEnum::getValue($list['status']);
-
-            $total['goods_num_count'] += $list['goods_num'];
-
+            $total['stone_weight_count'] += $list['stone_weight'];
+            $total['stone_num_count'] += $list['stone_num'];
+            $total['actual_weight_count'] += $list['actual_weight'];
+            $total['actual_num_count'] += $list['actual_num'];
         }
         return [$lists,$total];
     }

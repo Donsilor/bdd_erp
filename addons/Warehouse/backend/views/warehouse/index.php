@@ -168,13 +168,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {audit} {status} {delete}',
+                            'template' => '{edit} {ajax-apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->audit_status,[AuditStatusEnum::SAVE ,AuditStatusEnum::UNPASS])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
+                                },
+                                'ajax-apply' => function($url, $model, $key){
+                                    if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);
                                     }
                                 },

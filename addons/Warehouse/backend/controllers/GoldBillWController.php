@@ -318,7 +318,7 @@ class GoldBillWController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '盘点单明细';
+        $name = '金料盘点单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -327,23 +327,16 @@ class GoldBillWController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['产品名称', 'gold_name' , 'text'],
-            ['条码号', 'gold_sn' , 'text'],
+            ['金料材质', 'gold_type' , 'text'],
+            ['名称', 'gold_name' , 'text'],
+            ['金料编号', 'gold_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['商品类型', 'goods_type' , 'text'],
-            ['原料类型', 'gold_type' , 'text'],
-            ['仓库', 'warehouse_name' , 'text'],
-            ['材质', 'material' , 'text', ],
-            ['重量', 'gold_weight' , 'text'],
-            ['石头类型', 'main_stone_type' , 'text'],
-            ['石头形状', 'diamond_shape' , 'text'],
-            ['石重（ct)', 'diamond_carat' , 'text'],
-            ['尺寸	', 'finger' , 'text'],
-            ['库存(数量)	', 'product_size' , 'text'],
-            ['实盘(数量)	', 'goods_num' , 'text'],
-            ['实盘(重量)', 'actual_num' , 'text'],
-            ['差异(数量)', 'profit_num' , 'text'],
-            ['备注', 'goods_remark' , 'text'],
+            ['金重', 'gold_weight' , 'text'],
+            ['库存(数量)', 'gold_num' , 'text'],
+            ['价格	', 'gold_price' , 'text'],
+            ['实盘(重量g)', 'actual_weight' , 'text'],
+            ['差异(重量)', 'diff_weight' , 'text'],
+            ['备注', 'remark' , 'text'],
 
         ];
 
@@ -352,7 +345,7 @@ class GoldBillWController extends BaseController
 
 
     private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','wbg.actual_weight'];
         $query = WarehouseGoldBillWForm::find()->alias('w')
             ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(WarehouseGoldBillGoodsW::tableName().' wbg','wbg.id=wg.id')
@@ -361,25 +354,15 @@ class GoldBillWController extends BaseController
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'actual_weight_count' => 0,
         ];
         foreach ($lists as &$list){
-            $bill = WarehouseBill::find()->where(['id'=>$list['bill_id']])->one();
-            $list['warehouse_name'] = $bill->toWarehouse->name ?? '';
-            $list['material'] = \Yii::$app->attr->valueName($list['material']);
-            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
-            $list['diamond_shape'] = \Yii::$app->attr->valueName($list['diamond_shape']);
+            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+            $list['diff_weight'] = $list['gold_weight'] - $list['actual_weight'];
 
-            $list['poll_price'] = '';
-
-            $diamond_carat = empty($list['diamond_carat']) ? 0 :$list['diamond_carat'];
-            $second_stone_weight1 = empty($list['second_stone_weight1']) ? 0 :$list['second_stone_weight1'];
-            $list['diamond_carat_sum'] =  $diamond_carat + $second_stone_weight1;
-
-            $list['status'] = PandianStatusEnum::getValue($list['status']);
-
-            $total['goods_num_count'] += $list['goods_num'];
-
+            $total['gold_weight_count'] += $list['gold_weight'];
+            $total['actual_weight_count'] += $list['actual_weight'];
         }
         return [$lists,$total];
     }

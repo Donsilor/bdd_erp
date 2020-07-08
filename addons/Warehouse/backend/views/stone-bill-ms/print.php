@@ -29,13 +29,13 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>石料盘点单明细表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>石料入库单明细表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
 				<div class="list clf">
 					<div class="child fl clf">
-						<div class="child-attr fl">盘点单号：</div>
+						<div class="child-attr fl">入库单号：</div>
 						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
 					</div>
 				</div>

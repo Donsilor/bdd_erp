@@ -29,13 +29,13 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>盘点单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>金料入库单明细表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
 				<div class="list clf">
 					<div class="child fl clf">
-						<div class="child-attr fl">盘点单号：</div>
+						<div class="child-attr fl">入库单号：</div>
 						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
 					</div>
 				</div>
@@ -49,35 +49,24 @@
                         <div>序号</div>
                     </td>
                     <td>
-                        <div>金料材质</div>
+                        <div>金料类型</div>
                     </td>
                     <td>
                         <div>名称</div>
                     </td>
                     <td>
-                        <div>金料编号</div>
-                    </td>
-                    <td>
                         <div>款号</div>
                     </td>
                     <td>
-                        <div>金重</div>
-                    </td>
-                    <td>
-                        <div>库存(数量)</div>
+                        <div>重量(g)</div>
                     </td>
                     <td>
                         <div>价格</div>
                     </td>
                     <td>
-                        <div>实盘(重量g)</div>
-                    </td>
-                    <td>
-                        <div>差异(重量)</div>
-                    </td>
-                    <td>
                         <div>备注</div>
                     </td>
+
                 </tr>
                 <!-- 列表内容 -->
                 <?php
@@ -98,22 +87,10 @@
                         <div><?= $val['gold_sn'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['style_sn'] ?></div>
-                    </td>
-                    <td>
                         <div><?= $val['gold_weight'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_num'] ?></div>
-                    </td>
-                    <td>
                         <div><?= $val['gold_price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['actual_weight'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['diff_weight'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['remark'] ?></div>
@@ -128,31 +105,19 @@
                             <div>序号</div>
                         </td>
                         <td>
-                            <div>金料材质</div>
+                            <div>金料类型</div>
                         </td>
                         <td>
                             <div>名称</div>
                         </td>
                         <td>
-                            <div>金料编号</div>
-                        </td>
-                        <td>
                             <div>款号</div>
                         </td>
                         <td>
-                            <div>金重</div>
-                        </td>
-                        <td>
-                            <div>库存(数量)</div>
+                            <div>重量(g)</div>
                         </td>
                         <td>
                             <div>价格</div>
-                        </td>
-                        <td>
-                            <div>实盘(重量g)</div>
-                        </td>
-                        <td>
-                            <div>差异(重量)</div>
                         </td>
                         <td>
                             <div>备注</div>
@@ -163,15 +128,7 @@
                 }
                 ?>
                 <tr>
-                    <td colspan="3"><div>合计</div></td>
-                    <td></td>
-                    <td></td>
-                    <td><div><?= $total['gold_weight_count']?></div></td>
-                    <td></td>
-                    <td></td>
-                    <td><div><?= $total['actual_weight_count']?></div></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="7"><div>合计</div></td>
                 </tr>
 			</table>
             <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">审核人：<?= $model->auditor->username ?? ''?></span></span></div>
