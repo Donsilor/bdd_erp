@@ -37,6 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
+                                'label' => '布产编号',
+                                'value' => function ($model){
+                                    return $model->produceGold->produce_sn ?? '';
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            /*[
                                 'attribute'=>'gold_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -62,13 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'gold_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
+                            /*[
                                 'attribute' => 'gold_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -77,17 +85,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+                            ],*/
                             [
-                                'label' => '布产编号',
-                                'value' => function ($model){
-                                    return $model->produceGold->produce_sn ?? '';
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'label' => '配料状态',
+                                'label' => '状态',
                                 'value' => function ($model){
                                     return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
                                 },
