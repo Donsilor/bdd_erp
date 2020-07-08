@@ -98,4 +98,12 @@ class WarehouseGold extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
+    /**
+     * 仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
 }

@@ -32,6 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->style_sn ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('gold_type') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->gold_type)??"" ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('gold_num') ?>：</td>
                             <td><?= $model->gold_num ?></td>
                         </tr>
@@ -79,6 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="box-footer text-center">
+            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
         <!-- box end -->
     </div>
