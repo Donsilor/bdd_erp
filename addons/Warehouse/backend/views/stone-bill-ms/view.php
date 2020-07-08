@@ -140,3 +140,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+</script>

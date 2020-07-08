@@ -49,49 +49,34 @@
                         <div>序号</div>
                     </td>
                     <td>
-                        <div>石头类型</div>
-                    </td>
-                    <td>
                         <div>名称</div>
                     </td>
                     <td>
-                        <div>石包号</div>
+                        <div>石类</div>
                     </td>
                     <td>
                         <div>款号</div>
                     </td>
                     <td>
-                        <div>色彩</div>
+                        <div>石头形状</div>
                     </td>
                     <td>
-                        <div>形状</div>
+                        <div>石头颜色</div>
                     </td>
                     <td>
-                        <div>重量（ct）</div>
+                        <div>数量</div>
                     </td>
                     <td>
-                        <div>库存数量（个）</div>
-                    </td>
-                    <td>
-                        <div>单价/ct</div>
-                    </td>
-                    <td>
-                        <div>尺寸</div>
+                        <div>尺寸（ct）</div>
                     </td>
                     <td>
                         <div>规格(颜色/净度/切工/石重)</div>
                     </td>
                     <td>
-                        <div>实盘(数量)</div>
+                        <div>单价/ct</div>
                     </td>
                     <td>
-                        <div>实盘(重量)</div>
-                    </td>
-                    <td>
-                        <div>差异(数量)</div>
-                    </td>
-                    <td>
-                        <div>差异(重量)</div>
+                        <div>总价格</div>
                     </td>
                     <td>
                         <div>备注</div>
@@ -108,31 +93,22 @@
                         <div><?= $key + 1 ?></div>
                     </td>
                     <td>
-                        <div><?= $val['stone_type'] ?></div>
-                    </td>
-                    <td>
                         <div><?= $val['stone_name'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['stone_sn'] ?></div>
+                        <div><?= $val['stone_type'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['style_sn'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['color'] ?></div>
-                    </td>
-                    <td>
                         <div><?= $val['shape'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['stone_weight'] ?></div>
+                        <div><?= $val['color'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['stone_num'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['stone_price'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['stone_size'] ?></div>
@@ -141,16 +117,10 @@
                         <div><?= $val['spec'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['actual_num'] ?></div>
+                        <div><?= $val['stone_price'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['actual_weight'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['diff_num'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['diff_weight'] ?></div>
+                        <div><?= $val['stone_sum_price'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['remark'] ?></div>
@@ -165,49 +135,34 @@
                             <div>序号</div>
                         </td>
                         <td>
-                            <div>石头类型</div>
-                        </td>
-                        <td>
                             <div>名称</div>
                         </td>
                         <td>
-                            <div>石包号</div>
+                            <div>石类</div>
                         </td>
                         <td>
                             <div>款号</div>
                         </td>
                         <td>
-                            <div>色彩</div>
+                            <div>石头形状</div>
                         </td>
                         <td>
-                            <div>形状</div>
+                            <div>石头颜色</div>
                         </td>
                         <td>
-                            <div>重量（ct）</div>
+                            <div>数量</div>
                         </td>
                         <td>
-                            <div>库存数量（个）</div>
-                        </td>
-                        <td>
-                            <div>单价/ct</div>
-                        </td>
-                        <td>
-                            <div>尺寸</div>
+                            <div>尺寸（ct）</div>
                         </td>
                         <td>
                             <div>规格(颜色/净度/切工/石重)</div>
                         </td>
                         <td>
-                            <div>实盘(数量)</div>
+                            <div>单价/ct</div>
                         </td>
                         <td>
-                            <div>实盘(重量)</div>
-                        </td>
-                        <td>
-                            <div>差异(数量)</div>
-                        </td>
-                        <td>
-                            <div>差异(重量)</div>
+                            <div>总价格</div>
                         </td>
                         <td>
                             <div>备注</div>
@@ -222,16 +177,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td><div><?= $total['stone_weight_count']?></div></td>
                     <td><div><?= $total['stone_num_count']?></div></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['actual_weight_count']?></div></td>
-                    <td><div><?= $total['actual_num_count']?></div></td>
-                    <td></td>
-                    <td></td>
+                    <td><div><?= $total['stone_sum_price_count']?></div></td>
                     <td></td>
                 </tr>
 			</table>

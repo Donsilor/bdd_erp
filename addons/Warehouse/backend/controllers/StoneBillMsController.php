@@ -194,10 +194,9 @@ class StoneBillMsController extends StoneBillController
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-            'stone_weight_count' => 0,
             'stone_num_count' => 0,
-            'actual_weight_count' => 0,
-            'actual_num_count' => 0,
+            'stone_sum_price_count' => 0,
+
         ];
         foreach ($lists as &$list){
             $list['stone_type'] = \Yii::$app->attr->valueName($list['stone_type']);
@@ -206,15 +205,11 @@ class StoneBillMsController extends StoneBillController
             $color = \Yii::$app->attr->valueName($list['color']);
             $list['color'] = $color;
             $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
-            $list['diff_weight'] = $list['stone_weight'] - $list['actual_weight'];
-            $list['diff_num'] = $list['stone_num'] - $list['actual_num'];
             $list['spec'] = $color.'/'.$clarity.'/'
                 .$cut.'/'.$list['carat'];
-
-            $total['stone_weight_count'] += $list['stone_weight'];
+            $list['stone_sum_price'] = $list['stone_price'] * $list['stone_weight'];
             $total['stone_num_count'] += $list['stone_num'];
-            $total['actual_weight_count'] += $list['actual_weight'];
-            $total['actual_num_count'] += $list['actual_num'];
+            $total['stone_sum_price_count'] += $list['stone_sum_price'];
         }
         return [$lists,$total];
     }
