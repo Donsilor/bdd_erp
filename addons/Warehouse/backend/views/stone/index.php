@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => 'width:150px',
                             ]),
                             'headerOptions' => [],
-                        ],                        
+                        ],
                         [
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
