@@ -101,8 +101,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{delete}',
+                                'contentOptions' => ['style' => ['white-space' => 'nowrap']],
+                                'template' => '{edit} {delete}',
                                 'buttons' => [
+                                    'edit' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                                'class' => 'btn btn-info btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
+                                            ]);
+                                        }
+                                    },
                                     'delete' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除', [

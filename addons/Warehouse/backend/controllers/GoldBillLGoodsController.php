@@ -85,9 +85,11 @@ class GoldBillLGoodsController extends GoldBillGoodsController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
+                $model->cost_price = bcmul($model->gold_price, $model->gold_weight, 3);
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
                 $trans->commit();
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){
@@ -110,7 +112,7 @@ class GoldBillLGoodsController extends GoldBillGoodsController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l-goods/index', 'bill_id' => $bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
