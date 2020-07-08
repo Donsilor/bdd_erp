@@ -289,6 +289,10 @@ class WarehouseStoneBillWService extends Service
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        /*$count = WarehouseStoneBillGoodsW::find()->where(['fin_status'=>FinAuditStatusEnum::PENDING])->count();
+        if($count) {
+            throw new \Exception("盘点明细还有财务未审核的商品，盘点不能审核");
+        }*/
         $subQuery = WarehouseStoneBillGoods::find()->select(['stone_sn'])->where(['bill_id'=>$form->id]);
         if($form->audit_status == AuditStatusEnum::PASS) {
             $form->bill_status = StoneBillStatusEnum::CONFIRM;
