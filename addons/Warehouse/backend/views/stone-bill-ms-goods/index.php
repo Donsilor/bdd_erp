@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php echo Html::batchButtons(false)?>
                     <span class="summary" style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
-                        石包总粒数：<span style="color:green;"><?= $bill->total_num?></span>
+                        石包总粒数：<span style="color:green;"><?= $bill->total_grain?></span>
                         石包总重：<span style="color:green;"><?= $bill->total_weight?>(ct)</span>
                         石包总额：<span style="color:green;"><?= $bill->total_cost?></span>
                     </span>
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:130%; white-space:nowrap;'],
+                        'options' => ['style'=>' width:150%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },
@@ -87,7 +87,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],*/
                             [
                                 'attribute'=>'stone_name',
-                                'filter' => true,
+                                'filter' => Html::activeTextInput($searchModel, 'stone_name', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'stone_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
+                                    'class' => 'form-control',
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -132,11 +141,34 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => true,
                             ],
+                            [
+                                'attribute' => 'cert_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->cert_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             /*[
                                 'attribute' => 'carat',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],*/
+                            [
+                                'attribute' => 'shape',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->shape);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute' => 'color',
                                 'value' => function($model){
@@ -210,6 +242,51 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute' => 'stone_colour',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->stone_colour);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'stone_norms',
+                                //'filter' => Html::activeTextInput($searchModel, 'stone_norms', [
+                                //    'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->stone_norms??"";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'stone_size',
+                                //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                                //    'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->stone_size??"";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                //'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                //    'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->remark??"";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{edit} {delete}',
@@ -219,7 +296,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },

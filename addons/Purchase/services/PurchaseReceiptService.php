@@ -758,7 +758,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
-        $form->to_warehouse_id = WarehouseIdEnum::GOLD;
+        $form->to_warehouse_id = WarehouseIdEnum::GOLD;//金料库
         $goods = $ids = [];
         $total_weight = $total_cost = $sale_price = 0;
         foreach ($models as $model){
@@ -834,7 +834,7 @@ class PurchaseReceiptService extends Service
         if(!$models){
             throw new \Exception('采购收货单没有待入库的货品');
         }
-        $form->to_warehouse_id = WarehouseIdEnum::STONE;
+        $form->to_warehouse_id = WarehouseIdEnum::STONE;//石料库
         $goods = $ids = [];
         $total_stone_num = $total_weight= $market_price= $sale_price = 0;
         foreach ($models as $model){
@@ -846,24 +846,28 @@ class PurchaseReceiptService extends Service
                 'cert_type' => $model->cert_type,
                 'cert_id' => $model->cert_id,
                 'carat' => $model->goods_weight,
+                'shape' => $model->goods_shape,
                 'color' => $model->goods_color,
                 'clarity' => $model->goods_clarity,
                 'cut' => $model->goods_cut,
                 'polish' => $model->goods_polish,
                 'fluorescence' =>$model->goods_fluorescence,
                 'symmetry' =>$model->goods_symmetry,
+                'stone_colour' => $model->goods_colour,
                 'stone_num' => $model->stone_num,
                 'source_detail_id' => $model->id,
                 'stone_price' => $model->stone_price,
                 'cost_price' => $model->cost_price,
                 'stone_weight' => $model->goods_weight,
                 'stone_norms' => $model->goods_norms,
+                'stone_size' => $model->goods_size,
                 'sale_price' => $model->stone_price,
+                'remark' => $model->goods_remark,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time()
             ];
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
-            $total_weight = bcadd($total_weight, $model->goods_weight, 2);
+            $total_weight = bcadd($total_weight, $model->goods_weight, 3);
         }
         $bill = [
             'bill_type' =>  StoneBillTypeEnum::STONE_MS,
@@ -873,7 +877,7 @@ class PurchaseReceiptService extends Service
             'to_warehouse_id' => $form->to_warehouse_id,
             'adjust_type' => AdjustTypeEnum::ADD,
             'total_num' => count($goods),
-            'total_stone_num' => $total_stone_num,
+            'total_grain' => $total_stone_num,
             'total_weight' => $total_weight,
             'total_cost' => $form->total_cost,
             'pay_amount' => $form->total_cost,
