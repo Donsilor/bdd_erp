@@ -135,6 +135,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width' => '120'],
                             ],
                             [
+                                'label' => '财务调整状态',
+                                'attribute' => 'goodsW.fin_adjust_status',
+                                'value' =>function($model){
+                                    return \addons\Warehouse\common\enums\FinAdjustStatusEnum::getValue($model->goodsW->fin_adjust_status);
+                                },
+                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.fin_adjust_status',\addons\Warehouse\common\enums\FinAdjustStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'110'],
+                            ],
+                            [
                                 'label' => '财务确认人',
                                 'value' => function($model){
                                     return $model->goodsW->finer->username ?? "";
@@ -173,19 +186,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
                                         'prompt' => '全部',
                                         'class' => 'form-control',
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'110'],
-                            ],
-                            [
-                                'label' => '财务调整状态',
-                                'attribute' => 'goodsW.fin_adjust_status',
-                                'value' =>function($model){
-                                    return \addons\Warehouse\common\enums\FinAdjustStatusEnum::getValue($model->goodsW->fin_adjust_status);
-                                },
-                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.fin_adjust_status',\addons\Warehouse\common\enums\FinAdjustStatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'110'],
