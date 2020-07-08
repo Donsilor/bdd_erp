@@ -27,10 +27,10 @@ class WarehouseGoldBillGoodsWForm extends WarehouseGoldBillGoodsW
      * {@inheritdoc}
      */
     public function attributeLabels()
-    { 
+    {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'adjust_status' => '调整原因',
         ]);
     }
     /**

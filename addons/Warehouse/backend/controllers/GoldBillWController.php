@@ -2,33 +2,26 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
+
+use Yii;
+use common\traits\Curd;
+use common\models\base\SearchModel;
 use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
-use Yii;
-use common\traits\Curd;
-use common\models\base\SearchModel;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use common\enums\AuditStatusEnum;
 use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
 use common\helpers\StringHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
-use common\enums\AuditStatusEnum;
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\PandianStatusEnum;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseBillW;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillWForm;
-use common\helpers\PageHelper;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -54,13 +47,19 @@ class GoldBillWController extends BaseController
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
-                        
+                    'creator' => ['username'],
+                    'billW' => ['gold_type'],
                 ]
         ]);
         
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['updated_at','created_at']);
-        
+            ->search(Yii::$app->request->queryParams,['gold_type','updated_at','created_at']);
+
+        $gold_type = $searchModel->gold_type;
+        if (!empty($gold_type)) {
+            $dataProvider->query->andWhere(['=', 'billW.gold_type', $gold_type]);
+        }
+
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -92,25 +91,25 @@ class GoldBillWController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
+        $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseGoldBillWForm();
-        if($model->isNewRecord){
-            $from = Yii::$app->request->post('WarehouseGoldBillWForm');
-            $model->gold_type = $from['gold_type']??"";
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord){
             $model->bill_type = $this->billType;
+        }else{
+            $model->gold_type = false;
         }
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
+        if ($model->load(\Yii::$app->request->post())) {
             if($isNewRecord){
-                $model->bill_no   = SnHelper::createBillSn($this->billType);
+                $model->bill_no = SnHelper::createBillSn($this->billType);
             }
             try{
-                $trans = Yii::$app->trans->beginTransaction();               
+                $trans = \Yii::$app->trans->beginTransaction();
                 if($isNewRecord) {
-                    $model = Yii::$app->warehouseService->goldW->createBillW($model);
+                    $model = \Yii::$app->warehouseService->goldW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -123,8 +122,6 @@ class GoldBillWController extends BaseController
                 }else{
                     return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
                 }
-
-                
             }catch (\Exception $e) {   
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -210,9 +207,7 @@ class GoldBillWController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
-        $from = Yii::$app->request->post('WarehouseGoldBillWForm');
-        $model->gold_sn = trim($from['gold_sn'])??"";
-        $model->gold_weight = trim($from['gold_weight'])??"";
+        $model->gold_type = false;
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
@@ -224,9 +219,7 @@ class GoldBillWController extends BaseController
                 
                 return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
             }catch(\Exception $e) {
-                
                 $trans->rollback();
-
                 return $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer),'error');
             }
         }
@@ -244,8 +237,8 @@ class GoldBillWController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        
+        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
+        $model->gold_type = false;
         //默认值
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;

@@ -40,7 +40,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:130%;'],
+                    'options' => ['style'=>'width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -78,7 +78,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                      return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
                                 },
                                 'filter' => false,
-                        ],*/
+                        ],
                         [
                             'label' => '盘点仓库',
                             'attribute' => 'to_warehouse_id',
@@ -95,16 +95,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
-                            'label' => '石料类型',
+                            'label' => '盘点石料',
                             'value' => function($model){
                                 if($model->billW->stone_type){
                                     return Yii::$app->attr->valueName($model->billW->stone_type)??"";
                                 }
                                 return "";
                             },
-                            'filter' => false,
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_type',\Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+
+                            ]),
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
@@ -242,12 +246,15 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],*/
                         [
                                 'label' => '制单人',
-                                'attribute' => 'creator_id',
+                                'attribute' => 'creator.username',
                                 'value' => function ($model) {
                                      return $model->creator->username ??'';
                                  },
                                  'headerOptions' => ['width' => '100'],
-                                 'filter' => false,
+                                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
 
                         ],
                         [
@@ -311,7 +318,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         if($model->bill_status == BillStatusEnum::SAVE){
                                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModalLg',
+                                                'data-target' => '#ajaxModal',
                                             ]);
                                         }
                                     }, 

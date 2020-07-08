@@ -51,12 +51,15 @@ class StoneBillWGoodsController extends BaseController
                 'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
                     "goodsW"=> [
-                        "adjust_status",
+                        "actual_grain",
                         "actual_weight",
                         "fin_status",
                         "fin_checker",
                         "fin_check_time",
                         "fin_remark",
+                        "fin_adjust_status",
+                        "adjust_status",
+                        "adjust_reason",
                     ]
                 ]
         ]);
@@ -100,7 +103,7 @@ class StoneBillWGoodsController extends BaseController
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->fin_check_time = time();
-                $model->fin_checker = (string) \Yii::$app->user->identity->id;
+                $model->fin_checker = (string) \Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->stoneW->auditFinW($model);
 

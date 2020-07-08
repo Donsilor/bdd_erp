@@ -8,6 +8,8 @@ use addons\Sales\common\models\Order;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\OrderGoods;
 use common\helpers\ResultHelper;
+use addons\Sales\common\models\OrderInvoice;
+use addons\Sales\common\models\OrderAddress;
 
 /**
  * Default controller for the `order` module
@@ -190,6 +192,74 @@ class OrderController extends BaseController
     public function actionAjaxEditAddress()
     {
         $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderAddress::class;
+        $model = $this->findModel($id);
+        if($model->isNewRecord) {
+            $model->order_id = $id;     
+        }        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }                
+                $trans->commit();
+                
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');                
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        if(!$model->realname) {
+            $model->realname = $model->order->customer_name ?? null;
+        }
+        if(!$model->mobile) {
+            $model->mobile = $model->order->customer_mobile ?? null;
+        }
+        if(!$model->email) {
+            $model->email = $model->order->customer_email ?? null;
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
+    /**
+     * 修改收货地址
+     * @return \yii\web\Response|mixed|string|string
+     */
+    public function actionAjaxEditInvoice()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderInvoice::class;
+        $model = $this->findModel($id);
+        if($model->isNewRecord) {
+            $model->order_id = $id;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }                
+                $trans->commit();
+                
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
     }
         
     

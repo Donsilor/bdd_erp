@@ -68,7 +68,7 @@ class OrderAccount extends BaseModel
             'order_amount' => '订单总金额',
             'goods_amount' => '商品总金额',
             'discount_amount' => '优惠金额',
-            'pay_amount' => '实际应付金额',
+            'pay_amount' => '应付金额',
             'refund_amount' => '退款金额',
             'shipping_fee' => '运费',
             'tax_fee' => '税费',

@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        //'options' => ['style'=>'width:120%;'],
+                        'options' => ['style'=>'width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
@@ -83,23 +83,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'160'],
                             ],
                             [
-                                    'attribute' => 'style_sn',
-                                    'filter' => true,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'120'],
+                                'attribute' => 'style_sn',
+                                'filter' => true,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '应盘重量',
+                                'label' => '应盘重量(g)',
                                 'format' => 'raw',
                                 'value' => function($model){
-                                    return $model->goodsW->gold_weight ?? '0.00';
+                                    return $model->gold_weight ?? '0.00';
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
-                                'label' => '实盘重量',
+                                'label' => '实盘重量(g)',
                                 'format' => 'raw',
                                 'value' => function($model){
                                     return $model->goodsW->actual_weight ?? '0.00';
@@ -119,6 +119,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => '120'],
+                            ],
+                            [
+                                'label' => '财务调整状态',
+                                'attribute' => 'goodsW.fin_adjust_status',
+                                'value' =>function($model){
+                                    return \addons\Warehouse\common\enums\FinAdjustStatusEnum::getValue($model->goodsW->fin_adjust_status);
+                                },
+                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.fin_adjust_status',\addons\Warehouse\common\enums\FinAdjustStatusEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'110'],
                             ],
                             [
                                 'label' => '财务确认人',
@@ -151,25 +164,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width' => '160'],
                             ],
                             [
-                                    'label' => '盘点状态',
-                                    'attribute' => 'status',
-                                    'value' =>function($model){
-                                        return \addons\Warehouse\common\enums\PandianStatusEnum::getValue($model->status);
-                                    },
-                                    'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
-                                            'prompt' => '全部',
-                                            'class' => 'form-control',                                            
-                                    ]),
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'110'],
+                                'label' => '盘点状态',
+                                'attribute' => 'status',
+                                'value' =>function($model){
+                                    return \addons\Warehouse\common\enums\PandianStatusEnum::getValue($model->status);
+                                },
+                                'filter'=> Html::activeDropDownList($searchModel, 'status',\addons\Warehouse\common\enums\PandianStatusEnum::getMap(), [
+                                        'prompt' => '全部',
+                                        'class' => 'form-control',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'110'],
                             ],
                             [
-                                'label' => '调整状态',
-                                'attribute' => 'goodsW.adjust_status',
+                                'label' => '调整原因',
+                                'attribute' => 'goodsW.adjust_reason',
                                 'value' =>function($model){
-                                    return \addons\Warehouse\common\enums\PandianAdjustEnum::getValue($model->goodsW->adjust_status);
+                                    return \addons\Warehouse\common\enums\AdjustReasonEnum::getValue($model->goodsW->adjust_reason);
                                 },
-                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_status',\addons\Warehouse\common\enums\PandianAdjustEnum::getMap(), [
+                                'filter'=> Html::activeDropDownList($searchModel, 'goodsW.adjust_reason',\addons\Warehouse\common\enums\AdjustReasonEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
@@ -190,8 +203,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'audit' => function($url, $model, $key){
-                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING){
+                                    'audit' => function($url, $model, $key) use($bill) {
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING && $bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',

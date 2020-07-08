@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsWForm;
 use addons\Warehouse\common\models\WarehouseStoneBillGoodsW;
 use Yii;
@@ -20,6 +21,7 @@ use addons\Warehouse\common\enums\FinAuditStatusEnum;
 use addons\Warehouse\common\enums\GoldStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
+use yii\db\Exception;
 
 /**
  * 盘点单
@@ -39,6 +41,7 @@ class WarehouseGoldBillWService extends WarehouseBillService
         $bill = new WarehouseGoldBill();
         $bill->attributes = $form->toArray();
         $bill->bill_status = BillStatusEnum::SAVE;
+        $bill->to_warehouse_id = WarehouseIdEnum::GOLD;//金料库
         if(false === $bill->save() ) {
             throw new \Exception($this->getError($bill));
         }
@@ -49,10 +52,10 @@ class WarehouseGoldBillWService extends WarehouseBillService
         ];
         $goods_list = WarehouseGold::find()->where($where)->asArray()->all();
         $gold_weight = 0;
-        $bill_goods_values = [];
+        $bill_goods_values = $bill_goods_keys = $ids = [];
         if(!empty($goods_list)) {
-            $bill_goods= [];
             foreach ($goods_list as $goods) {
+                $ids[] = $goods['id'];
                 $bill_goods = [
                     'bill_id'=>$bill->id,
                     'bill_type'=>$bill->bill_type,
@@ -67,14 +70,27 @@ class WarehouseGoldBillWService extends WarehouseBillService
                 ];
                 $bill_goods_values[] = array_values($bill_goods);
                 $gold_weight = bcadd($gold_weight, $goods['gold_weight'], 3);
-            }
-            if(empty($bill_goods_keys)) {
                 $bill_goods_keys = array_keys($bill_goods);
+                if(count($bill_goods_values)>=10){
+                    //导入明细
+                    $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                    if(!$result) {
+                        throw new \Exception('导入单据明细失败1');
+                    }
+                    $bill_goods_values = [];
+                }
             }
-            //导入明细
-            $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
-            if(!$result) {
-                throw new \Exception('导入单据明细失败');
+            if(!empty($bill_goods_values)){
+                //导入明细
+                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseGoldBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
+                if(!$result) {
+                    throw new \Exception('导入单据明细失败2');
+                }
+            }
+            //更新仓库所选材质货品 盘点中
+            $execute_num = WarehouseGold::updateAll(['gold_status'=>GoldStatusEnum::IN_PANDIAN],['id'=>$ids,'gold_status'=>GoldStatusEnum::IN_STOCK]);
+            if($execute_num <> count($ids)){
+                throw new \Exception("货品改变状态数量与明细数量不一致");
             }
         }else{
             throw new \Exception('库存中未查到材质为['.\Yii::$app->attr->valueName($form->gold_type).']的盘点数据');
@@ -146,10 +162,10 @@ class WarehouseGoldBillWService extends WarehouseBillService
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
         }else {
             if($form->to_warehouse_id == $goods->warehouse_id
-                && bccomp($billGoods->gold_weight,$form->gold_weight,2)==0) {
+                && bccomp($billGoods->gold_weight,$form->gold_weight,3)==0) {
                 $billGoods->status = PandianStatusEnum::NORMAL;//正常
             }elseif($form->to_warehouse_id != $goods->warehouse_id
-                || bccomp($billGoods->gold_weight,$form->gold_weight,2)!=0){
+                || bccomp($billGoods->gold_weight,$form->gold_weight,3)!=0){
                 $billGoods->status = PandianStatusEnum::LOSS;//盘亏
             }
         }

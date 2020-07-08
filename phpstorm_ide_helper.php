@@ -35,6 +35,7 @@ class Yii
  * @property \Da\QrCode\Component\QrCodeComponent $qr
  * @property \common\components\Attribute $attr
  * @property \common\components\Transaction $trans
+ * @property \common\components\Area $area
  * @property \yii\db\Connection $styleDb //款式库连接
  * @author jianyan74 <751393839@qq.com>
  */

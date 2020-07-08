@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '石重范围',
+                            'label' => '石重范围(ct)',
                             'attribute' => 'stone_weight_min',
                             'value' => function ($model){
                                 return $model->stone_weight_min." - ".$model->stone_weight_max;
