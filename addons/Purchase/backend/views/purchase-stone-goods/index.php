@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'stone_shape',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->stone_shape) ;
+                                    return Yii::$app->attr->valueName($model->stone_shape)??"";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
                                     'prompt' => '全部',

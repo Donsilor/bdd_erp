@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\models\backend\Member;
 use Yii;
 use addons\Supply\common\models\Supplier;
 
@@ -152,5 +153,13 @@ class WarehouseStone extends BaseModel
     public function getSupplier()
     {
         return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
 }

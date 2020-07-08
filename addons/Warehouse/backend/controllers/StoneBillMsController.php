@@ -122,7 +122,7 @@ class StoneBillMsController extends StoneBillController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new WarehouseStoneBillMsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -131,7 +131,7 @@ class StoneBillMsController extends StoneBillController
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
+                $model->auditor_id = \Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->stoneMs->auditBillMs($model);
 
