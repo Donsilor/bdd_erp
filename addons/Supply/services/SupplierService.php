@@ -29,9 +29,9 @@ class SupplierService
      * @return array
      */
     public function getDropDown($where=[]){
-        $where = ArrayHelper::merge(['status' => StatusEnum::ENABLED], $where);
         $model = Supplier::find()
-            ->where($where)
+            ->where(['status' => StatusEnum::ENABLED])
+            ->andWhere($where)
             ->select(['id','supplier_name'])
             ->asArray()
             ->all();
