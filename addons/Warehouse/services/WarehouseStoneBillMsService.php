@@ -94,6 +94,8 @@ class WarehouseStoneBillMsService extends Service
                     'stone_symmetry' => $billGoods->symmetry,
                     'stone_polish' => $billGoods->polish,
                     'stone_fluorescence' => $billGoods->fluorescence,
+                    'cert_id' => $billGoods->cert_id,
+                    'cert_type' => (string) $billGoods->cert_type,
                     'stone_norms' => $billGoods->stone_norms,
                     'stone_size' => $billGoods->stone_size,
                     'stone_colour' => $billGoods->stone_colour,

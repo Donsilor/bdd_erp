@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'gold_type',
                             'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->gold_type);
+                                return Yii::$app->attr->valueName($model->gold_type)??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                 'prompt' => '全部',

@@ -2,7 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
@@ -77,12 +79,14 @@ class GoldController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGold();
+        $model = $model ?? new WarehouseGoldForm();
+        $bill = $model->getBillInfo();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
+            'bill'=>$bill,
         ]);
     }
 
@@ -104,7 +108,7 @@ class GoldController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'bill' => ['audit_time'],
             ]
         ]);
         $dataProvider = $searchModel
@@ -118,6 +122,8 @@ class GoldController extends BaseController
         $gold = WarehouseGold::findOne(['id'=>$id]);
         $dataProvider->query->andWhere(['=', 'gold_sn', $gold->gold_sn]);
         $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
+
+        $dataProvider->query->andWhere(['=', 'bill.bill_type', GoldBillTypeEnum::GOLD_C]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

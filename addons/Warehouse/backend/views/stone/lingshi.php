@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:120%; white-space:nowrap;'],
+                        //'options' => ['style'=>' width:120%; white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'visible' => true,
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:50px'],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'stone_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -65,21 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'stone_num',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'stone_weight',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
                                 'attribute' => 'cert_id',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'filter' => true,
                             ],
-                            /* [
+                             [
                                 'attribute' => 'stone_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -88,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],      */                       
+                            ],
                             [
                                 'attribute' => 'color',
                                 'value' => function($model){
@@ -160,6 +150,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
+                            ],*/
+                            [
+                                'label' => '领石单号',
+                                'value' => function ($model){
+                                    return $model->bill->bill_no ?? '';
+                                },
+                                'filter' => false,
                             ],
                             [
                                 'label' => '布产编号',
@@ -167,15 +164,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->produceStone->produce_sn ?? '';
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '配石状态',
+                                'label' => '订单号',
+                                'value' => function ($model){
+                                    return $model->produceStone->from_order_sn ?? '';
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '领石数量',
+                                'attribute' => 'stone_num',
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '领石重量',
+                                'attribute' => 'stone_weight',
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '状态',
                                 'value' => function ($model){
                                     return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->produceStone->peishi_status ??0);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             /* [
                                 'attribute' => 'cut',
