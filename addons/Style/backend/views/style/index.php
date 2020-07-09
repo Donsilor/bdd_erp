@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'id',
                     'filter' => true,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
+                    'headerOptions' => ['width'=>'80'],
             ], 
             [
                     'attribute' => 'style_image',
@@ -57,26 +57,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'filter' => false,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'110'],  
+                    'headerOptions' => ['style'=>'110'],  
             ],  
             [
                     'attribute' => 'style_sn',
                     'value'=>function($model) {
                          return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'style_sn', [
+                            'class' => 'form-control',
+                            'style'=>'width:110px'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'150'],
+                    'headerOptions' => ['width'=>'110'],
             ],
             [                    
                     'attribute' => 'style_name',
                     'value' => 'style_name',
                     'filter' => Html::activeTextInput($searchModel, 'style_name', [
                           'class' => 'form-control',
-                          'style'=>'width:250px' 
+                          'style'=>'width:200px' 
                     ]),
                     'format' => 'raw',   
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'200'],
             ],            
             [
                     'attribute' => 'style_cate_id',
@@ -89,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'style'=>'width:100px',
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'100'],
             ], 
             [
                     'attribute' => 'product_type_id',
@@ -102,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'style'=>'width:120px;'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'120'],
             ],
             [
                     'attribute' => 'is_inlay',
@@ -113,9 +116,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'is_inlay',\addons\Style\common\enums\InlayEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            //'style'=>'width:100px'
+                            'style'=>'width:100px'
                     ]),
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'110'],
             ], 
             [
                     'attribute' => 'style_channel_id',
@@ -125,10 +128,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            //'style'=>'width:100px'
+                            'style'=>'width:100px'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'100'],
             ], 
             [
                     'attribute' => 'is_autosn',
@@ -138,10 +141,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'is_autosn',\common\enums\AutoSnEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            //'style'=>'width:100px'
+                            'style'=>'width:100px'
                     ]),
                     'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'100'],
            ],            
            [
                     'attribute' => 'goods_num',
@@ -151,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                            'style'=>'width:80px'
                     ]),
                     'format' => 'raw',
-                    //'headerOptions' => ['width' => '80'],
+                    'headerOptions' => ['width' => '80'],
            ],
            [
                     'attribute' => 'audit_status',
@@ -163,10 +166,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
-                            'style'=>'width:120px'
+                            'style'=>'width:100px'
                     ]),
                     'format' => 'raw',
-                    //'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width' => '100'],
            ], 
            [
                     'attribute'=>'created_at',
@@ -205,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'style'=>'width:80px'
                     ]),
                     'format' => 'raw',
-                    //'headerOptions' => ['class' => 'col-md-1'],
+                    'headerOptions' => ['width'=>'80'],
            ],            
            [
                 'class' => 'yii\grid\ActionColumn',
@@ -222,7 +225,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'ajax-apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提交', [
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);

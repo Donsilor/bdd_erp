@@ -54,9 +54,9 @@ class WarehouseBillGoods extends BaseModel
     {
         return [
             [['id', 'bill_id', 'goods_num', 'order_detail_id', 'source_detail_id', 'put_in_type', 'warehouse_id','from_warehouse_id','to_warehouse_id', 'material', 'status','creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['bill_no', 'bill_type', 'goods_id', 'goods_name', 'style_sn'], 'required'],
+            [['bill_no', 'bill_type', 'goods_name', 'style_sn'], 'required'],
             [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
-            [['bill_no', 'style_sn', 'diamond_cert_id'], 'string', 'max' => 30],
+            [['bill_no', 'goods_id', 'style_sn', 'diamond_cert_id'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name'], 'string', 'max' => 160],
             [['diamond_color', 'diamond_clarity'], 'string', 'max' => 10],

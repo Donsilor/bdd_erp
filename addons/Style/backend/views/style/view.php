@@ -37,10 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                             <td><?= $model->style_sn ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
-                            <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                         </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
@@ -51,28 +47,36 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->type->name ??'' ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
-                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_material') ?>：</td>
+                            <td> <?= addons\Style\common\enums\StyleMaterialEnum::getValue($model->style_material) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
+                            <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
                             <td><?= $model->source->name ??'' ?></td>
-                        </tr>                                               
-                        <tr>
-                            <td class="col-xs-1 text-right">默认工厂：</td>
-                            <td><?= $model->supplier->supplier_name ?? '' ?></td>
-                        </tr>    
-                        <tr>
-                            <td class="col-xs-1 text-right">工厂模号：</td>
-                            <td><?= $model->factory_mo ?? ''?></td>
-                        </tr>                     
+                        </tr> 
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
                             <td> <?= $model->channel->name ?? '' ?></td>
-                        </tr>                                                                      
+                        </tr> 
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
+                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
+                        </tr> 
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
                             <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
+                        </tr>                                       
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_id') ?>：</td>
+                            <td><?= $model->supplier->supplier_name ?? '' ?></td>
+                        </tr>    
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                            <td><?= $model->factory_mo ?? ''?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>

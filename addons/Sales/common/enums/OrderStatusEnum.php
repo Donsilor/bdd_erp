@@ -19,7 +19,7 @@ class OrderStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [     
-               self::SAVE => "保存",
+               self::SAVE => "已保存",
                self::PENDIGN => "待审核",
                self::CONFORMED => "已审核", 
                self::CANCAEL => "已关闭", 
