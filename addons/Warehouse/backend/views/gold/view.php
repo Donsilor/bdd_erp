@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="box-footer text-center">
-            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
+            <?= Html::a('返回列表', ['index'], ['class' => 'btn btn-default btn-sm']) ?>
         </div>
     </div>
 </div>
