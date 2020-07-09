@@ -49,13 +49,13 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
     {
         return [
             [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'is_stock', 'is_gift', 'created_at', 'updated_at','is_apply'], 'integer'],
-            [['order_id','jintuo_type','goods_name','goods_num','goods_price'],'required'],
+            [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
             [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate'], 'number'],
-            [['style_sn', 'goods_sn'], 'string', 'max' => 50],
+            [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
             [['goods_id'], 'string', 'max' => 20],
             [['goods_name'], 'string', 'max' => 300],
             [['goods_image'], 'string', 'max' => 100],
-            [['goods_spec'], 'string', 'max' => 255],
+            [['goods_spec','remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 5],
             [['produce_sn'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
@@ -72,6 +72,7 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
             'merchant_id' => '商户ID',
             'order_id' => '订单id',
             'style_sn' => '款式编号',
+            'qiban_sn' => '起版编号',
             'goods_sn' => '商品编号',
             'goods_id' => '现货货号',
             'style_cate_id' => '款式分类',
@@ -98,6 +99,7 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
+            'remark' => '备注',
 
         ];
     }

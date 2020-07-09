@@ -4,6 +4,7 @@ namespace addons\Sales\common\forms;
 
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\AttributeSpec;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
 use common\enums\ConfirmEnum;
@@ -25,6 +26,8 @@ class OrderGoodsForm extends OrderGoods
     public $attr;
 
     public $style_id;
+
+    public $order_goods_sn;
     /**
      * {@inheritdoc}
      */
@@ -59,6 +62,7 @@ class OrderGoodsForm extends OrderGoods
         return ArrayHelper::merge(parent::attributeLabels() , [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
+                'order_goods_sn' => '款号/起版号',
             ]);
     }
 
@@ -88,6 +92,12 @@ class OrderGoodsForm extends OrderGoods
             $this->attr_custom  = $attr_list;
             $this->attr_require = $attr_list;
         }
+        if($this->qiban_type == QibanTypeEnum::NON_VERSION){
+            $this->order_goods_sn = $this->style_sn;
+        }else{
+            $this->order_goods_sn = $this->qiban_sn;
+        }
+
     }
     /**
      * 初始化 已填写属性数据

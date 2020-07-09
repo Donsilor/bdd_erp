@@ -97,6 +97,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'visible' => false,
                                     ],
                                     [
+                                        'value'=>function($model){
+
+                                        }
+                                    ],
+                                    [
                                         'attribute' => 'goods_image',
                                         'value' => function ($model) {
                                             return common\helpers\ImageHelper::fancyBox($model->goods_image);

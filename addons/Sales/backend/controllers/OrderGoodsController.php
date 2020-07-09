@@ -45,9 +45,12 @@ class OrderGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
+
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+
                 //创建属性关系表数据
                 $model->createAttrs();
                 //更新采购汇总：总金额和总数量
@@ -119,7 +122,7 @@ class OrderGoodsController extends BaseController
     {
 
         $order_id = Yii::$app->request->get('order_id');
-        $goods_sn = Yii::$app->request->get('goods_sn');
+        $order_goods_sn = Yii::$app->request->get('order_goods_sn');
         $search = Yii::$app->request->get('search');
         $jintuo_type = Yii::$app->request->get('jintuo_type');
 
@@ -129,20 +132,20 @@ class OrderGoodsController extends BaseController
         if($model->isNewRecord) {
             $model->order_id = $order_id;
         }
-        if($model->isNewRecord && $search && $goods_sn) {
+        if($model->isNewRecord && $search && $order_goods_sn) {
 
             $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-            $style  = Style::find()->where(['style_sn'=>$goods_sn])->one();
+            $style  = Style::find()->where(['style_sn'=>$order_goods_sn])->one();
             if(!$style) {
-                $qiban = Qiban::find()->where(['qiban_sn'=>$goods_sn])->one();
+                $qiban = Qiban::find()->where(['qiban_sn'=>$order_goods_sn])->one();
                 if(!$qiban) {
                     return $this->message("[款号/起版号]不存在", $this->redirect($skiUrl), 'error');
                 }elseif($qiban->status != StatusEnum::ENABLED) {
                     return $this->message("起版号不可用", $this->redirect($skiUrl), 'error');
                 }else{
                     $model->style_id = $qiban->id;
-                    $model->goods_sn = $goods_sn;
-                    $model->qiban_sn = $goods_sn;
+                    $model->qiban_sn = $order_goods_sn;
+                    $model->order_goods_sn = $order_goods_sn;
                     $model->qiban_type = $qiban->qiban_type;
                     $model->style_sn = $qiban->style_sn;
                     $model->style_cate_id = $qiban->style_cate_id;
@@ -152,7 +155,6 @@ class OrderGoodsController extends BaseController
                     $model->goods_name = $qiban->qiban_name;
                     $model->jintuo_type = $qiban->jintuo_type;
                     $model->is_inlay = $qiban->is_inlay;
-                    $model->stone_info = $qiban->stone_info;
                     $model->remark = $qiban->remark;
                     $model->goods_image = $qiban->style_image;
 
@@ -167,8 +169,8 @@ class OrderGoodsController extends BaseController
                 return $this->message("款号不可用", $this->redirect($skiUrl), 'error');
             }else{
                 $model->style_id = $style->id;
-                $model->goods_sn = $goods_sn;
-                $model->style_sn = $goods_sn;
+                $model->style_sn = $order_goods_sn;
+                $model->order_goods_sn = $order_goods_sn;
                 $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_cate_id = $style->style_cate_id;
                 $model->product_type_id = $style->product_type_id;

@@ -19,18 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'order_id')->hiddenInput()->label(false) ?>
-			     <?php if($model->goods_sn) {?>
+			     <?php if($model->order_goods_sn) {?>
 			         <div class="row">
     			         <?php if($model->isNewRecord) {?>      			    
             			 <div class="col-lg-3">         
-                			<?= $form->field($model, 'goods_sn')->textInput() ?> 
+                			<?= $form->field($model, 'order_goods_sn')->textInput() ?>
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
         			     <?php }else{?>
         			     <div class="col-lg-4">         
-                			<?= $form->field($model, 'goods_sn')->textInput(['disabled'=>'disabled']) ?> 
+                			<?= $form->field($model, 'order_goods_sn')->textInput(['disabled'=>'disabled']) ?>
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">
@@ -54,12 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'goods_name')->textInput() ?> 
             			 </div>
             			 <div class="col-lg-4">
-            			 	<?= $form->field($model, 'goods_num')->textInput() ?>
+            			 	<?= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
             			 </div>
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'goods_price')->textInput() ?>
             			 </div> 
         			 </div>
+                     <div class="row">
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'goods_pay_price')->textInput() ?>
+                         </div>
+                         <div class="col-lg-8">
+                             <?= $form->field($model, 'remark')->textInput() ?>
+                         </div>
+                     </div>
 
 					<div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
@@ -104,16 +112,14 @@ $this->params['breadcrumbs'][] = $this->title;
                      ?>
                      <div class="row">
                          <div class="col-lg-4">
-                             <?= $form->field($model, 'goods_image')->widget(common\widgets\webuploader\Files::class, [
-                                 'config' => [
-                                 ]
-                             ]); ?>
+                             <?= \common\helpers\ImageHelper::fancyBox($model->goods_image,90,90); ?>
+                             <?= $form->field($model, 'goods_image')->hiddenInput()->label(false) ?>
                          </div>
                      </div>
     			<?php }else{?>
         			<div class="row">
             			 <div class="col-lg-4">         
-                			<?= $form->field($model, 'goods_sn')->textInput() ?> 
+                			<?= $form->field($model, 'order_goods_sn')->textInput() ?>
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
@@ -130,13 +136,13 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
 function searchGoods() {
-   var goods_sn = $.trim($("#ordergoodsform-goods_sn").val());
+   var order_goods_sn = $.trim($("#ordergoodsform-order_goods_sn").val());
    var jintuo_type = $("#ordergoodsform-jintuo_type").val();
-   if(!goods_sn) {
+   if(!order_goods_sn) {
 	    rfMsg("请输入款号或起版号");
         return false;
    }
-   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['goods_sn','search','jintuo_type'])?>&search=1&goods_sn="+goods_sn+"&jintuo_type="+jintuo_type;
+   var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['order_goods_sn','search','jintuo_type'])?>&search=1&order_goods_sn="+order_goods_sn+"&jintuo_type="+jintuo_type;
    window.location.href = url;
 }
 </script>
