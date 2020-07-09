@@ -34,7 +34,7 @@ class GoldBillController extends BaseController
                 'auditor' => ['username'],
             ];
         }else{
-            $this->modelClass = WarehouseGoldBillLGoodsForm::class;
+            $this->modelClass = WarehouseGoldBillGoodsForm::class;
             $relations = [
                 'bill' => [
                     'id',
@@ -75,6 +75,7 @@ class GoldBillController extends BaseController
             if($supplier_id){
                 $dataProvider->query->andWhere(['=','bill.supplier_id', $supplier_id]);
             }
+            $dataProvider->query->andWhere(['>', 'bill.status', -1]);
         }
         return $this->render($this->action->id, [
             'model' => $model,

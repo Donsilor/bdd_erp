@@ -212,47 +212,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width' => '80'],
                         ],
-                        /*[
-                            'class' => 'yii\grid\ActionColumn',
-                            'header' => '操作',
-                            'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {delete}',
-                            'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
-                                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
-                                        ]);
-                                    }
-                                },
-                                'apply' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
-                                'audit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status,[BillStatusEnum::PENDING])){
-                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
-                                        ]);
-                                    }
-                                },
-                                'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['stone-bill-ms-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                                },
-                                'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id],'取消');
-                                    }
-                                },
-                            ],
-                        ]*/
                     ]
                 ]); ?>
             </div>
