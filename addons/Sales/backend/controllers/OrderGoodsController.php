@@ -1,8 +1,11 @@
 <?php
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderGoodsForm;
+use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
@@ -48,7 +51,7 @@ class OrderGoodsController extends BaseController
                 //创建属性关系表数据
                 $model->createAttrs();
                 //更新采购汇总：总金额和总数量
-                Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
+                Yii::$app->purchaseService->purchase->purchaseSummary($model->order_id);
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -65,6 +68,45 @@ class OrderGoodsController extends BaseController
         ]);
     }
 
+
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        $order_id = Yii::$app->request->get('order_id');
+
+        try{
+
+            $trans = Yii::$app->trans->beginTransaction();
+
+            $order = Order::find()->where(['id'=>$order_id])->one();
+            if($order->order_status == OrderStatusEnum::CONFORMED) {
+                throw new \Exception("订单已审核,不允许删除",422);
+            }
+            $model = $this->findModel($id);
+            if (!$model->delete()) {
+                throw new \Exception("删除失败",422);
+            }
+
+            //删除商品属性
+            OrderGoodsAttribute::deleteAll(['id'=>$id]);
+            //更新单据汇总
+            Yii::$app->salesService->order->orderSummary($order_id);
+            $trans->commit();
+
+            return $this->message("删除成功", $this->redirect($this->returnUrl));
+        }catch (\Exception $e) {
+
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect($this->returnUrl), 'error');
+        }
+    }
 
 
     /**
@@ -108,7 +150,6 @@ class OrderGoodsController extends BaseController
                     $model->style_channel_id = $qiban->style_channel_id;
                     $model->style_sex = $qiban->style_sex;
                     $model->goods_name = $qiban->qiban_name;
-                    $model->cost_price  = $qiban->cost_price;
                     $model->jintuo_type = $qiban->jintuo_type;
                     $model->is_inlay = $qiban->is_inlay;
                     $model->stone_info = $qiban->stone_info;
@@ -134,7 +175,6 @@ class OrderGoodsController extends BaseController
                 $model->style_channel_id = $style->style_channel_id;
                 $model->style_sex = $style->style_sex;
                 $model->goods_name = $style->style_name;
-                $model->cost_price = $style->cost_price;
                 $model->is_inlay = $style->is_inlay;
                 $model->goods_image = $style->style_image;
             }
