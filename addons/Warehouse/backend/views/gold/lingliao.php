@@ -37,12 +37,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
+                                'label' => '领料单号',
+                                'value' => function ($model){
+                                    return $model->bill->bill_no ?? '';
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'label' => '领料时间',
+                                'attribute'=>'audit_time',
+                                'filter' => false,
+                                'value' => function($model){
+                                    if($model->bill->audit_time){
+                                        return Yii::$app->formatter->asDatetime($model->bill->audit_time) ?? "";
+                                    }
+                                    return "";
+                                },
+                            ],
+                            [
                                 'label' => '布产编号',
                                 'value' => function ($model){
                                     return $model->produceGold->produce_sn ?? '';
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'label' => '订单号',
+                                'value' => function ($model){
+                                    return $model->produceGold->from_order_sn ?? '';
+                                },
+                                'filter' => false,
                             ],
                             /*[
                                 'attribute'=>'gold_sn',
@@ -72,9 +97,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],*/
                             [
+                                'label' => '领料克重(g)',
                                 'attribute' => 'gold_weight',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => false,
                             ],
                             /*[
                                 'attribute' => 'gold_price',
@@ -92,7 +117,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                         ]
                     ]); ?>

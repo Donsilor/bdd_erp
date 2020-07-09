@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseStoneBillGoodsForm;
 use common\helpers\Url;
 use Yii;
@@ -81,7 +82,7 @@ class StoneController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'bill' => ['audit_time'],
             ]
         ]);
         $dataProvider = $searchModel
@@ -95,6 +96,8 @@ class StoneController extends BaseController
         $stone = WarehouseStone::findOne(['id'=>$id]);
         $dataProvider->query->andWhere(['=', 'stone_sn', $stone->stone_sn]);
         $dataProvider->query->andWhere(['>',WarehouseStoneBillGoodsForm::tableName().'.status',-1]);
+
+        $dataProvider->query->andWhere(['=', 'bill.bill_type', StoneBillTypeEnum::STONE_SS]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

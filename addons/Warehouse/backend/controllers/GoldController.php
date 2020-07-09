@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -107,7 +108,7 @@ class GoldController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-
+                'bill' => ['audit_time'],
             ]
         ]);
         $dataProvider = $searchModel
@@ -121,6 +122,8 @@ class GoldController extends BaseController
         $gold = WarehouseGold::findOne(['id'=>$id]);
         $dataProvider->query->andWhere(['=', 'gold_sn', $gold->gold_sn]);
         $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
+
+        $dataProvider->query->andWhere(['=', 'bill.bill_type', GoldBillTypeEnum::GOLD_C]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

@@ -53,7 +53,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $cert_id 证书号
  * @property string $cert_type 证书类型
  * @property string $stone_norms 石料规格
- * @property int $stone_status 石料状态
+ * @property int $stone_status 库存状态
  * @property int $supplier_id 供应商
  * @property int $put_in_type 入库方式
  * @property int $warehouse_id 所在仓库
@@ -139,7 +139,7 @@ class WarehouseStone extends BaseModel
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'stone_norms' => '石料规格',
-            'stone_status' => '石料状态',
+            'stone_status' => '库存状态',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
             'warehouse_id' => '所在仓库',

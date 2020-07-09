@@ -14,7 +14,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $gold_name 金料名称
  * @property string $gold_type 金料类型
  * @property string $style_sn 金料款号
- * @property int $gold_status 金料状态
+ * @property int $gold_status 库存状态
  * @property int $supplier_id 供应商
  * @property int $gold_num 金料数量
  * @property string $gold_weight 库存重量/克
@@ -65,7 +65,7 @@ class WarehouseGold extends BaseModel
             'gold_sn' => '批次号',
             'gold_name' => '金料名称',
             'gold_type' => '金料类型',
-            'gold_status' => '金料状态',
+            'gold_status' => '库存状态',
             'style_sn' => '金料款号',
             'gold_num' => '金料数量',
             'gold_weight' => '库存重量(g)',
