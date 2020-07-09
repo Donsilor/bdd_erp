@@ -25,13 +25,14 @@ class BillController extends BaseController
     public function actionIndex()
     {
         $model = new $this->modelClass;
-        $relations = [
-            'creator' => ['username'],
-            'auditor' => ['username'],
-        ];
         $searchParams = Yii::$app->request->get('SearchModel');
         $model->goods_id = $searchParams['goods_id']??"";
-        if($model->goods_id){
+        if(empty($model->goods_id)){
+            $relations = [
+                'creator' => ['username'],
+                'auditor' => ['username'],
+            ];
+        }else{
             $this->modelClass = WarehouseBillGoodsForm::class;
             $relations = [
                 'bill' => [
@@ -92,7 +93,7 @@ class BillController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {

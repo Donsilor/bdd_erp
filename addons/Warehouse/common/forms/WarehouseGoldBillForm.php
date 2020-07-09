@@ -19,7 +19,8 @@ class WarehouseGoldBillForm extends WarehouseGoldBill
     public function rules()
     {
          $rules = [
-             [['gold_sn'], 'required'],
+             [['gold_sn'], 'string', 'max'=>30],
+             [['gold_sn'], 'filter', 'filter' => 'trim'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
