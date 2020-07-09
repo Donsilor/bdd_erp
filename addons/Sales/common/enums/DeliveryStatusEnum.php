@@ -10,7 +10,7 @@ class DeliveryStatusEnum extends \common\enums\BaseEnum
 {
     
     const SAVE = 0;
-    const PRE_SEND = 1;
+    const TO_SEND = 1;
     const HAS_SEND = 2;
     /**
      * @return array
@@ -19,7 +19,7 @@ class DeliveryStatusEnum extends \common\enums\BaseEnum
     {
         return [
                 self::SAVE => "未发货",
-                self::PRE_SEND => "待发货",
+                self::TO_SEND => "待发货",
                 self::HAS_SEND => "已发货",
         ];
     }
