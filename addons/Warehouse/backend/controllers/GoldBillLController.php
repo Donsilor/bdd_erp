@@ -80,7 +80,7 @@ class GoldBillLController extends GoldBillController
     {
         $bill_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l/index', 'bill_id'=>$bill_id]));
         $model = $this->findModel($bill_id);
         $model = $model ?? new WarehouseGoldBill();
         return $this->render($this->action->id, [

@@ -71,7 +71,7 @@ class PurchaseStone extends BaseModel
         return [
             'id' => 'ID',
             'purchase_sn' => '采购单号',
-            'supplier_id' => '供应商ID',
+            'supplier_id' => '供应商',
             'total_cost' => '总成本',
             'total_num' => '总数量',
             'total_stone_num' => '总粒数',
