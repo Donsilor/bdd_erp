@@ -17,7 +17,8 @@ use addons\Supply\common\models\Supplier;
  * @property string $style_image 商品主图
  * @property string $style_material 款式材质
  * @property string $sale_price 销售价
- * @property string $sale_volume 销量
+ * @property int $factory_id 默认工厂
+ * @property string $factory_mo 工厂模号
  * @property string $market_price 市场价
  * @property string $cost_price 成本价
  * @property string $cost_price_min 成本价最小值
@@ -53,12 +54,13 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['id','style_material','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
+                [['id','factory_id','style_material','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
                 [['style_material','product_type_id','style_channel_id','style_cate_id','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
                 ['cost_price','compare','compareValue' => 1000000000, 'operator' => '<'],
                 [['style_sn'], 'string', 'max' => 50],
+                [['factory_mo'], 'string', 'max' => 30],
                 [['style_image','style_3ds'], 'string', 'max' => 100],
                 [['audit_remark','remark','style_name'], 'string', 'max' => 255],
                 [['style_sn'],'unique'],
@@ -80,6 +82,8 @@ class Style extends BaseModel
             'style_channel_id' =>'归属渠道',
             'style_sex' => '款式性别',
             'style_material' => '款式材质',
+            'factory_id' => '默认工厂',
+            'factory_mo' => '默认工厂模号',
             'style_image' => '款式图片',
             'sale_price' => '销售价',
             'sale_volume' => '销量',
