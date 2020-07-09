@@ -19,7 +19,7 @@ class WarehouseBillForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-             [['goods_id'], 'required']
+             [['goods_id'], 'string', 'max'=>30]
          ];
          return array_merge(parent::rules() , $rules);
     }
