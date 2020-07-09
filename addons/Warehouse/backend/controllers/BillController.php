@@ -54,14 +54,18 @@ class BillController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => $relations,
         ]);
-        $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['created_at','supplier_id','to_warehouse_id','from_warehouse_id']);
-        $created_at = $searchModel->created_at;
-        if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
-        }
-        if($model->goods_id){
+        if(empty($model->goods_id)){
+            $dataProvider = $searchModel
+                ->search(\Yii::$app->request->queryParams,['created_at']);
+            $created_at = $searchModel->created_at;
+            if (!empty($created_at)) {
+                $dataProvider->query->andFilterWhere(['>=',WarehouseBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+                $dataProvider->query->andFilterWhere(['<',WarehouseBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            }
+            $dataProvider->query->andWhere(['>',WarehouseBill::tableName().'.status',-1]);
+        }else{
+            $dataProvider = $searchModel
+                ->search(\Yii::$app->request->queryParams,['supplier_id','to_warehouse_id','from_warehouse_id']);
             $dataProvider->query->andWhere(['=','goods_id', $model->goods_id]);
             $supplier_id = $searchModel->supplier_id;
             if($supplier_id){
@@ -76,8 +80,6 @@ class BillController extends BaseController
                 $dataProvider->query->andWhere(['=','bill.from_warehouse_id', $from_warehouse_id]);
             }
             $dataProvider->query->andWhere(['>','bill.status',-1]);
-        }else{
-            $dataProvider->query->andWhere(['>',WarehouseBill::tableName().'.status',-1]);
         }
         return $this->render($this->action->id, [
             'model' => $model,
