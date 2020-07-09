@@ -95,7 +95,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],      */                       
+                            ],      */
+                            [
+                                'attribute' => 'shape',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->shape);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute' => 'color',
                                 'value' => function($model){
@@ -167,6 +179,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'stone_colour',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->stone_colour);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'stone_norms',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'stone_size',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => false,
                             ],
                             [
                                 'label' => '布产编号',

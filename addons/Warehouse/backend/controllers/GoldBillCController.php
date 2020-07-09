@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Supply\common\models\Supplier;
+use common\helpers\PageHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -59,8 +62,9 @@ class GoldBillCController extends GoldBillController
         $dataProvider->query->andWhere(['=', WarehouseGoldBill::tableName().'.bill_type', $this->billType]);
 
         //导出
-        if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(WarehouseGoldBill::tableName().'.id');
+            $this->actionExport($queryIds);
         }
 
         return $this->render($this->action->id, [
@@ -170,15 +174,72 @@ class GoldBillCController extends GoldBillController
         ]);
     }
 
-    public function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids = null){
+        $name = '金料入库单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+        list($list,) = $this->getData($ids);
         $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
-        ];
-        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
+            ['名称', 'gold_type' , 'text'],
+            ['金类', 'gold_name' , 'text'],
+            ['款号', 'style_no' , 'text'],
+            ['重量(g)', 'gold_weight' , 'text'],
+            ['加工厂', 'supplier_name' , 'text'],
+            ['价格	', 'gold_price' , 'text'],
+            ['备注', 'remark' , 'text'],
 
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    private function getData($ids){
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','sup.supplier_name'];
+        $query = WarehouseGoldBillCForm::find()->alias('w')
+            ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(Supplier::tableName().' sup','sup.id=w.supplier_id')
+            ->where(['w.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+
+        ];
+        foreach ($lists as &$list){
+            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+        }
+        return [$lists,$total];
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionPrint()
+    {
+
+
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        list($lists,$total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' => $total
+        ]);
     }
 
 }

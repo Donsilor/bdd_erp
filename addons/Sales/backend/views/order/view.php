@@ -79,6 +79,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box"  style="margin:0px">
                 <div class="box-header" style="margin:0">
                     <h3 class="box-title"><i class="fa fa-info"></i> 商品信息</h3>
+                    <?= Html::create(['order-goods/edit'], '添加商品', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                 </div>
                 <div class="table-responsive col-lg-12">
                      <?= GridView::widget([

@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                    </div>   
                   <?php }?>
                 <?php
-                $attr_list = \Yii::$app->styleService->attribute->module(\addons\Style\common\enums\AttrModuleEnum::QIBAN)->getAttrListByCateId($model->style_cate_id,\addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
+                $attr_list = \Yii::$app->styleService->attribute->module(\addons\Style\common\enums\AttrModuleEnum::PURCHASE)->getAttrListByCateId($model->style_cate_id,\addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type,'getAttrTypeMap'),$model->is_inlay);
                 foreach ($attr_list as $k=>$attr){
                     $attr_id  = $attr['id'];//属性ID
                     $is_require = $attr['is_require'];
