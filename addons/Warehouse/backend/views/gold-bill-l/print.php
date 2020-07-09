@@ -84,7 +84,7 @@
                         <div><?= $val['gold_name'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_sn'] ?></div>
+                        <div><?= $val['style_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['gold_weight'] ?></div>

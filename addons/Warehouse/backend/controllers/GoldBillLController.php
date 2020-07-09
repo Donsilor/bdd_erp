@@ -170,7 +170,7 @@ class GoldBillLController extends GoldBillController
         $header = [
             ['金料类型', 'gold_type' , 'text'],
             ['名称', 'gold_name' , 'text'],
-            ['款号', 'gold_sn' , 'text'],
+            ['款号', 'style_sn' , 'text'],
             ['重量(g)', 'gold_weight' , 'text'],
             ['价格	', 'gold_price' , 'text'],
             ['备注', 'remark' , 'text'],
