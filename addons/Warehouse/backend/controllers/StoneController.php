@@ -116,12 +116,14 @@ class StoneController extends BaseController
         $tab = \Yii::$app->request->get('tab',1);
         $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['stone/index']));
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseStone();
+        $model = $model ?? new WarehouseStoneForm();
+        $bill = $model->getBillInfo();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->warehouseService->stone->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
+            'bill'=>$bill,
         ]);
     }
 

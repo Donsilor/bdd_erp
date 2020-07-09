@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
@@ -77,12 +78,14 @@ class GoldController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGold();
+        $model = $model ?? new WarehouseGoldForm();
+        $bill = $model->getBillInfo();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
+            'bill'=>$bill,
         ]);
     }
 

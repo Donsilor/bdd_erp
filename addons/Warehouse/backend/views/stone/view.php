@@ -1,10 +1,6 @@
 <?php
 
-use common\enums\GenderEnum;
 use common\helpers\Html;
-use common\helpers\Url;
-use yii\web\View;
-use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -13,9 +9,7 @@ use yii\widgets\ActiveForm;
 $this->title = '石料详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-//
 ?>
-
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title;?> - <?= $model->stone_sn?> - <?= \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
@@ -127,6 +121,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ms_weight') ?>：</td>
                                     <td><?= $model->ms_weight ?></td>
                                 </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ss_cnt') ?>：</td>
+                                    <td><?= $model->ss_cnt ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('ss_weight') ?>：</td>
+                                    <td><?= $model->ss_weight ?></td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -215,6 +217,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
                                     <td><?= $model->warehouse->name??""?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right">入库单号：</td>
+                                    <td><?= $bill['bill_no']??""?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right">采购收货单号：</td>
+                                    <td><?= $bill['receipt_no']??""?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right">采购单号：</td>
+                                    <td><?= $bill['purchase_sn']??""?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
