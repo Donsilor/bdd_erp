@@ -59,7 +59,7 @@ class AttributeSpec extends BaseModel
             'attr_values' => '属性值',
             'input_type' => '显示类型',
             'is_require' => '必填',
-            'is_inlay' => '是否镶嵌',
+            'is_inlay' => '产品线',
             'status' => '状态',
             'sort' => '排序',
             'modules' => '所属模块',
