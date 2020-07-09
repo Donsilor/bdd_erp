@@ -55,6 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_material') ?>：</td>
+                            <td> <?= addons\Style\common\enums\StyleMaterialEnum::getValue($model->style_material) ?></td>
+                        </tr>  
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
                             <td><?= $model->source->name ??'' ?></td>
                         </tr>                                               
@@ -69,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
                             <td> <?= $model->channel->name ?? '' ?></td>
-                        </tr>                                                                      
+                        </tr>                                                                                            
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
                             <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
