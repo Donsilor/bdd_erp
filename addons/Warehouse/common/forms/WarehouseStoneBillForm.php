@@ -19,7 +19,8 @@ class WarehouseStoneBillForm extends WarehouseStoneBill
     public function rules()
     {
          $rules = [
-             [['stone_sn'], 'required'],
+             [['stone_sn'], 'string', 'max'=>30],
+             [['stone_sn'], 'filter', 'filter' => 'trim'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }

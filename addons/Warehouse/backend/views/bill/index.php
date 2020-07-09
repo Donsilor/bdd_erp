@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel */
 
 $this->title = Yii::t('bill', '出入库列表');
 $this->params['breadcrumbs'][] = $this->title;
@@ -22,14 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
-                <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
-                    <div class="col-xs-3">
-                        <?= $form->field($searchModel, 'goods_id')->textInput(["placeholder"=>"请输入货号"]) ?>
-                    </div>
-                    <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
-                        <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
-                    </div>
-                <?php ActiveForm::end(); ?>
+                <div class="row">
+                    <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
+                        <div class="col-xs-3">
+                            <?= $form->field($searchModel, 'goods_id')->textInput(["placeholder"=>"请输入货号"]) ?>
+                        </div>
+                        <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
+                            <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                </div>
                 <?php if(empty($model->goods_id)){?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
