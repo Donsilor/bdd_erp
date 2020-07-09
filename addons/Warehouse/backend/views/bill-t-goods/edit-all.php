@@ -13,7 +13,7 @@ use addons\Style\common\enums\AttrIdEnum;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '其他收货单明细');
+$this->title = Yii::t('bill_t_goods', '其他入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
