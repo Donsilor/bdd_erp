@@ -23,14 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
-                <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
-                <div class="col-xs-3">
-                    <?= $form->field($searchModel, 'gold_sn')->textInput(["placeholder"=>"请输入批次号"]) ?>
+                <div class="row">
+                    <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
+                        <div class="col-xs-3">
+                            <?= $form->field($searchModel, 'gold_sn')->textInput(["placeholder"=>"请输入批次号"]) ?>
+                        </div>
+                        <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
+                            <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?>
                 </div>
-                <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
-                    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
-                </div>
-                <?php ActiveForm::end(); ?>
                 <?php if(empty($model->gold_sn)){?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -49,12 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'id',  //设置每行数据的复选框属性
                                 'headerOptions' => ['width'=>'30'],
                             ],
-                            [
+                            /*[
                                 'attribute' => 'id',
                                 'filter' => true,
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'80'],
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'bill_no',
                                 'value'=>function($model) {

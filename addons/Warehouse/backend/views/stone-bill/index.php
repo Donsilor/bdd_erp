@@ -23,14 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
-                <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
-                <div class="col-xs-3">
-                    <?= $form->field($searchModel, 'stone_sn')->textInput(["placeholder"=>"请输入石料编号"]) ?>
+                <div class="row">
+                    <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
+                        <div class="col-xs-3">
+                            <?= $form->field($searchModel, 'stone_sn')->textInput(["placeholder"=>"请输入石料编号"]) ?>
+                        </div>
+                        <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
+                            <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?>
                 </div>
-                <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
-                    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
-                </div>
-                <?php ActiveForm::end(); ?>
                 <?php if(empty($model->stone_sn)){?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -248,6 +250,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'80'],
                             ],*/
                             [
+                                'attribute'=>'stone_sn',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute' => 'bill_type',
                                 'value' => function ($model){
                                     return \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type);
@@ -284,11 +291,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute'=>'stone_sn',
-                                'filter' =>false,
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
