@@ -118,18 +118,20 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="text-center" >
 
                 <?php
-                if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS) {
                     echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                         'class' => 'btn btn-primary btn-ms',
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]);
-                    echo '&nbsp;';
-                    echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                        'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                    ]);
-                }
+                    
+                ?>
+                <?php
+                    if($model->audit_status == AuditStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                            'class'=>'btn btn-success btn-ms',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
                 ?>
                 <?php
                 $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_STYLE,$model->id);

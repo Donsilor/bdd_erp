@@ -184,5 +184,23 @@ class OrderGoodsController extends BaseController
 
         return true;
     }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        $model->initAttrs();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'returnUrl'=>$this->returnUrl,
+        ]);
+    }
 }
 

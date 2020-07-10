@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\forms;
 
+use common\enums\AuditStatusEnum;
 use Yii;
 
 use addons\Style\common\models\Style;
@@ -180,7 +181,9 @@ class StyleGoodsForm extends Model
         }
         $cost_price_min = min($cost_prices);
         $cost_price_max = max($cost_prices);
-        
+
+        //重新编辑后，款式审核状态改为未审核
+        $style->audit_status = AuditStatusEnum::SAVE;
         $style->goods_num = $goods_num;
         $style->cost_price = $cost_price_min;
         $style->cost_price_min = $cost_price_min;

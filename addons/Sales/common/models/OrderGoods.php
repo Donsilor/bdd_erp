@@ -2,6 +2,9 @@
 
 namespace addons\Sales\common\models;
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Style\common\models\StyleChannel;
 use Yii;
 
 /**
@@ -102,5 +105,51 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
             'remark' => '备注',
 
         ];
+    }
+
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
+    }
+
+    /**
+     * 款式渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
+    }
+
+
+    /**
+     * 采购单一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class, ['id'=>'order_id'])->alias('order');
+    }
+
+
+    /**
+     * 商品属性列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttrs()
+    {
+        return $this->hasMany(OrderGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
     }
 }
