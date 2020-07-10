@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
+use addons\Style\common\forms\StyleAttrForm;
 use common\enums\ConfirmEnum;
 use common\helpers\ArrayHelper;
 use Yii;
@@ -475,6 +476,14 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->is_inlay = $style->is_inlay;
                 $images = Yii::$app->styleService->style->getStyleImages($goods_sn);
                 $model->goods_images = join(',',$images);
+
+
+                $styleForm = new StyleAttrForm();
+                $styleForm->style_id = $style->id;
+                $styleForm->initAttrs();
+
+                $model->attr_custom = $styleForm->attr_custom;
+                $model->attr_require = $styleForm->attr_require;
             }
         }
         
