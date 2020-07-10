@@ -115,6 +115,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'goods_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:120px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'goods_status',
                                 'value' => function ($model){
                                     return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
