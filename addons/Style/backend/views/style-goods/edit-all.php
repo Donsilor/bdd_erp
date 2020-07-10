@@ -67,9 +67,7 @@ $model = $model ?? new StyleGoodsForm();
 
     <div class="modal-footer">
         <div class="col-sm-10 text-center">
-            <?php if($style->audit_status == AuditStatusEnum::SAVE || $style->audit_status == AuditStatusEnum::UNPASS) { ?>
                 <button class="btn btn-primary" type="submit">保存</button>
-            <?php } ?>
             <span class="btn btn-white" onclick="window.location.href='<?php echo $returnUrl;?>'">返回</span>
         </div>
 	</div>

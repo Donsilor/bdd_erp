@@ -169,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'template' => '{view} {edit} {apply-edit} {delete}',
                                         'buttons' => [
                                             'view'=> function($url, $model, $key){
-                                                return Html::edit(['order-goods/view','id' => $model->id, 'order_id'=>$model->order_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                                return Html::edit(['order-goods/view','id' => $model->id, 'order_id'=>$model->order_id, 'returnUrl' => Url::getReturnUrl()],'详情',[
                                                     'class' => 'btn btn-info btn-xs',
                                                 ]);
                                             },
