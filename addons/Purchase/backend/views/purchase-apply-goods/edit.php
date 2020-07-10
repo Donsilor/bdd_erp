@@ -83,6 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         default:{
                             $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
+                            if(empty($attr_values)) {
+                                $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                            }
                             $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
                             break;
                         }
