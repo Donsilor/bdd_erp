@@ -12,7 +12,6 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderAddress;
-use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
 use addons\Supply\common\enums\FromTypeEnum;
