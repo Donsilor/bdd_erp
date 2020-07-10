@@ -4,6 +4,7 @@ namespace addons\Sales\common\forms;
 
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\AttributeSpec;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
 use common\enums\ConfirmEnum;
@@ -25,12 +26,15 @@ class OrderGoodsForm extends OrderGoods
     public $attr;
 
     public $style_id;
+
+    public $order_goods_sn;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
+
             [['attr_require'], 'required','isEmpty'=>function($value){
                 if(!empty($value)) {
                     foreach ($value as $k=>$v) {
@@ -58,6 +62,7 @@ class OrderGoodsForm extends OrderGoods
         return ArrayHelper::merge(parent::attributeLabels() , [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
+                'order_goods_sn' => '款号/起版号',
             ]);
     }
 
@@ -87,6 +92,12 @@ class OrderGoodsForm extends OrderGoods
             $this->attr_custom  = $attr_list;
             $this->attr_require = $attr_list;
         }
+        if($this->qiban_type == QibanTypeEnum::NON_VERSION){
+            $this->order_goods_sn = $this->style_sn;
+        }else{
+            $this->order_goods_sn = $this->qiban_sn;
+        }
+
     }
     /**
      * 初始化 已填写属性数据
@@ -193,7 +204,7 @@ class OrderGoodsForm extends OrderGoods
     public function createApply()
     {
         //主要信息
-        $fields = array('goods_name','cost_price','goods_num','peiliao_type','peishi_type');
+        $fields = array('goods_name','goods_price','goods_num');
         $apply_info = array();
         foreach ($fields as $field) {
             $apply_info[] = array(
@@ -226,10 +237,7 @@ class OrderGoodsForm extends OrderGoods
             );
         }
         //其他信息
-        $fields = array(
-            'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_loss','jiagong_fee',
-            'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','parts_weight','parts_price','parts_fee','factory_cost_price','stone_info','parts_info','remark','goods_image'
-        );
+        $fields = [];
         foreach ($fields as $field) {
             $apply_info[] = array(
                 'code'=>$field,

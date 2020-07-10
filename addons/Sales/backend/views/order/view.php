@@ -1,8 +1,8 @@
 <?php
 
 use common\helpers\Html;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
+use addons\Sales\common\enums\OrderStatusEnum;
+use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\AmountHelper;
 
@@ -79,12 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box"  style="margin:0px">
                 <div class="box-header" style="margin:0">
                     <h3 class="box-title"><i class="fa fa-info"></i> 商品信息</h3>
-                    <?= Html::create(['order-goods/edit'], '添加商品', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                    <?= Html::create(['order-goods/edit', 'order_id' => $model->id], '添加商品', [
+                        'class' => 'btn btn-primary btn-xs openIframe',
+                        'data-width'=>'90%',
+                        'data-height'=>'90%',
+                        'data-offset'=>'20px',
                     ]); ?>
                 </div>
                 <div class="table-responsive col-lg-12">
+                    <?php $order = $model ?>
                      <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'tableOptions' => ['class' => 'table table-hover'],
@@ -92,6 +95,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'class' => 'yii\grid\SerialColumn',
                                         'visible' => false,
+                                    ],
+                                    [
+                                        'value'=>function($model){
+
+                                        }
                                     ],
                                     [
                                         'attribute' => 'goods_image',
@@ -154,6 +162,34 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     return $model->is_gift;
                                             }
                                     ],
+                                    [
+                                        'class' => 'yii\grid\ActionColumn',
+                                        'header' => '操作',
+                                        //'headerOptions' => ['width' => '150'],
+                                        'template' => '{view} {edit} {apply-edit} {delete}',
+                                        'buttons' => [
+                                            'view'=> function($url, $model, $key){
+                                                return Html::edit(['order-goods/view','id' => $model->id, 'order_id'=>$model->order_id, 'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
+                                                    'class' => 'btn btn-info btn-xs',
+                                                ]);
+                                            },
+                                            'edit' => function($url, $model, $key) use($order){
+                                                if($order->order_status == OrderStatusEnum::SAVE) {
+                                                    return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                }
+                                            },
+                                            'apply-edit' =>function($url, $model, $key) use($order){
+                                                if($order->order_status == OrderStatusEnum::CONFORMED) {
+                                                    return Html::edit(['order-goods/apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                }
+                                            },
+                                            'delete' => function($url, $model, $key) use($order){
+                                                if($order->order_status == OrderStatusEnum::SAVE) {
+                                                    return Html::delete(['order-goods/delete','id' => $model->id,'order_id'=>$model->order_id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
+                                                }
+                                            },
+                                        ]
+                                    ]
                                 ]
                             ]); ?>
                 </div>

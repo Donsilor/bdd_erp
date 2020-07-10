@@ -2,6 +2,8 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\models\OrderGoodsAttribute;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -199,6 +201,24 @@ class OrderService extends Service
             }
         }
         return $model->order_sn;
+    }
+
+
+
+    /**
+     * 采购单汇总
+     * @param unknown $purchase_id
+     */
+    public function orderSummary($order_id)
+    {
+        $sum = OrderGoods::find()
+            ->select(['sum(goods_num) as total_num','sum(goods_price*goods_num) as total_goods_price','sum(goods_discount) as total_goods_discount','sum(goods_pay_price*goods_num) as total_pay_price'])
+            ->where(['order_id'=>$order_id])
+            ->asArray()->one();
+        if($sum) {
+            Order::updateAll(['goods_num'=>$sum['total_num']/1],['id'=>$order_id]);
+            OrderAccount::updateAll(['discount_amount'=>$sum['total_goods_discount']/1,'paid_amount'=>$sum['total_pay_price']/1],['order_id'=>$order_id]);
+        }
     }
     
 }
