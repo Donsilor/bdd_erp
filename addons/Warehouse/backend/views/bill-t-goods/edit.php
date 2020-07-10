@@ -28,6 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'goods_name')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
