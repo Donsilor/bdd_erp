@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'columns' => [
                                     [
                                         'name' =>'purchase_sn',
-                                        'title'=>"采购单号",
+                                        'title'=>$model->getAttributeLabel('purchase_sn'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -44,7 +44,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' =>'produce_sn',
-                                        'title'=>"布产单号",
+                                        'title'=>$modelG->getAttributeLabel('produce_sn'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'readonly' =>'true',
+                                            'style'=>'width:160px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' =>'order_sn',
+                                        'title'=>$modelG->getAttributeLabel('order_sn'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -54,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' =>'goods_name',
-                                        'title'=>"货品名称",
+                                        'title'=>$modelG->getAttributeLabel('goods_name'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -62,8 +72,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
+                                        'name' =>'goods_sn',
+                                        'title'=>$modelG->getAttributeLabel('goods_sn'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
                                         'name' =>'goods_num',
-                                        'title'=>"货品数量",
+                                        'title'=>$modelG->getAttributeLabel('goods_num'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -72,27 +91,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
-                                        'name' =>'style_sn',
-                                        'title'=>"款号",
-                                        'enableError'=>false,
-                                        'options' => [
-                                            'class' => 'input-priority',
-                                            'readonly' =>'true',
-                                            'style'=>'width:120px'
-                                        ]
-                                    ],
-                                    [
-                                        'name' => "factory_mo",
-                                        'title'=>"工厂模号",
-                                        'enableError'=>false,
-                                        'options' => [
-                                            'class' => 'input-priority',
-                                            'style'=>'width:100px'
-                                        ]
-                                    ],
-                                    [
                                         'name' => "product_type_id",
-                                        'title'=>"产品线",
+                                        'title'=>$modelG->getAttributeLabel('product_type_id'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "style_cate_id",
-                                        'title'=>"款式分类",
+                                        'title'=>$modelG->getAttributeLabel('style_cate_id'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "style_sex",
-                                        'title'=>"款式性别",
+                                        'title'=>$modelG->getAttributeLabel('style_sex'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -127,8 +127,74 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'items' => \addons\Style\common\enums\StyleSexEnum::getMap()
                                     ],
                                     [
+                                        'name' => "style_channel_id",
+                                        'title'=>$modelG->getAttributeLabel('style_channel_id'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:120px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->styleService->styleChannel->getDropDown()
+                                    ],
+                                    [
+                                        'name' =>'style_sn',
+                                        'title'=>$modelG->getAttributeLabel('style_sn'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'readonly' =>'true',
+                                            'style'=>'width:120px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' =>'qiban_sn',
+                                        'title'=>$modelG->getAttributeLabel('qiban_sn'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'readonly' =>'true',
+                                            'style'=>'width:120px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "qiban_type",
+                                        'title'=>$modelG->getAttributeLabel('qiban_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:120px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \addons\Style\common\enums\QibanTypeEnum::getMap()
+                                    ],
+                                    [
+                                        'name' => "factory_mo",
+                                        'title'=>$modelG->getAttributeLabel('factory_mo'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "finger_hk",
+                                        'title'=>$modelG->getAttributeLabel('finger_hk'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'defaultValue' => 0,
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO)
+                                    ],
+                                    [
                                         'name' => "finger",
-                                        'title'=>"指圈",
+                                        'title'=>$modelG->getAttributeLabel('finger'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -141,7 +207,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "xiangkou",
-                                        'title'=>"镶口",
+                                        'title'=>$modelG->getAttributeLabel('xiangkou'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -154,7 +220,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "material",
-                                        'title'=>"主成色",
+                                        'title'=>$modelG->getAttributeLabel('material'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -167,8 +233,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL)
                                     ],
                                     [
+                                        'name' => "material_type",
+                                        'title'=>$modelG->getAttributeLabel('material_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'disabled'=>'disabled',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'defaultValue' => 0,
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE)
+                                    ],
+                                    [
+                                        'name' => "material_color",
+                                        'title'=>$modelG->getAttributeLabel('material_color'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'disabled'=>'disabled',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'defaultValue' => 0,
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR)
+                                    ],
+                                    [
                                         'name' => "gold_weight",
-                                        'title'=>"主成色重",
+                                        'title'=>$modelG->getAttributeLabel('gold_weight'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -179,7 +273,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "gold_price",
-                                        'title'=>"主成色买入单价",
+                                        'title'=>$modelG->getAttributeLabel('gold_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -190,7 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "gold_loss",
-                                        'title'=>"金损",
+                                        'title'=>$modelG->getAttributeLabel('gold_loss'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -201,7 +295,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "gold_amount",
-                                        'title'=>"金料额",
+                                        'title'=>$modelG->getAttributeLabel('gold_amount'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -211,20 +305,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
-                                        'name' => "jintuo_type",
-                                        'title'=>"金托类型",
-                                        'enableError'=>false,
-                                        'type'  => 'dropDownList',
-                                        'options' => [
-                                            'class' => 'input-priority',
-                                            'style'=>'width:80px',
-                                            'prompt'=>'请选择',
-                                        ],
-                                        'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
-                                    ],
-                                    [
                                         'name' => "gross_weight",
-                                        'title'=>"毛重",
+                                        'title'=>$modelG->getAttributeLabel('gross_weight'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -235,7 +317,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "suttle_weight",
-                                        'title'=>"净重",
+                                        'title'=>$modelG->getAttributeLabel('suttle_weight'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -245,8 +327,110 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
+                                        'name' => "jintuo_type",
+                                        'title'=>$modelG->getAttributeLabel('jintuo_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \addons\Style\common\enums\JintuoTypeEnum::getMap()
+                                    ],
+                                    [
+                                        'name' => "is_inlay",
+                                        'title'=>$modelG->getAttributeLabel('is_inlay'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \addons\Style\common\enums\InlayEnum::getMap()
+                                    ],
+                                    [
+                                        'name' => "kezi",
+                                        'title'=>$modelG->getAttributeLabel('kezi'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "goods_color",
+                                        'title'=>$modelG->getAttributeLabel('goods_color'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::GOODS_COLOR)
+                                    ],
+                                    [
+                                        'name' => "chain_long",
+                                        'title'=>$modelG->getAttributeLabel('chain_long'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "chain_type",
+                                        'title'=>$modelG->getAttributeLabel('chain_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_TYPE)
+                                    ],
+                                    [
+                                        'name' => "cramp_ring",
+                                        'title'=>$modelG->getAttributeLabel('cramp_ring'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_BUCKLE)
+                                    ],
+                                    [
+                                        'name' => "talon_head_type",
+                                        'title'=>$modelG->getAttributeLabel('talon_head_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::TALON_HEAD_TYPE)
+                                    ],
+                                    [
+                                        'name' => "xiangqian_craft",
+                                        'title'=>$modelG->getAttributeLabel('xiangqian_craft'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGQIAN_CRAFT)
+                                    ],
+                                    [
                                         'name' => "product_size",
-                                        'title'=>"成品尺寸",
+                                        'title'=>$modelG->getAttributeLabel('product_size'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -255,7 +439,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "cert_id",
-                                        'title'=>"证书号",
+                                        'title'=>$modelG->getAttributeLabel('cert_id'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -263,8 +447,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
+                                        'name' => "cert_type",
+                                        'title'=>$modelG->getAttributeLabel('cert_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:80px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE)
+                                    ],
+                                    [
                                         'name' => "cost_price",
-                                        'title'=>"成本价",
+                                        'title'=>$modelG->getAttributeLabel('cost_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -275,7 +471,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "market_price",
-                                        'title'=>"市场价",
+                                        'title'=>$modelG->getAttributeLabel('market_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -286,7 +482,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "sale_price",
-                                        'title'=>"销售价",
+                                        'title'=>$modelG->getAttributeLabel('sale_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -297,7 +493,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "main_stone",
-                                        'title'=>"主石类型",
+                                        'title'=>$modelG->getAttributeLabel('main_stone'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -308,8 +504,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE)
                                     ],
                                     [
-                                        'name' => "main_cert_id",
-                                        'title'=>"主石证书号",
+                                        'name' => "main_stone_sn",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_sn'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -317,8 +513,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
+                                        'name' => "main_cert_id",
+                                        'title'=>$modelG->getAttributeLabel('main_cert_id'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "main_cert_type",
+                                        'title'=>$modelG->getAttributeLabel('main_cert_type'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE)
+                                    ],
+                                    [
                                         'name' => "main_stone_num",
-                                        'title'=>"主石数量",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_num'),
                                         'enableError'=>false,
                                         'defaultValue' => 0,
                                         'options' => [
@@ -329,7 +546,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "main_stone_weight",
-                                        'title'=>"主石重",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_weight'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -339,8 +556,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]
                                     ],
                                     [
+                                        'name' => "main_stone_shape",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_shape'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SHAPE)
+                                    ],
+                                    [
                                         'name' => "main_stone_color",
-                                        'title'=>"主石颜色",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_color'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -352,7 +581,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "main_stone_clarity",
-                                        'title'=>"主石净度",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_clarity'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -363,8 +592,77 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY)
                                     ],
                                     [
+                                        'name' => "main_stone_cut",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_cut'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CUT)
+                                    ],
+                                    [
+                                        'name' => "main_stone_symmetry",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_symmetry'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SYMMETRY)
+                                    ],
+                                    [
+                                        'name' => "main_stone_polish",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_polish'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_POLISH)
+                                    ],
+                                    [
+                                        'name' => "main_stone_fluorescence",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_fluorescence'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_FLUORESCENCE)
+                                    ],
+                                    [
+                                        'name' => "main_stone_colour",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_colour'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOUR)
+                                    ],
+                                    [
+                                        'name' => "main_stone_size",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_size'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
                                         'name' => "main_stone_price",
-                                        'title'=>"主石买入单价",
+                                        'title'=>$modelG->getAttributeLabel('main_stone_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -375,7 +673,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_cert_id1",
-                                        'title'=>"副石证书号",
+                                        'title'=>$modelG->getAttributeLabel('second_cert_id1'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -384,7 +682,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone1",
-                                        'title'=>"副石1类型",
+                                        'title'=>$modelG->getAttributeLabel('second_stone1'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -396,7 +694,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone_num1",
-                                        'title'=>"副石1数量",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_num1'),
                                         'enableError'=>false,
                                         'defaultValue' => 0,
                                         'options' => [
@@ -407,18 +705,63 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone_weight1",
-                                        'title'=>"副石1重量",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_weight1'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
                                             'type' => 'number',
-                                            'style'=>'width:80px'
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "second_stone_shape1",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_shape1'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_SHAPE)
+                                    ],
+                                    [
+                                        'name' => "second_stone_color1",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_color1'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR)
+                                    ],
+                                    [
+                                        'name' => "second_stone_clarity1",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_clarity1'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY)
+                                    ],
+                                    [
+                                        'name' => "second_stone_size1",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_size1'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
                                         ]
                                     ],
                                     [
                                         'name' => "second_stone_price1",
-                                        'title'=>"副石1买入单价",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_price1'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -429,7 +772,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone2",
-                                        'title'=>"副石2类型",
+                                        'title'=>$modelG->getAttributeLabel('second_stone2'),
                                         'enableError'=>false,
                                         'type'  => 'dropDownList',
                                         'options' => [
@@ -441,7 +784,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone_num2",
-                                        'title'=>"副石2数量",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_num2'),
                                         'enableError'=>false,
                                         'defaultValue' => 0,
                                         'options' => [
@@ -452,18 +795,63 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "second_stone_weight2",
-                                        'title'=>"副石2重量",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_weight2'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
                                             'type' => 'number',
-                                            'style'=>'width:80px'
+                                            'style'=>'width:100px'
+                                        ]
+                                    ],
+                                    [
+                                        'name' => "second_stone_shape2",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_shape2'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_SHAPE)
+                                    ],
+                                    [
+                                        'name' => "second_stone_color2",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_color2'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR)
+                                    ],
+                                    [
+                                        'name' => "second_stone_clarity2",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_clarity2'),
+                                        'enableError'=>false,
+                                        'type'  => 'dropDownList',
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px',
+                                            'prompt'=>'请选择',
+                                        ],
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY)
+                                    ],
+                                    [
+                                        'name' => "second_stone_size2",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_size2'),
+                                        'enableError'=>false,
+                                        'options' => [
+                                            'class' => 'input-priority',
+                                            'style'=>'width:100px'
                                         ]
                                     ],
                                     [
                                         'name' => "second_stone_price2",
-                                        'title'=>"副石2买入单价",
+                                        'title'=>$modelG->getAttributeLabel('second_stone_price2'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -474,7 +862,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "markup_rate",
-                                        'title'=>"加价率",
+                                        'title'=>$modelG->getAttributeLabel('markup_rate'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -485,7 +873,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "gong_fee",
-                                        'title'=>"工费",
+                                        'title'=>$modelG->getAttributeLabel('gong_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -496,7 +884,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "parts_weight",
-                                        'title'=>"配件重量",
+                                        'title'=>$modelG->getAttributeLabel('parts_weight'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -507,7 +895,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "parts_price",
-                                        'title'=>"配件金额",
+                                        'title'=>$modelG->getAttributeLabel('parts_price'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -518,7 +906,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "parts_fee",
-                                        'title'=>"配件工费",
+                                        'title'=>$modelG->getAttributeLabel('parts_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -529,7 +917,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "xianqian_fee",
-                                        'title'=>"镶嵌工费",
+                                        'title'=>$modelG->getAttributeLabel('xianqian_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -540,7 +928,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "biaomiangongyi",
-                                        'title'=>"表面工艺",
+                                        'title'=>$modelG->getAttributeLabel('biaomiangongyi'),
                                         'type' => 'dropDownList',
                                         'enableError'=>false,
                                         'options' => [
@@ -552,7 +940,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "biaomiangongyi_fee",
-                                        'title'=>"表面工艺工费",
+                                        'title'=>$modelG->getAttributeLabel('biaomiangongyi_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -563,7 +951,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "fense_fee",
-                                        'title'=>"分色工艺工费",
+                                        'title'=>$modelG->getAttributeLabel('fense_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -574,7 +962,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "bukou_fee",
-                                        'title'=>"补口工费",
+                                        'title'=>$modelG->getAttributeLabel('bukou_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -585,7 +973,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "cert_fee",
-                                        'title'=>"证书费",
+                                        'title'=>$modelG->getAttributeLabel('cert_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -596,7 +984,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "extra_stone_fee",
-                                        'title'=>"超石费",
+                                        'title'=>$modelG->getAttributeLabel('extra_stone_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -607,7 +995,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "tax_fee",
-                                        'title'=>"税费",
+                                        'title'=>$modelG->getAttributeLabel('tax_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -618,7 +1006,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "other_fee",
-                                        'title'=>"其他费用",
+                                        'title'=>$modelG->getAttributeLabel('other_fee'),
                                         'enableError'=>false,
                                         'defaultValue' => '0.00',
                                         'options' => [
@@ -629,7 +1017,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' =>'barcode',
-                                        'title'=>"条形码编号",
+                                        'title'=>$modelG->getAttributeLabel('barcode'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
@@ -638,7 +1026,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'name' => "goods_remark",
-                                        'title'=>"商品备注",
+                                        'title'=>$modelG->getAttributeLabel('goods_remark'),
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',

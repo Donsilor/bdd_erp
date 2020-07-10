@@ -125,6 +125,7 @@ class ReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
         $id = \Yii::$app->request->get('receipt_id');
         $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $modelG = new PurchaseReceiptGoodsForm();
         $model->produce_sns = \Yii::$app->request->get('produce_sns');
         $goods_list = [];
         if(\Yii::$app->request->get('search') && $model->produce_sns){
@@ -150,6 +151,7 @@ class ReceiptGoodsController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $model,
+            'modelG' => $modelG,
             'goods_list' => $goods_list,
             'num' => count($goods_list),
         ]);
