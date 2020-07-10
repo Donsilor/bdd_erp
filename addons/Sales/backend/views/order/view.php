@@ -115,9 +115,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => 'goods_name'
                                     ],
                                     [
+                                        'attribute'=>'goods_sn',
+                                        'value' => 'goods_sn'
+                                    ],
+                                    [
                                             'attribute'=>'style_sn',
                                             'value' => 'style_sn'
-                                    ],                                    
+                                    ],
+                                    [
+                                        'attribute'=>'qiban_sn',
+                                        'value' => 'qiban_sn'
+                                    ],
+                                    [
+                                        'attribute'=>'qiban_type',
+                                        'value' => function($model){
+                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                                        }
+                                    ],
+
                                     [
                                         'attribute'=>'goods_num',
                                         'value' => 'goods_num'
