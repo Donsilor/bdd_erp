@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute'=>'attr_id',
                                     'filter' => false,
                                     'value' => function($model){
-                                        return $model->attr->attr_name;
+                                        return $model->attr->attr_name ?? '';
                                     },
                                     'headerOptions' => ['class' => 'col-md-1'],
                                ],

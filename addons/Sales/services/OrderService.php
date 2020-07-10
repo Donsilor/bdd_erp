@@ -12,6 +12,11 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderAddress;
+use addons\Sales\common\models\OrderGoodsAttribute;
+use addons\Supply\common\enums\BuChanEnum;
+use common\enums\AuditStatusEnum;
+use addons\Supply\common\enums\FromTypeEnum;
+use addons\Sales\common\enums\IsStockEnum;
 
 /**
  * Class SaleChannelService
@@ -105,6 +110,79 @@ class OrderService extends Service
 
         return $order;        
     }
+    /**
+     * 同步订单商品生成布产单
+     * @param int $order_id
+     * @param array $detail_ids
+     * @throws \Exception
+     */
+    public function syncProduce($order_id, $detail_ids = null)
+    {
+        $order = Order::find()->where(['id'=>$order_id])->one();
+        if($order->total_num <= 0 ){
+            throw new \Exception('订单没有明细');
+        }
+        if($order->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('订单没有审核');
+        }
+        $query = OrderGoods::find()->where(['order_id'=>$order_id,'is_stock'=>IsStockEnum::NO]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        foreach ($models as $model){
+            $buchan_status = BuChanEnum::INITIALIZATION;
+            $goods = [
+                    'goods_name' =>$model->goods_name,
+                    'goods_num' =>$model->goods_num,
+                    'from_order_id'=>$model->order_id,
+                    'from_detail_id' => $model->id,
+                    'from_order_sn'=>$order->order_sn,
+                    'from_type' => FromTypeEnum::ORDER,
+                    'style_sn' => $model->style_sn,
+                    //'peiliao_type'=>$model->peiliao_type,
+                    //'peishi_type'=>$model->peishi_type,
+                    //'peishi_status'=>$peishi_status,
+                    //'peiliao_status'=>$peiliao_status,
+                    'bc_status' => $buchan_status,
+                    'qiban_sn' => $model->qiban_sn,
+                    'qiban_type'=>$model->qiban_type,
+                    'jintuo_type'=>$model->jintuo_type,
+                    'style_sex' =>$model->style_sex,
+                    'is_inlay' =>$model->is_inlay,
+                    'product_type_id'=>$model->product_type_id,
+                    'style_cate_id'=>$model->style_cate_id,
+                    //'supplier_id'=>$order->supplier_id,
+                    //'follower_id'=>$order->follower_id,
+                    'factory_mo'=>$model->factory_mo,
+                    //'factory_distribute_time' => time()
+            ];
+            if($model->produce_id && $model->produce){
+                if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
+                    //生产中之后的流程，禁止同步
+                    continue;
+                }else {
+                    unset($goods['bc_status']);
+                    $goods['id'] = $model->produce->id;
+                    //如果是配料中的，不同步配料类型和配料状态
+                    if($model->produce->bc_status == BuChanEnum::IN_PEILIAO) {
+                        /* unset($goods['peiliao_type']);
+                        unset($goods['peishi_status']);
+                        unset($goods['peiliao_status']); */
+                    }
+                }
+            }
+            $goods_attrs = OrderGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+            $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+            if($produce) {
+                $model->produce_id = $produce->id;
+            }
+            if(false === $model->save()) {
+                throw new \Exception($this->getError($model),422);
+            }
+        }
+    }
+    
     /**
      * 创建订单编号
      * @param Style $model
