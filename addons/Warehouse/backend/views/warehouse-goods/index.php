@@ -239,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'总重',
+                            'attribute'=>'gross_weight',
                             'value'=>'gross_weight',
                             'filter' => false,
                             'headerOptions' => [],
@@ -253,9 +253,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'尺寸',
+                            'attribute'=>'product_size',
                             'value'=>function($model){
-                                return '需确认规则';
+                                return $model->product_size;
                             },
                             'filter' => false,
                             'headerOptions' => [],
@@ -273,9 +273,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'主石规格',
+                            'attribute'=>'main_stone_size',
                             'value'=>function($model){
-                                return '需确认规则';
+                                return $model->main_stone_size;
                             },
                             'filter' => false,
                             'headerOptions' => [],
@@ -301,9 +301,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'副石1规格',
+                            'attribute'=>'second_stone_size1',
                             'value'=>function($model){
-                                return '需确认规则';
+                                return $model->second_stone_size1;
                             },
                             'filter' => false,
                             'headerOptions' => [],
