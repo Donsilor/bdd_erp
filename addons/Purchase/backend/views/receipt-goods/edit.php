@@ -112,6 +112,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'xiangqian_craft')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'biaomiangongyi')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">

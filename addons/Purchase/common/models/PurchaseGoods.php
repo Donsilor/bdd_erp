@@ -47,6 +47,7 @@ use addons\Supply\common\models\Produce;
  * @property string $gold_cost_price 单件银(金)额
  * @property string $gold_amount 金料额
  * @property string $parts_info 配件信息
+ * @property string $parts_weight 配件重量
  * @property string $jiagong_fee 加工费/件
  * @property string $xiangqian_fee 镶石费/件
  * @property string $gong_fee 工费总额/件(jiagong+xiangqian)

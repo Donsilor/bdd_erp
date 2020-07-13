@@ -216,7 +216,7 @@ class WarehouseGoods extends BaseModel
             'biaomiangongyi' => '表面工艺',
             'talon_head_type' => '爪头形状',
             'goods_color' => '金料颜色',
-            'xiangqian_craft' => '爪头形状',
+            'xiangqian_craft' => '镶嵌工艺',
             'markup_rate' => '加价率',
             'remark' => '商品备注',
             'apply_id' => '当前申请人',
