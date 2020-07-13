@@ -213,7 +213,7 @@ class WarehouseGoods extends BaseModel
             'chain_type' => '链类型',
             'cramp_ring' => '扣环',
             'talon_head_type' => '爪头形状',
-            'xiangqian_craft' => '爪头形状',
+            'xiangqian_craft' => '镶嵌工艺',
             'markup_rate' => '加价率',
             'remark' => '商品备注',
             'apply_id' => '当前申请人',
