@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '订单列表';
+$this->title = '待配货订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
