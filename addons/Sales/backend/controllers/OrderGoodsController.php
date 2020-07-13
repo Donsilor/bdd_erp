@@ -1,8 +1,10 @@
 <?php
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderGoodsForm;
+use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
@@ -94,6 +96,10 @@ class OrderGoodsController extends BaseController
                 throw new \Exception("订单已审核,不允许删除",422);
             }
             $model = $this->findModel($id);
+            if($model->is_stock == IsStockEnum::YES){
+                throw new \Exception("请先解绑",422);
+            }
+
             if (!$model->delete()) {
                 throw new \Exception("删除失败",422);
             }
@@ -192,6 +198,51 @@ class OrderGoodsController extends BaseController
 
         return true;
     }
+
+
+    public function actionStock(){
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = StockGoodsForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new StockGoodsForm();
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                Yii::$app->salesService->orderGoods->toStock($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUntie(){
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            Yii::$app->salesService->orderGoods->toUntie($model);
+            $trans->commit();
+            //前端提示
+            Yii::$app->getSession()->setFlash('success','解绑成功');
+            return $this->redirect(Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
+    }
+
 
 
     /**
