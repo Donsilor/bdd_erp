@@ -129,7 +129,7 @@ class WarehouseBillLService extends Service
                 'put_in_type'=>$bill->put_in_type,
                 'company_id'=> 1,//暂时为1
                 'warehouse_id' => $bill->to_warehouse_id?:0,
-                'order_detail_id' => $good->order_detail_id??"",
+                'order_detail_id' => (string)$good->order_detail_id??"",
                 'order_sn' => $good->order_sn??"",
                 'produce_sn' => $good->produce_sn,
                 'kezi' => $good->kezi,

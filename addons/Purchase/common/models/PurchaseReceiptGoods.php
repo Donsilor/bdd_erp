@@ -137,7 +137,7 @@ class PurchaseReceiptGoods extends BaseModel
     {
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
-            [['receipt_id', 'xuhao', 'goods_status', 'goods_num', 'style_sex', 'style_channel_id', 'qiban_type', 'jintuo_type', 'is_inlay', 'biaomiangongyi', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'second_stone_num3', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'receipt_id', 'xuhao', 'goods_status', 'goods_num', 'style_sex', 'style_channel_id', 'qiban_type', 'jintuo_type', 'is_inlay', 'biaomiangongyi', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'second_stone_num3', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_price', 'gold_amount', 'gold_loss', 'gross_weight', 'suttle_weight', 'cost_price', 'market_price', 'sale_price', 'parts_weight', 'parts_price', 'single_stone_weight', 'chain_long', 'main_stone_weight', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3', 'markup_rate', 'gong_fee', 'parts_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'cert_fee', 'extra_stone_fee', 'tax_fee', 'other_fee', 'total_gong_fee'], 'number'],
             [['purchase_sn', 'order_sn', 'produce_sn', 'qiban_sn', 'cert_id', 'second_cert_id1'], 'string', 'max' => 30],
             [['barcode', 'kezi', 'goods_color', 'product_size', 'cert_type', 'main_cert_type', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
