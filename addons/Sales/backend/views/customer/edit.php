@@ -50,15 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-3">
                             <?= $form->field($model, 'marriage')->radioList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
                         </div>
-                        <div class="col-lg-3">
-                            <?= $form->field($model, 'head_portrait')->widget(common\widgets\webuploader\Files::class, [
-                                'config' => [
-                                    'pick' => [
-                                        'multiple' => false,
-                                    ],
-                                ]
-                            ]); ?>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
