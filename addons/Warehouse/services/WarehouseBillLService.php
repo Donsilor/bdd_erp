@@ -73,11 +73,21 @@ class WarehouseBillLService extends Service
         $key = array_keys($goods[0]);
         foreach ($goods as $item) {
             $value[] = array_values($item);
+            if(count($value)>10){
+                $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \Exception("创建收货单据明细失败1");
+                }
+                $value = [];
+            }
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建收货单据明细失败");
+        if(!empty($value)){
+            $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \Exception("创建收货单据明细失败2");
+            }
         }
+
     }
 
     /**
