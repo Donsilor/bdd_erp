@@ -16,10 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -51,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'30'],
             ],  
-            [
+            /*[
                     'attribute'=>'created_at',
                     'value'=>function($model){
                            return Yii::$app->formatter->asDatetime($model->created_at);
@@ -75,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),                    
                     'headerOptions' => ['class' => 'col-md-1'],
             
-            ],
+            ],*/
             [
                     'attribute' => 'order_sn',
                     'value'=>function($model) {
@@ -98,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
-            [
+            /*[
                     'label' => '联系方式',
                     'attribute' => 'customer_mobile',
                     'value' => function($model){
@@ -111,14 +107,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
-/*                
             [
                     'attribute' => 'goods_num',
                     'value' => "goods_num",
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
-            ], */
+            ],*/
             [
                     'attribute' => 'account.order_amount',
                     'value' => function($model){
@@ -202,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],  
-            [
+            /*[
                     'attribute' => 'follower_id',
                     'value' => function($model){
                         return $model->follower->username ?? '';
@@ -210,11 +205,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
+            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {apply} {follower} {close}',
+                'template' => '',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[

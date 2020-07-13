@@ -35,6 +35,10 @@ class DistributionOrderController extends BaseController
                      'id' => SORT_DESC
                 ],
                 'pageSize' => $this->getPageSize(),
+                'relations' => [
+                    'account' => ['order_amount'],
+                    'address' => [],
+                ]
                 
         ]);
         
