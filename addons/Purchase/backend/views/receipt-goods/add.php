@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:260px'
                                         ]
                                     ],
@@ -77,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -97,6 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:120px',
                                             'prompt'=>'请选择',
                                         ],
@@ -109,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:120px',
                                             'prompt'=>'请选择',
                                         ],
@@ -121,6 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -133,6 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:120px',
                                             'prompt'=>'请选择',
                                         ],
@@ -165,6 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:120px',
                                             'prompt'=>'请选择',
                                         ],
@@ -176,6 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -186,6 +194,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -199,6 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -212,6 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -225,6 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'disabled'=>'disabled',
                                             'prompt'=>'请选择',
@@ -240,7 +252,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'options' => [
                                             'class' => 'input-priority',
                                             'style'=>'width:100px',
-                                            'disabled'=>'disabled',
+                                            'readonly' =>'true',
                                             'prompt'=>'请选择',
                                         ],
                                         'defaultValue' => 0,
@@ -254,7 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'options' => [
                                             'class' => 'input-priority',
                                             'style'=>'width:100px',
-                                            'disabled'=>'disabled',
+                                            'readonly' =>'true',
                                             'prompt'=>'请选择',
                                         ],
                                         'defaultValue' => 0,
@@ -267,6 +279,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -278,6 +291,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -289,6 +303,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -300,6 +315,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -311,6 +327,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -322,6 +339,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -333,6 +351,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -345,6 +364,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -356,6 +376,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -366,6 +387,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -377,6 +399,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -387,6 +410,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -399,6 +423,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -412,6 +437,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'options' => [
                                             'class' => 'input-priority',
                                             'style'=>'width:80px',
+                                            'readonly' =>'true',
                                             'prompt'=>'请选择',
                                         ],
                                         'items' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::TALON_HEAD_TYPE)
@@ -423,6 +449,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -434,6 +461,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -443,6 +471,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -453,6 +482,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px',
                                             'prompt'=>'请选择',
                                         ],
@@ -465,6 +495,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -476,6 +507,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -487,6 +519,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -498,6 +531,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -509,6 +543,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -518,6 +553,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -528,6 +564,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -540,6 +577,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => 0,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -551,6 +589,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -562,6 +601,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -574,6 +614,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -586,6 +627,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -598,6 +640,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -610,6 +653,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -622,6 +666,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -634,6 +679,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -646,6 +692,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -657,6 +704,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -667,6 +715,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -677,6 +726,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -687,6 +737,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -699,6 +750,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => 0,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -710,6 +762,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -721,6 +774,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -733,6 +787,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -745,6 +800,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -756,6 +812,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -766,6 +823,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -777,6 +835,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -789,6 +848,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => 0,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -800,6 +860,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -811,6 +872,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -823,6 +885,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -835,6 +898,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'type'  => 'dropDownList',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -846,6 +910,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px'
                                         ]
                                     ],
@@ -856,6 +921,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -867,6 +933,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -878,6 +945,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -889,6 +957,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -900,6 +969,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -911,6 +981,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -922,6 +993,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -933,6 +1005,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:100px',
                                             'prompt'=>'请选择',
                                         ],
@@ -945,6 +1018,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -956,6 +1030,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:100px'
                                         ]
@@ -967,6 +1042,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -978,6 +1054,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -989,6 +1066,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -1000,6 +1078,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -1011,6 +1090,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'defaultValue' => '0.00',
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'type' => 'number',
                                             'style'=>'width:80px'
                                         ]
@@ -1021,6 +1101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:120px'
                                         ]
                                     ],
@@ -1030,6 +1111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'enableError'=>false,
                                         'options' => [
                                             'class' => 'input-priority',
+                                            'readonly' =>'true',
                                             'style'=>'width:80px'
                                         ]
                                     ]

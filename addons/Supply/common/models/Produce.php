@@ -29,6 +29,7 @@ use common\models\backend\Member;
  * @property int $style_sex 款式性别
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
+ * @property string $factory_mo 工厂模号
  * @property int $is_inlay 是否镶嵌
  * @property int $inlay_type 镶嵌方式
  * @property int $peiliao_type 配料类型

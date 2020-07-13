@@ -109,7 +109,7 @@ class PurchaseReceiptService extends Service
     }
 
     /**
-     * 采购收货单汇总
+     * 汇总
      * @param integer $receipt_id
      * @param integer $purchase_type
      * @throws \Exception
@@ -118,28 +118,33 @@ class PurchaseReceiptService extends Service
     {
         $select = [
             'sum(1) as receipt_num',
-            'sum(goods_weight) as total_weight',
             'sum(cost_price) as total_cost',
         ];
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
+            $gold = ["sum(goods_weight) as total_weight"];
+            $select = ArrayHelper::merge($select, $gold);
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
-            $select[] = "sum(stone_num) as total_stone_num";
+            $stone = ["sum(goods_weight) as total_weight","sum(stone_num) as total_stone_num"];
+            $select = ArrayHelper::merge($select, $stone);
         }else{
             $model = new PurchaseReceiptGoods();
         }
         $sum = $model::find()
             ->select($select)
             ->where(['receipt_id'=>$receipt_id, 'status'=>StatusEnum::ENABLED])
-            ->asArray()->one();
+            ->asArray()
+            ->one();
         if($sum) {
             $data = [
                 'receipt_num'=>$sum['receipt_num']/1,
-                'total_weight'=>$sum['total_weight']/1,
                 'total_cost'=>$sum['total_cost']/1,
             ];
-            if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $data['total_weight'] = $sum['total_weight']/1;
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $data['total_weight'] = $sum['total_weight']/1;
                 $data['total_stone_num'] = $sum['total_stone_num']/1;
             }
             $result = PurchaseReceipt::updateAll($data, ['id'=>$receipt_id]);
@@ -258,16 +263,33 @@ class PurchaseReceiptService extends Service
             $main_stone = $attr_arr[AttrIdEnum::MAIN_STONE_TYPE]['attr_value_id'] ?? '';
             $main_stone_num = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
             $main_stone_weight = $attr_arr[AttrIdEnum::MAIN_STONE_NUM]['attr_value'] ?? '0';
+            $main_stone_shape = $attr_arr[AttrIdEnum::MAIN_STONE_SHAPE]['attr_value_id'] ?? '';
             $main_stone_color = $attr_arr[AttrIdEnum::MAIN_STONE_COLOR]['attr_value_id'] ?? '';
             $main_stone_clarity = $attr_arr[AttrIdEnum::MAIN_STONE_CLARITY]['attr_value_id'] ?? '';
+            $main_stone_cut = $attr_arr[AttrIdEnum::MAIN_STONE_CUT]['attr_value_id'] ?? '';
+            $main_stone_symmetry = $attr_arr[AttrIdEnum::MAIN_STONE_SYMMETRY]['attr_value_id'] ?? '';
+            $main_stone_polish = $attr_arr[AttrIdEnum::MAIN_STONE_POLISH]['attr_value_id'] ?? '';
+            $main_stone_fluorescence = $attr_arr[AttrIdEnum::MAIN_STONE_FLUORESCENCE]['attr_value_id'] ?? '';
+            $main_stone_colour = $attr_arr[AttrIdEnum::MAIN_STONE_COLOUR]['attr_value_id'] ?? '';
+            $main_stone_size = "";
+            $main_cert_id = "";
+            $main_cert_type = "";
             //副石1
             $second_stone1 = $attr_arr[AttrIdEnum::SIDE_STONE1_TYPE]['attr_value_id'] ?? '';
             $second_stone_num1 = $attr_arr[AttrIdEnum::SIDE_STONE1_NUM]['attr_value'] ?? '0';
             $second_stone_weight1 = $attr_arr[AttrIdEnum::SIDE_STONE1_WEIGHT]['attr_value'] ?? '0';
+            $second_stone_shape1 = $attr_arr[AttrIdEnum::SIDE_STONE1_SHAPE]['attr_value_id'] ?? '';
+            $second_stone_color1 = $attr_arr[AttrIdEnum::SIDE_STONE1_COLOR]['attr_value_id'] ?? '';
+            $second_stone_clarity1 = $attr_arr[AttrIdEnum::SIDE_STONE1_CLARITY]['attr_value_id'] ?? '';
+            $second_stone_size1 = "";
             //副石2
             $second_stone2 = $attr_arr[AttrIdEnum::SIDE_STONE2_TYPE]['attr_value_id'] ?? '';
             $second_stone_num2 = $attr_arr[AttrIdEnum::SIDE_STONE2_NUM]['attr_value'] ?? '0';
             $second_stone_weight2 = $attr_arr[AttrIdEnum::SIDE_STONE2_WEIGHT]['attr_value'] ?? '0';
+            $second_stone_shape2 = $attr_arr[AttrIdEnum::SIDE_STONE2_SHAPE]['attr_value_id'] ?? '';
+            $second_stone_color2 = $attr_arr[AttrIdEnum::SIDE_STONE2_COLOR]['attr_value_id'] ?? '';
+            $second_stone_clarity2 = $attr_arr[AttrIdEnum::SIDE_STONE2_CLARITY]['attr_value_id'] ?? '';
+            $second_stone_size2 = "";
             if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO){
                 //金料信息
                 $gold_weight = ProduceGold::find()->alias('pg')
@@ -281,12 +303,17 @@ class PurchaseReceiptService extends Service
                     'ws.stone_type',
                     'sum(sg.stone_num) as stone_num',
                     'sum(sg.stone_weight) as stone_weight',
+                    'ws.stone_shape',
                     'ws.stone_color',
                     'ws.stone_clarity',
                     'ws.stone_cut',
                     'ws.stone_symmetry',
                     'ws.stone_polish',
-                    'ws.stone_fluorescence'
+                    'ws.stone_fluorescence',
+                    'ws.stone_colour',
+                    'ws.stone_norms',
+                    'ws.cert_id',
+                    'ws.cert_type',
                 ];
                 $stone = ProduceStone::find()->alias('ps')
                     ->leftJoin(ProduceStoneGoods::tableName().' sg','ps.id=sg.id')
@@ -304,8 +331,17 @@ class PurchaseReceiptService extends Service
                         //$main_stone = $stone1['stone_type'] ?? $main_stone;
                         $main_stone_num = $stone1['stone_num'] ?? $main_stone_num;
                         $main_stone_weight = $stone1['stone_weight'] ?? $main_stone_weight;
+                        $main_stone_shape = $stone1['stone_shape'] ?? $main_stone_shape;
                         $main_stone_color = $stone1['stone_color'] ?? $main_stone_color;
                         $main_stone_clarity = $stone1['stone_clarity'] ?? $main_stone_clarity;
+                        $main_stone_cut = $stone1['stone_cut'] ?? $main_stone_cut;
+                        $main_stone_symmetry = $stone1['stone_symmetry'] ?? $main_stone_symmetry;
+                        $main_stone_polish = $stone1['stone_polish'] ?? $main_stone_polish;
+                        $main_stone_fluorescence = $stone1['stone_fluorescence'] ?? $main_stone_fluorescence;
+                        $main_stone_colour = $stone1['stone_colour'] ?? $main_stone_colour;
+                        $main_stone_size = $stone1['stone_norms'] ?? $main_stone_size;
+                        $main_cert_id = $stone1['cert_id'] ?? $main_cert_id;
+                        $main_cert_type = $stone1['cert_type'] ?? $main_cert_type;
                     }
                     //副石1
                     if(isset($stone[2])){
@@ -313,6 +349,10 @@ class PurchaseReceiptService extends Service
                         //$second_stone1 = $stone2['stone_type'] ?? $second_stone1;
                         $second_stone_num1 = $stone2['stone_num'] ?? $second_stone_num1;
                         $second_stone_weight1 = $stone2['stone_weight'] ?? $second_stone_weight1;
+                        $second_stone_shape1 = $stone1['stone_shape'] ?? $second_stone_shape1;
+                        $second_stone_color1 = $stone1['stone_color'] ?? $second_stone_color1;
+                        $second_stone_clarity1 = $stone1['stone_clarity'] ?? $second_stone_clarity1;
+                        $second_stone_size1 = $stone1['stone_norms'] ?? $second_stone_size1;
                     }
                     //副石2
                     if(isset($stone[3])){
@@ -320,6 +360,10 @@ class PurchaseReceiptService extends Service
                         //$second_stone2 = $stone3['stone_type'] ?? $second_stone2;
                         $second_stone_num2 = $stone3['stone_num'] ?? $second_stone_num2;
                         $second_stone_weight2 = $stone3['stone_weight'] ?? $second_stone_weight2;
+                        $second_stone_shape2 = $stone1['stone_shape'] ?? $second_stone_shape2;
+                        $second_stone_color2 = $stone1['stone_color'] ?? $second_stone_color2;
+                        $second_stone_clarity2 = $stone1['stone_clarity'] ?? $second_stone_clarity2;
+                        $second_stone_size2 = $stone1['stone_norms'] ?? $second_stone_size2;
                     }
                 }
             }
@@ -329,44 +373,80 @@ class PurchaseReceiptService extends Service
                     'receipt_id' => $form->id,
                     'produce_sn' => $produce_sn,
                     'purchase_sn' => $produce->from_order_sn,
+                    'order_sn' => $produce->from_order_sn,
+                    'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                     'goods_name' => $produce->goods_name,
                     'goods_num' => 1,
-                    'style_sn' => $produce->qiban_sn ?: $produce->style_sn,
+                    'goods_sn' => $produce->qiban_sn ?: $produce->style_sn,
+                    'style_sn' => $produce->style_sn,
                     'style_cate_id' => $produce->style_cate_id,
                     'product_type_id' => $produce->product_type_id,
+                    'style_sex' => $produce->style_sex,
+                    'qiban_sn' => $produce->qiban_sn,
+                    'qiban_type' => $produce->qiban_type,
                     'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value_id'] ?? '',
+                    'finger_hk' => $attr_arr[AttrIdEnum::PORT_NO]['attr_value_id'] ?? '',
                     'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value_id'] ?? '',
                     'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
+                    'material_type' => $attr_arr[AttrIdEnum::MATERIAL_TYPE]['attr_value_id'] ?? '',
+                    'material_color' => $attr_arr[AttrIdEnum::MATERIAL_COLOR]['attr_value_id'] ?? '',
                     'jintuo_type' => $produce->jintuo_type,
-                    'style_sex' => $produce->style_sex,
                     'style_channel_id' => $purchaseGoods->style_channel_id,
-                    'factory_mo' => "",
+                    'factory_mo' => $produce->factory_mo,
                     'gold_weight' => $gold_weight,
                     'gold_price' => $purchaseGoods->gold_price,
                     'gold_loss' => $purchaseGoods->gold_loss,
                     'gold_amount' => $purchaseGoods->gold_amount,
                     'gross_weight' => $purchaseGoods->single_stone_weight,
                     'suttle_weight' => $purchaseGoods->gold_price,
+                    'is_inlay' => $purchaseGoods->is_inlay,
+                    //'kezi' => $purchaseGoods->kezi,
+                    'goods_color' => $purchaseGoods->goods_color,
+                    'parts_weight' => $purchaseGoods->parts_weight,
+                    'product_size' => $purchaseGoods->product_size,
+                    'single_stone_weight' => $purchaseGoods->single_stone_weight,
+                    'chain_long' => $attr_arr[AttrIdEnum::CHAIN_LENGTH]['attr_value_id'] ?? '',
+                    'chain_type' => $attr_arr[AttrIdEnum::CHAIN_TYPE]['attr_value_id'] ?? '',
+                    'cramp_ring' => $attr_arr[AttrIdEnum::CHAIN_BUCKLE]['attr_value_id'] ?? '',
+                    'talon_head_type' => $attr_arr[AttrIdEnum::TALON_HEAD_TYPE]['attr_value_id'] ?? '',
+                    'xiangqian_craft' => $attr_arr[AttrIdEnum::XIANGQIAN_CRAFT]['attr_value_id'] ?? '',
                     'cost_price' => $purchaseGoods->factory_cost_price,
                     'cert_id' => $attr_arr[AttrIdEnum::DIA_CERT_NO]['attr_value'] ?? '',
-                    'product_size' => $purchaseGoods->product_size,
+                    'cert_type' => $attr_arr[AttrIdEnum::DIA_CERT_TYPE]['attr_value'] ?? '',
                     'put_in_type' =>$purchase->put_in_type,
                     //主石
                     'main_stone' => $main_stone,
+                    'main_cert_id' => $main_cert_id,
+                    'main_cert_type' => $main_cert_type,
                     'main_stone_num' => $main_stone_num,
                     'main_stone_weight' => $main_stone_weight,
+                    'main_stone_shape' => $main_stone_shape,
                     'main_stone_color' => $main_stone_color,
                     'main_stone_clarity' => $main_stone_clarity,
+                    'main_stone_cut' => $main_stone_cut,
+                    'main_stone_symmetry' => $main_stone_symmetry,
+                    'main_stone_polish' => $main_stone_polish,
+                    'main_stone_fluorescence' => $main_stone_fluorescence,
+                    'main_stone_colour' => $main_stone_colour,
+                    'main_stone_size' => $main_stone_size,
                     'main_stone_price' => 0,
                     //副石1
                     'second_stone1' => $second_stone1,
                     'second_stone_num1' => $second_stone_num1,
                     'second_stone_weight1' => $second_stone_weight1,
+                    'second_stone_shape1' => $second_stone_shape1,
+                    'second_stone_color1' => $second_stone_color1,
+                    'second_stone_clarity1' => $second_stone_clarity1,
+                    'second_stone_size1' => $second_stone_size1,
                     'second_stone_price1' => 0,
                     //副石2
                     'second_stone2' => $second_stone2,
                     'second_stone_num2' => $second_stone_num2,
                     'second_stone_weight2' => $second_stone_weight2,
+                    'second_stone_shape2' => $second_stone_shape2,
+                    'second_stone_color2' => $second_stone_color2,
+                    'second_stone_clarity2' => $second_stone_clarity2,
+                    'second_stone_size2' => $second_stone_size2,
                     'second_stone_price2' => 0,
                     //工费
                     'gong_fee' => $purchaseGoods->gong_fee,
@@ -376,6 +456,7 @@ class PurchaseReceiptService extends Service
                     'fense_fee' => $purchaseGoods->fense_fee,
                     'bukou_fee' => $purchaseGoods->bukou_fee,
                     'cert_fee' => $purchaseGoods->cert_fee,
+                    'total_gong_fee' => 0,
                     'extra_stone_fee' => 0,
                 ];
                 $receipt_goods[] = ArrayHelper::merge($goodsM->getAttributes(),$goods);
@@ -398,8 +479,9 @@ class PurchaseReceiptService extends Service
             $max = PurchaseReceiptGoods::find()->where(['receipt_id' => $form->id])->select(['xuhao'])->orderBy(['xuhao' => SORT_DESC])->one();
             $xuhao = $max->xuhao??1;
             foreach ($goods as $good) {
+                $xuhao++;
                 $good['receipt_id'] = $form->id;
-                $good['xuhao'] = $xuhao++;
+                $good['xuhao'] = $xuhao;
                 $good['goods_status'] =ReceiptGoodsStatusEnum::SAVE;
                 $good['status'] = StatusEnum::ENABLED;
                 $good['created_at'] = time();
