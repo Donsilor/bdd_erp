@@ -32,6 +32,10 @@ return [
                                     'title' => '订单列表',
                                     'route' => 'order/index',
                             ],
+                            [
+                                    'title' => '待配货订单',
+                                    'route' => 'distribution-order/index',
+                            ],
                     ],
                     
             ],
