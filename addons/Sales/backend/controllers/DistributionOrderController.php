@@ -3,6 +3,7 @@
 namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\models\OrderGoods;
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -58,15 +59,36 @@ class DistributionOrderController extends BaseController
     }
 
     /**
-     * 详情展示页
+     * 销账
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
-    public function actionView()
+    public function actionAccountSales()
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
+        $goods_ids = Yii::$app->request->post('goods_ids');
         $model = $this->findModel($id);
+        $model = $model ?? new DistributionOrderForm();
+        $model->goods_ids = $goods_ids;
+        //$this->activeFormValidate($model);
+        if (\Yii::$app->request->isPost) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+
+                \Yii::$app->salesService->distribution->AccountSales($model);
+
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                //$error = $e->getMessage();\Yii::error($error);
+                return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+            }
+            return $this->message("保存成功", $this->redirect($this->returnUrl), 'success');
+        }
 
         $dataProvider = null;
         if (!is_null($id)) {
@@ -91,6 +113,7 @@ class DistributionOrderController extends BaseController
             'dataProvider' => $dataProvider,
             'returnUrl'=>$this->returnUrl,
             'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
         ]);
     }
 }

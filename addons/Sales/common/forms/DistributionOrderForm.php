@@ -11,13 +11,14 @@ use addons\Sales\common\models\Order;
  */
 class DistributionOrderForm extends Order
 {
+    public $goods_ids;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-                
+
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -32,5 +33,5 @@ class DistributionOrderForm extends Order
                 
         ]);
     }
-    
+
 }
