@@ -28,13 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
     </div>
-    <div class="tab-content" style="padding-right: 10px;">
-        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+    <div class="tab-content">
+        <div class="row col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 </div>
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -149,19 +149,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'class' => 'yii\grid\ActionColumn',
-                                'header' => '操作',
-                                'template' => '',
-                                'buttons' => [
-                                    'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-                                            return Html::delete(['delete', 'id' => $model->id]);
-                                        }
-
-                                    },
-                                ],
-                                'headerOptions' => ['class' => 'col-md-3'],
-                            ]
+                                'attribute' => 'sale_price',
+                                'filter' => false,
+                            ],
                         ]
                     ]); ?>
                 </div>

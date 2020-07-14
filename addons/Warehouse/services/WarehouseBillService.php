@@ -152,6 +152,15 @@ class WarehouseBillService extends Service
                     ];
                     break;
                 }
+            case BillTypeEnum::BILL_TYPE_S :
+                {
+                    $tab = [
+                        1=>['name'=>'单据详情','url'=>Url::to(['bill-s/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'单据明细','url'=>Url::to(['bill-s-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                        3=>['name'=>'日志列表','url'=>Url::to(['bill-log/index','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                    ];
+                    break;
+                }
 
         }
         return $tab;

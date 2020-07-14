@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\forms\WarehouseBillSForm;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -30,11 +31,11 @@ use common\helpers\StringHelper;
 class BillSController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillBForm::class;
+    public $modelClass = WarehouseBillSForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_S;
 
     /**
-     * Lists all WarehouseBill models.
+     * Lists all WarehouseBillSForm models.
      * @return mixed
      */
     public function actionIndex()
@@ -59,18 +60,18 @@ class BillSController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseBillSForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseBillSForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseBillSForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseBillSForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>',WarehouseBillSForm::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=',WarehouseBillSForm::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){

@@ -34,7 +34,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:130%;'],
+                    //'options' => ['style'=>' width:120%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -72,7 +72,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
                             },
                             'filter' => false,
-                        ],*/
+                        ],
                         [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
@@ -99,7 +99,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
@@ -111,6 +111,13 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'total_sale',
+                            'filter' => Html::activeTextInput($searchModel, 'total_sale', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],

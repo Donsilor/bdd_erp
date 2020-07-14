@@ -8,7 +8,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '退货返厂单详情';
+$this->title = '销售单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-xs-12">
             <div class="box">
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
+                <div class="box-body table-responsive">
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_no') ?>：</td>
