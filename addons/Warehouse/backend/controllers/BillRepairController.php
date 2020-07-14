@@ -124,7 +124,7 @@ class BillRepairController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {

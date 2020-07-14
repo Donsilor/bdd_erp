@@ -34,7 +34,7 @@ class WarehouseBillRepairLog extends BaseModel
     public function rules()
     {
         return [
-            [['repair_id', 'log_msg', 'creator_id', 'created_at'], 'required'],
+            [['repair_id', 'log_msg'], 'required'],
             [['repair_id', 'log_type', 'creator_id', 'created_at'], 'integer'],
             [['log_msg'], 'string', 'max' => 255],
             [['creator'], 'string', 'max' => 30],
@@ -78,7 +78,7 @@ class WarehouseBillRepairLog extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->identity->getId();
+            $this->creator_id = \Yii::$app->user->identity->getId();
             $this->creator = \Yii::$app->user->identity->username;
         }
         return parent::beforeSave($insert);
