@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_sn',
                     'value'=>function($model) {
-                        return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->order_sn, ['order/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                         'class' => 'form-control',
@@ -209,32 +209,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '',
+                'template' => '{account}',
                 'buttons' => [
-                    'edit' => function($url, $model, $key){
-                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModalLg',
+                    'account' => function($url, $model, $key){
+                            return Html::edit(['account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'配货',[
                                     'class'=>'btn btn-primary btn-sm',
                             ]);
 
-                    },                    
-                    'audit' => function($url, $model, $key){
-                        
-                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                    'class'=>'btn btn-success btn-sm',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
-                             ]); 
-
-                    },                    
-                    'close' => function($url, $model, $key){
-                       
-                            return Html::delete(['delete', 'id' => $model->id],'关闭',[
-                                'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
-                            ]);
-
-                    },                    
+                    },
                 ]
             ]
         ]

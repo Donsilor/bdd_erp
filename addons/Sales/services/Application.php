@@ -14,6 +14,7 @@ use common\components\Service;
  * @property \addons\Sales\services\CustomerService $customer 客户
  * @property \addons\Sales\services\PaymentService $payment 支付方式
  * @property \addons\Sales\services\OrderService $order 订单
+ * @property \addons\Sales\services\DistributionOrderService $distribution 订单
  * @property \addons\Sales\services\OrderGoodsService $orderGoods 订单明细
  * @property \addons\Sales\services\OrderLogService $orderLog 订单日志
  */
@@ -31,5 +32,6 @@ class Application extends Service
             'order' => 'addons\Sales\services\OrderService',
             'orderGoods' => 'addons\Sales\services\OrderGoodsService',
             'orderLog' => 'addons\Sales\services\OrderLogService',
+            'distribution' => 'addons\Sales\services\DistributionOrderService',
     ];
 }

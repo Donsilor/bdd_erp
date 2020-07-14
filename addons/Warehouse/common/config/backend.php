@@ -48,6 +48,10 @@ return [
                         'title' => '借货单',
                         'route' => 'bill-j/index',
                     ],
+                    [
+                        'title' => '销售单',
+                        'route' => 'bill-s/index',
+                    ],
                     /*[
                         'title' => '维修退货单',
                         'route' => 'bill-o/index',
