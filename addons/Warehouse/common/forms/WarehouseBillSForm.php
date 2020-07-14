@@ -1,28 +1,29 @@
 <?php
 
-namespace addons\Sales\common\forms;
+namespace addons\Warehouse\common\forms;
 
 use Yii;
+use common\helpers\StringHelper;
+use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\ArrayHelper;
-use addons\Sales\common\models\Order;
 
 /**
- * 待配货订单 Form
+ * 销售单 Form
+ *
  */
-class DistributionOrderForm extends Order
+class WarehouseBillSForm extends WarehouseBill
 {
-    public $goods_ids;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        $rules = [
+         $rules = [
 
-        ];
-        return ArrayHelper::merge(parent::rules() , $rules);
+         ];
+         return array_merge(parent::rules() , $rules);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -30,8 +31,7 @@ class DistributionOrderForm extends Order
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                
+
         ]);
     }
-
 }

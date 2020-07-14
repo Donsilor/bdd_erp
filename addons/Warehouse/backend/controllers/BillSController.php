@@ -2,17 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Supply\common\models\Supplier;
-use addons\Warehouse\common\enums\PutInTypeEnum;
-use addons\Warehouse\common\models\Warehouse;
-use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoods;
-use common\helpers\ArrayHelper;
-use common\helpers\PageHelper;
-use common\helpers\StringHelper;
+use addons\Warehouse\common\forms\WarehouseBillSForm;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -20,22 +10,32 @@ use common\helpers\SnHelper;
 use common\helpers\ExcelHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\Warehouse;
+use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
+use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\ArrayHelper;
+use common\helpers\PageHelper;
+use common\helpers\StringHelper;
+
 
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
  */
-class BillBController extends BaseController
+class BillSController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillBForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_B;
+    public $modelClass = WarehouseBillSForm::class;
+    public $billType = BillTypeEnum::BILL_TYPE_S;
 
     /**
-     * Lists all WarehouseBill models.
+     * Lists all WarehouseBillSForm models.
      * @return mixed
      */
     public function actionIndex()
@@ -60,18 +60,18 @@ class BillBController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseBillBForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseBillBForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseBillSForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseBillSForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseBillBForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseBillBForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseBillSForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseBillSForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',WarehouseBillBForm::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=',WarehouseBillBForm::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>',WarehouseBillSForm::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=',WarehouseBillSForm::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
