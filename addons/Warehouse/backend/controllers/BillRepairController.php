@@ -92,7 +92,7 @@ class BillRepairController extends BaseController
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $model = $this->findModel($id);
-        $model = $model ??new WarehouseBillRepair();
+        $model = $model ?? new WarehouseBillRepairForm();
 
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -124,7 +124,7 @@ class BillRepairController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {

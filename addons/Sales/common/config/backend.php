@@ -36,6 +36,10 @@ return [
                                     'title' => '待配货订单',
                                     'route' => 'distribution-order/index',
                             ],
+                            [
+                                    'title' => 'FQC质检',
+                                    'route' => 'order-fqc/index',
+                            ],
                     ],
                     
             ],
@@ -71,6 +75,10 @@ return [
                             [
                                     'title' => '支付方式',
                                     'route' => 'payment/index',
+                            ],
+                            [
+                                    'title' => '质检配置',
+                                    'route' => 'fqc-config/index',
                             ],
                     ],
                     

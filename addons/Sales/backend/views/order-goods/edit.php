@@ -72,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                          </div>
                      </div>
 
+                     <?php if($model->is_stock == \addons\Sales\common\enums\IsStockEnum::NO){ ?>
 					<div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
                     </div>
@@ -119,6 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              <?= $form->field($model, 'goods_image')->hiddenInput()->label(false) ?>
                          </div>
                      </div>
+                     <?php } ?>
     			<?php }else{?>
         			<div class="row">
             			 <div class="col-lg-4">         

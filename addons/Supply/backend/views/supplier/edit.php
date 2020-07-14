@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'balance_type')->dropDownList(\addons\Supply\common\enums\BalanceTypeEnum::getMap()) ?>
                         </div>
                     </div>
-                    <?php $model->business_scope = !empty($model->business_scope)?explode(',', $model->business_scope):null;?>
+                    <?php $model->business_scope = !empty($model->business_scope)?array_filter(explode(',', $model->business_scope)):null;?>
                     <?= $form->field($model, 'business_scope')->checkboxList(\addons\Supply\common\enums\BusinessScopeEnum::getMap()) ?>
                     <!-- ./nav-tabs-custom -->
                 </div>
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   </div>
                   <div class="row">
                       <div class="col-lg-3">
-                            <?php $model->pay_type = !empty($model->pay_type)?explode(',', $model->pay_type):null;?>
+                            <?php $model->pay_type = !empty($model->pay_type)?array_filter(explode(',', $model->pay_type)):null;?>
                             <?= $form->field($model, 'pay_type')->checkboxList(\addons\Supply\common\enums\SettlementWayEnum::getMap()) ?>
                       </div>
                       <div class="col-lg-3">

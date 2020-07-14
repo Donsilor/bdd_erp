@@ -214,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {apply} {follower} {close}',
+                'template' => '{edit} {audit} {ajax-apply} {apply} {follower} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                             return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
@@ -223,14 +223,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class'=>'btn btn-primary btn-sm',
                             ]);
 
-                    },                    
+                    },
+                    'ajax-apply' => function($url, $model, $key){
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
                     'audit' => function($url, $model, $key){
-                        
-                            return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                    'class'=>'btn btn-success btn-sm',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
-                             ]); 
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
+                            return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
+                                'class' => 'btn btn-success btn-sm',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                        }
 
                     },                    
                     'close' => function($url, $model, $key){

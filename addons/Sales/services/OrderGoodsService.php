@@ -44,20 +44,22 @@ class OrderGoodsService extends Service
                 }
             }
 
+            //删除商品属性
+            OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+
             $attr_list = $this->Attrs();
             foreach ($attr_list as $key => $attr_arr){
-                if(!$wareshouse_goods->$key) continue;
-
+                $attr_value_id = (int)$wareshouse_goods->$key;
+                if(!$wareshouse_goods->$key){
+                    $attr_value_id = 0;
+                }
                 $attr = [
                     'id' => $model->id,
                     'attr_id' => $attr_arr['attr_id'],
-                    'attr_value_id' => $attr_arr['attr_type'] == 2 ? (int)$wareshouse_goods->$key : 0,
+                    'attr_value_id' => $attr_arr['attr_type'] == 2 ? $attr_value_id : 0,
                     'attr_value' => $attr_arr['attr_type'] == 2 ? \Yii::$app->attr->valueName($wareshouse_goods->$key) : $wareshouse_goods->$key,
                 ];
-                $order_goods_attr = OrderGoodsAttribute::find()->where(['id' => $model->id, 'attr_id' => $attr_arr['attr_id']])->one();
-                if(empty($order_goods_attr)){
-                    $order_goods_attr = new OrderGoodsAttribute();
-                }
+                $order_goods_attr = new OrderGoodsAttribute();
                 $order_goods_attr->attributes = $attr;
                 if(false === $order_goods_attr->save()){
                     throw new \Exception($this->getError($order_goods_attr));
@@ -65,7 +67,7 @@ class OrderGoodsService extends Service
             }
 
             $wareshouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
-            if(false === $wareshouse_goods->save()){
+            if(false === $wareshouse_goods->save(true,['goods_status'])){
                 throw new \Exception($this->getError($wareshouse_goods));
             }
 
@@ -104,6 +106,22 @@ class OrderGoodsService extends Service
             throw new \Exception($this->getError($wareshouse_goods));
         }
 
+        //删除商品属性
+        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+
+        //还原原有商品属性
+        $attr_list = json_decode($model->attr_info,true);
+        if($attr_list){
+            foreach ($attr_list as $attr){
+                $order_goods_attr = new OrderGoodsAttribute();
+                $order_goods_attr->attributes = $attr;
+                if(false === $order_goods_attr->save()){
+                    throw new \Exception($this->getError($order_goods_attr));
+                }
+            }
+        }
+
+
         //订单明细
         $model->is_stock = IsStockEnum::NO; //现货
         $model->goods_id = '';
@@ -136,10 +154,6 @@ class OrderGoodsService extends Service
             ],
             'material_color' =>[
                 'attr_id' => AttrIdEnum::MATERIAL_COLOR, //材质颜色
-                'attr_type' => 2
-            ],
-            'material' => [
-                'attr_id' => AttrIdEnum::MATERIAL, //材质（成色）
                 'attr_type' => 2
             ],
             'xiangkou' => [
@@ -180,7 +194,7 @@ class OrderGoodsService extends Service
                 'attr_type' => 2
             ],
             'diamond_color' => [
-                'attr_id' => AttrIdEnum::DIA_SHAPE, //钻石颜色
+                'attr_id' => AttrIdEnum::DIA_COLOR, //钻石颜色
                 'attr_type' => 2
             ],
             'diamond_fluorescence' => [
@@ -229,7 +243,7 @@ class OrderGoodsService extends Service
                 'attr_type' => 2
             ],
             'second_stone_color1' => [
-                'attr_id' => AttrIdEnum::SIDE_STONE1_SHAPE, //副石1颜色
+                'attr_id' => AttrIdEnum::SIDE_STONE1_COLOR, //副石1颜色
                 'attr_type' => 2
             ],
             'second_stone_clarity1' => [
@@ -253,14 +267,7 @@ class OrderGoodsService extends Service
                 'attr_id' => AttrIdEnum::SIDE_STONE2_SHAPE, //副石2形状
                 'attr_type' => 2
             ],
-            'second_stone_color2' => [
-                'attr_id' => AttrIdEnum::SIDE_STONE2_COLOR, //副石2颜色
-                'attr_type' => 2
-            ],
-            'second_stone_clarity2' => [
-                'attr_id' => AttrIdEnum::SIDE_STONE2_CLARITY, //副石2净度
-                'attr_type' => 2
-            ],
+
             'second_stone_weight2' => [
                 'attr_id' => AttrIdEnum::SIDE_STONE2_WEIGHT, //副石2重量(ct)
                 'attr_type' => 1
@@ -270,10 +277,6 @@ class OrderGoodsService extends Service
                 'attr_type' => 1
             ],
 
-            'goods_color' => [
-                'attr_id' => AttrIdEnum::GOODS_COLOR, //货品外部颜色
-                'attr_type' => 2
-            ],
             'product_size' => [
                 'attr_id' => AttrIdEnum::PRODUCT_SIZE, //成品尺寸(mm)
                 'attr_type' => 1

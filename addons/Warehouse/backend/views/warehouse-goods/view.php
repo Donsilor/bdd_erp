@@ -190,8 +190,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->attr->valueName($model->xiangkou) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material') ?>：</td>
-                            <td><?= Yii::$app->attr->valueName($model->material) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_type') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->material_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_color') ?>：</td>

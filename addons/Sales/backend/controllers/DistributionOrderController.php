@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Sales\common\models\OrderGoods;
 use common\helpers\ResultHelper;
 use Yii;
@@ -48,6 +49,7 @@ class DistributionOrderController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         //$dataProvider->query->andWhere(['=',DistributionOrderForm::tableName().'.order_id',$order_id]);
+        //$dataProvider->query->andWhere(['=',DistributionOrderForm::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,

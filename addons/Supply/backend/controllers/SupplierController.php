@@ -125,6 +125,7 @@ class SupplierController extends BaseController
         $model = $model ?? new Supplier();
         if($model->business_scope){
             $business_scope_arr = explode(',', $model->business_scope);
+            $business_scope_arr = array_filter($business_scope_arr);
             $business_scope_str = '';
             foreach ($business_scope_arr as $business_scope){
                 $business_scope_str .= ','. \addons\Supply\common\enums\BusinessScopeEnum::getValue($business_scope);
@@ -134,6 +135,7 @@ class SupplierController extends BaseController
 
         if($model->pay_type){
             $pay_type_arr = explode(',', $model->pay_type);
+            $pay_type_arr = array_filter($pay_type_arr);
             $pay_type_str = '';
             foreach ($pay_type_arr as $pay_type){
                 $pay_type_str .= ','. \addons\Supply\common\enums\SettlementWayEnum::getValue($pay_type);

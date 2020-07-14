@@ -208,4 +208,24 @@ class DateHelper
 
         return $msectime;
     }
+
+    /**
+     * 求取从某日起经过一定天数后的日期,
+     * 排除周日
+     * @param $start       开始日期
+     * @param $offset      经过天数
+     * @return
+     *  examples:输入(2010-06-25,5),得到2010-07-02
+     */
+    public static function getEndDay( $start='now', $offset=0){
+        $tmptime = $start + 24*3600;
+        while( $offset > 0 ){
+            $weekday = date('w', $tmptime);
+            if($weekday != 0){//不是周末
+                $offset--;
+            }
+            $tmptime += 24*3600;
+        }
+        return $tmptime;
+    }
 }

@@ -91,7 +91,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
             ],
-            [
+            /*[
                 'attribute' => 'bill_m_no',
                 'value' => 'bill_m_no',
                 'filter' => Html::activeTextInput($searchModel, 'bill_m_no', [
@@ -99,7 +99,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
-            ],
+            ],*/
             [
                 'attribute' => 'order_sn',
                 'value' => 'order_sn',
