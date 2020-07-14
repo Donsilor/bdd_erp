@@ -102,7 +102,7 @@ class DistributionOrderService extends Service
         }
         $bill = [
             'bill_type' => BillTypeEnum::BILL_TYPE_S,
-            'bill_status' => BillStatusEnum::CONFIRM,
+            'bill_status' => BillStatusEnum::PENDING,
             'channel_id' => $form->sale_channel_id,
             'order_sn' => $form->order_sn,
             'order_type' => OrderTypeEnum::ORDER_K,
@@ -122,7 +122,7 @@ class DistributionOrderService extends Service
 
         //2.更新商品库存状态
         $condition = ['goods_id'=>$form->goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK];
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::HAS_SOLD], $condition);
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_SALE], $condition);
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
