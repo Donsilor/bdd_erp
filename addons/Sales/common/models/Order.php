@@ -65,7 +65,7 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency','customer_mobile','customer_name'], 'required'],
-            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
@@ -76,7 +76,7 @@ class Order extends BaseModel
             [['customer_email'], 'string', 'max' => 120],
             ['customer_email', 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
             [['customer_message', 'store_remark'], 'string', 'max' => 500],
-            [['remark'], 'string', 'max' => 255],
+            [['remark','audit_remark'], 'string', 'max' => 255],
             [['order_sn'], 'unique'],
         ];
     }
@@ -117,6 +117,8 @@ class Order extends BaseModel
             'area_id' => '订单区域',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
+            'auditor_id' => '审核人',
+            'audit_remark' => '审核备注',
             'customer_id' => '客户ID',
             'customer_name' => '客户姓名',
             'customer_mobile' => '客户手机',

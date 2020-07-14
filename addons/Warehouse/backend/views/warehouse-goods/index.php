@@ -150,11 +150,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'attribute' => 'material',
+                            'attribute' => 'material_type',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->material);
+                                return Yii::$app->attr->valueName($model->material_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'material',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL), [
+                            'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'

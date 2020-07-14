@@ -2,6 +2,8 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\OrderStatusEnum;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\traits\Curd;
 use addons\Sales\common\models\Order;
@@ -184,7 +186,32 @@ class OrderController extends BaseController
     {
         
     }
-   
+
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $order_goods_count = OrderGoods::find()->where(['order_id'=>$id])->count();
+        if($order_goods_count == 0){
+            return $this->message('订单没有明细', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+        $model = $this->findModel($id);
+        if($model->order_status != OrderStatusEnum::SAVE){
+            return $this->message('订单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->order_status = OrderStatusEnum::PENDING;
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
     /**
      * 订单审核
      * @return array
@@ -192,8 +219,34 @@ class OrderController extends BaseController
      */
     public function actionAjaxAudit()
     {
-        
-    }    
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                $model->auditor_id = \Yii::$app->user->id;
+                $model->audit_time = time();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->order_status = OrderStatusEnum::CONFORMED;
+                }
+                if(false === $model->save()){
+                    return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        }
+        $model->audit_status = AuditStatusEnum::PASS;
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
     /**
      * 修改收货地址
      * @return \yii\web\Response|mixed|string|string

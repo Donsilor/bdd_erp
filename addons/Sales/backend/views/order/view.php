@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\IsStockEnum;
 use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\AmountHelper;
@@ -202,12 +203,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 }
                                             },
                                             'stock' => function($url, $model, $key) use($order){
-                                                if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == \addons\Sales\common\enums\IsStockEnum::NO) {
+                                                if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::NO) {
                                                     return Html::edit(['order-goods/stock','id' => $model->id],'绑定现货',['class'=>'btn btn-primary btn-xs','data-toggle' => 'modal','data-target' => '#ajaxModalLg',]);
                                                 }
                                             },
                                             'untie' => function($url, $model, $key) use($order){
-                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == \addons\Sales\common\enums\IsStockEnum::YES) {
+                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::YES) {
                                                      return Html::edit(['order-goods/untie', 'id' => $model->id], '解绑', [
                                                          'class' => 'btn btn-primary btn-xs',
                                                          'onclick' => 'rfTwiceAffirm(this,"解绑现货", "确定解绑吗？");return false;',

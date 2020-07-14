@@ -6,7 +6,6 @@ use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
-use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\forms\QibanAttrForm;
@@ -50,12 +49,19 @@ class OrderGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
 
                 $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+
+
+                //期货才会更新属性信息
+                if($model->is_stock == IsStockEnum::NO){
+                    //创建属性关系表数据
+                    $model->createAttrs();
+                }
+
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
 
-                //创建属性关系表数据
-                $model->createAttrs();
+
                 //更新采购汇总：总金额和总数量
                 Yii::$app->salesService->order->orderSummary($model->order_id);
                 $trans->commit();

@@ -175,6 +175,7 @@ class OrderGoodsForm extends OrderGoods
     public function  createAttrs()
     {
         OrderGoodsAttribute::deleteAll(['id'=>$this->id]);
+        $attr_info = [];
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new OrderGoodsAttribute();
@@ -192,10 +193,15 @@ class OrderGoodsForm extends OrderGoods
                 continue;
             }
             $model->sort = $spec->sort;
+
+            //保存属性
+            $attr_info[] = $model->attributes;
+
             if(false === $model->save()) {
                 throw new \Exception($this->getErrors($model));
             }
         }
+        $this->attr_info = json_encode($attr_info);
     }
     /**
      * 采购商品申请编辑-创建
