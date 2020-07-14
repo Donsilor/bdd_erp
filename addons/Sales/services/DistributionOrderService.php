@@ -96,8 +96,8 @@ class DistributionOrderService extends Service
                 'created_at' => time(),
             ];
 
-            $total_cost = bcadd($total_cost, $goods->total_cost, 2);
-            $total_market = bcadd($total_market, $goods->total_market, 2);
+            $total_cost = bcadd($total_cost, $goods->cost_price, 2);
+            $total_market = bcadd($total_market, $goods->market_price, 2);
             $total_sale = bcadd($total_sale, $orderGoods->goods_pay_price, 2);
         }
         $bill = [

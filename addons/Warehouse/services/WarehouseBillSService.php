@@ -34,6 +34,7 @@ class WarehouseBillSService extends WarehouseBillService
         foreach ($goods as $k => &$good){
             $good['bill_id'] = $bill_id;
             $good['bill_no'] = $billM->bill_no;
+            $good['bill_type'] = $billM->bill_type;
             $goodsM->setAttributes($good);
             if(!$goodsM->validate()){
                 throw new \Exception($this->getError($goodsM));

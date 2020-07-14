@@ -84,6 +84,7 @@ class DistributionOrderController extends BaseController
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
+                //return ResultHelper::json(422, "保存失败:".$e->getMessage());
                 //$error = $e->getMessage();\Yii::error($error);
                 return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
