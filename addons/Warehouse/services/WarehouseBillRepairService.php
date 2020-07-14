@@ -2,17 +2,19 @@
 
 namespace addons\Warehouse\services;
 
-
-use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use addons\Warehouse\common\forms\WarehouseBillRepairForm;
 use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseBillRepairLog;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\WeixiuStatusEnum;
 use addons\Warehouse\common\enums\QcStatusEnum;
 use addons\Warehouse\common\enums\RepairStatusEnum;
+use addons\Style\common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\DateHelper;
+use common\helpers\Url;
 use yii\base\Exception;
 
 /**
@@ -40,6 +42,7 @@ class WarehouseBillRepairService extends Service
     /**
      * 创建维修单
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function createRepairBill($form)
     {
@@ -60,15 +63,23 @@ class WarehouseBillRepairService extends Service
         $form->repair_times = 1;
         $form->repair_status = RepairStatusEnum::SAVE;
         $form->qc_status = QcStatusEnum::SAVE;
-        $form->predict_time = $this->getEndDay(time(), 3);
+        $form->predict_time = DateHelper::getEndDay(time(), 3);
         if(false === $form->save()){
             throw new Exception($this->getError($form));
         }
+        $log_msg = "创建维修出库单";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
      * 维修申请
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function applyRepair($form)
     {
@@ -94,11 +105,19 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        $log_msg = "维修申请";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
      * 维修审核
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function auditRepair($form)
     {
@@ -121,11 +140,19 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        $log_msg = "维修审核";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
      * 下单申请
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function ordersRepair($form)
     {
@@ -140,11 +167,19 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        $log_msg = "下单申请";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
      * 维修完毕
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function finishRepair($form)
     {
@@ -159,11 +194,19 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        $log_msg = "维修完毕";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
      * 收货
      * @param WarehouseBillRepairForm $form
+     * @throws
      */
     public function receivingRepair($form)
     {
@@ -178,25 +221,28 @@ class WarehouseBillRepairService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        $log_msg = "维修收货";
+        $log = [
+            'repair_id' => $form->id,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => $log_msg,
+        ];
+        $this->createRepairLog($log);
     }
 
     /**
-     * 求取从某日起经过一定天数后的日期,
-     * 排除周日
-     * @param $start       开始日期
-     * @param $offset      经过天数
-     * @return
-     *  examples:输入(2010-06-25,5),得到2010-07-02
+     * 维修日志
+     * @param array $log
+     * @throws \Exception
+     * @return object $model
      */
-    public function getEndDay( $start='now', $offset=0){
-        $tmptime = $start + 24*3600;
-        while( $offset > 0 ){
-            $weekday = date('w', $tmptime);
-            if($weekday != 0){//不是周末
-                $offset--;
-            }
-            $tmptime += 24*3600;
+    public function createRepairLog($log){
+
+        $model = new WarehouseBillRepairLog();
+        $model->attributes = $log;
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
         }
-        return $tmptime;
+        return $model;
     }
 }
