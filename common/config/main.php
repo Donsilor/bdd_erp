@@ -22,14 +22,14 @@ return [
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
         ],
-        //款式库
-        'styleDb' => [
+        //BDD官网
+        'bddDb' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
-                'username' => 'root',
-                'password' => 'root',
+                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
                 'charset' => 'utf8',
-                'tablePrefix'=>'style_',
+                'tablePrefix'=>'',
                 'attributes' => [
 
                 ],
