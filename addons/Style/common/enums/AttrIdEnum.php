@@ -95,4 +95,5 @@ class AttrIdEnum
     const PRODUCT_SIZE = 75;//成品尺寸(mm)
     const TALON_HEAD_TYPE = 90;//爪头形状
     const XIANGQIAN_CRAFT = 81;//镶嵌工艺
+    const KEZI = 83;//刻字内容
 }

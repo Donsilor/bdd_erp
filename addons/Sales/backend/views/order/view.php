@@ -66,6 +66,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?></td>
                         </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
+                            <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
+                        </tr>
                     </table>
                 </div>
                 <!-- <div class="box-footer text-center">
@@ -115,9 +123,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => 'goods_name'
                                     ],
                                     [
+                                        'attribute'=>'goods_id',
+                                        'value' => 'goods_id'
+                                    ],
+                                    [
                                             'attribute'=>'style_sn',
                                             'value' => 'style_sn'
-                                    ],                                    
+                                    ],
+                                    [
+                                        'attribute'=>'qiban_sn',
+                                        'value' => 'qiban_sn'
+                                    ],
+                                    [
+                                        'attribute'=>'qiban_type',
+                                        'value' => function($model){
+                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                                        }
+                                    ],
+
                                     [
                                         'attribute'=>'goods_num',
                                         'value' => 'goods_num'
@@ -166,7 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'yii\grid\ActionColumn',
                                         'header' => '操作',
                                         //'headerOptions' => ['width' => '150'],
-                                        'template' => '{view} {edit} {apply-edit} {delete}',
+                                        'template' => '{view} {edit} {stock} {untie} {apply-edit} {delete}',
                                         'buttons' => [
                                             'view'=> function($url, $model, $key){
                                                 return Html::edit(['order-goods/view','id' => $model->id, 'order_id'=>$model->order_id, 'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -177,6 +200,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
                                                     return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                 }
+                                            },
+                                            'stock' => function($url, $model, $key) use($order){
+                                                if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == \addons\Sales\common\enums\IsStockEnum::NO) {
+                                                    return Html::edit(['order-goods/stock','id' => $model->id],'绑定现货',['class'=>'btn btn-primary btn-xs','data-toggle' => 'modal','data-target' => '#ajaxModalLg',]);
+                                                }
+                                            },
+                                            'untie' => function($url, $model, $key) use($order){
+                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == \addons\Sales\common\enums\IsStockEnum::YES) {
+                                                     return Html::edit(['order-goods/untie', 'id' => $model->id], '解绑', [
+                                                         'class' => 'btn btn-primary btn-xs',
+                                                         'onclick' => 'rfTwiceAffirm(this,"解绑现货", "确定解绑吗？");return false;',
+                                                     ]);
+                                                 }
+
                                             },
                                             'apply-edit' =>function($url, $model, $key) use($order){
                                                 if($order->order_status == OrderStatusEnum::CONFORMED) {

@@ -211,11 +211,12 @@ class OrderService extends Service
     public function orderSummary($order_id)
     {
         $sum = OrderGoods::find()
-            ->select(['sum(goods_num) as total_num','sum(goods_price*goods_num) as total_goods_price','sum(goods_discount) as total_goods_discount','sum(goods_pay_price*goods_num) as total_pay_price'])
+            ->select(['sum(goods_num) as total_num','sum(goods_price*goods_num) as total_goods_price','sum(goods_discount) as total_goods_discount','sum(goods_pay_price*goods_num) as total_pay_price','min(is_stock) as is_stock','min(is_gift) as is_gift'])
             ->where(['order_id'=>$order_id])
             ->asArray()->one();
         if($sum) {
-            Order::updateAll(['goods_num'=>$sum['total_num']/1],['id'=>$order_id]);
+            $order_type = $sum['is_stock'] == 1 ? 1 : 2; //1现货 2定制
+            Order::updateAll(['goods_num'=>$sum['total_num']/1, 'order_type'=>$order_type],['id'=>$order_id]);
             OrderAccount::updateAll(['discount_amount'=>$sum['total_goods_discount']/1,'paid_amount'=>$sum['total_pay_price']/1],['order_id'=>$order_id]);
         }
     }

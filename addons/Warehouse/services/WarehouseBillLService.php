@@ -73,11 +73,21 @@ class WarehouseBillLService extends Service
         $key = array_keys($goods[0]);
         foreach ($goods as $item) {
             $value[] = array_values($item);
+            if(count($value)>10){
+                $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \Exception("创建收货单据明细失败1");
+                }
+                $value = [];
+            }
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建收货单据明细失败");
+        if(!empty($value)){
+            $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \Exception("创建收货单据明细失败2");
+            }
         }
+
     }
 
     /**
@@ -102,20 +112,38 @@ class WarehouseBillLService extends Service
         $goods = $bill_goods = $goods_ids = [];
         foreach ($billGoods as $good) {
             $goods_ids[] = $good->goods_id;
+            //$good  = new WarehouseBillGoodsL();
             $goods[] = [
                 'goods_id' => $good->goods_id,
                 'goods_name' =>$good->goods_name,
+                'goods_image' => $good->goods_image,
                 'style_sn' => $good->style_sn,
                 'product_type_id'=>$good->product_type_id,
                 'style_cate_id'=>$good->style_cate_id,
                 'style_sex' => $good->style_sex,
+                'style_channel_id' => $good->style_channel_id,
+                'qiban_sn' => $good->qiban_sn,
+                'qiban_type' => $good->qiban_type,
                 'goods_status'=>GoodsStatusEnum::IN_STOCK,
                 'supplier_id'=>$bill->supplier_id,
                 'put_in_type'=>$bill->put_in_type,
                 'company_id'=> 1,//暂时为1
                 'warehouse_id' => $bill->to_warehouse_id?:0,
-                'order_detail_id' => $good->order_detail_id??"",
+                'order_detail_id' => (string)$good->order_detail_id??"",
                 'order_sn' => $good->order_sn??"",
+                'produce_sn' => $good->produce_sn,
+                'kezi' => $good->kezi,
+                'biaomiangongyi' => $good->biaomiangongyi,
+                'is_inlay' => $good->is_inlay,
+                'chain_long' => $good->chain_long,
+                'chain_type' => $good->chain_type,
+                'cramp_ring' => $good->cramp_ring,
+                'talon_head_type' => $good->talon_head_type,
+                'xiangqian_craft' => $good->xiangqian_craft,
+                'parts_gold_weight' => $good->parts_gold_weight,
+                'xiangkou' => $good->xiangkou,
+                'length' => $good->length,
+                'parts_num' => $good->parts_num,
                 //金料信息
                 'gold_weight' => $good->gold_weight,
                 'suttle_weight' => $good->suttle_weight,
@@ -124,8 +152,8 @@ class WarehouseBillLService extends Service
                 'gold_amount' => $good->gold_amount,
                 'gross_weight' => $good->gross_weight,
                 'finger' => $good->finger,
+                'finger_hk' => $good->finger_hk,
                 'product_size' => $good->product_size,
-                'produce_sn' => $good->produce_sn,
                 'cert_type' => $good->cert_type,
                 'cert_id' => $good->cert_id,
                 'goods_num' => $good->goods_num,
@@ -149,19 +177,18 @@ class WarehouseBillLService extends Service
                 //费用信息
                 'market_price' => $good->market_price,
                 'cost_price' => $good->cost_price,
-                'xiangkou' => $good->xiangkou,
                 'bukou_fee' => $good->bukou_fee,
                 'biaomiangongyi_fee' => $good->biaomiangongyi_fee,
                 'xianqian_fee' => $good->xianqian_fee,
                 'gong_fee' => $good->gong_fee,
-                'length' => $good->length,
-                'parts_gold_weight' => $good->parts_gold_weight,
-                'parts_num' => $good->parts_num,
+                'total_gong_fee' => $good->total_gong_fee,
                 //主石
                 'main_stone_sn' => $good->main_stone_sn,
                 'main_stone_type' => $good->main_stone_type,
                 'main_stone_num' => $good->main_stone_num,
                 'main_stone_price' => $good->main_stone_price,
+                'main_stone_colour' => $good->main_stone_colour,
+                'main_stone_size' => $good->main_stone_size,
                 //副石1
                 'second_cert_id1' => $good->second_cert_id1,
                 'second_stone_sn1' => $good->second_stone_sn1,
@@ -172,11 +199,21 @@ class WarehouseBillLService extends Service
                 'second_stone_color1' => $good->second_stone_color1,
                 'second_stone_clarity1' => $good->second_stone_clarity1,
                 'second_stone_shape1' => $good->second_stone_shape1,
+                'second_stone_size1' => $good->second_stone_size1,
                 //副石2
                 'second_stone_type2' => $good->second_stone_type2,
                 'second_stone_num2' => $good->second_stone_num2,
                 'second_stone_weight2' => $good->second_stone_weight2,
                 'second_stone_price2' => $good->second_stone_price2,
+                'second_stone_color2' => $good->second_stone_color2,
+                'second_stone_clarity2' => $good->second_stone_clarity2,
+                'second_stone_shape2' => $good->second_stone_shape2,
+                'second_stone_size2' => $good->second_stone_size2,
+                //副石3
+                'second_stone_type3' => $good->second_stone_type3,
+                'second_stone_num3' => $good->second_stone_num3,
+                'second_stone_weight3' => $good->second_stone_weight3,
+                'second_stone_price3' => $good->second_stone_price3,
                 'remark' => $good->remark,
                 'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),
@@ -208,10 +245,19 @@ class WarehouseBillLService extends Service
                 throw new \Exception($this->getError($model));
             }
             $value[] = array_values($item);
+            if(count($value)>10){
+                $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \Exception("创建货品信息失败1");
+                }
+                $value=[];
+            }
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建货品信息失败");
+        if(!empty($value)){
+            $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \Exception("创建货品信息失败2");
+            }
         }
         $value = [];
         $key = array_keys($bill_goods[0]);
@@ -221,10 +267,18 @@ class WarehouseBillLService extends Service
                 throw new \Exception($this->getError($goodsM));
             }
             $value[] = array_values($item);
+            if(count($value)>10){
+                $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \Exception("创建收货单明细失败");
+                }
+            }
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建收货单明细失败");
+        if(!empty($value)){
+            $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \Exception("创建收货单明细失败");
+            }
         }
         //创建货号
         $ids = WarehouseGoods::find()->select(['id'])->where(['goods_id' => $goods_ids])->all();

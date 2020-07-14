@@ -125,6 +125,7 @@ class ReceiptGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
         $id = \Yii::$app->request->get('receipt_id');
         $model = PurchaseReceiptForm::findOne(['id'=>$id]);
+        $modelG = new PurchaseReceiptGoodsForm();
         $model->produce_sns = \Yii::$app->request->get('produce_sns');
         $goods_list = [];
         if(\Yii::$app->request->get('search') && $model->produce_sns){
@@ -150,6 +151,7 @@ class ReceiptGoodsController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $model,
+            'modelG' => $modelG,
             'goods_list' => $goods_list,
             'num' => count($goods_list),
         ]);
@@ -422,8 +424,8 @@ class ReceiptGoodsController extends BaseController
                 //同步采购收货单至L单
                 Yii::$app->purchaseService->receipt->syncReceiptToBillL($model);
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','申请入库成功');
-                return ResultHelper::json(200, '申请入库成功');
+                Yii::$app->getSession()->setFlash('success','操作成功');
+                return ResultHelper::json(200, '操作成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -445,7 +447,6 @@ class ReceiptGoodsController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
         }
-
         try{
             $trans = \Yii::$app->db->beginTransaction();
 
