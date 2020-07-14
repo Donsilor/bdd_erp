@@ -2,17 +2,16 @@
 
 namespace addons\Sales\services;
 
+use Yii;
 use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
-use Yii;
 use common\components\Service;
 use common\helpers\Url;
 use yii\db\Exception;
