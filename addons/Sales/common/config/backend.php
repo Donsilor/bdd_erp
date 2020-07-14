@@ -72,6 +72,10 @@ return [
                                     'title' => '支付方式',
                                     'route' => 'payment/index',
                             ],
+                            [
+                                    'title' => '质检配置',
+                                    'route' => 'fqc-config/index',
+                            ],
                     ],
                     
             ],
