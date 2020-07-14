@@ -30,13 +30,13 @@ class Yii
  * @property \addons\Purchase\services\Application $purchaseService
  * @property \addons\Warehouse\services\Application $warehouseService
  * @property \addons\Sales\services\Application $salesService
+ * @property \addons\Shop\services\Application $shopService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat
  * @property \Da\QrCode\Component\QrCodeComponent $qr
  * @property \common\components\Attribute $attr
  * @property \common\components\Transaction $trans
  * @property \common\components\Area $area
- * @property \yii\db\Connection $styleDb //款式库连接
  * @author jianyan74 <751393839@qq.com>
  */
 class MyApplication

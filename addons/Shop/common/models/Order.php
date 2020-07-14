@@ -3,7 +3,6 @@
 namespace addons\Shop\common\models;
 
 use Yii;
-use addons\Shop\common\models\order\OrderAccount;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -156,7 +155,7 @@ class Order extends BaseModel
      */
     public function getMember()
     {
-        return $this->hasOne(\common\models\member\Member::class, ['id'=>'member_id']);
+        return $this->hasOne(Member::class, ['id'=>'member_id']);
     }
     
     /**

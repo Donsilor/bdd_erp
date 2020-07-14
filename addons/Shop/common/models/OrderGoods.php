@@ -83,26 +83,12 @@ class OrderGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
-    
-    public function langModel()
-    {
-        return new OrderGoodsLang();
-    }
-    /**
-     * 语言包
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLang()
-    {
-        return $this->hasOne(OrderGoodsLang::class, ['master_id'=>'id'])->alias('lang')->where(['lang.language' => Yii::$app->params['language']]);
-    }
-
     /**
      * 对应快递模型
      * @return \yii\db\ActiveQuery
      */
-    public function getCoupon()
+    public function getStyle()
     {
-        return $this->hasOne(MarketCoupon::class, ['id'=>'coupon_id']);
+        return $this->hasOne(Style::class, ['id'=>'style_id']);
     }
 }

@@ -8,7 +8,7 @@ use common\components\Service;
  * Class Application
  *
  * @package addons\Shop\services
- * @property \addons\Shop\services\OrderService $order 订单
+ * @property \addons\Shop\services\OrderSyncService $orderSync 订单同步
  */
 class Application extends Service
 {
@@ -16,6 +16,6 @@ class Application extends Service
      * @var array
      */
     public $childService = [
-            'order' => 'addons\Shop\services\OrderService',            
+            'orderSync' => 'addons\Shop\services\OrderSyncService',            
     ];
 }

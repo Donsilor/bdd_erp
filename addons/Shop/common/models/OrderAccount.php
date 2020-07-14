@@ -1,6 +1,6 @@
 <?php
 
-namespace addons\Shop\common\models\order;
+namespace addons\Shop\common\models;
 
 use Yii;
 
