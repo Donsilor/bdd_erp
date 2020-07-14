@@ -4,7 +4,7 @@ use jianyan\treegrid\TreeGrid;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 
-$this->title = '质检未过原因';
+$this->title = 'FQC质检未过原因';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
