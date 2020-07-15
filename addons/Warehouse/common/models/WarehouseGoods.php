@@ -95,7 +95,7 @@ class WarehouseGoods extends BaseModel
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay'], 'integer'],
             [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
-                'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount', 'chain_long','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee'], 'number'],
+                'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color'], 'string', 'max' => 100],
             [['style_sn','goods_id','qiban_sn'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn'], 'string', 'max' => 20],
@@ -103,7 +103,7 @@ class WarehouseGoods extends BaseModel
                 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2','chain_type','cramp_ring','talon_head_type','xiangqian_craft' ,'main_stone_colour','second_stone_shape2','second_stone_color2','second_stone_clarity2',
                 'second_stone_type3','biaomiangongyi'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
-            [['cert_type','factory_mo'], 'string', 'max' => 50],
+            [['cert_type','factory_mo','chain_long'], 'string', 'max' => 50],
             [['audit_remark','remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
         ];
