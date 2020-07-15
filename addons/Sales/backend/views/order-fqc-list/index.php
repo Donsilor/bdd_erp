@@ -43,8 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute'=>'order_sn',
-                            'filter' => true,
+                            'attribute' => 'order_sn',
+                            'value'=>function($model) {
+                                return Html::a($model->order_sn, ['order/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
+                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
+                                'style'=> 'width:150px;'
+                            ]),
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
