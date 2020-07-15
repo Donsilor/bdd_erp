@@ -40,6 +40,10 @@ return [
                                     'title' => 'FQC质检',
                                     'route' => 'order-fqc/index',
                             ],
+                            [
+                                    'title' => '质检问题列表',
+                                    'route' => 'order-fqc-list/index',
+                            ],
                     ],
                     
             ],

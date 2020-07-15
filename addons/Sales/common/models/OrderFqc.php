@@ -3,6 +3,7 @@
 namespace addons\Sales\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "sales_order_fqc".
@@ -57,5 +58,23 @@ class OrderFqc extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(FqcConfig::class, ['id'=>'problem'])->alias('fqc');
     }
 }

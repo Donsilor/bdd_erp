@@ -124,7 +124,7 @@ class OrderFqcController extends BaseController
 
                 \Yii::$app->salesService->orderFqc->orderFqc($model);
                 $trans->commit();
-                return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+                return $this->message('操作成功', $this->redirect(['index']), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');

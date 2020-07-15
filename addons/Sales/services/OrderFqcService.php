@@ -25,14 +25,17 @@ class OrderFqcService extends Service
     /**
      * FQC质检
      * @param OrderFqcForm $form
-     * @return array
+     * @return object
      * @throws
      */
     public function orderFqc($form)
     {
         $order = Order::findOne($form->order_id);
-        if($order){
+        if(!$order){
             throw new \Exception('订单号：'.$form->order_sn.'未查到订单信息');
+        }
+        if($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO){
+            throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能质检');
         }
         if($form->is_pass){
             $order->delivery_status = DeliveryStatusEnum::TO_SEND;
@@ -57,16 +60,19 @@ class OrderFqcService extends Service
             if($execute_num <> count($goods_ids)){
                 throw new \Exception("货品改变状态数量与明细数量不一致");
             }
-            //质检日志
-            $form->creator_id = \Yii::$app->user->identity->getId();
-            $form->created_at = time();
-            if(false === $form->save()){
-                throw new \Exception($this->getError($form));
-            }
         }
+        //更新订单信息
         if(false === $order->save()){
             throw new \Exception($this->getError($order));
         }
-        return [];
+
+        //创建质检日志
+        $form->creator_id = \Yii::$app->user->identity->getId();
+        $form->created_at = time();
+        if(false === $form->save()){
+            throw new \Exception($this->getError($form));
+        }
+
+        return $order;
     }
 }
