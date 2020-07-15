@@ -71,6 +71,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute' => 'is_pass',
+                            'format' => 'raw',
+                            'value' =>function($model){
+                                return \addons\Sales\common\enums\IsPassEnum::getValue($model->is_pass);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'is_pass',\addons\Sales\common\enums\IsPassEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'creator_id',
                             'value' => "creator.username",
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
