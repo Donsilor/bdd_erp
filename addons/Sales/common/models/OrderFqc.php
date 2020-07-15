@@ -25,7 +25,7 @@ class OrderFqc extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('sales_order_fqc');
+        return self::tableFullName('order_fqc');
     }
 
     /**

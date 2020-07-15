@@ -7,7 +7,7 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
-use addons\Sales\common\models\OrderFqc;
+use addons\Sales\common\forms\OrderFqcForm;
 
 /**
  * Default controller for the `orderFqc` module
@@ -17,9 +17,9 @@ class OrderFqcController extends BaseController
     use Curd;
     
     /**
-     * @var OrderFqc
+     * @var Order
      */
-    public $modelClass = OrderFqc::class;
+    public $modelClass = Order::class;
     
     /**
      * Renders the index view for the module
@@ -28,7 +28,6 @@ class OrderFqcController extends BaseController
      */
     public function actionIndex()
     {
-        $this->modelClass = Order::class;
         $order_status = Yii::$app->request->get('order_status', -1);        
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
@@ -76,7 +75,6 @@ class OrderFqcController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = Order::class;
         $model = $this->findModel($id); 
         
         $dataProvider = null;
@@ -106,5 +104,55 @@ class OrderFqcController extends BaseController
         ]);
     }
 
+    /**
+     * ajax FQC质检
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxFqc()
+    {
+        $id = \Yii::$app->request->get('id');
+        $order = $this->findModel($id) ?? new Order();
+        $model = new OrderFqcForm();
+        $model->order_id = $order->id;
+        $model->order_sn = $order->order_sn;
+        $model->is_pass = \Yii::$app->request->get('is_pass');
+        if($model->is_pass){
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+
+                \Yii::$app->salesService->orderFqc->orderFqc($model);
+                $trans->commit();
+                return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            $isNewRecord = $model->isNewRecord;
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+
+                \Yii::$app->salesService->orderFqc->orderFqc($model);
+
+                $trans->commit();
+                if($isNewRecord) {
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else {
+                    return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
+                }
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 }
 

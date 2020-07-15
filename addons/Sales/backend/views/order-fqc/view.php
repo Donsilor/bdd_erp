@@ -11,7 +11,7 @@ use common\helpers\AmountHelper;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '订单详情';
+$this->title = 'FQC质检详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
@@ -171,13 +171,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                         'attribute'=>'is_stock',
                                         'value' => function($model){
-                                                return $model->is_stock;
+                                            return $model->is_stock;
                                         }
                                 ],
                                 [
                                         'attribute'=>'is_gift',
                                         'value' => function($model){
-                                                return $model->is_gift;
+                                            return $model->is_gift;
                                         }
                                 ],
                             ]
@@ -185,6 +185,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
     </div>
+        <div class="box-footer text-center">
+            <?php
+                echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::YES, 'returnUrl' => Url::getReturnUrl()], '质检通过',[
+                    'onclick' => 'rfTwiceAffirm(this,"质检通过", "确定通过吗？");return false;',
+                    'class'=>"btn btn-info btn-sm",
+                ]);
+                echo "&nbsp";
+                echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::NO, 'returnUrl' => Url::getReturnUrl()], '质检不通过',[
+                    'class'=>"btn btn-danger btn-sm",
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModal',
+                ]);
+            ?>
+            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
+        </div>
 </div>
 <!-- tab-content end -->
 </div>
