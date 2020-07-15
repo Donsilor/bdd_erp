@@ -16,14 +16,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
-
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">布产详情 - <?php echo $model->produce_sn?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-</div>
-
-<div class="row">
-     <div class="col-xs-12">
+  <div class="tab-content" >
          <div class="box">
              <div class="col-xs-6">
                  <div class="box">
@@ -148,92 +144,92 @@ $this->params['breadcrumbs'][] = $this->title;
                          </table>
                      </div>
                  </div>
-             </div>    
-
+             </div> 
+             <div class="col-xs-12">   
+           	   <div class="box-footer text-center" >
+                    <?php
+                    $buttonHtml = '';
+                    switch ($model->bc_status){
+            
+                        //确认分配
+                        case BuChanEnum::TO_CONFIRMED:
+                            $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>$returnUrl], '确认分配', [
+                                'class'=>'btn btn-info btn-ms',
+                                'style'=>"margin-left:5px",
+                                'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
+            
+                            ]);
+                        //初始化
+                        case BuChanEnum::INITIALIZATION:
+                            $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '分配工厂', [
+                                'class'=>'btn btn-primary btn-ms',
+                                'style'=>"margin-left:5px",
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModal',
+                            ]);
+                            break;
+                        //待配料    
+                        case BuChanEnum::TO_PEILIAO :
+                            $buttonHtml .= Html::edit(['apply-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
+                                'class'=>'btn btn-success btn-ms',
+                                'style'=>"margin-left:5px",
+                                'onclick' => 'rfTwiceAffirm(this,"开始配料","确定操作吗？");return false;',
+                            ]);
+                            break;
+                        //配料中
+                        case BuChanEnum::IN_PEILIAO:
+                            
+                            break;
+                        //待生产
+                        case BuChanEnum::TO_PRODUCTION:
+                            $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
+                                'class'=>'btn btn-danger btn-ms',
+                                'style'=>"margin-left:5px",
+                                'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',
+            
+                            ]);
+                            break;
+                        //生产中
+                        case BuChanEnum::IN_PRODUCTION :
+                            ;
+                        //部分出厂
+                        case BuChanEnum::PARTIALLY_SHIPPED:
+                            $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
+                                'class'=>'btn btn-success btn-ms',
+                                'style'=>"margin-left:5px",
+                                'data-toggle' => 'modal',
+                                'data-target' => '#ajaxModalLg',
+                            ]);
+                            break;
+                        default:
+                            $buttonHtml .= '';
+            
+                    }
+                    echo $buttonHtml;
+            
+                    if($model->bc_status >= BuChanEnum::ASSIGNED && $model->audit_follower_status != \common\enums\AuditStatusEnum::PENDING){
+                        echo  Html::edit(['change-follower','id'=>$model->id ,'returnUrl'=>$returnUrl], '更改跟单人', [
+                            'class'=>'btn btn-primary btn-ms',
+                            'style'=>"margin-left:5px",
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+            
+                    if($model->audit_follower_status == \common\enums\AuditStatusEnum::PENDING) {
+                        echo '&nbsp;';
+                        echo Html::edit(['ajax-audit-follower', 'id' => $model->id], '跟单人审核', [
+                            'class' => 'btn btn-success btn-ms',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
+            
+            
+                    ?>
+                </div>
          </div>
-     </div>
-    <div class="box-footer text-center" >
-        <?php
-        $buttonHtml = '';
-        switch ($model->bc_status){
-
-            //确认分配
-            case BuChanEnum::TO_CONFIRMED:
-                $buttonHtml .= Html::edit(['to-confirmed','id'=>$model->id ,'returnUrl'=>$returnUrl], '确认分配', [
-                    'class'=>'btn btn-info btn-ms',
-                    'style'=>"margin-left:5px",
-                    'onclick' => 'rfTwiceAffirm(this,"确认分配","确定操作吗？");return false;',
-
-                ]);
-            //初始化
-            case BuChanEnum::INITIALIZATION:
-                $buttonHtml .= Html::edit(['to-factory','id'=>$model->id ,'returnUrl'=>$returnUrl], '分配工厂', [
-                    'class'=>'btn btn-primary btn-ms',
-                    'style'=>"margin-left:5px",
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
-                ]);
-                break;
-            //待配料    
-            case BuChanEnum::TO_PEILIAO :
-                $buttonHtml .= Html::edit(['apply-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [
-                    'class'=>'btn btn-success btn-ms',
-                    'style'=>"margin-left:5px",
-                    'onclick' => 'rfTwiceAffirm(this,"开始配料","确定操作吗？");return false;',
-                ]);
-                break;
-            //配料中
-            case BuChanEnum::IN_PEILIAO:
-                
-                break;
-            //待生产
-            case BuChanEnum::TO_PRODUCTION:
-                $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>$returnUrl], '开始生产', [
-                    'class'=>'btn btn-danger btn-ms',
-                    'style'=>"margin-left:5px",
-                    'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',
-
-                ]);
-                break;
-            //生产中
-            case BuChanEnum::IN_PRODUCTION :
-                ;
-            //部分出厂
-            case BuChanEnum::PARTIALLY_SHIPPED:
-                $buttonHtml .= Html::edit(['produce-shipment','id'=>$model->id ,'returnUrl'=>$returnUrl], '生产出厂', [
-                    'class'=>'btn btn-success btn-ms',
-                    'style'=>"margin-left:5px",
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModalLg',
-                ]);
-                break;
-            default:
-                $buttonHtml .= '';
-
-        }
-        echo $buttonHtml;
-
-        if($model->bc_status >= BuChanEnum::ASSIGNED && $model->audit_follower_status != \common\enums\AuditStatusEnum::PENDING){
-            echo  Html::edit(['change-follower','id'=>$model->id ,'returnUrl'=>$returnUrl], '更改跟单人', [
-                'class'=>'btn btn-primary btn-ms',
-                'style'=>"margin-left:5px",
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
-            ]);
-        }
-
-        if($model->audit_follower_status == \common\enums\AuditStatusEnum::PENDING) {
-            echo '&nbsp;';
-            echo Html::edit(['ajax-audit-follower', 'id' => $model->id], '跟单人审核', [
-                'class' => 'btn btn-success btn-ms',
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
-            ]);
-        }
-
-
-        ?>
-    </div>
+   </div> 
 
     <div class="col-xs-6" style="margin-top: 20px;">
         <div class="box">
@@ -338,4 +334,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <?php }?>
     </div>
-</div>
+</div></div>
