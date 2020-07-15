@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-        <?= $form->field($model, 'fee_type')->dropDownList(\addons\Style\common\enums\FactoryFeeEnum::getMap(),['prompt'=>'请选择']);?>
+        <?= $form->field($model, 'fee_type')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FACEWORK),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'fee_price')->textInput() ?>
         <?= $form->field($model, 'remark')->textInput() ?>
         <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>

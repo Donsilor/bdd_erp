@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
             <?= $form->field($model, 'position')->dropDownList(\addons\Style\common\enums\StoneEnum::getPositionMap(),['prompt'=>'请选择']);?>
-            <?= $form->field($model, 'stone_type')->dropDownList(\addons\Style\common\enums\StoneEnum::getTypeMap(),['prompt'=>'请选择']);?>
+            <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE),['prompt'=>'请选择']);?>
 
             <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>

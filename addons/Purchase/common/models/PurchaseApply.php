@@ -77,7 +77,7 @@ class PurchaseApply extends BaseModel
             'final_audit_time' => '审核时间',
             'final_audit_remark' => '审核备注',
             //'status' => '状态',
-            'apply_status' => '申请状态',
+            'apply_status' => '申请单状态',
             'remark' => '采购备注',
             'follower_id' => '跟单人',
             'creator_id' => '创建人',
