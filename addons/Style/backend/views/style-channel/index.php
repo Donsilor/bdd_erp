@@ -158,10 +158,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             'template' => '{edit} {ajax-apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
+                                    if(in_array($model->audit_status,[AuditStatusEnum::SAVE ,AuditStatusEnum::UNPASS])) {
+                                        return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    }
                                 },
                                 'ajax-apply' => function($url, $model, $key){
                                     if($model->audit_status == AuditStatusEnum::SAVE || $model->audit_status == AuditStatusEnum::UNPASS){
