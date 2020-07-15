@@ -32,7 +32,7 @@ class OrderFqcListController extends BaseController
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
-                'partialMatchAttributes' => [], // 模糊查询
+                'partialMatchAttributes' => ['remark'], // 模糊查询
                 'defaultOrder' => [
                      'id' => SORT_DESC
                 ],
@@ -43,8 +43,14 @@ class OrderFqcListController extends BaseController
         ]);
         
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
-        
+            ->search(Yii::$app->request->queryParams, ['created_at']);
+
+        //创建时间过滤
+        if (!empty($searchParams['created_at'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['created_at']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
+        }
+
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
