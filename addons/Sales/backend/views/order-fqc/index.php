@@ -69,19 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
-            [
-                    'label' => '联系方式',
-                    'attribute' => 'customer_mobile',
-                    'value' => function($model){
-                          $str = '';
-                          $str .= $model->customer_mobile ? $model->customer_mobile."<br/>":'';
-                          $str .= $model->customer_email ? $model->customer_email."<br/>":'';
-                          return $str;
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
 /*                
             [
                     'attribute' => 'goods_num',
