@@ -110,11 +110,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 ?>
 
-                <?php
-                if($model->order->order_status == OrderStatusEnum::CONFORMED) {
-                    echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                }
-                ?>
+<!--                --><?php
+//                if($model->order->order_status == OrderStatusEnum::CONFORMED) {
+//                    echo Html::edit(['apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-ms openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+//                }
+//                ?>
                 <?php
                 if($model->is_apply == common\enums\ConfirmEnum::YES) {
                     echo Html::edit(['apply-view','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看审批',[

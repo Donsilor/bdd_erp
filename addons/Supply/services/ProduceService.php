@@ -106,7 +106,7 @@ class ProduceService extends Service
                 $produce->inlay_type = $produceAttr->attr_value_id;
             }
         }
-        $produce->follower_name = $produce->follower->username;
+        $produce->follower_name = $produce->follower->username ?? '';
         //更新布产单属性到布产单横向字段
         if(false === $produce->save(true)) {
             throw new \Exception($this->getError($produce));

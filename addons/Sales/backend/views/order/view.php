@@ -77,9 +77,37 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                     </table>
                 </div>
-                <!-- <div class="box-footer text-center">
-                    
-                </div>-->
+                <div class="box-footer text-center">
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                            'data-toggle' => 'modal',
+                            'class' => 'btn btn-primary btn-ms',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                            'class'=>'btn btn-success btn-ms',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
+                        echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-ms',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+
+
+                </div>
             </div>
         </div>
     <!-- box end -->
@@ -94,21 +122,30 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-height'=>'90%',
                         'data-offset'=>'20px',
                     ]); ?>
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
+                        echo Html::button('布产', [
+                            'class'=>'btn btn-success btn-xs',
+                            'onclick' => 'batchBuchan()',
+                        ]);
+                    }
+                    ?>
                 </div>
                 <div class="table-responsive col-lg-12">
                     <?php $order = $model ?>
                      <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'tableOptions' => ['class' => 'table table-hover'],
+                                'options'=>['id'=>'order-goods'],
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
                                         'visible' => false,
                                     ],
                                     [
-                                        'value'=>function($model){
-
-                                        }
+                                        'class'=>'yii\grid\CheckboxColumn',
+                                        'name'=>'id',  //设置每行数据的复选框属性
+                                        'headerOptions' => ['width'=>'30'],
                                     ],
                                     [
                                         'attribute' => 'goods_image',
@@ -119,6 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'raw',
                                         'headerOptions' => ['width'=>'80'],
                                     ],
+                                    'id',
                                     [
                                             'attribute'=>'goods_name',
                                             'value' => 'goods_name'
@@ -169,21 +207,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => 'produce_sn'
                                     ],
                                     [
-                                            'label'=>'布产状态',
+                                            'attribute'=>'bc_status',
                                             'value' =>function($model){
-                                                return '未布产';
+                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status);
                                             }
                                     ],
                                     [
                                             'attribute'=>'is_stock',
                                             'value' => function($model){
-                                                    return $model->is_stock;
+                                                    return IsStockEnum::getValue($model->is_stock);
                                             }
                                     ],
                                     [
                                             'attribute'=>'is_gift',
                                             'value' => function($model){
-                                                    return $model->is_gift;
+                                                    return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
                                             }
                                     ],
                                     [
@@ -216,11 +254,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                  }
 
                                             },
-                                            'apply-edit' =>function($url, $model, $key) use($order){
-                                                if($order->order_status == OrderStatusEnum::CONFORMED) {
-                                                    return Html::edit(['order-goods/apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
-                                                }
-                                            },
+//                                            'apply-edit' =>function($url, $model, $key) use($order){
+//                                                if($order->order_status == OrderStatusEnum::CONFORMED) {
+//                                                    return Html::edit(['order-goods/apply-edit','id' => $model->id],'申请编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+//                                                }
+//                                            },
                                             'delete' => function($url, $model, $key) use($order){
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
                                                     return Html::delete(['order-goods/delete','id' => $model->id,'order_id'=>$model->order_id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);
@@ -364,3 +402,24 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <!-- tab-content end -->
 </div>
+
+<script>
+    function batchBuchan() {
+        appConfirm("提交布产",'确定布产吗',function (value) {
+            switch (value) {
+                case "defeat":
+                    var ids = $("#order-goods").yiiGridView("getSelectedRows");
+                    if(ids == ''){
+                        rfMsg('请选中商品明细')
+                        return false;
+                    }
+                    var url = "<?= Url::to(['order-goods/buchan'])?>?ids=" + ids;
+                    window.location = url;
+
+                    break;
+                default:
+            }
+        });
+    }
+
+</script>

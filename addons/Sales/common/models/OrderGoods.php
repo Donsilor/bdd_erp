@@ -51,7 +51,7 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'is_stock', 'is_gift', 'created_at', 'updated_at','is_apply'], 'integer'],
+            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
             [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
             [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate'], 'number'],
             [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
@@ -71,7 +71,7 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => '订单商品表索引id',
+            'id' => 'ID',
             'merchant_id' => '商户ID',
             'order_id' => '订单id',
             'style_sn' => '款式编号',
@@ -96,9 +96,11 @@ class OrderGoods extends \addons\Sales\common\models\BaseModel
             'exchange_rate' => '汇率',
             'delivery_status' => '发货状态',
             'distribute_status' => '配货状态',
+            'bc_status' => '布产状态',
             'produce_sn' => '布产编号',
             'is_stock' => '是否现货',
             'is_gift' => '是否赠品',
+            'is_bc' => '是否布产',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',

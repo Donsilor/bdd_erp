@@ -181,7 +181,6 @@ class OrderGoodsForm extends OrderGoods
             $model = new OrderGoodsAttribute();
             $model->id = $this->id;
             $model->attr_id  = $attr_id;
-
             if(InputTypeEnum::isText($spec->input_type)) {
                 $model->attr_value_id  = 0;
                 $model->attr_value = $attr_value_id;
@@ -201,7 +200,12 @@ class OrderGoodsForm extends OrderGoods
                 throw new \Exception($this->getErrors($model));
             }
         }
+
+        //保存期货属性信息
         $this->attr_info = json_encode($attr_info);
+        if(false === $this->save(true,['attr_info'])) {
+            throw new \Exception($this->getErrors($this));
+        }
     }
     /**
      * 采购商品申请编辑-创建

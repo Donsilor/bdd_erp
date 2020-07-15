@@ -99,7 +99,7 @@ class WarehouseGoods extends BaseModel
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color'], 'string', 'max' => 100],
             [['style_sn','goods_id','qiban_sn'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn'], 'string', 'max' => 20],
-            [['finger', 'finger_hk','order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1',
+            [['finger','finger_hk','order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1',
                 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2','chain_type','cramp_ring','talon_head_type','xiangqian_craft' ,'main_stone_colour','second_stone_shape2','second_stone_color2','second_stone_clarity2',
                 'second_stone_type3','biaomiangongyi'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],

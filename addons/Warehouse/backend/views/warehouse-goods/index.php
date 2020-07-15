@@ -190,6 +190,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
+                        [
+                            'attribute'=>'gold_price',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+
+                        [
+                            'attribute'=>'gold_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+
 
                         [
                             'attribute'=>'cost_price',
@@ -292,11 +310,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label'=>'主石规格（颜色/净度/切工/抛光/荧光）',
                             'value'=>function($model){
-                                return $model->diamond_color.'/'.
-                                    $model->diamond_clarity.'/'.
-                                    $model->diamond_cut.'/'.
-                                    $model->diamond_polish.'/'.
-                                    $model->diamond_fluorescence;
+                                return Yii::$app->attr->valueName($model->diamond_color).'/'.
+                                    Yii::$app->attr->valueName($model->diamond_clarity).'/'.
+                                    Yii::$app->attr->valueName($model->diamond_cut).'/'.
+                                    Yii::$app->attr->valueName($model->diamond_polish).'/'.
+                                Yii::$app->attr->valueName($model->diamond_fluorescence);
                             },
                             'filter' => false,
                             'headerOptions' => [],

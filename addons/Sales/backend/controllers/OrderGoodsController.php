@@ -6,14 +6,19 @@ use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
+use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
+use addons\Supply\common\enums\BuChanEnum;
+use addons\Supply\common\enums\FromTypeEnum;
+use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\helpers\ResultHelper;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use common\traits\Curd;
 use Yii;
@@ -45,23 +50,20 @@ class OrderGoodsController extends BaseController
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
+
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
                 $model->goods_discount = $model->goods_price - $model->goods_pay_price;
 
-
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
                 //期货才会更新属性信息
                 if($model->is_stock == IsStockEnum::NO){
                     //创建属性关系表数据
                     $model->createAttrs();
                 }
-
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }
-
-
                 //更新采购汇总：总金额和总数量
                 Yii::$app->salesService->order->orderSummary($model->order_id);
                 $trans->commit();
@@ -144,6 +146,7 @@ class OrderGoodsController extends BaseController
         }
         if($model->isNewRecord) {
             $model->order_id = $order_id;
+            $model->currency = $model->order->currency;
         }
         if($model->isNewRecord && $search && $goods_sn) {
 
@@ -267,5 +270,63 @@ class OrderGoodsController extends BaseController
             'returnUrl'=>$this->returnUrl,
         ]);
     }
+
+
+
+    /**
+     * @return mixed
+     * 布产
+     */
+    public function actionBuchan(){
+        $ids = \Yii::$app->request->get('ids');
+        if(!is_object($ids)) {
+            $ids = StringHelper::explodeIds($ids);
+        }
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            $order_goods = OrderGoods::find()->where(['id'=>$ids])->all();
+            foreach ($order_goods as $model){
+                if($model['is_stock'] == IsStockEnum::YES){
+                    return $this->message("商品{$model->id}为现货，不能布产", $this->redirect(\Yii::$app->request->referrer), 'warning');
+                }
+                if($model['is_bc'] == ConfirmEnum::YES){
+                    return $this->message("商品{$model->id}为已经布产", $this->redirect(\Yii::$app->request->referrer), 'warning');
+                }
+                $goods = [
+                    'goods_name' =>$model->goods_name,
+                    'goods_num' =>$model->goods_num,
+                    'from_order_id'=>$model->order_id,
+                    'from_detail_id' => $model->id,
+                    'from_order_sn'=>$model->order->order_sn,
+                    'from_type' => FromTypeEnum::ORDER,
+                    'style_sn' => $model->style_sn,
+                    'bc_status' => BuChanEnum::INITIALIZATION,
+                    'qiban_sn' => $model->qiban_sn,
+                    'qiban_type'=>$model->qiban_type,
+                    'jintuo_type'=>$model->jintuo_type,
+                    'style_sex' =>$model->style_sex,
+                    'is_inlay' =>$model->is_inlay,
+                    'product_type_id'=>$model->product_type_id,
+                    'style_cate_id'=>$model->style_cate_id,
+                ];
+                $goods_attrs = OrderGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+                $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+                if($produce) {
+                    $model->bc_status = BuChanEnum::INITIALIZATION;
+                    $model->is_bc = ConfirmEnum::YES;
+                    $model->produce_sn = $produce->produce_sn;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model),422);
+                }
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+    }
+
 }
 
