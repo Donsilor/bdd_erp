@@ -37,9 +37,7 @@ class OrderFqcService extends Service
         if($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO){
             throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能质检');
         }
-        if($form->is_pass){
-            $order->delivery_status = DeliveryStatusEnum::TO_SEND;
-        }else{
+        if(!$form->is_pass){
             $order->distribute_status = DistributeStatusEnum::SAVE;
             //质检不通过，取消S单
             $bill = WarehouseBill::find()->where(['order_sn'=>$form->order_sn])->one();
@@ -62,9 +60,12 @@ class OrderFqcService extends Service
             }
         }
         //更新订单信息
+        $order->delivery_status = DeliveryStatusEnum::TO_SEND;
         if(false === $order->save()){
             throw new \Exception($this->getError($order));
         }
+
+        //创建订单日志
 
         //创建质检日志
         $form->creator_id = \Yii::$app->user->identity->getId();
