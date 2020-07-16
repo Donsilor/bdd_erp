@@ -25,7 +25,7 @@ return [
     'menu' => [            
             [
                     'title' => '订单管理',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexOrder',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -49,7 +49,7 @@ return [
             ],
             [
                     'title' => '客户管理',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexCustomer',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -60,8 +60,24 @@ return [
                     
             ],
             [
+                    'title' => '物流管理',
+                    'route' => 'indexShipping',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '待发货列表',
+                                    'route' => 'shipping/index',
+                            ],
+                            [
+                                    'title' => '快递单列表',
+                                    'route' => 'freight/index',
+                            ],
+                    ],
+
+            ],
+            [
                     'title' => '功能配置',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexConfig',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
