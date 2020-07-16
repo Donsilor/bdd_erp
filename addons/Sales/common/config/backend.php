@@ -84,6 +84,10 @@ return [
                                     'title' => '质检配置',
                                     'route' => 'fqc-config/index',
                             ],
+                            [
+                                    'title' => '货币汇率',
+                                    'route' => 'currency/index',
+                            ],
                     ],
                     
             ],
