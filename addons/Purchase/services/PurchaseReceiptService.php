@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\enums\WarehouseIdEnum;
 use Yii;
 use common\components\Service;
@@ -503,6 +504,15 @@ class PurchaseReceiptService extends Service
             //更新采购收货单汇总：总金额和总数量
             $this->purchaseReceiptSummary($form->id, PurchaseTypeEnum::GOODS);
         }
+        $log_msg = '添加商品';
+        $log = [
+            'receipt_id' => $form->id,
+            'receipt_no' => $form->receipt_no,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_module' => '成品采购收货单',
+            'log_msg' => $log_msg
+        ];
+        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
     }
 
     /**
@@ -661,6 +671,15 @@ class PurchaseReceiptService extends Service
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
+        $log_msg = '申请入库';
+        $log = [
+            'receipt_id' => $form->id,
+            'receipt_no' => $form->receipt_no,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_module' => '成品采购收货单',
+            'log_msg' => $log_msg
+        ];
+        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
     }
 
     /**
@@ -717,6 +736,16 @@ class PurchaseReceiptService extends Service
         if(false === $res) {
             throw new Exception("更新货品状态失败");
         }
+        /*$receipt = PurchaseReceipt::findOne($ids[0]);
+        $log_msg = '质检操作';
+        $log = [
+            'receipt_id' => $receipt->id,
+            'receipt_no' => $receipt->receipt_no,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_module' => '成品采购收货单',
+            'log_msg' => $log_msg
+        ];
+        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);*/
     }
 
     /**
