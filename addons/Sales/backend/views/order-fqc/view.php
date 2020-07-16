@@ -189,7 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
                 echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::YES, 'returnUrl' => Url::getReturnUrl()], '质检通过',[
                     'onclick' => 'rfTwiceAffirm(this,"质检通过", "确定通过吗？");return false;',
-                    'class'=>"btn btn-info btn-sm",
+                    'class'=>"btn btn-success btn-sm",
                 ]);
                 echo "&nbsp";
                 echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::NO, 'returnUrl' => Url::getReturnUrl()], '质检不通过',[

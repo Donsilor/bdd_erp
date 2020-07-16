@@ -39,7 +39,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>' width:120%;'],
+        //'options' => ['style'=>' width:120%;'],
         'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
@@ -215,7 +215,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {apply} {audit} {close}',
+                'template' => '{edit} {goods} {apply} {audit} {close} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                     'edit' => function($url, $model, $key){
@@ -259,6 +259,13 @@ $params = $params ? "&".http_build_query($params) : '';
                         if($model->receipt_status == PurchaseStatusEnum::SAVE) {
                             return Html::delete(['close', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'delete' => function($url, $model, $key){
+                        if($model->receipt_status == PurchaseStatusEnum::CANCEL) {
+                            return Html::delete(['delete', 'id' => $model->id],'删除',[
+                                'onclick' => 'rfTwiceAffirm(this,"删除单据", "确定删除吗？");return false;',
                             ]);
                         }
                     },

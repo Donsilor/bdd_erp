@@ -65,6 +65,7 @@ class OrderFqcService extends Service
             throw new \Exception($this->getError($order));
         }
 
+
         //创建订单日志
 
         //创建质检日志
