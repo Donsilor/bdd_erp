@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <h6 style="color:red">*有款起版的商品（既有款号又有起版号的），下订单只能用起版号下单</h6>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -70,6 +71,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'qiban_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                'class' => 'form-control',
+                                'style'=> 'width:150px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'qiban_type',
+                            'value'=> function($model){
+                                return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'goods_name',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column){
@@ -89,6 +111,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods_status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'goods_source',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoodSourceEnum::getValue($model->goods_source);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_source',\addons\Warehouse\common\enums\GoodSourceEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'

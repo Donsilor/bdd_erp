@@ -116,12 +116,24 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box"  style="margin:0px">
                 <div class="box-header" style="margin:0">
                     <h3 class="box-title"><i class="fa fa-info"></i> 商品信息</h3>
-                    <?= Html::create(['order-goods/edit', 'order_id' => $model->id], '添加商品', [
-                        'class' => 'btn btn-primary btn-xs openIframe',
-                        'data-width'=>'90%',
-                        'data-height'=>'90%',
-                        'data-offset'=>'20px',
-                    ]); ?>
+                    <h6 style="color:red">*有款起版的商品（既有款号又有起版号的），下订单只能用起版号下单</h6>
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                        echo Html::create(['order-goods/edit', 'order_id' => $model->id], '期货商品', [
+                            'class' => 'btn btn-primary btn-xs openIframe',
+                            'data-width' => '90%',
+                            'data-height' => '90%',
+                            'data-offset' => '20px',
+                        ]);
+                        echo '&nbsp;';
+                        echo Html::create(['order-goods/edit-stock', 'order_id' => $model->id], '现货商品', [
+                            'class' => 'btn btn-primary btn-xs openIframe',
+                            'data-width' => '90%',
+                            'data-height' => '90%',
+                            'data-offset' => '20px',
+                        ]);
+                    }
+                     ?>
                     <?php
                     if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
                         echo Html::button('布产', [
@@ -237,7 +249,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                             },
                                             'edit' => function($url, $model, $key) use($order){
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
-                                                    return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    if($model->is_stock == IsStockEnum::NO){
+                                                        return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    }else{
+                                                        return Html::edit(['order-goods/edit-stock','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    }
+
                                                 }
                                             },
                                             'stock' => function($url, $model, $key) use($order){

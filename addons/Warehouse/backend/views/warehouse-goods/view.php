@@ -43,6 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods_status) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_source') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\GoodSourceEnum::getValue($model->goods_source) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
                             <td><?= $model->warehouse->name ?? '' ?></td>
                         </tr>
