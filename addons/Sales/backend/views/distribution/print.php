@@ -38,6 +38,12 @@
 					<div class="child fl clf">
 						<div class="child-attr fl">订单号：</div>
 						<div class="child-val fl"><?= $model->order_sn ?? '' ?> </div>
+                        <div class="child-attr fl">客户姓名：</div>
+                        <div class="child-val fl"><?= $model->customer_name ?? '' ?> </div>
+                        <div class="child-attr fl">客户手机：</div>
+                        <div class="child-val fl"><?= $model->customer_mobile ?? '' ?> </div>
+                        <div class="child-attr fl">支付方式：</div>
+                        <div class="child-val fl"><?= \common\enums\PayTypeEnum::getValue($model->pay_type) ?? '' ?> </div>
 					</div>
 
 				</div>
@@ -227,7 +233,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['cost_price_count']?></div></td>
+                    <td><div><?= $total['cost_price_count']??""?></div></td>
                     <td></td>
                     <td></td>
                     <td></td>
