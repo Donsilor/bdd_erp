@@ -35,6 +35,7 @@ class Yii
  * @property \jianyan\easywechat\Wechat $wechat
  * @property \Da\QrCode\Component\QrCodeComponent $qr
  * @property \common\components\Attribute $attr
+ * @property \common\components\ShopAttribute $shopAttr
  * @property \common\components\Transaction $trans
  * @property \common\components\Area $area
  * @author jianyan74 <751393839@qq.com>

@@ -8,6 +8,7 @@ use common\components\Service;
 use addons\Shop\common\models\Order;
 use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\models\OrderGoods;
+use addons\Shop\common\enums\AttrIdEnum;
 
 /**
  * Bdd 订单同步
@@ -15,13 +16,53 @@ use addons\Shop\common\models\OrderGoods;
  * @package services\common
  */
 class OrderSyncService extends Service
-{
+{   
+    //需要同步的属性ID数组
+    public $syncAttrIds;
+    //输入类型属性ID数组
+    public $inputAttrIds;
+    //单选类型属性ID数组
+    public $selectAttrIds;
+    
+    public function init()
+    {
+         $this->selectAttrIds = [
+                 AttrIdEnum::FINGER, //= 38;//美号（手寸）
+                // AttrIdEnum::MATERIAL, //= 10;//材质（成色）
+                 AttrIdEnum::XIANGKOU, //= 49;//镶口
+                 AttrIdEnum::CHAIN_TYPE, //= 43;//链类型
+                 AttrIdEnum::CHAIN_BUCKLE, //= 42;//链扣环
+                 AttrIdEnum::DIA_CLARITY, //= 2;//钻石净度
+                 AttrIdEnum::DIA_CUT, //= 4;//钻石切工
+                 AttrIdEnum::DIA_SHAPE, //= 6;//钻石形状
+                 AttrIdEnum::DIA_COLOR, //= 7;//钻石颜色
+                 AttrIdEnum::DIA_FLUORESCENCE, //= 8;//荧光
+                 AttrIdEnum::DIA_CERT_TYPE, //= 48;//证书类型
+                 AttrIdEnum::DIA_POLISH, //= 28;//抛光
+                 AttrIdEnum::DIA_SYMMETRY, //= 29;//对称
+         ];
+         
+         $this->inputAttrIds = [
+                 AttrIdEnum::JINZHONG, //= 11;//金重
+                 AttrIdEnum::CHAIN_LENGTH, //= 53;//链长
+                 AttrIdEnum::HEIGHT, //= 41;//高度（mm）
+                 AttrIdEnum::DIA_CARAT, //= 59;//钻石大小
+                 AttrIdEnum::DIA_CERT_NO, //= 31;//证书编号
+                 AttrIdEnum::DIA_CUT_DEPTH, //= 32;//切割深度（%）
+                 //AttrIdEnum::DIA_TABLE_LV, //= 33;//台宽比（%）
+                 //AttrIdEnum::DIA_LENGTH, //= 34;//长度（mm）
+                 //AttrIdEnum::DIA_WIDTH, //= 35;//宽度（mm）
+                 AttrIdEnum::DIA_ASPECT_RATIO, //= 36;//长宽比（%）
+                 AttrIdEnum::DIA_STONE_FLOOR, //= 37;//石底层
+         ];
+         $this->syncAttrIds = $this->selectAttrIds + $this->inputAttrIds;
+    }
     /**
      * 同步订单到erp
      * @param int $order_id 订单Id
      */
     public function syncOrder($order_id)
-    {   
+    {   $order_id = 1407;
         //数据校验
         $order = Order::find()->where(['id'=>$order_id])->one();
         if(!$order) {
@@ -41,13 +82,14 @@ class OrderSyncService extends Service
         if(!$order->member) {
             throw new \Exception("member查询失败");
         }
+        echo '<pre/>';
+        $orderData = $this->getErpOrderData($order);print_r($orderData);
+        $orderGoodsData = $this->getErpOrderGoodsData($order);print_r($orderGoodsData);
+        $orderAddressData = $this->getErpOrderAddressData($order);print_r($orderAddressData);
+        $orderAccountData = $this->getErpOrderAccountData($order);print_r($orderAccountData);
+        $customerData = $this->getErpCustomerData($order);print_r($customerData);
         
-        $orderData = $this->getErpOrderData($order);
-        $orderGoodsData = $this->getErpOrderGoodsData($order);
-        $orderAddressData = $this->getErpOrderAddressData($order);
-        $orderAccountData = $this->getErpOrderAccountData($order);
-        $customerData = $this->getErpCustomerData($order);
-        echo 'finished';
+        echo 'Finished';
     }
     /**
      * ERP 客户资料 表单
@@ -67,8 +109,8 @@ class OrderSyncService extends Service
                 "google_account"=>$order->member->google_account,
                 "facebook_account"=>$order->member->facebook_account,
                 "qq"=>$order->member->qq,
-                "mobile"=>$order->member->mobile,
-                "email"=>$order->member->email,
+                "mobile"=>$this->getErpCustomerMobile($order),
+                "email"=>$order->address->email,
                 "birthday"=>$order->member->birthday,
                 "home_phone"=>$order->member->home_phone,
                 "country_id"=>$order->address->country_id,
@@ -129,19 +171,42 @@ class OrderSyncService extends Service
         
         return $erpGoodsList;
     }
+    
     /**
      * ERP订单商品属性表单
      * @param OrderGoods $model 订单商品Model
      */
     public function getErpOrderGoodsAttrsData($model)
     {
-        $goods_spec = json_decode($model->goods_spec,true);
-        $goods_attr = json_decode($model->goods_attr,true);
-        foreach ($goods_spec as $id=>$val){
-            //$attr_name = Yii::$app->attr
+        $goods_spec = json_decode($model->goods_spec,true) ?? [];
+        $goods_attr = json_decode($model->goods_attr,true) ??[];
+        $goods_attr = $goods_attr + $goods_spec;
+        $erp_attrs = [];
+        foreach ($goods_attr as $attr_id=>$val_id){
+            if(!in_array($attr_id,$this->syncAttrIds) || $val_id==='') {
+                continue;
+            }
+            $erp_attr_id  = Yii::$app->shopAttr->erpAttrId($attr_id);
+            if(!$erp_attr_id) {
+                $attr_name = $attr_name ?? Yii::$app->shopAttr->erpAttrId($attr_id);
+                throw new \Exception("[ID={$attr_id}]属性未绑定ERP属性ID");
+            }
+            if(in_array($attr_id,$this->inputAttrIds)) {
+                 $erp_value_id = 0;
+                 $erp_value = 0;
+            }elseif(in_array($attr_id,$this->selectAttrIds)){                
+                $erp_value_id  = Yii::$app->shopAttr->erpValueId($val_id);
+                if(!$erp_value_id) {
+                    throw new \Exception("[ID={$attr_id},{$val_id}] 属性值未绑定ERP属性值ID");
+                }
+                $erp_value = Yii::$app->shopAttr->valueName($val_id);
+            }else {
+                continue;
+            }
+            $erp_attrs[] = ['attr_id'=>$erp_attr_id,'attr_value_id'=>$erp_value_id,'attr_value'=>$erp_value];
         }
-        print_r($goods_spec);
-        print_r($goods_attr);
+        print_r($erp_attrs);
+        return $erp_attrs;
     }
     /**
      * ERP订单金额表单
@@ -193,11 +258,15 @@ class OrderSyncService extends Service
             "out_trade_no"=>$order->order_sn,
             "area_id"=>$order->ip_area_id,
             "customer_name"=>$order->address->realname,
-            "customer_mobile"=>$order->address->mobile,
+            "customer_mobile"=>$this->getErpCustomerMobile($order),
             "customer_email"=>$order->address->email,
             "customer_message"=>$order->buyer_remark,
             "store_remark"=>$order->seller_remark,
         ];
+    }
+    public static function getErpCustomerMobile($order)
+    {
+        return trim($order->address->mobile_code,'+').'-'.$order->address->mobile;
     }
     /**
      * ERP销售渠道

@@ -110,6 +110,106 @@ class OrderService extends Service
         return $order;        
     }
     /**
+     * 自动创建同步订单
+     * @param unknown $orderInfo
+     * @param unknown $accountInfo
+     * @param unknown $goodsList
+     * @param unknown $customerInfo
+     * @param unknown $addressInfo
+     * @param array $noticeInfo
+     * @throws \Exception
+     * @return \addons\Sales\common\models\Order
+     */
+    public function syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $noticeInfo = [])
+    {
+        if(empty($orderInfo['out_trade_no'])) {
+            throw new \Exception("orderInfo->out_trade_no 不能为空");
+        }
+        //1.同步订单
+        $order = Order::find()->where(['out_trade_no'=>$orderInfo['out_trade_no']])->one();
+        if(!$order) {
+            $order = new Order();
+        }
+        $order->attributes = $orderInfo;
+        if(false === $order->save()) {
+             throw new \Exception($this->getError($order));
+        }        
+        //2.同步订单金额
+        $account = OrderAccount::find()->where(['order_id'=>$order->id])->one();
+        if(!$account) {
+            $account = new OrderAccount();
+            $account->order_id = $order->id;
+        }
+        $account->attributes = $accountInfo;
+        if(false == $account->save()) {
+            throw new \Exception($this->getError($account));
+        }
+        //3.同步订单商品明细
+        if($order->isNewRecord) {
+            foreach ($goodsList as $goodsInfo) {
+                $orderGoods = new OrderGoods();
+                $orderGoods->attributes = $goodsInfo;
+                $orderGoods->order_id = $order->id;
+                if(false === $orderGoods->save()) {
+                    throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));
+                }
+                /**
+                 * [attr_id] => 6[attr_value_id] => 16[attr_value] => 圆形
+                 */
+                foreach ($orderGoods['goods_attrs'] ??[] as $attr) {
+                    $goodsAttr = new OrderGoodsAttribute();
+                    $goodsAttr->attributes = $attr;
+                    if($goodsAttr->attr_value_id) {
+                        $goodsAttr->attr_value = Yii::$app->attr->valueName($goodsAttr->attr_value_id);
+                    }
+                    if(false === $orderGoods->save()) {
+                        throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
+                    }
+                }
+            }
+        }
+        //4.同步客户信息
+        $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
+        if(!$customer) {
+            //2.创建用户信息
+            $customer = new Customer();
+            $customer->attributes = $customerInfo;
+            $customer->channel_id = $order->sale_channel_id;
+            if(false == $customer->save()) {
+                throw new \Exception("创建用户失败：".$this->getError($customer));
+            }
+        }else{
+            //更新用户信息
+            $customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
+            $customer->mobile = $customer->mobile ? $customer->mobile: $order->customer_mobile;
+            $customer->email = $customer->email ? $customer->email : $order->customer_email;
+            //$customer->attributes = $customerInfo;
+            if(false == $customer->save()) {
+                throw new \Exception("更新用户失败：".$this->getError($customer));
+            }
+        }
+        $order->customer_id = $customer->id;
+        if($order->isNewRecord){
+            $order->order_sn = $this->createOrderSn($order);
+        }
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
+        
+        //5.同步订单收货地址
+        $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
+        if(!$address) {
+            $address = new OrderAddress();            
+            $address->order_id = $order->id;
+        }
+        $address->attributes = $addressInfo;     
+        if(false == $address->save()) {
+            throw new \Exception("同步收货地址失败：".$this->getError($address));
+        }  
+        //5.同步发票
+        return $order;        
+    }
+    /**
      * 同步订单商品生成布产单
      * @param int $order_id
      * @param array $detail_ids
