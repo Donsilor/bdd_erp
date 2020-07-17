@@ -93,7 +93,7 @@ class WarehouseGoods extends BaseModel
         return [
             [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source'], 'integer'],
-            [['goods_id','company_id', 'warehouse_id', 'jintuo_type'], 'required'],
+            [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
                 'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color'], 'string', 'max' => 100],

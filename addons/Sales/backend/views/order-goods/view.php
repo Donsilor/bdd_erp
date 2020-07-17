@@ -77,15 +77,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
-                                    <td><?= $model->cate->name ?></td>
+                                    <td><?= $model->cate->name ?? '' ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
-                                    <td><?= $model->type->name ?></td>
+                                    <td><?= $model->type->name ?? '' ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
-                                    <td><?= $model->channel->name ?></td>
+                                    <td><?= $model->channel->name ?? '' ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>

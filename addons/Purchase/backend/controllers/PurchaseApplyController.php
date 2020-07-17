@@ -6,8 +6,13 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\models\PurchaseApplyGoods;
+use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\models\StyleChannel;
+use addons\Supply\common\enums\GoodsTypeEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
+use common\helpers\PageHelper;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\enums\LogTypeEnum;
@@ -72,13 +77,12 @@ class PurchaseApplyController extends BaseController
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         //导出
-        /* if(\Yii::$app->request->get('action') === 'export'){
-            $dataProvider->setPagination(false);
-            $ids = ArrayHelper::map($dataProvider->models,'id');
-            $this->actionExport($ids);
-        } */
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(PurchaseApply::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
 
 
 
@@ -451,122 +455,118 @@ class PurchaseApplyController extends BaseController
             $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
-            return $this->message('采购订单ID不为空', $this->redirect(['index']), 'warning');
+            return $this->message('采购申请单ID不为空', $this->redirect(['index']), 'warning');
         }
-
-        $select = ['p.apply_sn','p.follower_id','p.apply_status','m.username','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
-
-        $list = Purchase::find()->alias('p')
-            ->leftJoin(Member::tableName().' m','m.id=p.follower_id')
-            ->leftJoin(Supplier::tableName().' s','s.id=p.supplier_id')
-            ->leftJoin(PurchaseGoods::tableName().' pg','pg.purchase_id=p.id')
-            ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
-
-            ->where(['p.id'=>$ids])
-            ->select($select)
-            ->asArray()
-            ->all();
-
-        foreach ($list as &$val){
-            $attr = PurchaseGoodsAttribute::find()->where(['id'=>$val['id']])->asArray()->all();
-            $val['attr'] = ArrayHelper::map($attr,'attr_id','attr_value');
-        }
-
-        //print_r($list);exit();
+        list($list,) = $this->getData($ids);
 
         $header = [
-            ['订单编号', 'apply_sn' , 'text'],
-            ['跟单人', 'username' , 'text'],
-            ['订单状态', 'apply_status' , 'selectd',ApplyStatusEnum::getMap()],
             ['商品名称', 'goods_name' , 'text'],
-            ['商品编号', 'style_sn' , 'text'],
+            ['商品类型	', 'goods_type' , 'text'],
+            ['款号', 'style_sn' , 'text'],
             ['起版号', 'qiban_sn' , 'text'],
-            ['起版类型', 'qiban_type' , 'selectd',QibanTypeEnum::getMap()],
-            ['产品线', 'product_type_name' , 'text'],
-            ['款式分类', 'style_cate_name' , 'text'],
-            ['款式性别', 'style_sex' , 'selectd',StyleSexEnum::getMap()],
-            ['金托类型', 'jintuo_type' , 'selectd',JintuoTypeEnum::getMap()],
-            ['是否镶嵌', 'is_inlay' , 'selectd',InlayEnum::getMap()],
-            ['成本价', 'cost_price' , 'text'],
+            ['起版类型', 'qiban_type' , 'text'],
+            ['金托类型', 'jintuo_type' , 'text'],
+            ['款式分类	', 'style_cate_name' , 'text'],
+            ['产品线', 'product_type_name' ,  'text'],
+            ['归属渠道', 'style_channel_name' , 'text'],
             ['商品数量', 'goods_num' , 'text'],
-            ['手寸', 'id' , 'function',function($model){
-                return $model['attr']['38'] ?? '';
-            }],
-            ['证书号', 'id' , 'function',function($model){
-                return $model['attr']['31'] ?? '';
-            }],
-            ['主成色', 'id' , 'function',function($model){
-                return $model['attr']['10'] ?? '';
-            }],
-            ['主石类型', 'id' , 'function',function($model){
-                return $model['attr']['56'] ?? '';
-            }],
-            ['主石重', 'id' , 'function',function($model){
-                return $model['attr']['59'] ?? '';
-            }],
-            ['主石数', 'id' , 'function',function($model){
-                return $model['attr']['65'] ?? '';
-            }],
-            ['主石单价', 'main_stone_price' , 'text'],
-
-            ['市场价(标签价)', 'id' , 'function',function($model){
-                return $model['attr']['2'] ?? '';
-            }],
-            ['镶口', 'id' , 'function',function($model){
-                return $model['attr']['49'] ?? '';
-            }],
-
-            ['副石1类型', 'id' , 'function',function($model){
-                return $model['attr']['60'] ?? '';
-            }],
-            ['副石1重', 'id' , 'function',function($model){
-                return $model['attr']['44'] ?? '';
-            }],
-            ['副石1粒数', 'id' , 'function',function($model){
-                return $model['attr']['45'] ?? '';
-            }],
-            ['副石1单价', 'second_stone_price1' , 'text'],
-//            ['副石1净度', 'id' , 'function',function($model){
-//                return $model['attr']['47'] ?? '';
-//            }],
-//            ['副石1颜色', 'id' , 'function',function($model){
-//                return $model['attr']['46'] ?? '';
-//            }],
-
-            ['副石2类型', 'id' , 'function',function($model){
-                return $model['attr']['64'] ?? '';
-            }],
-            ['副石2粒数', 'id' , 'function',function($model){
-                return $model['attr']['62'] ?? '';
-            }],
-            ['副石2重', 'id' , 'function',function($model){
-                return $model['attr']['63'] ?? '';
-            }],
-            ['副石2单价', 'second_stone_price2' , 'text'],
-            ['采购备注', 'remark' , 'text'],
-            ['石料信息', 'stone_info' , 'text'],
-            ['金损', 'gold_loss' , 'text'],
-            ['单件银(金)额', 'gold_cost_price' , 'text'],
-            ['配件信息', 'parts_info' , 'text'],
-            ['加工费/件', 'jiagong_fee' , 'text'],
-            ['镶石费/件', 'xiangqian_fee' , 'text'],
-            ['工费总额/件', 'gong_fee' , 'text'],
-            ['改图费', 'gaitu_fee' , 'text'],
-            ['喷蜡费', 'penla_fee' , 'text'],
-            ['单件额', 'unit_cost_price' , 'text'],
-            ['工厂成本价', 'factory_cost_price' , 'text'],
-            ['金重', 'id' , 'function',function($model){
-                return $model['attr']['11'] ?? '';
-            }],
-            ['毛重', 'id' , 'function',function($model){
-                return $model['attr']['11'] ?? '';
-            }]
+            ['成本价', 'cost_price' ,'text'],
+            ['成色', 'material' , 'text'],
+            ['金重', 'jinzhong' , 'text'],
+            ['手寸', 'finger' , 'text'],
+            ['链长	', 'chain_length' , 'text'],
+            ['镶口', 'xiangkou' , 'text'],
+            ['主石类型	', 'main_stone_type' , 'text'],
+            ['主石数量', 'main_stone_num' , 'text'],
+            ['主石规格', 'main_stone_spec' ,'text'],
+            ['副石1类型', 'second_stone1_type' , 'text'],
+            ['副石1数量', 'second_stone1_num' , 'text'],
+            ['副石1规格', 'second_stone1_spec' , 'text'],
+            ['副石2类型', 'second_stone2_type' , 'text'],
+            ['副石2数量', 'second_stone2_num' , 'text'],
+            ['证书类型', 'dia_cert_type' , 'text'],
 
         ];
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
+
+    private function getData($ids){
+        $select = ['p.apply_sn','p.follower_id','p.apply_status','m.username','sc.name as style_channel_name','type.name as product_type_name','cate.name as style_cate_name','pg.*'];
+        $query = PurchaseApply::find()->alias('p')
+            ->innerJoin(PurchaseApplyGoods::tableName().' pg','pg.apply_id=p.id')
+            ->leftJoin(Member::tableName().' m','m.id=p.follower_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=pg.product_type_id')
+            ->leftJoin(StyleChannel::tableName().' sc','sc.id=pg.style_channel_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=pg.style_cate_id')
+            ->where(['p.id'=>$ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+
+        //统计
+        $total = [
+
+        ];
+        foreach ($lists as &$list){
+            $attr = PurchaseApplyGoodsAttribute::find()->where(['id'=>$list['id']])->asArray()->all();
+            $attr = ArrayHelper::map($attr,'attr_id','attr_value');
+
+            $list['goods_type'] = GoodsTypeEnum::getValue($list['goods_type']);
+            $list['qiban_type'] = QibanTypeEnum::getValue($list['qiban_type']);
+            $list['jintuo_type'] = JintuoTypeEnum::getValue($list['jintuo_type']);
+
+            //材质
+            $list['material'] = $attr[AttrIdEnum::MATERIAL] ?? '';
+            //金重
+            $list['jinzhong'] = $attr[AttrIdEnum::JINZHONG] ?? '';
+
+            //手寸
+            $finger_str = '';
+            if(isset($attr[AttrIdEnum::FINGER])){
+                $finger_str .= $attr[AttrIdEnum::FINGER]."/美号";
+                $finger_str .= "<br/>";
+            }
+            if(isset($attr[AttrIdEnum::PORT_NO])){
+                $finger_str .= $attr[AttrIdEnum::PORT_NO]."/港号";
+            }
+            $list['finger'] = $finger_str;
+
+            //链长
+            $list['chain_length'] = $attr[AttrIdEnum::CHAIN_LENGTH] ?? '';
+            //镶口
+            $list['xiangkou'] = $attr[AttrIdEnum::XIANGKOU] ?? '';
+
+            //主石类型
+            $list['main_stone_type'] = $attr[AttrIdEnum::MAIN_STONE_TYPE] ?? '';
+            //主石数量
+            $list['main_stone_num'] = $attr[AttrIdEnum::MAIN_STONE_NUM] ?? '';
+            //主石规格
+            $color = $attr[AttrIdEnum::DIA_COLOR] ?? "无";
+            $clarity = $attr[AttrIdEnum::DIA_CLARITY] ?? "无";
+            $cut = $attr[AttrIdEnum::DIA_CUT] ?? "无";
+            $polish = $attr[AttrIdEnum::DIA_POLISH] ?? "无";
+            $symmetry = $attr[AttrIdEnum::DIA_SYMMETRY] ?? "无";
+            $fluorescence = $attr[AttrIdEnum::DIA_FLUORESCENCE] ?? "无";
+            $list['main_stone_spec'] =  $color.'/'.$clarity.'/'.$cut.'/'.$polish.'/'.$symmetry.'/'.$fluorescence;
+            //副石1类型
+            $list['second_stone1_type'] = $attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? '';
+            //副石1数量
+            $list['second_stone1_num'] = $attr[AttrIdEnum::SIDE_STONE1_NUM] ?? '';
+            //副石1规格
+            $color = $attr[AttrIdEnum::SIDE_STONE1_COLOR] ?? "无";
+            $clarity = $attr[AttrIdEnum::SIDE_STONE1_CLARITY] ?? "无";
+            $list['second_stone1_spec'] = $color.'/'.$clarity;
+            //副石2类型
+            $list['second_stone2_type'] = $attr[AttrIdEnum::SIDE_STONE2_TYPE] ?? '';
+            //副石2数量
+            $list['second_stone2_num'] = $attr[AttrIdEnum::SIDE_STONE2_NUM] ?? '';
+            //证书类型
+            $list['dia_cert_type'] = $attr[AttrIdEnum::DIA_CERT_TYPE] ?? '';
+
+        }
+        return [$lists,$total];
+    }
+
 
     /**
      * 单据打印

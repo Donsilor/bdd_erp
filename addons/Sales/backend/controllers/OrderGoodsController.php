@@ -101,18 +101,21 @@ class OrderGoodsController extends BaseController
                     $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
                     return $this->message('此货号不存在或者不是库存状态', $this->redirect($skiUrl), 'error');
                 }
-            }
-            $model->order_id = $order_id;
-            $model->currency = $model->order->currency;
-            $model->goods_id = $goods_id;
 
-            $model->jintuo_type = $wareshouse_goods->jintuo_type;
-            $model->qiban_type = $wareshouse_goods->qiban_type;
-            $model->style_sex = $wareshouse_goods->style_sex;
-            $model->style_cate_id = $wareshouse_goods->style_cate_id;
-            $model->product_type_id = $wareshouse_goods->product_type_id;
-            $model->goods_num = $wareshouse_goods->goods_num;
-            $model->goods_name = $wareshouse_goods->goods_name;
+                $model->jintuo_type = $wareshouse_goods->jintuo_type;
+                $model->qiban_type = $wareshouse_goods->qiban_type;
+                $model->style_sex = $wareshouse_goods->style_sex;
+                $model->style_cate_id = $wareshouse_goods->style_cate_id;
+                $model->product_type_id = $wareshouse_goods->product_type_id;
+                $model->goods_num = $wareshouse_goods->goods_num;
+                $model->goods_name = $wareshouse_goods->goods_name;
+                $model->style_sn = $wareshouse_goods->style_sn;
+                $model->qiban_sn = $wareshouse_goods->qiban_sn;
+
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = $goods_id;
+            }
 
 
         }
