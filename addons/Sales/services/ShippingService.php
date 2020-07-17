@@ -37,7 +37,7 @@ class ShippingService extends Service
             throw new \Exception('订单号：'.$form->order_sn.'未查到订单信息');
         }
         if($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO){
-            //throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能发货');
+            throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能发货');
         }
         if($order->delivery_status != DeliveryStatusEnum::TO_SEND){
             throw new \Exception('订单号：'.$form->order_sn.'不是待发货状态不能发货');
@@ -62,7 +62,7 @@ class ShippingService extends Service
         //更新库存信息
         $execute_num = WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::HAS_SOLD], ['goods_id'=>$goods_ids, 'goods_status'=>GoodsStatusEnum::IN_SALE]);
         if($execute_num <> count($goods_ids)){
-            //throw new \Exception("货品改变状态数量与明细数量不一致");
+            throw new \Exception("货品改变状态数量与明细数量不一致");
         }
         //更新订单信息
         $order->delivery_status = DeliveryStatusEnum::HAS_SEND;
