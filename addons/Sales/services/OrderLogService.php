@@ -53,6 +53,8 @@ class OrderLogService extends Service
     {
         $model = new OrderLog();
         $model->attributes = $log;
+        $model->creator_id = Yii::$app->user->identity->getId();
+        $model->creator = \Yii::$app->user->identity->username;
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }

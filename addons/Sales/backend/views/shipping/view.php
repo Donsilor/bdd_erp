@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\OrderTypeEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\IsStockEnum;
@@ -60,20 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->customer_email ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
                             <td><?= $model->express->name ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
                             <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
                         </tr>
                     </table>
                 </div>
