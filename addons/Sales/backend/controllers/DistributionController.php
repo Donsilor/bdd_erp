@@ -5,10 +5,14 @@ namespace addons\Sales\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
+use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\forms\DistributionForm;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use common\helpers\ResultHelper;
-
+use common\helpers\PageHelper;
 
 /**
  * 待配货订单
@@ -49,7 +53,7 @@ class DistributionController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
-        //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
+        //$dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -118,5 +122,47 @@ class DistributionController extends BaseController
             'tab'=>$tab,
             'tabList'=>\Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
         ]);
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new Order();
+        list($lists,$total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' =>$total
+        ]);
+    }
+
+    private function getData($ids){
+        $select = ['o.*','og.*','g.*','type.name as product_type_name','cate.name as style_cate_name'];
+        $query = Order::find()->alias('o')
+            ->leftJoin(OrderGoods::tableName().' og','og.order_id=o.id')
+            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=og.goods_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->where(['o.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'cost_price_count' => 0,
+        ];
+        foreach ($lists as &$list){
+            $list['material'] = \Yii::$app->attr->valueName($list['material']);
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+
+            $total['cost_price_count'] += $list['cost_price'];
+
+        }
+        return [$lists,$total];
     }
 }

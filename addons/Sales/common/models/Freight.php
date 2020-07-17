@@ -46,6 +46,7 @@ class Freight extends BaseModel
     {
         return [
             [['freight_no', 'express_id'], 'required'],
+            [['freight_no'], 'unique'],
             [['express_id', 'sale_channel_id', 'print_status', 'print_num', 'print_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['order_amount'], 'number'],
             [['freight_no'], 'string', 'max' => 30],

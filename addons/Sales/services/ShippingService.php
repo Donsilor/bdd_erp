@@ -32,18 +32,21 @@ class ShippingService extends Service
      */
     public function orderShipping($form)
     {
-        $order = Order::find()->where(['order_sn' => $form->order_sn])->one() ?? new Order();
+        $order = Order::find()->where(['order_sn' => $form->order_sn])->one();
         if(!$order){
             throw new \Exception('订单号：'.$form->order_sn.'未查到订单信息');
         }
         if($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO){
+            throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能发货');
+        }
+        if($order->delivery_status != DeliveryStatusEnum::TO_SEND){
             throw new \Exception('订单号：'.$form->order_sn.'不是待发货状态不能发货');
         }
         if($order->refund_status != RefundStatusEnum::SAVE){
             throw new \Exception('订单号：'.$form->order_sn.'已退款或退款申请中，不能发货');
         }
         //销售单审核
-        $bill = WarehouseBill::find()->where(['order_sn'=>$form->order_sn])->one() ?? new WarehouseBill();
+        $bill = WarehouseBill::find()->where(['order_sn'=>$form->order_sn])->one();
         if(!$bill){
             throw new \Exception('订单号：'.$form->order_sn.'未查到S销售单');
         }

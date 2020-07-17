@@ -2,13 +2,15 @@
 
 namespace addons\Sales\backend\controllers;
 
-use addons\Sales\common\models\OrderAddress;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\forms\ShippingForm;
+use addons\Sales\common\forms\OrderFqcForm;
+use addons\Sales\common\enums\DeliveryStatusEnum;
 
 /**
  * Default controller for the `Order` module
@@ -56,12 +58,13 @@ class ShippingController extends BaseController
                     ['like', Order::tableName().'.customer_email', $searchParams['customer_mobile']]
             ];            
             $dataProvider->query->andWhere($where);
-        }        
+        }
         //创建时间过滤
         if (!empty($searchParams['created_at'])) {
             list($start_date, $end_date) = explode('/', $searchParams['created_at']);
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
-        }        
+        }
+        $dataProvider->query->andWhere(['=',Order::tableName().'.delivery_status', DeliveryStatusEnum::TO_SEND]);
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
@@ -115,7 +118,7 @@ class ShippingController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $order = $this->findModel($id) ?? new Order();
-        $address = OrderAddress::findOne($id);
+        $address = OrderAddress::findOne($id) ?? new OrderAddress();
         $model = new ShippingForm();
         $model->order_sn = $order->order_sn;
         // ajax 校验
