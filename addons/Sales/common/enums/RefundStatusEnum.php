@@ -18,7 +18,7 @@ class RefundStatusEnum extends \common\enums\BaseEnum
     {
         return [
                self::SAVE => "未操作",
-               self::APPLY=> "退款申请",
+               self::APPLY=> "退款中",
                self::HAS_RETURN => "已退款",
         ];
     }
