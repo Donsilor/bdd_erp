@@ -115,7 +115,7 @@ class ShippingController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $order = $this->findModel($id) ?? new Order();
-        $address = OrderAddress::findOne($id);
+        $address = OrderAddress::findOne($id) ?? new OrderAddress();
         $model = new ShippingForm();
         $model->order_sn = $order->order_sn;
         // ajax 校验
