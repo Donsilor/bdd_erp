@@ -2,6 +2,7 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\enums\RefundStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Sales\common\models\Order;
@@ -36,7 +37,10 @@ class ShippingService extends Service
             throw new \Exception('订单号：'.$form->order_sn.'未查到订单信息');
         }
         if($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO){
-            throw new \Exception('订单号：'.$form->order_sn.'不是已配货状态不能质检');
+            throw new \Exception('订单号：'.$form->order_sn.'不是待发货状态不能发货');
+        }
+        if($order->refund_status != RefundStatusEnum::SAVE){
+            throw new \Exception('订单号：'.$form->order_sn.'已退款或退款申请中，不能发货');
         }
         //销售单审核
         $bill = WarehouseBill::find()->where(['order_sn'=>$form->order_sn])->one() ?? new WarehouseBill();
@@ -59,6 +63,9 @@ class ShippingService extends Service
         }
         //更新订单信息
         $order->delivery_status = DeliveryStatusEnum::HAS_SEND;
+        $order->delivery_time = time();
+        $order->express_id = $form->express_id;
+        $order->express_no = $form->freight_no;
         if(false === $order->save()){
             throw new \Exception($this->getError($order));
         }

@@ -143,6 +143,7 @@ class ShippingController extends BaseController
         $model->consignee_mobile = $address->mobile;
         $address->address_details = $address->country_name.$address->province_name.$address->city_name.$address->address_details;
         $model->consignee_address = $address->address_details;
+        $model->express_id = $order->express_id;
         $model->consigner = \Yii::$app->user->identity->username??"";
 
         return $this->renderAjax($this->action->id, [
