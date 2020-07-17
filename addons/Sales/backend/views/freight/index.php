@@ -21,12 +21,6 @@ $params = $params ? "&".http_build_query($params) : '';
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools" style="right: 100px;">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
-                </div>
                 <div class="box-tools" >
                     <a href="<?= Url::to(['index?action=export'.$params])?>" class="blue">导出Excel</a>
                 </div>

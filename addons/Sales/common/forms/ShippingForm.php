@@ -4,12 +4,12 @@ namespace addons\Sales\common\forms;
 
 use Yii;
 use common\helpers\ArrayHelper;
-use addons\Sales\common\models\Order;
+use addons\Sales\common\models\Freight;
 
 /**
  * 订单发货 Form
  */
-class ShippingForm extends Order
+class ShippingForm extends Freight
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class ShippingForm extends Order
     public function rules()
     {
         $rules = [
-            [['order_sn'], 'required'],
+            //[['order_sn'], 'required'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

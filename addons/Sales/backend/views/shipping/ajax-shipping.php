@@ -5,7 +5,7 @@ use common\helpers\Url;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-fqc', 'id' => $model['id']]),
+        'validationUrl' => Url::to(['ajax-shipping', 'id' => $model['id']]),
         'fieldConfig' => [
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
@@ -17,13 +17,45 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
 </div>
     <div class="modal-body">
-       <div class="col-sm-12">
-            <?= $form->field($model, 'order_id')->hiddenInput(['value'=>$model->order_id])->label(false)?>
-            <?= $form->field($model, 'order_sn')->textInput(['readonly'=>true])?>
-            <?= $form->field($model, 'problem')->dropDownList(\Yii::$app->salesService->fqc->getDropDown(),['prompt'=>'请选择']);?>
-            <?= $form->field($model, 'is_pass')->hiddenInput(['value'=>$model->is_pass])->label(false)?>
-            <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'freight_no')->textInput(['maxlength' => true]); ?>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'express_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->salesService->express->getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_mobile')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_tel')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_address')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consigner')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

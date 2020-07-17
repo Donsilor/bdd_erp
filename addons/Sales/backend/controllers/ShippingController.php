@@ -17,9 +17,9 @@ class ShippingController extends BaseController
     use Curd;
     
     /**
-     * @var ShippingForm
+     * @var Order
      */
-    public $modelClass = ShippingForm::class;
+    public $modelClass = Order::class;
     
     /**
      * Renders the index view for the module
@@ -115,21 +115,7 @@ class ShippingController extends BaseController
         $id = \Yii::$app->request->get('id');
         $order = $this->findModel($id) ?? new Order();
         $model = new ShippingForm();
-        $model->order_id = $order->id;
         $model->order_sn = $order->order_sn;
-        $model->is_pass = \Yii::$app->request->get('is_pass');
-        if($model->is_pass){
-            try{
-                $trans = \Yii::$app->db->beginTransaction();
-
-                \Yii::$app->salesService->shipping->orderShipping($model);
-                $trans->commit();
-                return $this->message('操作成功', $this->redirect(['index']), 'success');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
-        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
