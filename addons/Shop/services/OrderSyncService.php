@@ -104,6 +104,7 @@ class OrderSyncService extends Service
                 "pay_type"=>$this->getErpPayType($order),
                 "pay_status"=>$order->payment_status,
                 "pay_time"=>$order->payment_time,
+                'goods_num'=>array_sum(array_column($order->goods??[],'goods_num')),
                 "order_status"=>$this->getErpOrderStatus($order),
                 "refund_status"=>0,
                 "express_id"=>$this->getErpExpressId($order),
@@ -135,7 +136,7 @@ class OrderSyncService extends Service
                 "lastname"=>$order->member->lastname,
                 "realname"=>$order->member->realname,
                 "channel_id"=>$this->getErpSaleChannelId($order),
-                "source_id"=>0,
+                "source_id"=>1,//BDD官网
                 "head_portrait"=>$order->member->head_portrait,
                 "gender"=>$order->member->gender,
                 "marriage"=>$order->member->marriage,

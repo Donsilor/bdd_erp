@@ -97,6 +97,7 @@ class Order extends BaseModel
             'pay_type' => '支付方式',
             'pay_status' => '支付状态',
             'pay_time' => '支付时间',
+            'goods_num' => '商品数量',
             'sale_channel_id' => '销售渠道',
             'finished_time' => '订单完成时间',
             'order_status' => '订单状态',

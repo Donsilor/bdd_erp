@@ -148,7 +148,7 @@ class OrderService extends Service
             throw new \Exception($this->getError($account));
         }
         //3.同步订单商品明细
-        if($is_new === false) {
+        if($is_new === true) {
             foreach ($goodsList as $goodsInfo) {
                 $style_sn = $goodsInfo['style_sn'] ?? '';
                 $style = Style::find()->where(['style_sn'=>$style_sn])->one();
@@ -191,10 +191,10 @@ class OrderService extends Service
             }
         }else{
             //更新用户信息
-            $customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
-            $customer->mobile = $customer->mobile ? $customer->mobile: $order->customer_mobile;
-            $customer->email = $customer->email ? $customer->email : $order->customer_email;
-            //$customer->attributes = $customerInfo;
+            //$customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
+            //$customer->mobile = $customer->mobile ? $customer->mobile: $order->customer_mobile;
+            //$customer->email = $customer->email ? $customer->email : $order->customer_email;
+            $customer->attributes = $customerInfo;
             if(false == $customer->save()) {
                 throw new \Exception("更新用户失败：".$this->getError($customer));
             }
