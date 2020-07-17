@@ -9,6 +9,7 @@ use addons\Shop\common\models\Order;
 use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\models\OrderGoods;
 use addons\Shop\common\enums\AttrIdEnum;
+use addons\Shop\common\enums\OrderFromEnum;
 
 /**
  * Bdd 订单同步
@@ -62,7 +63,8 @@ class OrderSyncService extends Service
      * @param int $order_id 订单Id
      */
     public function syncOrder($order_id)
-    {   $order_id = 1407;
+    {   
+        $order_id = 1407;
         //数据校验
         $order = Order::find()->where(['id'=>$order_id])->one();
         if(!$order) {
@@ -81,15 +83,46 @@ class OrderSyncService extends Service
         }
         if(!$order->member) {
             throw new \Exception("member查询失败");
-        }
-        echo '<pre/>';
-        $orderData = $this->getErpOrderData($order);print_r($orderData);
-        $orderGoodsData = $this->getErpOrderGoodsData($order);print_r($orderGoodsData);
-        $orderAddressData = $this->getErpOrderAddressData($order);print_r($orderAddressData);
-        $orderAccountData = $this->getErpOrderAccountData($order);print_r($orderAccountData);
-        $customerData = $this->getErpCustomerData($order);print_r($customerData);
-        
-        echo 'Finished';
+        }        
+        $orderInfo = $this->getErpOrderData($order);
+        $goodsList = $this->getErpOrderGoodsData($order);
+        $addressInfo = $this->getErpOrderAddressData($order);
+        $accountInfo = $this->getErpOrderAccountData($order);
+        $customerInfo = $this->getErpCustomerData($order);
+        return Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);        
+    }
+    /**
+     * ERP订单主表表单
+     * @param Order $order
+     */
+    public function getErpOrderData($order)
+    {
+        return [
+                "language"=>$order->language,
+                "currency"=>$order->account->currency,
+                "pay_sn"=>$order->pay_sn,
+                "pay_type"=>$this->getErpPayType($order),
+                "pay_status"=>$order->payment_status,
+                "pay_time"=>$order->payment_time,
+                "order_status"=>$this->getErpOrderStatus($order),
+                "refund_status"=>0,
+                "express_id"=>$this->getErpExpressId($order),
+                "express_no"=>$order->express_no,
+                "delivery_status"=>$this->getErpDeliveryStatus($order),
+                "delivery_time"=>$order->delivery_time,
+                "receive_type"=>$order->receive_type,
+                "sale_channel_id"=>$this->getErpSaleChannelId($order),
+                "order_from"=>$this->getErpOrderFrom($order),
+                "order_type"=>$this->getErpOrderType($order),
+                "is_invoice"=>$order->is_invoice,
+                "out_trade_no"=>$order->order_sn,
+                "area_id"=>$order->ip_area_id,
+                "customer_name"=>$order->address->realname,
+                "customer_mobile"=>$this->getErpCustomerMobile($order),
+                "customer_email"=>$order->address->email,
+                "customer_message"=>$order->buyer_remark,
+                "store_remark"=>$order->seller_remark,
+        ];
     }
     /**
      * ERP 客户资料 表单
@@ -153,8 +186,9 @@ class OrderSyncService extends Service
             $erpGoods = [
                     "goods_name" => $model->goods_name,
                     "goods_image"=> $model->goods_image,
-                    "style_sn"=> $model->style->style_sn ?? '',
+                    "style_sn"=> $model->style->style_sn ?? '',                    
                     "goods_sn"=> $model->goods_sn,
+                    "jintuo_type"=> $this->getErpJintuoType($model),
                     "goods_num"=> $model->goods_num,
                     "goods_price"=> $model->goods_price,
                     "goods_pay_price"=> $model->goods_pay_price,
@@ -193,7 +227,7 @@ class OrderSyncService extends Service
             }
             if(in_array($attr_id,$this->inputAttrIds)) {
                  $erp_value_id = 0;
-                 $erp_value = 0;
+                 $erp_value = $val_id;
             }elseif(in_array($attr_id,$this->selectAttrIds)){                
                 $erp_value_id  = Yii::$app->shopAttr->erpValueId($val_id);
                 if(!$erp_value_id) {
@@ -205,7 +239,7 @@ class OrderSyncService extends Service
             }
             $erp_attrs[] = ['attr_id'=>$erp_attr_id,'attr_value_id'=>$erp_value_id,'attr_value'=>$erp_value];
         }
-        print_r($erp_attrs);
+        //print_r($erp_attrs);
         return $erp_attrs;
     }
     /**
@@ -233,48 +267,30 @@ class OrderSyncService extends Service
         ];
     }
     /**
-     * ERP订单主表表单
+     * ERP 订单客户手机
      * @param Order $order
      */
-    public function getErpOrderData($order)
-    {
-        return [
-            "language"=>$order->language,
-            "currency"=>$order->account->currency,
-            "pay_sn"=>$order->pay_sn,
-            "pay_type"=>$this->getErpPayType($order),
-            "pay_status"=>$order->payment_status,
-            "pay_time"=>$order->payment_time,
-            "order_status"=>$order->payment_time, 
-            "refund_status"=>0,
-            "express_id"=>0,
-            "express_no"=>0,
-            "delivery_status"=>0,
-            "delivery_time"=>$order->delivery_time,
-            "receive_type"=>0,
-            "sale_channel_id"=>$this->getErpSaleChannelId($order),
-            "order_from"=>$this->getErpOrderFrom($order),
-            "is_invoice"=>$order->is_invoice,
-            "out_trade_no"=>$order->order_sn,
-            "area_id"=>$order->ip_area_id,
-            "customer_name"=>$order->address->realname,
-            "customer_mobile"=>$this->getErpCustomerMobile($order),
-            "customer_email"=>$order->address->email,
-            "customer_message"=>$order->buyer_remark,
-            "store_remark"=>$order->seller_remark,
-        ];
-    }
     public static function getErpCustomerMobile($order)
     {
         return trim($order->address->mobile_code,'+').'-'.$order->address->mobile;
     }
     /**
-     * ERP销售渠道
+     * ERP 订单销售渠道
      * @param Order $order
      */
     public static function getErpSaleChannelId($order)
-    {
-         return 1;
+    {  
+        $map = [
+                OrderFromEnum::WEB_HK => 1,
+                OrderFromEnum::MOBILE_HK => 1,
+                OrderFromEnum::WEB_CN => 1,
+                OrderFromEnum::MOBILE_CN => 1,
+                OrderFromEnum::WEB_US => 2,
+                OrderFromEnum::MOBILE_US => 2,
+                OrderFromEnum::WEB_TW => 1,
+                OrderFromEnum::MOBILE_TW => 1,
+        ];        
+        return $map[$order->order_from]??'';
     }
     /**
      * ERP 订单来源
@@ -282,7 +298,7 @@ class OrderSyncService extends Service
      */
     public static function getErpOrderFrom($order)
     {
-        return 0;
+        return \addons\Sales\common\enums\OrderFromEnum::FROM_BDD;
     }
     /**
      * ERP 订单支付方式
@@ -290,14 +306,58 @@ class OrderSyncService extends Service
      */
     public static function getErpPayType($order)
     {
-        return 0;
+        return $order->payment_type;
     }
     /**
      * ERP 订单发货状态
      * @param Order $order
      */
-    public function getErpDeliveryStatus($order)
+    public static function getErpDeliveryStatus($order)
     {
-        return 0;
+        $erp_delivery_status = \addons\Sales\common\enums\DeliveryStatusEnum::SAVE;
+        if($order->order_status >= OrderStatusEnum::ORDER_SEND) {
+            $erp_delivery_status = \addons\Sales\common\enums\DeliveryStatusEnum::HAS_SEND;
+        }
+        return $erp_delivery_status;
+    }
+    /**
+     * ERP 订单快递方式
+     * @param Order $order
+     */
+    public static function getErpExpressId($order)
+    {
+        return $order->express_id;
+    }
+    /**
+     * ERP 订单状态
+     * @param Order $order
+     */
+    public static function getErpOrderStatus($order)
+    {
+        $erp_order_status = \addons\Sales\common\enums\OrderStatusEnum::SAVE;
+        if($order->order_status >= OrderStatusEnum::ORDER_SEND) {
+            $erp_order_status = \addons\Sales\common\enums\OrderStatusEnum::CONFORMED;
+        }
+        return $erp_order_status;
+    }
+    /**
+     * ERP 订单类型 1现货 2期货
+     * @param Order $order
+     */
+    public static function getErpOrderType($order)
+    {
+        return \addons\Sales\common\enums\OrderTypeEnum::FUTURE;
+    }    
+    /**
+     * ERP 金托类型
+     * @param OrderGoods $goods
+     */
+    public static function getErpJintuoType($goods)
+    {   
+        $erp_jintuo_type = \addons\Style\common\enums\JintuoTypeEnum::Chengpin;
+        if($goods->goods_type == 12) {
+            $erp_jintuo_type = \addons\Style\common\enums\JintuoTypeEnum::Kongtuo;
+        }
+        return $erp_jintuo_type;
     }
 }

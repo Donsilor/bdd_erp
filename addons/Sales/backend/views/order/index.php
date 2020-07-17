@@ -162,6 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'pay_status',\addons\Sales\common\enums\PayStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style' =>'width:80px'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -174,6 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'distribute_status',\addons\Sales\common\enums\DistributeStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style' =>'width:80px'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -186,6 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'delivery_status',\addons\Sales\common\enums\DeliveryStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style' =>'width:80px'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
@@ -198,6 +201,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => Html::activeDropDownList($searchModel, 'order_status',\addons\Sales\common\enums\OrderStatusEnum::getMap(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
+                            'style' =>'width:80px'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],  
+            [
+                    'attribute' => 'order_from',
+                    'value' => function ($model){
+                        return \addons\Sales\common\enums\OrderFromEnum::getValue($model->order_from);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'order_from',\addons\Sales\common\enums\OrderFromEnum::getMap(), [
+                            'prompt' => '全部',
+                            'class' => 'form-control',
+                            'style' =>'width:90px'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],

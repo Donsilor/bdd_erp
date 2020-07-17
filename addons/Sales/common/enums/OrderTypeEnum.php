@@ -8,7 +8,7 @@ namespace addons\Sales\common\enums;
  */
 class OrderTypeEnum extends \common\enums\BaseEnum
 {
-    const unknown = 0;
+    const UNKNOWN = 0;
     const STOCK = 1;
     const FUTURE = 2;
     /**
@@ -17,7 +17,7 @@ class OrderTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::unknown => "未知",
+                self::UNKNOWN => "未知",
                 self::STOCK => "现货单",
                 self::FUTURE => "期货单",
         ];

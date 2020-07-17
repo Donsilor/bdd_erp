@@ -16,6 +16,7 @@ use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Sales\common\enums\IsStockEnum;
+use addons\Style\common\models\Style;
 
 /**
  * Class SaleChannelService
@@ -126,8 +127,10 @@ class OrderService extends Service
             throw new \Exception("orderInfo->out_trade_no 不能为空");
         }
         //1.同步订单
+        $is_new = false;
         $order = Order::find()->where(['out_trade_no'=>$orderInfo['out_trade_no']])->one();
         if(!$order) {
+            $is_new = true;
             $order = new Order();
         }
         $order->attributes = $orderInfo;
@@ -145,10 +148,17 @@ class OrderService extends Service
             throw new \Exception($this->getError($account));
         }
         //3.同步订单商品明细
-        if($order->isNewRecord) {
+        if($is_new === false) {
             foreach ($goodsList as $goodsInfo) {
+                $style_sn = $goodsInfo['style_sn'] ?? '';
+                $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+                if(!$style) {
+                    throw new \Exception("同步订单商品失败：[{$style_sn}]款号在erp系统不存在");
+                }
+                //从款式信息自动带出款的信息
+                $styleInfo = $style->toArray(['style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
                 $orderGoods = new OrderGoods();
-                $orderGoods->attributes = $goodsInfo;
+                $orderGoods->attributes = $goodsInfo + $styleInfo;
                 $orderGoods->order_id = $order->id;
                 if(false === $orderGoods->save()) {
                     throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));
@@ -156,13 +166,14 @@ class OrderService extends Service
                 /**
                  * [attr_id] => 6[attr_value_id] => 16[attr_value] => 圆形
                  */
-                foreach ($orderGoods['goods_attrs'] ??[] as $attr) {
+                foreach ($goodsInfo['goods_attrs'] ??[] as $attr) {
                     $goodsAttr = new OrderGoodsAttribute();
                     $goodsAttr->attributes = $attr;
                     if($goodsAttr->attr_value_id) {
                         $goodsAttr->attr_value = Yii::$app->attr->valueName($goodsAttr->attr_value_id);
                     }
-                    if(false === $orderGoods->save()) {
+                    $goodsAttr->id = $orderGoods->id;
+                    if(false === $goodsAttr->save()) {
                         throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
                     }
                 }
@@ -189,7 +200,7 @@ class OrderService extends Service
             }
         }
         $order->customer_id = $customer->id;
-        if($order->isNewRecord){
+        if($is_new === true){
             $order->order_sn = $this->createOrderSn($order);
         }
         if(false == $order->save()) {
