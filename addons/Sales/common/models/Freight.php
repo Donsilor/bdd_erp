@@ -64,7 +64,7 @@ class Freight extends BaseModel
         return [
             'id' => 'ID',
             'freight_no' => '快递单号',
-            'express_id' => '物流公司',
+            'express_id' => '快递公司',
             'consignee' => '收货人',
             'consignee_address' => '收货人地址',
             'consignee_mobile' => '收货人手机号',
