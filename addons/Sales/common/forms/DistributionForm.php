@@ -9,7 +9,7 @@ use addons\Sales\common\models\Order;
 /**
  * 待配货订单 Form
  */
-class DistributionOrderForm extends Order
+class DistributionForm extends Order
 {
     public $goods_ids;
     /**
