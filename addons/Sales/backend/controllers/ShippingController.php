@@ -7,19 +7,19 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
-use addons\Sales\common\forms\OrderFqcForm;
+use addons\Sales\common\forms\ShippingForm;
 
 /**
- * Default controller for the `orderFqc` module
+ * Default controller for the `Order` module
  */
-class OrderFqcController extends BaseController
+class ShippingController extends BaseController
 {
     use Curd;
     
     /**
-     * @var Order
+     * @var ShippingForm
      */
-    public $modelClass = Order::class;
+    public $modelClass = ShippingForm::class;
     
     /**
      * Renders the index view for the module
@@ -105,16 +105,16 @@ class OrderFqcController extends BaseController
     }
 
     /**
-     * ajax FQC质检
+     * ajax 发货
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxFqc()
+    public function actionAjaxShipping()
     {
         $id = \Yii::$app->request->get('id');
         $order = $this->findModel($id) ?? new Order();
-        $model = new OrderFqcForm();
+        $model = new ShippingForm();
         $model->order_id = $order->id;
         $model->order_sn = $order->order_sn;
         $model->is_pass = \Yii::$app->request->get('is_pass');
@@ -122,7 +122,7 @@ class OrderFqcController extends BaseController
             try{
                 $trans = \Yii::$app->db->beginTransaction();
 
-                \Yii::$app->salesService->orderFqc->orderFqc($model);
+                \Yii::$app->salesService->shipping->orderShipping($model);
                 $trans->commit();
                 return $this->message('操作成功', $this->redirect(['index']), 'success');
             }catch (\Exception $e){
@@ -137,7 +137,7 @@ class OrderFqcController extends BaseController
             try{
                 $trans = \Yii::$app->db->beginTransaction();
 
-                \Yii::$app->salesService->orderFqc->orderFqc($model);
+                \Yii::$app->salesService->shipping->orderShipping($model);
 
                 $trans->commit();
                 if($isNewRecord) {

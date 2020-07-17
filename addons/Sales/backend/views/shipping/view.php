@@ -11,7 +11,7 @@ use common\helpers\AmountHelper;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'FQC质检';
+$this->title = '订单发货';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
@@ -187,15 +187,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
         <div class="box-footer text-center">
             <?php
-                echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::YES, 'returnUrl' => Url::getReturnUrl()], '质检通过',[
-                    'onclick' => 'rfTwiceAffirm(this,"质检通过", "确定通过吗？");return false;',
-                    'class'=>"btn btn-success btn-sm",
-                ]);
-                echo "&nbsp";
-                echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::NO, 'returnUrl' => Url::getReturnUrl()], '质检不通过',[
-                    'class'=>"btn btn-danger btn-sm",
+                echo Html::edit(['ajax-shipping', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '发货',[
+                    'class'=>"btn btn-primary btn-sm",
                     'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
+                    'data-target' => '#ajaxModalLg',
                 ]);
             ?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
