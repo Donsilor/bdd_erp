@@ -101,7 +101,7 @@ class OrderService extends Service
             $address->country_id = $customer->country_id;
             $address->province_id = $customer->province_id;
             $address->city_id = $customer->city_id;
-            $address->address_details = $customer->address_details;
+            $address->address_details = $customer->address;
             //$address->zip_code = $customer->zip_code;
         }        
         if(false == $address->save(false)) {
