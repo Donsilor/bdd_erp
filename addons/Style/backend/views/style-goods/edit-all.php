@@ -161,5 +161,18 @@ $(function(){
         	}
         });    
     }
+
+
+    $(document).on("click",'.sku_type li',function(){
+        var checked = false;
+        if(!$(this).hasClass('checked')){
+            checked = true;
+            $(this).addClass('checked');
+        }else{
+            $(this).removeClass('checked');
+        }
+
+        $(this).parent().next().find("input[type*='checkbox']").prop("checked",checked);
+    });
 });
 </script>

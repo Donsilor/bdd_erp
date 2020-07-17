@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\models;
 
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -34,10 +35,11 @@ class StyleChannel extends BaseModel
     {
         return [
             [['name'], 'required'],
-            [['merchant_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'status','audit_status','auditor_id', 'creator_id', 'created_at','audit_time', 'updated_at'], 'integer'],
             [['tag'], 'string', 'max' => 10],
             [['code'], 'string', 'max' => 20],
             [['name'], 'string', 'max' => 100],
+            [['audit_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,6 +56,10 @@ class StyleChannel extends BaseModel
             'tag' => '标签(编款用)',
             'status' => '状态',
             'sort' => '排序',
+            'audit_status' => '审核状态',
+            'audit_remark' => '审核备注',
+            'audit_time' => '审核时间',
+            'auditor_id' => '审核人',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -82,5 +88,13 @@ class StyleChannel extends BaseModel
     public function getMember()
     {
         return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }

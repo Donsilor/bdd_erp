@@ -2,27 +2,27 @@
 
 namespace addons\Sales\backend\controllers;
 
-use addons\Sales\common\enums\DistributeStatusEnum;
-use addons\Sales\common\models\OrderGoods;
-use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Sales\common\forms\DistributionOrderForm;
+use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\forms\DistributionForm;
+use common\helpers\ResultHelper;
+
 
 /**
  * 待配货订单
  *
- * Class OrderLogController
+ * Class DistributionController
  * @package addons\Order\backend\controllers
  */
-class DistributionOrderController extends BaseController
+class DistributionController extends BaseController
 {
     use Curd;
     /**
-     * @var DistributionOrderForm
+     * @var DistributionForm
      */
-    public $modelClass = DistributionOrderForm::class;
+    public $modelClass = DistributionForm::class;
     
     /**
      * Lists all Order models.
@@ -48,8 +48,8 @@ class DistributionOrderController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         
-        //$dataProvider->query->andWhere(['=',DistributionOrderForm::tableName().'.order_id',$order_id]);
-        //$dataProvider->query->andWhere(['=',DistributionOrderForm::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
+        //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
+        //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -71,7 +71,7 @@ class DistributionOrderController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $goods_ids = Yii::$app->request->post('goods_ids');
         $model = $this->findModel($id);
-        $model = $model ?? new DistributionOrderForm();
+        $model = $model ?? new DistributionForm();
         $model->goods_ids = $goods_ids;
         //$this->activeFormValidate($model);
         if (\Yii::$app->request->isPost) {

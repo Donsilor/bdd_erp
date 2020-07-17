@@ -217,12 +217,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{edit} {audit} {ajax-apply} {apply} {follower} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModalLg',
-                                    'class'=>'btn btn-primary btn-sm',
-                            ]);
-
+                     if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                             'data-toggle' => 'modal',
+                             'data-target' => '#ajaxModalLg',
+                             'class' => 'btn btn-primary btn-sm',
+                         ]);
+                     }
                     },
                     'ajax-apply' => function($url, $model, $key){
                         if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE){

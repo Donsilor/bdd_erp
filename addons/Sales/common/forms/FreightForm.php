@@ -3,15 +3,14 @@
 namespace addons\Sales\common\forms;
 
 use Yii;
+use addons\Sales\common\models\Freight;
 use common\helpers\ArrayHelper;
-use addons\Sales\common\models\Order;
 
 /**
- * 待配货订单 Form
+ * 快递单 Form
  */
-class DistributionOrderForm extends Order
+class FreightForm extends Freight
 {
-    public $goods_ids;
     /**
      * {@inheritdoc}
      */
@@ -22,7 +21,7 @@ class DistributionOrderForm extends Order
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -30,7 +29,7 @@ class DistributionOrderForm extends Order
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                
+
         ]);
     }
 

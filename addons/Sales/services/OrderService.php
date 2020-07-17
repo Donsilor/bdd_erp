@@ -305,7 +305,7 @@ class OrderService extends Service
 
 
     /**
-     * 采购单汇总
+     * 订单金额汇总
      * @param unknown $purchase_id
      */
     public function orderSummary($order_id)
@@ -316,8 +316,17 @@ class OrderService extends Service
             ->asArray()->one();
         if($sum) {
             $order_type = $sum['is_stock'] == 1 ? 1 : 2; //1现货 2定制
-            Order::updateAll(['goods_num'=>$sum['total_num']/1, 'order_type'=>$order_type],['id'=>$order_id]);
-            OrderAccount::updateAll(['discount_amount'=>$sum['total_goods_discount']/1,'paid_amount'=>$sum['total_pay_price']/1],['order_id'=>$order_id]);
+            Order::updateAll(['goods_num'=>$sum['total_num'], 'order_type'=>$order_type],['id'=>$order_id]);
+            $order_account = OrderAccount::find()->where(['order_id'=>$order_id])->one();
+            if(empty($order_account)){
+                $order_account = new OrderAccount();
+                $order_account->order_id = $order_id;
+            }
+            $order_account->discount_amount = $sum['total_goods_discount'];
+            $order_account->goods_amount = $sum['total_goods_price'];
+            $order_account->order_amount = $sum['total_pay_price'];
+            $order_account->pay_amount = $sum['total_pay_price'] - $order_account->paid_amount;
+            $order_account->save();
         }
     }
     

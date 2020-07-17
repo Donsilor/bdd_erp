@@ -43,6 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods_status) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_source') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\GoodSourceEnum::getValue($model->goods_source) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('warehouse_id') ?>：</td>
                             <td><?= $model->warehouse->name ?? '' ?></td>
                         </tr>
@@ -182,6 +186,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->attr->valueName($model->finger) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('finger_hk') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->finger_hk) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('product_size') ?>：</td>
                             <td><?= $model->product_size ?></td>
                         </tr>
@@ -206,10 +214,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->gold_loss ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
+                            <td><?= $model->gold_price ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_amount') ?>：</td>
+                            <td><?= $model->gold_amount ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('suttle_weight') ?>：</td>
                             <td><?= $model->suttle_weight ?></td>
                         </tr>
-
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_gold_weight') ?>：</td>
                             <td><?= $model->parts_gold_weight ?></td>
@@ -226,6 +242,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
                             <td><?= $model->gong_fee ?></td>
                         </tr>
+
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
                             <td><?= $model->bukou_fee ?></td>
@@ -234,12 +256,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xianqian_fee') ?>：</td>
                             <td><?= $model->xianqian_fee ?></td>
                         </tr>
-
-                    </table>
-                </div>
-                <div class="col-xs-6">
-                    <table class="table table-hover">
-
 
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_fee') ?>：</td>
