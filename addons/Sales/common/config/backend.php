@@ -34,7 +34,7 @@ return [
                             ],
                             [
                                     'title' => '待配货订单',
-                                    'route' => 'distribution-order/index',
+                                    'route' => 'distribution/index',
                             ],
                             [
                                     'title' => 'FQC质检',
