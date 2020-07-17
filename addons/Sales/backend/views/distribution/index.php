@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_sn',
                     'value'=>function($model) {
-                        return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->order_sn, ['account-sales', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                         'class' => 'form-control',
@@ -209,13 +209,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{account}',
+                'template' => '{account} {print}',
                 'buttons' => [
                     'account' => function($url, $model, $key){
                             return Html::edit(['account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'配货',[
                                     'class'=>'btn btn-primary btn-sm',
                             ]);
-
+                    },
+                    'print' => function($url, $model, $key){
+                        return Html::a('打印提货单',['print','id'=>$model->id],[
+                            'target'=>'_blank',
+                            'class'=>'btn btn-info btn-sm',
+                        ]);
                     },
                 ]
             ]
