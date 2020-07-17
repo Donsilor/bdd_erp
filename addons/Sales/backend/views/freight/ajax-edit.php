@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
         <div class="row">
             <div class="col-lg-6">
-                <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true]); ?>
+                <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true, 'disabled'=>true]); ?>
             </div>
             <div class="col-lg-6">
                 <?= $form->field($model, 'freight_no')->textInput(['maxlength' => true]); ?>

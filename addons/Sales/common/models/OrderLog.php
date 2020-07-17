@@ -3,6 +3,9 @@
 namespace addons\Sales\common\models;
 
 use Yii;
+use common\models\backend\Member;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sales_order_log".
@@ -60,5 +63,40 @@ class OrderLog extends BaseModel
             'creator_id' => '操作人',
             'created_at' => '创建时间',
         ];
+    }
+    /**
+     * @param
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
+        ];
+    }
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId();
+            $this->creator = \Yii::$app->user->identity->username;
+        }
+        return parent::beforeSave($insert);
+    }
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id']);
     }
 }

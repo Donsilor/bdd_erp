@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\models\OrderAddress;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -114,6 +115,7 @@ class ShippingController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $order = $this->findModel($id) ?? new Order();
+        $address = OrderAddress::findOne($id);
         $model = new ShippingForm();
         $model->order_sn = $order->order_sn;
         // ajax 校验
@@ -136,6 +138,13 @@ class ShippingController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
+
+        $model->consignee = $address->firstname;
+        $model->consignee_mobile = $address->mobile;
+        $address->address_details = $address->country_name.$address->province_name.$address->city_name.$address->address_details;
+        $model->consignee_address = $address->address_details;
+        $model->consigner = \Yii::$app->user->identity->username??"";
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
