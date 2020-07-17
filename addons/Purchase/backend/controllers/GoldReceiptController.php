@@ -29,7 +29,7 @@ use common\traits\Curd;
 * Class ReceiptController
 * @package addons\Purchase\Backend\controllers
 */
-class GoldReceiptController extends ReceiptController
+class GoldReceiptController extends BaseController
 {
     use Curd;
 
