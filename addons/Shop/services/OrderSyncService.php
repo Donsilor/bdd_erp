@@ -10,6 +10,8 @@ use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\models\OrderGoods;
 use addons\Shop\common\enums\AttrIdEnum;
 use addons\Shop\common\enums\OrderFromEnum;
+use addons\Shop\common\models\OrderSync;
+use addons\Shop\common\enums\SyncPlatformEnum;
 
 /**
  * Bdd 订单同步
@@ -63,8 +65,7 @@ class OrderSyncService extends Service
      * @param int $order_id 订单Id
      */
     public function syncOrder($order_id)
-    {   
-        $order_id = 1407;
+    {  
         //数据校验
         $order = Order::find()->where(['id'=>$order_id])->one();
         if(!$order) {
@@ -89,7 +90,15 @@ class OrderSyncService extends Service
         $addressInfo = $this->getErpOrderAddressData($order);
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
-        return Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);        
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            $erpOrder = Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);  
+            OrderSync::updateAll(['sync_created'=>1,'sync_created_time'=>time()],['order_id'=>$order_id,'sync_platform'=>SyncPlatformEnum::SYNC_EPR]);
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollback();
+            throw $e;
+        }        
     }
     /**
      * ERP订单主表表单
