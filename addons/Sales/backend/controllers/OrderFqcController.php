@@ -63,7 +63,7 @@ class OrderFqcController extends BaseController
             list($start_date, $end_date) = explode('/', $searchParams['created_at']);
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
         }
-        $dataProvider->query->andWhere(['=',OrderFqcForm::tableName().'.distribute_status', DistributeStatusEnum::HAS_PEIHUO]);
+        $dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::HAS_PEIHUO]);
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,

@@ -58,13 +58,13 @@ class ShippingController extends BaseController
                     ['like', Order::tableName().'.customer_email', $searchParams['customer_mobile']]
             ];            
             $dataProvider->query->andWhere($where);
-        }        
+        }
         //创建时间过滤
         if (!empty($searchParams['created_at'])) {
             list($start_date, $end_date) = explode('/', $searchParams['created_at']);
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
         }
-        $dataProvider->query->andWhere(['=',OrderFqcForm::tableName().'.delivery_status', DeliveryStatusEnum::TO_SEND]);
+        $dataProvider->query->andWhere(['=',Order::tableName().'.delivery_status', DeliveryStatusEnum::TO_SEND]);
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,

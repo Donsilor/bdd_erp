@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\models\Order;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -50,7 +51,7 @@ class DistributionController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
-        $dataProvider->query->andWhere(['=',DistributionForm::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
+        $dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
