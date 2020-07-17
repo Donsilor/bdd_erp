@@ -22,7 +22,7 @@ $form = ActiveForm::begin([
             <div class="row">
                 <div class="col-lg-6">
                 <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+                    'data' => Yii::$app->salesService->saleChannel->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true
