@@ -24,7 +24,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                 </div>
                 <div class="box-tools" >
@@ -68,7 +68,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function ($model){
                                 return $model->express->name ?? '';
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'express_id',Yii::$app->salesService->express->getDropDown(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'express_id',\Yii::$app->salesService->express->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:120px;',
@@ -211,16 +211,13 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {status} {delete}',
+                            'template' => '{edit} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
+                                        'data-target' => '#ajaxModalLg',
                                     ]);
-                                },
-                                'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);

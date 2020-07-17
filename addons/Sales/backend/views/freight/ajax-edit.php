@@ -18,10 +18,45 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
-        <?= $form->field($model, 'code')->textInput(); ?>
-        <?= $form->field($model, 'sort')->textInput(); ?>
-        <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'order_sn')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'freight_no')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'express_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->salesService->express->getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_mobile')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_tel')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consignee_address')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'consigner')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
