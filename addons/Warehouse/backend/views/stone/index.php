@@ -10,7 +10,7 @@ use addons\Warehouse\common\enums\StoneStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone', '石料列表');
+$this->title = Yii::t('stone', '石料库存');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
