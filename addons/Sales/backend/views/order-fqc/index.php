@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{view}',
                             'buttons' => [
                                 'view' => function ($url, $model, $key) {
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('质检', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
                                 },
                             ]
                         ]
