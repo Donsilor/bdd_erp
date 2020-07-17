@@ -10,7 +10,7 @@ use addons\Warehouse\common\enums\StoneStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone', '石料列表');
+$this->title = Yii::t('stone', '石料库存');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -386,7 +386,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-                        ]*/
+                        ],*/
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'header' => '操作',
+                            'template' => '{view}',
+                            'buttons' => [
+                                'view' => function($url, $model, $key){
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
+                            ],
+                        ],
                     ]
                 ]); ?>
             </div>

@@ -97,7 +97,7 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                        'title' => '金料列表',
+                        'title' => '金料库存',
                         'route' => 'gold/index',
                     ],
                     [
@@ -128,7 +128,7 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                     [
-                        'title' => '石料列表',
+                        'title' => '石料库存',
                         'route' => 'stone/index',
                     ],
                     [

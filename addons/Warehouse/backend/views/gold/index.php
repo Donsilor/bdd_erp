@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold', '金料列表');
+$this->title = Yii::t('gold', '金料库存');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -180,17 +180,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
                         ],
-                        /*[
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '',
+                            'template' => '{view}',
                             'buttons' => [
-                                'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                'view' => function($url, $model, $key){
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                             ],
-                        ]*/
+                        ],
                     ]
                 ]); ?>
             </div>
