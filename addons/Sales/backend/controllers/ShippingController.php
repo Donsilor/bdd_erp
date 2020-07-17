@@ -2,13 +2,15 @@
 
 namespace addons\Sales\backend\controllers;
 
-use addons\Sales\common\models\OrderAddress;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\forms\ShippingForm;
+use addons\Sales\common\forms\OrderFqcForm;
+use addons\Sales\common\enums\DeliveryStatusEnum;
 
 /**
  * Default controller for the `Order` module
@@ -61,7 +63,8 @@ class ShippingController extends BaseController
         if (!empty($searchParams['created_at'])) {
             list($start_date, $end_date) = explode('/', $searchParams['created_at']);
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
-        }        
+        }
+        $dataProvider->query->andWhere(['=',OrderFqcForm::tableName().'.delivery_status', DeliveryStatusEnum::TO_SEND]);
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
