@@ -25,7 +25,7 @@ return [
     'menu' => [            
             [
                     'title' => '订单管理',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexOrder',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -34,7 +34,7 @@ return [
                             ],
                             [
                                     'title' => '待配货订单',
-                                    'route' => 'distribution-order/index',
+                                    'route' => 'distribution/index',
                             ],
                             [
                                     'title' => 'FQC质检',
@@ -49,7 +49,7 @@ return [
             ],
             [
                     'title' => '客户管理',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexCustomer',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -60,8 +60,24 @@ return [
                     
             ],
             [
+                    'title' => '物流管理',
+                    'route' => 'indexShipping',
+                    'icon' => 'fa fa-superpowers',
+                    'child' => [
+                            [
+                                    'title' => '待发货订单',
+                                    'route' => 'shipping/index',
+                            ],
+                            [
+                                    'title' => '快递单列表',
+                                    'route' => 'freight/index',
+                            ],
+                    ],
+
+            ],
+            [
                     'title' => '功能配置',
-                    'route' => 'indexPurchase',
+                    'route' => 'indexConfig',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -83,6 +99,10 @@ return [
                             [
                                     'title' => '质检配置',
                                     'route' => 'fqc-config/index',
+                            ],
+                            [
+                                    'title' => '货币汇率',
+                                    'route' => 'currency/index',
                             ],
                     ],
                     

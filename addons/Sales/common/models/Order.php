@@ -31,6 +31,7 @@ use common\helpers\RegularHelper;
  * @property int $order_type 订单类型 1现货 2定制 3赠品
  * @property int $is_invoice 是否开发票
  * @property string $out_trade_no 外部订单号
+ * @property int $sale_channel_id 销售渠道
  * @property int $follower_id 跟进人
  * @property int $followed_time 跟进时间
  * @property int $followed_status 跟进状态 1已跟进 0未跟进

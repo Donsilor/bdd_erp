@@ -5,9 +5,10 @@ namespace common\components;
 use Yii;
 use common\enums\CacheEnum;
 use common\enums\StatusEnum;
-use addons\Style\common\models\AttributeValue;
-use addons\Style\common\models\AttributeValueLang;
-use addons\Style\common\models\AttributeLang;
+use addons\Shop\common\models\AttributeValue;
+use addons\Shop\common\models\AttributeValueLang;
+use addons\Shop\common\models\AttributeLang;
+use addons\Shop\common\models\Attribute;
 
 
 /**
@@ -15,7 +16,7 @@ use addons\Style\common\models\AttributeLang;
  * @package common\components
  * @author gaopeng
  */
-class Attribute
+class ShopAttribute
 {
     /**
      * 返回属性名称
@@ -31,6 +32,21 @@ class Attribute
         }
         $result = $this->getAttr($attr_id , $noCache);
         return $result['info'][$language]['name']??'';
+    }
+    /**
+     * 返回ERP属性ID
+     *
+     * @param string $name 字段名称
+     * @param bool $noCache true 不从缓存读取 false 从缓存读取
+     * @return bool|string
+     */
+    public function erpAttrId($attr_id, $language = null, $noCache = false,$merchant_id = '')
+    {
+        if($language == null) {
+            $language = \Yii::$app->params['language'];
+        }
+        $result = $this->getAttr($attr_id , $noCache);
+        return $result['info'][$language]['erp_id']??'';
     }
     /**
      * 属性值列表
@@ -63,7 +79,21 @@ class Attribute
         }
         return $result;
     }
-    
+    /**
+     * 返回ERP属性值ID
+     * @param unknown $value_id
+     * @param unknown $language
+     * @param string $noCache
+     * @return string
+     */
+    public function erpValueId($value_id, $language = null,$noCache = false , $merchant_id = '')
+    {
+        if($language == null) {
+            $language = \Yii::$app->params['language'];
+        }
+        $result = $this->getAttrValue($value_id,$noCache);
+        return $result[$language]['erp_id']??'';
+    }
     /**
      * 返回属性值名称
      * @param unknown $value_id
@@ -76,7 +106,7 @@ class Attribute
         if($language == null) {
             $language = \Yii::$app->params['language'];
         }
-        $result = $this->getAttrValue($value_id,$noCache);
+        $result = $this->getAttrValue($value_id,true);
         return $result[$language]['name']??'';
     }
     /**
@@ -86,23 +116,26 @@ class Attribute
      * @return array
      */
     public function getAttr($attr_id , $noCache = false , $merchant_id = '')
-    {
-        $cacheKey = CacheEnum::getPrefix('goodsAttr',$merchant_id).':'.$attr_id;
+    {   $noCache = true;
+        $cacheKey = CacheEnum::getPrefix('goodsAttr',$merchant_id).'-shop:'.$attr_id;
         if (!($info = Yii::$app->cache->get($cacheKey)) || $noCache == true) {
-            $models = AttributeLang::find()
-                ->select(['master_id','language','attr_name'])
-                ->where(['master_id'=>$attr_id])
+            $models = Attribute::find()->alias('attr')
+                ->innerJoin(AttributeLang::tableName().' lang','attr.id=lang.master_id')
+                ->select(['lang.master_id','lang.language','lang.attr_name','attr.erp_id'])
+                ->where(['attr.id'=>$attr_id])
                 ->asArray()->all();
+
             $info['info'] = [];
             foreach ($models as $row) {
                 $info['info'][$row['language']] = [
                         'id'=>$row['master_id'],
-                        'name'=>$row['attr_name']
+                        'name'=>$row['attr_name'],
+                        'erp_id'=>$row['erp_id'],
                 ];
             }
             $models = AttributeValue::find()->alias("val")
                 ->leftJoin(AttributeValueLang::tableName()." lang","val.id=lang.master_id")
-                ->select(['lang.master_id',"val.code","lang.attr_value_name",'lang.language'])
+                ->select(['lang.master_id',"val.code","val.erp_id","lang.attr_value_name",'lang.language'])
                 ->where(['val.attr_id'=>$attr_id,'val.status'=>StatusEnum::ENABLED])
                 ->orderBy('val.sort asc,val.id asc')
                 ->asArray()->all();
@@ -113,6 +146,7 @@ class Attribute
                         'id'=>$row['master_id'],
                         'name'=>$row['attr_value_name'],
                         'code'=>$row['code'],
+                        'erp_id'=>$row['erp_id']
                 ];
             }
             $info['items'] = $value_list;
@@ -130,13 +164,13 @@ class Attribute
      * @return array
      */
     public function getAttrValue($value_id , $noCache = false , $merchant_id = '')
-    {
-        $cacheKey = CacheEnum::getPrefix('goodsAttrValue',$merchant_id).':'.$value_id;
+    {   $noCache = true;
+        $cacheKey = CacheEnum::getPrefix('goodsAttrValue',$merchant_id).'-shop:'.$value_id;
         if (!($info = Yii::$app->cache->get($cacheKey)) || $noCache == true) {            
             
             $models = AttributeValue::find()->alias("val")
                 ->leftJoin(AttributeValueLang::tableName()." lang","val.id=lang.master_id")
-                ->select(['lang.master_id',"lang.attr_value_name",'lang.language'])
+                ->select(['lang.master_id',"lang.attr_value_name",'lang.language','val.erp_id'])
                 ->where(['val.id'=>$value_id])
                 ->asArray()->all();
             
@@ -145,13 +179,13 @@ class Attribute
                 $info[$row['language']] = [
                         'id'=>$row['master_id'],
                         'name'=>$row['attr_value_name'],
+                        'erp_id'=>$row['erp_id']
                 ];
             }
             $duration = (int) rand(3600*24,3600*24+3600);//防止缓存穿透
             // 设置缓存
             Yii::$app->cache->set($cacheKey, $info,$duration);
         }
-       
         return $info;
     }
 

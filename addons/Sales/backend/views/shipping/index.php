@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = 'FQC质检列表';
+$this->title = '待发货订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{view}',
                             'buttons' => [
                                 'view' => function ($url, $model, $key) {
-                                    return Html::a('质检', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
+                                    return Html::a('发货', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
                                 },
                             ]
                         ]

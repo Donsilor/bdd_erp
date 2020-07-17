@@ -25,7 +25,11 @@ class OrderController extends BaseController
      * @var Order
      */
     public $modelClass = Order::class;
-    
+    public function actionTest()
+    {
+        Yii::$app->shopService->orderSync->syncOrder(1879);
+        exit;
+    }
     /**
      * Renders the index view for the module
      * @return string

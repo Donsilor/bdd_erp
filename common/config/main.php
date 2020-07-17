@@ -25,7 +25,7 @@ return [
         //BDD官网
         'bddDb' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd;',
+                'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd;',
                 'username' => 'super',
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
@@ -122,12 +122,9 @@ return [
                         ],
                 ],
         ],
-        'area' => [
-             'class' => 'common\components\Area',
-        ],
-		'attr' => [
-            'class' => 'common\components\Attribute',
-        ],
-        'trans'=>'common\components\Transaction'
+        'area' => ['class' => 'common\components\Area'],
+		'attr' => ['class' => 'common\components\Attribute'],
+        'trans'=>['class'=>'common\components\Transaction'],
+        'shopAttr'=>['class'=>'common\components\ShopAttribute']
     ],
 ];
