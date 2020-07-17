@@ -65,7 +65,7 @@ return [
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
-                                    'title' => '待发货列表',
+                                    'title' => '待发货订单',
                                     'route' => 'shipping/index',
                             ],
                             [
