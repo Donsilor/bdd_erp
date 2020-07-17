@@ -148,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'tableOptions' => ['class' => 'table table-hover'],
-                                'options'=>['id'=>'order-goods'],
+                                'options'=>['id'=>'order-goods','style'=>' width:140%;white-space:nowrap;'],
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
@@ -191,7 +191,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
                                         }
                                     ],
-
+                                    [
+                                        'attribute'=>'jintou_type',
+                                        'value' => function($model){
+                                            return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                                        }
+                                    ],
                                     [
                                         'attribute'=>'goods_num',
                                         'value' => 'goods_num'

@@ -22,7 +22,7 @@ $form = ActiveForm::begin([
         <div class="tab-content">
             <?= $form->field($model, 'supplier_id')->widget(kartik\select2\Select2::class, [
                 'data' => $supplier,
-                'options' => ['placeholder' => '请选择'],
+                'options' => ['placeholder' => '请选择','onchange'=>'getFollower()'],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],

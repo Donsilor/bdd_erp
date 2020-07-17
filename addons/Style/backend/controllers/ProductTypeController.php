@@ -29,6 +29,7 @@ class ProductTypeController extends BaseController
     public function actionIndex()
     {
         $title = Yii::$app->request->get('title',null);
+        $status = Yii::$app->request->get('status',-1);
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -43,16 +44,22 @@ class ProductTypeController extends BaseController
         if(!empty($title)){
             $query->andWhere(['or',['=','id',$title],['like','name',$title]]);
         }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false
         ]);
-        $dataProvider->query->andWhere(['>','status',-1]);
+        if($status != -1 ){
+            $dataProvider->query->andWhere(['=','status',$status]);
+        }else{
+            $dataProvider->query->andWhere(['>','status',-1]);
+        }
 
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'status' => $status
         ]);
     }
 
