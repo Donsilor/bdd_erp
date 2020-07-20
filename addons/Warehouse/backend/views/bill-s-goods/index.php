@@ -139,7 +139,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods.finger',
                                 'filter' => false,
                             ],
-
+                            [
+                                'attribute' => 'goods.finger_hk',
+                                'filter' => false,
+                            ],
                             [
                                 'attribute' => 'goods.cert_id',
                                 'filter' => false,

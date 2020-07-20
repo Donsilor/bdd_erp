@@ -58,8 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                      },
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                             'model' => $searchModel,
-                            'attribute' => 'created_at',
-                            'value' => $searchModel->created_at,
+                            'attribute' => 'order_time',
+                            'value' => $searchModel->order_time,
                             'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                             'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
@@ -218,8 +218,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
+            ], 
             [
+                    'attribute' => 'out_trade_no',
+                    'value'=>"out_trade_no",
+                    'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+           ],
+            /* [
                     'attribute' => 'follower_id',
                     'value' => function($model){
                         return $model->follower->username ?? '';
@@ -227,7 +237,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],
+            ], */
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

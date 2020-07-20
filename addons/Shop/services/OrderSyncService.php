@@ -12,6 +12,8 @@ use addons\Shop\common\enums\AttrIdEnum;
 use addons\Shop\common\enums\OrderFromEnum;
 use addons\Shop\common\models\OrderSync;
 use addons\Shop\common\enums\SyncPlatformEnum;
+use addons\Style\common\enums\MaterialEnum;
+use common\helpers\ArrayHelper;
 
 /**
  * Bdd 订单同步
@@ -31,10 +33,11 @@ class OrderSyncService extends Service
     {
          $this->selectAttrIds = [
                  AttrIdEnum::FINGER, //= 38;//美号（手寸）
-                // AttrIdEnum::MATERIAL, //= 10;//材质（成色）
+                 AttrIdEnum::MATERIAL, //= 10;//材质（成色）
                  AttrIdEnum::XIANGKOU, //= 49;//镶口
                  AttrIdEnum::CHAIN_TYPE, //= 43;//链类型
                  AttrIdEnum::CHAIN_BUCKLE, //= 42;//链扣环
+                 AttrIdEnum::MAIN_STONE_TYPE,//=56;主石类型
                  AttrIdEnum::DIA_CLARITY, //= 2;//钻石净度
                  AttrIdEnum::DIA_CUT, //= 4;//钻石切工
                  AttrIdEnum::DIA_SHAPE, //= 6;//钻石形状
@@ -58,14 +61,14 @@ class OrderSyncService extends Service
                  AttrIdEnum::DIA_ASPECT_RATIO, //= 36;//长宽比（%）
                  AttrIdEnum::DIA_STONE_FLOOR, //= 37;//石底层
          ];
-         $this->syncAttrIds = $this->selectAttrIds + $this->inputAttrIds;
+         $this->syncAttrIds = ArrayHelper::merge($this->selectAttrIds , $this->inputAttrIds);
     }
     /**
      * 同步订单到erp
      * @param int $order_id 订单Id
      */
     public function syncOrder($order_id)
-    {  
+    {  //$order_id = 1405;
         //数据校验
         $order = Order::find()->where(['id'=>$order_id])->one();
         if(!$order) {
@@ -132,6 +135,7 @@ class OrderSyncService extends Service
                 "customer_email"=>$order->address->email,
                 "customer_message"=>$order->buyer_remark,
                 "store_remark"=>$order->seller_remark,
+                'order_time'=>$order->created_at,
         ];
     }
     /**
@@ -226,10 +230,22 @@ class OrderSyncService extends Service
         $goods_attr = json_decode($model->goods_attr,true) ??[];
         $goods_attr = $goods_attr + $goods_spec;
         $erp_attrs = [];
+        //echo "<pre/>";
+        //print_r($goods_attr);
+       // print_r($this->syncAttrIds);
         foreach ($goods_attr as $attr_id=>$val_id){
             if(!in_array($attr_id,$this->syncAttrIds) || $val_id==='') {
                 continue;
             }
+            ///echo $val_id,'--';
+            if($attr_id == AttrIdEnum::MATERIAL) {
+                $material = Yii::$app->shopAttr->valueName($val_id);
+                list($material_type,$material_color) = $this->getErpMaterialAndColor($material);
+                $erp_attrs[] = ['attr_id'=>\addons\Style\common\enums\AttrIdEnum::MATERIAL_TYPE,'attr_value_id'=>$material_type,'attr_value'=>$material];
+                $erp_attrs[] = ['attr_id'=>\addons\Style\common\enums\AttrIdEnum::MATERIAL_COLOR,'attr_value_id'=>$material_color,'attr_value'=>$material];
+                continue;
+            }
+            
             $erp_attr_id  = Yii::$app->shopAttr->erpAttrId($attr_id);
             if(!$erp_attr_id) {
                 $attr_name = $attr_name ?? Yii::$app->shopAttr->erpAttrId($attr_id);
@@ -238,7 +254,7 @@ class OrderSyncService extends Service
             if(in_array($attr_id,$this->inputAttrIds)) {
                  $erp_value_id = 0;
                  $erp_value = $val_id;
-            }elseif(in_array($attr_id,$this->selectAttrIds)){                
+            }elseif(in_array($attr_id,$this->selectAttrIds)){ 
                 $erp_value_id  = Yii::$app->shopAttr->erpValueId($val_id);
                 if(!$erp_value_id) {
                     throw new \Exception("[ID={$attr_id},{$val_id}] 属性值未绑定ERP属性值ID");
@@ -249,8 +265,63 @@ class OrderSyncService extends Service
             }
             $erp_attrs[] = ['attr_id'=>$erp_attr_id,'attr_value_id'=>$erp_value_id,'attr_value'=>$erp_value];
         }
-        //print_r($erp_attrs);
+        //print_r($erp_attrs);exit;
         return $erp_attrs;
+    }
+    /**
+     * 
+     * @param sting $material
+     * /**
+            BDD官网主成色：
+28     18K白金      【erp材质： 18K     28     金料颜色：246
+29  18K黄金         【erp材质： 18K     28    金料颜色：247
+30   18K玫瑰金     【erp材质： 18K     28       金料颜色：248
+31   14K白金      【erp材质： 14K     33     金料颜色：246
+32   14k黄金          【erp材质： 14K     33    金料颜色：247
+33   14K玫瑰金   【erp材质： 14K     33    金料颜色：248
+34   铂金         【erp材质： Pt950    34    金料颜色：246
+35    银925    【erp材质： Ag925    35    金料颜色：246
+204   合金   【erp材质： Ag925   29
+212   足金    【erp材质： Au999           31   金料颜色：247
+     * @return string[]|number[]
+     */
+    public function getErpMaterialAndColor($material)
+    {
+        
+        $material_type = '';
+        $material_type = '';
+        if($material == "18K白金") {
+            $material_type = 18;
+            $material_color = 246;
+        }elseif($material == "18K黄金") {
+            $material_type = 18;
+            $material_color = 247;
+        }elseif($material == "18K白金") {
+            $material_type = 18;
+            $material_color = 246;
+        }elseif($material == "18K玫瑰金") {
+            $material_type = 18;
+            $material_color = 248;
+        }elseif($material == "14k黄金") {
+            $material_type = 33;
+            $material_color = 247;
+        }elseif($material == "14K玫瑰金") {
+            $material_type = 18;
+            $material_color = 248;
+        }elseif($material == "铂金") {
+            $material_type = 34;
+            $material_color = 246;
+        }elseif($material == "银925") {
+            $material_type = 35;
+            $material_color = 246;
+        }elseif($material == "合金") {
+            $material_type = 35;
+            $material_color = 246;
+        }elseif($material == "足金") {
+            $material_type = 31;
+            $material_color = 247;
+        }
+        return [$material_type,$material_color];
     }
     /**
      * ERP订单金额表单

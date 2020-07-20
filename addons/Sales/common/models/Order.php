@@ -66,7 +66,7 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency','customer_mobile','customer_name'], 'required'],
-            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
@@ -103,7 +103,7 @@ class Order extends BaseModel
             'order_status' => '订单状态',
             'refund_status' => '退款状态',
             'express_id' => '快递公司',
-            'express_no' => '物流单号',
+            'express_no' => '快递单号',
             'distribute_status' => '配货状态',
             'delivery_status' => '发货状态',
             'delivery_time' => '发货时间',
@@ -128,7 +128,8 @@ class Order extends BaseModel
             'store_remark' => '商家备注',
             'remark' => '订单备注',
             'creator_id' => '创建人',
-            'created_at' => '订单时间',
+            'order_time' => '下单时间',
+            'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }

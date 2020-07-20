@@ -49,6 +49,7 @@ class OrderService extends Service
         //1.创建订单
         $order = clone $form;
         $order->creator_id  = \Yii::$app->user->identity->id;
+        $order->order_time = time();
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }
