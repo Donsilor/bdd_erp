@@ -102,7 +102,7 @@ class OrderFqcController extends BaseController
                 'model' => $model,
                 'dataProvider' => $dataProvider,
                 'tab'=>\Yii::$app->request->get('tab',1),
-                'tabList'=>\Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
+                'tabList'=>\Yii::$app->salesService->orderFqc->menuTabList($id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
         ]);
     }

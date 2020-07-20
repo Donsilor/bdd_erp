@@ -120,7 +120,7 @@ class DistributionController extends BaseController
             'dataProvider' => $dataProvider,
             'returnUrl'=>$this->returnUrl,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
+            'tabList'=>\Yii::$app->salesService->distribution->menuTabList($id,$this->returnUrl),
         ]);
     }
 

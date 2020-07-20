@@ -2,7 +2,6 @@
 
 namespace addons\Sales\services;
 
-use addons\Sales\common\enums\RefundStatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Sales\common\models\Order;
@@ -15,6 +14,8 @@ use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Sales\common\enums\RefundStatusEnum;
+use common\helpers\Url;
 use common\helpers\ArrayHelper;
 use yii\db\Exception;
 
@@ -24,6 +25,21 @@ use yii\db\Exception;
  */
 class ShippingService extends Service
 {
+
+    /**
+     * tab
+     * @param int $order_id
+     * @param string $returnUrl
+     * @return array
+     */
+    public function menuTabList($order_id, $returnUrl = null)
+    {
+        return [
+            1=>['name'=>'质检详情','url'=>Url::to(['order/order-fqc','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            //2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+    }
+
     /**
      * 订单发货
      * @param ShippingForm $form

@@ -32,7 +32,7 @@ class DistributionOrderService extends Service
     {
         return [
             1=>['name'=>'待配货详情','url'=>Url::to(['order/account-sales','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+            //2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
         ];
     }
 
