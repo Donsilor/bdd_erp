@@ -338,7 +338,7 @@ class OrderService extends Service
             $order_account->discount_amount = $sum['total_goods_discount'];
             $order_account->goods_amount = $sum['total_goods_price'];
             $order_account->order_amount = $sum['total_pay_price'];
-            $order_account->pay_amount = $sum['total_pay_price'] - $order_account->paid_amount;
+            $order_account->pay_amount = $sum['total_pay_price'];
             $order_account->save();
         }
     }
