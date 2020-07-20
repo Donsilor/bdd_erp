@@ -136,7 +136,7 @@ class ReceiptGoodsController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect($skiUrl), 'error');
             }
         }
-        if($model->load(\Yii::$app->request->post())){
+        if($model->load(\Yii::$app->request->post()) && !empty($goods_list)){
             try{
                 $trans = Yii::$app->db->beginTransaction();
                 $model->goods = $goods_list;
