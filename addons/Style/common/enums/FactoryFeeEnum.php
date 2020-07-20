@@ -8,13 +8,10 @@ namespace addons\Style\common\enums;
  */
 class FactoryFeeEnum extends \common\enums\BaseEnum
 {
-    const FEE_18K = 1;
-    const FEE_PT950 = 2;
-    const FEE_SILVER = 3;
-    const FEE_CHAOSHI = 4;
-    const FEE_CHAOZHONG = 5;
-    const FEE_SURFACE = 6;
-    const FEE_FINGER = 7;
+    const BASIC_GF = 1;
+    const INLAID_GF = 2;
+    const PARTS_GF = 3;
+    const TECHNOLOGY_GF = 4;
     /**
      * @return array
      * 
@@ -22,13 +19,11 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::FEE_18K => "18K工费",
-                self::FEE_PT950 => "PT950工费",
-                self::FEE_SILVER => "银工费",
-                self::FEE_CHAOSHI => "超石工费",
-                self::FEE_CHAOZHONG => "超重工费",
-                self::FEE_SURFACE => "表面工艺",
-                self::FEE_FINGER => "改圈工费",
+                self::BASIC_GF => "基本工费",
+                self::INLAID_GF => "镶石工费",
+                self::PARTS_GF => "配件工费",
+                self::TECHNOLOGY_GF => "工艺工费",
+
         ];
     }   
     

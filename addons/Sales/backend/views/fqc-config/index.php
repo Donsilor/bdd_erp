@@ -30,10 +30,21 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'method' => 'get',
                         ]); ?>
 
-                        <div class="col-sm-4">
-                            <div class="input-group m-b">
-                                <input type="text" class="form-control" name="title" placeholder="标题或者ID" value="<?= Yii::$app->request->get('title') ?>"/>
-                                <span class="input-group-btn"><button class="btn btn-white"><i class="fa fa-search"></i> 搜索</button></span>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="title" placeholder="标题或者ID" value="<?= Yii::$app->request->get('title') ?>"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="form-control" name="status">
+                                        <option value="-1">请选择</option>
+                                        <option value="1" <?php if($status == 1){ echo 'selected';} ?>>启动</option>
+                                        <option value="0" <?php if($status == 0){ echo 'selected';} ?>>禁用</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="input-group-btn"><button class="btn btn-white"><i class="fa fa-search"></i> 搜索</button></span>
+                                </div>
                             </div>
                         </div>
                         <?php ActiveForm::end(); ?>

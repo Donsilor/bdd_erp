@@ -2,6 +2,7 @@
 
 namespace addons\Sales\services;
 
+use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use addons\Sales\common\models\Order;
@@ -22,6 +23,21 @@ use yii\db\Exception;
  */
 class OrderFqcService extends Service
 {
+
+    /**
+     * tab
+     * @param int $order_id
+     * @param string $returnUrl
+     * @return array
+     */
+    public function menuTabList($order_id, $returnUrl = null)
+    {
+        return [
+            1=>['name'=>'质检详情','url'=>Url::to(['order/order-fqc','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            //2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+        ];
+    }
+
     /**
      * FQC质检
      * @param OrderFqcForm $form

@@ -17,9 +17,9 @@ use common\components\Service;
  * @property \addons\Sales\services\DistributionOrderService $distribution 订单配货
  * @property \addons\Sales\services\OrderGoodsService $orderGoods 订单明细
  * @property \addons\Sales\services\OrderLogService $orderLog 订单日志
- * @property \addons\Sales\services\FqcConfigService $fqc 订单质检
+ * @property \addons\Sales\services\FqcConfigService $fqc FQC配置
  * @property \addons\Sales\services\ShippingService $shipping 订单发货
- * @property \addons\Sales\services\OrderFqcService $orderFqc FQC配置
+ * @property \addons\Sales\services\OrderFqcService $orderFqc 订单质检
  */
 class Application extends Service
 {

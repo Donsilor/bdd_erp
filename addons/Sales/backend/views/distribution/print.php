@@ -1,3 +1,6 @@
+<?php
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -38,17 +41,32 @@
 					<div class="child fl clf">
 						<div class="child-attr fl">订单号：</div>
 						<div class="child-val fl"><?= $model->order_sn ?? '' ?> </div>
+                        <div class="child-attr fl">商品数量：</div>
+                        <div class="child-val fl"><?= $model->goods_num ?? '0' ?> </div>
+                        <div class="child-attr fl">销售渠道：</div>
+                        <div class="child-val fl"><?= $model->saleChannel->name ?? '' ?> </div>
                         <div class="child-attr fl">客户姓名：</div>
                         <div class="child-val fl"><?= $model->customer_name ?? '' ?> </div>
+					</div>
+				</div>
+                <div class="list clf">
+                    <div class="child fl clf">
                         <div class="child-attr fl">客户手机：</div>
                         <div class="child-val fl"><?= $model->customer_mobile ?? '' ?> </div>
                         <div class="child-attr fl">支付方式：</div>
                         <div class="child-val fl"><?= \common\enums\PayTypeEnum::getValue($model->pay_type) ?? '' ?> </div>
-					</div>
-
-				</div>
-
-			</div>
+                        <div class="child-attr fl">配货状态：</div>
+                        <div class="child-val fl"><?= \addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></div>
+                        <div class="child-attr fl">跟单人：</div>
+                        <div class="child-val fl"><?= $model->follower->username ?? '' ?> </div>
+                    </div>
+                </div>
+                <div class="list clf">
+                    <div class="child fl clf">
+                        <div class="child-attr fl">备注：</div>
+                        <div class="child-val fl"><?= $model->remark ?? '' ?> </div>
+                    </div>
+                </div>
 			
 			<!-- 订单列表 -->
 			<table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
