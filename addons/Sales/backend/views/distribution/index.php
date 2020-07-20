@@ -94,6 +94,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
+            [
+                    'attribute' => 'goods_num',
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'60'],
+            ],
             /*[
                     'label' => '联系方式',
                     'attribute' => 'customer_mobile',
@@ -148,8 +154,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => [],
-            ],         
+            ],
             [
+                    'attribute' => 'distribute_status',
+                    'value' => function ($model){
+                        return \addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status);
+                    },
+                    'filter' => Html::activeDropDownList($searchModel, 'distribute_status',\addons\Sales\common\enums\DistributeStatusEnum::getMap(), [
+                        'prompt' => '全部',
+                        'class' => 'form-control',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            /*[
                     'attribute' => 'pay_status',
                     'value' => function ($model){
                         return \addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status);
@@ -160,19 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
-            [
-                    'attribute' => 'distribute_status',
-                    'value' => function ($model){
-                        return \addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'distribute_status',\addons\Sales\common\enums\DistributeStatusEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-           ],  
+            ],
             [
                     'attribute' => 'delivery_status',
                     'value' => function ($model){
@@ -184,7 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
+            ],
             [
                     'attribute' => 'order_status',
                     'value' => function ($model){
@@ -196,16 +202,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
-            /*[
-                    'attribute' => 'follower_id',
-                    'value' => function($model){
-                        return $model->follower->username ?? '';
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],*/
+            ], */
+            [
+                'attribute' => 'follower_id',
+                'value' => function($model){
+                    return $model->follower->username ?? '';
+                },
+                'filter' => false,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                'attribute' => 'remark',
+                'filter' => true,
+                'headerOptions' => ['width'=>'120'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

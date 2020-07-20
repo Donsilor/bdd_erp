@@ -60,12 +60,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->customer_email ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
                             <td><?= $model->express->name ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?></td>
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
                         </tr>
                     </table>
                 </div>
@@ -94,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'tableOptions' => ['class' => 'table table-hover'],
+                            //'options' => ['style'=>'white-space:nowrap;'],
                             'columns' => [
                                 [
                                     'class' => 'yii\grid\SerialColumn',
@@ -118,6 +119,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value' => 'goods_name'
                                 ],
                                 [
+                                    'attribute' => 'goods_id',
+                                    'format' => 'raw',
+                                    'value' => function ($model, $key, $index, $column){
+                                        return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                    },
+                                    'headerOptions' => ['width' => '160'],
+                                ],
+                                [
                                     'attribute'=>'goods_sn',
                                     'value' => 'goods_sn'
                                 ],
@@ -140,7 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute'=>'goods_num',
                                     'value' => 'goods_num'
                                 ],
-                                [
+                                /*[
                                     'attribute'=>'goods_price',
                                     'value' => function($model) {
                                         return common\helpers\AmountHelper::outputAmount($model->goods_price, 2,$model->currency);
@@ -151,7 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function($model) {
                                         return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2,$model->currency);
                                     }
-                                ],
+                                ],*/
                                 [
                                     'attribute'=>'goods_pay_price',
                                     'value' => function($model) {
@@ -179,14 +188,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value' => function($model){
                                                 return $model->is_gift;
                                         }
-                                ],
-                                [
-                                        'attribute' => 'goods_id',
-                                        'format' => 'raw',
-                                        'value' => function ($model, $key, $index, $column){
-                                            return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
-                                        },
-                                        'headerOptions' => ['width' => '160'],
                                 ],
                             ]
                         ]); ?>
