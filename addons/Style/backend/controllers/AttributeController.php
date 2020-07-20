@@ -96,7 +96,7 @@ class AttributeController extends BaseController
                     'sort'=>SORT_ASC,
                     'id' => SORT_DESC
                 ],
-                'pageSize' => 100,
+                'pageSize' => $this->getPageSize(100),
                 'relations' => [
                     'lang' => ['attr_value_name'],
                 ]
