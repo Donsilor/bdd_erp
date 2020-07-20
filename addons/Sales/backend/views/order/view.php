@@ -64,14 +64,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->express->name ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
+                        </tr>
+						<tr>
+						    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
                             <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td><?= $model->out_trade_no ?></td>
                             <td class="col-xs-1 text-right"></td>
                             <td></td>
                         </tr>
-
                     </table>
                 </div>
                 <div class="box-footer text-center">
@@ -145,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'tableOptions' => ['class' => 'table table-hover'],
-                                'options'=>['id'=>'order-goods','style'=>' width:140%;white-space:nowrap;'],
+                                'options'=>['id'=>'order-goods','style'=>' width:100%;'],
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
@@ -156,6 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'name'=>'id',  //设置每行数据的复选框属性
                                         'headerOptions' => ['width'=>'30'],
                                     ],
+                                    'id',
                                     [
                                         'attribute' => 'goods_image',
                                         'value' => function ($model) {
@@ -164,32 +170,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'filter' => false,
                                         'format' => 'raw',
                                         'headerOptions' => ['width'=>'80'],
-                                    ],
-                                    'id',
+                                    ],                                    
                                     [
                                             'attribute'=>'goods_name',
-                                            'value' => 'goods_name'
+                                            'value' => 'goods_name',
+                                            'contentOptions' => ['style'=>'width:200px;word-wrap:break-word;'],
                                     ],
                                     [
-                                        'attribute'=>'goods_id',
-                                        'value' => 'goods_id'
+                                            'attribute'=>'goods_id',
+                                            'value' => 'goods_id'
                                     ],
                                     [
                                             'attribute'=>'style_sn',
                                             'value' => 'style_sn'
                                     ],
-                                    [
+                                    /* [
                                         'attribute'=>'qiban_sn',
                                         'value' => 'qiban_sn'
-                                    ],
+                                    ], */
                                     [
                                         'attribute'=>'qiban_type',
                                         'value' => function($model){
-                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                                        }
+                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type).'<br/>'.$model->qiban_sn;
+                                        },
+                                        'format' => 'raw',
                                     ],
                                     [
-                                        'attribute'=>'jintou_type',
+                                        'attribute'=>'jintuo_type',
                                         'value' => function($model){
                                             return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
                                         }
@@ -216,15 +223,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2,$model->currency);
                                         }
                                     ],
-                                    [
+                                    /* [
                                             'attribute'=>'produce_sn',
                                             'value' => 'produce_sn'
-                                    ],
+                                    ], */
                                     [
                                             'attribute'=>'bc_status',
                                             'value' =>function($model){
-                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status);
-                                            }
+                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status).'<br/>'.$model->produce_sn;
+                                            },
+                                            'format' => 'raw',
                                     ],
                                     [
                                             'attribute'=>'is_stock',
