@@ -14,8 +14,8 @@ use Yii;
  * @property double $stone_weight_min 石重范围小
  * @property double $stone_weight_max 石重范围大
  * @property int $cert_type 证书类型
- * @property string $product_size_min 尺寸小
- * @property string $product_size_max 尺寸大
+ * @property string $product_size_min 尺寸小(mm)
+ * @property string $product_size_max 尺寸大(mm)
  * @property string $remark 备注
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -66,8 +66,8 @@ class StoneStyle extends BaseModel
             'stone_weight_min' => '石重范围小(ct)',
             'stone_weight_max' => '石重范围大(ct)',
             'cert_type' => '证书类型',
-            'product_size_min' => '尺寸小',
-            'product_size_max' => '尺寸大',
+            'product_size_min' => '尺寸小(mm)',
+            'product_size_max' => '尺寸大(mm)',
             'remark' => '备注',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
