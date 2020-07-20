@@ -153,7 +153,7 @@ class OrderService extends Service
                 $style_sn = $goodsInfo['style_sn'] ?? '';
                 $style = Style::find()->where(['style_sn'=>$style_sn])->one();
                 if(!$style) {
-                    throw new \Exception("同步订单商品失败：[{$style_sn}]款号在erp系统不存在");
+                    throw new \Exception("[{$style_sn}]款号在erp系统不存在");
                 }
                 //从款式信息自动带出款的信息
                 $styleInfo = $style->toArray(['style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
@@ -166,9 +166,9 @@ class OrderService extends Service
                 /**
                  * [attr_id] => 6[attr_value_id] => 16[attr_value] => 圆形
                  */
-                foreach ($goodsInfo['goods_attrs'] ??[] as $attr) {
+                foreach ($goodsInfo['goods_attrs'] ??[] as $goods_attr) {
                     $goodsAttr = new OrderGoodsAttribute();
-                    $goodsAttr->attributes = $attr;
+                    $goodsAttr->attributes = $goods_attr;
                     if($goodsAttr->attr_value_id) {
                         $goodsAttr->attr_value = Yii::$app->attr->valueName($goodsAttr->attr_value_id);
                     }
@@ -200,7 +200,7 @@ class OrderService extends Service
             }
         }
         $order->customer_id = $customer->id;
-        if($is_new === true){
+        if($order->order_sn == ''){
             $order->order_sn = $this->createOrderSn($order);
         }
         if(false == $order->save()) {
@@ -218,6 +218,7 @@ class OrderService extends Service
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }  
         //5.同步发票
+        
         return $order;        
     }
     /**

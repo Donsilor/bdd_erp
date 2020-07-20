@@ -79,6 +79,6 @@ class AttributeValue extends BaseModel
      */
     public function getLang()
     {
-        return $this->hasOne(AttributeValueLang::class, ['master_id'=>'id']);
+        return $this->hasOne(AttributeValueLang::class, ['master_id'=>'id'])->alias("lang")->where(['lang.language'=>Yii::$app->params['language']]);
     }
 }
