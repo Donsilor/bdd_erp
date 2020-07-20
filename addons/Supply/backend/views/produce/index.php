@@ -214,6 +214,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     ])
             ],
             [
+                'attribute' => 'peishi_status',
+                'value' => function($model){
+                    return \addons\Supply\common\enums\PeishiStatusEnum::getValue($model->peishi_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'peishi_status',\addons\Supply\common\enums\PeishiStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' => 'width:130px;',
+                ])
+            ],
+            [
                 'attribute' => 'peiliao_type',
                 'value' => function($model){
                     return PeiliaoTypeEnum::getValue($model->peiliao_type);
@@ -223,6 +234,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'form-control',
                         'style' => 'width:130px;',
                 ])                
+            ],
+            [
+                'attribute' => 'peiliao_status',
+                'value' => function($model){
+                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'peiliao_status',\addons\Supply\common\enums\PeiliaoStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' => 'width:130px;',
+                ])
             ],
             [
                 'attribute' => 'factory_distribute_time',
@@ -334,8 +356,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-target' => '#ajaxModal',
                                 ]);
                                 break;
-                            //已分配
+                            //设置配料信息
                             case BuChanEnum::ASSIGNED:
+                                if($model->from_type == \addons\Supply\common\enums\FromTypeEnum::ORDER){
+                                    $buttonHtml .= Html::edit(['set-peiliao','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '设置配料信息', [
+                                        'class'=>'btn btn-success btn-sm',
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#ajaxModalLg',
+                                    ]);
+
+                                }
+                                break;
+                            //待配料
+                            case BuChanEnum::TO_PEILIAO :
+                                $buttonHtml .= Html::edit(['apply-peiliao','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '申请配料', [
+                                    'class'=>'btn btn-success btn-sm',
+                                    'style'=>"margin-left:5px",
+                                    'onclick' => 'rfTwiceAffirm(this,"开始配料","确定操作吗？");return false;',
+                                ]);
+                                break;
+                            //配料中
+                            case BuChanEnum::IN_PEILIAO:
+
+                                break;
+                            //已分配
+                            case BuChanEnum::TO_PRODUCTION:
                                 $buttonHtml .= Html::edit(['to-produce','id'=>$model->id ,'returnUrl'=>Url::getReturnUrl()], '开始生产', [
                                     'class'=>'btn btn-danger btn-sm',
                                     'onclick' => 'rfTwiceAffirm(this,"开始生产","确定操作吗？");return false;',

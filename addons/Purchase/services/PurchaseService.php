@@ -115,7 +115,7 @@ class PurchaseService extends Service
             if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
                 $buchan_status = BuChanEnum::TO_PEILIAO;
             } else {
-                $buchan_status = BuChanEnum::ASSIGNED;
+                $buchan_status = BuChanEnum::TO_PRODUCTION;
             }
             $goods = [
                     'goods_name' =>$model->goods_name,
@@ -147,7 +147,7 @@ class PurchaseService extends Service
                     //生产中之后的流程，禁止同步
                     continue;
                 }else {
-                    unset($goods['bc_status']);
+//                    unset($goods['bc_status']);
                     $goods['id'] = $model->produce->id;                    
                     //如果是配料中的，不同步配料类型和配料状态
                     if($model->produce->bc_status == BuChanEnum::IN_PEILIAO) {

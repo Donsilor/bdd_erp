@@ -46,7 +46,7 @@ class Purchase extends BaseModel
         return [
             [['total_cost'], 'number'],
             [['supplier_id','purchase_cate','put_in_type'], 'required'],
-            [['id','purchase_cate','put_in_type','order_type','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at'], 'integer'],
+            [['id','purchase_cate','put_in_type','order_type','supplier_id','total_num', 'creator_id','follower_id','supplier_id', 'auditor_id', 'audit_status', 'purchase_status','audit_time','created_at', 'updated_at','channel_id'], 'integer'],
             [['audit_remark','apply_sn', 'remark'], 'string', 'max' => 255],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_status'], 'checkAuditStatus'],
@@ -93,7 +93,8 @@ class Purchase extends BaseModel
             'order_type' => '订单类型',
             'put_in_type' =>'采购方式',
             'total_cost' => '总成本',
-            'total_num' => '总数量',  
+            'channel_id' => '采购渠道',
+            'total_num' => '总数量',
             'follower_id' => '跟单人',
             'creator_id' => '创建人',
             'status' => '开启状态',

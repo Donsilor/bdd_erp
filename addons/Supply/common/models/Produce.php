@@ -101,7 +101,7 @@ class Produce extends BaseModel
             'is_inlay' => '是否镶嵌',
             'inlay_type' => '镶嵌方式',
             'peiliao_type' => '配料类型',
-            'peishi_type' => '配石类型',
+            'peishi_type' => '配石类型(公司)',
             'peiliao_status' => '配料状态',
             'peishi_status' => '配石状态',
             'bc_status' => '布产状态',

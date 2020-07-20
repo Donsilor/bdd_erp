@@ -424,7 +424,7 @@ class ReceiptController extends BaseController
 
         ];
         foreach ($lists as &$list){
-            //成色
+            //材质
             $material = empty($list['material']) ? 0 : $list['material'];
             $list['material'] = Yii::$app->attr->valueName($material);
             //单据状态

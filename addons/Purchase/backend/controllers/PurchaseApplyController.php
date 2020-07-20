@@ -471,7 +471,7 @@ class PurchaseApplyController extends BaseController
             ['归属渠道', 'style_channel_name' , 'text'],
             ['商品数量', 'goods_num' , 'text'],
             ['成本价', 'cost_price' ,'text'],
-            ['成色', 'material' , 'text'],
+            ['材质', 'material' , 'text'],
             ['金重', 'jinzhong' , 'text'],
             ['手寸', 'finger' , 'text'],
             ['链长	', 'chain_length' , 'text'],

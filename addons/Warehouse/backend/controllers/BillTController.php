@@ -278,7 +278,7 @@ class BillTController extends BaseController
             ['仓库','warehouse_id' , 'selectd',\Yii::$app->warehouseService->warehouse::getDropDownForAll()],
             ['商品类型', 'style_cate_name' , 'selectd',BillStatusEnum::getMap()],
             ['产品分类', 'product_type_name' , 'text'],
-            ['成色', 'material' , 'function',function($model){
+            ['材质', 'material' , 'function',function($model){
                 return \Yii::$app->attr->valueName($model['material']);
             }],
             ['手寸', 'finger' , 'text'],

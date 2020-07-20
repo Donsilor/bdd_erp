@@ -254,7 +254,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                    'label'=>'成色',
+                                    'label'=>'材质',
                                     'value'=> function($model){
                                         return $model->attr[AttrIdEnum::MATERIAL] ?? "";
                                     }

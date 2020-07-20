@@ -17,6 +17,7 @@ class LogModuleEnum extends BaseEnum
     const TO_PRODUCE  = 5;
     const LEAVE_FACTORY  = 6;
     const QC_QUALITY  = 7;
+    const SET_PEILIAO  = 8;
 
     /**
      * 
@@ -32,6 +33,7 @@ class LogModuleEnum extends BaseEnum
             self::TO_PRODUCE => "开始生产",
             self::LEAVE_FACTORY => "生产出厂",
             self::QC_QUALITY => "QC质检",
+            self::SET_PEILIAO => "设置配料信息",
 
         ];
     }

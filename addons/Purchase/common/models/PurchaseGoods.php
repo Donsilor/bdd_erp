@@ -109,7 +109,7 @@ class PurchaseGoods extends BaseModel
             'qiban_sn' => '起版编号',
             'qiban_type' => '起版类型',
             'peiliao_type' => '配料类型',
-            'peishi_type' => '配石类型',
+            'peishi_type' => '配石类型（公司）',
             'product_type_id' => '产品线',
             'style_channel_id' => '所属渠道',
             'style_cate_id' => '款式分类',

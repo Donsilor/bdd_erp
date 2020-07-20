@@ -142,7 +142,6 @@ class PurchaseGoodsController extends BaseController
         $model = $model ?? new PurchaseGoodsForm();
         $model->initAttrs();
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
-        print_r($model);
         return $this->render($this->action->id, [
             'model' => $model,
             'purchase' => $purchase

@@ -168,6 +168,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#ajaxModal',
                             ]);
                             break;
+
+                        //设置配料信息
+                        case BuChanEnum::ASSIGNED:
+                            if($model->from_type == \addons\Supply\common\enums\FromTypeEnum::ORDER){
+                                $buttonHtml .= Html::edit(['set-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '设置配料信息', [
+                                    'class'=>'btn btn-success btn-ms',
+                                    'style'=>"margin-left:5px",
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModalLg',
+                                ]);
+
+                            }
+                            break;
                         //待配料    
                         case BuChanEnum::TO_PEILIAO :
                             $buttonHtml .= Html::edit(['apply-peiliao','id'=>$model->id ,'returnUrl'=>$returnUrl], '申请配料', [

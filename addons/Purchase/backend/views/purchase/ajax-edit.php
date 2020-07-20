@@ -60,19 +60,31 @@ $form = ActiveForm::begin([
                    ]);?>
                </div>
            </div>
-
-            <?= $form->field($model, 'delivery_time')->widget(DatePicker::class, [
-                'language' => 'zh-CN',
-                'options' => [
-                     'value' => $model->delivery_time ? date('Y-m-d', $model->delivery_time) :'',
-                ],
-                'pluginOptions' => [
-                    'format' => 'yyyy-mm-dd',
-                    'todayHighlight' => true,//今日高亮
-                    'autoclose' => true,//选择后自动关闭
-                    'todayBtn' => true,//今日按钮显示
-                ]
-            ]);?> 
+           <div class="row">
+               <div class="col-sm-6">
+                   <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+                       'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => true
+                       ],
+                   ]);?>
+               </div>
+               <div class="col-sm-6">
+                <?= $form->field($model, 'delivery_time')->widget(DatePicker::class, [
+                    'language' => 'zh-CN',
+                    'options' => [
+                         'value' => $model->delivery_time ? date('Y-m-d', $model->delivery_time) :'',
+                    ],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true,//今日高亮
+                        'autoclose' => true,//选择后自动关闭
+                        'todayBtn' => true,//今日按钮显示
+                    ]
+                ]);?>
+               </div>
+           </div>
             <?= $form->field($model, 'apply_sn')->textArea(['options'=>['maxlength' => true],'placeholder' => '请输入采购申请单,多个用逗号隔开'])?>   
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    

@@ -3,9 +3,13 @@
 namespace addons\Supply\backend\controllers;
 
 use addons\Supply\common\enums\BuChanEnum;
+use addons\Supply\common\enums\FromTypeEnum;
 use addons\Supply\common\enums\LogModuleEnum;
 use addons\Supply\common\enums\NopassReasonEnum;
+use addons\Supply\common\enums\PeiliaoTypeEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Supply\common\forms\ProduceFollowerForm;
+use addons\Supply\common\forms\SetPeiliaoForm;
 use addons\Supply\common\forms\ToFactoryForm;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
@@ -182,6 +186,54 @@ class ProduceController extends BaseController
         Yii::$app->supplyService->produce->createProduceLog($log);
         Yii::$app->getSession()->setFlash('success','保存成功');
         return $this->redirect(Yii::$app->request->referrer);
+    }
+
+
+    //设置配料信息
+    public function actionSetPeiliao(){
+        $id = Yii::$app->request->get('id');
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['produce/index']));
+        $this->modelClass = SetPeiliaoForm::class;
+        $model = $this->findModel($id);
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->bc_status != BuChanEnum::ASSIGNED || $model->from_type != FromTypeEnum::ORDER){
+                return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::ASSIGNED).'且不是'.FromTypeEnum::getValue(FromTypeEnum::ORDER).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
+            }
+
+            $model->peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
+            $model->peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
+            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
+                $model->bc_status = BuChanEnum::TO_PEILIAO;
+            }else{
+                $model->bc_status = BuChanEnum::TO_PRODUCTION;
+            }
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+            //日志
+            $follower = SupplierFollower::find()->where(['id'=>$model->follower_id])->one();
+            $log = [
+                'produce_id' => $id,
+                'produce_sn' => $model->produce_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'bc_status' => $model->bc_status,
+                'log_module' => LogModuleEnum::getValue(LogModuleEnum::SET_PEILIAO),
+                'log_msg' => LogModuleEnum::getValue(LogModuleEnum::SET_PEILIAO)
+            ];
+            Yii::$app->supplyService->produce->createProduceLog($log);
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(Yii::$app->request->referrer);
+
+
+
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'returnUrl' => $returnUrl
+        ]);
+
     }
 
 
