@@ -31,7 +31,7 @@ class AttrIdEnum
     //钻石信息
     const DIA_CLARITY = 2;//钻石净度
     const DIA_CUT = 4;//钻石切工
-    const DIA_CARAT = 59;//钻石大小
+    const DIA_CARAT = 5;//钻石大小
     const DIA_SHAPE = 6;//钻石形状
     const DIA_COLOR = 7;//钻石颜色
     const DIA_FLUORESCENCE = 8;//荧光

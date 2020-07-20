@@ -27,7 +27,7 @@ class OrderController extends BaseController
     public $modelClass = Order::class;
     public function actionTest()
     {
-        Yii::$app->shopService->orderSync->syncOrder(1879);
+        Yii::$app->shopService->orderSync->syncOrder(1405);
         exit;
     }
     /**
@@ -66,9 +66,9 @@ class OrderController extends BaseController
             $dataProvider->query->andWhere($where);
         }        
         //创建时间过滤
-        if (!empty($searchParams['created_at'])) {
-            list($start_date, $end_date) = explode('/', $searchParams['created_at']);
-            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
+        if (!empty($searchParams['order_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['order_time']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
         }        
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,

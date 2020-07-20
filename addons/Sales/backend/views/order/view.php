@@ -70,8 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
                             <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
+                            <td><?= $model->out_trade_no ?></td>
                             <td class="col-xs-1 text-right"></td>
                             <td></td>
                         </tr>
