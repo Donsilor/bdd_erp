@@ -40,7 +40,7 @@ class Country extends Widget
      *
      * @var string
      */
-    public $template = 'long';
+    public $template = 'short';
 
     /**
      * 关联的ajax url
