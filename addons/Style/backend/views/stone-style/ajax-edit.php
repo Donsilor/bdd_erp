@@ -19,7 +19,14 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'style_sn')->textInput() ?>
-        <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']);?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <?= $form->field($model, 'stone_weight_min')->textInput() ?>
@@ -28,7 +35,14 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'stone_weight_max')->textInput() ?>
             </div>
         </div>
-        <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']);?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'product_size_min')->textInput() ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'product_size_max')->textInput() ?>
+            </div>
+        </div>
         <?= $form->field($model, 'remark')->textarea() ?>
     </div>
     <div class="modal-footer">
