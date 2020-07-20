@@ -125,6 +125,19 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\StatusEnum::getValue($model->status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+
+                            ]),
+                        ],
+                        [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],

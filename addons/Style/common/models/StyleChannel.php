@@ -35,7 +35,7 @@ class StyleChannel extends BaseModel
     {
         return [
             [['name'], 'required'],
-            [['merchant_id', 'status','audit_status','auditor_id', 'creator_id', 'created_at','audit_time', 'updated_at'], 'integer'],
+            [['merchant_id', 'status','audit_status','auditor_id', 'creator_id', 'created_at','audit_time', 'sort','updated_at'], 'integer'],
             [['tag'], 'string', 'max' => 10],
             [['code'], 'string', 'max' => 20],
             [['name'], 'string', 'max' => 100],

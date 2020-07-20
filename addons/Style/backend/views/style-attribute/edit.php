@@ -22,7 +22,7 @@ $model = $model ?? new StyleAttrForm();
                     foreach ($attr_list_all as $attr_type=>$attr_list){  
                         ?>
                         <div class="box-header with-border">
-                        	<h3 class="box-title" style="font-weight: bold"><?= AttrTypeEnum::getValue($attr_type)?></h3>
+                        	<h3 class="box-title" style="font-weight: bold"><?= AttrTypeEnum::getValue($attr_type)?><span style="font-size:12px;color: red">（*点击属性标题即可全选）</span></h3>
                     	</div> 
                         <div class="box-body" style="margin-left:10px;">
                         <?php
