@@ -94,6 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '尺寸范围',
+                            'attribute' => 'product_size_min',
+                            'value' => function ($model){
+                                return $model->product_size_min." - ".$model->product_size_max;
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'remark',
                             'value' => 'remark',
                             'headerOptions' => ['class' => 'col-md-1'],
