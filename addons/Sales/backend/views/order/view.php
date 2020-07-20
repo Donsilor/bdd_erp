@@ -230,7 +230,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                             'attribute'=>'bc_status',
                                             'value' =>function($model){
-                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status).'<br/>'.$model->produce_sn;
+                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?? '未布产'.'<br/>'.$model->produce_sn;
                                             },
                                             'format' => 'raw',
                                     ],
