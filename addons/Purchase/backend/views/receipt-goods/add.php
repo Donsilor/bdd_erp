@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:26px;','onclick'=>"searchReceiptGoods()"]) ?>
                     </div>
                 </div>
-                <span style="color:red;">提示：一次最多添加100个商品，可分多次添加，已添加数量：<?= $num;?></span>
+                <span style="color:red;">提示：一次最多添加100件商品，可分多次添加，已添加数量：<?= $num;?></span>
                 <div class="row">
                     <div class="box-body table-responsive">
                         <div class="tab-content">
