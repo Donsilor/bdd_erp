@@ -192,9 +192,9 @@ class DefectiveController extends BaseController
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message("取消失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message("取消成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        return $this->message("操作成功", $this->redirect(Yii::$app->request->referrer), 'success');
     }
 
     /**
@@ -216,9 +216,9 @@ class DefectiveController extends BaseController
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message("取消失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message("取消成功", $this->redirect(Yii::$app->request->referrer), 'success');
+        return $this->message("操作成功", $this->redirect(Yii::$app->request->referrer), 'success');
     }
 
     /**
