@@ -148,6 +148,30 @@ class BillRepairController extends BaseController
     }
 
     /**
+     * ajax 维修订单-取消
+     *
+     * @return mixed
+     */
+    public function actionCancel()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new WarehouseBillRepairForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->warehouseService->repair->cancelRepair($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("操作成功", $this->redirect(Yii::$app->request->referrer), 'success');
+    }
+
+    /**
      * ajax 维修单-申请
      *
      * @return mixed|string|\yii\web\Response
