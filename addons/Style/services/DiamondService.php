@@ -1,6 +1,7 @@
 <?php
 
 namespace addons\Style\services;
+use addons\Style\common\models\DiamondLog;
 use common\components\Service;
 use addons\Style\common\models\Diamond;
 use addons\Style\common\models\Style;
@@ -103,6 +104,22 @@ class DiamondService extends Service
         
         \Yii::$app->services->salepolicy->syncGoodsMarkup($style_id);        
     }
-    
+
+
+    /**
+     * 单据日志
+     * @param array $log
+     * @throws \Exception
+     * @return \addons\Warehouse\common\models\WarehouseBillLog
+     */
+    public function createLog($log){
+
+        $model = new DiamondLog();
+        $model->attributes = $log;
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
+        }
+        return $model;
+    }
 
 }

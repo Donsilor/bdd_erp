@@ -134,6 +134,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-height' => '90%',
                             'data-offset' => '20px',
                         ]);
+                        echo '&nbsp;';
+                        echo Html::create(['order-goods/edit-diamond', 'order_id' => $model->id], '添加裸钻', [
+                            'class' => 'btn btn-primary btn-xs openIframe',
+                            'data-width' => '90%',
+                            'data-height' => '90%',
+                            'data-offset' => '20px',
+                        ]);
                     }
                      ?>
                     <?php
@@ -181,8 +188,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => 'goods_id'
                                     ],
                                     [
-                                            'attribute'=>'style_sn',
-                                            'value' => 'style_sn'
+                                        'attribute'=>'style_sn',
+                                        'value' => 'style_sn'
+                                    ],
+                                    [
+                                        'label'=>'证书号',
+                                        'value' => function($model){
+                                            $order_goods_attr = \addons\Sales\common\models\OrderGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>\addons\Style\common\enums\AttrIdEnum::DIA_CERT_NO])->one();
+                                            $cert_id = $order_goods_attr->attr_value ?? '';
+                                            return $cert_id;
+                                        }
                                     ],
                                     /* [
                                         'attribute'=>'qiban_sn',
@@ -259,7 +274,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             },
                                             'edit' => function($url, $model, $key) use($order){
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
-                                                    if($model->is_stock == IsStockEnum::NO){
+                                                    if($model->product_type_id == 15){
+                                                        return Html::edit(['order-goods/edit-diamond','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    }elseif($model->is_stock == IsStockEnum::NO){
                                                         return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }else{
                                                         return Html::edit(['order-goods/edit-stock','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
@@ -273,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 }
                                             },
                                             'untie' => function($url, $model, $key) use($order){
-                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::YES) {
+                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::YES && $model->product_type_id != 15) {
                                                      return Html::edit(['order-goods/untie', 'id' => $model->id], '解绑', [
                                                          'class' => 'btn btn-primary btn-xs',
                                                          'onclick' => 'rfTwiceAffirm(this,"解绑现货", "确定解绑吗？");return false;',

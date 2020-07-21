@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools"  style="right: 100px;">
-                    <?= Html::create(['edit-lang']) ?>
+                    <?= Html::create(['edit']) ?>
                 </div>
                 <div class="box-tools" >
                     <a href="<?= Url::to(['export?goods_name='.$goods_name.'&id='.$id.'&goods_sn='.$goods_sn.'&cert_id='.$cert_id.'&sale_price='.$sale_price.'&carat='.$carat.'&status='.$status])?>" class="blue">导出Excel</a>
@@ -69,8 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'80'],
             ],
             [
-                'attribute' => 'lang.goods_name',
-                'value' => 'lang.goods_name',
+                'attribute' => 'goods_name',
+                'value' => 'goods_name',
                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                     'class' => 'form-control',
                 ]),
@@ -119,15 +119,38 @@ $this->params['breadcrumbs'][] = $this->title;
             //'fluorescence',
             //'source_id',
             //'source_discount',
-            //'is_stock',
+            [
+                'attribute' => 'is_stock',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \addons\Sales\common\enums\IsStockEnum::getValue($model->is_stock);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'is_stock',\addons\Sales\common\enums\IsStockEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'audit_status',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
-                    return \common\enums\FrameEnum::getValue($model->status);
+                    return \common\enums\StatusEnum::getValue($model->status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\FrameEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
@@ -137,10 +160,30 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {status} {view}',
+                'template' => '{edit} {ajax-apply} {audit}  {view}',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
-                        return Html::edit(['edit-lang', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE || $model->audit_status == \common\enums\AuditStatusEnum::UNPASS) {
+                        return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                    }
+                },
+                'ajax-apply' => function($url, $model, $key){
+                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                        ]);
+                    }
+                },
+
+                'audit' => function($url, $model, $key){
+                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]);
+                    }
                 },
                'status' => function($url, $model, $key){
                         return Html::status($model['status']);
@@ -149,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::delete(['delete', 'id' => $model->id]);
                 },
                 'view'=> function($url, $model, $key){
-                    return Html::a('预览', \Yii::$app->params['frontBaseUrl'].'/diamond-details/'.$model->id.'?goodId='.$model->id.'&backend=1',['class'=>'btn btn-info btn-sm','target'=>'_blank']);
+                    return Html::a('详情',['view','id'=>$model->id] ,['class'=>'btn btn-info btn-sm']);
                 },
                 ]
             ]

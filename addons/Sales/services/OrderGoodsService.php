@@ -5,9 +5,11 @@ namespace addons\Sales\services;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\models\Diamond;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\components\Service;
+use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
 
@@ -79,6 +81,160 @@ class OrderGoodsService extends Service
 
           //更新采购汇总：总金额和总数量
           \Yii::$app->salesService->order->orderSummary($model->order_id);
+
+//        }catch (\Exception $e){
+//            echo $e;
+//            exit;
+//        }
+
+    }
+
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * 添加裸钻
+     */
+    public function addDiamond($model){
+//        try{
+        $diamond_goods = Diamond::find()->where(['cert_id'=>$model->cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+        if(empty($diamond_goods)){
+            throw new \Exception("此裸钻不存在或者不是审核状态",422);
+        }
+        //删除商品属性
+        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+
+        $attr_list = array(
+            //证书类型
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CERT_TYPE,
+                'attr_value_id' => $diamond_goods->cert_type ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->cert_type)
+            ],
+            //证书号
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CERT_NO,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->cert_id
+            ],
+            //石重
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CARAT,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->carat
+            ],
+            //净度
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CLARITY,
+                'attr_value_id' => $diamond_goods->clarity ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->clarity)
+            ],
+            //切工
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CUT,
+                'attr_value_id' => $diamond_goods->cut ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->cut)
+            ],
+            //颜色
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_COLOR,
+                'attr_value_id' => $diamond_goods->color ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->color)
+            ],
+            //形状
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_SHAPE,
+                'attr_value_id' => $diamond_goods->shape ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->shape)
+            ],
+            //切割深度
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_CUT_DEPTH,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->depth_lv
+            ],
+            //台宽比
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_TABLE_LV,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->table_lv
+            ],
+            //对称
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_SYMMETRY,
+                'attr_value_id' => $diamond_goods->symmetry ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->symmetry)
+            ],
+            //抛光
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_POLISH,
+                'attr_value_id' => $diamond_goods->polish ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->polish)
+            ],
+            //荧光
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_FLUORESCENCE,
+                'attr_value_id' => $diamond_goods->fluorescence ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->fluorescence)
+            ],
+            //石底层
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_STONE_FLOOR,
+                'attr_value_id' => $diamond_goods->stone_floor ?? 0,
+                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->stone_floor)
+            ],
+            //长度
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_LENGTH,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->length
+            ],
+            //宽度
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_WIDTH,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->width
+            ],
+            //长宽比
+            [
+                'id' => $model->id,
+                'attr_id' => AttrIdEnum::DIA_ASPECT_RATIO,
+                'attr_value_id' => 0,
+                'attr_value' => $diamond_goods->aspect_ratio
+            ],
+        );
+
+        foreach ($attr_list as  $attr){
+            $order_goods_attr = new OrderGoodsAttribute();
+            $order_goods_attr->attributes = $attr;
+            if(false === $order_goods_attr->save()){
+                throw new \Exception($this->getError($order_goods_attr));
+            }
+        }
+
+        $diamond_goods->status = StatusEnum::DISABLED;
+        if(false === $diamond_goods->save(true,['status'])){
+            throw new \Exception($this->getError($diamond_goods));
+        }
+
+
+        //更新采购汇总：总金额和总数量
+        \Yii::$app->salesService->order->orderSummary($model->order_id);
 
 //        }catch (\Exception $e){
 //            echo $e;
