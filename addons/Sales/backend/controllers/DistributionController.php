@@ -9,6 +9,7 @@ use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\forms\DistributionForm;
 use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use common\helpers\ResultHelper;
@@ -53,7 +54,7 @@ class DistributionController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
-        //$dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
+        $dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,

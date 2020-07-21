@@ -121,7 +121,7 @@ class WarehouseBillCService extends WarehouseBillService
      * @param WarehouseBill $form
      * @throws
      */
-    public function closeBillC($form)
+    public function cancelBillC($form)
     {
         //更新库存状态
         $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
@@ -135,6 +135,23 @@ class WarehouseBillCService extends WarehouseBillService
         }
         $form->bill_status = BillStatusEnum::CANCEL;
         if(false === $form->save()){
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 其他出库单-删除
+     * @param WarehouseBill $form
+     * @throws
+     */
+    public function deleteBillC($form)
+    {
+        //删除明细
+        $res = WarehouseBillGoods::deleteAll(['bill_id' => $form->id]);
+        if(false === $res){
+            throw new Exception("删除明细失败");
+        }
+        if(false === $form->delete()){
             throw new \Exception($this->getError($form));
         }
     }

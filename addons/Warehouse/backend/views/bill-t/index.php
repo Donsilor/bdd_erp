@@ -243,7 +243,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {audit} {goods} {apply} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -271,15 +271,23 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['bill-t-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['bill-t-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-info btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },
-                                'delete' => function($url, $model, $key){
+                                'cancel' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id], '关闭',[
-                                            'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
+                                        return Html::delete(['cancel', 'id' => $model->id], '取消',[
+                                            'class' => 'btn btn-warning btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
+                                        ]);
+                                    }
+                                },
+                                'delete' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::CANCEL) {
+                                        return Html::delete(['delete', 'id' => $model->id], '删除',[
+                                            'onclick' => 'rfTwiceAffirm(this,"删除单据", "确定删除吗？");return false;',
                                         ]);
                                     }
                                 },

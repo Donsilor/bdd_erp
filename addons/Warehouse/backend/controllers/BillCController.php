@@ -225,7 +225,31 @@ class BillCController extends BaseController
     }
 
     /**
-     * 其他出库单关闭
+     * 其他出库单-关闭
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionCancel($id)
+    {
+        $this->modelClass = WarehouseBill::class;
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+
+            \Yii::$app->warehouseService->billC->cancelBillC($model);
+            $trans->commit();
+            $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     * 其他出库单-删除
      *
      * @param $id
      * @return mixed
@@ -239,7 +263,7 @@ class BillCController extends BaseController
         try{
             $trans = \Yii::$app->db->beginTransaction();
 
-            \Yii::$app->warehouseService->billC->closeBillC($model);
+            \Yii::$app->warehouseService->billC->deleteBillC($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

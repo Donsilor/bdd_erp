@@ -52,7 +52,7 @@ class OrderController extends BaseController
                 ]
         ]);
         
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email', 'order_status']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email']);
         $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
         if($order_status != -1) {
             $dataProvider->query->andWhere(['=', 'order_status', $order_status]);

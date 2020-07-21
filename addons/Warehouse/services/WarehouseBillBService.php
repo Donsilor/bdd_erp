@@ -98,10 +98,11 @@ class WarehouseBillBService extends WarehouseBillService
     }
 
     /**
-     * 退货返厂单关闭
+     * 退货返厂单-关闭
      * @param WarehouseBillBForm $form
+     * @throws
      */
-    public function closeBillB($form)
+    public function cancelBillB($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -114,7 +115,25 @@ class WarehouseBillBService extends WarehouseBillService
                 throw new Exception("商品{$goods->goods_id}不是返厂中或者不存在，请查看原因");
             }
         }
+        $form->bill_status = BillStatusEnum::CANCEL;
         if(false === $form->save()){
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 退货返厂单-删除
+     * @param WarehouseBillBForm $form
+     * @throws
+     */
+    public function deleteBillB($form)
+    {
+        //删除明细
+        $res = WarehouseBillGoods::deleteAll(['bill_id' => $form->id]);
+        if(false === $res){
+            throw new Exception("删除明细失败");
+        }
+        if(false === $form->delete()){
             throw new \Exception($this->getError($form));
         }
     }

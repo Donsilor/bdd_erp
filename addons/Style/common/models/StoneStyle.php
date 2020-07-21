@@ -6,16 +6,20 @@ use common\models\backend\Member;
 use Yii;
 
 /**
- * This is the model class for table "style_stone_style".
+ * This is the model class for table "style_stone".
  *
  * @property int $id ID
  * @property string $stone_type 石料类型
  * @property string $style_sn 款号
- * @property double $stone_weight_min 石重范围小
- * @property double $stone_weight_max 石重范围大
+ * @property string $stone_weight_min 石重范围小(ct)
+ * @property string $stone_weight_max 石重范围大(ct)
  * @property int $cert_type 证书类型
  * @property string $product_size_min 尺寸小(mm)
  * @property string $product_size_max 尺寸大(mm)
+ * @property string $stone_shape 石头形状
+ * @property string $stone_carat 石重(ct)
+ * @property string $color_scope 颜色范围
+ * @property string $clarity_scope 净度范围
  * @property string $remark 备注
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -43,14 +47,14 @@ class StoneStyle extends BaseModel
     public function rules()
     {
         return [
-            [['style_sn'], 'unique'],
-            [['stone_type', 'style_sn', 'stone_weight_min', 'stone_weight_max'], 'required'],
-            [['stone_weight_min', 'stone_weight_max'], 'number'],
+            [['stone_type', 'style_sn'], 'required'],
+            [['stone_weight_min', 'stone_weight_max', 'stone_carat'], 'number'],
             [['cert_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['stone_type'], 'string', 'max' => 10],
-            [['style_sn'], 'string', 'max' => 30],
+            [['stone_type', 'stone_shape'], 'string', 'max' => 10],
+            [['style_sn', 'color_scope', 'clarity_scope'], 'string', 'max' => 30],
             [['product_size_min', 'product_size_max'], 'string', 'max' => 100],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
+            [['style_sn'], 'unique'],
         ];
     }
 
@@ -68,6 +72,10 @@ class StoneStyle extends BaseModel
             'cert_type' => '证书类型',
             'product_size_min' => '尺寸小(mm)',
             'product_size_max' => '尺寸大(mm)',
+            'stone_shape' => '石头形状[莫桑石]',
+            'stone_carat' => '石重[莫桑石](ct)',
+            'color_scope' => '颜色范围[莫桑石](D-Z)',
+            'clarity_scope' => '净度范围[莫桑石](FL-SI2)',
             'remark' => '备注',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',

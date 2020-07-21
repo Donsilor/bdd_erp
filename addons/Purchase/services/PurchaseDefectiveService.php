@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\enums\DefectiveStatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -180,7 +181,7 @@ class PurchaseDefectiveService extends Service
     }
 
     /**
-     * 不良返厂单-取消/删除
+     * 不良返厂单-取消
      * @param object $form
      * @throws \Exception
      */
@@ -190,7 +191,23 @@ class PurchaseDefectiveService extends Service
             throw new \Exception($this->getError($form));
         }
         //同步采购收货单商品状态
-        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::IQC_PASS);
+        $this->getReceiptGoodsIds($form, ReceiptGoodsStatusEnum::IQC_NO_PASS);
+        $form->defective_status = DefectiveStatusEnum::CANCEL;
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
+     * 不良返厂单-删除
+     * @param object $form
+     * @throws \Exception
+     */
+    public function DeleteDefect($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
         $res = PurchaseDefectiveGoods::deleteAll(['defective_id'=>$form->id]);
         if(false === $res) {
             throw new \Exception("删除单据明细失败");

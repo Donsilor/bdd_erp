@@ -8,15 +8,20 @@ use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\models\Diamond;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\helpers\ResultHelper;
@@ -149,6 +154,76 @@ class OrderGoodsController extends BaseController
     }
 
 
+    public function actionEditDiamond(){
+
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if($model->isNewRecord){
+            $cert_id = Yii::$app->request->get('cert_id');
+            $search = Yii::$app->request->get('search');
+            $order_id = Yii::$app->request->get('order_id');
+            if($search && $cert_id) {
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+                if(empty($diamond_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此裸钻不存在或者审核没通过', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 15; //钻石
+                $model->goods_num = $diamond_goods->goods_num;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_pay_price = $diamond_goods->sale_price;
+                $model->goods_price = $diamond_goods->sale_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $cert_id;
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = $diamond_goods->goods_id;
+            }
+
+        }else{
+            $order_goods_attr = OrderGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+            $model->cert_id = $order_goods_attr->attr_value;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+
+    }
+
+
     /**
      * 删除
      *
@@ -183,7 +258,6 @@ class OrderGoodsController extends BaseController
             //更新单据汇总
             Yii::$app->salesService->order->orderSummary($order_id);
             $trans->commit();
-
             return $this->message("删除成功", $this->redirect($this->returnUrl));
         }catch (\Exception $e) {
 

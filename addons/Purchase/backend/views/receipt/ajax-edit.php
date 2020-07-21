@@ -23,7 +23,8 @@ $form = ActiveForm::begin([
                     'data' => \Yii::$app->supplyService->supplier->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
-                        'allowClear' => false
+                        'allowClear' => false,
+                        'disabled'=>$model->isNewRecord ? null:'disabled'
                     ],
                 ]);?>
             <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [

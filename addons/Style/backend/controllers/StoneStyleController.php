@@ -83,6 +83,12 @@ class StoneStyleController extends BaseController
             if($model->stone_weight_min>$model->stone_weight_max){
                 return $this->message('石重范围小不能大于石重范围大', $this->redirect(\Yii::$app->request->referrer), 'error');
             }
+            if($model->stone_type != AttrIdEnum::STONE_TYPE_MO && empty($model->stone_weight_min)){
+                return $this->message('石重范围小必填', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            if($model->stone_type != AttrIdEnum::STONE_TYPE_MO && empty($model->stone_weight_max)){
+                return $this->message('石重范围大必填', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
             if($model->stone_type == AttrIdEnum::STONE_TYPE_MO && empty($model->product_size_min)){
                 return $this->message('尺寸范围小必填', $this->redirect(\Yii::$app->request->referrer), 'error');
             }

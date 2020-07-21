@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
+                            /*[
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{delete}',
@@ -145,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                 ],
                                 'headerOptions' => [],
-                            ]
+                            ]*/
                         ]
                     ]); ?>
                 </div>

@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                 </div>
             </div>
@@ -53,10 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'style_sn',
                             'value' => 'style_sn',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'label' => '石料类型',
@@ -100,6 +100,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->product_size_min." - ".$model->product_size_max;
                             },
                             'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' => '石头形状',
+                            'attribute' => 'stone_shape',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->stone_shape);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'stone_carat',
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
+                            'attribute' => 'color_scope',
+                            'value' => function ($model){
+                                return $model->color_scope??"";
+                            },
+                            'filter' => true,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'clarity_scope',
+                            'value' => function ($model){
+                                return $model->clarity_scope??"";
+                            },
+                            'filter' => true,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -222,7 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
+                                        'data-target' => '#ajaxModalLg',
                                     ]);
                                 },
                                 'apply' => function($url, $model, $key){

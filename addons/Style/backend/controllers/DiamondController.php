@@ -2,7 +2,10 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use common\enums\AttrIdEnum;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use addons\Style\common\models\Style;
 use Yii;
@@ -51,9 +54,6 @@ class DiamondController extends BaseController
 
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams, ['goods_name','language']);
-        $this->setLocalLanguage($searchModel->language);
-        $dataProvider->query->joinWith(['lang']);
-        $dataProvider->query->andFilterWhere(['like', 'lang.goods_name',$searchModel->goods_name]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -64,30 +64,26 @@ class DiamondController extends BaseController
      *
      * @return mixed
      */
-    public function actionEditLang()
+    public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
         $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         
         $model = $this->findModel($id);
         $status = $model ? $model->status:0;
-        if ($model->load(Yii::$app->request->post())) { 
+        // ajax 验证
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                if($model->status == 1 && $status == 0){
+                if($model->isNewRecord == true){
                     $model->onsale_time = time();
+                    $model->status = StatusEnum::DISABLED;
                 }
+                $model->audit_status = AuditStatusEnum::SAVE;
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
-
-                //同步款式库的状态
-                Style::updateAll(['status'=>$model->status,'virtual_clicks'=>$model->virtual_clicks,'virtual_volume'=>$model->virtual_volume],['id'=>$model->style_id]);
-
-                $this->editLang($model);
-                //同步裸钻数据到goods
-                \Yii::$app->services->diamond->syncDiamondToGoods($model->id);
-                
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
@@ -100,6 +96,90 @@ class DiamondController extends BaseController
         }
         
         return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model->audit_status = AuditStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+    }
+
+
+    /**
+     * ajax 审核
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxAudit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        if($model->audit_status == AuditStatusEnum::PENDING) {
+            $model->audit_status = AuditStatusEnum::PASS;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->audit_time = time();
+                $model->auditor_id = \Yii::$app->user->identity->id;
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->status = StatusEnum::ENABLED;
+                }
+
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                //日志
+                $log = [
+                    'diamond_id' => $model->id,
+                    'cert_id' => $model->cert_id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_msg' => '裸钻审核：'.AuditStatusEnum::getValue($model->audit_status),
+                    'creator_id' => Yii::$app->user->identity->getId(),
+                    'creator' => \Yii::$app->user->identity->username,
+                ];
+                \Yii::$app->styleService->diamond->createLog($log);
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -119,27 +199,20 @@ class DiamondController extends BaseController
         if(!empty($carat)){
             $carat_str .= $carat.'ct';
         }
-        $languages = Yii::$app->params['languages'];
-        $ids = array($cert_type_id,$shape_id,$color_id,$clarity_id);
-        $data = array();
-        foreach ($languages as $key=>$val){
-            $goods_name = $carat_str;
-            $language = $key;
-            $attr_arr = \Yii::$app->services->goodsAttribute->getAttributeByValueIds($ids, $language);
-            if(isset($attr_arr[AttrIdEnum::SHAPE])){
-                $goods_name .= ' '.$attr_arr[AttrIdEnum::SHAPE];
-            }
-            if(isset($attr_arr[AttrIdEnum::COLOR])){
-                $goods_name .= ' '.$attr_arr[AttrIdEnum::COLOR].'色';
-            }
-            if(isset($attr_arr[AttrIdEnum::CLARITY])){
-                $goods_name .= ' '.$attr_arr[AttrIdEnum::CLARITY].'净度';
-            }
-            if(isset($attr_arr[AttrIdEnum::CERT_TYPE])){
-                $goods_name .= ' '.$attr_arr[AttrIdEnum::CERT_TYPE];
-            }
-            $data[$language] = $goods_name;
+        $goods_name = $carat_str;
+        if($shape_id){
+            $goods_name .= ' '.Yii::$app->attr->valueName($shape_id);
         }
+        if($color_id){
+            $goods_name .= ' '.Yii::$app->attr->valueName($color_id).'色';
+        }
+        if($clarity_id){
+            $goods_name .= ' '.Yii::$app->attr->valueName($clarity_id).'净度';
+        }
+        if($cert_type_id){
+            $goods_name .= ' '.Yii::$app->attr->valueName($cert_type_id);
+        }
+        $data = $goods_name;
 
         return ResultHelper::json(200, '保存成功',$data);
 

@@ -37,7 +37,7 @@ return [
                                     'route' => 'distribution/index',
                             ],
                             [
-                                    'title' => 'FQC质检',
+                                    'title' => '订单发货质检',
                                     'route' => 'order-fqc/index',
                             ],
                             [

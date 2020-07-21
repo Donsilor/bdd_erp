@@ -26,7 +26,9 @@ class OrderGoodsForm extends OrderGoods
     public $attr;
 
     public $style_id;
-    
+
+    public $cert_id;
+
     /**
      * {@inheritdoc}
      */
@@ -62,6 +64,7 @@ class OrderGoodsForm extends OrderGoods
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
                 'goods_sn' => '款号/起版号',
+                'cert_id' => '证书号',
             ]);
     }
 
