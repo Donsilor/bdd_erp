@@ -203,7 +203,54 @@ class BillLController extends BaseController
     }
 
     /**
-     * 删除/关闭/取消
+     * 取消
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionCancel($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->bill_status = BillStatusEnum::CANCEL;
+            $billGoods = WarehouseBillGoodsL::find()->where(['bill_id' => $id])->select(['goods_id', 'source_detail_id'])->all();
+            if(!$billGoods){
+                throw new \Exception("单据明细为空");
+            }
+            if($model->order_type == OrderTypeEnum::ORDER_L){
+                //同步采购收货单货品状态
+                $ids = ArrayHelper::getColumn(ArrayHelper::toArray($billGoods), 'source_detail_id');
+                $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::IQC_PASS], ['id'=>$ids]);
+                if(false === $res) {
+                    throw new \Exception("同步采购收货单货品状态失败");
+                }
+            }
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '收货单',
+                'log_msg' => '取消单据'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->getSession()->setFlash('success','取消成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+    }
+
+    /**
+     * 删除
      *
      * @param $id
      * @return mixed

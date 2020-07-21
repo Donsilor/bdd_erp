@@ -135,6 +135,7 @@ class CountryService extends Service
             ->orderBy('id asc')
             ->select(['id', 'title', 'pid'])
             ->andFilterWhere(['level' => $level])
+            ->orderBy('sort asc')
             ->cache(600)
             ->asArray()
             ->all();

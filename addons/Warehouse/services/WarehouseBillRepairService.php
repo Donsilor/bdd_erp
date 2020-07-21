@@ -77,6 +77,24 @@ class WarehouseBillRepairService extends Service
     }
 
     /**
+     * 维修单-取消
+     * @param WarehouseBillRepairForm $form
+     * @throws \Exception
+     */
+    public function cancelRepair($form)
+    {
+        $goods = WarehouseGoods::find()->where(['goods_id'=>$form->goods_id])->one() ?? new WarehouseGoods();
+        $goods->weixiu_status = WeixiuStatusEnum::SAVE;
+        if(false === $goods->save()){
+            throw new Exception("更新货品维修状态失败");
+        }
+        $form->repair_status = RepairStatusEnum::CANCEL;
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+    }
+
+    /**
      * 维修申请
      * @param WarehouseBillRepairForm $form
      * @throws
@@ -244,5 +262,20 @@ class WarehouseBillRepairService extends Service
             throw new \Exception($this->getError($model));
         }
         return $model;
+    }
+
+    /**
+     * 货品是否维修中
+     * @param WarehouseGoods $goods
+     * @throws \Exception
+     * @return object $model
+     */
+    public function checkRepairStatus($goods){
+
+        if($goods->weixiu_status != WeixiuStatusEnum::SAVE){
+            throw new \Exception($goods->goods_id."货号维修中");
+        }
+
+        return $goods;
     }
 }

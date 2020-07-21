@@ -6,7 +6,7 @@ use yii\helpers\Url;
 <?php if ($level >= 1){ ?>
     <?= $form->field($model, $countryName)->dropDownList(Yii::$app->services->country->getProvinceMapByPid(), [
             'prompt' => '-- 请选择国家 --',
-            'onchange' => 'widget_country(this, 1,"' . Html::getInputId($model, $cityName) . '","' . Html::getInputId($model, $cityName) . '")',
+            'onchange' => 'widget_country(this, 1,"' . Html::getInputId($model, $countryName) . '","' . Html::getInputId($model, $cityName) . '")',
         ]); ?>
 <?php }?>
 <?php if ($level >= 2){ ?>

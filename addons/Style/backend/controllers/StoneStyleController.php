@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -81,6 +82,18 @@ class StoneStyleController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             if($model->stone_weight_min>$model->stone_weight_max){
                 return $this->message('石重范围小不能大于石重范围大', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            if($model->stone_type != AttrIdEnum::STONE_TYPE_MO && empty($model->stone_weight_min)){
+                return $this->message('石重范围小必填', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            if($model->stone_type != AttrIdEnum::STONE_TYPE_MO && empty($model->stone_weight_max)){
+                return $this->message('石重范围大必填', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            if($model->stone_type == AttrIdEnum::STONE_TYPE_MO && empty($model->product_size_min)){
+                return $this->message('尺寸范围小必填', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            if($model->stone_type == AttrIdEnum::STONE_TYPE_MO && empty($model->product_size_max)){
+                return $this->message('尺寸范围大必填', $this->redirect(\Yii::$app->request->referrer), 'error');
             }
             $model->status = StatusEnum::DISABLED;
             return $model->save()

@@ -216,7 +216,30 @@ class BillBController extends BaseController
     }
 
     /**
-     * 退货返厂单关闭
+     * 退货返厂单-取消
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionCancel($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+
+            \Yii::$app->warehouseService->billB->cancelBillB($model);
+            $trans->commit();
+            $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     * 退货返厂单-删除
      *
      * @param $id
      * @return mixed
@@ -228,8 +251,8 @@ class BillBController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model->bill_status = BillStatusEnum::CANCEL;
-            \Yii::$app->warehouseService->billB->closeBillB($model);
+
+            \Yii::$app->warehouseService->billB->deleteBillB($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
