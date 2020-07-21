@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'stone_carat',
-                            'filter' => true,
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return $model->color_scope??"";
                             },
-                            'filter' => false,
+                            'filter' => true,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -134,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return $model->clarity_scope??"";
                             },
-                            'filter' => false,
+                            'filter' => true,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
