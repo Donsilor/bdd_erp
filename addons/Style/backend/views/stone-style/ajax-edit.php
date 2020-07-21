@@ -18,29 +18,40 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-        <?= $form->field($model, 'style_sn')->textInput() ?>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'style_sn')->textInput() ?>
+            </div>
+            <div class="col-lg-3">
                 <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'stone_shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),['prompt'=>'请选择']);?>
+            </div>
+            <div class="col-lg-3">
                 <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']);?>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <?= $form->field($model, 'stone_weight_min')->textInput() ?>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <?= $form->field($model, 'stone_weight_max')->textInput() ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'product_size_min')->textInput() ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'product_size_max')->textInput() ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <?= $form->field($model, 'product_size_min')->textInput() ?>
+                <?= $form->field($model, 'color_scope')->textInput() ?>
             </div>
             <div class="col-lg-6">
-                <?= $form->field($model, 'product_size_max')->textInput() ?>
+                <?= $form->field($model, 'clarity_scope')->textInput() ?>
             </div>
         </div>
         <?= $form->field($model, 'remark')->textarea() ?>
