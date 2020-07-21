@@ -201,4 +201,28 @@ class DefectiveGoodsController extends BaseController
             'tab'=>$tab,
         ]);
     }
+
+    /**
+     * ajax 不良返厂单-删除明细
+     *
+     * @return mixed
+     */
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new PurchaseDefectiveGoods();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            if(false === $model->delete()) {
+                throw new \Exception($this->getError($model));
+            }
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("操作成功", $this->redirect(Yii::$app->request->referrer), 'success');
+    }
 }
