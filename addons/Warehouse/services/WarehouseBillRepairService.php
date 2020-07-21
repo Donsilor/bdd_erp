@@ -263,4 +263,19 @@ class WarehouseBillRepairService extends Service
         }
         return $model;
     }
+
+    /**
+     * 货品是否维修中
+     * @param WarehouseGoods $goods
+     * @throws \Exception
+     * @return object $model
+     */
+    public function checkRepairStatus($goods){
+
+        if($goods->weixiu_status != WeixiuStatusEnum::SAVE){
+            throw new \Exception($goods->goods_id."货号维修中");
+        }
+
+        return $goods;
+    }
 }
