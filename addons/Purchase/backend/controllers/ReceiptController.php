@@ -2,28 +2,25 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\enums\PurchaseStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use Yii;
+use common\models\base\SearchModel;
+use addons\Purchase\common\models\PurchaseReceipt;
+use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
-use addons\Warehouse\common\enums\RepairStatusEnum;
-use common\helpers\PageHelper;
-use common\models\backend\Member;
-use Yii;
-use common\models\base\SearchModel;
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\enums\PurchaseStatusEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
+use common\helpers\PageHelper;
+use common\models\backend\Member;
 use common\enums\AuditStatusEnum;
-use common\enums\WhetherEnum;
-use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -39,7 +36,7 @@ class ReceiptController extends BaseController
     use Curd;
 
     /**
-    * @var Receipt
+    * @var PurchaseReceiptForm
     */
     public $modelClass = PurchaseReceiptForm::class;
     public $purchaseType = PurchaseTypeEnum::GOODS;
@@ -110,13 +107,14 @@ class ReceiptController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
+            $log_msg = "编辑收货单";
             if($isNewRecord){
+                $log_msg = "创建收货单";
                 $model->creator_id  = \Yii::$app->user->identity->getId();
             }
             if(false === $model->save()){
                 $this->message('保存失败：'.$this->getError($model), $this->redirect(['index']), 'error');
             }
-            $log_msg = "编辑收货单";
             $log = [
                 'receipt_id' => $model->id,
                 'receipt_no' => $model->receipt_no,
