@@ -1,6 +1,7 @@
 <?php
 
 
+use addons\Purchase\common\enums\DefectiveStatusEnum;
 use common\helpers\Html;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -135,12 +136,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($defective){
-                                        if($defective->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        if($defective->defective_status == DefectiveStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除',[
+                                                'class'=>'btn btn-danger btn-xs',
+                                            ]);
                                         }
                                     },
                                 ],
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ]
                         ]
                     ]); ?>

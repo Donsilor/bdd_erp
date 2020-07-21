@@ -174,7 +174,31 @@ class DefectiveController extends BaseController
     }
 
     /**
-     * ajax 不良返厂单-取消/删除
+     * ajax 不良返厂单-取消
+     *
+     * @return mixed
+     */
+    public function actionCancel()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->purchaseService->defective->cancelDefect($model);
+
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("取消失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message("取消成功", $this->redirect(Yii::$app->request->referrer), 'success');
+    }
+
+    /**
+     * ajax 不良返厂单-删除
      *
      * @return mixed
      */
@@ -187,7 +211,7 @@ class DefectiveController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->purchaseService->defective->cancelDefect($model);
+            \Yii::$app->purchaseService->defective->DeleteDefect($model);
 
             $trans->commit();
         }catch (\Exception $e){
