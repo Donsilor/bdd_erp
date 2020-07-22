@@ -24,7 +24,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
                 </div>
                 <div class="box-tools" >
@@ -37,7 +37,6 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -75,46 +74,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'express_man',
-                            'filter' => Html::activeTextInput($searchModel, 'express_man', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'attribute'=>'express_phone',
-                            'filter' => Html::activeTextInput($searchModel, 'express_phone', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'attribute' => 'settlement_way',
-                            'value' => function ($model){
-                                return \addons\Sales\common\enums\SettlementWayEnum::getValue($model->settlement_way);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'settlement_way',\addons\Sales\common\enums\SettlementWayEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' =>'width:80px'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute' => 'delivery_scope',
-                            'value' => function ($model){
-                                return \addons\Sales\common\enums\DeliveryScopeEnum::getValue($model->delivery_scope);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'delivery_scope',\addons\Sales\common\enums\DeliveryScopeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' =>'width:80px'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
                             'label' => '添加人',
                             'attribute' => 'member.username',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -123,6 +82,8 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
 
                         ],
+
+
                         [
                             'attribute'=>'updated_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
@@ -148,7 +109,10 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
+
                         ],
+
+
                         [
                             'attribute' => 'status',
                             'format' => 'raw',
@@ -173,38 +137,17 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {apply} {audit} {view} {status}',
+                            'template' => '{edit} {info} {status}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
+                                        'data-target' => '#ajaxModal',
                                     ]);
                                 },
-                                'apply' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-info btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
-                                'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
-                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
-                                        ]);
-                                    }
-                                },
-                                'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                                },
+
                                 'status' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
-                                         return Html::status($model->status);
-                                    }
+                                    return Html::status($model->status);
                                 },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);

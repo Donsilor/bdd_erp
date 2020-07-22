@@ -7,15 +7,31 @@ use Yii;
 /**
  * This is the model class for table "sales_express".
  *
- * @property int $id
- * @property string $code 快递编码
+ * @property int $id ID
+ * @property string $code 快递编码(暂时不用)
  * @property string $cover 快递公司logo
  * @property string $name 快递名称
+ * @property string $express_man 快递联系人
+ * @property string $express_phone 快递联系人电话
+ * @property string $company_man 公司联系人
+ * @property string $company_phone 公司联系人电话
+ * @property int $settlement_way 结算方式
+ * @property int $settlement_period 结算周期
+ * @property string $settlement_account 结算账户
+ * @property int $delivery_scope 配送范围
+ * @property int $receive_time 收件时间
+ * @property string $pact_file 合同文件
+ * @property string $cert_file 资质文件
+ * @property int $auditor_id 审核人
+ * @property int $audit_status 审核状态
+ * @property int $audit_time 审核时间
+ * @property string $audit_remark 审核备注
+ * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用
- * @property int $sort
+ * @property int $sort 排序
  * @property int $creator_id 创建人
- * @property int $created_at
- * @property int $updated_at
+ * @property int $created_at 创建时间
+ * @property int $updated_at 更新时间
  */
 class Express extends BaseModel
 {
@@ -33,10 +49,13 @@ class Express extends BaseModel
     public function rules()
     {
         return [
-            [['status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['name'], 'required'],
+            [['settlement_way', 'settlement_period', 'delivery_scope', 'receive_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['code'], 'string', 'max' => 25],
-            [['cover'], 'string', 'max' => 100],
+            [['cover', 'settlement_account'], 'string', 'max' => 100],
             [['name'], 'string', 'max' => 50],
+            [['express_man', 'express_phone', 'company_man', 'company_phone'], 'string', 'max' => 30],
+            [['pact_file', 'cert_file', 'audit_remark', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,9 +66,25 @@ class Express extends BaseModel
     {
         return [
             'id' => 'ID',
-            'code' => '快递编码',
+            'code' => '快递编码(暂时不用)',
             'cover' => '快递公司logo',
             'name' => '快递名称',
+            'express_man' => '快递联系人',
+            'express_phone' => '快递联系人电话',
+            'company_man' => '公司联系人',
+            'company_phone' => '公司联系人电话',
+            'settlement_way' => '结算方式',
+            'settlement_period' => '结算周期',
+            'settlement_account' => '结算账户',
+            'delivery_scope' => '配送范围',
+            'receive_time' => '收件时间',
+            'pact_file' => '合同文件',
+            'cert_file' => '资质文件',
+            'auditor_id' => '审核人',
+            'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',
+            'remark' => '备注',
             'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',

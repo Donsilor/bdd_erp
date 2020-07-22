@@ -12,11 +12,12 @@ use common\helpers\Url;
 class SupplierService
 {
     /**
-     * 布产编辑 tab
-     * @param int $id 款式ID
+     * 供应商 tab
+     * @param int $supplier_id 供应商ID
+     * @param string $returnUrl
      * @return array
      */
-    public function menuTabList($supplier_id,$returnUrl = null)
+    public function menuTabList($supplier_id, $returnUrl = null)
     {
         return [
             1=>['name'=>'供应商','url'=>Url::to(['supplier/view','id'=>$supplier_id,'tab'=>1,'returnUrl'=>$returnUrl])],
