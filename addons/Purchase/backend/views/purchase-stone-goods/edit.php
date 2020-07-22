@@ -11,16 +11,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
-            <?php $form = ActiveForm::begin([]); ?>
+            <?php $form = ActiveForm::begin(['id' => 'purchasestonegoodsform']); ?>
             <div class="box-body" style="padding:20px 50px">
               <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
-              <div class="row">                        
-                <div class="col-lg-4">
-                    <?= $form->field($model, 'goods_name')->textInput() ?>
-                </div>
-                    <div class="col-lg-4">
-                 <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择']) ?>
-                </div>
+              <div class="row">
                   <div class="col-lg-4">
                       <?= $form->field($model, 'goods_sn')->widget(\kartik\select2\Select2::class, [
                           'data' => Yii::$app->styleService->stone->getDropDown(),
@@ -30,17 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
                           ],
                       ]);?>
                   </div>
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'goods_name')->textInput() ?>
+                </div>
+                 <div class="col-lg-4">
+                    <?= $form->field($model, 'stone_type')->dropDownList($model->getStoneTypeMap(),['prompt'=>'请选择', 'disabled'=>'disabled']) ?>
+                </div>
               </div>
-              <div class="row">                        
+              <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_num')->textInput() ?>
                     </div>
-                      <div class="col-lg-4">
-                          <?= $form->field($model, 'goods_weight')->textInput() ?>
-                      </div>
-                  <div class="col-lg-4">
-                      <?= $form->field($model, 'stone_price')->textInput() ?>
-                  </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'stone_price')->textInput() ?>
+                    </div>
 			   </div>
 			   <div class="row">
                    <div class="col-lg-4">
@@ -99,3 +99,28 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    var formId = 'purchasestonegoodsform';
+    function fillStoneForm(){
+        var goods_sn = $("#"+formId+"-goods_sn").val();
+        if(goods_sn != '') {
+            $.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-stone'])?>',
+                dataType: "json",
+                data: {
+                    'goods_sn': goods_sn,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {
+                        $("#"+formId+"-goods_name").val(data.data.goods_name);
+                        $("#"+formId+"-stone_type").val(data.data.stone_type);
+                    }
+                }
+            });
+        }
+    }
+    $("#"+formId+"-goods_sn").change(function(){
+        fillStoneForm();
+    });
+</script>

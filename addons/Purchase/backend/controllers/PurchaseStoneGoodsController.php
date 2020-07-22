@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\forms\PurchaseStoneReceiptGoodsForm;
+use addons\Style\common\models\StoneStyle;
 use common\helpers\Url;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -80,7 +81,7 @@ class PurchaseStoneGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         $purchase_id = Yii::$app->request->get('purchase_id');
         
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new PurchaseStoneGoodsForm();
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
@@ -92,6 +93,8 @@ class PurchaseStoneGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 3);
+                $stoneStyle = StoneStyle::find()->select(['stone_type'])->where(['style_sn'=>$model->goods_sn])->one();
+                $model->stone_type = $stoneStyle->stone_type;
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
@@ -125,6 +128,26 @@ class PurchaseStoneGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+
+    /**
+     * 查询石料款号信息
+     * @return array
+     */
+    public function actionAjaxGetStone()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = StoneStyle::find()->select(['stone_type','stone_shape','product_size_min','product_size_max'])->where(['style_sn'=>$goods_sn])->one();
+        $stone_type = \Yii::$app->attr->valueName($model->stone_type)??"";
+        $stone_shape = \Yii::$app->attr->valueName($model->stone_shape)??"";
+        $data = [
+            'stone_type' => $model->stone_type,
+            'goods_name' => $stone_type.$stone_shape.$model->product_size_min.$model->product_size_max,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
+    }
+
     /**
      * 删除
      *
