@@ -43,13 +43,12 @@ class ExpressArea extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'express_id'], 'required'],
-            [['id', 'express_id', 'is_holidays', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['express_id'], 'required'],
+            [['express_id', 'is_holidays', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['first_price', 'supply_price', 'last_first_price', 'last_supply_price'], 'number'],
             [['delivery_area'], 'string', 'max' => 160],
             [['delivery_time'], 'string', 'max' => 20],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
-            [['id', 'express_id'], 'unique', 'targetAttribute' => ['id', 'express_id']],
         ];
     }
 
@@ -79,5 +78,14 @@ class ExpressArea extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 物流信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExpress()
+    {
+        return $this->hasOne(Express::class, ['id'=>'express_id'])->alias('express');
     }
 }
