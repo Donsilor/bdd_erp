@@ -354,8 +354,8 @@ class ProduceController extends BaseController
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
-        if($model->bc_status != BuChanEnum::ASSIGNED){
-            return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::ASSIGNED).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
+        if($model->bc_status != BuChanEnum::TO_PRODUCTION){
+            return $this->message('不是'.BuChanEnum::getValue(BuChanEnum::TO_PRODUCTION).'，不能操作', $this->redirect(Yii::$app->request->referrer), 'warning');
         }
         $model->bc_status = BuChanEnum::IN_PRODUCTION;
         $model->factory_order_time = time();
