@@ -12,7 +12,7 @@ return [
     'timeZone' => 'Asia/Shanghai',
     'bootstrap' => [
         'queue', // 队列系统
-        'common\components\Init', // 加载默认的配置
+        'common\components\Init', // 加载默认的配置8.129.190.33
     ],
     'components' => [
         'db' => [

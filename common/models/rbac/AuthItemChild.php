@@ -59,12 +59,8 @@ class AuthItemChild extends \common\models\base\BaseModel
      */
     public function getItem()
     {
-         /*  return $this->hasOne(AuthItem::class, ['id' => 'item_id'])
-            ->orderBy('sort asc, id asc')
-            ->where(['status' => StatusEnum::ENABLED]);  */
-        
-        return $this->hasOne(AuthItem::class, ['key' => 'item_key'])
-            ->orderBy('sort asc, id asc')
-            ->where(['status' => StatusEnum::ENABLED]);
+         return $this->hasOne(AuthItem::class, ['id' => 'item_id'])
+                ->orderBy('sort asc, id asc')
+                ->where(['status' => StatusEnum::ENABLED]);  
     }
 }

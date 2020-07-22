@@ -267,6 +267,7 @@ class PurchaseService extends Service
                 $goods[$k]['goods_size'] =  $model->stone_size;
                 $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
+                $goods[$k]['channel_id'] = $model->channel_id;
 
                 $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             }

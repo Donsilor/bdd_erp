@@ -1015,6 +1015,7 @@ class PurchaseReceiptService extends Service
                 'stone_colour' => $model->goods_colour,
                 'stone_num' => $model->stone_num,
                 'source_detail_id' => $model->id,
+                'channel_id' => $model->channel_id,
                 'stone_price' => $model->stone_price,
                 'cost_price' => $model->cost_price,
                 'stone_weight' => $model->goods_weight,

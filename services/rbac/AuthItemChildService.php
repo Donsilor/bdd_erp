@@ -152,7 +152,7 @@ class AuthItemChildService extends Service
         $field = ['role_id', 'item_id','item_key', 'name', 'app_id', 'is_addon', 'addons_name'];       
         if(!empty($rows)) {
             $sql = Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->getSql();
-            !empty($rows) && Yii::$app->db->createCommand(str_replace("INSERT", "REPLACE", $sql))->execute();
+            Yii::$app->db->createCommand(str_replace("INSERT", "REPLACE", $sql))->execute();
             //Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();            
         }
     }

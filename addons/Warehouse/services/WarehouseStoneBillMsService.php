@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -28,6 +29,7 @@ class WarehouseStoneBillMsService extends Service
      * 创建石料入库单（买石单）
      * @param array $bill
      * @param array $details
+     * @throws
      */
     public function createBillMs($bill, $details){
         $billM = new WarehouseStoneBill();
@@ -52,16 +54,17 @@ class WarehouseStoneBillMsService extends Service
         foreach ($details as $detail) {
             $value[] = array_values($detail);
         }
-        $res = Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
+        $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
         if(false === $res){
             throw new \Exception("创建买石单明细失败");
         }
-        Yii::$app->warehouseService->stoneBill->stoneBillSummary($billM->id);
+        \Yii::$app->warehouseService->stoneBill->stoneBillSummary($billM->id);
         return $billM;
     }
     /**
      * 买石单-审核
-     * @param $form
+     * @param WarehouseStoneBillMsForm $form
+     * @throws
      */
     public function auditBillMs($form)
     {
@@ -77,6 +80,7 @@ class WarehouseStoneBillMsService extends Service
             }
             //石包入库
             foreach ($billGoodsList as $billGoods) {
+                //$billGoods = new WarehouseStoneBillGoods();
                 $stoneM = new WarehouseStone();
                 $stoneData = [
                     'stone_sn' => (string) rand(10000000000,99999999999),//临时
@@ -86,7 +90,8 @@ class WarehouseStoneBillMsService extends Service
                     'stone_type' => $billGoods->stone_type,
                     'supplier_id' => $form->supplier_id,
                     'put_in_type' => $form->put_in_type,
-                    'warehouse_id' => $form->warehouse_id,
+                    'warehouse_id' => $form->to_warehouse_id,
+                    'channel_id' => $billGoods->channel_id,
                     'stone_shape' => $billGoods->shape,
                     'stone_color' => $billGoods->color,
                     'stone_clarity' => $billGoods->clarity,

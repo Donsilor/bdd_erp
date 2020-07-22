@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 use addons\Supply\common\models\ProduceStone;
 
@@ -34,6 +35,7 @@ use addons\Supply\common\models\ProduceStone;
  * @property string $cost_price 成本价
  * @property string $stone_price 石料单价/ct
  * @property string $sale_price 销售价格
+ * @property int $channel_id 渠道
  * @property int $source_detail_id 来源明细ID
  * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
@@ -57,7 +59,7 @@ class WarehouseStoneBillGoods extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type', 'stone_name'], 'required'],
-            [['bill_id', 'stone_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'stone_num', 'channel_id', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
             [['bill_no', 'stone_name', 'stone_sn', 'style_sn', 'stone_size'], 'string', 'max' => 30],
             [['bill_type', 'stone_type', 'cert_type', 'stone_colour'], 'string', 'max' => 10],
@@ -100,6 +102,7 @@ class WarehouseStoneBillGoods extends BaseModel
             'cost_price' => '成本价',
             'stone_price' => '石料单价/ct',
             'sale_price' => '销售价格',
+            'channel_id' => '渠道',
             'source_detail_id' => '来源明细ID',
             'remark' => '备注',
             'status' => '状态',
@@ -130,5 +133,13 @@ class WarehouseStoneBillGoods extends BaseModel
     public function getBill()
     {
         return $this->hasOne(WarehouseStoneBill::class, ['id'=>'bill_id'])->alias('bill');
+    }
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }

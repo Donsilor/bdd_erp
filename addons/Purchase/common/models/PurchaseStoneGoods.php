@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
@@ -27,6 +28,7 @@ use Yii;
  * @property string $stone_colour 石料色彩
  * @property string $stone_size 石料尺寸
  * @property string $spec_remark 规格备注
+ * @property int $channel_id 渠道
  * @property string $cert_type 证书类型
  * @property string $cert_id 证书号
  * @property int $is_apply 是否申请修改
@@ -53,8 +55,8 @@ class PurchaseStoneGoods extends BaseModel
     public function rules()
     {
         return [
-            [['purchase_id','goods_name','goods_sn','stone_type','cost_price','goods_weight','stone_num'], 'required'],
-            [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id','goods_name','goods_sn','stone_num'], 'required'],
+            [['purchase_id', 'goods_num', 'stone_num', 'channel_id', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
@@ -94,6 +96,7 @@ class PurchaseStoneGoods extends BaseModel
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'spec_remark' => '规格备注',
+            'channel_id' => '渠道',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
             'is_receipt' => '是否已收货',
@@ -102,5 +105,14 @@ class PurchaseStoneGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }
