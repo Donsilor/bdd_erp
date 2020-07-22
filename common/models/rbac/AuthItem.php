@@ -8,6 +8,7 @@ use common\traits\Tree;
  * This is the model class for table "{{%rbac_auth_item}}".
  *
  * @property int $id
+ * @property string $key  唯一标识
  * @property string $name 别名
  * @property string $title 标题
  * @property string $app_id 应用
@@ -47,6 +48,7 @@ class AuthItem extends \common\models\base\BaseModel
             [['title', 'addons_name'], 'string', 'max' => 200],
             [['app_id'], 'string', 'max' => 20],
             [['tree'], 'string', 'max' => 500],
+            [['key'], 'string', 'max' => 32],
         ];
     }
 
@@ -57,6 +59,7 @@ class AuthItem extends \common\models\base\BaseModel
     {
         return [
             'id' => 'ID',
+            'key' => 'KEY',
             'name' => '别名',
             'title' => '标题',
             'app_id' => '应用',

@@ -142,7 +142,7 @@ return [
                  ],
                  [
                         'title' =>'起版列表',
-                        'name'  => 'qiban/index',
+                        'name'  => 'qibanIndex',
                         'child' =>[
                                 ['title' => '首页','name'  => 'qiban/index'],
                                 ['title' => '新增/编辑(有款)','name'  => 'qiban/edit'],
@@ -155,7 +155,7 @@ return [
                 ],
                 [
                         'title' =>'商品列表',
-                        'name'  => 'style-goods/index',
+                        'name'  => 'styleGoodsIndex',
                         'child' =>[
                                 ['title' => '首页','name'  => 'style-goods/index'],
                                 ['title' => '编辑','name'  => 'style-goods/edit-all'],
@@ -164,7 +164,7 @@ return [
                 ],
                 [
                         'title' =>'裸钻列表',
-                        'name'  => 'diamond/index',
+                        'name'  => 'diamondIndex',
                         'child' =>[
                                 ['title' => '首页','name'  => 'diamond/index'],
                                 ['title' => '新增/编辑','name'  => 'diamond/edit'],
