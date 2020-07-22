@@ -196,7 +196,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_status',
                     'value' => function ($model){
-                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status);
+                        $model->getTargetType();
+                        $audit_name_str = '';
+                        if($model->targetType){
+                            $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                            $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                        }
+                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status).$audit_name_str;
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'order_status',\addons\Sales\common\enums\OrderStatusEnum::getMap(), [
                             'prompt' => '全部',
@@ -261,7 +267,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
+                        $model->getTargetType();
+                        if($model->targetType){
+                            $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
+                        }else{
+                            $isAudit = true;
+                        }
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING && $isAudit) {
                             return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
                                 'class' => 'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',

@@ -187,7 +187,7 @@ class OrderGoodsController extends BaseController
                 $model->cert_id = $cert_id;
                 $model->order_id = $order_id;
                 $model->currency = $model->order->currency;
-                $model->goods_id = $diamond_goods->goods_id;
+                $model->goods_id = (string)$diamond_goods->goods_id;
             }
 
         }else{

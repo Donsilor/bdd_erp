@@ -2,7 +2,9 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -366,14 +368,14 @@ class PurchaseGoodsController extends BaseController
                 $model->cost_price = $style->cost_price;
                 $model->is_inlay = $style->is_inlay;                
                 $model->goods_image = $style->style_image;
-
                 $styleForm = new StyleAttrForm();
                 $styleForm->style_id = $style->id;
                 $styleForm->initAttrs();
-
                 $model->attr_custom = $styleForm->attr_custom;
                 $model->attr_require = $styleForm->attr_require;
             }
+            //非镶切 配石类型默认不配石
+            $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "";
         }
         
         return true;

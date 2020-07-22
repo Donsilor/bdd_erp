@@ -134,7 +134,7 @@ class Qiban extends BaseModel
     public function beforeValidate()
     {
         $style_images = $this->style_images;
-        if($style_images){
+        if(is_array($style_images)){
             $this->style_image = $style_images[0] ?? '';
             $this->style_images = join(',',$style_images);
         }

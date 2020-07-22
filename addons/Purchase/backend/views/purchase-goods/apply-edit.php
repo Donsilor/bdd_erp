@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			 </div>
     			 <div class="row">
     			     <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_type')->dropDownList(addons\Supply\common\enums\PeishiTypeEnum::getMap(),['prompt'=>'请选择']) ?> 
+                        <?= $form->field($model, 'peishi_type')->dropDownList(addons\Supply\common\enums\PeishiTypeEnum::getMap(),['prompt'=>'请选择','disabled'=>$model->is_inlay == \addons\Style\common\enums\InlayEnum::No]) ?>
         			 </div>
         			 <div class="col-lg-4">
                         <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?> 

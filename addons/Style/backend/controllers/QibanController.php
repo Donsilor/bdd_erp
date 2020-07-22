@@ -7,6 +7,8 @@ use addons\Style\common\enums\IsApply;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\QibanAuditForm;
 use addons\Style\common\models\Style;
+use common\enums\FlowStatusEnum;
+use common\enums\TargetTypeEnum;
 use common\helpers\ResultHelper;
 use Yii;
 use common\models\base\SearchModel;
@@ -35,6 +37,8 @@ class QibanController extends BaseController
     */
     public $modelClass = Qiban::class;
 
+    //审批流程
+    public $targetType = TargetTypeEnum::STYLE_QIBAN;
 
     /**
     * 首页
@@ -304,12 +308,20 @@ class QibanController extends BaseController
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            //审批流程
+            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->qiban_sn);
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
     }
 
     /**
@@ -332,18 +344,28 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    if($model->is_apply == IsApply::Wait){
-                        $model->is_apply = IsApply::Yes;
-                    }
+
+                $audit = [
+                    'audit_status' =>  $model->audit_status ,
+                    'audit_time' => time(),
+                    'audit_remark' => $model->audit_remark
+                ];
+                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                //审批完结才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE) {
                     $model->auditor_id = \Yii::$app->user->id;
                     $model->audit_time = time();
-                    $model->status = StatusEnum::ENABLED;
-                }else{
-                    $model->status = StatusEnum::DISABLED;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
+                    if ($model->audit_status == AuditStatusEnum::PASS) {
+                        if ($model->is_apply == IsApply::Wait) {
+                            $model->is_apply = IsApply::Yes;
+                        }
+                        $model->status = StatusEnum::ENABLED;
+                    } else {
+                        $model->status = StatusEnum::DISABLED;
+                    }
+                    if (false === $model->save()) {
+                        throw new \Exception($this->getError($model));
+                    }
                 }
                 $trans->commit();
             }catch (\Exception $e){

@@ -56,7 +56,7 @@ $form = ActiveForm::begin([
     </div>
 <?php ActiveForm::end(); ?>
 <script>
-var formId = 'order';
+var formId = 'orderform';
 function fillCustomerForm(){
 	var customer_mobile = $("#"+formId+"-customer_mobile").val();
     var customer_name  = $("#"+formId+"-customer_name").val();

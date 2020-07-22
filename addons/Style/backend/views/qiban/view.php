@@ -158,7 +158,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                 ?>
                 <?php
-                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_QIBAN,$model->id);
+                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING && $isAudit){
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-sm',
                         'data-toggle' => 'modal',
@@ -286,8 +287,15 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+    <div class="col-xs-12">
+        <div id="flow">
+        </div>
+    </div>
 </div>
+<script>
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> \common\enums\TargetTypeEnum::STYLE_QIBAN,'target_id'=>$model->id])?>")
 
+</script>
 
 
 

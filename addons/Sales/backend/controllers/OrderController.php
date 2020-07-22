@@ -3,7 +3,9 @@
 namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\forms\OrderForm;
 use common\enums\AuditStatusEnum;
+use common\enums\FlowStatusEnum;
 use Yii;
 use common\traits\Curd;
 use addons\Sales\common\models\Order;
@@ -24,7 +26,8 @@ class OrderController extends BaseController
     /**
      * @var Order
      */
-    public $modelClass = Order::class;
+    public $modelClass = OrderForm::class;
+
     public function actionTest()
     {
         Yii::$app->shopService->orderSync->syncOrder(1405);
@@ -128,7 +131,7 @@ class OrderController extends BaseController
     {
         $id = Yii::$app->request->get('id');        
         $model = $this->findModel($id); 
-        
+        $model->getTargetType();
         $dataProvider = null;
         if (!is_null($id)) {
             $searchModel = new SearchModel([
@@ -202,17 +205,31 @@ class OrderController extends BaseController
         if($order_goods_count == 0){
             return $this->message('订单没有明细', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
         $model = $this->findModel($id);
+        $model = $model ?? new OrderForm();
         if($model->order_status != OrderStatusEnum::SAVE){
             return $this->message('订单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->order_status = OrderStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        $model->getTargetType();
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            if($model->targetType){
+                //审批流程
+                Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);
+            }
+
+            $model->order_status = OrderStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
@@ -225,19 +242,41 @@ class OrderController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new OrderForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                $model->auditor_id = \Yii::$app->user->id;
-                $model->audit_time = time();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->order_status = OrderStatusEnum::CONFORMED;
-                }
-                if(false === $model->save()){
-                    return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                $model->getTargetType();
+                if($model->targetType){
+                    $audit = [
+                        'audit_status' =>  $model->audit_status ,
+                        'audit_time' => time(),
+                        'audit_remark' => $model->audit_remark
+                    ];
+                    $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                    //审批完结才会走下面
+                    if($res->flow_status == FlowStatusEnum::COMPLETE){
+                        $model->auditor_id = \Yii::$app->user->id;
+                        $model->audit_time = time();
+                        if($model->audit_status == AuditStatusEnum::PASS){
+                            $model->order_status = OrderStatusEnum::CONFORMED;
+                        }
+                        if(false === $model->save()){
+                            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                        }
+                    }
+                }else{
+                    $model->auditor_id = \Yii::$app->user->id;
+                    $model->audit_time = time();
+                    if($model->audit_status == AuditStatusEnum::PASS){
+                        $model->order_status = OrderStatusEnum::CONFORMED;
+                    }
+                    if(false === $model->save()){
+                        return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                    }
                 }
                 $trans->commit();
             }catch (\Exception $e){

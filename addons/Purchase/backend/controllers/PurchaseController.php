@@ -160,8 +160,6 @@ class PurchaseController extends BaseController
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
             }
-
-
             //日志
             $log = [
                 'purchase_id' => $id,
@@ -171,7 +169,6 @@ class PurchaseController extends BaseController
                 'log_msg' => "申请审核"
             ];
             Yii::$app->purchaseService->purchase->createPurchaseLog($log);
-
             $trans->commit();
             return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
         }catch (\Exception $e){

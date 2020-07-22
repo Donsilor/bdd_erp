@@ -2,6 +2,7 @@
 
 namespace addons\Supply\backend\controllers;
 
+use addons\Style\common\enums\InlayEnum;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Supply\common\enums\LogModuleEnum;
@@ -131,6 +132,7 @@ class ProduceController extends BaseController
             }
             $model->factory_distribute_time = time();
             $model->bc_status = BuChanEnum::TO_CONFIRMED;
+            $model->follower_name = $model->follower->username;
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
             }
@@ -195,6 +197,8 @@ class ProduceController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['produce/index']));
         $this->modelClass = SetPeiliaoForm::class;
         $model = $this->findModel($id);
+        $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : '';
+
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             if($model->bc_status != BuChanEnum::ASSIGNED || $model->from_type != FromTypeEnum::ORDER){
