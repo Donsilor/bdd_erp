@@ -173,7 +173,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {apply} {audit} {status}',
+                            'template' => '{edit} {apply} {audit} {view} {status}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -184,7 +184,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'apply' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-success btn-sm',
+                                            'class'=>'btn btn-info btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                                         ]);
                                     }
@@ -198,8 +198,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                         ]);
                                     }
                                 },
+                                'view' => function($url, $model, $key){
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
                                 'status' => function($url, $model, $key){
-                                    return Html::status($model->status);
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
+                                         return Html::status($model->status);
+                                    }
                                 },
                                 'delete' => function($url, $model, $key){
                                     return Html::delete(['delete', 'id' => $model->id]);

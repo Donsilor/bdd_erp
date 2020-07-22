@@ -3,6 +3,7 @@
 namespace addons\Sales\backend\controllers;
 
 use Yii;
+use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\Express;
@@ -116,6 +117,26 @@ class ExpressController extends BaseController
         $model->audit_status  = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws 
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new ExpressForm();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->express->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }
