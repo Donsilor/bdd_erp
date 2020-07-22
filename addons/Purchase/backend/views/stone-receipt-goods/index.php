@@ -314,6 +314,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'channel_id',
+                                'value' => function ($model){
+                                    return $model->saleChannel->name??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'channel_id', \Yii::$app->salesService->saleChannel->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;',
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
                                 'attribute'=>'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],

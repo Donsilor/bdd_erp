@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
@@ -104,5 +105,14 @@ class PurchaseStoneGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }

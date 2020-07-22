@@ -87,6 +87,15 @@ $form = ActiveForm::begin([
            </div>
            <div class="row">
                <div class="col-lg-4">
+                   <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+                       'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => true
+                       ],
+                   ]);?>
+               </div>
+               <div class="col-lg-4">
                    <?= $form->field($model, 'goods_norms')->textarea() ?>
                </div>
                <div class="col-lg-4">

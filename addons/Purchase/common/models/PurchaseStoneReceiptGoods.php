@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
@@ -111,7 +112,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'channel_id' => '渠道',
             'xuhao' => '石料序号',
             'sort' => '排序',
-            'status' => '状态 1启用 0禁用 -1 删除',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
@@ -130,5 +131,13 @@ class PurchaseStoneReceiptGoods extends BaseModel
     public function getFqc()
     {
         return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
+    }
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }

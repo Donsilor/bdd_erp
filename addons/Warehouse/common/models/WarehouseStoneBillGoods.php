@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 use addons\Supply\common\models\ProduceStone;
 
@@ -132,5 +133,13 @@ class WarehouseStoneBillGoods extends BaseModel
     public function getBill()
     {
         return $this->hasOne(WarehouseStoneBill::class, ['id'=>'bill_id'])->alias('bill');
+    }
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }
