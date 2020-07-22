@@ -169,7 +169,7 @@ class PurchaseStoneGoodsController extends BaseController
                 throw new \Exception("采购单不是保存状态,不允许删除",422);
             }
             
-            $model = $this->findModel($id);            
+            $model = $this->findModel($id) ?? new PurchaseStoneGoodsForm();
             if (!$model->delete()) {
                 throw new \Exception("删除失败",422);
             }

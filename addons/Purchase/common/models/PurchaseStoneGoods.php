@@ -27,6 +27,7 @@ use Yii;
  * @property string $stone_colour 石料色彩
  * @property string $stone_size 石料尺寸
  * @property string $spec_remark 规格备注
+ * @property int $channel_id 渠道
  * @property string $cert_type 证书类型
  * @property string $cert_id 证书号
  * @property int $is_apply 是否申请修改
@@ -54,7 +55,7 @@ class PurchaseStoneGoods extends BaseModel
     {
         return [
             [['purchase_id','goods_name','goods_sn','stone_num'], 'required'],
-            [['purchase_id', 'goods_num', 'stone_num', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['purchase_id', 'goods_num', 'stone_num', 'channel_id', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
@@ -94,6 +95,7 @@ class PurchaseStoneGoods extends BaseModel
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'spec_remark' => '规格备注',
+            'channel_id' => '渠道',
             'is_apply' => '是否申请修改',
             'apply_info' => '申请信息',
             'is_receipt' => '是否已收货',
