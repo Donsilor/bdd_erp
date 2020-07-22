@@ -65,6 +65,7 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'sort')->textInput(); ?>
             </div>
         </div>
+        <?= $form->field($model, 'remark')->textarea(); ?>
         <div class="row">
             <div class="col-lg-4">
                 <?= $form->field($model, 'cover')->widget(common\widgets\webuploader\Files::class, [
