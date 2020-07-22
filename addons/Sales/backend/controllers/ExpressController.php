@@ -123,7 +123,7 @@ class ExpressController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws 
+     * @throws
      */
     public function actionView()
     {

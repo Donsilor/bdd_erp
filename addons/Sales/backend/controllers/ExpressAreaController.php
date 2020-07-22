@@ -3,7 +3,9 @@
 namespace addons\Sales\backend\controllers;
 
 use Yii;
+use common\helpers\Url;
 use common\traits\Curd;
+use addons\Sales\common\models\Express;
 use addons\Sales\common\models\ExpressArea;
 use addons\Sales\common\forms\ExpressAreaForm;
 use common\models\base\SearchModel;
@@ -30,6 +32,9 @@ class ExpressAreaController extends BaseController
      */
     public function actionIndex()
     {
+        $express_id = Yii::$app->request->get('express_id');
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['express-area/index', 'express_id'=>$express_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -46,6 +51,8 @@ class ExpressAreaController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['created_at']);
 
+        $dataProvider->query->andWhere(['=', 'express_id', $express_id]);
+
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',ExpressAreaForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -53,10 +60,50 @@ class ExpressAreaController extends BaseController
         }
 
         //$dataProvider->query->andWhere(['>',ExpressAreaForm::tableName().'.status',-1]);
-
+        $express = Express::find()->where(['id'=>$express_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'tabList' => Yii::$app->salesService->express->menuTabList($express_id, $returnUrl),
+            'express' => $express,
+            'returnUrl' => $returnUrl,
+            'tab'=>$tab,
+        ]);
+    }
+
+    /**
+     * Ajax 编辑/创建
+     * @throws
+     * @return mixed
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $express_id = Yii::$app->request->get('express_id');
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
+
+        $model = $this->findModel($id);
+        $model = $model ?? new ExpressAreaForm();
+
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                $error = $e->getMessage();
+                \Yii::error($error);
+                return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+            }
+            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+        }
+        $model->express_id = $express_id;
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 }

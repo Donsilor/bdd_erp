@@ -20,21 +20,32 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <div>
-                <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
-                <?= $form->field($model, 'express_man')->textInput(['maxlength' => true]); ?>
-                <?= $form->field($model, 'express_phone')->textInput(['maxlength' => true]); ?>
+        <div class="row">
+            <?= $form->field($model, 'express_id')->hiddenInput()->label(false); ?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'delivery_area')->textInput(['maxlength' => true]); ?>
             </div>
-            <!--<?= $form->field($model, 'code')->textInput(); ?>-->
-            <?= $form->field($model, 'cover')->widget(common\widgets\webuploader\Files::class, [
-                'config' => [
-                    'pick' => [
-                        'multiple' => false,
-                    ],
-                ]
-            ]); ?>
-            <?= $form->field($model, 'sort')->textInput(); ?>
-            <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'delivery_time')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'first_price')->textInput(['maxlength' => true]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'supply_price')->textInput(['maxlength' => true]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'is_holidays')->radioList(\common\enums\ConfirmEnum::getMap())?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'status')->radioList(\common\enums\StatusEnum::getMap())?>
+            </div>
+        </div>
+        <?= $form->field($model, 'remark')->textarea(); ?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
