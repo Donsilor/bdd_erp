@@ -47,10 +47,13 @@ $form = ActiveForm::begin([
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'stone_carat')->textInput() ?>
+            </div>
+            <div class="col-lg-3">
                 <?= $form->field($model, 'color_scope')->textInput() ?>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <?= $form->field($model, 'clarity_scope')->textInput() ?>
             </div>
         </div>
