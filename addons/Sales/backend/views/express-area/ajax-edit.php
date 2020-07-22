@@ -20,7 +20,11 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
+            <div>
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
+                <?= $form->field($model, 'express_man')->textInput(['maxlength' => true]); ?>
+                <?= $form->field($model, 'express_phone')->textInput(['maxlength' => true]); ?>
+            </div>
             <!--<?= $form->field($model, 'code')->textInput(); ?>-->
             <?= $form->field($model, 'cover')->widget(common\widgets\webuploader\Files::class, [
                 'config' => [

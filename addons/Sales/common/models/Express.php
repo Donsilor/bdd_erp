@@ -49,6 +49,7 @@ class Express extends BaseModel
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['settlement_way', 'settlement_period', 'delivery_scope', 'receive_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['code'], 'string', 'max' => 25],
             [['cover', 'settlement_account'], 'string', 'max' => 100],
@@ -84,7 +85,7 @@ class Express extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用',
+            'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
