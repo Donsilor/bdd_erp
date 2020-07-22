@@ -165,8 +165,8 @@ class PurchaseStoneGoodsController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();
             
             $purchase = PurchaseStone::find()->where(['id'=>$purchase_id])->one();
-            if($purchase->audit_status != AuditStatusEnum::PENDING) {
-                throw new \Exception("采购单已审核,不允许删除",422);
+            if($purchase->audit_status != AuditStatusEnum::SAVE) {
+                throw new \Exception("采购单不是保存状态,不允许删除",422);
             }
             
             $model = $this->findModel($id);            
