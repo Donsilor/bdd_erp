@@ -4,8 +4,10 @@ namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderForm;
+use addons\Sales\common\forms\OrderGoodsForm;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
+use common\helpers\ArrayHelper;
 use Yii;
 use common\traits\Curd;
 use addons\Sales\common\models\Order;
@@ -135,7 +137,7 @@ class OrderController extends BaseController
         $dataProvider = null;
         if (!is_null($id)) {
             $searchModel = new SearchModel([
-                    'model' => OrderGoods::class,
+                    'model' => OrderGoodsForm::class,
                     'scenario' => 'default',
                     'partialMatchAttributes' => [], // 模糊查询
                     'defaultOrder' => [
@@ -149,6 +151,12 @@ class OrderController extends BaseController
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
             
             $dataProvider->setSort(false);
+            //商品属性
+            $models = $dataProvider->models;
+            foreach ($models as & $goods){
+                $attrs = $goods->attrs ?? [];
+                $goods['attr'] = ArrayHelper::map($attrs,'attr_id','attr_value');
+            }
         }
         return $this->render($this->action->id, [
                 'model' => $model,

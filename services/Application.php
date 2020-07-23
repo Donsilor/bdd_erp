@@ -52,6 +52,7 @@ use common\components\Service;
  * @property \services\common\ProvincesService $provinces ip黑名单省市区
  * @property \services\common\CountryService $country 国家地区
  * @property \services\common\IpBlacklistService $ipBlacklist ip黑名单
+ * @property \services\common\DepartmentService $department 部门
  * @property \services\rbac\AuthItemService $rbacAuthItem 权限
  * @property \services\rbac\AuthItemChildService $rbacAuthItemChild 授权的权限
  * @property \services\rbac\AuthRoleService $rbacAuthRole 角色
@@ -142,6 +143,7 @@ class Application extends Service
             'class' => 'services\common\MailerService',
             'queueSwitch' => false, // 是否丢进队列
         ],
+        'department' => 'services\common\DepartmentService',
         /** ------ rbac ------ **/
         'rbacAuthItem' => 'services\rbac\AuthItemService',
         'rbacAuthItemChild' => 'services\rbac\AuthItemChildService',

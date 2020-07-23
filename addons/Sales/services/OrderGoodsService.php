@@ -6,6 +6,7 @@ use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\Diamond;
+use addons\Supply\common\enums\BuChanEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\components\Service;
@@ -74,6 +75,7 @@ class OrderGoodsService extends Service
             }
 
             //订单明细
+            $model->bc_status = BuChanEnum::NO_PRODUCTION;
             $model->is_stock = IsStockEnum::YES; //现货
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
