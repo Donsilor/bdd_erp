@@ -21,7 +21,7 @@ class CustomerForm extends Customer
             //[['firstname', 'lastname', 'mobile'], 'required'],
             ['mobile', 'filter', 'filter' => 'trim'],
             //['mobile', 'match', 'pattern'=>'/^[1][34578][0-9]{9}$/'],
-            ['email', 'email'],
+            [['email', 'invoice_email'], 'email'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
