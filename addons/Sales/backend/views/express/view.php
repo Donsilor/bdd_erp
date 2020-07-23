@@ -47,14 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('settlement_way') ?>：</td>
                                      <td><?= $model->settlement_way??""?></td>
                                  </tr>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-xs-6" style="padding: 0px;">
-                     <div class="box" style="margin-bottom: 0px;">
-                         <div class="box-body table-responsive" >
-                             <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('settlement_period') ?>：</td>
                                      <td><?= $model->settlement_period??"" ?></td>
@@ -67,15 +59,50 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('delivery_scope') ?>：</td>
                                      <td><?= $model->delivery_scope??""?></td>
                                  </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-xs-6" style="padding: 0px;">
+                     <div class="box" style="margin-bottom: 0px;">
+                         <div class="box-body table-responsive" >
+                             <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receive_time') ?>：</td>
                                      <td><?= $model->receive_time ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                                     <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                     <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                                     <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                     <td><?= $model->audit_remark ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sort') ?>：</td>
+                                     <td><?= $model->sort ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                                      <td><?= $model->remark ?></td>
                                  </tr>
-                                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                              </table>
                          </div>
                      </div>

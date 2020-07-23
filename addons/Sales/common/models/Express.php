@@ -3,6 +3,7 @@
 namespace addons\Sales\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "sales_express".
@@ -149,6 +150,23 @@ class Express extends BaseModel
      */
     public function getMember()
     {
-        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('member');
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }
