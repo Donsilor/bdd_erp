@@ -22,6 +22,7 @@ use common\models\backend\Member;
  * @property string $delivery_scope 配送范围
  * @property string $receive_time 收件时间
  * @property int $stop_receive_time 暂停收件时间
+ * @property string $stop_receive_area 暂停配送区域
  * @property int $start_receive_time 恢复收件时间
  * @property string $pact_file 合同文件
  * @property string $cert_file 资质文件
@@ -58,7 +59,7 @@ class Express extends BaseModel
             [['cover', 'settlement_account', 'receive_time'], 'string', 'max' => 100],
             [['name'], 'string', 'max' => 50],
             [['express_man', 'express_phone', 'company_man', 'company_phone'], 'string', 'max' => 30],
-            [['pact_file', 'cert_file', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['stop_receive_area', 'pact_file', 'cert_file', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['settlement_way'], 'parseSettlementWay'],
             [['settlement_period'], 'parseSettlementPeriod'],
             [['delivery_scope'], 'parseDeliveryScope'],
@@ -86,6 +87,7 @@ class Express extends BaseModel
             'delivery_scope' => '配送范围',
             'receive_time' => '收件时间',
             'stop_receive_time' => '暂停收件时间',
+            'stop_receive_area' => '暂停配送区域',
             'start_receive_time' => '恢复收件时间',
             'pact_file' => '合同文件',
             'cert_file' => '资质文件',

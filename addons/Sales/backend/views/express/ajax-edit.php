@@ -91,7 +91,14 @@ $form = ActiveForm::begin([
                 ]);?>
             </div>
         </div>
-        <?= $form->field($model, 'remark')->textarea(); ?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'stop_receive_area')->textarea(); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'remark')->textarea(); ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <?= $form->field($model, 'cover')->widget(common\widgets\webuploader\Files::class, [
