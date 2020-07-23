@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header"><?php echo $this->title;?></h2>
-      <?php $tab_list = [0=>'全部',1=>'基本信息',2=>'联系方式',3=>'客户地址'];?>
+      <?php $tab_list = [0=>'全部',1=>'基本信息',2=>'联系方式',3=>'客户地址',4=>'发票信息'];?>
      <?php echo Html::tab($tab_list,0,'tab')?>
      <div class="tab-content">
            <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
@@ -172,6 +172,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
               <!-- ./box-body -->
           </div>
+         <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_4">
+             <ul class="nav nav-tabs pull-right">
+                 <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[4]??''?></li>
+             </ul>
+             <div class="box-body col-lg-12" style="padding-left:30px">
+                 <div class="row">
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'is_invoice')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_type')->radioList(\addons\Sales\common\enums\InvoiceTypeEnum::getMap()) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_title_type')->radioList(\addons\Sales\common\enums\InvoiceTitleTypeEnum::getMap()) ?>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_tax')->textInput(['maxlength' => true]) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_email')->textInput(['maxlength' => true]) ?>
+                     </div>
+                 </div>
+             </div>
+             <!-- ./box-body -->
+         </div>
       <!-- ./row -->
     </div>
     <div class="modal-footer">

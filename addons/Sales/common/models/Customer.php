@@ -29,10 +29,16 @@ use Yii;
  * @property int $city_id 城市
  * @property int $area_id 地区
  * @property string $address 详细地址
- * @property int $age 客户年龄
+ * @property int $age 年龄
  * @property int $level 客户等级
  * @property string $language 语言
  * @property string $currency 货币
+ * @property int $is_invoice 是否默认开发票
+ * @property int $invoice_type 发票类型
+ * @property string $invoice_title 发票抬头
+ * @property int $invoice_title_type 抬头类型
+ * @property string $invoice_tax 发票税务号
+ * @property string $invoice_email 接收发票邮箱
  * @property string $remark 备注
  * @property int $status 状态[-1:删除;0:禁用;1启用]
  * @property int $created_at 创建时间
@@ -54,13 +60,13 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['firstname', 'lastname'], 'string', 'max' => 100],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['firstname', 'lastname', 'invoice_title'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
-            [['head_portrait', 'google_account', 'facebook_account', 'email'], 'string', 'max' => 150],
-            [['language', 'currency'], 'string', 'max' => 10],
+            [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
-            [['address', 'remark'], 'string', 'max' => 255],
+            [['address', 'invoice_tax', 'remark'], 'string', 'max' => 255],
+            [['language', 'currency'], 'string', 'max' => 10],
             [['birthday'], 'safe'],
         ];
     }
@@ -97,6 +103,12 @@ class Customer extends BaseModel
             'level' => '客户等级',
             'language' => '语言',
             'currency' => '货币',
+            'is_invoice' => '是否默认开发票',
+            'invoice_type' => '发票类型',
+            'invoice_title' => '发票抬头',
+            'invoice_title_type' => '抬头类型',
+            'invoice_tax' => '发票税务号',
+            'invoice_email' => '接收发票邮箱',
             'remark' => '备注',
             'status' => '状态',
             'created_at' => '创建时间',
