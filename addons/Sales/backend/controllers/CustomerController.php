@@ -104,12 +104,11 @@ class CustomerController extends BaseController
      * 编辑客户
      *
      * @return mixed
+     * @throws
      */
     public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-
         $model = $this->findModel($id);
         $model = $model ?? new CustomerForm();
 
@@ -129,14 +128,10 @@ class CustomerController extends BaseController
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                //$error = $e->getMessage();
-                //\Yii::error($error);
                 return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
-
             return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }
-
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
