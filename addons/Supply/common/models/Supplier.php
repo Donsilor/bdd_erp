@@ -3,6 +3,7 @@
 namespace addons\Supply\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "supply_supplier".
@@ -38,6 +39,7 @@ use Yii;
  * @property string $remark 供应商备注
  * @property int $sort 排序
  * @property int $status 状态 1启用 0禁用 -1 删除
+ * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -57,7 +59,7 @@ class Supplier extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_name','supplier_tag'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
@@ -107,6 +109,7 @@ class Supplier extends BaseModel
             'remark' => '供应商备注',
             'sort' => '排序',
             'status' => '状态',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
@@ -132,5 +135,22 @@ class Supplier extends BaseModel
             $this->pay_type = ','.implode(',',$this->pay_type).',';
         }
         return $this->pay_type;
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }

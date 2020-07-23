@@ -50,7 +50,11 @@ class SupplierController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'creator' => ['username'],
+                'auditor' => ['username'],
+            ]
         ]);
 
         $dataProvider = $searchModel
@@ -90,6 +94,9 @@ class SupplierController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                if($model->isNewRecord){
+                    $model->creator_id = \Yii::$app->user->id;
+                }
                 $model->status = StatusEnum::DISABLED;
                 $model->supplier_code = StringHelper::getFirstCode($model->supplier_name);
                 if(false === $model->save()){
