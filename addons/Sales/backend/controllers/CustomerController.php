@@ -80,7 +80,7 @@ class CustomerController extends BaseController
                 }
                 $trans->commit();
                 return $isNewRecord
-                    ? $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success')
+                    ? $this->message("保存成功", $this->redirect(['edit', 'id' => $model->id]), 'success')
                     : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
 
             }catch (\Exception $e) {

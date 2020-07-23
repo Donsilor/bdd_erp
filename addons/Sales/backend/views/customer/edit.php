@@ -50,6 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-3">
                             <?= $form->field($model, 'marriage')->radioList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
                         </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'level')->radioList(\addons\Sales\common\enums\LevelEnum::getMap()) ?>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
@@ -83,6 +86,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'todayBtn' => true,//今日按钮显示
                                 ]
                             ]);?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'language')->widget(\kartik\select2\Select2::class, [
+                                'data' => \common\enums\LanguageEnum::getMap(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'currency')->widget(\kartik\select2\Select2::class, [
+                                'data' => \common\enums\CurrencyEnum::getMap(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'remark')->textarea(['maxlength' => true]) ?>
                         </div>
                     </div>
                 </div>

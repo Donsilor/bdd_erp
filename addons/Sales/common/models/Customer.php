@@ -3,7 +3,6 @@
 namespace addons\Sales\common\models;
 
 use Yii;
-use common\helpers\RegularHelper;
 
 /**
  * This is the model class for table "sales_customer".
@@ -13,6 +12,7 @@ use common\helpers\RegularHelper;
  * @property string $firstname 名
  * @property string $lastname 姓
  * @property string $realname 真实姓名
+ * @property int $channel_id 归属渠道
  * @property int $source_id 客户来源
  * @property string $head_portrait 头像
  * @property int $gender 性别[0:未知;1:男;2:女]
@@ -29,6 +29,10 @@ use common\helpers\RegularHelper;
  * @property int $city_id 城市
  * @property int $area_id 地区
  * @property string $address 详细地址
+ * @property int $level 客户等级
+ * @property string $language 语言
+ * @property string $currency 货币
+ * @property string $remark 备注
  * @property int $status 状态[-1:删除;0:禁用;1启用]
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
@@ -49,13 +53,14 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['birthday'], 'safe'],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'level', 'status', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email'], 'string', 'max' => 150],
+            [['language', 'currency'], 'string', 'max' => 10],
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
-            [['address'], 'string', 'max' => 255],
+            [['address', 'remark'], 'string', 'max' => 255],
+            [['birthday'], 'safe'],
         ];
     }
 
@@ -66,11 +71,11 @@ class Customer extends BaseModel
     {
         return [
             'id' => 'ID',
-            'merchant_id' => '商户',
+            'merchant_id' => '商户id',
             'firstname' => '名',
             'lastname' => '姓',
             'realname' => '真实姓名',
-            'channel_id' => '销售渠道',
+            'channel_id' => '归属渠道',
             'source_id' => '客户来源',
             'head_portrait' => '头像',
             'gender' => '性别',
@@ -84,9 +89,13 @@ class Customer extends BaseModel
             'home_phone' => '家庭号码',
             'country_id' => '所属国家',
             'province_id' => '省',
-            'city_id' => '城市/地区',
+            'city_id' => '城市',
             'area_id' => '地区',
             'address' => '详细地址',
+            'level' => '客户等级',
+            'language' => '语言',
+            'currency' => '货币',
+            'remark' => '备注',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
