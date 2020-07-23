@@ -148,6 +148,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-target' => '#ajaxModal',
                     ]);
                 }
+                echo '&nbsp;';
+                echo Html::a('返回列表', ['index'], ['class' => 'btn btn-default btn-sm']);
             ?>
         </div>
     </div>
