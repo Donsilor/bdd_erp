@@ -36,6 +36,7 @@ use Yii;
  * @property int $is_invoice 是否默认开发票
  * @property int $invoice_type 发票类型
  * @property string $invoice_title 发票抬头
+ * @property int $invoice_title_type 抬头类型
  * @property string $invoice_tax 发票税务号
  * @property string $invoice_email 接收发票邮箱
  * @property string $remark 备注
@@ -59,7 +60,7 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'invoice_title'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
@@ -105,6 +106,7 @@ class Customer extends BaseModel
             'is_invoice' => '是否默认开发票',
             'invoice_type' => '发票类型',
             'invoice_title' => '发票抬头',
+            'invoice_title_type' => '抬头类型',
             'invoice_tax' => '发票税务号',
             'invoice_email' => '接收发票邮箱',
             'remark' => '备注',
