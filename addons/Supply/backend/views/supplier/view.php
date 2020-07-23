@@ -14,9 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">供应商详情 - <?php echo $model->supplier_name?> - <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></h2>
+    <h2 class="page-header"><?= $this->title ?> - <?= $model->supplier_name?> - <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-
     <div class="row">
          <div class="col-xs-12">
              <div class="box">
@@ -35,6 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_tag') ?>：</td>
                                      <td><?= $model->supplier_tag ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
+                                     <td><?= $model->pay_type ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('balance_type') ?>：</td>
@@ -73,6 +76,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('business_address') ?>：</td>
                                      <td><?= $model->business_address ?></td>
                                  </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
+                                     <td><?= $model->address ?></td>
+                                 </tr>
 
                              </table>
                          </div>
@@ -108,19 +115,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->bdd_telephone ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
-                                     <td><?= $model->address ?></td>
-                                 </tr>
-                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                                      <td><?= $model->remark ?></td>
                                  </tr>
-
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
-                                     <td><?= $model->pay_type ?></td>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                                     <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                                  </tr>
-                                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                     <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                                     <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                     <td><?= $model->audit_remark ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                                 </tr>
                              </table>
                          </div>
                      </div>

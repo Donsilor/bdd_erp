@@ -43,6 +43,8 @@ class ExpressController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'member' => ['username'],
+                'creator' => ['username'],
+                'auditor' => ['username'],
             ]
         ]);
 
@@ -123,7 +125,7 @@ class ExpressController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws 
+     * @throws
      */
     public function actionView()
     {
@@ -132,6 +134,33 @@ class ExpressController extends BaseController
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
         $model = $this->findModel($id);
         $model = $model ?? new ExpressForm();
+        if($model->settlement_way){
+            $arr = explode(',', $model->settlement_way);
+            $arr = array_filter($arr);
+            $str = '';
+            foreach ($arr as $val){
+                $str .= ','. \addons\Sales\common\enums\SettlementWayEnum::getValue($val);
+            }
+            $model->settlement_way = trim( $str,',' );
+        }
+        if($model->settlement_period){
+            $arr = explode(',', $model->settlement_period);
+            $arr = array_filter($arr);
+            $str = '';
+            foreach ($arr as $val){
+                $str .= ','. \addons\Sales\common\enums\SettlementPeriodEnum::getValue($val);
+            }
+            $model->settlement_period = trim( $str,',' );
+        }
+        if($model->delivery_scope){
+            $arr = explode(',', $model->delivery_scope);
+            $arr = array_filter($arr);
+            $str = '';
+            foreach ($arr as $val){
+                $str .= ','. \addons\Sales\common\enums\DeliveryScopeEnum::getValue($val);
+            }
+            $model->delivery_scope = trim( $str,',' );
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,

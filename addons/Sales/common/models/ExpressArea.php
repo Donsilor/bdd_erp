@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $express_id 快递ID
+ * @property string $express_name 快递名称
  * @property string $delivery_area 配送区域
  * @property string $delivery_time 配送时长
  * @property string $first_price 首重价格
@@ -43,9 +44,10 @@ class ExpressArea extends BaseModel
     public function rules()
     {
         return [
-            [['express_id'], 'required'],
+            [['delivery_area'], 'required'],
             [['express_id', 'is_holidays', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['first_price', 'supply_price', 'last_first_price', 'last_supply_price'], 'number'],
+            [['express_name'], 'string', 'max' => 30],
             [['delivery_area'], 'string', 'max' => 160],
             [['delivery_time'], 'string', 'max' => 20],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
@@ -60,6 +62,7 @@ class ExpressArea extends BaseModel
         return [
             'id' => 'ID',
             'express_id' => '快递ID',
+            'express_name' => '快递名称',
             'delivery_area' => '配送区域',
             'delivery_time' => '配送时长',
             'first_price' => '首重价格',
@@ -72,12 +75,35 @@ class ExpressArea extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用',
+            'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId();
+        }
+
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * 关联管理员一对一
+     * @return
+     */
+    public function getMember()
+    {
+        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
     }
 
     /**

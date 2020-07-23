@@ -40,18 +40,21 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]); ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'settlement_way')->dropDownList(\addons\Sales\common\enums\SettlementWayEnum::getMap(),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'settlement_account')->textInput(['maxlength' => true]); ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <?= $form->field($model, 'settlement_period')->dropDownList(\addons\Sales\common\enums\SettlementPeriodEnum::getMap(),['prompt'=>'请选择']);?>
+                <?php $model->settlement_way = !empty($model->settlement_way)?array_filter(explode(',', $model->settlement_way)):null;?>
+                <?= $form->field($model, 'settlement_way')->checkboxList(\addons\Sales\common\enums\SettlementWayEnum::getMap())?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'settlement_account')->textInput(['maxlength' => true]); ?>
+                <?php $model->settlement_period = !empty($model->settlement_period)?array_filter(explode(',', $model->settlement_period)):null;?>
+                <?= $form->field($model, 'settlement_period')->checkboxList(\addons\Sales\common\enums\SettlementPeriodEnum::getMap())?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'delivery_scope')->dropDownList(\addons\Sales\common\enums\DeliveryScopeEnum::getMap(),['prompt'=>'请选择']);?>
+                <?php $model->delivery_scope = !empty($model->delivery_scope)?array_filter(explode(',', $model->delivery_scope)):null;?>
+                <?= $form->field($model, 'delivery_scope')->checkboxList(\addons\Sales\common\enums\DeliveryScopeEnum::getMap())?>
             </div>
         </div>
         <div class="row">
