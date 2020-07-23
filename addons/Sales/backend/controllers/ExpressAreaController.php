@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use common\helpers\ResultHelper;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -78,28 +79,25 @@ class ExpressAreaController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
-        $express_id = Yii::$app->request->get('express_id');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        $id = \Yii::$app->request->get('id');
+        $express_id = \Yii::$app->request->get('express_id');
 
         $model = $this->findModel($id);
         $model = $model ?? new ExpressAreaForm();
-
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(\Yii::$app->request->post())) {
             try{
-                $trans = Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->db->beginTransaction();
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
-                $error = $e->getMessage();
-                \Yii::error($error);
-                return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            \Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(\Yii::$app->request->referrer);
         }
         $model->express_id = $express_id;
         return $this->renderAjax($this->action->id, [

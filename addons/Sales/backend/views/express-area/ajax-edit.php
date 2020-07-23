@@ -21,7 +21,9 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <div class="row">
-            <?= $form->field($model, 'express_id')->hiddenInput()->label(false); ?>
+            <?php if($model->isNewRecord){?>
+                <?= $form->field($model, 'express_id')->hiddenInput()->label(false); ?>
+            <?php }?>
             <div class="col-lg-6">
                 <?= $form->field($model, 'delivery_area')->textInput(['maxlength' => true]); ?>
             </div>
@@ -46,6 +48,8 @@ $form = ActiveForm::begin([
             </div>
         </div>
         <?= $form->field($model, 'remark')->textarea(); ?>
+        <?= $form->field($model, 'last_first_price')->hiddenInput(['value'=>$model->first_price??0])->label(false); ?>
+        <?= $form->field($model, 'last_supply_price')->hiddenInput(['value'=>$model->supply_price??0])->label(false); ?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

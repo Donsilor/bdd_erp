@@ -47,8 +47,8 @@ class ExpressArea extends BaseModel
             [['delivery_area'], 'required'],
             [['express_id', 'is_holidays', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['first_price', 'supply_price', 'last_first_price', 'last_supply_price'], 'number'],
-            [['delivery_area'], 'string', 'max' => 160],
             [['express_name'], 'string', 'max' => 30],
+            [['delivery_area'], 'string', 'max' => 160],
             [['delivery_time'], 'string', 'max' => 20],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
         ];

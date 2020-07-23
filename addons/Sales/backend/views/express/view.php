@@ -102,11 +102,14 @@ $this->params['breadcrumbs'][] = $this->title;
          </div>
         <div class="box-footer text-center">
             <?php
+                echo Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                    'data-toggle' => 'modal',
+                    'data-target' => '#ajaxModalLg',
+                ]);
                 if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
-                    echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                        'class'=>'btn btn-success btn-sm',
+                        'class'=>'btn btn-info btn-sm',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                     ]);
                 }
