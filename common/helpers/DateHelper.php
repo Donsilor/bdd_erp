@@ -240,13 +240,13 @@ class DateHelper
      */
     public static function getYearByDate($date)
     {
-        $year = strtotime($date);
+        $time = strtotime($date);
 
-        if($year === false)
+        if($time === false)
         {
             return "";
         }
-        list($y1,$m1,$d1) = explode("-",date("Y-m-d",$year));
+        list($y1,$m1,$d1) = explode("-",date("Y-m-d",$time));
         $now = strtotime("now");
         list($y2,$m2,$d2) = explode("-",date("Y-m-d",$now));
         $year = $y2 - $y1;
