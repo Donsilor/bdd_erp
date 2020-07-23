@@ -50,6 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= common\enums\GenderEnum::getValue($model->gender) ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('age') ?>：</td>
+                                     <td><?= $model->age ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('marriage') ?>：</td>
                                      <td><?= \addons\Sales\common\enums\MarriageEnum::getValue($model->marriage) ?></td>
                                  </tr>
@@ -65,10 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('home_phone') ?>：</td>
                                      <td><?= $model->home_phone ?></td>
                                  </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
-                                     <td><?= $model->qq ?></td>
-                                 </tr>
                              </table>
                          </div>
                      </div>
@@ -78,6 +78,10 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box" style="margin-bottom: 0px;">
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
+                                     <td><?= $model->qq ?></td>
+                                 </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('email') ?>：</td>
                                      <td><?= $model->email ?></td>
@@ -109,10 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('city_id') ?>：</td>
                                      <td><?= $model->city->title ?? "" ?></td>
-                                 </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('area_id') ?>：</td>
-                                     <td><?= $model->area_id ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
