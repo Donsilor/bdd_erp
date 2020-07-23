@@ -5,14 +5,14 @@ namespace addons\Sales\common\enums;
 use common\enums\BaseEnum;
 
 /**
- * Class InvoiceTypeEnum
+ * Class InvoiceTitleTypeEnum
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
-class InvoiceTypeEnum extends BaseEnum
+class InvoiceTitleTypeEnum extends BaseEnum
 {
-    const PAPER = 1;
-    const ELECTRONIC = 2;
+    const ENTERPRISE = 1;
+    const PERSONAL = 2;
 
     /**
      * @return array
@@ -20,8 +20,8 @@ class InvoiceTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::PAPER => '纸质发票',
-            self::ELECTRONIC => '电子发票',
+            self::ENTERPRISE => '企业',
+            self::PERSONAL => '个人或事业单位',
         ];
     }
 }

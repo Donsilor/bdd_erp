@@ -527,7 +527,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                     	<tr>
-                    		<td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
+                    		<td><?= addons\Sales\common\enums\InvoiceTitleTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                         	<td><?= $model->invoice->invoice_title ??''?></td>
                         	<td><?= $model->invoice->tax_number ??''?></td>
                         	<td><?= addons\Sales\common\enums\InvoiceElectronicEnum::getValue($model->invoice->is_electronic ??'') ?></td>
