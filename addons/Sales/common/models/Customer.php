@@ -29,6 +29,7 @@ use Yii;
  * @property int $city_id 城市
  * @property int $area_id 地区
  * @property string $address 详细地址
+ * @property int $age 客户年龄
  * @property int $level 客户等级
  * @property string $language 语言
  * @property string $currency 货币
@@ -53,7 +54,7 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'level', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'status', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email'], 'string', 'max' => 150],
@@ -92,6 +93,7 @@ class Customer extends BaseModel
             'city_id' => '城市',
             'area_id' => '地区',
             'address' => '详细地址',
+            'age' => '客户年龄',
             'level' => '客户等级',
             'language' => '语言',
             'currency' => '货币',
