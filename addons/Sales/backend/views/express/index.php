@@ -94,27 +94,33 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'settlement_way',
-                            'value' => function ($model){
-                                return \addons\Sales\common\enums\SettlementWayEnum::getValue($model->settlement_way);
+                            'value' => function($model){
+                                if($model->settlement_way){
+                                    $key = explode(',', $model->settlement_way);
+                                    $key = array_filter($key);
+                                    $value = \addons\Sales\common\enums\SettlementWayEnum::getValues($key);
+                                    return implode(",",$value);
+                                }else{
+                                    return '';
+                                }
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'settlement_way',\addons\Sales\common\enums\SettlementWayEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' =>'width:80px'
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'attribute' => 'delivery_scope',
-                            'value' => function ($model){
-                                return \addons\Sales\common\enums\DeliveryScopeEnum::getValue($model->delivery_scope);
+                            'value' => function($model){
+                                if($model->delivery_scope){
+                                    $key = explode(',', $model->delivery_scope);
+                                    $key = array_filter($key);
+                                    $value = \addons\Sales\common\enums\DeliveryScopeEnum::getValues($key);
+                                    return implode(",",$value);
+                                }else{
+                                    return '';
+                                }
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'delivery_scope',\addons\Sales\common\enums\DeliveryScopeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' =>'width:80px'
-                            ]),
+                            'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'100'],
                         ],

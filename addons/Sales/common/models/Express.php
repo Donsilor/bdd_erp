@@ -15,10 +15,10 @@ use Yii;
  * @property string $express_phone 快递联系人电话
  * @property string $company_man 公司联系人
  * @property string $company_phone 公司联系人电话
- * @property int $settlement_way 结算方式
- * @property int $settlement_period 结算周期
+ * @property string $settlement_way 结算方式
+ * @property string $settlement_period 结算周期
  * @property string $settlement_account 结算账户
- * @property int $delivery_scope 配送范围
+ * @property string $delivery_scope 配送范围
  * @property int $receive_time 收件时间
  * @property string $pact_file 合同文件
  * @property string $cert_file 资质文件
@@ -50,12 +50,15 @@ class Express extends BaseModel
     {
         return [
             [['name'], 'required'],
-            [['settlement_way', 'settlement_period', 'delivery_scope', 'receive_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['receive_time', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['code'], 'string', 'max' => 25],
             [['cover', 'settlement_account'], 'string', 'max' => 100],
             [['name'], 'string', 'max' => 50],
             [['express_man', 'express_phone', 'company_man', 'company_phone'], 'string', 'max' => 30],
             [['pact_file', 'cert_file', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['settlement_way'], 'parseSettlementWay'],
+            [['settlement_period'], 'parseSettlementPeriod'],
+            [['delivery_scope'], 'parseDeliveryScope'],
         ];
     }
 
@@ -105,6 +108,39 @@ class Express extends BaseModel
         }
 
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * 结算方式
+     */
+    public function parseSettlementWay()
+    {
+        if(is_array($this->settlement_way)){
+            $this->settlement_way = ','.implode(',',$this->settlement_way).',';
+        }
+        return $this->settlement_way;
+    }
+
+    /**
+     * 结算周期
+     */
+    public function parseSettlementPeriod()
+    {
+        if(is_array($this->settlement_period)){
+            $this->settlement_period = ','.implode(',',$this->settlement_period).',';
+        }
+        return $this->settlement_period;
+    }
+
+    /**
+     * 配送范围
+     */
+    public function parseDeliveryScope()
+    {
+        if(is_array($this->delivery_scope)){
+            $this->delivery_scope = ','.implode(',',$this->delivery_scope).',';
+        }
+        return $this->delivery_scope;
     }
 
     /**

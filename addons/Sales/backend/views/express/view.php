@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('settlement_way') ?>：</td>
-                                     <td><?= \addons\Sales\common\enums\SettlementWayEnum::getValue($model->settlement_way) ?></td>
+                                     <td><?= $model->settlement_way??""?></td>
                                  </tr>
                              </table>
                          </div>
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('settlement_period') ?>：</td>
-                                     <td><?= \addons\Sales\common\enums\SettlementPeriodEnum::getValue($model->settlement_period) ?></td>
+                                     <td><?= $model->settlement_period??"" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('settlement_account') ?>：</td>
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('delivery_scope') ?>：</td>
-                                     <td><?= \addons\Sales\common\enums\DeliveryScopeEnum::getValue($model->delivery_scope) ?></td>
+                                     <td><?= $model->delivery_scope??""?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receive_time') ?>：</td>
