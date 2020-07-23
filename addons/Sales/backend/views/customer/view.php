@@ -69,15 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('home_phone') ?>：</td>
                                      <td><?= $model->home_phone ?></td>
                                  </tr>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-
-                 <div class="col-xs-6" style="padding: 0px;">
-                     <div class="box" style="margin-bottom: 0px;">
-                         <div class="box-body table-responsive" >
-                             <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
                                      <td><?= $model->qq ?></td>
@@ -90,6 +81,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
                                      <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
                                  </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+
+                 <div class="col-xs-6" style="padding: 0px;">
+                     <div class="box" style="margin-bottom: 0px;">
+                         <div class="box-body table-responsive" >
+                             <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('currency') ?>：</td>
                                      <td><?= \common\enums\CurrencyEnum::getValue($model->currency) ?></td>
@@ -100,6 +100,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('facebook_account') ?>：</td>
+                                     <td><?= $model->facebook_account ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('is_invoice') ?>：</td>
+                                     <td><?= \common\enums\ConfirmEnum::getValue($model->is_invoice) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_type') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice_type) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_title_type') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\InvoiceTitleTypeEnum::getValue($model->invoice_title_type) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_title') ?>：</td>
+                                     <td><?= $model->invoice_title ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_tax') ?>：</td>
+                                     <td><?= $model->invoice_tax ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_email') ?>：</td>
                                      <td><?= $model->facebook_account ?></td>
                                  </tr>
                                  <tr>

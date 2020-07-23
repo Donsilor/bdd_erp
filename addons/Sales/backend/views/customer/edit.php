@@ -185,13 +185,16 @@ $this->params['breadcrumbs'][] = $this->title;
                          <?= $form->field($model, 'invoice_type')->radioList(\addons\Sales\common\enums\InvoiceTypeEnum::getMap()) ?>
                      </div>
                      <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_title_type')->radioList(\addons\Sales\common\enums\InvoiceTitleTypeEnum::getMap()) ?>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-lg-3">
                          <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>
                      </div>
                      <div class="col-lg-3">
                          <?= $form->field($model, 'invoice_tax')->textInput(['maxlength' => true]) ?>
                      </div>
-                 </div>
-                 <div class="row">
                      <div class="col-lg-3">
                          <?= $form->field($model, 'invoice_email')->textInput(['maxlength' => true]) ?>
                      </div>
