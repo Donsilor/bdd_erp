@@ -210,16 +210,19 @@ class DateHelper
     }
 
     /**
-     * 求取从某日起经过一定天数后的日期,
-     * 排除周日
-     * @param $start       开始日期
-     * @param $offset      经过天数
-     * @return
-     *  examples:输入(2010-06-25,5),得到2010-07-02
+     * 求取从某日起经过一定天数后的日期,排除周日
+     *
+     * @param string $start
+     * @param int $offset
+     * @return string
+     *  examples:输入(2020-06-25,5),得到2020-07-02
      */
-    public static function getEndDay( $start='now', $offset=0){
-        $tmptime = $start + 24*3600;
-        while( $offset > 0 ){
+    public static function getEndDay( $start = 'now', $offset = 0)
+    {
+        $tmptime = bcadd($start, 24*3600);
+
+        while( $offset > 0 )
+        {
             $weekday = date('w', $tmptime);
             if($weekday != 0){//不是周末
                 $offset--;
@@ -227,5 +230,28 @@ class DateHelper
             $tmptime += 24*3600;
         }
         return $tmptime;
+    }
+
+    /**
+     * 根据日期计算年
+     *
+     * @param string $date
+     * @return int
+     */
+    public static function getYearByDate($date)
+    {
+        $year = strtotime($date);
+
+        if($year === false)
+        {
+            return "";
+        }
+        list($y1,$m1,$d1) = explode("-",date("Y-m-d",$year));
+        $now = strtotime("now");
+        list($y2,$m2,$d2) = explode("-",date("Y-m-d",$now));
+        $year = $y2 - $y1;
+        if((int)($m2.$d2) < (int)($m1.$d1))
+            $year -= 1;
+        return $year??"";
     }
 }

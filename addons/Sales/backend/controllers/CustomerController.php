@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use common\helpers\DateHelper;
 use Yii;
 use common\helpers\Url;
 use common\helpers\ResultHelper;
@@ -64,28 +65,32 @@ class CustomerController extends BaseController
     /**
      * 创建客户
      * @return array|mixed
+     * @throws
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new CustomerForm();
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
             try{
-                $trans = Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
+                if($model->birthday && !$model->age){
+                    $model->age = DateHelper::getYearByDate($model->birthday);
+                }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
+                \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $isNewRecord
                     ? $this->message("保存成功", $this->redirect(['edit', 'id' => $model->id]), 'success')
-                    : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-
+                    : $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             }catch (\Exception $e) {
                 $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
 

@@ -88,6 +88,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);?>
                         </div>
                         <div class="col-lg-3">
+                            <?= $form->field($model, 'age')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
                             <?= $form->field($model, 'language')->widget(\kartik\select2\Select2::class, [
                                 'data' => \common\enums\LanguageEnum::getMap(),
                                 'options' => ['placeholder' => '请选择'],
@@ -96,8 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]);?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-3">
                             <?= $form->field($model, 'currency')->widget(\kartik\select2\Select2::class, [
                                 'data' => \common\enums\CurrencyEnum::getMap(),
