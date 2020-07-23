@@ -21,10 +21,6 @@ $form = ActiveForm::begin([
             	<div class="col-lg-12"><?= $form->field($model, 'realname')->textInput()?></div>
             </div>
            <div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'mobile')->textInput()?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'email')->textInput() ?></div>
-           </div>
-           <div class="row">
                <div class="col-lg-12">
                    <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
                        'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
@@ -36,15 +32,19 @@ $form = ActiveForm::begin([
                </div>
            </div>
            <div class="row">
-                <div class="col-lg-12">
-                    <?= $form->field($model, 'source_id')->widget(\kartik\select2\Select2::class, [
-                        'data' => \Yii::$app->salesService->sources->getDropDown(),
-                        'options' => ['placeholder' => '请选择'],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ]);?>
-                </div>
+                <div class="col-lg-6"><?= $form->field($model, 'mobile')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'email')->textInput() ?></div>
+           </div>
+           <div class="row">
+               <div class="col-lg-12">
+                   <?= $form->field($model, 'source_id')->widget(\kartik\select2\Select2::class, [
+                       'data' => \Yii::$app->salesService->sources->getDropDown(),
+                       'options' => ['placeholder' => '请选择'],
+                       'pluginOptions' => [
+                           'allowClear' => true
+                       ],
+                   ]);?>
+               </div>
            </div>
         </div>
     </div>

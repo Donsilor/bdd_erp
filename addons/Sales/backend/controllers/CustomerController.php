@@ -85,6 +85,7 @@ class CustomerController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->salesService->customer->createCustomerNo($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $isNewRecord
