@@ -329,6 +329,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value'=> function($model){
                                             $main_stone_weight =  $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? "无";
                                             $main_stone_num =  $model->attr[AttrIdEnum::MAIN_STONE_NUM] ?? "无";
+                                            $main_stone_weight = $main_stone_weight == '' ? "无" : $main_stone_weight;
+                                            $main_stone_num = $main_stone_num == '' ? "无" : $main_stone_num;
                                             return $main_stone_weight.'/'.$main_stone_num;
                                         },
 
@@ -352,6 +354,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value'=> function($model){
                                             $side_stone_weight =  $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? "无";
                                             $side_stone_num =  $model->attr[AttrIdEnum::SIDE_STONE1_NUM] ?? "无";
+                                            $side_stone_weight = $side_stone_weight == '' ? "无" : $side_stone_weight;
+                                            $side_stone_num = $side_stone_num == '' ? "无" : $side_stone_num;
                                             return $side_stone_weight.'/'.$side_stone_num;
                                         },
 
@@ -361,6 +365,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value'=> function($model){
                                             $side_stone_color =  $model->attr[AttrIdEnum::SIDE_STONE1_COLOR] ?? "无";
                                             $side_stone_clarity =  $model->attr[AttrIdEnum::SIDE_STONE1_CLARITY] ?? "无";
+                                            $side_stone_color = $side_stone_color == '' ? "无" : $side_stone_color;
+                                            $side_stone_clarity = $side_stone_clarity == '' ? "无" : $side_stone_clarity;
                                             return $side_stone_color.'/'.$side_stone_clarity;
                                         },
 

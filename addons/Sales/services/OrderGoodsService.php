@@ -294,6 +294,14 @@ class OrderGoodsService extends Service
 
     public function Attrs(){
         return [
+            'material_type' => [
+                'attr_id' => AttrIdEnum::MATERIAL_TYPE, //材质
+                'attr_type' => 2
+            ],
+            'material_color' =>[
+                'attr_id' => AttrIdEnum::MATERIAL_COLOR, //材质颜色
+                'attr_type' => 2
+            ],
             'gold_weight'=> [
                 'attr_id' => AttrIdEnum::JINZHONG, //金重
                 'attr_type' => 1,
@@ -306,22 +314,16 @@ class OrderGoodsService extends Service
                 'attr_id' => AttrIdEnum::PORT_NO, //港号（手寸）
                 'attr_type'=> 2
             ],
-            'material_type' => [
-                'attr_id' => AttrIdEnum::MATERIAL_TYPE, //材质
-                'attr_type' => 2
-            ],
-            'material_color' =>[
-                'attr_id' => AttrIdEnum::MATERIAL_COLOR, //材质颜色
-                'attr_type' => 2
-            ],
-            'xiangkou' => [
-                'attr_id' => AttrIdEnum::XIANGKOU, //镶口
-                'attr_type' => 2
-            ],
             'chain_long' => [
                 'attr_id' => AttrIdEnum::CHAIN_LENGTH, //链长
                 'attr_type' => 1
             ],
+
+            'xiangkou' => [
+                'attr_id' => AttrIdEnum::XIANGKOU, //镶口
+                'attr_type' => 2
+            ],
+
             'chain_type' => [
                 'attr_id' => AttrIdEnum::CHAIN_TYPE, //链类型
                 'attr_type' => 2
@@ -334,7 +336,26 @@ class OrderGoodsService extends Service
                 'attr_id' => AttrIdEnum::FACEWORK, //表面工艺
                 'attr_type' => 2
             ],
-
+            'main_stone_type' => [
+                'attr_id' => AttrIdEnum::MAIN_STONE_TYPE, //主石类型
+                'attr_type' => 2
+            ],
+            'diamond_shape' =>[
+                'attr_id' => AttrIdEnum::DIA_SHAPE, //钻石形状
+                'attr_type' => 2
+            ],
+            'diamond_carat' => [
+                'attr_id' => AttrIdEnum::DIA_CARAT, //钻石大小
+                'attr_type' => 1
+            ],
+            'main_stone_num' => [
+                'attr_id' => AttrIdEnum::MAIN_STONE_NUM, //主石数量
+                'attr_type' => 1
+            ],
+            'diamond_color' => [
+                'attr_id' => AttrIdEnum::DIA_COLOR, //钻石颜色
+                'attr_type' => 2
+            ],
             'diamond_clarity' => [
                 'attr_id' => AttrIdEnum::DIA_CLARITY, //钻石净度
                 'attr_type' => 2
@@ -343,16 +364,12 @@ class OrderGoodsService extends Service
                 'attr_id' => AttrIdEnum::DIA_CUT, //钻石切工,
                 'attr_type' => 2
             ],
-            'diamond_carat' => [
-                'attr_id' => AttrIdEnum::DIA_CARAT, //钻石大小
-                'attr_type' => 1
-            ],
-            'diamond_shape' =>[
-                'attr_id' => AttrIdEnum::DIA_SHAPE, //钻石形状
+            'diamond_polish' => [
+                'attr_id' => AttrIdEnum::DIA_POLISH, //钻石抛光
                 'attr_type' => 2
             ],
-            'diamond_color' => [
-                'attr_id' => AttrIdEnum::DIA_COLOR, //钻石颜色
+            'diamond_symmetry' => [
+                'attr_id' => AttrIdEnum::DIA_SYMMETRY, //钻石对称
                 'attr_type' => 2
             ],
             'diamond_fluorescence' => [
@@ -371,26 +388,7 @@ class OrderGoodsService extends Service
                 'attr_id' => AttrIdEnum::DIA_COLOUR, //钻石色彩
                 'attr_type' => 2
             ],
-            'diamond_polish' => [
-                'attr_id' => AttrIdEnum::DIA_POLISH, //钻石抛光
-                'attr_type' => 2
-            ],
-            'diamond_symmetry' => [
-                'attr_id' => AttrIdEnum::DIA_SYMMETRY, //钻石对称
-                'attr_type' => 2
-            ],
-            'main_stone_size' => [
-                'attr_id' =>  AttrIdEnum::DIA_SPEC, //钻石规格
-                'attr_type' => 1
-            ],
-            'main_stone_type' => [
-                'attr_id' => AttrIdEnum::MAIN_STONE_TYPE, //主石类型
-                'attr_type' => 2
-            ],
-            'main_stone_num' => [
-                'attr_id' => AttrIdEnum::MAIN_STONE_NUM, //主石数量
-                'attr_type' => 1
-            ],
+
 
             'second_stone_type1' => [
                 'attr_id' => AttrIdEnum::SIDE_STONE1_TYPE, //副石1类型
