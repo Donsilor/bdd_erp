@@ -54,12 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= \addons\Sales\common\enums\MarriageEnum::getValue($model->marriage) ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('level') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\LevelEnum::getValue($model->level) ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('mobile') ?>：</td>
                                      <td><?= $model->mobile ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('home_phone') ?>：</td>
                                      <td><?= $model->home_phone ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
+                                     <td><?= $model->qq ?></td>
                                  </tr>
                              </table>
                          </div>
@@ -75,8 +83,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->email ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
-                                     <td><?= $model->qq ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
+                                     <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('currency') ?>：</td>
+                                     <td><?= \common\enums\CurrencyEnum::getValue($model->currency) ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('google_account') ?>：</td>
@@ -105,6 +117,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
                                      <td><?= $model->address ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
                                  </tr>
                              </table>
                          </div>

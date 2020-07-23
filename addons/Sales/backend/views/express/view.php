@@ -59,6 +59,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('delivery_scope') ?>：</td>
                                      <td><?= $model->delivery_scope??""?></td>
                                  </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receive_time') ?>：</td>
+                                     <td><?= $model->receive_time ?></td>
+                                 </tr>
                              </table>
                          </div>
                      </div>
@@ -68,8 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receive_time') ?>：</td>
-                                     <td><?= $model->receive_time ?></td>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('stop_receive_time') ?>：</td>
+                                     <td><?= $model->stop_receive_time?\Yii::$app->formatter->asDatetime($model->stop_receive_time):''; ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('start_receive_time') ?>：</td>
+                                     <td><?= $model->start_receive_time?\Yii::$app->formatter->asDatetime($model->start_receive_time):''; ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>

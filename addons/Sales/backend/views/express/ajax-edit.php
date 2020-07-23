@@ -2,6 +2,7 @@
 
 use common\enums\StatusEnum;
 use common\widgets\webuploader\Files;
+use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use yii\base\Widget;
@@ -62,13 +63,42 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'receive_time')->textInput(['maxlength' => true]); ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+                <?= $form->field($model, 'stop_receive_time')->widget(DatePicker::class, [
+                    'language' => 'zh-CN',
+                    'options' => [
+                        'value' => $model->stop_receive_time?date('Y-m-d', $model->stop_receive_time):"",
+                    ],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true,//今日高亮
+                        'autoclose' => true,//选择后自动关闭
+                        'todayBtn' => true,//今日按钮显示
+                    ]
+                ]);?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'sort')->textInput(); ?>
+                <?= $form->field($model, 'start_receive_time')->widget(DatePicker::class, [
+                    'language' => 'zh-CN',
+                    'options' => [
+                        'value' => $model->start_receive_time?date('Y-m-d', $model->start_receive_time):'',
+                    ],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true,//今日高亮
+                        'autoclose' => true,//选择后自动关闭
+                        'todayBtn' => true,//今日按钮显示
+                    ]
+                ]);?>
             </div>
         </div>
-        <?= $form->field($model, 'remark')->textarea(); ?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'stop_receive_area')->textarea(); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'remark')->textarea(); ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <?= $form->field($model, 'cover')->widget(common\widgets\webuploader\Files::class, [

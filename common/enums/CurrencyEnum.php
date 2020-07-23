@@ -21,9 +21,9 @@ class CurrencyEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::CNY=> '人民币',
-            self::HKD=> '港币',
-            self::USD=> '美元',
+            self::CNY=> 'CNY',
+            self::HKD=> 'HKD',
+            self::USD=> 'USD',
         ];
     }
 }
