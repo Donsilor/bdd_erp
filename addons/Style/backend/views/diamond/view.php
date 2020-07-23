@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
 
                                 <tr>
-                                    <?php $parame_images = !empty($model->parame_images)?explode(',', $model->parame_images):null;?>
+                                    <?php $parame_images = !empty($model->parame_images)?explode(',', $model->parame_images):[];?>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parame_images') ?>：</td>
                                     <td>
                                         <?php foreach ($parame_images as $img){
