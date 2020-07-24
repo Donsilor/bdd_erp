@@ -1,15 +1,15 @@
 <?php
 
-namespace addons\Sales\common\forms;
+namespace addons\Warehouse\common\forms;
 
 use Yii;
-use addons\Sales\common\models\SaleChannel;
+use addons\Warehouse\common\models\Moissanite;
 use common\helpers\ArrayHelper;
 
 /**
- * 销售渠道 Form
+ * 莫桑石列表 Form
  */
-class SaleChannelForm extends SaleChannel
+class MoissaniteForm extends Moissanite
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class SaleChannelForm extends SaleChannel
     public function rules()
     {
         $rules = [
-
+            [['style_sn'], 'required']
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

@@ -46,8 +46,8 @@ class Moissanite extends BaseModel
             [['ref_carat', 'real_carat', 'karat_price', 'est_cost'], 'number'],
             [['karat_num', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['name', 'style_sn', 'size', 'color_scope', 'clarity_scope'], 'string', 'max' => 30],
-            [['type', 'shape'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
+            [['type', 'shape'], 'safe'],
         ];
     }
 
@@ -68,8 +68,8 @@ class Moissanite extends BaseModel
             'karat_num' => '克拉数量',
             'karat_price' => '克拉成本',
             'est_cost' => '预估成本/ct',
-            'color_scope' => '颜色范围',
-            'clarity_scope' => '净度范围',
+            'color_scope' => '颜色范围(D-Z)',
+            'clarity_scope' => '净度范围(FL-SI2)',
             'remark' => '备注',
             'sort' => '排序',
             'status' => '状态',
@@ -77,5 +77,14 @@ class Moissanite extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 创建人 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('creator');
     }
 }

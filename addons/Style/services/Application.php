@@ -20,8 +20,8 @@ use common\components\Service;
  * @property \addons\Style\services\StyleAttributeService $styleAttribute 款和属性关系
  * @property \addons\Style\services\QibanService $qiban 起版和属性关系
  * @property \addons\Style\services\QibanAttributeService $qibanAttribute 起版和属性关系
- * @property \addons\Style\services\GoldStyleService $gold 金料款式
- * @property \addons\Style\services\StoneStyleService $stone 石料款式
+ * @property \addons\Style\services\GoldService $gold 金料款式
+ * @property \addons\Style\services\StoneService $stone 石料款式
  */
 class Application extends Service
 {

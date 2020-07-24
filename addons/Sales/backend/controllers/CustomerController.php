@@ -183,7 +183,7 @@ class CustomerController extends BaseController
         $this->modelClass = OrderForm::class;
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
-        $customer_id = \Yii::$app->request->get('customer_id', -1);
+        $customer_id = \Yii::$app->request->get('customer_id', null);
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -194,20 +194,11 @@ class CustomerController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'account' => ['order_amount', 'refund_amount'],
-                'address' => [],
             ]
         ]);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
         $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
         $dataProvider->query->andWhere(['=', Order::tableName().'.customer_id', $customer_id]);
-        // 联系人搜索
-        if(!empty($searchParams['customer_mobile'])) {
-            $where = [ 'or',
-                ['like', Order::tableName().'.customer_mobile', $searchParams['customer_mobile']],
-                ['like', Order::tableName().'.customer_email', $searchParams['customer_mobile']]
-            ];
-            $dataProvider->query->andWhere($where);
-        }
         //创建时间过滤
         if (!empty($searchParams['order_time'])) {
             list($start_date, $end_date) = explode('/', $searchParams['order_time']);

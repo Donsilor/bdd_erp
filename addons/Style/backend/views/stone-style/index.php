@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'color_scope',
                             'value' => function ($model){
                                 return $model->color_scope??"";
@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => true,
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'remark',
                             'value' => 'remark',

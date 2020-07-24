@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -8,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('sale_channel', '销售渠道');
+$this->title = Yii::t('moissanite', '莫桑石列表');
 $this->params['breadcrumbs'][] = $this->title;
 
 $params = Yii::$app->request->queryParams;
@@ -23,7 +24,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 <div class="box-tools" style="right: 100px;">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                 </div>
                 <div class="box-tools" >
@@ -36,6 +37,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -59,19 +61,112 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeTextInput($searchModel, 'name', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '添加人',
-                            'attribute' => 'member.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
                             ]),
-
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
-
-
+                        [
+                            'label' => '石头类型',
+                            'attribute' => 'type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' => '石头形状',
+                            'attribute' => 'shape',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->shape);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'size',
+                            'filter' => Html::activeTextInput($searchModel, 'size', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'ref_carat',
+                            'filter' => Html::activeTextInput($searchModel, 'ref_carat', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'real_carat',
+                            'filter' => Html::activeTextInput($searchModel, 'real_carat', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'karat_num',
+                            'filter' => Html::activeTextInput($searchModel, 'karat_num', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'karat_price',
+                            'filter' => Html::activeTextInput($searchModel, 'karat_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'est_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'est_cost', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'color_scope',
+                            'filter' => Html::activeTextInput($searchModel, 'color_scope', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'clarity_scope',
+                            'filter' => Html::activeTextInput($searchModel, 'clarity_scope', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'remark',
+                            'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' => '创建人',
+                            'attribute' => 'creator.username',
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute'=>'updated_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
@@ -89,30 +184,23 @@ $params = $params ? "&".http_build_query($params) : '';
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
-
                             ]),
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
-
                         ],
-
-
                         [
                             'attribute' => 'status',
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
                                 return \common\enums\StatusEnum::getValue($model->status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'sort',
@@ -125,15 +213,14 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {info} {status}',
+                            'template' => '{edit} {status}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
+                                        'data-target' => '#ajaxModalLg',
                                     ]);
                                 },
-
                                 'status' => function($url, $model, $key){
                                     return Html::status($model->status);
                                 },
@@ -141,7 +228,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                     return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ],
-
                         ]
                     ]
                 ]); ?>

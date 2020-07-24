@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use yii\base\Widget;
@@ -19,10 +20,63 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'tag')->textInput(); ?>
-            <?= $form->field($model, 'sort')->textInput() ?>
-            <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
+        <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'name')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"]) ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['disabled'=>true, 'prompt'=>'请选择']);?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'style_sn')->widget(\kartik\select2\Select2::class, [
+                    'data' => Yii::$app->styleService->stone->getDropDown($model->type),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'shape')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'size')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'ref_carat')->textInput() ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'real_carat')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'karat_num')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'karat_price')->textInput() ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'est_cost')->textInput(['disabled'=>true, "placeholder"=>"系统自动计算"]) ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'color_scope')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'clarity_scope')->textInput() ?>
+            </div>
+        </div>
+        <?= $form->field($model, 'remark')->textarea() ?>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
