@@ -97,7 +97,7 @@ $form = ActiveForm::begin([
                 },
                 success: function (data) {
                     if (parseInt(data.code) == 200 && data.data) {
-                        $("#"+formId+"-shape").select2("val",data.data.stone_shape);
+                        $("#"+formId+"-shape").val(data.data.stone_shape).trigger("change");
                     }
                 }
             });
