@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\ChannelIdEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\models\Order;
 use common\helpers\DateHelper;
@@ -79,6 +80,12 @@ class CustomerController extends BaseController
             $isNewRecord = $model->isNewRecord;
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new \Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new \Exception("非国际批发客户手机号必填");
+                }
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }
@@ -122,6 +129,12 @@ class CustomerController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new \Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new \Exception("非国际批发客户手机号必填");
+                }
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }

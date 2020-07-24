@@ -54,6 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= common\enums\GenderEnum::getValue($model->gender) ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('birthday') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDate($model->birthday) ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('age') ?>：</td>
                                      <td><?= $model->age ?></td>
                                  </tr>
@@ -150,8 +154,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->address ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"></td>
-                                     <td></td>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
                                  </tr>
                              </table>
                          </div>

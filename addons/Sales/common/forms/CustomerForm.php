@@ -19,7 +19,7 @@ class CustomerForm extends Customer
         $rules = [
             [['realname', 'channel_id'], 'required'],
             //[['firstname', 'lastname', 'mobile'], 'required'],
-            ['mobile', 'filter', 'filter' => 'trim'],
+            [['realname', 'mobile', 'email', 'invoice_email'], 'filter', 'filter' => 'trim'],
             //['mobile', 'match', 'pattern'=>'/^[1][34578][0-9]{9}$/'],
             [['email', 'invoice_email'], 'email'],
         ];
