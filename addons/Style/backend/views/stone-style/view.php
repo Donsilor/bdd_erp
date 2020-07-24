@@ -120,7 +120,11 @@ $this->params['breadcrumbs'][] = $this->title;
          </div>
         <div class="box-footer text-center">
             <?php
-                echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                echo Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑',
+                    [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]);
             ?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
