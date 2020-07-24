@@ -76,6 +76,9 @@ class MoissaniteController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try{
+                $stone_type = \Yii::$app->attr->valueName($model->type)??"";
+                $stone_shape = \Yii::$app->attr->valueName($model->shape)??"";
+                $model->name = $stone_type.$stone_shape.$model->size;
                 $model->est_cost = bcmul($model->real_carat, $model->karat_price, 2);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
