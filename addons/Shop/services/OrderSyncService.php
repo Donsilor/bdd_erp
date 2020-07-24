@@ -145,9 +145,9 @@ class OrderSyncService extends Service
     public function getErpCustomerData($order)
     {
         return [
-                "firstname"=>$order->member->firstname,
-                "lastname"=>$order->member->lastname,
-                "realname"=>$order->member->realname,
+                "firstname"=>$order->address->firstname,
+                "lastname"=>$order->address->lastname,
+                "realname"=>$order->address->realname,
                 "channel_id"=>$this->getErpSaleChannelId($order),
                 "source_id"=>1,//BDD官网
                 "head_portrait"=>$order->member->head_portrait,
