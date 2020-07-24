@@ -39,7 +39,7 @@ class StoneStyleController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['created_at', 'audit_time', 'stone_weight_min', 'stone_weight_max']);
+            ->search(Yii::$app->request->queryParams,['created_at', 'updated_at', 'audit_time', 'stone_weight_min', 'stone_weight_max']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
@@ -50,6 +50,11 @@ class StoneStyleController extends BaseController
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        }
+        $updated_at = $searchModel->updated_at;
+        if (!empty($updated_at)) {
+            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
         $stone_weight_min = $searchModel->stone_weight_min;
         if (!empty($stone_weight_min)) {
