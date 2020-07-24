@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:120%;white-space:nowrap;' ],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'label' => '证书类型',
                             'attribute' => 'cert_type',
                             'value' => function ($model){
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ],*/
                         [
                             'label' => '尺寸范围(mm)',
                             'attribute' => 'product_size_min',
@@ -118,13 +118,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'stone_carat',
                             'filter' => false,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'80'],
                         ],
-                        /*[
+                        [
                             'attribute' => 'color_scope',
                             'value' => function ($model){
                                 return $model->color_scope??"";
@@ -157,13 +157,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                             ]),
                         ],
-                        [
+                        /*[
                             'attribute' => 'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -190,14 +190,39 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'auditor.username', [
                                 'class' => 'form-control',
                             ]),
-                        ],
+                        ],*/
                         [
+                            'attribute' => 'updated_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'updated_at',
+                                'value' => '',
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                            },
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        /*[
                             'attribute' => 'audit_time',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'audit_time',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -223,7 +248,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'audit_remark', [
                                 'class' => 'form-control',
                             ]),
-                        ],
+                        ],*/
                         [
                             'label' => '审核状态',
                             'attribute' => 'audit_status',
