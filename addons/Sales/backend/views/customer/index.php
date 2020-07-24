@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     'filterModel' => $searchModel,
                     //重新定义分页样式
                     'tableOptions' => ['class' => 'table table-hover rf-table'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
