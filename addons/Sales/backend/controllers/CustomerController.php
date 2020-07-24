@@ -141,6 +141,9 @@ class CustomerController extends BaseController
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
                 }
+                if(!$model->customer_no){
+                    \Yii::$app->salesService->customer->createCustomerNo($model);
+                }
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
