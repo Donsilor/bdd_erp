@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?= Html::create(['edit']) ?>
-                    <a href="<?= Url::to(['index?action=export'.$params])?>" class="blue">导出Excel</a>
+                    <a href="<?= Url::to(['index?action=export'])?>" class="blue">导出Excel</a>
                 </div>
             </div>
             <div class="box-body table-responsive">

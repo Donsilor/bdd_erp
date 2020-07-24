@@ -28,7 +28,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     ]); ?>
                 </div>
                 <div class="box-tools" >
-                    <a href="<?= Url::to(['index?action=export'.$params])?>" class="blue">导出Excel</a>
+                    <a href="<?= Url::to(['index?action=export'])?>" class="blue">导出Excel</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
