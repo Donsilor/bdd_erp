@@ -74,4 +74,13 @@ class Flow extends BaseModel
         ];
     }
 
+    /**
+     * 部门
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFlowType()
+    {
+        return $this->hasOne(FlowType::class, ['id'=>'flow_type'])->alias('flowType');
+    }
+
 }

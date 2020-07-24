@@ -7,6 +7,7 @@ use common\enums\FlowMethodEnum;
 use common\enums\FlowStatus;
 use common\enums\FlowStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\ArrayHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
@@ -19,6 +20,21 @@ use common\models\common\FlowType;
  */
 class FlowTypeService extends Service
 {
+
+    /***
+     * @return mixed
+     */
+    public function getDropDown(){
+        $model = FlowType::find()
+            ->where(['status' => StatusEnum::ENABLED])
+            ->select(['id','name'])
+            ->orderBy('id desc')
+            ->asArray()
+            ->all();
+
+        return ArrayHelper::map($model,'id', 'name');
+    }
+
     /***
      * 创建具体审批流程
      */
@@ -173,6 +189,8 @@ class FlowTypeService extends Service
         $member = \Yii::$app->services->backendMember->findByIdWithAssignment($flow->current_users);
         return $member->username ?? '';
     }
+
+
 
 
 

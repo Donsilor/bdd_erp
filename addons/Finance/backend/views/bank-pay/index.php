@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 use common\enums\TargetTypeEnum;
+use addons\Finance\common\enums\FinanceStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,10 +26,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
-                    <?= Html::button('导出', [
-                        'class'=>'btn btn-success btn-xs',
-                        'onclick' => 'batchExport()',
-                    ]);?>
+<!--                    --><?//= Html::button('导出', [
+//                        'class'=>'btn btn-success btn-xs',
+//                        'onclick' => 'batchExport()',
+//                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">  
@@ -57,11 +58,11 @@ $params = $params ? "&".http_build_query($params) : '';
                     'headerOptions' => ['width'=>'80'],
             ],  
             [
-                    'attribute' => 'purchase_sn',
+                    'attribute' => 'finance_no',
                     'value'=>function($model) {
                         return Html::a($model->purchase_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
+                    'filter' => Html::activeTextInput($searchModel, 'finance_no', [
                             'class' => 'form-control',
                             'style'=> 'width:150px;'
                     ]),
@@ -69,11 +70,11 @@ $params = $params ? "&".http_build_query($params) : '';
                     //'headerOptions' => ['width'=>'150'],
             ],
             [
-                'attribute' => 'channel_id',
+                'attribute' => 'dept_id',
                 'value'=>function($model) {
-                    return $model->channel->name ?? '';
+                    return $model->department->name ?? '';
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style'=> 'width:100px;'
@@ -83,81 +84,56 @@ $params = $params ? "&".http_build_query($params) : '';
             ],
 
             [
-                    'attribute' => 'supplier_id',
-                    'value' =>"supplier.supplier_name",
-                    'filter'=>\kartik\select2\Select2::widget([
-                            'name'=>'SearchModel[supplier_id]',
-                            'value'=>$searchModel->supplier_id,
-                            'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                            'options' => ['placeholder' =>"请选择",'style'=>"width:180px"],
-                            'pluginOptions' => [
-                                    'allowClear' => true,                                          
-                            ],
-                     ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-2'],
-            ],
-            [
-                    'attribute' => 'follower_id',
-                    'value' => "follower.username",
-                    'filter' => Html::activeTextInput($searchModel, 'follower.username', [
-                        'class' => 'form-control',
-                        'style'=> 'width:150px;'
-                    ]),
+                    'attribute' => 'pay_amount',
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'total_num',
-                    'value' => "total_num",
+                    'attribute' => 'currency',
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
             [
-                    'attribute' => 'total_cost',
-                    'value' => 'total_cost',
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],            
-            [
-                    'attribute' => 'apply_sn',
-                    'value' => function($model){
-                        return implode('<br/>',\common\helpers\StringHelper::explodeIds($model->apply_sn));
-                    },
-                    'filter' => Html::activeTextInput($searchModel, 'apply_sn', [
-                            'class' => 'form-control',
-                            'style'=> 'width:150px;'
-                    ]),
-                    'format' => 'raw',
-                    //'headerOptions' => ['width'=>'200'],
+                'attribute' => 'finance_status',
+                'value' => function ($model){
+                    $audit_name = Yii::$app->services->flowType->getCurrentUsersName(TargetTypeEnum::PURCHASE_MENT,$model->id);
+                    $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    return PurchaseStatusEnum::getValue($model->finance_status).$audit_name_str;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'finance_status',FinanceStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'delivery_time',
-                    'value'=>function($model){
-                        return Yii::$app->formatter->asDatetime($model->created_at);
-                    },
-                    'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
-                        'model' => $searchModel,
-                        'attribute' => 'delivery_time',
-                        'value' => $searchModel->delivery_time,
-                        'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                        'pluginOptions' => [
-                            'format' => 'yyyy-mm-dd',
-                            'locale' => [
-                                'separator' => '/',
-                            ],
-                            'endDate' => date('Y-m-d',time()),
-                            'todayHighlight' => true,
-                            'autoclose' => true,
-                            'todayBtn' => 'linked',
-                            'clearBtn' => true,
-                        ],
-                    ]),
-
+                'attribute' => 'audit_status',
+                'value' => function ($model){
+                    return AuditStatusEnum::getValue($model->audit_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
             ],
-
+            [
+                'attribute' => 'creator_id',
+                'value' => function($model){
+                    return $model->creator->username ?? '';
+                },
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'80'],
+            ],
             [
                     'attribute'=>'created_at',
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
@@ -182,18 +158,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
 
             ],
-            [
-                    'attribute' => 'creator_id',
-                    'value' => function($model){
-                        return $model->creator->username ?? '';
-                    },
-                    'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                        'class' => 'form-control',
-                        'style'=> 'width:80px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ],
+
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
@@ -207,21 +172,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
-            [
-                'attribute' => 'purchase_status',                    
-                'value' => function ($model){
-                    $audit_name = Yii::$app->services->flowType->getCurrentUsersName(TargetTypeEnum::PURCHASE_MENT,$model->id);
-                    $audit_name_str = $audit_name ? "({$audit_name})" : "";
-                    return PurchaseStatusEnum::getValue($model->purchase_status).$audit_name_str;
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'purchase_status',PurchaseStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style'=> 'width:80px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],            
+
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
@@ -255,15 +206,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                            ]);
-                        }
-                    },
-                    'follower' => function($url, $model, $key){
-                        if($model->purchase_status <= PurchaseStatusEnum::PENDING){
-                            return Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
-                                'class'=>'btn btn-info btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
                             ]);
                         }
                     },

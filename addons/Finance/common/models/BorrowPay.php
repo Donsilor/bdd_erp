@@ -3,17 +3,20 @@
 namespace addons\Finance\common\models;
 
 use addons\Shop\common\models\BaseModel;
+use common\models\backend\Member;
 use Yii;
 
 /**
  * This is the model class for table "finance_borrow_pay".
  *
  * @property int $id
+ * @property string $finance_no 单号
  * @property int $dept_id 所属部门
  * @property int $apply_time 填单时间
  * @property string $apply_user 借款人
  * @property string $borrow_remark 借款事由
  * @property string $borrow_amount 借款金额
+ * @property string $currency 币种
  * @property int $repay_time 预计还款时间
  * @property int $auditor_id 审核人ID
  * @property int $audit_status 审核状态
@@ -39,11 +42,12 @@ class BorrowPay extends BaseModel
     public function rules()
     {
         return [
-            [['dept_id', 'apply_time'], 'required'],
-            [['dept_id', 'apply_time', 'repay_time', 'auditor_id', 'audit_status', 'audit_time', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['finance_no', 'dept_id', 'apply_time', 'apply_user', 'borrow_remark', 'borrow_amount', 'currency', 'repay_time'], 'required'],
+            [['dept_id', 'apply_time', 'repay_time', 'auditor_id', 'audit_status', 'audit_time','finance_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['borrow_remark'], 'string'],
             [['borrow_amount'], 'number'],
-            [['apply_user'], 'string', 'max' => 30],
+            [['finance_no', 'apply_user'], 'string', 'max' => 30],
+            [['currency'], 'string', 'max' => 3],
             [['audit_remark'], 'string', 'max' => 255],
         ];
     }
@@ -55,19 +59,40 @@ class BorrowPay extends BaseModel
     {
         return [
             'id' => 'ID',
+            'finance_no' => '单号',
             'dept_id' => '所属部门',
             'apply_time' => '填单时间',
             'apply_user' => '借款人',
             'borrow_remark' => '借款事由',
             'borrow_amount' => '借款金额',
+            'currency' => '币种',
             'repay_time' => '预计还款时间',
             'auditor_id' => '审核人ID',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
+            'finance_status' => '单据状态',
             'creator_id' => '创建人Id',
             'created_at' => '创建时间',
             'updated_at' => 'Updated At',
         ];
+    }
+
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
 }

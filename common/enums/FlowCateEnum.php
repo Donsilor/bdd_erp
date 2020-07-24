@@ -16,7 +16,7 @@ class FlowCateEnum extends BaseEnum
     const STYLE_MOD = 3;//款式管理
     const WAREHOUSE_MOD = 4;//销售管理
     const SALES_MOD = 5;//销售管理
-    const FINANCE_MOD = 5;//销售管理
+    const FINANCE_MOD = 6;//财务管理
 
     /**
      * @return array
