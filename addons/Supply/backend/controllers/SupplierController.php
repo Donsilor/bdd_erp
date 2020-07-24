@@ -84,7 +84,7 @@ class SupplierController extends BaseController
     public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
+        //$returnUrl = Yii::$app->request->get('returnUrl',['index']);
 
         $model = $this->findModel($id);
         $model = $model ?? new SupplierForm();
@@ -112,7 +112,7 @@ class SupplierController extends BaseController
                 return $this->message("保存失败:".$error, $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
 
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }
 
         return $this->render($this->action->id, [
