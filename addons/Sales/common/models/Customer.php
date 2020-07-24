@@ -3,16 +3,17 @@
 namespace addons\Sales\common\models;
 
 use Yii;
-use common\helpers\RegularHelper;
 
 /**
  * This is the model class for table "sales_customer".
  *
  * @property int $id 主键
  * @property int $merchant_id 商户id
+ * @property string $customer_no 客户编号
  * @property string $firstname 名
  * @property string $lastname 姓
  * @property string $realname 真实姓名
+ * @property int $channel_id 归属渠道
  * @property int $source_id 客户来源
  * @property string $head_portrait 头像
  * @property int $gender 性别[0:未知;1:男;2:女]
@@ -29,6 +30,17 @@ use common\helpers\RegularHelper;
  * @property int $city_id 城市
  * @property int $area_id 地区
  * @property string $address 详细地址
+ * @property int $age 年龄
+ * @property int $level 客户等级
+ * @property string $language 语言
+ * @property string $currency 货币
+ * @property int $is_invoice 是否默认开发票
+ * @property int $invoice_type 发票类型
+ * @property string $invoice_title 发票抬头
+ * @property int $invoice_title_type 抬头类型
+ * @property string $invoice_tax 发票税务号
+ * @property string $invoice_email 接收发票邮箱
+ * @property string $remark 备注
  * @property int $status 状态[-1:删除;0:禁用;1启用]
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
@@ -49,13 +61,15 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['birthday'], 'safe'],
-            [['firstname', 'lastname'], 'string', 'max' => 100],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['firstname', 'lastname', 'invoice_title'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
-            [['head_portrait', 'google_account', 'facebook_account', 'email'], 'string', 'max' => 150],
+            [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
-            [['address'], 'string', 'max' => 255],
+            [['customer_no'], 'string', 'max' => 30],
+            [['address', 'invoice_tax', 'remark'], 'string', 'max' => 255],
+            [['language', 'currency'], 'string', 'max' => 10],
+            [['birthday'], 'safe'],
         ];
     }
 
@@ -66,11 +80,12 @@ class Customer extends BaseModel
     {
         return [
             'id' => 'ID',
-            'merchant_id' => '商户',
+            'merchant_id' => '商户id',
+            'customer_no' => '客户编号',
             'firstname' => '名',
             'lastname' => '姓',
             'realname' => '真实姓名',
-            'channel_id' => '销售渠道',
+            'channel_id' => '归属渠道',
             'source_id' => '客户来源',
             'head_portrait' => '头像',
             'gender' => '性别',
@@ -84,9 +99,20 @@ class Customer extends BaseModel
             'home_phone' => '家庭号码',
             'country_id' => '所属国家',
             'province_id' => '省',
-            'city_id' => '城市/地区',
+            'city_id' => '城市',
             'area_id' => '地区',
             'address' => '详细地址',
+            'age' => '客户年龄',
+            'level' => '客户级别',
+            'language' => '语言',
+            'currency' => '货币',
+            'is_invoice' => '是否默认开发票',
+            'invoice_type' => '发票类型',
+            'invoice_title' => '发票抬头',
+            'invoice_title_type' => '抬头类型',
+            'invoice_tax' => '发票税务号',
+            'invoice_email' => '接收发票邮箱',
+            'remark' => '备注',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',

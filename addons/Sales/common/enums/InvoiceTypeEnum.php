@@ -11,8 +11,8 @@ use common\enums\BaseEnum;
  */
 class InvoiceTypeEnum extends BaseEnum
 {
-    const ENTERPRISE = 1;
-    const PERSONAL = 2;
+    const PAPER = 1;
+    const ELECTRONIC = 2;
 
     /**
      * @return array
@@ -20,8 +20,8 @@ class InvoiceTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::ENTERPRISE => '企业',
-            self::PERSONAL => '个人',
+            self::PAPER => '纸质发票',
+            self::ELECTRONIC => '电子发票',
         ];
     }
 }

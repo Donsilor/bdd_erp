@@ -133,20 +133,40 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-hover">
-                   <?php 
-                   if($model->attrs){
-                        foreach ($model->attrs as $attr){
-                            ?>
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
-                                <td><?= $attr->attr_value ?></td>
-                            </tr>
-                        <?php 
-                        } 
-                    }
-                    ?>
-                </table>
+                <div class="col-xs-6">
+                    <div class="box">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <?php
+                                    $order_goods_attrs = $model->attrs ?? [];
+                                    $order_goods_attrs_list = \common\helpers\ArrayHelper::map($order_goods_attrs,'attr_id','attr_value');
+                                    $attrs = Yii::$app->salesService->orderGoods->Attrs();
+                                    $count = count($attrs);
+                                    $i = 0;
+                                    foreach ($attrs as $attr){
+                                        $i++;
+                                        if($i == $count/2 + 1){
+                                        ?>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="box">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <?php } ?>
+
+                                        <tr>
+                                            <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr['attr_id'])?>：</td>
+                                            <td><?= $order_goods_attrs_list[$attr['attr_id']] ?? '' ?></td>
+                                        </tr>
+                                    <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

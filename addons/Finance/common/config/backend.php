@@ -32,22 +32,7 @@ return [
                     'title' => '银行支付单',
                     'route' => 'bank-payment/index',
                 ],
-                [
-                    'title' => '合同款支付审批单',
-                    'route' => 'purchase/index',
-                ],
-                [
-                    'title' => '采购收货单',
-                    'route' => 'receipt/index',
-                ],
-                [
-                    'title' => '不良返厂单',
-                    'route' => 'defective/index',
-                ],
-                [
-                    'title' => '质检列表',
-                    'route' => 'receipt-goods/iqc-index',
-                ],
+
             ],
 
         ],

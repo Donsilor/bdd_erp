@@ -38,6 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->realname ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('customer_no') ?>：</td>
+                                     <td><?= $model->customer_no ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
                                      <td><?= $model->channel->name ?? '' ?></td>
                                  </tr>
@@ -50,8 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= common\enums\GenderEnum::getValue($model->gender) ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('birthday') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDate($model->birthday) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('age') ?>：</td>
+                                     <td><?= $model->age ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('marriage') ?>：</td>
                                      <td><?= \addons\Sales\common\enums\MarriageEnum::getValue($model->marriage) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('level') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\LevelEnum::getValue($model->level) ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('mobile') ?>：</td>
@@ -61,22 +77,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('home_phone') ?>：</td>
                                      <td><?= $model->home_phone ?></td>
                                  </tr>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-
-                 <div class="col-xs-6" style="padding: 0px;">
-                     <div class="box" style="margin-bottom: 0px;">
-                         <div class="box-body table-responsive" >
-                             <table class="table table-hover">
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
+                                     <td><?= $model->qq ?></td>
+                                 </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('email') ?>：</td>
                                      <td><?= $model->email ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('qq') ?>：</td>
-                                     <td><?= $model->qq ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
+                                 </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-xs-6" style="padding: 0px;">
+                     <div class="box" style="margin-bottom: 0px;">
+                         <div class="box-body table-responsive" >
+                             <table class="table table-hover">
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
+                                     <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('currency') ?>：</td>
+                                     <td><?= \common\enums\CurrencyEnum::getValue($model->currency) ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('google_account') ?>：</td>
@@ -84,6 +111,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('facebook_account') ?>：</td>
+                                     <td><?= $model->facebook_account ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('is_invoice') ?>：</td>
+                                     <td><?= \common\enums\ConfirmEnum::getValue($model->is_invoice) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_type') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice_type) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_title_type') ?>：</td>
+                                     <td><?= \addons\Sales\common\enums\InvoiceTitleTypeEnum::getValue($model->invoice_title_type) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_title') ?>：</td>
+                                     <td><?= $model->invoice_title ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_tax') ?>：</td>
+                                     <td><?= $model->invoice_tax ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('invoice_email') ?>：</td>
                                      <td><?= $model->facebook_account ?></td>
                                  </tr>
                                  <tr>
@@ -99,12 +150,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->city->title ?? "" ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('area_id') ?>：</td>
-                                     <td><?= $model->area_id ?></td>
-                                 </tr>
-                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
                                      <td><?= $model->address ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
                                  </tr>
                              </table>
                          </div>

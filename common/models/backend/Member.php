@@ -56,7 +56,7 @@ class Member extends User
     public function rules()
     {
         return [
-            [['type', 'gender', 'province_id', 'city_id', 'area_id', 'visit_count', 'last_time', 'role', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'gender', 'province_id', 'city_id', 'area_id', 'visit_count', 'last_time', 'role', 'status', 'created_at', 'updated_at','dept_id'], 'integer'],
             [['birthday'], 'safe'],
             [['username', 'qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
             [['password_hash', 'password_reset_token', 'head_portrait'], 'string', 'max' => 150],
@@ -83,6 +83,7 @@ class Member extends User
             'type' => '类型',
             'realname' => '真实姓名',
             'head_portrait' => '头像',
+            'dept_id' => '部门',
             'gender' => '性别',
             'qq' => 'QQ',
             'email' => '邮箱',

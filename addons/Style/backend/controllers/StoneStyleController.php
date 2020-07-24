@@ -2,13 +2,14 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Style\common\models\StoneStyle;
+use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * StoneStyleController implements the CRUD actions for StoneStyle model.
@@ -38,7 +39,7 @@ class StoneStyleController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['created_at', 'audit_time', 'stone_weight_min', 'stone_weight_max']);
+            ->search(Yii::$app->request->queryParams,['created_at', 'updated_at', 'audit_time', 'stone_weight_min', 'stone_weight_max']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
@@ -49,6 +50,11 @@ class StoneStyleController extends BaseController
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+        }
+        $updated_at = $searchModel->updated_at;
+        if (!empty($updated_at)) {
+            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.updated_at', strtotime(explode('/', $updated_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.updated_at', (strtotime(explode('/', $updated_at)[1]) + 86400)] );//结束时间
         }
         $stone_weight_min = $searchModel->stone_weight_min;
         if (!empty($stone_weight_min)) {
@@ -159,6 +165,26 @@ class StoneStyleController extends BaseController
         $model->audit_status  = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new StoneStyle();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->styleService->stone->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }

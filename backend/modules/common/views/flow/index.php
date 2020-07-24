@@ -92,6 +92,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
+                'attribute' => 'flow_type',
+                'value' => function($model){
+                    return $model->flowType->name;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'flow_type',Yii::$app->services->flowType->getDropDown(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
                 'attribute' => 'current_users',
                 'value' => function($model){
                     $user_id_arr = explode(',',$model->current_users);

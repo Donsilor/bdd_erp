@@ -62,16 +62,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'tag',
+                            'filter' => Html::activeTextInput($searchModel, 'tag', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'label' => '添加人',
                             'attribute' => 'member.username',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'member.username', [
                                 'class' => 'form-control',
                             ]),
-
                         ],
-
-
                         [
                             'attribute'=>'updated_at',
                             'filter' => DateRangePicker::widget([    // 日期组件

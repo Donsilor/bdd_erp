@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     'filterModel' => $searchModel,
                     //重新定义分页样式
                     'tableOptions' => ['class' => 'table table-hover rf-table'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
@@ -58,6 +59,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         ],*/
                         [
                             'attribute' => 'realname',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->realname, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => true,
                         ],
                         [

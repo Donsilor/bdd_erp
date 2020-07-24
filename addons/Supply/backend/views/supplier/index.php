@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?= Html::create(['edit']) ?>
+                    <a href="<?= Url::to(['index?action=export'])?>" class="blue">导出Excel</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%'],
+                    'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -42,10 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'id',
-                            'value' => 'id',
-                            'filter' => Html::activeTextInput($searchModel, 'id', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => true,
                             'format' => 'raw',
                             'headerOptions' => ['width'=>'60'],
                         ],
@@ -73,7 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             },
                             'filter' => false,
-                            'contentOptions' => ['style' => 'word-break:break-all;'],
                             'headerOptions' => ['width'=>'300'],
                         ],
                         [
@@ -127,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -152,7 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'audit_time',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [

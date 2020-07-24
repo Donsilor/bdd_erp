@@ -32,15 +32,15 @@ class TargetTypeEnum extends BaseEnum
     {
         return [
                 self::PURCHASE_MENT => "采购单据",
-                self::PURCHASE_APPLY_T_MENT => "采购申请单（电商）审批流程",
-                self::PURCHASE_APPLY_F_MENT => "采购申请单（国际批发）审批流程",
-                self::PURCHASE_APPLY_Z_MENT => "采购申请单（高端珠宝）审批流程",
-                self::PURCHASE_APPLY_S_MENT => "采购申请单（商品部）审批流程",
+                self::PURCHASE_APPLY_T_MENT => "采购申请单",//采购申请单（电商）审批流程
+                self::PURCHASE_APPLY_F_MENT => "采购申请单",//采购申请单（国际批发）审批流程
+                self::PURCHASE_APPLY_Z_MENT => "采购申请单",//采购申请单（高端珠宝）审批流程
+                self::PURCHASE_APPLY_S_MENT => "采购申请单",//采购申请单（商品部）审批流程
                 self::STYLE_STYLE => "款式审批流程",
                 self::STYLE_QIBAN => "起版审批流程",
-                self::ORDER_F_MENT => '客户订单（国际批发）审批流程',
-                self::ORDER_T_MENT => '客户订单（跨境电商）审批流程',
-                self::ORDER_Z_MENT => '客户订单（高端珠宝）审批流程',
+                self::ORDER_F_MENT => '客户订单',
+                self::ORDER_T_MENT => '客户订单',
+                self::ORDER_Z_MENT => '客户订单',
         ];
     }
 

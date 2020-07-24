@@ -2,6 +2,10 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\ChannelIdEnum;
+use addons\Sales\common\forms\OrderForm;
+use addons\Sales\common\models\Order;
+use common\helpers\DateHelper;
 use Yii;
 use common\helpers\Url;
 use common\helpers\ResultHelper;
@@ -64,28 +68,39 @@ class CustomerController extends BaseController
     /**
      * 创建客户
      * @return array|mixed
+     * @throws
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new CustomerForm();
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
             try{
-                $trans = Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new \Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new \Exception("非国际批发客户手机号必填");
+                }
+                if($model->birthday){
+                    $model->age = DateHelper::getYearByDate($model->birthday);
+                }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->salesService->customer->createCustomerNo($model);
                 $trans->commit();
+                \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $isNewRecord
-                    ? $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success')
-                    : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-
+                    ? $this->message("保存成功", $this->redirect(['edit', 'id' => $model->id]), 'success')
+                    : $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             }catch (\Exception $e) {
                 $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
 
@@ -99,12 +114,11 @@ class CustomerController extends BaseController
      * 编辑客户
      *
      * @return mixed
+     * @throws
      */
     public function actionEdit()
     {
         $id = Yii::$app->request->get('id');
-        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
-
         $model = $this->findModel($id);
         $model = $model ?? new CustomerForm();
 
@@ -115,20 +129,28 @@ class CustomerController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new Exception("非国际批发客户手机号必填");
+                }
+                if($model->birthday){
+                    $model->age = DateHelper::getYearByDate($model->birthday);
+                }
                 if(false === $model->save()){
                     throw new Exception($this->getError($model));
+                }
+                if(!$model->customer_no){
+                    \Yii::$app->salesService->customer->createCustomerNo($model);
                 }
                 $trans->commit();
             }catch (Exception $e){
                 $trans->rollBack();
-                //$error = $e->getMessage();
-                //\Yii::error($error);
                 return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
             }
-
-            return $this->message("保存成功", $this->redirect($returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }
-
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
@@ -150,6 +172,46 @@ class CustomerController extends BaseController
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->salesService->customer->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * 客户订单列表
+     * @return string
+     * @throws
+     */
+    public function actionOrder()
+    {
+        $this->modelClass = OrderForm::class;
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $customer_id = \Yii::$app->request->get('customer_id', null);
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'account' => ['order_amount', 'refund_amount'],
+            ]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
+        $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
+        $dataProvider->query->andWhere(['=', Order::tableName().'.customer_id', $customer_id]);
+        //创建时间过滤
+        if (!empty($searchParams['order_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['order_time']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
+        }
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

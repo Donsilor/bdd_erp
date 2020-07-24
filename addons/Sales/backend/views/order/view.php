@@ -6,6 +6,7 @@ use addons\Sales\common\enums\IsStockEnum;
 use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\AmountHelper;
+use addons\Style\common\enums\AttrIdEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -162,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 'tableOptions' => ['class' => 'table table-hover'],
-                                'options'=>['id'=>'order-goods','style'=>' width:100%;'],
+                                'options'=>['id'=>'order-goods','style'=>' width:100%;white-space:nowrap;'],
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
@@ -190,11 +191,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                             'attribute'=>'goods_id',
-                                            'value' => 'goods_id'
+                                            'value' => 'goods_id',
+                                            'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
                                         'attribute'=>'style_sn',
-                                        'value' => 'style_sn'
+                                        'value' => 'style_sn',
+                                        'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
                                         'label'=>'证书号',
@@ -248,24 +251,127 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => 'produce_sn'
                                     ], */
                                     [
-                                            'attribute'=>'bc_status',
-                                            'value' =>function($model){
-                                                return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?? '未布产'.'<br/>'.$model->produce_sn;
-                                            },
-                                            'format' => 'raw',
+                                        'attribute'=>'bc_status',
+                                        'value' =>function($model){
+                                            return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?? '未布产'.'<br/>'.$model->produce_sn;
+                                        },
+                                        'format' => 'raw',
                                     ],
                                     [
-                                            'attribute'=>'is_stock',
-                                            'value' => function($model){
-                                                    return IsStockEnum::getValue($model->is_stock);
-                                            }
+                                        'attribute'=>'is_stock',
+                                        'value' => function($model){
+                                            return IsStockEnum::getValue($model->is_stock);
+                                        }
                                     ],
                                     [
-                                            'attribute'=>'is_gift',
-                                            'value' => function($model){
-                                                    return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
-                                            }
+                                        'attribute'=>'is_gift',
+                                        'value' => function($model){
+                                            return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
+                                        }
                                     ],
+                                    [
+                                        'label'=>'材质',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::MATERIAL] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'金料颜色',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::MATERIAL_COLOR] ?? "";
+                                        },
+
+                                    ],
+                                    [
+                                        'label'=>'金重（g）',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::JINZHONG] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'美号',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::FINGER] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'港号',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::PORT_NO] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'链长（cm）',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::CHAIN_LENGTH] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'镶口',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::XIANGKOU] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'表面工艺',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::FACEWORK] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'主石类型',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::MAIN_STONE_TYPE] ?? "";
+                                        },
+                                    ],
+                                    [
+                                        'label'=>'主石石重和数量',
+                                        'value'=> function($model){
+                                            $main_stone_weight =  $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? "无";
+                                            $main_stone_num =  $model->attr[AttrIdEnum::MAIN_STONE_NUM] ?? "无";
+                                            $main_stone_weight = $main_stone_weight == '' ? "无" : $main_stone_weight;
+                                            $main_stone_num = $main_stone_num == '' ? "无" : $main_stone_num;
+                                            return $main_stone_weight.'/'.$main_stone_num;
+                                        },
+
+                                    ],
+                                    [
+                                        'label'=>'主石规格(颜色/净度/切工/抛光/对称/荧光)',
+                                        'value'=> function($model){
+                                            $main_stone_color =  $model->attr[AttrIdEnum::MAIN_STONE_COLOR] ?? "无";
+                                            $main_stone_clarity =  $model->attr[AttrIdEnum::MAIN_STONE_CLARITY] ?? "无";
+                                            $main_stone_cut =  $model->attr[AttrIdEnum::MAIN_STONE_CUT] ?? "无";
+                                            $main_stone_polish =  $model->attr[AttrIdEnum::MAIN_STONE_POLISH] ?? "无";
+                                            $main_stone_symmetry =  $model->attr[AttrIdEnum::MAIN_STONE_SYMMETRY] ?? "无";
+                                            $main_stone_fluorescence =  $model->attr[AttrIdEnum::MAIN_STONE_FLUORESCENCE] ?? "无";
+                                            return $main_stone_color . '/' . $main_stone_clarity . '/' . $main_stone_cut .
+                                                '/' . $main_stone_polish . '/' . $main_stone_symmetry . '/'. $main_stone_fluorescence;
+                                        },
+
+                                    ],
+                                    [
+                                        'label'=>'副石石重和数量',
+                                        'value'=> function($model){
+                                            $side_stone_weight =  $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? "无";
+                                            $side_stone_num =  $model->attr[AttrIdEnum::SIDE_STONE1_NUM] ?? "无";
+                                            $side_stone_weight = $side_stone_weight == '' ? "无" : $side_stone_weight;
+                                            $side_stone_num = $side_stone_num == '' ? "无" : $side_stone_num;
+                                            return $side_stone_weight.'/'.$side_stone_num;
+                                        },
+
+                                    ],
+                                    [
+                                        'label'=>'副石规格(颜色/净度)',
+                                        'value'=> function($model){
+                                            $side_stone_color =  $model->attr[AttrIdEnum::SIDE_STONE1_COLOR] ?? "无";
+                                            $side_stone_clarity =  $model->attr[AttrIdEnum::SIDE_STONE1_CLARITY] ?? "无";
+                                            $side_stone_color = $side_stone_color == '' ? "无" : $side_stone_color;
+                                            $side_stone_clarity = $side_stone_clarity == '' ? "无" : $side_stone_clarity;
+                                            return $side_stone_color.'/'.$side_stone_clarity;
+                                        },
+
+                                    ],
+                                    'remark',
                                     [
                                         'class' => 'yii\grid\ActionColumn',
                                         'header' => '操作',
@@ -421,7 +527,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                     	<tr>
-                    		<td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
+                    		<td><?= addons\Sales\common\enums\InvoiceTitleTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                         	<td><?= $model->invoice->invoice_title ??''?></td>
                         	<td><?= $model->invoice->tax_number ??''?></td>
                         	<td><?= addons\Sales\common\enums\InvoiceElectronicEnum::getValue($model->invoice->is_electronic ??'') ?></td>

@@ -30,7 +30,7 @@ class SupplierForm extends Supplier
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'id'=>'序号',
+            //'id'=>'序号',
         ]);
     }
 

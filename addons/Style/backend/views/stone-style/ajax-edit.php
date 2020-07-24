@@ -19,43 +19,49 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <?= $form->field($model, 'style_sn')->textInput() ?>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
             </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'stone_shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),['prompt'=>'请选择']);?>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'stone_shape')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?>
             </div>
-            <div class="col-lg-3">
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
                 <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']);?>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <?= $form->field($model, 'stone_weight_min')->textInput() ?>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <?= $form->field($model, 'stone_weight_max')->textInput() ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'product_size_min')->textInput() ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'product_size_max')->textInput() ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'product_size_min')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'product_size_max')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
                 <?= $form->field($model, 'stone_carat')->textInput() ?>
             </div>
-            <div class="col-lg-3">
+            <!--<div class="col-lg-3">
                 <?= $form->field($model, 'color_scope')->textInput() ?>
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model, 'clarity_scope')->textInput() ?>
-            </div>
+            </div>-->
         </div>
         <?= $form->field($model, 'remark')->textarea() ?>
     </div>

@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ]); ?>
 <div class="box-body nav-tabs-custom">
      <h2 class="page-header"><?php echo $this->title;?></h2>
-      <?php $tab_list = [0=>'全部',1=>'基本信息',2=>'联系方式',3=>'客户地址'];?>
+      <?php $tab_list = [0=>'全部',1=>'基本信息',2=>'联系方式',3=>'客户地址',4=>'发票信息'];?>
      <?php echo Html::tab($tab_list,0,'tab')?>
      <div class="tab-content">
            <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_1">
@@ -42,16 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
                         </div>-->
                         <div class="col-lg-3">
+                            <?= $form->field($model, 'customer_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
+                        </div>
+                        <div class="col-lg-3">
                             <?= $form->field($model, 'realname')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-lg-3">
-                            <?= $form->field($model, 'gender')->radioList(\common\enums\GenderEnum::getMap()) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?= $form->field($model, 'marriage')->radioList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-3">
                             <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
                                 'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
@@ -70,6 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]);?>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-3">
                             <?= $form->field($model, 'birthday')->widget(DatePicker::class, [
                                 'language' => 'zh-CN',
@@ -84,6 +81,43 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]);?>
                         </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'gender')->radioList(\common\enums\GenderEnum::getMap()) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'marriage')->radioList(\addons\Sales\common\enums\MarriageEnum::getMap()) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'level')->radioList(\addons\Sales\common\enums\LevelEnum::getMap()) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'age')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'language')->widget(\kartik\select2\Select2::class, [
+                                'data' => \common\enums\LanguageEnum::getMap(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'currency')->widget(\kartik\select2\Select2::class, [
+                                'data' => \common\enums\CurrencyEnum::getMap(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <?= $form->field($model, 'remark')->textarea(['maxlength' => true]) ?>
+                        </div>
                     </div>
                 </div>
            </div>
@@ -94,13 +128,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body col-lg-12" style="padding-left:30px">
                     <div class="row">
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true])->label("手机 [<sapn style=\"color:red;\">非国际批发必填</sapn>]") ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'home_phone')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("邮箱 [<sapn style=\"color:red;\">国际批发必填</sapn>]") ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'qq')->textInput(['maxlength' => true]) ?>
@@ -143,6 +177,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
               <!-- ./box-body -->
           </div>
+         <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_4">
+             <ul class="nav nav-tabs pull-right">
+                 <li class="pull-left header"><i class="fa fa-th"></i> <?= $tab_list[4]??''?></li>
+             </ul>
+             <div class="box-body col-lg-12" style="padding-left:30px">
+                 <div class="row">
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'is_invoice')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_type')->radioList(\addons\Sales\common\enums\InvoiceTypeEnum::getMap()) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_title_type')->radioList(\addons\Sales\common\enums\InvoiceTitleTypeEnum::getMap()) ?>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_tax')->textInput(['maxlength' => true]) ?>
+                     </div>
+                     <div class="col-lg-3">
+                         <?= $form->field($model, 'invoice_email')->textInput(['maxlength' => true]) ?>
+                     </div>
+                 </div>
+             </div>
+             <!-- ./box-body -->
+         </div>
       <!-- ./row -->
     </div>
     <div class="modal-footer">
