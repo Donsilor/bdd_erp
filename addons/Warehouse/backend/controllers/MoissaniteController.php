@@ -72,6 +72,7 @@ class MoissaniteController extends BaseController
         $model = $model ?? new MoissaniteForm();
         if($model->isNewRecord){
             $model->type = AttrIdEnum::STONE_TYPE_MO;
+            $model->creator_id = \Yii::$app->user->identity->getId();
         }
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
