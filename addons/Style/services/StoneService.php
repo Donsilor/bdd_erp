@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use common\helpers\Url;
 use Yii;
 use common\components\Service;
 use addons\Style\common\models\StoneStyle;
@@ -15,6 +16,20 @@ use common\helpers\ArrayHelper;
  */
 class StoneService extends Service
 {
+
+    /**
+     * 石料款式 tab
+     * @param int $id 款式ID
+     * @param string $returnUrl
+     * @return array
+     */
+    public function menuTabList($id, $returnUrl = null)
+    {
+        return [
+            1=>['name'=>'石料款式详情','url'=>Url::to(['view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+        ];
+    }
+
     /**
      * @param int $stone_type;
      * @return array|\yii\db\ActiveRecord[]

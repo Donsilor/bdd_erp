@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use common\helpers\ExcelHelper;
 use Yii;
 use common\traits\Curd;
 use addons\Warehouse\common\forms\MoissaniteForm;
@@ -54,6 +55,12 @@ class MoissaniteController extends BaseController
 
         //$dataProvider->query->andWhere(['>',MoissaniteForm::tableName().'.status',-1]);
 
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(MoissaniteForm::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
+
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -93,5 +100,45 @@ class MoissaniteController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids = null){
+        $name = '莫桑石信息';
+        list($list,) = $this->getData($ids);
+        $header = [
+            ['名称', 'name' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['类型', 'type' , 'text'],
+            ['形状', 'shape' , 'text'],
+            ['尺寸(mm)', 'size' , 'text'],
+            ['尺寸参考石重(ct)', 'ref_carat' , 'text'],
+            ['实际石重(ct)', 'real_carat' , 'text', ],
+            ['克拉数量', 'karat_num' , 'text'],
+            ['克拉成本', 'karat_price' , 'text'],
+            ['预估成本/ct', 'est_cost' , 'text'],
+            ['颜色范围(D-Z)', 'color_scope' , 'text'],
+            ['净度范围(FL-SI2)', 'clarity_scope' , 'text'],
+            ['备注', 'remark' , 'text'],
+        ];
+        return ExcelHelper::exportData($list, $header, $name.'导出_' . date('YmdHis',time()));
+    }
+
+    private function getData($ids){
+        $lists = MoissaniteForm::find()->asArray()->all();
+        foreach ($lists as &$list){
+            if($list['type']){
+                $list['type'] = \Yii::$app->attr->valueName($list['type'])??"";
+            }
+            if($list['shape']){
+                $list['shape'] = \Yii::$app->attr->valueName($list['shape'])??"";
+            }
+        }
+        return [$lists,[]];
     }
 }

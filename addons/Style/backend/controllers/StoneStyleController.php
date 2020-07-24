@@ -2,13 +2,14 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Style\common\models\StoneStyle;
+use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * StoneStyleController implements the CRUD actions for StoneStyle model.
@@ -159,6 +160,26 @@ class StoneStyleController extends BaseController
         $model->audit_status  = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $model = $this->findModel($id);
+        $model = $model ?? new StoneStyle();
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->styleService->stone->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
         ]);
     }
 }
