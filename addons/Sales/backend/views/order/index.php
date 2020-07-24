@@ -52,9 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'30'],
             ],  
             [
-                    'attribute'=>'created_at',
+                    'attribute'=>'order_time',
                     'value'=>function($model){
-                           return Yii::$app->formatter->asDatetime($model->created_at);
+                        return Yii::$app->formatter->asDatetime($model->order_time);
                      },
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                             'model' => $searchModel,
