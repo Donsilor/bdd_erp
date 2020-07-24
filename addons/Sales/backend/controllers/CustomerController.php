@@ -2,6 +2,9 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\ChannelIdEnum;
+use addons\Sales\common\forms\OrderForm;
+use addons\Sales\common\models\Order;
 use common\helpers\DateHelper;
 use Yii;
 use common\helpers\Url;
@@ -77,12 +80,19 @@ class CustomerController extends BaseController
             $isNewRecord = $model->isNewRecord;
             try{
                 $trans = \Yii::$app->trans->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new \Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new \Exception("非国际批发客户手机号必填");
+                }
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->salesService->customer->createCustomerNo($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $isNewRecord
@@ -119,6 +129,12 @@ class CustomerController extends BaseController
             }
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                if($model->channel_id == ChannelIdEnum::GP && !$model->email){
+                    throw new Exception("渠道为国际批发，客户邮箱为必填");
+                }
+                if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
+                    throw new Exception("非国际批发客户手机号必填");
+                }
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }
@@ -153,6 +169,46 @@ class CustomerController extends BaseController
             'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->salesService->customer->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * 客户订单列表
+     * @return string
+     * @throws
+     */
+    public function actionOrder()
+    {
+        $this->modelClass = OrderForm::class;
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $customer_id = \Yii::$app->request->get('customer_id', null);
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'account' => ['order_amount', 'refund_amount'],
+            ]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
+        $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
+        $dataProvider->query->andWhere(['=', Order::tableName().'.customer_id', $customer_id]);
+        //创建时间过滤
+        if (!empty($searchParams['order_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['order_time']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
+        }
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

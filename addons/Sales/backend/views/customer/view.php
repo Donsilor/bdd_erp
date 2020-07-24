@@ -38,6 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->realname ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('customer_no') ?>：</td>
+                                     <td><?= $model->customer_no ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
                                      <td><?= $model->channel->name ?? '' ?></td>
                                  </tr>
@@ -48,6 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gender') ?>：</td>
                                      <td><?= common\enums\GenderEnum::getValue($model->gender) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('birthday') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDate($model->birthday) ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('age') ?>：</td>
@@ -78,18 +86,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->email ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
-                                     <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
                                  </tr>
                              </table>
                          </div>
                      </div>
                  </div>
-
                  <div class="col-xs-6" style="padding: 0px;">
                      <div class="box" style="margin-bottom: 0px;">
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
+                                     <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
+                                 </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('currency') ?>：</td>
                                      <td><?= \common\enums\CurrencyEnum::getValue($model->currency) ?></td>
@@ -143,8 +154,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->address ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                     <td><?= $model->remark ?></td>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
                                  </tr>
                              </table>
                          </div>

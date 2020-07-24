@@ -88,6 +88,10 @@ return [
                         'title' => '出入库列表',
                         'route' => 'bill/index',
                     ],
+                    [
+                        'title' => '莫桑石列表',
+                        'route' => 'moissanite/index',
+                    ],
                 ],
 
             ],

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id 主键
  * @property int $merchant_id 商户id
+ * @property string $customer_no 客户编号
  * @property string $firstname 名
  * @property string $lastname 姓
  * @property string $realname 真实姓名
@@ -65,6 +66,7 @@ class Customer extends BaseModel
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
+            [['customer_no'], 'string', 'max' => 30],
             [['address', 'invoice_tax', 'remark'], 'string', 'max' => 255],
             [['language', 'currency'], 'string', 'max' => 10],
             [['birthday'], 'safe'],
@@ -79,6 +81,7 @@ class Customer extends BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户id',
+            'customer_no' => '客户编号',
             'firstname' => '名',
             'lastname' => '姓',
             'realname' => '真实姓名',
@@ -100,7 +103,7 @@ class Customer extends BaseModel
             'area_id' => '地区',
             'address' => '详细地址',
             'age' => '客户年龄',
-            'level' => '客户等级',
+            'level' => '客户级别',
             'language' => '语言',
             'currency' => '货币',
             'is_invoice' => '是否默认开发票',
