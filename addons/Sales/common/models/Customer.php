@@ -103,7 +103,7 @@ class Customer extends BaseModel
             'area_id' => '地区',
             'address' => '详细地址',
             'age' => '客户年龄',
-            'level' => '客户等级',
+            'level' => '客户级别',
             'language' => '语言',
             'currency' => '货币',
             'is_invoice' => '是否默认开发票',
