@@ -33,6 +33,10 @@ return [
                         'route' => 'warehouse-goods/index',
                     ],
                     [
+                        'title' => '莫桑石列表',
+                        'route' => 'moissanite/index',
+                    ],
+                    [
                         'title' => '入库单',
                         'route' => 'bill-l/index',
                     ],
