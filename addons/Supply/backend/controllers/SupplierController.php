@@ -6,6 +6,8 @@ use addons\Purchase\common\forms\PurchaseGoodsForm;
 use addons\Supply\common\models\SupplierFollower;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\models\WarehouseStoneBill;
+use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
@@ -67,6 +69,12 @@ class SupplierController extends BaseController
         }
 
         $dataProvider->query->andWhere(['>',Supplier::tableName().'.status',-1]);
+
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(Supplier::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -212,5 +220,82 @@ class SupplierController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids = null){
+        $name = '供应商信息';
+        if(!is_array($ids)){
+            //$ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            //return $this->message('ID不为空', $this->redirect(['index']), 'warning');
+        }
+        list($list,) = $this->getData($ids);
+        $header = [
+            ['供应商编码', 'supplier_code' , 'text'],
+            ['供应商简称', 'supplier_tag' , 'text'],
+            ['供应商名称', 'supplier_name' , 'text'],
+            ['营业执照号码', 'business_no' , 'text'],
+            ['营业执照地址', 'business_address' , 'text'],
+            ['经营范围', 'business_scope' , 'text'],
+            ['结算方式', 'pay_type' , 'text', ],
+            ['付款周期', 'balance_type' , 'text'],
+            ['税务登记证号', 'tax_no' , 'text'],
+            ['开户行', 'bank_name' , 'text'],
+            ['银行账户', 'bank_account' , 'text'],
+            ['开户姓名', 'bank_account_name' , 'text'],
+            ['联系人', 'contactor' , 'text'],
+            ['联系人手机', 'telephone' , 'text'],
+            ['联系电话', 'mobile' , 'text'],
+            ['取货地址', 'address' , 'text'],
+            ['BDD紧急联系人', 'bdd_contactor' , 'text'],
+            ['BDD紧急联系人手机', 'bdd_mobile' , 'text'],
+            ['BDD紧急联系人电话', 'bdd_telephone' , 'text'],
+            ['供应商备注', 'remark' , 'text'],
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'导出_' . date('YmdHis',time()));
+    }
+
+    private function getData($ids){
+        //$query = SupplierForm::find()->where(['id' => $ids]);
+        $lists = SupplierForm::find()->asArray()->all();
+        //$lists = PageHelper::findAll($query, 100);
+        foreach ($lists as &$list){
+            if($list['business_scope']){
+                $business_scope_arr = explode(',', $list['business_scope']);
+                $business_scope_arr = array_filter($business_scope_arr);
+                $business_scope_str = '';
+                foreach ($business_scope_arr as $business_scope){
+                    $business_scope_str .= ','. \addons\Supply\common\enums\BusinessScopeEnum::getValue($business_scope);
+                }
+                $list['business_scope'] = trim( $business_scope_str,',' );
+            }
+            if($list['pay_type']){
+                $pay_type_arr = explode(',', $list['pay_type']);
+                $pay_type_arr = array_filter($pay_type_arr);
+                $pay_type_str = '';
+                foreach ($pay_type_arr as $pay_type){
+                    $pay_type_str .= ','. \addons\Supply\common\enums\SettlementWayEnum::getValue($pay_type);
+                }
+                $list['pay_type'] = trim( $pay_type_str,',' );
+            }
+            if($list['balance_type']){
+                $balance_type_arr = explode(',', $list['balance_type']);
+                $balance_type_arr = array_filter($balance_type_arr);
+                $balance_type_str = '';
+                foreach ($balance_type_arr as $balance_type){
+                    $balance_type_str .= ','. \addons\Supply\common\enums\BalanceTypeEnum::getValue($balance_type);
+                }
+                $list['balance_type'] = trim( $balance_type_str,',' );
+            }
+        }
+        return [$lists,[]];
     }
 }
