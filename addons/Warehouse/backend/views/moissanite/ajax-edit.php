@@ -83,3 +83,27 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+    var formId = 'moissaniteform';
+    function fillStyleForm(){
+        var style_sn = $("#"+formId+"-style_sn").val();
+        if(style_sn != '') {
+            $.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-style'])?>',
+                dataType: "json",
+                data: {
+                    'style_sn': style_sn,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {
+                        $("#"+formId+"-shape").select2("val",data.data.stone_shape);
+                    }
+                }
+            });
+        }
+    }
+    $("#"+formId+"-style_sn").change(function(){
+        fillStyleForm();
+    });
+</script>

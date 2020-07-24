@@ -2,12 +2,14 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use common\helpers\ExcelHelper;
 use Yii;
 use common\traits\Curd;
 use addons\Warehouse\common\forms\MoissaniteForm;
+use addons\Style\common\models\StoneStyle;
 use addons\Style\common\enums\AttrIdEnum;
 use common\models\base\SearchModel;
+use common\helpers\ExcelHelper;
+use common\helpers\ResultHelper;
 
 /**
  * 莫桑石列表
@@ -100,6 +102,19 @@ class MoissaniteController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询款号信息
+     * @return array
+     */
+    public function actionAjaxGetStyle()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $style_sn = \Yii::$app->request->get('style_sn');
+        $model = StoneStyle::find()->select(['stone_shape'])->where(['style_sn'=>$style_sn])->asArray()->one();
+        return ResultHelper::json(200,'查询成功', $model);
     }
 
     /**
