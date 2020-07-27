@@ -49,7 +49,7 @@ class BankPay extends BaseModel
     {
         return [
             [[ 'dept_id', 'apply_user', 'budget_year', 'budget_type', 'pay_amount', 'payee_company', 'payee_account', 'currency', 'payee_bank', 'usage'], 'required'],
-            [['dept_id', 'project_name', 'budget_type', 'auditor_id', 'audit_status', 'audit_time','finance_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['dept_id', 'project_name', 'budget_type', 'auditor_id', 'audit_status', 'audit_time','finance_status', 'creator_id', 'created_at', 'updated_at','flow_id'], 'integer'],
             [['pay_amount'], 'number'],
             [['usage'], 'string'],
             [['finance_no', 'apply_user', 'budget_year'], 'string', 'max' => 30],
@@ -86,6 +86,7 @@ class BankPay extends BaseModel
             'audit_remark' => '审核备注',
             'finance_status' => '单据状态',
             'flow_ids' => '关联列表',
+            'flow_id' => '流程ID',
             'annex_file' => '附件',
             'creator_id' => '创建人Id',
             'created_at' => '创建时间',

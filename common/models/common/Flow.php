@@ -43,8 +43,9 @@ class Flow extends BaseModel
     {
         return [
             [['cate', 'flow_type', 'flow_method', 'target_id','flow_detail_id', 'target_type',  'flow_status', 'flow_total', 'flow_num', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['current_users','flow_name', 'flow_remark'], 'string', 'max' => 255],
+            [['current_users','flow_name', 'flow_remark','url'], 'string', 'max' => 255],
             [['target_no'], 'string', 'max' => 30],
+            [['id','sid'], 'safe'],
         ];
     }
 
@@ -55,6 +56,7 @@ class Flow extends BaseModel
     {
         return [
             'id' => 'ID',
+            'sid' => 'ID',
             'flow_name' => '流程名称',
             'cate' => '流程分类',
             'flow_type' => '流程类型',
@@ -71,6 +73,7 @@ class Flow extends BaseModel
             'creator_id' => '发起人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
+            'url' => '链接',
         ];
     }
 

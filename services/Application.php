@@ -33,6 +33,7 @@ use common\components\Service;
  * @property \services\member\CreditsLogService $memberCreditsLog 会员积分/余额变动日志
  * @property \services\member\RechargeConfigService $memberRechargeConfig 会员充值
  * @property \services\common\FlowTypeService $flowType 审批流程
+ * @property \services\common\FlowService $flow 审批流程
  * @property \services\common\ActionLogService $actionLog 行为日志
  * @property \services\common\ActionBehaviorService $actionBehavior 可被记录的行为
  * @property \services\common\AttachmentService $attachment 公用资源
@@ -110,6 +111,7 @@ class Application extends Service
         ],
         /** ------ 公用部分 ------ **/
         'flowType' => 'services\common\FlowTypeService',
+        'flow' => 'services\common\FlowService',
         'menu' => 'services\common\MenuService',
         'menuCate' => 'services\common\MenuCateService',
         'config' => 'services\common\ConfigService',

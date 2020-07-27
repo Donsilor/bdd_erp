@@ -20,77 +20,117 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-xs-12">
             <div class="box">
                 <div class=" table-responsive" >
-                    <table class="table table-hover">
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_no') ?>：</td>
-                            <td><?= $model->finance_no ?></td>
-                        </tr>
- 						<tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_user') ?>：</td>
-                            <td><?= $model->apply_user ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('dept_id') ?>：</td>
-                            <td><?= $model->department->name ?? ''?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('project_name') ?>：</td>
-                            <td><?= \addons\Finance\common\enums\ProjectEnum::getValue($model->project_name)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_year') ?>：</td>
-                            <td><?= $model->budget_year ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_type') ?>：</td>
-                            <td><?= \addons\Finance\common\enums\BudgetTypeEnum::getValue($model->budget_type)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                            <td><?= $model->pay_amount ;  ?> <?= $model->currency ;?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_company') ?>：</td>
-                            <td><?= $model->payee_company; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_account') ?>：</td>
-                            <td><?= $model->payee_account?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_bank') ?>：</td>
-                            <td><?= $model->payee_bank  ?></td>
-                        </tr>
+                    <div class="col-xs-6">
+                        <table class="table table-hover">
+                            <tr>
+                                <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('finance_no') ?>：</td>
+                                <td><?= $model->finance_no ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_user') ?>：</td>
+                                <td><?= $model->apply_user ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('dept_id') ?>：</td>
+                                <td><?= $model->department->name ?? ''?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('project_name') ?>：</td>
+                                <td><?= \addons\Finance\common\enums\ProjectEnum::getValue($model->project_name)?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_year') ?>：</td>
+                                <td><?= $model->budget_year ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_type') ?>：</td>
+                                <td><?= \addons\Finance\common\enums\BudgetTypeEnum::getValue($model->budget_type)?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
+                                <td><?= $model->pay_amount ;  ?> <?= $model->currency ;?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_company') ?>：</td>
+                                <td><?= $model->payee_company; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_account') ?>：</td>
+                                <td><?= $model->payee_account?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_bank') ?>：</td>
+                                <td><?= $model->payee_bank  ?></td>
+                            </tr>
 
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
-                            <td><?= $model->usage ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_status') ?>：</td>
-                            <td><?= FinanceStatusEnum::getValue($model->finance_status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                            <td><?= $model->audit_remark ?></td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
+                                <td><?= $model->usage ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_status') ?>：</td>
+                                <td><?= FinanceStatusEnum::getValue($model->finance_status)?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                                <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                                <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
+                                <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                                <td><?= $model->audit_remark ?></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="box">
+                            <h4>附件列表</h4>
+                            <div>
+                                <?php
+                                    $annex_file = explode(',',$model->annex_file) ?? [];
+                                    if($annex_file){
+                                        foreach ($annex_file as $file){
+                                             echo common\helpers\ImageHelper::fancyBox($file);
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="box">
+                            <h4>关联列表</h4>
+                            <div>
+                                <dl>
+                                    <?php
+                                     $flow_ids = explode('|',$model->flow_ids ) ?? [];
+                                     $flow_list = Yii::$app->services->flow->getFlows($flow_ids);
+                                     foreach ($flow_list as $flow){
+                                    ?>
+                                    <dd><?= $flow['id']?> : <?= Html::a($flow['flow_name'], $flow['url'], ['style'=>"text-decoration:underline;color:#3c8dbc"])?></dd>
+                                    <?php } ?>
+                                </dl>
+                                <p>
+                                    <?= Html::create(['select-flow','id'=>$model->id], '新增/编辑相关表单', [
+                                        'class' => 'btn btn-primary btn-xs openIframe',
+                                        'data-width'=>'90%',
+                                        'data-height'=>'90%',
+                                        'data-offset'=>'20px',
+                                    ]);?>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="box-footer text-center">
                     <?php

@@ -7,6 +7,7 @@ use common\enums\AuditStatusEnum;
 use common\enums\FlowStatus;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
+use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
@@ -28,6 +29,7 @@ class FlowController extends BaseController
      * @var ConfigCate
      */
     public $modelClass = Flow::class;
+    public $enableCsrfValidation = false;
 
     /**
      * 首页
@@ -76,6 +78,23 @@ class FlowController extends BaseController
         ]);
     }
 
+
+
+    //编辑时获取单个戒指数据
+    public function actionGetFlow(){
+        $post = Yii::$app->request->post();
+        if(!isset($post['flow_id']) || empty($post['flow_id'])){
+            return ResultHelper::json(422, '参数错误');
+        }
+        $id = $post['flow_id'];
+//        $model = $this->findModel($id);
+        $model = Flow::find()->where(['id'=>$id])->select(['id','flow_name','flow_status'])->asArray()->all();
+        foreach ($model as &$val){
+            $val['flow_status'] = FlowStatusEnum::getValue($val['flow_status']);
+        }
+        return ResultHelper::json(200, '保存成功',$model);
+
+    }
 
 
 
