@@ -123,14 +123,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute'=>'delivery_no',
                             'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                 'class' => 'form-control',
                                  'style' => 'width:150px;'
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ], 
+                        ],*/
                         [
                             'attribute' => 'creator_id',
                             'value' => function($model){
