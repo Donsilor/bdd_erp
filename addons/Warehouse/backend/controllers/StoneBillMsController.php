@@ -61,7 +61,7 @@ class StoneBillMsController extends StoneBillController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+            $this->actionExport($dataProvider);
         }
 
         return $this->render($this->action->id, [
