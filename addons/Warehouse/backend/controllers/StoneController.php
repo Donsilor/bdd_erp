@@ -158,7 +158,7 @@ class StoneController extends BaseController
             ['库存数量', 'stock_cnt' , 'text'],
             ['库存重量', 'stock_weight' , 'text'],
             ['尺寸', 'stone_size' , 'text'],
-            ['规格(颜色/净度/切工/石重)', 'spec' , 'text'],
+            ['规格(颜色/净度/切工)', 'spec' , 'text'],
             ['单价', 'stone_price' , 'text'],
             //['总价格', 'stone_sum_price' , 'text'],
             ['备注', 'remark' , 'text'],
@@ -184,12 +184,12 @@ class StoneController extends BaseController
         foreach ($lists as &$list){
             $list['stone_type'] = \Yii::$app->attr->valueName($list['stone_type']);
             $clarity = \Yii::$app->attr->valueName($list['stone_clarity']);
-            $cut = $list['carat'];
-            $color = \Yii::$app->attr->valueName($list['color']);
-            $list['color'] = $color;
-            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $cut = $list['stone_cut'];
+            $color = \Yii::$app->attr->valueName($list['stone_color']);
+            $list['stone_color'] = $color;
+            $list['stone_shape'] = \Yii::$app->attr->valueName($list['stone_shape']);
             $list['spec'] = $color.'/'.$clarity.'/'
-                .$cut.'/'.$list['carat'];
+                .$cut;
             //$list['stone_sum_price'] = $list['stone_price'] * $list['stone_weight'];
             //$total['stone_num_count'] += $list['stone_num'];
             //$total['stone_sum_price_count'] += $list['stone_sum_price'];
