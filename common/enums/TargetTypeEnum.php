@@ -1,8 +1,6 @@
 <?php
 
 namespace common\enums;
-use addons\Purchase\common\models\Purchase;
-use common\helpers\Url;
 
 /**
  * 目标类型

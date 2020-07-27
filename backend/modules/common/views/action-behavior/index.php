@@ -43,9 +43,56 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model) {
                                 return AppEnum::getValue($model->app_id);
                             },
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['width' => '100'],
                         ],
-                        'url',
+                        [
+                                'attribute' => 'object',
+                                'value' => function ($model) {
+                                    return $model->object;
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'object', [
+                                        'class' => 'form-control',
+                                        'style'=>'width:100px'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                        ],
+                        [
+                                'attribute' => 'behavior',
+                                'value' => function ($model) {
+                                    return $model->behavior;
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'behavior', [
+                                        'class' => 'form-control',
+                                        'style'=>'width:150px'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '150'],
+                        ],
+                        [
+                                'attribute' => 'url',
+                                'value' => function ($model) {
+                                        return $model->url;
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'url', [
+                                        'class' => 'form-control',
+                                        'style'=>'width:300px'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '300'],
+                        ],                    
+                        [
+                            'attribute' => 'event',
+                            'value' => function ($model, $key, $index, $column) {
+                                return \common\enums\BehaviorEventEnum::getValue($model->event);
+                            },
+                            'format' => 'raw',
+                            'filter' => Html::activeDropDownList($searchModel, 'method', \common\enums\BehaviorEventEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control'
+                            ]),
+                            'headerOptions' => ['width' => '100'],
+                        ],
                         [
                             'attribute' => 'method',
                             'value' => function ($model, $key, $index, $column) {
@@ -55,7 +102,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'method', MethodEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control'
-                            ])
+                            ]),
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'action',
@@ -66,7 +114,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'action', $actionExplain, [
                                 'prompt' => '全部',
                                 'class' => 'form-control'
-                            ])
+                            ]),
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'is_ajax',
@@ -77,9 +126,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'is_ajax', $ajaxExplain, [
                                 'prompt' => '全部',
                                 'class' => 'form-control'
-                            ])
+                            ]),
+                            'headerOptions' => ['width' => '100'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'is_record_post',
                             'value' => function ($model, $key, $index, $column) {
                                 return Html::whether($model->is_record_post);
@@ -90,7 +140,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                     'prompt' => '全部',
                                     'class' => 'form-control'
                                 ]
-                            )
+                            ),
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'level',
@@ -103,8 +154,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                     'prompt' => '全部',
                                     'class' => 'form-control'
                                 ]
-                            )
-                        ],
+                            ),
+                            'headerOptions' => ['width' => '100'],
+                        ],*/
                         'remark',
                         [
                             'header' => "操作",

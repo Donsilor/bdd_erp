@@ -58,9 +58,9 @@ class ActionBehavior extends \common\models\base\BaseModel
     public function rules()
     {
         return [
-            [['behavior', 'url'], 'required'],
-            [['action', 'is_record_post', 'is_ajax', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['app_id', 'behavior'], 'string', 'max' => 50],
+            [['object','behavior', 'url','event'], 'required'],
+            [['action', 'is_record_post', 'is_ajax', 'status','event', 'created_at', 'updated_at'], 'integer'],
+            [['app_id', 'behavior','object'], 'string', 'max' => 50],
             [['url'], 'string', 'max' => 200],
             [['remark'], 'string', 'max' => 100],
             [['method', 'level'], 'string', 'max' => 20],
@@ -77,10 +77,12 @@ class ActionBehavior extends \common\models\base\BaseModel
             'app_id' => '应用',
             'url' => '请求Url',
             'method' => '请求方式',
-            'behavior' => '标识',
+            'object' => '目标对象',
+            'behavior' => '目标行为',            
             'remark' => '备注',
             'level' => '行为级别',
             'action' => '触发方式',
+            'event' => '行为事件',
             'is_record_post' => 'Post数据记录',
             'is_ajax' => 'Ajax请求',
             'status' => '状态',

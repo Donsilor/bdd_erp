@@ -51,7 +51,7 @@ class ActionLog extends \common\models\base\BaseModel
         return [
             [['merchant_id', 'user_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['get_data', 'post_data', 'header_data'], 'safe'],
-            [['behavior', 'app_id', 'module', 'controller', 'action', 'country', 'provinces', 'city'], 'string', 'max' => 50],
+            [['object','behavior', 'app_id', 'module', 'controller', 'action', 'country', 'provinces', 'city'], 'string', 'max' => 50],
             [['method'], 'string', 'max' => 20],
             [['url', 'device'], 'string', 'max' => 200],
             [['ip'], 'string', 'max' => 16],
@@ -67,8 +67,9 @@ class ActionLog extends \common\models\base\BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户',
-            'user_id' => '用户',
+            'user_id' => '操作用户',
             'app_id' => '应用',
+            'object' => '对象',
             'behavior' => '行为',
             'method' => '提交方法',
             'module' => '模块',
@@ -79,7 +80,7 @@ class ActionLog extends \common\models\base\BaseModel
             'post_data' => 'Post Data',
             'header_data' => 'Header Data',
             'ip' => 'ip',
-            'remark' => '备注',
+            'remark' => '日志内容',
             'country' => '国家',
             'provinces' => '省',
             'city' => '市',

@@ -92,8 +92,7 @@ class ProductTypeController extends BaseController
             'model' => $model,
             'cateDropDownList' => Yii::$app->styleService->productType->getDropDownForEdit($id),
         ]);
-    }
-    
+    }    
     /**
      * 删除
      *
