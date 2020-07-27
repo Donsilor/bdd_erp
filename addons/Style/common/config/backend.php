@@ -64,6 +64,10 @@ return [
                                     'title' => '石料款式',
                                     'route' => 'stone-style/index',
                             ],
+                            [
+                                    'title' => '配件款式',
+                                    'route' => 'parts-style/index',
+                            ],
                     ],
             ],
             [

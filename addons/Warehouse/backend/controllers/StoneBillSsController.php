@@ -2,9 +2,12 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
 use addons\Warehouse\common\forms\WarehouseStoneBillSsForm;
 
+use common\helpers\PageHelper;
 use common\helpers\SnHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -62,7 +65,7 @@ class StoneBillSsController extends StoneBillController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+            $this->actionExport($dataProvider);
         }
 
         return $this->render($this->action->id, [
@@ -209,6 +212,90 @@ class StoneBillSsController extends StoneBillController
         $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids = null){
+        $name = '石料领石单明细';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+        list($list,) = $this->getData($ids);
+        $header = [
+            ['单据编号', 'bill_no' , 'text'],
+            ['名称', 'stone_name' , 'text'],
+            ['石类', 'stone_type' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['石头形状', 'shape' , 'text'],
+            ['石头颜色', 'color' , 'text'],
+            ['数量', 'stone_num' , 'text'],
+            ['尺寸', 'stone_size' , 'text'],
+            ['规格(颜色/净度/切工/石重)', 'spec' , 'text'],
+            ['单价', 'stone_price' , 'text'],
+            ['总价格', 'stone_sum_price' , 'text'],
+            ['备注', 'remark' , 'text'],
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    private function getData($ids){
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
+        $query = WarehouseStoneBillSsForm::find()->alias('w')
+            ->leftJoin(WarehouseStoneBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->where(['w.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'stone_num_count' => 0,
+            'stone_sum_price_count' => 0,
+
+        ];
+        foreach ($lists as &$list){
+            $list['stone_type'] = \Yii::$app->attr->valueName($list['stone_type']);
+            $clarity = \Yii::$app->attr->valueName($list['clarity']);
+            $cut = $list['carat'];
+            $color = \Yii::$app->attr->valueName($list['color']);
+            $list['color'] = $color;
+            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $list['spec'] = $color.'/'.$clarity.'/'
+                .$cut.'/'.$list['carat'];
+            $list['stone_sum_price'] = $list['stone_price'] * $list['stone_weight'];
+            $total['stone_num_count'] += $list['stone_num'];
+            $total['stone_sum_price_count'] += $list['stone_sum_price'];
+        }
+        return [$lists,$total];
+    }
+
+    /**
+     * 单据打印
+     * @return string
+     * @throws
+     */
+    public function actionPrint()
+    {
+
+
+        $this->layout = '@backend/views/layouts/print';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        list($lists,$total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' => $total
         ]);
     }
 

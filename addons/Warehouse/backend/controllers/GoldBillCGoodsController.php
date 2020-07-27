@@ -26,9 +26,9 @@ class GoldBillCGoodsController extends GoldBillGoodsController
      */
     public function actionIndex()
     {
-
+        $bill_id = \Yii::$app->request->get('bill_id');
         $tab = \Yii::$app->request->get('tab',2);
-        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index']));
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -50,7 +50,7 @@ class GoldBillCGoodsController extends GoldBillGoodsController
             $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillGoods::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillGoods::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $bill_id = \Yii::$app->request->get('bill_id');
+
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
 
         $gold_sn = \Yii::$app->request->get('gold_sn', null);
@@ -113,7 +113,7 @@ class GoldBillCGoodsController extends GoldBillGoodsController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

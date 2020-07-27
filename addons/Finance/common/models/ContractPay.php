@@ -49,11 +49,12 @@ class ContractPay extends \yii\db\ActiveRecord
     {
         return [
             [['finance_no', 'dept_id', 'apply_user', 'apply_time', 'contract_name', 'contract_info', 'contract_type', 'payment_type', 'amount_total', 'last_period_total', 'this_period_amount', 'currency', 'this_period_total'], 'required'],
-            [['dept_id', 'apply_time', 'contract_type', 'payment_type', 'auditor_id', 'audit_status', 'audit_time', 'finance_status','created_at', 'updated_at', 'creator_id'], 'integer'],
+            [['dept_id', 'contract_type', 'payment_type', 'auditor_id', 'audit_status', 'audit_time', 'finance_status','created_at', 'updated_at', 'creator_id'], 'integer'],
             [['amount_total', 'last_period_total', 'this_period_amount', 'this_period_total'], 'number'],
             [['finance_no', 'apply_user', 'contract_no'], 'string', 'max' => 30],
             [['contract_name'], 'string', 'max' => 50],
-            [['contract_info', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['contract_info', 'audit_remark', 'remark','flow_ids'], 'string', 'max' => 255],
+            [['annex_file'], 'string', 'max' => 500],
             [['currency'], 'string', 'max' => 3],
         ];
     }
@@ -68,7 +69,6 @@ class ContractPay extends \yii\db\ActiveRecord
             'finance_no' => 'Finance No',
             'dept_id' => '所属部门',
             'apply_user' => '填单人',
-            'apply_time' => '填单时间',
             'contract_name' => '合同名称',
             'contract_no' => '合同编号',
             'contract_info' => '合同单位及其联系人、联系电话',
@@ -84,6 +84,8 @@ class ContractPay extends \yii\db\ActiveRecord
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'finance_status' => '单据状态',
+            'flow_ids' => '关联列表',
+            'annex_file' => '附件',
             'created_at' => '创建时间',
             'updated_at' => 'Updated At',
             'creator_id' => '创建人Id',

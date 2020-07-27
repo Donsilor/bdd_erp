@@ -252,7 +252,5 @@ $params = $params ? "&".http_build_query($params) : '';
         }else{
             window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
         }
-
     }
-
 </script>

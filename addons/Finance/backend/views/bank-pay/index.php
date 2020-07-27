@@ -22,10 +22,7 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
+                    <?= Html::create(['edit'], '创建'); ?>
 <!--                    --><?//= Html::button('导出', [
 //                        'class'=>'btn btn-success btn-xs',
 //                        'onclick' => 'batchExport()',
@@ -60,7 +57,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'finance_no',
                     'value'=>function($model) {
-                        return Html::a($model->purchase_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->finance_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'finance_no', [
                             'class' => 'form-control',
@@ -97,9 +94,13 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'finance_status',
                 'value' => function ($model){
-                    $audit_name = Yii::$app->services->flowType->getCurrentUsersName(TargetTypeEnum::PURCHASE_MENT,$model->id);
-                    $audit_name_str = $audit_name ? "({$audit_name})" : "";
-                    return PurchaseStatusEnum::getValue($model->finance_status).$audit_name_str;
+                    $model->getTargetType();
+                    $audit_name_str = '';
+                    if($model->targetType){
+                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    }
+                    return FinanceStatusEnum::getValue($model->finance_status).$audit_name_str;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'finance_status',FinanceStatusEnum::getMap(), [
                     'prompt' => '全部',
@@ -179,17 +180,18 @@ $params = $params ? "&".http_build_query($params) : '';
                 'template' => '{goods} {edit} {ajax-audit} {apply} {follower} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
-                            return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModalLg',
-                                    'class'=>'btn btn-primary btn-sm',
-                            ]);
+                        if($model->finance_status == FinanceStatusEnum::SAVE){
+                            return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',['class'=>'btn btn-primary btn-sm',]);
                         }
                     },                    
                     'ajax-audit' => function($url, $model, $key){
-                        $isAudit = Yii::$app->services->flowType->isAudit(TargetTypeEnum::PURCHASE_MENT,$model->id);
-                        if($model->purchase_status == PurchaseStatusEnum::PENDING && $isAudit){
+                        $model->getTargetType();
+                        if($model->targetType){
+                            $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
+                        }else{
+                            $isAudit = true;
+                        }
+                        if($model->finance_status == FinanceStatusEnum::PENDING && $isAudit){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -202,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     },
 
                     'apply' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                        if($model->finance_status == FinanceStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -210,7 +212,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'close' => function($url, $model, $key){
-                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                        if($model->finance_status == FinanceStatusEnum::SAVE){
                             return Html::delete(['close', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);

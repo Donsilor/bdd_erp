@@ -30,7 +30,7 @@ return [
             'child' => [
                 [
                     'title' => '银行支付单',
-                    'route' => 'bank-payment/index',
+                    'route' => 'bank-pay/index',
                 ],
 
             ],

@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -51,7 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'style_sn',
-                            'value' => 'style_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
@@ -93,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:160px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -112,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'label' => '审核人',
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
@@ -127,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'audit_time',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control',],
+                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:160px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -153,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => Html::activeTextInput($searchModel, 'audit_remark', [
                                 'class' => 'form-control',
                             ]),
-                        ],
+                        ],*/
                         [
                             'label' => '审核状态',
                             'attribute' => 'audit_status',
@@ -184,7 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {status} {delete}',
+                            'template' => '{edit} {apply} {audit} {view} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -208,6 +212,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-target' => '#ajaxModal',
                                         ]);
                                     }
+                                },
+                                'view' => function($url, $model, $key){
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {

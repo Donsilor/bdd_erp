@@ -30,6 +30,7 @@ class Yii
  * @property \addons\Purchase\services\Application $purchaseService
  * @property \addons\Warehouse\services\Application $warehouseService
  * @property \addons\Sales\services\Application $salesService
+ * @property \addons\Finance\services\Application $financeService
  * @property \addons\Shop\services\Application $shopService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat

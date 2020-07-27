@@ -128,13 +128,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body col-lg-12" style="padding-left:30px">
                     <div class="row">
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true])->label("手机 [<sapn style=\"color:red;\">非国际批发必填</sapn>]") ?>
+                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true])->label("手机 [<sapn style=\"color:red;\">*非国际批发必填</sapn>]") ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'home_phone')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("邮箱 [<sapn style=\"color:red;\">国际批发必填</sapn>]") ?>
+                            <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("邮箱 [<sapn style=\"color:red;\">*国际批发必填</sapn>]") ?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'qq')->textInput(['maxlength' => true]) ?>

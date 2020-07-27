@@ -111,9 +111,21 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="box-footer text-center">
+            <?php
+                echo Html::button('导出', [
+                    'class'=>'btn btn-success btn-sm',
+                    'onclick' => 'batchExport()',
+                ]);
+                echo '&nbsp;';
+            ?>
             <?= Html::a('返回列表', ['index'], ['class' => 'btn btn-default btn-sm']) ?>
         </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+    }
+</script>
 
 

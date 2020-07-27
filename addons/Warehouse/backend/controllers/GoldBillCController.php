@@ -181,7 +181,7 @@ class GoldBillCController extends GoldBillController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '金料入库单明细';
+        $name = '领料单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -190,11 +190,12 @@ class GoldBillCController extends GoldBillController
         }
         list($list,) = $this->getData($ids);
         $header = [
+            ['单据编号', 'bill_no' , 'text'],
+            ['供应商', 'supplier_name' , 'text'],
             ['名称', 'gold_type' , 'text'],
             ['金类', 'gold_name' , 'text'],
             ['款号', 'style_no' , 'text'],
             ['重量(g)', 'gold_weight' , 'text'],
-            ['加工厂', 'supplier_name' , 'text'],
             ['价格	', 'gold_price' , 'text'],
             ['备注', 'remark' , 'text'],
 

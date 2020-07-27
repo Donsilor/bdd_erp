@@ -75,6 +75,14 @@ class Flow extends BaseModel
     }
 
     /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
      * 部门
      * @return \yii\db\ActiveQuery
      */

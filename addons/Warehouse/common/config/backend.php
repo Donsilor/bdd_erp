@@ -117,6 +117,10 @@ return [
                         'route' => 'gold-bill-c/index',
                     ],
                     [
+                        'title' => '退料单',
+                        'route' => 'gold-bill-d/index',
+                    ],
+                    [
                         'title' => '盘点单',
                         'route' => 'gold-bill-w/index',
                     ],
@@ -158,6 +162,41 @@ return [
                     [
                         'title' => '出入库列表',
                         'route' => 'stone-bill/index',
+                    ],
+                ],
+            ],
+            [
+                'title' => '配件管理',
+                'route' => 'indexParts',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '配件库存',
+                        'route' => 'parts/index',
+                    ],
+                    [
+                        'title' => '配件列表',
+                        'route' => 'parts-apply/index',
+                    ],
+                    [
+                        'title' => '入库单',
+                        'route' => 'parts-bill-l/index',
+                    ],
+                    [
+                        'title' => '领件单',
+                        'route' => 'parts-bill-c/index',
+                    ],
+                    [
+                        'title' => '退件单',
+                        'route' => 'parts-bill-d/index',
+                    ],
+                    [
+                        'title' => '盘点单',
+                        'route' => 'parts-bill-w/index',
+                    ],
+                    [
+                        'title' => '出入库列表',
+                        'route' => 'parts-bill/index',
                     ],
                 ],
             ],

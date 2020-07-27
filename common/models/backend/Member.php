@@ -2,6 +2,7 @@
 
 namespace common\models\backend;
 
+use common\models\common\Department;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -142,5 +143,14 @@ class Member extends User
                 ],
             ]
         ];
+    }
+
+    /**
+     * 部门
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartment()
+    {
+        return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
 }

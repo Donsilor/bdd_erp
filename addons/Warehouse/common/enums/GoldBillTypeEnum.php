@@ -13,6 +13,7 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
 {
     const GOLD_L   = 'GL';
     const GOLD_C   = 'GC';
+    const GOLD_D   = 'GD';
     const GOLD_W   = 'GW';
 
     /**
@@ -23,6 +24,7 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
         return [
             self::GOLD_L   => '入库单',
             self::GOLD_C   => '领料单',
+            self::GOLD_D   => '退料单',
             self::GOLD_W   => '盘点单',
         ];
     }

@@ -38,19 +38,12 @@ class BankPayForm extends BankPay
     }
 
     public function getTargetType(){
-        switch ($this->sale_channel_id){
-            case 3:
-                $this->targetType = TargetTypeEnum::ORDER_F_MENT;
-                break;
-            case 4:
-                $this->targetType = TargetTypeEnum::ORDER_Z_MENT;
-                break;
-            case 9:
-                $this->targetType = TargetTypeEnum::ORDER_T_MENT;
-                break;
-            default:
-                $this->targetType = false;
-
+        if(in_array($this->dept_id,[17])){
+            $this->targetType = TargetTypeEnum::BANK_PAY_F_MENT;
+        }elseif (in_array($this->dept_id,[6,7,8,9,10,11,12,13,14,15,16])){
+            $this->targetType = TargetTypeEnum::BANK_PAY_T_MENT;
+        }else{
+            $this->targetType = false;
         }
     }
     
