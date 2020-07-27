@@ -18,7 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>                
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
+                </div>
             </div>
             <div class="box-body table-responsive">
                 <?= GridView::widget([
@@ -248,3 +254,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
+
+    }
+
+</script>

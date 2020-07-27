@@ -117,6 +117,10 @@ return [
                         'route' => 'gold-bill-c/index',
                     ],
                     [
+                        'title' => '退料单',
+                        'route' => 'gold-bill-d/index',
+                    ],
+                    [
                         'title' => '盘点单',
                         'route' => 'gold-bill-w/index',
                     ],

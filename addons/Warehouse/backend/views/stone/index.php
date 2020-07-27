@@ -19,6 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
+                </div>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -26,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:160%;'],
+                    'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -246,7 +252,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                             //    'class' => 'form-control',
@@ -256,7 +262,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
@@ -403,3 +409,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
+    }
+</script>

@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_c_goods', '领料单明细');
+$this->title = Yii::t('gold_bill_d_goods', '退料单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

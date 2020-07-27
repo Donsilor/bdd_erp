@@ -61,7 +61,7 @@ class StoneBillMsController extends StoneBillController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+            $this->actionExport($dataProvider);
         }
 
         return $this->render($this->action->id, [
@@ -167,6 +167,7 @@ class StoneBillMsController extends StoneBillController
         }
         list($list,) = $this->getData($ids);
         $header = [
+            ['单据编号', 'bill_no' , 'text'],
             ['名称', 'stone_name' , 'text'],
             ['石类', 'stone_type' , 'text'],
             ['款号', 'style_sn' , 'text'],

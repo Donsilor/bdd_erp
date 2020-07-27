@@ -2,32 +2,31 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Supply\common\models\Supplier;
-use common\helpers\PageHelper;
-use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\forms\WarehouseGoldBillCForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillDForm;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
-use common\helpers\Url;
-use common\helpers\ExcelHelper;
 use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Supply\common\models\Supplier;
 use addons\Supply\common\models\ProduceGold;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
+use common\enums\AuditStatusEnum;
+use common\helpers\StringHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
+use common\helpers\Url;
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
  */
-class GoldBillCController extends GoldBillController
+class GoldBillDController extends GoldBillController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillCForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_C;
+    public $modelClass = WarehouseGoldBillDForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_D;
 
     /**
      * Lists all StyleChannel models.
@@ -82,7 +81,7 @@ class GoldBillCController extends GoldBillController
     {
         $bill_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-d/index']));
         $model = $this->findModel($bill_id);
         $model = $model ?? new WarehouseGoldBill();
         return $this->render($this->action->id, [
@@ -139,7 +138,7 @@ class GoldBillCController extends GoldBillController
     }
 
     /**
-     * ajax 领料单-审核
+     * ajax 退料单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -181,7 +180,7 @@ class GoldBillCController extends GoldBillController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '领料单明细';
+        $name = '退料单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -192,11 +191,11 @@ class GoldBillCController extends GoldBillController
         $header = [
             ['单据编号', 'bill_no' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
-            ['名称', 'gold_type' , 'text'],
-            ['金类', 'gold_name' , 'text'],
-            ['款号', 'style_no' , 'text'],
-            ['重量(g)', 'gold_weight' , 'text'],
-            ['价格	', 'gold_price' , 'text'],
+            ['金料类型', 'gold_type' , 'text'],
+            ['金料名称', 'gold_name' , 'text'],
+            ['金料款号', 'style_sn' , 'text'],
+            ['金料重量(g)', 'gold_weight' , 'text'],
+            ['金料价格', 'gold_price' , 'text'],
             ['备注', 'remark' , 'text'],
 
         ];
@@ -207,7 +206,7 @@ class GoldBillCController extends GoldBillController
 
     private function getData($ids){
         $select = ['wg.*','w.bill_no','w.to_warehouse_id','sup.supplier_name'];
-        $query = WarehouseGoldBillCForm::find()->alias('w')
+        $query = WarehouseGoldBillDForm::find()->alias('w')
             ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->leftJoin(Supplier::tableName().' sup','sup.id=w.supplier_id')
             ->where(['w.id' => $ids])

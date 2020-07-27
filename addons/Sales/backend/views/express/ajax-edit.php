@@ -41,7 +41,7 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]); ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'settlement_account')->textInput(['maxlength' => true]); ?>
+                <?= $form->field($model, 'receive_time')->textInput(['maxlength' => true]); ?>
             </div>
         </div>
         <div class="row">
@@ -60,7 +60,7 @@ $form = ActiveForm::begin([
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <?= $form->field($model, 'receive_time')->textInput(['maxlength' => true]); ?>
+                <?= $form->field($model, 'settlement_account')->textInput(['maxlength' => true]); ?>
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'stop_receive_time')->widget(DatePicker::class, [

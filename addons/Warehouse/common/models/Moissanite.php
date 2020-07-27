@@ -63,7 +63,7 @@ class Moissanite extends BaseModel
             'type' => '类型',
             'shape' => '形状',
             'size' => '尺寸(mm)',
-            'ref_carat' => '尺寸参考石重(ct)',
+            'ref_carat' => '尺寸参考钻石重(ct)',
             'real_carat' => '实际石重(ct)',
             'karat_num' => '克拉数量',
             'karat_price' => '克拉成本',

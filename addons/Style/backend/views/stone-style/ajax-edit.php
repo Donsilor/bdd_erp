@@ -26,7 +26,13 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'stone_shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'stone_shape')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?>
             </div>
         </div>
         <div class="row">
