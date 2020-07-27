@@ -188,7 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {status} {delete}',
+                            'template' => '{edit} {apply} {audit} {view} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -212,6 +212,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-target' => '#ajaxModal',
                                         ]);
                                     }
+                                },
+                                'view' => function($url, $model, $key){
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
