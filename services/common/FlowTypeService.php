@@ -7,6 +7,7 @@ use common\enums\FlowMethodEnum;
 use common\enums\FlowStatus;
 use common\enums\FlowStatusEnum;
 use common\enums\StatusEnum;
+use common\enums\TargetTypeEnum;
 use common\helpers\ArrayHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
@@ -38,7 +39,7 @@ class FlowTypeService extends Service
     /***
      * 创建具体审批流程
      */
-    public function createFlow($flow_type_id,$target_id,$target_no=null){
+    public function createFlow($flow_type_id,$target_id,$target_no=''){
 
         $flow_type = FlowType::find()->where(['id'=>$flow_type_id,'status' => StatusEnum::ENABLED])->one();
         if(empty($flow_type)){
@@ -50,8 +51,18 @@ class FlowTypeService extends Service
             throw new \Exception('请查看审批人员是否添加');
         }
 
+        $member_id = \Yii::$app->user->identity->getId();
+        $member = \Yii::$app->services->backendMember->findByIdWithAssignment($member_id);
+        $department_name = $member->department->name ?? '';
+        $member_name = $member->username;
+        $flow_name = '';
+        if($department_name != ''){
+            $flow_name = $department_name.'-';
+        }
+        $flow_name .= $member_name.'-'.TargetTypeEnum::getValue($flow_type_id);
+
         $flow = new Flow();
-        $flow->flow_name = $flow_type->name;
+        $flow->flow_name = $flow_name;
         $flow->cate = $flow_type->cate;
         $flow->flow_type = $flow_type_id;
         $flow->flow_method = $flow_type->method;
@@ -64,7 +75,7 @@ class FlowTypeService extends Service
         }
         $flow->flow_status = FlowStatusEnum::GO_ON;
         $flow->flow_total = count($users_arr);
-        $flow->creator_id = \Yii::$app->user->identity->getId();
+        $flow->creator_id = $member_id;
         $flow->created_at = time();
         if(false === $flow->save()){
             throw new \Exception($this->getError($flow));

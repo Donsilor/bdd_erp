@@ -2,19 +2,19 @@
 
 use common\helpers\Html;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
+use addons\Finance\common\enums\FinanceStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '采购单详情';
+$this->title = '银行支付单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $model->purchase_sn?></h2>
+    <h2 class="page-header">银行支付单详情 - <?php echo $model->finance_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content" >
         <div class="col-xs-12">
@@ -22,64 +22,65 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class=" table-responsive" >
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
-                            <td><?= $model->purchase_sn ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_no') ?>：</td>
+                            <td><?= $model->finance_no ?></td>
                         </tr>
  						<tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_cate') ?>：</td>
-                            <td><?= \addons\Purchase\common\enums\PurchaseCateEnum::getValue($model->purchase_cate)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_user') ?>：</td>
+                            <td><?= $model->apply_user ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
-                            <td><?= \addons\Purchase\common\enums\OrderTypeEnum::getValue($model->order_type)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('dept_id') ?>：</td>
+                            <td><?= $model->department->name ?? ''?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_status') ?>：</td>
-                            <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('project_name') ?>：</td>
+                            <td><?= \addons\Finance\common\enums\ProjectEnum::getValue($model->project_name)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
-                            <td><?= $model->total_num ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_year') ?>：</td>
+                            <td><?= $model->budget_year ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
-                            <td><?= $model->total_cost ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_type') ?>：</td>
+                            <td><?= \addons\Finance\common\enums\BudgetTypeEnum::getValue($model->budget_type)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                            <td><?= $model->supplier ? $model->supplier->supplier_name : '';  ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
+                            <td><?= $model->pay_amount ;  ?> <?= $model->currency ;?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('follower_id') ?>：</td>
-                            <td><?= $model->follower ? $model->follower->username : ''; ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_company') ?>：</td>
+                            <td><?= $model->payee_company; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_account') ?>：</td>
+                            <td><?= $model->payee_account?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_bank') ?>：</td>
+                            <td><?= $model->payee_bank  ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
+                            <td><?= $model->usage ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_status') ?>：</td>
+                            <td><?= FinanceStatusEnum::getValue($model->finance_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                             <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_time') ?>：</td>
-                            <td><?= $model->delivery_time ? \Yii::$app->formatter->asDatetime($model->delivery_time) : '' ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_sn') ?>：</td>
-                            <td><?= $model->apply_sn ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                            <td><?= $model->remark ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
@@ -93,25 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="box-footer text-center">
                     <?php
-                        if($model->purchase_status == BillStatusEnum::SAVE) {
-                            echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
-                                'data-toggle' => 'modal',
+                        if($model->finance_status == FinanceStatusEnum::SAVE) {
+                            echo Html::edit(['edit', 'id' => $model->id], '编辑', [
                                 'class' => 'btn btn-primary btn-ms',
-                                'data-target' => '#ajaxModalLg',
                             ]);
                         }
                     ?>
+
                     <?php
-                    if($model->purchase_status <= BillStatusEnum::PENDING){
-                        echo Html::edit(['ajax-follower','id'=>$model->id], '跟单人', [
-                            'class'=>'btn btn-info btn-ms',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]);
-                    }
-                    ?>
-                    <?php
-                    if($model->purchase_status == BillStatusEnum::SAVE){
+                    if($model->finance_status == FinanceStatusEnum::SAVE){
                         echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                             'class'=>'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -119,8 +110,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::PURCHASE_MENT,$model->id);
-                    if($model->purchase_status == BillStatusEnum::PENDING && $isAudit){
+                    if($model->targetType){
+                        $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
+                    }else{
+                        $isAudit = true;
+                    }
+                    if($model->finance_status == FinanceStatusEnum::PENDING && $isAudit){
                         echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                             'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
@@ -132,10 +127,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'target'=>'_blank',
                         'class'=>'btn btn-info btn-ms',
                     ]); ?>
-                    <?= Html::button('导出', [
-                        'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'batchExport()',
-                    ]);?>
+<!--                    --><?//= Html::button('导出', [
+//                        'class'=>'btn btn-success btn-ms',
+//                        'onclick' => 'batchExport()',
+//                    ]);?>
                 </div>
             </div>
         </div>
@@ -151,6 +146,6 @@ $this->params['breadcrumbs'][] = $this->title;
     function batchExport() {
         window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
     }
-    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> \common\enums\TargetTypeEnum::PURCHASE_MENT,'target_id'=>$model->id])?>")
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> $model->targetType,'target_id'=>$model->id])?>")
 
 </script>

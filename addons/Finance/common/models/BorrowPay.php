@@ -43,12 +43,13 @@ class BorrowPay extends BaseModel
     {
         return [
             [['finance_no', 'dept_id', 'apply_time', 'apply_user', 'borrow_remark', 'borrow_amount', 'currency', 'repay_time'], 'required'],
-            [['dept_id', 'apply_time', 'repay_time', 'auditor_id', 'audit_status', 'audit_time','finance_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['dept_id', 'repay_time', 'auditor_id', 'audit_status', 'audit_time','finance_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['borrow_remark'], 'string'],
             [['borrow_amount'], 'number'],
             [['finance_no', 'apply_user'], 'string', 'max' => 30],
             [['currency'], 'string', 'max' => 3],
-            [['audit_remark'], 'string', 'max' => 255],
+            [['audit_remark','flow_ids'], 'string', 'max' => 255],
+            [['annex_file'], 'string', 'max' => 500],
         ];
     }
 
@@ -61,7 +62,6 @@ class BorrowPay extends BaseModel
             'id' => 'ID',
             'finance_no' => '单号',
             'dept_id' => '所属部门',
-            'apply_time' => '填单时间',
             'apply_user' => '借款人',
             'borrow_remark' => '借款事由',
             'borrow_amount' => '借款金额',
@@ -72,6 +72,8 @@ class BorrowPay extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'finance_status' => '单据状态',
+            'flow_ids' => '关联列表',
+            'annex_file' => '附件',
             'creator_id' => '创建人Id',
             'created_at' => '创建时间',
             'updated_at' => 'Updated At',

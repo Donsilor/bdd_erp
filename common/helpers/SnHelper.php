@@ -105,5 +105,17 @@ class SnHelper
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, 9999999),7,'0',STR_PAD_LEFT);
     }
 
+
+    /**
+     * 财务申请单号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createFinanceSn($id=null,$prefix = 'OA')
+    {
+        $id = $id ?? mt_rand(1, 999999);
+        return $prefix.str_pad($id,5,'0',STR_PAD_LEFT);
+    }
+
     
 }
