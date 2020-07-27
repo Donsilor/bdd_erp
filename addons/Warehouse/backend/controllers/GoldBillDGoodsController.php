@@ -8,17 +8,17 @@ use common\models\base\SearchModel;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\forms\WarehouseGoldBillCGoodsForm;
-use common\helpers\Url;
+use addons\Warehouse\common\forms\WarehouseGoldBillDGoodsForm;
 use common\helpers\ExcelHelper;
+use common\helpers\Url;
 
 /**
- * 领料单
+ * 退料单
  */
-class GoldBillCGoodsController extends GoldBillGoodsController
+class GoldBillDGoodsController extends GoldBillGoodsController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillCGoodsForm::class;
+    public $modelClass = WarehouseGoldBillDGoodsForm::class;
     public $billType = GoldBillTypeEnum::GOLD_C;
     /**
      * 列表
@@ -28,7 +28,7 @@ class GoldBillCGoodsController extends GoldBillGoodsController
     {
         $bill_id = \Yii::$app->request->get('bill_id');
         $tab = \Yii::$app->request->get('tab',2);
-        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index', 'bill_id'=>$bill_id]));
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['gold-bill-d-goods/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -113,7 +113,7 @@ class GoldBillCGoodsController extends GoldBillGoodsController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-c-goods/index', 'bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-d-goods/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

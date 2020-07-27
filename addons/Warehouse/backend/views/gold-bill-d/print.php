@@ -29,7 +29,7 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>领料单明细表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>退料单明细表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
