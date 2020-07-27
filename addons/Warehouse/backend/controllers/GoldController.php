@@ -2,20 +2,18 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
-use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
-use addons\Warehouse\common\models\WarehouseGold;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseStone;
+use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\forms\WarehouseGoldForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Supply\common\models\Supplier;
+use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
-
+use common\helpers\PageHelper;
+use common\helpers\Url;
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
@@ -57,7 +55,7 @@ class GoldController extends BaseController
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+            $this->actionExport($dataProvider);
         }
 
         return $this->render($this->action->id, [
@@ -135,19 +133,51 @@ class GoldController extends BaseController
     }
 
     /**
-     * 导出
-     * @return string
-     * @throws
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
+    public function actionExport($ids = null){
+        $name = '金料';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('ID不为空', $this->redirect(['index']), 'warning');
+        }
+        list($list,) = $this->getData($ids);
         $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
+            ['批次号', 'gold_sn' , 'text'],
+            ['供应商', 'supplier_name' , 'text'],
+            ['金料类型', 'gold_type' , 'text'],
+            ['金料名称', 'gold_name' , 'text'],
+            ['金料款号', 'style_sn' , 'text'],
+            ['金料数量', 'gold_num' , 'text'],
+            ['库存重量(g)', 'gold_weight' , 'text'],
+            ['金料单价', 'gold_price' , 'text'],
+            ['备注', 'remark' , 'text'],
         ];
-        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
 
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    private function getData($ids){
+        $select = ['g.*','sup.supplier_name'];
+        $query = WarehouseGold::find()->alias('g')
+            ->leftJoin(Supplier::tableName().' sup','sup.id=g.supplier_id')
+            ->where(['g.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+
+        ];
+        foreach ($lists as &$list){
+            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+        }
+        return [$lists,$total];
     }
 
 }
