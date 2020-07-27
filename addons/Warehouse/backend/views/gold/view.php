@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-footer text-center">
             <?php
                 echo Html::button('导出', [
-                    'class'=>'btn btn-success btn-ms',
+                    'class'=>'btn btn-success btn-sm',
                     'onclick' => 'batchExport()',
                 ]);
                 echo '&nbsp;';

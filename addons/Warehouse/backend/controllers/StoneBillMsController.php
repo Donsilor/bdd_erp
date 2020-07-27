@@ -167,6 +167,7 @@ class StoneBillMsController extends StoneBillController
         }
         list($list,) = $this->getData($ids);
         $header = [
+            ['单据编号', 'bill_no' , 'text'],
             ['名称', 'stone_name' , 'text'],
             ['石类', 'stone_type' , 'text'],
             ['款号', 'style_sn' , 'text'],

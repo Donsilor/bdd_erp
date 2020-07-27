@@ -129,7 +129,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('打印',['print','id'=>$model->id],[
                 'target'=>'_blank',
                 'class'=>'btn btn-info btn-ms',
-            ]); ?>
+            ]);
+            echo '&nbsp;';
+            ?>
             <?= Html::button('导出', [
                 'class'=>'btn btn-success btn-ms',
                 'onclick' => 'batchExport()',

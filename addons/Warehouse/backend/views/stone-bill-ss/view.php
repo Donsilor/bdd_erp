@@ -113,15 +113,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
             ?>
-            <?php
-           /*  if($model->bill_status == BillStatusEnum::PENDING){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                    'class'=>'btn btn-success btn-ms',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModal',
-                ]);
-            } */
+            <?= Html::a('打印',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-ms',
+            ]);
+            echo '&nbsp;';
             ?>
+            <?= Html::button('导出', [
+                'class'=>'btn btn-success btn-ms',
+                'onclick' => 'batchExport()',
+            ]);?>
         </div>
 
         <!-- box end -->
