@@ -34,7 +34,7 @@ class OrderController extends Controller
                     ->innerJoin(OrderSync::tableName().' sync','order.id=sync.order_id and sync.sync_platform='.SyncPlatformEnum::SYNC_EPR)
                     ->where(['order.is_test'=>0,'sync.sync_created'=>0])
                     ->andWhere(['>=','order.order_status',OrderStatusEnum::ORDER_PAID])
-                    ->andWhere(['<','sync.sync_created_time',time()-1200])                    
+                    ->andWhere(['<','sync.sync_created_time',time()-60])                    
                     ->orderBy('order.id asc')
                     ->limit(50)
                     ->all();

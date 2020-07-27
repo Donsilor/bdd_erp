@@ -22,6 +22,7 @@ use common\components\Service;
  * @property \addons\Style\services\QibanAttributeService $qibanAttribute 起版和属性关系
  * @property \addons\Style\services\GoldService $gold 金料款式
  * @property \addons\Style\services\StoneService $stone 石料款式
+ * @property \addons\Style\services\PartsService $parts 配件款式
  */
 class Application extends Service
 {
@@ -44,5 +45,6 @@ class Application extends Service
         'qibanAttribute' => 'addons\Style\services\QibanAttributeService',
         'gold' => 'addons\Style\services\GoldService',
         'stone' => 'addons\Style\services\StoneService',
+        'parts' => 'addons\Style\services\PartsService',
     ];
 }

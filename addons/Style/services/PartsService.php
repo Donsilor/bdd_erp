@@ -2,22 +2,22 @@
 
 namespace addons\Style\services;
 
-use common\helpers\Url;
 use Yii;
+use common\helpers\Url;
 use common\components\Service;
-use addons\Style\common\models\GoldStyle;
+use addons\Style\common\models\PartsStyle;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 
 /**
- * Class GoldService
+ * Class PartsService
  * @package addons\Style\services
  * @author jianyan74 <751393839@qq.com>
  */
-class GoldService extends Service
+class PartsService extends Service
 {
     /**
-     * 金料款式 tab
+     * 配件款式 tab
      * @param int $id 款式ID
      * @param string $returnUrl
      * @return array
@@ -25,19 +25,19 @@ class GoldService extends Service
     public function menuTabList($id, $returnUrl = null)
     {
         return [
-            1=>['name'=>'金料款式详情','url'=>Url::to(['view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            1=>['name'=>'配件款式详情','url'=>Url::to(['view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
         ];
     }
 
     /**
-     * @param int $gold_type;
+     * @param int $parts_type;
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getDropDown($gold_type = null)
+    public static function getDropDown($parts_type = null)
     {
-        $model = GoldStyle::find()
+        $model = PartsStyle::find()
             ->where(['=', 'status', StatusEnum::ENABLED])
-            ->andFilterWhere(['=', 'gold_type', $gold_type])
+            ->andFilterWhere(['=', 'parts_type', $parts_type])
             ->select(['id', 'style_sn'])
             ->orderBy('sort asc')
             ->asArray()

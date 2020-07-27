@@ -97,7 +97,29 @@ return [
                                 'route' => 'stone-receipt-goods/iqc-index',
                         ],
                 ],
-                
+        ],
+        [
+                'title' => '配件采购',
+                'route' => 'indexPurchase',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                            'title' => '配件采购单',
+                            'route' => 'purchase-parts/index',
+                        ],
+                        [
+                            'title' => '配件收货单',
+                            'route' => 'parts-receipt/index',
+                        ],
+                        [
+                            'title' => '配件返厂单',
+                            'route' => 'parts-defective/index',
+                        ],
+                        [
+                            'title' => '配件质检列表',
+                            'route' => 'parts-receipt-goods/iqc-index',
+                        ],
+                ],
         ],
         [
             'title' => '功能配置',

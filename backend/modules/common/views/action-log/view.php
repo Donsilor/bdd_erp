@@ -75,7 +75,7 @@ use common\helpers\Html;
         <tr>
             <td style="min-width: 100px">Header数据</td>
             <td style="max-width: 700px">
-                <?php Yii::$app->debris->p(DebrisHelper::htmlEncode($model['header_data'])) ?>
+                <?php //Yii::$app->debris->p(DebrisHelper::htmlEncode($model['header_data'])) ?>
             </td>
         </tr>
         </tbody>

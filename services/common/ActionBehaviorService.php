@@ -27,7 +27,8 @@ class ActionBehaviorService extends Service
             $key[] = $item['app_id'];
             $key[] = $item['url'];
             $key[] = $item['action'];
-            $data[implode('|', $key)] = $item;
+            $event = $item['event'];
+            $data[implode('|', $key)][$event] = $item;
         }
 
         return $data;

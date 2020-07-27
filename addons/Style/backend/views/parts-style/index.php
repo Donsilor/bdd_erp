@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_style', '金料款式列表');
+$this->title = Yii::t('parts_style', '配件款式列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -62,12 +62,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'label' => '金料类型',
-                            'attribute' => 'gold_type',
+                            'label' => '配件类型',
+                            'attribute' => 'parts_type',
                             'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->gold_type);
+                                return Yii::$app->attr->valueName($model->parts_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
@@ -188,7 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {view} {status} {delete}',
+                            'template' => '{edit} {apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -212,9 +212,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-target' => '#ajaxModal',
                                         ]);
                                     }
-                                },
-                                'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {

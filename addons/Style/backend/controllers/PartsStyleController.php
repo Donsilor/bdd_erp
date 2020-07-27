@@ -2,23 +2,23 @@
 
 namespace addons\Style\backend\controllers;
 
-use common\helpers\Url;
 use Yii;
+use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Style\common\models\GoldStyle;
+use addons\Style\common\models\PartsStyle;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
 /**
- * GoldStyleController implements the CRUD actions for GoldStyle model.
+ * PartsStyleController implements the CRUD actions for PartsStyle model.
  */
-class GoldStyleController extends BaseController
+class PartsStyleController extends BaseController
 {
     use Curd;
-    public $modelClass = GoldStyle::class;
+    public $modelClass = PartsStyle::class;
     /**
-     * Lists all GoldStyle models.
+     * Lists all PartsStyle models.
      * @return mixed
      */
     public function actionIndex()
@@ -42,8 +42,8 @@ class GoldStyleController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',GoldStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',GoldStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',PartsStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',PartsStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $dataProvider = $searchModel
@@ -51,11 +51,11 @@ class GoldStyleController extends BaseController
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',StoneStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',StoneStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',PartsStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',PartsStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',GoldStyle::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',PartsStyle::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -71,7 +71,7 @@ class GoldStyleController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new PartsStyle();
 
         // ajax 校验
         $this->activeFormValidate($model);
@@ -93,7 +93,7 @@ class GoldStyleController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new PartsStyle();
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -113,7 +113,7 @@ class GoldStyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new PartsStyle();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -154,11 +154,11 @@ class GoldStyleController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new PartsStyle();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->styleService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->styleService->parts->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
