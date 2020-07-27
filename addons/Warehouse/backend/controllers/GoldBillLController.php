@@ -168,13 +168,13 @@ class GoldBillLController extends GoldBillController
         }
         list($list,) = $this->getData($ids);
         $header = [
+            ['单据编号', 'bill_no', 'text'],
             ['金料类型', 'gold_type' , 'text'],
             ['名称', 'gold_name' , 'text'],
             ['款号', 'style_sn' , 'text'],
             ['重量(g)', 'gold_weight' , 'text'],
             ['价格	', 'gold_price' , 'text'],
             ['备注', 'remark' , 'text'],
-
         ];
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
@@ -182,7 +182,7 @@ class GoldBillLController extends GoldBillController
 
 
     private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','w.bill_status'];
         $query = WarehouseGoldBillLForm::find()->alias('w')
             ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->where(['w.id' => $ids])

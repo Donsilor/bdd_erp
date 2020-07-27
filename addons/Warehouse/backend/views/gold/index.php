@@ -63,13 +63,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
-                            'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
                             'attribute' => 'gold_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->gold_type)??"";
@@ -81,18 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'gold_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
-                                'prompt' => '全部',
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         /*[
                             'attribute'=>'gold_num',
@@ -122,9 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'remark',
-                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                            //'filter' => Html::activeTextInput($searchModel, 'remark', [
                             //    'class' => 'form-control',
                             //]),
                             'value' => function ($model) {
@@ -132,6 +118,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
+                        ],*/
+                        [
+                            'attribute' => 'gold_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'creator_id',

@@ -246,7 +246,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                             //    'class' => 'form-control',
@@ -256,7 +256,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
-                        ],
+                        ],*/
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
