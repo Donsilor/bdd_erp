@@ -127,7 +127,7 @@ class PurchaseController extends BaseController
                 if($isNewRecord) {
                     //日志
                     $log = [
-                            'purchase_id' => $id,
+                            'purchase_id' => $model->id,
                             'purchase_sn' => $model->purchase_sn,
                             'log_type' => LogTypeEnum::ARTIFICIAL,
                             'log_module' => "创建采购单",
@@ -173,7 +173,7 @@ class PurchaseController extends BaseController
             }
             //日志
             $log = [
-                'purchase_id' => $id,
+                'purchase_id' => $model->id,
                 'purchase_sn' => $model->purchase_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "申请审核",
@@ -211,7 +211,7 @@ class PurchaseController extends BaseController
             }
             //日志
             $log = [
-                    'purchase_id' => $id,
+                    'purchase_id' => $model->id,
                     'purchase_sn' => $model->purchase_sn,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => "关闭单据",
@@ -269,7 +269,7 @@ class PurchaseController extends BaseController
 
                 //日志
                 $log = [
-                    'purchase_id' => $id,
+                    'purchase_id' => $model->id,
                     'purchase_sn' => $model->purchase_sn,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => "单据审核",
@@ -318,7 +318,7 @@ class PurchaseController extends BaseController
                 }
                 //日志
                 $log = [
-                    'purchase_id' => $id,
+                    'purchase_id' => $model->id,
                     'purchase_sn' => $model->purchase_sn,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => "分配跟单人",
