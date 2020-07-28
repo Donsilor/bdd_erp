@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -30,7 +31,7 @@ class PartsReceiptGoodsController extends BaseController
     /**
      * @var $modelClass PurchaseGoldReceiptGoodsForm
      */
-    public $modelClass = PurchaseGoldReceiptGoodsForm::class;
+    public $modelClass = PurchasePartsReceiptGoodsForm::class;
     public $purchaseType = PurchaseTypeEnum::MATERIAL_PARTS;
     
     /**
@@ -92,7 +93,7 @@ class PartsReceiptGoodsController extends BaseController
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['supplier_id', 'receipt_no']);
-        $dataProvider->query->andWhere(['>',PurchaseGoldReceiptGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',PurchasePartsReceiptGoods::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=','receipt.receipt_status', BillStatusEnum::CONFIRM]);
         $supplier_id = $searchModel->supplier_id;
         if($supplier_id){
@@ -187,7 +188,7 @@ class PartsReceiptGoodsController extends BaseController
 
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check',null);
-        $model = new PurchaseGoldReceiptGoodsForm();
+        $model = new PurchasePartsReceiptGoodsForm();
         $model->ids = $ids;
         if($check){
             try{
@@ -223,7 +224,7 @@ class PartsReceiptGoodsController extends BaseController
     public function actionAjaxDefective()
     {
         $ids = Yii::$app->request->post('ids');
-        $model = new PurchaseGoldReceiptGoodsForm();
+        $model = new PurchasePartsReceiptGoodsForm();
         $model->ids = $ids;
         try{
             $trans = Yii::$app->trans->beginTransaction();
@@ -245,7 +246,7 @@ class PartsReceiptGoodsController extends BaseController
     {
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check', null);
-        $model = new PurchaseGoldReceiptGoodsForm();
+        $model = new PurchasePartsReceiptGoodsForm();
         $model->ids = $ids;
         if($check){
             try{
@@ -292,7 +293,7 @@ class PartsReceiptGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            $model = PurchaseGoldReceiptGoods::find()->where(['id'=>$id])->one();
+            $model = PurchasePartsReceiptGoodsForm::find()->where(['id'=>$id])->one();
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));
             }

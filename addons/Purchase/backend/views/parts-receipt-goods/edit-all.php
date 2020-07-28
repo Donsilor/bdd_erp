@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['gold-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['parts-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
