@@ -9,7 +9,7 @@ use yii\grid\GridView;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 
-$this->title = '金料采购详情';
+$this->title = '配件采购详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">

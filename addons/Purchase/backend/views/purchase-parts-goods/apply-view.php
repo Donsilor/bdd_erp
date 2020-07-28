@@ -3,7 +3,7 @@
 use common\helpers\Html;
 use addons\Supply\common\enums\BuChanEnum;
 
-$this->title = '金料采购编辑-审批';
+$this->title = '配件采购编辑-审批';
 $this->params['breadcrumbs'][] = ['label' =>  $this->title];
 ?>
 <div class="row">

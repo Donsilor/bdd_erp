@@ -9,7 +9,7 @@ use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '金料采购单';
+$this->title = '配件采购单';
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
