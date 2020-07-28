@@ -146,7 +146,7 @@ class PurchaseApplyController extends BaseController
                             'apply_id' => $model->id,
                             'apply_sn' => $model->apply_sn,
                             'log_type' => LogTypeEnum::ARTIFICIAL,
-                            'log_module' => "创建采购申请单",
+                            'log_module' => "创建单据",
                             'log_msg' => "创建采购申请单,单号：".$model->apply_sn
                     ];
                     Yii::$app->purchaseService->apply->createApplyLog($log);

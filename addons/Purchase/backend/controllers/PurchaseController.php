@@ -127,7 +127,7 @@ class PurchaseController extends BaseController
                             'purchase_id' => $model->id,
                             'purchase_sn' => $model->purchase_sn,
                             'log_type' => LogTypeEnum::ARTIFICIAL,
-                            'log_module' => "创建采购单",
+                            'log_module' => "创建单据",
                             'log_msg' => "创建采购单，单号:".$model->purchase_sn
                     ];
                     Yii::$app->purchaseService->purchase->createPurchaseLog($log);

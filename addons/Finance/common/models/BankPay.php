@@ -3,7 +3,6 @@
 namespace addons\Finance\common\models;
 
 use common\models\backend\Member;
-use common\models\base\BaseModel;
 use common\models\common\Department;
 use Yii;
 
@@ -39,7 +38,7 @@ class BankPay extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('finance_bank_pay');
+        return self::tableFullName('bank_pay');
     }
 
     /**

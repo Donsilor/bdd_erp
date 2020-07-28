@@ -32,14 +32,14 @@ use Yii;
  * @property int $creator_id 创建人Id
  * @property string $remark 备注
  */
-class ContractPay extends \yii\db\ActiveRecord
+class ContractPay extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('finance_contract_pay');
+        return self::tableFullName('contract_pay');
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace addons\Finance\common\models;
 
-use addons\Shop\common\models\BaseModel;
 use common\models\backend\Member;
 use Yii;
 
@@ -33,7 +32,7 @@ class BorrowPay extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('finance_borrow_pay');
+        return self::tableFullName('borrow_pay');
     }
 
     /**
