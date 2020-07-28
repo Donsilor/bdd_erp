@@ -2,20 +2,19 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\forms\PurchaseStoneGoodsForm;
-use addons\Style\common\models\GoldStyle;
-use common\helpers\Url;
 use Yii;
-use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use common\helpers\ResultHelper;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\forms\PurchasePartsGoodsForm;
+use common\helpers\Url;
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Purchase\common\forms\PurchaseGoldGoodsForm;
 use addons\Purchase\common\models\PurchaseGold;
+
 /**
  * Attribute
  *
@@ -30,7 +29,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * @var PurchaseGoldGoodsForm
      */
-    public $modelClass = PurchaseGoldGoodsForm::class;
+    public $modelClass = PurchasePartsGoodsForm::class;
     /**
      * 首页
      *
@@ -64,7 +63,7 @@ class PurchasePartsGoodsController extends BaseController
                 'searchModel' => $searchModel,
                 'purchase'=> $purchase,
                 'tab'=>Yii::$app->request->get('tab',2),
-                'tabList'=>Yii::$app->purchaseService->gold->menuTabList($purchase_id,$this->returnUrl),
+                'tabList'=>Yii::$app->purchaseService->parts->menuTabList($purchase_id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
         ]);
     }
@@ -176,7 +175,7 @@ class PurchasePartsGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseGoldGoodsForm();
+        $model = $model ?? new PurchasePartsGoodsForm();
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -275,11 +274,11 @@ class PurchasePartsGoodsController extends BaseController
     {
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check');
-        $model = new PurchaseGoldGoodsForm();
+        $model = new PurchasePartsGoodsForm();
         $model->ids = $ids;
         if($check){
             try{
-                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_GOLD);
+                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_PARTS);
                 return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
@@ -289,7 +288,7 @@ class PurchasePartsGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 //同步采购单至采购收货单
-                Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_GOLD, $model->getIds());
+                Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_PARTS, $model->getIds());
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','操作成功');
                 return ResultHelper::json(200, '操作成功');

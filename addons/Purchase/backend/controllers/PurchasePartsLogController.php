@@ -5,8 +5,8 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Purchase\common\models\PurchaseGold;
-use addons\Purchase\common\models\PurchaseGoldLog;
+use addons\Purchase\common\models\PurchaseParts;
+use addons\Purchase\common\models\PurchasePartsLog;
 
 /**
  * 采购日志
@@ -20,7 +20,7 @@ class PurchasePartsLogController extends BaseController
     /**
      * @var PurchaseLog
      */
-    public $modelClass = PurchaseGoldLog::class;
+    public $modelClass = PurchasePartsLog::class;
 
     /**
      * Lists all PurchaseChannel models.
@@ -30,7 +30,7 @@ class PurchasePartsLogController extends BaseController
     {
         $purchase_id = Yii::$app->request->get('purchase_id');     
         
-        $purchase = PurchaseGold::find()->where(['id'=>$purchase_id])->one();
+        $purchase = PurchaseParts::find()->where(['id'=>$purchase_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -45,14 +45,14 @@ class PurchasePartsLogController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['=',PurchaseGoldLog::tableName().'.purchase_id',$purchase_id]);
+        $dataProvider->query->andWhere(['=',PurchasePartsLog::tableName().'.purchase_id',$purchase_id]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'purchase' => $purchase,
                 'tab'=>Yii::$app->request->get('tab',3),
-                'tabList'=>\Yii::$app->purchaseService->gold->menuTabList($purchase_id,$this->returnUrl),
+                'tabList'=>\Yii::$app->purchaseService->parts->menuTabList($purchase_id,$this->returnUrl),
         ]);
     }
     
