@@ -111,27 +111,38 @@ class PurchaseController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $isNewRecord = $model->isNewRecord;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
-            if($isNewRecord){
-                $model->purchase_sn = SnHelper::createPurchaseSn();
-                $model->creator_id  = \Yii::$app->user->identity->id;
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if($isNewRecord){
+                    $model->purchase_sn = SnHelper::createPurchaseSn();
+                    $model->creator_id  = \Yii::$app->user->identity->id;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                if($isNewRecord) {
+                    //日志
+                    $log = [
+                            'purchase_id' => $id,
+                            'purchase_sn' => $model->purchase_sn,
+                            'log_type' => LogTypeEnum::ARTIFICIAL,
+                            'log_module' => "创建采购单",
+                            'log_msg' => "创建采购单，单号:".$model->purchase_sn
+                    ];
+                    Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                }else{
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            if(false === $model->save()){
-                throw new \Exception($this->getError($model));
-                return $this->message($this->getError($model), $this->redirect(['index']), 'error');
-            }
-            if($isNewRecord) {
-                return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
-            }else{
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-
-
-        }
-
+        }        
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -153,7 +164,7 @@ class PurchaseController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn);
+            $flow = Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn);
 
             $model->purchase_status = PurchaseStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
@@ -166,7 +177,7 @@ class PurchaseController extends BaseController
                 'purchase_sn' => $model->purchase_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "申请审核",
-                'log_msg' => "申请审核"
+                'log_msg' => "采购单提交申请，流程号:".$flow->id,
             ];
             Yii::$app->purchaseService->purchase->createPurchaseLog($log);
             $trans->commit();
@@ -190,32 +201,31 @@ class PurchaseController extends BaseController
         if($model->purchase_status != PurchaseStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        $model->purchase_status = PurchaseStatusEnum::CANCEL;
-        if(false === $model->save()){
+        
+        try{
+            
+            $trans = Yii::$app->db->beginTransaction();
+            $model->purchase_status = PurchaseStatusEnum::CANCEL;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            //日志
+            $log = [
+                    'purchase_id' => $id,
+                    'purchase_sn' => $model->purchase_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => "关闭单据",
+                    'log_msg' => "关闭单据"
+            ];
+            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e) {
+            $trans->rollBack();
             return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-        //日志
-        $log = [
-            'purchase_id' => $id,
-            'purchase_sn' => $model->purchase_sn,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => "关闭单据",
-            'log_msg' => "关闭单据"
-        ];
-        Yii::$app->purchaseService->purchase->createPurchaseLog($log);
-        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }        
 
     }
-
-
-    public function actionAudit(){
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
-
 
     /**
      * ajax 审核
@@ -267,7 +277,6 @@ class PurchaseController extends BaseController
                 ];
                 Yii::$app->purchaseService->purchase->createPurchaseLog($log);
 
-
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -307,7 +316,6 @@ class PurchaseController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-
                 //日志
                 $log = [
                     'purchase_id' => $id,
@@ -398,8 +406,7 @@ class PurchaseController extends BaseController
             ['单件额', 'unit_cost_price' , 'text'],
             ['工厂总额', 'factory_cost_price_sum' , 'text'],
             ['公司成本总额', 'company_unit_cost_sum' , 'text'],
-        ];
-
+        ];        
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
