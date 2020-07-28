@@ -8,6 +8,8 @@ use addons\Supply\common\models\Supplier;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Style\common\models\StyleChannel;
+use addons\Sales\common\models\SaleChannel;
+use addons\Shop\common\models\Order;
 
 /**
  * This is the model class for table "warehouse_bill".
@@ -131,6 +133,14 @@ class WarehouseBill extends BaseModel
         return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
     /**
+     * 销售渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
+    }
+    /**
      * 供应商 一对一
      * @return \yii\db\ActiveQuery
      */
@@ -209,5 +219,13 @@ class WarehouseBill extends BaseModel
     public function getBillJ()
     {
         return $this->hasOne(WarehouseBillJ::class, ['id'=>'id'])->alias('billJ');
+    }
+    /**
+     * 订单
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class, ['order_sn'=>'order_sn'])->alias('order');
     }
 }

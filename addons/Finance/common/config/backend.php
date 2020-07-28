@@ -24,21 +24,46 @@ return [
 
     'menu' => [
         [
-            'title' => '财务类SZ',
+                'title' => '财务订单',
+                'route' => 'IndexOrderFinance',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                                'title' => '订单点款',
+                                'route' => 'order-pay/index',
+                        ],
+                ],
+                    
+        ],
+        [
+                'title' => '财务审批',
+                'route' => 'indexFlowFinance',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '银行支付单',
+                        'route' => 'bank-pay/index',
+                    ],
+                    [
+                        'title' => '合同款项支付审批单',
+                        'route' => 'contract-pay/index',
+                    ],
+                    [
+                        'title' => '个人因公借款审批单',
+                        'route' => 'borrow-pay/index',
+                    ],
+    
+                ],
+
+        ],
+        [
+            'title' => '财务出入库单',
             'route' => 'indexFinance',
             'icon' => 'fa fa-superpowers',
             'child' => [
                 [
-                    'title' => '银行支付单',
-                    'route' => 'bank-pay/index',
-                ],
-                [
-                    'title' => '合同款项支付审批单',
-                    'route' => 'contract-pay/index',
-                ],
-                [
-                    'title' => '个人因公借款审批单',
-                    'route' => 'borrow-pay/index',
+                    'title' => '财务出库单',
+                    'route' => 'finance-sale/index',
                 ],
 
             ],
