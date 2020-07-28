@@ -59,7 +59,7 @@ class PurchasePartsGoodsController extends BaseController
         $dataProvider->query->andWhere(['>','status',-1]);
         
         $purchase = PurchaseParts::find()->where(['id'=>$purchase_id])->one();
-        return $this->render('index', [
+        return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'purchase'=> $purchase,

@@ -103,27 +103,25 @@ class ReceiptController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseReceiptForm();
+        $isNewRecord = $model->isNewRecord;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
-            $log_msg = "编辑收货单";
-            if($isNewRecord){
-                $log_msg = "创建收货单";
-                $model->creator_id  = \Yii::$app->user->identity->getId();
-            }
+
             if(false === $model->save()){
                 $this->message('保存失败：'.$this->getError($model), $this->redirect(['index']), 'error');
             }
-            $log = [
-                'receipt_id' => $model->id,
-                'receipt_no' => $model->receipt_no,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '成品采购收货单',
-                'log_msg' => $log_msg
-            ];
-            \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
-            if($isNewRecord) {
+            
+            if($isNewRecord) {                
+                $log = [
+                        'receipt_id' => $model->id,
+                        'receipt_no' => $model->receipt_no,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => '创建收货单',
+                        'log_msg' => "创建收货单,单号:".$model->receipt_no,
+                ];
+                \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+                
                 return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
             }else{
                 $this->message('保存成功', $this->redirect(['index']), 'success');
@@ -135,10 +133,11 @@ class ReceiptController extends BaseController
     }
 
     /**
-     * @return mixed
      * 申请审核
+     * @return mixed 
      */
     public function actionAjaxApply(){
+        
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseReceiptForm();
@@ -150,20 +149,27 @@ class ReceiptController extends BaseController
         }
         $model->audit_status = AuditStatusEnum::PENDING;
         $model->receipt_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            $log = [
+                    'receipt_id' => $model->id,
+                    'receipt_no' => $model->receipt_no,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '申请审核',
+                    'log_msg' => "收货单申请审核"
+            ];
+            
+            \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+            $trans->commit();            
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');            
+        }catch(\Exception $e) {
+            $trans->rollback();
+            return $this->message('操作失败:'.$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $log_msg = "申请审核";
-        $log = [
-            'receipt_id' => $model->id,
-            'receipt_no' => $model->receipt_no,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => '成品采购收货单',
-            'log_msg' => $log_msg
-        ];
-        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
+        
     }
 
 
@@ -195,10 +201,8 @@ class ReceiptController extends BaseController
                     if(false === $res) {
                         throw new \Exception("更新货品状态失败");
                     }
-                    $log_msg = "审核通过";
                 }else{
                     $model->receipt_status = BillStatusEnum::SAVE;
-                    $log_msg = "审核不通过";
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
@@ -207,8 +211,8 @@ class ReceiptController extends BaseController
                     'receipt_id' => $model->id,
                     'receipt_no' => $model->receipt_no,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '成品采购收货单',
-                    'log_msg' => $log_msg
+                    'log_module' => '单据审核',
+                    'log_msg' => "采购收货单审核,审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
                 \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
                 $trans->commit();
@@ -260,19 +264,30 @@ class ReceiptController extends BaseController
             return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         $model->receipt_status = BillStatusEnum::CANCEL;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        try{
+            
+            $trans = \Yii::$app->trans->beginTransaction();
+            
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            $log = [
+                    'receipt_id' => $model->id,
+                    'receipt_no' => $model->receipt_no,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '关闭收货单',
+                    'log_msg' => '关闭采购收货单'
+            ];
+            \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+            
+            $trans->commit();
+            
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');                 
+        }catch(\Exception $e){
+            $trans->rollback();
+            return $this->message("操作失败:".$e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        $log_msg = '关闭收货单';
-        $log = [
-            'receipt_id' => $model->id,
-            'receipt_no' => $model->receipt_no,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => '成品采购收货单',
-            'log_msg' => $log_msg
-        ];
-        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
-        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        
     }
 
     /**
@@ -293,6 +308,7 @@ class ReceiptController extends BaseController
             PurchaseReceiptGoodsForm::deleteAll(['receipt_id'=>$model->id]);
 
             $model->delete();
+            
             $trans->commit();
             return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

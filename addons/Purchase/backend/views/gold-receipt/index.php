@@ -36,7 +36,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>' width:120%;'],
+        'options' => ['style'=>'white-space:nowrap;'],
         'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
@@ -139,7 +139,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'options' => ['readonly' => false, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [

@@ -101,6 +101,19 @@ class PurchaseReceiptService extends Service
                     }
                     break;
                 }
+            case PurchaseTypeEnum::MATERIAL_PARTS:
+                {
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['parts-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['parts-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
+                    }else{
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
+                    }
+                    break;
+                }
         }
         $tabList = ArrayHelper::merge($tabList, $tab);
         ksort($tabList);
@@ -127,6 +140,10 @@ class PurchaseReceiptService extends Service
             $model = new PurchaseStoneReceiptGoods();
             $stone = ["sum(goods_weight) as total_weight","sum(stone_num) as total_stone_num"];
             $select = ArrayHelper::merge($select, $stone);
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
+            $parts = ["sum(goods_weight) as total_weight"];
+            $select = ArrayHelper::merge($select, $parts);
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -145,6 +162,8 @@ class PurchaseReceiptService extends Service
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $data['total_weight'] = $sum['total_weight']/1;
                 $data['total_stone_num'] = $sum['total_stone_num']/1;
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $data['total_weight'] = $sum['total_weight']/1;
             }
             $result = PurchaseReceipt::updateAll($data, ['id'=>$receipt_id]);
         }
@@ -695,6 +714,8 @@ class PurchaseReceiptService extends Service
                 $model = new PurchaseGoldReceiptGoods();
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $model = new PurchaseStoneReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $model = new PurchasePartsReceiptGoods();
             }else{
                 $model = new PurchaseReceiptGoods();
             }
@@ -729,6 +750,8 @@ class PurchaseReceiptService extends Service
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -761,6 +784,8 @@ class PurchaseReceiptService extends Service
                 $model = new PurchaseGoldReceiptGoods();
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $model = new PurchaseStoneReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $model = new PurchasePartsReceiptGoods();
             }else{
                 $model = new PurchaseReceiptGoods();
             }
@@ -799,6 +824,8 @@ class PurchaseReceiptService extends Service
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -852,6 +879,26 @@ class PurchaseReceiptService extends Service
                     'goods_norms' => $goods->goods_norms,
                     'cost_price' => $goods->cost_price,
                     'goods_price' => $goods->stone_price,
+                    'iqc_reason' => $goods->iqc_reason,
+                    'iqc_remark' => $goods->iqc_remark,
+                    'created_at' => time(),
+                ];
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $detail[] = [
+                    'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
+                    'goods_name' => $goods->goods_name,
+                    'goods_num' => $goods->goods_num,
+                    'parts_type' => (String) $goods->parts_type,
+                    'material_type' => (String) $goods->material_type,
+                    'goods_weight' => $goods->goods_weight,
+                    'goods_color' => $goods->goods_color,
+                    'goods_shape' => $goods->goods_shape,
+                    'goods_size' => $goods->goods_size,
+                    'chain_type' => $goods->chain_type,
+                    'cramp_ring' => $goods->cramp_ring,
+                    'cost_price' => $goods->cost_price,
+                    'goods_price' => $goods->gold_price,
                     'iqc_reason' => $goods->iqc_reason,
                     'iqc_remark' => $goods->iqc_remark,
                     'created_at' => time(),

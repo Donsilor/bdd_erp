@@ -43,8 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'showFooter' => true,//显示footer行
                         'options' => ['style'=>'white-space:nowrap;'],
+                        'showFooter' => true,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
                             [

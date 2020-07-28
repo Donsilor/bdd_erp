@@ -10,7 +10,7 @@ use Yii;
  * This is the model class for table "purchase_defective_goods".
  *
  * @property int $id ID
- * @property int $defective_id 返厂单ID
+ * @property int $defective_id 单据ID
  * @property int $xuhao 序号
  * @property string $goods_name 商品名称
  * @property int $goods_num 商品数量
@@ -18,6 +18,7 @@ use Yii;
  * @property string $factory_mo 工厂模号
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
+ * @property int $style_channel_id 所属渠道
  * @property string $produce_sn 布产号
  * @property int $receipt_detail_id 收货单明细ID
  * @property string $material_type 商品类型
@@ -25,8 +26,12 @@ use Yii;
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
  * @property string $goods_norms 商品规格
+ * @property string $goods_size 商品尺寸
  * @property string $cost_price 总金额(成本价)
  * @property string $goods_price 商品单价/克/CT
+ * @property string $parts_type 配件类型
+ * @property string $chain_type 链类型
+ * @property string $cramp_ring 扣环
  * @property int $iqc_reason 质检未过原因
  * @property string $iqc_remark 质检备注
  * @property int $sort 排序
@@ -51,13 +56,14 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             [['defective_id', 'xuhao'], 'required'],
-            [['id', 'defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id','style_channel_id', 'receipt_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['defective_id', 'xuhao', 'goods_num', 'style_cate_id', 'product_type_id', 'style_channel_id', 'receipt_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'goods_price'], 'number'],
             [['goods_name', 'iqc_remark'], 'string', 'max' => 255],
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
-            [['goods_color', 'goods_clarity'], 'string', 'max' => 10],
             [['material_type', 'goods_norms'], 'string', 'max' => 20],
+            [['goods_color', 'goods_clarity', 'parts_type', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
+            [['goods_size'], 'string', 'max' => 100],
         ];
     }
 
@@ -68,7 +74,7 @@ class PurchaseDefectiveGoods extends BaseModel
     {
         return [
             'id' => 'ID',
-            'defective_id' => '返厂单ID',
+            'defective_id' => '单据ID',
             'xuhao' => '序号',
             'goods_name' => '商品名称',
             'goods_num' => '商品数量',
@@ -84,12 +90,16 @@ class PurchaseDefectiveGoods extends BaseModel
             'goods_color' => '颜色',
             'goods_clarity' => '净度',
             'goods_norms' => '商品规格',
+            'goods_size' => '商品尺寸',
             'cost_price' => '总金额(成本价)',
             'goods_price' => '商品单价/克/CT',
+            'parts_type' => '配件类型',
+            'chain_type' => '链类型',
+            'cramp_ring' => '扣环',
             'iqc_reason' => '质检未过原因',
             'iqc_remark' => '质检备注',
             'sort' => '排序',
-            'status' => '状态 1启用 0禁用 -1 删除',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

@@ -20,26 +20,47 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择','disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(),['prompt'=>'请选择']) ?>
                </div>
-               <div class="col-lg-6">
+               <div class="col-lg-4">
                    <?= $form->field($model, 'goods_sn')->textInput(['disabled'=>true]) ?>
                </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
+               <div class="col-lg-4">
                    <?= $form->field($model, 'goods_name')->textInput() ?>
                </div>
-               <div class="col-lg-6">
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
                    <?= $form->field($model, 'goods_weight')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_color')->dropDownList($model->getColorMap(),['prompt'=>'请选择']) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-6">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择','disabled'=>true]) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'chain_type')->dropDownList($model->getChainTypeMap(),['prompt'=>'请选择']) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'cramp_ring')->dropDownList($model->getCrampRingMap(),['prompt'=>'请选择']) ?>
+               </div>
+
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_size')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
                    <?= $form->field($model, 'gold_price')->textInput() ?>
                </div>
-               <div class="col-lg-6">
+               <div class="col-lg-4">
                    <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
                </div>
            </div>

@@ -1,17 +1,18 @@
 <?php
 
-use common\enums\WhetherEnum;
+use common\enums\BusinessScopeEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Warehouse\common\enums\BillStatusEnum;
+
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('stone_receipt', '石料收货单');
+$this->title = Yii::t('defective', '金料不良返厂单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -27,7 +28,6 @@ $params = $params ? "&".http_build_query($params) : '';
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
                     ]);?>
-                    <?= Html::button('打印明细',['class'=>'btn btn-info btn-xs','onclick'=>"printDetail()"]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -36,8 +36,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>'white-space:nowrap;'],
-        'showFooter' => false,//显示footer行
+        //'options' => ['style'=>' width:120%;'],
         'id'=>'grid',
         'columns' => [
             [
@@ -47,7 +46,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class'=>'yii\grid\CheckboxColumn',
                 'name'=>'id',  //设置每行数据的复选框属性
-                'headerOptions' => [],
+                'headerOptions' => ['width'=>'30'],
             ],
             [
                 'attribute' => 'id',
@@ -56,19 +55,16 @@ $params = $params ? "&".http_build_query($params) : '';
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => [],
+                'headerOptions' => ['width'=>'60'],
             ],
             [
-                'label' => '采购收货单号',
-                'attribute' => 'receipt_no',
+                'attribute' => 'defective_no',
                 'value'=>function($model) {
-                    return Html::a($model->receipt_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->defective_no, ['view', 'id' => $model->id, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
-                'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
-                    'class' => 'form-control',
-                ]),
+                'filter' => true,
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['width'=>'120'],
             ],
             [
                 'attribute' => 'supplier_id',
@@ -83,55 +79,46 @@ $params = $params ? "&".http_build_query($params) : '';
                     ],
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-3'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
-                'attribute' => 'receipt_num',
-                'value' => 'receipt_num',
-                'filter' => Html::activeTextInput($searchModel, 'receipt_num', [
+                'attribute' => 'defective_num',
+                'value' => 'defective_num',
+                'filter' => Html::activeTextInput($searchModel, 'defective_num', [
                     'class' => 'form-control',
-                    'style'=> 'width:60px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => [],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'attribute' => 'total_cost',
                 'value' => 'total_cost',
                 'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                     'class' => 'form-control',
-                    'style'=> 'width:120px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => [],
+                'headerOptions' => ['width'=>'80'],
             ],
             [
                 'attribute' => 'purchase_sn',
-                'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
-                    'class' => 'form-control',
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => 'purchase_sn',
+                'filter' => true,
+                'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute' => 'put_in_type',
-                'format' => 'raw',
-                'value' => function ($model){
-                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                ]),
-                'headerOptions' => ['class' => 'col-md-1'],
+                'attribute' => 'receipt_no',
+                'value' => 'receipt_no',
+                'filter' => true,
+                'headerOptions' => ['width'=>'120'],
             ],
             [
-                'attribute' => 'creator_id',
-                'value' => "creator.username",
-                'headerOptions' => ['class' => 'col-md-1'],
+                'label' => '制单人',
+                'attribute' => 'creator.username',
                 'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                     'class' => 'form-control',
                 ]),
+                'headerOptions' => ['width'=>'80'],
+
             ],
             [
                 'attribute' => 'created_at',
@@ -139,7 +126,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => '',
-                    'options' => ['readonly' => false, 'class' => 'form-control',],
+                    'options' => ['readonly' => true, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -156,58 +143,51 @@ $params = $params ? "&".http_build_query($params) : '';
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 },
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['width'=>'200'],
             ],
             [
                 'attribute' => 'audit_status',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
                     return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style'=> 'width:100px;'
                 ]),
+                'headerOptions' => ['width'=>'100'],
             ],
             [
-                'attribute' => 'receipt_status',
+                'attribute' => 'defective_status',
                 'value' => function ($model){
-                    return ReceiptStatusEnum::getValue($model->receipt_status);
+                    return BillStatusEnum::getValue($model->defective_status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'receipt_status',ReceiptStatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'defective_status',BillStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style'=> 'width:100px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'col-md-1'],
+                'headerOptions' => ['width'=>'100'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {goods} {apply} {audit} {delete}',
+                'template' => '{edit} {goods} {audit} {ajax-apply} {delete}',
                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->receipt_status == ReceiptStatusEnum::SAVE) {
+                        if($model->defective_status == BillStatusEnum::SAVE) {
                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
                             ]);
                         }
                     },
-                    'apply' => function($url, $model, $key){
-                        if($model->receipt_status == ReceiptStatusEnum::SAVE){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                'class'=>'btn btn-success btn-sm',
-                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                            ]);
-                        }
+                    'goods' => function($url, $model, $key){
+                        return Html::a('单据明细', ['gold-defective-goods/index', 'defective_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'audit' => function($url, $model, $key){
-                        if($model->receipt_status == ReceiptStatusEnum::PENDING) {
+                        if($model->defective_status == BillStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                 'class'=>'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -215,25 +195,23 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },
-                    'warehouse' => function($url, $model, $key){
-                        if($model->receipt_status == ReceiptStatusEnum::CONFIRM && $model->is_to_warehouse == WhetherEnum::DISABLED) {
-                            return Html::edit(['ajax-warehouse','id'=>$model->id], '申请入库', [
+                    'ajax-apply' => function($url, $model, $key){
+                        if($model->defective_status == BillStatusEnum::SAVE){
+                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#ajaxModal',
+                                'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);
                         }
                     },
-                    'goods' => function($url, $model, $key){
-                        return Html::a('单据明细', ['stone-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                    'status' => function($url, $model, $key){
+                        return Html::status($model['status']);
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->receipt_status == ReceiptStatusEnum::SAVE) {
-                            return Html::delete(['delete', 'id' => $model->id]);
+                        if($model->defective_status != BillStatusEnum::CONFIRM) {
+                            return Html::delete(['delete', 'id' => $model->id], '取消');
                         }
-                    },
-                ],
-                'headerOptions' => ['class' => 'col-md-2'],
+                    }
+                ]
             ]
     ]
     ]); ?>
@@ -241,7 +219,7 @@ $params = $params ? "&".http_build_query($params) : '';
         </div>
     </div>
 </div>
-<script type="text/javascript">
+<script>
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         if(ids.length == 0){
@@ -252,18 +230,5 @@ $params = $params ? "&".http_build_query($params) : '';
         }
 
     }
-    function printDetail()
-    {
-        var valArr = new Array;
-        $('input[name="id[]"]:checked').each(function(i){
-            valArr[i] = $(this).val();
-        });
-        if(valArr.length==0){
-            rfMsg("您还没有选择任何内容");
-            return false;
-        }
-        var vals = valArr.join(',');
-        window.open('/purchase/receipt/print?ids='+vals);
-    }
-</script>
 
+</script>

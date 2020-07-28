@@ -37,7 +37,7 @@ class PurchaseReceiptLog extends BaseModel
     {
         return [
             [['receipt_id', 'log_module'], 'required'],
-            [['receipt_id', 'log_type', 'creator_id', 'created_at'], 'integer'],
+            [['receipt_id', 'log_type', 'creator_id', 'created_at','log_time'], 'integer'],
             [['receipt_no', 'log_module', 'creator'], 'string', 'max' => 30],
             [['log_msg'], 'string', 'max' => 500],
         ];
@@ -55,6 +55,7 @@ class PurchaseReceiptLog extends BaseModel
             'log_type' => '操作类型',
             'log_msg' => '文字描述',
             'log_module' => '操作模块',
+            'log_time' => '操作时间',
             'creator' => '操作人',
             'creator_id' => 'Creator ID',
             'created_at' => '创建时间',
