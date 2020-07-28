@@ -259,7 +259,7 @@ class PurchaseService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
-            }else{
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_shape'] = $model->stone_shape;
                 $goods[$k]['goods_color'] = $model->stone_color;
@@ -278,6 +278,14 @@ class PurchaseService extends Service
                 $goods[$k]['channel_id'] = $model->channel_id;
 
                 $total_stone_num = bcadd($total_stone_num, $model->stone_num);
+            }else{
+                $goods[$k]['parts_type'] = $model->parts_type;
+                $goods[$k]['material_type'] = $model->material_type;
+                $goods[$k]['goods_shape'] = $model->goods_shape;
+                $goods[$k]['goods_color'] = $model->goods_color;
+                $goods[$k]['goods_size'] =  $model->goods_size;
+                $goods[$k]['chain_type'] = $model->chain_type;
+                $goods[$k]['cramp_ring'] =  $model->cramp_ring;
             }
             $total_weight = bcadd($total_weight, $model->goods_weight, 3);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);
@@ -323,7 +331,7 @@ class PurchaseService extends Service
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }
-        return $model ;
+        return $model;
     }
 
 
