@@ -121,6 +121,7 @@ class OrderSyncService extends Service
                 "refund_status"=>0,
                 "express_id"=>$this->getErpExpressId($order),
                 "express_no"=>$order->express_no,
+                "distribute_status"=>$this->getErpDistributeStatus($order),
                 "delivery_status"=>$this->getErpDeliveryStatus($order),
                 "delivery_time"=>$order->delivery_time,
                 "receive_type"=>$order->receive_type,
@@ -388,6 +389,18 @@ class OrderSyncService extends Service
     public static function getErpPayType($order)
     {
         return $order->payment_type;
+    }
+    /**
+     * ERP 订单配货状态
+     * @param Order $order
+     */
+    public static function getErpDistributeStatus($order)
+    {
+        $erp_distribute_status = \addons\Sales\common\enums\DistributeStatusEnum::SAVE;
+        if($order->order_status >= OrderStatusEnum::ORDER_SEND) {
+            $erp_distribute_status = \addons\Sales\common\enums\DistributeStatusEnum::HAS_PEIHUO;
+        }
+        return $erp_distribute_status;
     }
     /**
      * ERP 订单发货状态
