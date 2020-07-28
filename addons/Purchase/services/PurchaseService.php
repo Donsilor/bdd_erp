@@ -3,9 +3,12 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\forms\PurchasePartsGoodsForm;
 use addons\Purchase\common\models\PurchaseGold;
 use addons\Purchase\common\models\PurchaseGoldGoods;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchaseParts;
+use addons\Purchase\common\models\PurchasePartsGoods;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\models\PurchaseStone;
 use addons\Purchase\common\models\PurchaseStoneGoods;
@@ -179,8 +182,10 @@ class PurchaseService extends Service
         if(is_array($ids)){
             if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $model = new PurchaseStoneGoods();
-            }else{
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $model = new PurchaseGoldGoods();
+            }else{
+                $model = new PurchasePartsGoods();
             }
             foreach ($ids as $id) {
                 $goods = $model::findOne(['id'=>$id]);
@@ -207,9 +212,12 @@ class PurchaseService extends Service
         if($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneGoods();
             $PurchaseModel = new PurchaseStone();
-        }else{
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldGoods();
             $PurchaseModel = new PurchaseGold();
+        }else{
+            $model = new PurchasePartsGoods();
+            $PurchaseModel = new PurchaseParts();
         }
         if(!empty($detail_ids)) {
             $goods = $model::find()->select('purchase_id')->where(['id'=>$detail_ids[0]])->one();
@@ -302,10 +310,11 @@ class PurchaseService extends Service
 
     /**
      * 创建采购单日志
-     * @return array
+     * @return $model
+     * @throws
      */
-    public function createPurchaseLog($log){
-
+    public function createPurchaseLog($log)
+    {
         $model = new PurchaseLog();
         $model->attributes = $log;
         $model->log_time = time();

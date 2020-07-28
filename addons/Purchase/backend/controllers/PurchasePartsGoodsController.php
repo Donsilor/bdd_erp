@@ -96,7 +96,7 @@ class PurchasePartsGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //更新采购汇总：总金额和总数量
-                Yii::$app->purchaseService->gold->summary($model->purchase_id);
+                Yii::$app->purchaseService->parts->summary($model->purchase_id);
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
