@@ -118,7 +118,7 @@ class PartsReceiptController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = BillStatusEnum::CONFIRM;
-                    $res = PurchaseGoldReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    $res = PurchasePartsReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
                     if(false === $res) {
                         throw new \Exception("更新货品状态失败");
                     }
@@ -299,7 +299,7 @@ class PartsReceiptController extends BaseController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {

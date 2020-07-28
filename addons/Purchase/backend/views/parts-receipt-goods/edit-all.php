@@ -11,7 +11,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_receipt_goods', '金料收货单详情');
+$this->title = Yii::t('gold_receipt_goods', '配件收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['gold-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['parts-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -61,6 +62,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'parts_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->parts_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_name',
@@ -108,6 +118,73 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_color',
+                                'value' => function ($model, $key, $index, $column){
+                                    return Yii::$app->attr->valueName($model->goods_color)??"";
+                                    //return  Html::ajaxSelect($model,'goods_color', Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_shape',
+                                'value' => function ($model, $key, $index, $column){
+                                    return Yii::$app->attr->valueName($model->goods_shape)??"";
+                                    //return  Html::ajaxSelect($model,'goods_shape', Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'chain_type',
+                                'value' => function ($model, $key, $index, $column){
+                                    return Yii::$app->attr->valueName($model->chain_type)??"";
+                                    //return  Html::ajaxSelect($model,'chain_type', Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'chain_type',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'cramp_ring',
+                                'value' => function ($model, $key, $index, $column){
+                                    return Yii::$app->attr->valueName($model->cramp_ring)??"";
+                                    //return  Html::ajaxSelect($model,'cramp_ring', Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_weight',

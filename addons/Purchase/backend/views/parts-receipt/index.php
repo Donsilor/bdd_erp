@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_receipt', '金料收货单');
+$this->title = Yii::t('gold_receipt', '配件收货单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -36,7 +36,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>' width:120%;'],
+        'options' => ['style'=>'white-space:nowrap;'],
         'showFooter' => false,//显示footer行
         'id'=>'grid',
         'columns' => [
@@ -225,7 +225,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('单据明细', ['gold-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('单据明细', ['parts-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'delete' => function($url, $model, $key){
                         if($model->receipt_status == ReceiptStatusEnum::SAVE) {
@@ -233,7 +233,6 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                 ],
-                'headerOptions' => ['class' => 'col-md-2'],
             ]
     ]
     ]); ?>
