@@ -21,18 +21,18 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'style_sn')->textInput() ?>
         <div class="row">
             <div class="col-lg-6">
-                <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE),['prompt'=>'请选择']);?>
             </div>
             <div class="col-lg-6">
-                <?= $form->field($model, 'metal_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'metal_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE),['prompt'=>'请选择']);?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR),['prompt'=>'请选择']);?>
             </div>
             <div class="col-lg-6">
-                <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
+                <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE),['prompt'=>'请选择']);?>
             </div>
         </div>
         <?= $form->field($model, 'remark')->textarea() ?>

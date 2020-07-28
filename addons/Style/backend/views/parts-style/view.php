@@ -33,6 +33,38 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->style_sn ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('metal_type') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->metal_type)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('color') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->color)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('shape') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->shape)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
+                                     <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
+                                 </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-xs-6" style="padding: 0px;">
+                     <div class="box" style="margin-bottom: 0px;">
+                         <div class="box-body table-responsive" >
+                             <table class="table table-hover">
+                                 <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                                      <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                                  </tr>
@@ -48,22 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
                                      <td><?= $model->audit_remark ?></td>
                                  </tr>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-xs-6" style="padding: 0px;">
-                     <div class="box" style="margin-bottom: 0px;">
-                         <div class="box-body table-responsive" >
-                             <table class="table table-hover">
-                                 <tr>
-                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                                     <td><?= $model->creator ? $model->creator->username:''  ?></td>
-                                 </tr>
-                                 <tr>
-                                     <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                                     <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
-                                 </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
                                      <td><?= \Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
@@ -77,8 +93,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                     <td><?= $model->remark ?></td>
+                                     <td class="col-xs-3 text-right"></td>
+                                     <td></td>
                                  </tr>
                              </table>
                          </div>

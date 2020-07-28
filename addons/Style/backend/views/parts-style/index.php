@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->parts_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->metal_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'metal_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'metal_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->color);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->shape);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'

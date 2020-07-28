@@ -58,7 +58,7 @@ class PartsStyle extends BaseModel
             'id' => 'ID',
             'style_sn' => '款号',
             'parts_type' => '配件类型',
-            'metal_type' => '金属类型',
+            'metal_type' => '金属材质',
             'color' => '配件颜色',
             'shape' => '配件形状',
             'remark' => '备注',
