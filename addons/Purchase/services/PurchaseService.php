@@ -286,6 +286,7 @@ class PurchaseService extends Service
                 $goods[$k]['goods_size'] =  $model->goods_size;
                 $goods[$k]['chain_type'] = $model->chain_type;
                 $goods[$k]['cramp_ring'] =  $model->cramp_ring;
+                $goods[$k]['gold_price'] = $model->gold_price;
             }
             $total_weight = bcadd($total_weight, $model->goods_weight, 3);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);

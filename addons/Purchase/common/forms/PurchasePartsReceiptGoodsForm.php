@@ -3,31 +3,39 @@
 namespace addons\Purchase\common\forms;
 
 use Yii;
-use addons\Purchase\common\models\PurchasePartsGoods;
-use addons\Style\common\enums\AttrIdEnum;
-use common\enums\ConfirmEnum;
+use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
+use addons\Purchase\common\models\PurchasePartsReceiptGoods;
+use addons\Style\common\enums\AttrIdEnum;
 
 /**
- * 配件商品 Form
+ * 采购收货单明细 Form
  *
  */
-class PurchasePartsGoodsForm extends PurchasePartsGoods
+class PurchasePartsReceiptGoodsForm extends PurchasePartsReceiptGoods
 {
     public $ids;
-    public $put_in_type;
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-            [['put_in_type'], 'integer'],
+
         ];
         return array_merge(parent::rules() , $rules);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        //合并
+        return ArrayHelper::merge(parent::attributeLabels() , [
+            'id'=>'流水号',
+        ]);
+    }
     /**
      * 材质列表
      * @return array
@@ -77,30 +85,6 @@ class PurchasePartsGoodsForm extends PurchasePartsGoods
         return Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE);
     }
     /**
-     * 采购商品申请编辑-创建
-     */
-    public function createApply()
-    {
-        //主要信息
-        $fields = array('goods_name','material_type','cost_price','goods_num','gold_price','goods_weight','remark');
-        $apply_info = array();
-        foreach ($fields as $field) {
-            $apply_info[] = array(
-                    'code'=>$field,
-                    'value'=>$this->$field,
-                    'label'=>$this->getAttributeLabel($field),
-                    'group'=>'base',
-            );
-        }       
-        
-        $this->is_apply   = ConfirmEnum::YES;
-        $this->apply_info = json_encode($apply_info);
-        if(false === $this->save(true,['is_apply','apply_info','updated_at'])) {
-            throw new \Exception("保存失败",500);
-        }
-        
-    }
-    /**
      * {@inheritdoc}
      */
     public function getIds(){
@@ -110,4 +94,3 @@ class PurchasePartsGoodsForm extends PurchasePartsGoods
         return [];
     }
 }
-

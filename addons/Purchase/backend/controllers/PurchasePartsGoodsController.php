@@ -289,9 +289,9 @@ class PurchasePartsGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 //同步采购单至采购收货单
-                Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_PARTS, $model->getIds());
+                \Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_PARTS, $model->getIds());
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','操作成功');
+                \Yii::$app->getSession()->setFlash('success','操作成功');
                 return ResultHelper::json(200, '操作成功');
             }catch (\Exception $e){
                 $trans->rollBack();
