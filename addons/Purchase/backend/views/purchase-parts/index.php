@@ -130,7 +130,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
-            [
+            /*[
                 'attribute' => 'audit_time',
                 'value' => function($model){
                     return $model->audit_time ? Yii::$app->formatter->asDate($model->audit_time):'';
@@ -138,7 +138,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'filter' => false,
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],
+            ],*/
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){
@@ -151,13 +151,13 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
-            [
+            /*[
                 'attribute' => 'auditor_id',
                 'value' => "auditor.username",
                 'filter' => false,
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],
+            ],*/
             [
                 'attribute' => 'purchase_status',                    
                 'value' => function ($model){
@@ -194,9 +194,8 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品列表', ['purchase-gold-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-parts-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
-
                     'apply' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [

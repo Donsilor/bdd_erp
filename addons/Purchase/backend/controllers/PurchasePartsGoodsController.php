@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Purchase\common\models\PurchaseParts;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -57,7 +58,7 @@ class PurchasePartsGoodsController extends BaseController
         $dataProvider->query->andWhere(['=','purchase_id',$purchase_id]);
         $dataProvider->query->andWhere(['>','status',-1]);
         
-        $purchase = PurchaseGold::find()->where(['id'=>$purchase_id])->one();
+        $purchase = PurchaseParts::find()->where(['id'=>$purchase_id])->one();
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,

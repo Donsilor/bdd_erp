@@ -43,10 +43,11 @@ class PurchaseParts extends BaseModel
     public function rules()
     {
         return [
-            [['supplier_id', 'total_num', 'delivery_time', 'purchase_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'total_num', 'purchase_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
+            [['delivery_time'], 'safe'],
         ];
     }
 

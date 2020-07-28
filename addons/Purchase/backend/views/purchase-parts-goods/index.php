@@ -63,16 +63,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'100'],
                             ],*/
                             [
-                                    'attribute'=>'goods_name',
-                                    'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                            'class' => 'form-control',
-                                    ]),
-                                    'value' => function ($model) {
-                                         $str = $model->goods_name;
-                                         return $str;
-                                    },
-                                    'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                'attribute' => 'parts_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->parts_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'goods_name',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_name;
+                                    return $str;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'300'],
                             ],
                             [
                                 'attribute'=>'goods_sn',
@@ -94,6 +103,51 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_color',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_color);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_shape',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_shape);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_size',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_size);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'chain_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->chain_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'cramp_ring',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->cramp_ring);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                     'attribute' => 'goods_weight',
@@ -123,7 +177,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'headerOptions' => ['width'=>'150'],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'incl_tax_price',
                                 'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
                                     'class' => 'form-control',
@@ -132,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->incl_tax_price??"0.00";
                                 },
                                 'headerOptions' => ['width'=>'150'],
-                            ],
+                            ],*/
                             [
                                     'attribute' => 'is_receipt',
                                     'value' => function ($model){
