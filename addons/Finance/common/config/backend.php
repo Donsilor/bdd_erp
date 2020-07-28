@@ -56,6 +56,19 @@ return [
                 ],
 
         ],
+        [
+            'title' => '财务出入库单',
+            'route' => 'indexFinance',
+            'icon' => 'fa fa-superpowers',
+            'child' => [
+                [
+                    'title' => '财务出库单',
+                    'route' => 'finance-sale/index',
+                ],
+
+            ],
+
+        ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //
