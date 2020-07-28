@@ -42,10 +42,7 @@ class PurchaseController extends BaseController
      * @var Purchase
      */
     public $modelClass = Purchase::class;
-    /**
-     * @var int
-     */
-    public $purchaseType = PurchaseTypeEnum::GOODS;
+
     //审批流程
     public $targetType = TargetTypeEnum::PURCHASE_MENT;
 
@@ -97,7 +94,7 @@ class PurchaseController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',1),
-            'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($id,$this->purchaseType,$this->returnUrl),
+            'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($id,$this->returnUrl),
             'returnUrl'=>$this->returnUrl,
         ]);
     }

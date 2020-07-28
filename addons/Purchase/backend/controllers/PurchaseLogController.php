@@ -52,7 +52,7 @@ class PurchaseLogController extends BaseController
                 'searchModel' => $searchModel,
                 'purchase' => $purchase,
                 'tab'=>Yii::$app->request->get('tab',3),
-                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$purchase->purchase_type,$this->returnUrl),                
+                'tabList'=>\Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$this->returnUrl),                
         ]);
     }
     
