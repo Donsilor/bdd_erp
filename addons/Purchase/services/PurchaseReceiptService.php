@@ -714,6 +714,8 @@ class PurchaseReceiptService extends Service
                 $model = new PurchaseGoldReceiptGoods();
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $model = new PurchaseStoneReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $model = new PurchasePartsReceiptGoods();
             }else{
                 $model = new PurchaseReceiptGoods();
             }
@@ -748,6 +750,8 @@ class PurchaseReceiptService extends Service
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -780,6 +784,8 @@ class PurchaseReceiptService extends Service
                 $model = new PurchaseGoldReceiptGoods();
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
                 $model = new PurchaseStoneReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $model = new PurchasePartsReceiptGoods();
             }else{
                 $model = new PurchaseReceiptGoods();
             }
@@ -818,6 +824,8 @@ class PurchaseReceiptService extends Service
             $model = new PurchaseGoldReceiptGoods();
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
             $model = new PurchaseStoneReceiptGoods();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -871,6 +879,26 @@ class PurchaseReceiptService extends Service
                     'goods_norms' => $goods->goods_norms,
                     'cost_price' => $goods->cost_price,
                     'goods_price' => $goods->stone_price,
+                    'iqc_reason' => $goods->iqc_reason,
+                    'iqc_remark' => $goods->iqc_remark,
+                    'created_at' => time(),
+                ];
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $detail[] = [
+                    'xuhao' => $goods->xuhao,
+                    'receipt_detail_id' => $goods->id,
+                    'goods_name' => $goods->goods_name,
+                    'goods_num' => $goods->goods_num,
+                    'parts_type' => (String) $goods->parts_type,
+                    'material_type' => (String) $goods->material_type,
+                    'goods_weight' => $goods->goods_weight,
+                    'goods_color' => $goods->goods_color,
+                    'goods_shape' => $goods->goods_shape,
+                    'goods_size' => $goods->goods_size,
+                    'chain_type' => $goods->chain_type,
+                    'cramp_ring' => $goods->cramp_ring,
+                    'cost_price' => $goods->cost_price,
+                    'goods_price' => $goods->gold_price,
                     'iqc_reason' => $goods->iqc_reason,
                     'iqc_remark' => $goods->iqc_remark,
                     'created_at' => time(),
