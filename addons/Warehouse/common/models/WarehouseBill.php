@@ -2,14 +2,14 @@
 
 namespace addons\Warehouse\common\models;
 
-use addons\Sales\common\models\SaleChannel;
-use addons\Shop\common\models\Order;
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Style\common\models\StyleChannel;
+use addons\Sales\common\models\SaleChannel;
+use addons\Shop\common\models\Order;
 
 /**
  * This is the model class for table "warehouse_bill".

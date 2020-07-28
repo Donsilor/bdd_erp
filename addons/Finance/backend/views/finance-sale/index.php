@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '销售渠道',
                                 'attribute' => 'bill.channel_id',
                                 'value' => function ($model){
-                                    return $model->saleChannel->name ?? '';
+                                    return $model->bill->saleChannel->name ?? '';
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'bill.channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
                                     'prompt' => '全部',
