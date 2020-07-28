@@ -91,38 +91,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
-            [
-                'attribute' => 'finance_status',
-                'value' => function ($model){
-                    $model->getTargetType();
-                    $audit_name_str = '';
-                    if($model->targetType && $model->finance_status == \common\enums\FlowStatusEnum::GO_ON){
-                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
-                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
-                    }
-                    return FinanceStatusEnum::getValue($model->finance_status).$audit_name_str;
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'finance_status',FinanceStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style'=> 'width:80px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                'attribute' => 'audit_status',
-                'value' => function ($model){
-                    return AuditStatusEnum::getValue($model->audit_status);
-                },
-                'filter' => Html::activeDropDownList($searchModel, 'audit_status',AuditStatusEnum::getMap(), [
-                    'prompt' => '全部',
-                    'class' => 'form-control',
-                    'style'=> 'width:80px;'
-                ]),
-                'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
-            ],
+
             [
                 'attribute' => 'creator_id',
                 'value' => function($model){
@@ -159,7 +128,25 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
 
             ],
-
+            [
+                'attribute' => 'finance_status',
+                'value' => function ($model){
+                    $model->getTargetType();
+                    $audit_name_str = '';
+                    if($model->targetType && $model->finance_status == \common\enums\FlowStatusEnum::GO_ON){
+                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    }
+                    return FinanceStatusEnum::getValue($model->finance_status).$audit_name_str;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'finance_status',FinanceStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:80px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
             [
                     'attribute' => 'audit_status',
                     'value' => function ($model){

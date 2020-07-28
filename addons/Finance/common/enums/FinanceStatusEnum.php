@@ -22,7 +22,7 @@ class FinanceStatusEnum extends \common\enums\BaseEnum
 
                self::SAVE => "保存",
                self::PENDING => "待审核",
-               self::CONFORMED => "已审核", 
+               self::CONFORMED => "待确认",
                self::FINISH => "已完成",
                self::CANCAEL => "已关闭",
 

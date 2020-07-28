@@ -27,6 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td><?= $model->finance_no ?></td>
                             </tr>
                             <tr>
+                                <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('oa_no') ?>：</td>
+                                <td><?= $model->oa_no ?></td>
+                            </tr>
+                            <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('apply_user') ?>：</td>
                                 <td><?= $model->apply_user ?></td>
                             </tr>
@@ -129,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                      $flow_list = Yii::$app->services->flow->getFlows($flow_ids);
                                      foreach ($flow_list as $flow){
                                     ?>
-                                    <dd><?= $flow['id']?> : <?= Html::a($flow['flow_name'], $flow['url'], ['style'=>"text-decoration:underline;color:#3c8dbc"])?></dd>
+                                    <dd><?= $flow['flow_name']?> :  <?= Html::a($flow['target_no'], $flow['url'], ['style'=>"text-decoration:underline;color:#3c8dbc"])?></dd>
                                     <?php } ?>
                                 </dl>
                                 <p>

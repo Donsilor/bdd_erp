@@ -79,6 +79,9 @@ use common\helpers\Url;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'this_period_amount')->textInput(['disabled'=>true,'id'=>'this_period_amount_capital_2'])->label('支付金额（大写）')?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'oa_no')->textInput()?>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

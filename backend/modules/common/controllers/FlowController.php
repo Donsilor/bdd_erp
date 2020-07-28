@@ -88,7 +88,7 @@ class FlowController extends BaseController
         }
         $id = $post['flow_id'];
 //        $model = $this->findModel($id);
-        $model = Flow::find()->where(['id'=>$id])->select(['id','flow_name','flow_status'])->asArray()->all();
+        $model = Flow::find()->where(['id'=>$id])->select(['id','flow_name','target_no','flow_status'])->asArray()->all();
         foreach ($model as &$val){
             $val['flow_status'] = FlowStatusEnum::getValue($val['flow_status']);
         }

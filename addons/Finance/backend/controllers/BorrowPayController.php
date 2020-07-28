@@ -96,6 +96,7 @@ class BorrowPayController extends BaseController
         $model = $model ?? new BorrowPayForm();
 
         $model->creator_id = Yii::$app->user->identity->getId();
+        $model->loan_user_id = Yii::$app->user->identity->getId();
         $model->apply_user = $model->creator->username;
         $model->dept_id = $model->creator->dept_id;
         $model->currency = CurrencyEnum::CNY;

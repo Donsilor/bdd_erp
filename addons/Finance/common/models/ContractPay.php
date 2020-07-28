@@ -3,7 +3,6 @@
 namespace addons\Finance\common\models;
 
 use common\models\backend\Member;
-use common\models\base\BaseModel;
 use Yii;
 
 /**
@@ -52,7 +51,7 @@ class ContractPay extends BaseModel
             [['dept_id', 'apply_user',  'contract_name', 'contract_info', 'contract_type', 'payment_type', 'amount_total', 'last_period_total', 'this_period_amount', 'currency', 'this_period_total'], 'required'],
             [['dept_id', 'contract_type', 'payment_type', 'auditor_id', 'audit_status', 'audit_time', 'finance_status','created_at', 'updated_at', 'creator_id','flow_id'], 'integer'],
             [['amount_total', 'last_period_total', 'this_period_amount', 'this_period_total'], 'number'],
-            [['finance_no', 'apply_user', 'contract_no'], 'string', 'max' => 30],
+            [['finance_no', 'apply_user', 'contract_no','oa_no'], 'string', 'max' => 30],
             [['contract_name'], 'string', 'max' => 50],
             [['contract_info', 'audit_remark', 'remark','flow_ids'], 'string', 'max' => 255],
             [['annex_file'], 'string', 'max' => 500],
@@ -68,6 +67,7 @@ class ContractPay extends BaseModel
     {
         return [
             'id' => 'ID',
+            'oa_no' => 'OA单号',
             'finance_no' => '单号',
             'dept_id' => '所属部门',
             'apply_user' => '填单人',
@@ -132,5 +132,13 @@ class ContractPay extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 部门
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartment()
+    {
+        return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
 }

@@ -22,54 +22,73 @@ use common\helpers\Url;
                             ]
                         ]);
                     ?>
-
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'finance_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-                           </div>
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'apply_user')->textInput(['disabled'=>true])?>
-                           </div>
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department::getDropDown(),['disabled'=>true]) ?>
-                           </div>
-
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']) ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'borrow_amount')->textInput(['id'=>'borrow_amount'])?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'borrow_amount')->textInput(['disabled'=>true,'id'=>'borrow_amount_capital'])->label('支付金额（大写）')?>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <?= $form->field($model, 'repay_time')->widget(\kartik\datetime\DateTimePicker::class, [
-                                    'options' => [
-                                        'value' => $model->isNewRecord ? date('Y-m-d') : date('Y-m-d', $model->repay_time),
-                                    ],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'todayHighlight' => true,//今日高亮
-                                        'autoclose' => true,//选择后自动关闭
-                                        'todayBtn' => true,//今日按钮显示
-                                    ]
-                                ]);?>
-                            </div>
-                            <div class="col-lg-12">
-                               <?= $form->field($model, 'borrow_remark')->textArea(['options'=>['maxlength' => true]])?>
-                            </div>
-                    <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-4">
+                           <?= $form->field($model, 'finance_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
+                        </div>
+                        <div class="col-lg-4">
+                           <?= $form->field($model, 'apply_user')->textInput(['disabled'=>true])?>
+                        </div>
+                        <div class="col-lg-4">
+                           <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department::getDropDown(),['disabled'=>true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'borrow_amount')->textInput(['id'=>'borrow_amount'])?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'borrow_amount')->textInput(['disabled'=>true,'id'=>'borrow_amount_capital'])->label('支付金额（大写）')?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'loan_user_id')->widget(kartik\select2\Select2::class, [
+                                'data' => Yii::$app->services->backendMember->getDropDown(),
+                                'options' => ['placeholder' => '请选择'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'repay_time')->widget(\kartik\datetime\DateTimePicker::class, [
+                                'options' => [
+                                    'value' => $model->isNewRecord ? date('Y-m-d') : date('Y-m-d', $model->repay_time),
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true,//今日高亮
+                                    'autoclose' => true,//选择后自动关闭
+                                    'todayBtn' => true,//今日按钮显示
+                                ]
+                            ]);?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'oa_no')->textInput()?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                           <?= $form->field($model, 'borrow_remark')->textArea(['options'=>['maxlength' => true]])?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
                         <?php $model->annex_file = !empty($model->annex_file)?explode(',', $model->annex_file):null;?>
                         <?= $form->field($model, 'annex_file')->widget(common\widgets\webuploader\Files::class, [
-                            'type' => 'files',
-                            'config' => [
-                                'pick' => [
-                                    'multiple' => true,
-                                ],
+                        'type' => 'files',
+                        'config' => [
+                            'pick' => [
+                                'multiple' => true,
+                            ],
 
-                            ]
+                        ]
                         ]); ?>
+                        </div>
                     </div>
 
                     <div class="col-sm-12 text-center">

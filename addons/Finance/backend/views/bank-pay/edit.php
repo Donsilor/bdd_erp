@@ -22,51 +22,61 @@ use common\helpers\Url;
                             ]
                         ]);
                     ?>
+                    <div class="row">
+                        <div class="col-lg-4">
+                          <?= $form->field($model, 'finance_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
+                        </div>
+                        <div class="col-lg-4">
+                          <?= $form->field($model, 'apply_user')->textInput(['disabled'=>true])?>
+                        </div>
+                        <div class="col-lg-4">
+                          <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department::getDropDown(),['disabled'=>true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
 
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'finance_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-                           </div>
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'apply_user')->textInput(['disabled'=>true])?>
-                           </div>
-                           <div class="col-lg-4">
-                               <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department::getDropDown(),['disabled'=>true]) ?>
-                           </div>
-
-
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'budget_year')->textInput()?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'budget_type')->dropDownList(\addons\Finance\common\enums\BudgetTypeEnum::getMap(),['prompt'=>'请选择']) ?>
-                            </div>
-
-                            <div class="col-lg-4">
-                               <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']) ?>
-                            </div>
-                            <div class="col-lg-4">
-                               <?= $form->field($model, 'pay_amount')->textInput(['id'=>'pay_amount'])?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'pay_amount')->textInput(['disabled'=>true,'id'=>'pay_amount_capital'])->label('支付金额（大写）')?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'payee_company')->textInput()?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'payee_account')->textInput()?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?= $form->field($model, 'payee_bank')->textInput()?>
-                            </div>
-
-
-                            <div class="col-lg-12">
-                               <?= $form->field($model, 'usage')->textArea(['options'=>['maxlength' => true]])?>
-                            </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'budget_year')->textInput()?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'budget_type')->dropDownList(\addons\Finance\common\enums\BudgetTypeEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                           <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                        <div class="col-lg-4">
+                           <?= $form->field($model, 'pay_amount')->textInput(['id'=>'pay_amount'])?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'pay_amount')->textInput(['disabled'=>true,'id'=>'pay_amount_capital'])->label('支付金额（大写）')?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'payee_company')->textInput()?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'payee_account')->textInput()?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'payee_bank')->textInput()?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'oa_no')->textInput()?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                           <?= $form->field($model, 'usage')->textArea(['options'=>['maxlength' => true]])?>
+                        </div>
+                    </div>
                     <div class="col-lg-12">
                         <?php $model->annex_file = !empty($model->annex_file)?explode(',', $model->annex_file):null;?>
                         <?= $form->field($model, 'annex_file')->widget(common\widgets\webuploader\Files::class, [

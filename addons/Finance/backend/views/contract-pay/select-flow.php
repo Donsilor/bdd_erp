@@ -41,6 +41,7 @@ use common\helpers\Url;
                             ]),
                             'headerOptions' => ['width'=>'5'],
                         ],
+
                         [
                             'label' => '审批序号',
                             'value' =>'id',
@@ -51,9 +52,21 @@ use common\helpers\Url;
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
+                            'label' => '单号',
+                            'value' => function($model){
+                                return Html::a($model->target_no, $model->url, ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
+                            'filter' => Html::activeTextInput($searchModel, 'target_no', [
+                                'class' => 'form-control',
+                                'style' =>'width:100px'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'label' => '标题',
                             'value' => function($model){
-                                return Html::a($model->flow_name, $model->url, ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return $model->flow_name;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'flow_name', [
                                 'class' => 'form-control',
@@ -88,6 +101,7 @@ use common\helpers\Url;
                     <thead>
                     <tr>
                         <th>审批序号</th>
+                        <th>单号</th>
                         <th>标题</th>
                         <th>状态</th>
                         <th class="action-column">操作</th>
@@ -212,7 +226,8 @@ use common\helpers\Url;
                         $.each(data,function (i,v) {
                             var tr = $("<tr>"
                                 +"<td>" + v.id + "</td>"
-                                +"<td><a href='"+ v.url +"' style='text-decoration:underline;color:#3c8dbc'>" + v.flow_name + "</a></td>"
+                                +"<td><a href='"+ v.url +"' style='text-decoration:underline;color:#3c8dbc'>" + v.target_no + "</a></td>"
+                                +"<td>" + v.flow_name + "</td>"
                                 +"<td>" + v.flow_status + "</td>"
                                 + "<input type='hidden' name='flow_id[]' value='"+ v.id +"'/>"
                                 +'<td><a class="btn btn-danger btn-sm deltr" href="#" data-flowId="'+v.id+'">删除</a></td>'
