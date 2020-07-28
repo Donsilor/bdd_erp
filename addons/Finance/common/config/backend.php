@@ -32,6 +32,14 @@ return [
                     'title' => '银行支付单',
                     'route' => 'bank-pay/index',
                 ],
+                [
+                    'title' => '合同款项支付审批单',
+                    'route' => 'contract-pay/index',
+                ],
+                [
+                    'title' => '个人因公借款审批单',
+                    'route' => 'borrow-pay/index',
+                ],
 
             ],
 

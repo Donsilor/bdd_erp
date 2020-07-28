@@ -9,6 +9,8 @@ use common\components\Service;
  *
  * @package addons\Finance\services
  * @property \addons\Finance\services\BankPayService $bankPay
+ * @property \addons\Finance\services\BorrowPayService $borrowPay
+ * @property \addons\Finance\services\ContractPayService $contractPay
  * @var array
  */
 class Application extends Service
@@ -16,5 +18,7 @@ class Application extends Service
     
     public $childService = [
         'bankPay' => 'addons\Finance\services\BankPayService',
+        'borrowPay' => 'addons\Finance\services\BorrowPayService',
+        'contractPay' => 'addons\Finance\services\ContractPayService',
     ];
 }

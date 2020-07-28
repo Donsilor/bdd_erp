@@ -8,13 +8,13 @@ use addons\Finance\common\enums\FinanceStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '银行支付单详情';
+$this->title = '合同款项支付审批单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">银行支付单详情 - <?php echo $model->finance_no?></h2>
+    <h2 class="page-header">合同款项支付审批单详情 - <?php echo $model->finance_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content" >
         <div class="col-xs-12">
@@ -35,37 +35,53 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td><?= $model->department->name ?? ''?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('project_name') ?>：</td>
-                                <td><?= \addons\Finance\common\enums\ProjectEnum::getValue($model->project_name)?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('contract_name') ?>：</td>
+                                <td><?= $model->contract_name ;  ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_year') ?>：</td>
-                                <td><?= $model->budget_year ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('contract_no') ?>：</td>
+                                <td><?= $model->contract_no ;  ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_type') ?>：</td>
-                                <td><?= \addons\Finance\common\enums\BudgetTypeEnum::getValue($model->budget_type)?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('contract_type') ?>：</td>
+                                <td><?= \addons\Finance\common\enums\ContractTypeEnum::getValue($model->contract_type) ;  ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                                <td><?= $model->pay_amount ;  ?> <?= $model->currency ;?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('contract_info') ?>：</td>
+                                <td><?= $model->contract_info ;  ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_company') ?>：</td>
-                                <td><?= $model->payee_company; ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payment_type') ?>：</td>
+                                <td><?= \addons\Finance\common\enums\PaymentTypeEnum::getValue($model->payment_type) ;  ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_account') ?>：</td>
-                                <td><?= $model->payee_account?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('amount_total') ?>：</td>
+                                <td><?= $model->amount_total ;  ?> <?= $model->currency ;?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_bank') ?>：</td>
-                                <td><?= $model->payee_bank  ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('last_period_total') ?>：</td>
+                                <td><?= $model->last_period_total ;  ?> <?= $model->currency ;?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('this_period_amount') ?>：</td>
+                                <td><?= $model->this_period_amount ;  ?> <?= $model->currency ;?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('this_period_total') ?>：</td>
+                                <td><?= $model->this_period_total ;  ?> <?= $model->currency ;?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right">合同约定本期付款金额：</td>
+                                <td><?= \common\helpers\StringHelper::smalltoBIG($model->this_period_amount) ;  ?> <?= $model->currency ;?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right">乙方申请本期付款金额：</td>
+                                <td><?= \common\helpers\StringHelper::smalltoBIG($model->this_period_amount) ;  ?> <?= $model->currency ;?></td>
                             </tr>
 
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
-                                <td><?= $model->usage ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                <td><?= $model->remark ?></td>
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
@@ -143,8 +159,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                     ?>
-
-
                                 </p>
                             </div>
                         </div>
