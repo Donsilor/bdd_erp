@@ -2,13 +2,13 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
+use addons\Purchase\common\forms\PurchasePartsReceiptGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
@@ -18,12 +18,12 @@ use common\traits\Curd;
 use yii\base\Exception;
 
 /**
- * GoldReceiptGoods
+ * PartsReceiptGoods
  * Class ReceiptGoodsController
- * @property PurchaseGoldReceiptGoodsForm $modelClass
+ * @property PurchasePartsReceiptGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
-class GoldReceiptGoodsController extends BaseController
+class PartsReceiptGoodsController extends BaseController
 {
     use Curd;
     
@@ -31,7 +31,7 @@ class GoldReceiptGoodsController extends BaseController
      * @var $modelClass PurchaseGoldReceiptGoodsForm
      */
     public $modelClass = PurchaseGoldReceiptGoodsForm::class;
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_PARTS;
     
     /**
      * 首页
@@ -43,7 +43,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index', 'receipt_id' => $receipt_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-receipt-goods/index', 'receipt_id' => $receipt_id]));
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -78,7 +78,7 @@ class GoldReceiptGoodsController extends BaseController
     public function actionIqcIndex()
     {
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/iqc-index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-receipt-goods/iqc-index']));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -119,7 +119,7 @@ class GoldReceiptGoodsController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new PurchaseGoldReceiptGoodsForm();
+        $model = $this->findModel($id) ?? new PurchasePartsReceiptGoodsForm();
 
         // ajax 校验
         $this->activeFormValidate($model);
@@ -149,7 +149,7 @@ class GoldReceiptGoodsController extends BaseController
     {
         $receipt_id = Yii::$app->request->get('receipt_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-receipt-goods/index', 'receipt_id' => $receipt_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-receipt-goods/index', 'receipt_id' => $receipt_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

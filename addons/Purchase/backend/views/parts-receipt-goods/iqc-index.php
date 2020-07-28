@@ -14,7 +14,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('receipt_goods', '金料质检列表');
+$this->title = Yii::t('receipt_goods', '配件质检列表');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['iqc-index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
