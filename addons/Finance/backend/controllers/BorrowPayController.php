@@ -4,11 +4,10 @@ namespace addons\Finance\backend\controllers;
 
 
 use addons\Finance\common\enums\FinanceStatusEnum;
-use addons\Finance\common\forms\BankPayForm;
-use addons\Finance\common\models\BankPay;
+use addons\Finance\common\forms\BorrowPayForm;
+use addons\Finance\common\models\BorrowPay;
 use common\enums\CurrencyEnum;
 use common\enums\FlowStatusEnum;
-use common\enums\TargetType;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
@@ -25,19 +24,17 @@ use common\helpers\SnHelper;
  * Class PurchaseController
  * @package backend\modules\goods\controllers
  */
-class BankPayController extends BaseController
+class BorrowPayController extends BaseController
 {
     use Curd;
 
     /**
-     * @var BankPay
+     * @var BorrowPay
      */
-    public $modelClass = BankPayForm::class;
+    public $modelClass = BorrowPayForm::class;
     /**
      * @var int
      */
-
-
 
     /**
      * 首页
@@ -82,7 +79,7 @@ class BankPayController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',1),
-            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
+            'tabList'=> Yii::$app->financeService->borrowPay->menuTabList($id),
             'returnUrl'=>$this->returnUrl,
         ]);
     }
@@ -96,7 +93,7 @@ class BankPayController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new BankPayForm();
+        $model = $model ?? new BorrowPayForm();
 
         $model->creator_id = Yii::$app->user->identity->getId();
         $model->apply_user = $model->creator->username;
@@ -212,7 +209,7 @@ class BankPayController extends BaseController
             'flow_detail_arr' => $flow_detail_arr,
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',3),
-            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
+            'tabList'=> Yii::$app->financeService->borrowPay->menuTabList($id),
             'returnUrl'=>$this->returnUrl,
         ]);
 

@@ -8,13 +8,13 @@ use addons\Finance\common\enums\FinanceStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '银行支付单详情';
+$this->title = '个人因公借款审批单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">银行支付单详情 - <?php echo $model->finance_no?></h2>
+    <h2 class="page-header">个人因公借款审批单详情 - <?php echo $model->finance_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content" >
         <div class="col-xs-12">
@@ -35,37 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td><?= $model->department->name ?? ''?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('project_name') ?>：</td>
-                                <td><?= \addons\Finance\common\enums\ProjectEnum::getValue($model->project_name)?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('borrow_amount') ?>：</td>
+                                <td><?= $model->borrow_amount ;  ?> <?= $model->currency ;?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_year') ?>：</td>
-                                <td><?= $model->budget_year ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('repay_time') ?>：</td>
+                                <td><?= \Yii::$app->formatter->asDate($model->repay_time) ?></td>
                             </tr>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('budget_type') ?>：</td>
-                                <td><?= \addons\Finance\common\enums\BudgetTypeEnum::getValue($model->budget_type)?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_amount') ?>：</td>
-                                <td><?= $model->pay_amount ;  ?> <?= $model->currency ;?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_company') ?>：</td>
-                                <td><?= $model->payee_company; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_account') ?>：</td>
-                                <td><?= $model->payee_account?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('payee_bank') ?>：</td>
-                                <td><?= $model->payee_bank  ?></td>
-                            </tr>
-
-                            <tr>
-                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
-                                <td><?= $model->usage ?></td>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('borrow_remark') ?>：</td>
+                                <td><?= $model->borrow_remark ?></td>
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
@@ -143,8 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                     ?>
-
-
                                 </p>
                             </div>
                         </div>

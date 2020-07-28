@@ -2,13 +2,12 @@
 
 namespace addons\Finance\backend\controllers;
 
-
 use addons\Finance\common\enums\FinanceStatusEnum;
-use addons\Finance\common\forms\BankPayForm;
+use addons\Finance\common\forms\ContractPayForm;
 use addons\Finance\common\models\BankPay;
+use addons\Finance\common\models\ContractPay;
 use common\enums\CurrencyEnum;
 use common\enums\FlowStatusEnum;
-use common\enums\TargetType;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
@@ -25,19 +24,17 @@ use common\helpers\SnHelper;
  * Class PurchaseController
  * @package backend\modules\goods\controllers
  */
-class BankPayController extends BaseController
+class ContractPayController extends BaseController
 {
     use Curd;
 
     /**
      * @var BankPay
      */
-    public $modelClass = BankPayForm::class;
+    public $modelClass = ContractPayForm::class;
     /**
      * @var int
      */
-
-
 
     /**
      * 首页
@@ -63,7 +60,6 @@ class BankPayController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -82,7 +78,7 @@ class BankPayController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',1),
-            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
+            'tabList'=> Yii::$app->financeService->contractPay->menuTabList($id),
             'returnUrl'=>$this->returnUrl,
         ]);
     }
@@ -96,7 +92,7 @@ class BankPayController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new BankPayForm();
+        $model = $model ?? new ContractPayForm();
 
         $model->creator_id = Yii::$app->user->identity->getId();
         $model->apply_user = $model->creator->username;
@@ -212,7 +208,7 @@ class BankPayController extends BaseController
             'flow_detail_arr' => $flow_detail_arr,
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',3),
-            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
+            'tabList'=> Yii::$app->financeService->contractPay->menuTabList($id),
             'returnUrl'=>$this->returnUrl,
         ]);
 
