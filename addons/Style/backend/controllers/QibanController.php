@@ -351,8 +351,8 @@ class QibanController extends BaseController
                     'audit_remark' => $model->audit_remark
                 ];
                 $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
-                //审批完结才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE) {
+                //审批完结或者审批不通过才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     $model->auditor_id = \Yii::$app->user->id;
                     $model->audit_time = time();
                     if ($model->audit_status == AuditStatusEnum::PASS) {

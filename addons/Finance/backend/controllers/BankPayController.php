@@ -9,31 +9,15 @@ use addons\Finance\common\models\BankPay;
 use common\enums\CurrencyEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetType;
-use common\enums\TargetTypeEnum;
-use common\helpers\PageHelper;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use Yii;
-use common\helpers\ArrayHelper;
-use common\helpers\ExcelHelper;
-use common\helpers\StringHelper;
-use common\models\backend\Member;
 use common\enums\AuditStatusEnum;
-use common\enums\LogTypeEnum;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use common\helpers\SnHelper;
-use addons\Purchase\common\forms\PurchaseFollowerForm;
-use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\enums\PurchaseStatusEnum;
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
-use addons\Style\common\models\ProductType;
-use addons\Style\common\models\StyleCate;
-use addons\Style\common\enums\AttrIdEnum;
-use addons\Supply\common\models\Supplier;
+
 
 /**
  *
@@ -103,8 +87,7 @@ class BankPayController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>Yii::$app->request->get('tab',1),
-//            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
-            'tabList'=> [],
+            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
             'returnUrl'=>$this->returnUrl,
         ]);
     }
@@ -152,7 +135,6 @@ class BankPayController extends BaseController
                     throw new \Exception($this->getError($model));
                     return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
                 }
-
                 /**
                  * 把单据ID反写到流程表中
                  */
@@ -195,22 +177,25 @@ class BankPayController extends BaseController
         }
         try{
             $trans = Yii::$app->db->beginTransaction();
-
+            if($model->audit_status == AuditStatusEnum::UNPASS){
+                $model->getTargetType();
+                if($model->targetType) {
+                    /**
+                     * 审批不通过，重新生成审批流程
+                     */
+                    $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,$model->finance_no);
+                    if(!$flow){
+                        throw new \Exception('创建审批流程错误');
+                    }
+                    $model->flow_id = $flow->id;
+                }
+            }
 
             $model->finance_status = FinanceStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
             }
-            //日志
-//            $log = [
-//                'purchase_id' => $id,
-//                'purchase_sn' => $model->purchase_sn,
-//                'log_type' => LogTypeEnum::ARTIFICIAL,
-//                'log_module' => "申请审核",
-//                'log_msg' => "申请审核"
-//            ];
-//            Yii::$app->financeService->bankPay->createP0Log($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
         }catch (\Exception $e){
@@ -221,43 +206,22 @@ class BankPayController extends BaseController
 
 
 
-    /**
-     * 关闭
-     * @return mixed
-     */
-    public function actionClose(){
 
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        if($model->purchase_status != PurchaseStatusEnum::SAVE){
-            return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-        $model->purchase_status = PurchaseStatusEnum::CANCEL;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-        //日志
-        $log = [
-            'purchase_id' => $id,
-            'purchase_sn' => $model->purchase_sn,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => "关闭单据",
-            'log_msg' => "关闭单据"
-        ];
-        Yii::$app->purchaseService->purchase->createPurchaseLog($log);
-        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
-
-    }
-
-
-    public function actionAudit(){
+    public function actionLog(){
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        return $this->renderAjax($this->action->id, [
+        $model->getTargetType();
+        $flow_type_id = $model->targetType;
+        $flow_detail_arr = Yii::$app->services->flow->getFlowDetalsAll($flow_type_id,$id);
+        return $this->render($this->action->id, [
+            'flow_detail_arr' => $flow_detail_arr,
             'model' => $model,
+            'tab'=>Yii::$app->request->get('tab',3),
+            'tabList'=> Yii::$app->financeService->bankPay->menuTabList($id),
+            'returnUrl'=>$this->returnUrl,
         ]);
-    }
 
+    }
 
     /**
      * ajax 审核
@@ -282,8 +246,8 @@ class BankPayController extends BaseController
                     'audit_remark' => $model->audit_remark
                 ];
                 $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
-                //审批完结才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE){
+                //审批完结或者审批不通过才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if($model->audit_status == AuditStatusEnum::PASS){
@@ -330,6 +294,25 @@ class BankPayController extends BaseController
         ]);
     }
 
+
+    /**
+     * 关闭
+     * @return mixed
+     */
+    public function actionClose(){
+
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->finance_status != FinanceStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        $model->finance_status = FinanceStatusEnum::CANCAEL;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
 
     /**
      * 添加商品时查询戒指数据
@@ -394,7 +377,6 @@ class BankPayController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'flow_list' => $flow_list
-
         ]);
     }
 

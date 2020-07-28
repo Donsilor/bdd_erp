@@ -99,7 +99,6 @@ use common\helpers\Url;
         $("#pay_amount_capital").val(smalltoBIG(pay_amount))
     }
 
-
     function smalltoBIG(n)
     {
         var fraction = ['角', '分'];

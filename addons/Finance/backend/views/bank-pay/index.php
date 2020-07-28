@@ -96,7 +96,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 'value' => function ($model){
                     $model->getTargetType();
                     $audit_name_str = '';
-                    if($model->targetType){
+                    if($model->targetType && $model->finance_status == \common\enums\FlowStatusEnum::GO_ON){
                         $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
                         $audit_name_str = $audit_name ? "({$audit_name})" : "";
                     }

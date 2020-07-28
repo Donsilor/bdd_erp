@@ -73,7 +73,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('finance_status') ?>：</td>
-                                <td><?= FinanceStatusEnum::getValue($model->finance_status)?></td>
+                                <td>
+                                    <?php
+                                    $audit_name_str = '';
+                                    if($model->targetType && $model->finance_status == \common\enums\FlowStatusEnum::GO_ON){
+                                        $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                                        $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                                    }
+                                    echo FinanceStatusEnum::getValue($model->finance_status).$audit_name_str;
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
@@ -98,12 +107,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h4>附件列表</h4>
                             <div>
                                 <?php
-                                    $annex_file = explode(',',$model->annex_file) ?? [];
-                                    if($annex_file){
-                                        foreach ($annex_file as $file){
-                                             echo common\helpers\ImageHelper::fancyBox($file);
-                                        }
-                                    }
+                                $annex_file = !empty($model->annex_file)?explode(',', $model->annex_file):null;
+                                if($annex_file){
+                                    echo common\widgets\webuploader\Files::widget([
+                                        'type'=>'files',
+                                        'theme'=>'show',
+                                        'value'=> $annex_file,
+                                        'name'=>'format_video',
+                                    ]);
+                                }
+
                                 ?>
                             </div>
                         </div>

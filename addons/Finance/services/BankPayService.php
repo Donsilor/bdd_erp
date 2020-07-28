@@ -19,7 +19,7 @@ class BankPayService extends FinanceService
     {
         return [
             1=>['name'=>'基础信息','url'=>Url::to(['bank-pay/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-//            3=>['name'=>'日志信息','url'=>Url::to(['finance-log/index','purchase_id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])]
+            3=>['name'=>'日志信息','url'=>Url::to(['bank-pay/log','id'=>$id, 'tab'=>3,'returnUrl'=>$returnUrl])]
         ];
     }
 

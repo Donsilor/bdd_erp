@@ -224,8 +224,8 @@ class PurchaseApplyController extends BaseController
                     'audit_remark' => $model->audit_remark
                 ];
                 $res = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit);
-                //审批完结才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE) {
+                //审批完结或者审批不通过才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if ($model->audit_status == AuditStatusEnum::PASS) {
@@ -294,8 +294,8 @@ class PurchaseApplyController extends BaseController
                     'audit_remark' => $model->audit_remark
                 ];
                 $res = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit);
-                //审批完结才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE) {
+                //审批完结或者审批不通过才会走下面
+                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
 
                     $model->final_audit_time = time();
                     $model->final_auditor_id = \Yii::$app->user->identity->id;
