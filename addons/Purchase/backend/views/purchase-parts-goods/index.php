@@ -96,13 +96,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                    'attribute' => 'material_type',
-                                    'value' => function($model){
-                                        return Yii::$app->attr->valueName($model->material_type);
-                                    },
-                                    'filter' => false,
-                                    'format' => 'raw',
-                                    'headerOptions' => ['class' => 'col-md-1'],
+                                'attribute' => 'material_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->material_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'goods_color',
@@ -123,11 +123,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'goods_size',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->goods_size);
+                                'attribute'=>'goods_size',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_size;
+                                    return $str;
                                 },
-                                'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
