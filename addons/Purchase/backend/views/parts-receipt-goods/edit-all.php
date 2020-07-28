@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -151,9 +152,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                     'class' => 'form-control',
                                 ]),
-                                'value' => function ($model) {
-                                    $str = $model->goods_size;
-                                    return $str;
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
                                 },
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
