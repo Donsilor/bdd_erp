@@ -117,7 +117,7 @@ class ReceiptController extends BaseController
                         'receipt_id' => $model->id,
                         'receipt_no' => $model->receipt_no,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_module' => '创建收货单',
+                        'log_module' => '创建单据',
                         'log_msg' => "创建收货单,单号:".$model->receipt_no,
                 ];
                 \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);

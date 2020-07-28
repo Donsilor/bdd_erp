@@ -111,11 +111,21 @@ class SnHelper
      * @param string $prefix
      * @return string
      */
-    public static function createFinanceSn($id=null,$prefix = 'OA')
+    public static function createFinanceSn($id = null,$prefix = 'OA')
     {
-        $id = $id ?? mt_rand(1, 999999);
-        return $prefix.str_pad($id,5,'0',STR_PAD_LEFT);
+        $id = $id ?? mt_rand(1, 99999999);
+        return $prefix.str_pad($id,8,'0',STR_PAD_LEFT);
     }
 
-    
+    /**
+     * 财务申请单号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createOrderPaySn($prefix = 'PAY')
+    {
+        $number_len = 8 - strlen($prefix);
+        $number_max = substr('99999999',0, $number_len);
+        return $prefix.date('Ymd').mt_rand(3,9).str_pad(mt_rand(1, $number_max),$number_len,'0',STR_PAD_LEFT);
+    }
 }

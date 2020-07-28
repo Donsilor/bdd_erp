@@ -35,7 +35,7 @@ class BorrowPay extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('finance_borrow_pay');
+        return self::tableFullName('borrow_pay');
     }
 
 

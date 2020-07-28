@@ -40,7 +40,7 @@ class ContractPay extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('finance_contract_pay');
+        return self::tableFullName('contract_pay');
     }
 
     /**
