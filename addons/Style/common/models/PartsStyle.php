@@ -9,8 +9,11 @@ use common\models\backend\Member;
  * This is the model class for table "style_parts".
  *
  * @property int $id ID
- * @property string $parts_type 配件类型
  * @property string $style_sn 款号
+ * @property string $parts_type 配件类型
+ * @property string $metal_type 金属类型
+ * @property string $color 配件颜色
+ * @property string $shape 配件形状
  * @property string $remark 备注
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
@@ -38,10 +41,10 @@ class PartsStyle extends BaseModel
     public function rules()
     {
         return [
-            [['parts_type', 'style_sn'], 'required'],
+            [['style_sn', 'parts_type'], 'required'],
             [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['parts_type'], 'string', 'max' => 10],
             [['style_sn'], 'string', 'max' => 30],
+            [['parts_type', 'metal_type', 'color', 'shape'], 'string', 'max' => 10],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
     }
@@ -53,8 +56,11 @@ class PartsStyle extends BaseModel
     {
         return [
             'id' => 'ID',
-            'parts_type' => '配件类型',
             'style_sn' => '款号',
+            'parts_type' => '配件类型',
+            'metal_type' => '金属材质',
+            'color' => '配件颜色',
+            'shape' => '配件形状',
             'remark' => '备注',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',

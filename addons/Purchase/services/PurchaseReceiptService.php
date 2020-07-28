@@ -2,8 +2,6 @@
 
 namespace addons\Purchase\services;
 
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Warehouse\common\enums\WarehouseIdEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -13,11 +11,11 @@ use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\enums\DefectiveStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\models\PurchaseDefective;
-use addons\Purchase\common\models\PurchaseDefectiveGoods;
-use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Purchase\common\models\PurchasePartsReceiptGoods;
+use addons\Style\common\enums\LogTypeEnum;
+use addons\Warehouse\common\enums\WarehouseIdEnum;
 use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
@@ -177,6 +175,8 @@ class PurchaseReceiptService extends Service
                 $goods = new PurchaseStoneReceiptGoods();
             }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods = new PurchaseGoldReceiptGoods();
+            }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $goods = new PurchasePartsReceiptGoods();
             }else{
                 $goods = new PurchaseReceiptGoods();
             }

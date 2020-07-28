@@ -27,6 +27,8 @@ class AttrIdEnum
     //物料
     const MAT_STONE_TYPE = 40;//石料类型
     const MAT_GOLD_TYPE = 51;//金料类型
+    const MAT_PARTS_TYPE = 93;//配件类型
+    const MAT_PARTS_SHAPE = 94;//配件形状
     
     //钻石信息
     const DIA_CLARITY = 2;//钻石净度

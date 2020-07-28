@@ -12,6 +12,8 @@ class PurchaseTypeEnum extends BaseEnum
     const GOODS = 1;
     const MATERIAL_STONE = 2;
     const MATERIAL_GOLD = 3;
+    const MATERIAL_PARTS = 4;
+
     /**
      *
      * @return array
@@ -22,6 +24,7 @@ class PurchaseTypeEnum extends BaseEnum
                 self::GOODS => "商品采购",
                 self::MATERIAL_STONE =>'石料采购',
                 self::MATERIAL_GOLD =>'金料采购',
+                self::MATERIAL_PARTS =>'配件采购',
         ];
     }
     

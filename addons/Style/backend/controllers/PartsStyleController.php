@@ -57,7 +57,7 @@ class PartsStyleController extends BaseController
 
         $dataProvider->query->andWhere(['>',PartsStyle::tableName().'.status',-1]);
 
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
@@ -105,9 +105,10 @@ class PartsStyleController extends BaseController
     }
 
     /**
-     * 供应商-审核
+     * 配件款式-审核
      *
      * @return mixed
+     * @throws
      */
     public function actionAjaxAudit()
     {

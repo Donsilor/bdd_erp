@@ -62,12 +62,47 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
-                            'label' => '配件类型',
                             'attribute' => 'parts_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->parts_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'metal_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->metal_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'metal_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'color',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->color);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'shape',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->shape);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
