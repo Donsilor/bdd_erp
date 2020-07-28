@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
@@ -53,13 +54,14 @@ class PurchasePartsReceiptGoods extends BaseModel
     {
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
-            [['receipt_id', 'goods_num', 'put_in_type', 'to_warehouse_id', 'xuhao', 'goods_status', 'purchase_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'receipt_id', 'goods_num', 'put_in_type', 'to_warehouse_id', 'xuhao', 'goods_status', 'purchase_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
             [['parts_type', 'material_type', 'goods_color', 'goods_shape', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
             [['goods_size'], 'string', 'max' => 100],
+            [['supplier_id','receipt_no','receipt_status'], 'safe']
         ];
     }
 
@@ -98,5 +100,29 @@ class PurchasePartsReceiptGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 关联采购收货单明细表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceipt(){
+        return $this->hasOne(PurchaseReceipt::class, ['id'=>'receipt_id'])->alias('receipt');
+    }
+    /**
+     * 关联质检未过原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFqc()
+    {
+        return $this->hasOne(PurchaseFqcConfig::class, ['id'=>'iqc_reason'])->alias('fqc');
+    }
+    /**
+     * 对应渠道模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
 }

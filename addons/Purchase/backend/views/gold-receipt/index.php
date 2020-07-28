@@ -139,7 +139,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => '',
-                    'options' => ['readonly' => true, 'class' => 'form-control',],
+                    'options' => ['readonly' => false, 'class' => 'form-control',],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [

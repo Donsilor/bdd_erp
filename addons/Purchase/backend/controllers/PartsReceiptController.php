@@ -8,6 +8,7 @@ use addons\Purchase\common\models\PurchasePartsGoods;
 use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
@@ -93,6 +94,38 @@ class PartsReceiptController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    /**
+     * @return mixed
+     * 申请审核
+     */
+    public function actionAjaxApply(){
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseReceiptForm();
+        if($model->receipt_status != BillStatusEnum::SAVE){
+            return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        if(!$model->receipt_num){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $model->audit_status = AuditStatusEnum::PENDING;
+        $model->receipt_status = BillStatusEnum::PENDING;
+        if(false === $model->save()){
+            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        $log_msg = "申请审核";
+        $log = [
+            'receipt_id' => $model->id,
+            'receipt_no' => $model->receipt_no,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_module' => '配件采购收货单',
+            'log_msg' => $log_msg
+        ];
+        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
     }
 
     /**
