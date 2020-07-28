@@ -131,8 +131,10 @@ class PurchaseController extends BaseController
                             'log_msg' => "创建采购单，单号:".$model->purchase_sn
                     ];
                     Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                    $trans->commit();
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
+                    $trans->commit();
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             }catch (\Exception $e){
