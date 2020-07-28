@@ -6,6 +6,9 @@ use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use addons\Finance\common\forms\OrderPayForm;
+use addons\Sales\common\models\Order;
+use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\PayStatusEnum;
 
 /**
  *
@@ -35,7 +38,7 @@ class OrderPayController extends BaseController
      */
     public function actionIndex()
     {
-        $this->modelClass = \addons\Sales\common\models\Order::class;
+        $this->modelClass = Order::class;
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -45,12 +48,13 @@ class OrderPayController extends BaseController
                 ],
                 'pageSize' => $this->getPageSize(),
                 'relations' => [
-                     
+                    'account'=>["order_amount","pay_amount","paid_amount","currency"] 
                 ]
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+        $dataProvider->query->andWhere(['=',Order::tableName().".order_status",OrderStatusEnum::CONFORMED]);
+        //$dataProvider->query->andWhere(['=',Order::tableName().".pay_status",PayStatusEnum::NO_PAY]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -67,7 +71,7 @@ class OrderPayController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new BankPayForm();
+        $model = $model ?? new OrderPayForm();
         
         // ajax 校验
         $this->activeFormValidate($model);

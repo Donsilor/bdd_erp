@@ -196,6 +196,14 @@ class Order extends BaseModel
         return $this->hasOne(Express::class, ['id'=>'express_id']);
     }
     /**
+     * 支付方式 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayType()
+    {
+        return $this->hasOne(Payment::class, ['id'=>'pay_type']);
+    }
+    /**
      * 对应快递模型
      * @return \yii\db\ActiveQuery
      */
