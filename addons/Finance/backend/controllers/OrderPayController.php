@@ -48,7 +48,8 @@ class OrderPayController extends BaseController
                 ],
                 'pageSize' => $this->getPageSize(),
                 'relations' => [
-                    'account'=>["order_amount","pay_amount","paid_amount","currency"] 
+                    'account'=>["order_amount","pay_amount","paid_amount","currency"] ,
+                    'payLogs'=>["pay_sn"]
                 ]
         ]);
         

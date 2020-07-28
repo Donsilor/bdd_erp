@@ -118,7 +118,12 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'account.unpay_amount',
                     'value' => function ($model){
-                        return AmountHelper::outputAmount($model->account->pay_amount - $model->account->paid_amount,2,$model->account->currency);
+                        $unpay_amount = $model->account->pay_amount - $model->account->paid_amount;                       
+                        $unpay_amount_str = AmountHelper::outputAmount($unpay_amount,2,$model->account->currency);
+                        if($unpay_amount > 0) {
+                            $unpay_amount_str = "<b style='color:red'>".$unpay_amount_str."</b>";
+                        }
+                        return $unpay_amount_str;
                     },
                     'filter' => false,
                     'format' => 'raw',
@@ -162,7 +167,23 @@ $params = $params ? "&".http_build_query($params) : '';
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-           ],  
+           ],
+           [
+                   'attribute' => 'payLogs.pay_sn',
+                   'value'=>function($model) {
+                           $pay_sn = '';
+                           foreach ($model->payLogs ??[] as $payLog){
+                               $pay_sn .= $payLog->pay_sn;
+                           }
+                           return $pay_sn;
+                    },
+                    'filter' => Html::activeTextInput($searchModel, 'payLogs.pay_sn', [
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'150'],
+           ],
            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

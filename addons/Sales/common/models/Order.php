@@ -5,6 +5,7 @@ namespace addons\Sales\common\models;
 use Yii;
 use common\models\common\PayLog;
 use common\helpers\RegularHelper;
+use addons\Finance\common\models\OrderPay;
 
 /**
  * This is the model class for table "sales_order".
@@ -204,6 +205,14 @@ class Order extends BaseModel
         return $this->hasOne(Payment::class, ['id'=>'pay_type']);
     }
     /**
+     * 支付记录 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayLogs()
+    {
+        return $this->hasMany(OrderPay::class, ['order_id'=>'id']);
+    }
+    /**
      * 对应快递模型
      * @return \yii\db\ActiveQuery
      */
@@ -211,12 +220,5 @@ class Order extends BaseModel
     {
         return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id']);
     }
-    /**
-     * 对应订单商品信息模型
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPaylogs()
-    {
-        return $this->hasMany(PayLog::class,['order_sn'=>'order_sn']);
-    }
+    
 }
