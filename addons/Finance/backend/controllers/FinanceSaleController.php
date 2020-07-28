@@ -59,12 +59,12 @@ class FinanceSaleController extends BaseController
                 ]
         ]);
         
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['audit_time']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['bill.audit_time']);
         $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
-        
+
         //创建时间过滤
-        if (!empty($searchParams['audit_time'])) {
-            list($start_date, $end_date) = explode('/', $searchParams['audit_time']);
+        if (!empty($searchParams['bill.audit_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['bill.audit_time']);
             $dataProvider->query->andFilterWhere(['between', 'bill.audit_time', strtotime($start_date), strtotime($end_date) + 86400]);
         }
         $dataProvider->query->andWhere(['=','bill.bill_type', BillTypeEnum::BILL_TYPE_S]);
