@@ -276,7 +276,7 @@ class PurchaseApplyController extends BaseController
                     $log = [
                             'apply_id' => $model->id,
                             'apply_sn' => $model->apply_sn,
-                            'log_type' => LogTypeEnum::ARTIFICIAL,
+                            'log_type' => LogTypeEnum::SYSTEM,
                             'log_module' => "单据审核",
                             'log_msg' => "业务部提交申请到商品部,审批编号:".$flowS->id,
                     ];
