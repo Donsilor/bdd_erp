@@ -53,6 +53,9 @@ class ReceiptLogService extends Service
     {
         $model = new PurchaseReceiptLog();
         $model->attributes = $log;
+        $model->log_time = time();
+        $model->creator_id = \Yii::$app->user->id;
+        $model->creator = \Yii::$app->user->identity->username;
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }

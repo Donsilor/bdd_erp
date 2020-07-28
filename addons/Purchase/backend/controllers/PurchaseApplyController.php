@@ -414,7 +414,7 @@ class PurchaseApplyController extends BaseController
                 'apply_sn' => $model->apply_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "确认单据",
-                'log_msg' => "业务部确认审批结果"
+                'log_msg' => "创建人确认审批结果"
             ];
             Yii::$app->purchaseService->apply->createApplyLog($log);
             $trans->commit();
