@@ -176,7 +176,7 @@ class PurchaseController extends BaseController
                 'purchase_sn' => $model->purchase_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "申请审核",
-                'log_msg' => "采购单提交申请，流程号:".$flow->id,
+                'log_msg' => "采购单提交申请，审批编号:".$flow->id,
             ];
             Yii::$app->purchaseService->purchase->createPurchaseLog($log);
             $trans->commit();
@@ -248,9 +248,9 @@ class PurchaseController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                $flow = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
                 //审批完结或者审批不通过才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
+                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if($model->audit_status == AuditStatusEnum::PASS){
@@ -272,7 +272,7 @@ class PurchaseController extends BaseController
                     'purchase_sn' => $model->purchase_sn,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => "单据审核",
-                    'log_msg' => "审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                    'log_msg' => "采购申请单审核,审批编号:".$flow->id.",审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
                 Yii::$app->purchaseService->purchase->createPurchaseLog($log);
 

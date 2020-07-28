@@ -140,6 +140,18 @@ class PurchaseApplyController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+                if($isNewRecord){
+                    //日志
+                    $log = [
+                            'apply_id' => $model->id,
+                            'apply_sn' => $model->apply_sn,
+                            'log_type' => LogTypeEnum::ARTIFICIAL,
+                            'log_module' => "创建采购申请单",
+                            'log_msg' => "创建采购申请单,单号：".$model->apply_sn
+                    ];
+                    Yii::$app->purchaseService->apply->createApplyLog($log);
+                }             
+                
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
@@ -180,14 +192,24 @@ class PurchaseApplyController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            Yii::$app->services->flowType->createFlow($this->getTargetYType($model->channel_id),$id,$model->apply_sn);
-            Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
+            $flow = Yii::$app->services->flowType->createFlow($this->getTargetYType($model->channel_id),$id,$model->apply_sn);
+           // Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
 
             $model->apply_status = ApplyStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
             }
+            //日志
+            $log = [
+                    'apply_id' => $model->id,
+                    'apply_sn' => $model->apply_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => "申请审核",
+                    'log_msg' => "业务部提交申请,审批编号:".$flow->id,
+            ];
+            Yii::$app->purchaseService->apply->createApplyLog($log);
+            
             $trans->commit();
             return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
         }catch (\Exception $e){
@@ -223,9 +245,9 @@ class PurchaseApplyController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit);
+                $flow = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit);                
                 //审批完结或者审批不通过才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
+                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if ($model->audit_status == AuditStatusEnum::PASS) {
@@ -235,7 +257,30 @@ class PurchaseApplyController extends BaseController
                     }
                     if (false === $model->save()) {
                         throw new \Exception($this->getError($model));
-                    }
+                    }                    
+                }
+               
+                //日志
+                $log = [
+                        'apply_id' => $model->id,
+                        'apply_sn' => $model->apply_sn,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => "单据审核",
+                        'log_msg' => "业务部审核,审批编号:".$flow->id.",审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                ];
+                Yii::$app->purchaseService->apply->createApplyLog($log);
+                
+                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
+                    $flowS = Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
+                    //日志
+                    $log = [
+                            'apply_id' => $model->id,
+                            'apply_sn' => $model->apply_sn,
+                            'log_type' => LogTypeEnum::ARTIFICIAL,
+                            'log_module' => "单据审核",
+                            'log_msg' => "业务部提交申请到商品部,审批编号:".$flowS->id,
+                    ];
+                    Yii::$app->purchaseService->apply->createApplyLog($log);
                 }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -293,9 +338,9 @@ class PurchaseApplyController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit);
+                $flow = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit);
                 //审批完结或者审批不通过才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
+                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
 
                     $model->final_audit_time = time();
                     $model->final_auditor_id = \Yii::$app->user->identity->id;
@@ -307,6 +352,15 @@ class PurchaseApplyController extends BaseController
                         throw new \Exception($this->getError($model));
                     }
                 }
+                //日志
+                $log = [
+                        'apply_id' => $model->id,
+                        'apply_sn' => $model->apply_sn,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => "单据审核",
+                        'log_msg' => "商品部审核,审批编号:".$flow->id.",审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                ];
+                Yii::$app->purchaseService->apply->createApplyLog($log);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -360,7 +414,7 @@ class PurchaseApplyController extends BaseController
                 'apply_sn' => $model->apply_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "确认单据",
-                'log_msg' => "确认单据"
+                'log_msg' => "业务部确认审批结果"
             ];
             Yii::$app->purchaseService->apply->createApplyLog($log);
             $trans->commit();
@@ -393,7 +447,7 @@ class PurchaseApplyController extends BaseController
                 'apply_sn' => $model->apply_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "取消单据",
-                'log_msg' => "取消单据"
+                'log_msg' => "取消采购申请单"
         ];
         Yii::$app->purchaseService->apply->createApplyLog($log);
         return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
