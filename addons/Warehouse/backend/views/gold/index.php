@@ -12,6 +12,8 @@ use kartik\daterange\DateRangePicker;
 
 $this->title = Yii::t('gold', '金料库存');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
