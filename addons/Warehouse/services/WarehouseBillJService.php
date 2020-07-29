@@ -71,6 +71,7 @@ class WarehouseBillJService extends WarehouseBillService
     public function createBillGoodsJ($form, $bill_goods)
     {
         $bill = WarehouseBillJForm::find()->where(['id' => $form->bill_id])->one();
+
         //批量创建单据明细
         $goods_val = [];
         $goods_id_arr = [];
@@ -80,6 +81,7 @@ class WarehouseBillJService extends WarehouseBillService
             if(empty($goods_info)){
                 throw new \Exception("货号{$goods_id}不存在或者不是库存中");
             }
+
             //是否维修中
             //\Yii::$app->warehouseService->repair->checkRepairStatus($goods);
             $goods['bill_id'] = $bill->id;
