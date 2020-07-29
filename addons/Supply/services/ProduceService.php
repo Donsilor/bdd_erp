@@ -249,6 +249,7 @@ class ProduceService extends Service
      */
     private function createProduceStone($form , $attrValues) 
     {
+        $attrValues = array_filter($attrValues);
         $stone_list =[];
         //主石
         if(!empty($attrValues[AttrIdEnum::MAIN_STONE_TYPE])) {

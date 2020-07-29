@@ -338,7 +338,6 @@ class ProduceController extends BaseController
         try{
             
             $trans = Yii::$app->trans->beginTransaction();
-            
             Yii::$app->supplyService->produce->createPeiliao($model);
             
             $trans->commit();
