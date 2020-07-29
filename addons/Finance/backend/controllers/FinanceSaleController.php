@@ -2,7 +2,6 @@
 
 namespace addons\Finance\backend\controllers;
 
-use addons\Sales\common\models\Payment;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -11,6 +10,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Sales\common\models\SaleChannel;
 use addons\Style\common\models\ProductType;
+use addons\Sales\common\models\Payment;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ExcelHelper;
