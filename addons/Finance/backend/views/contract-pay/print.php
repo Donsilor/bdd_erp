@@ -258,22 +258,27 @@
 			<div class="title2">审批意见栏</div>
 			<table class="table2" border="1" bordercolor="#333" cellspacing="0" cellpadding="0">
                 <?php
-                 foreach ($flow_list as $flow_detail){
-                ?>
-				<tr>
-					<td width="20%">
-						<div><?= $flow_detail->memeber->department->name ?? ''?></div>
-					</td>
-                    <td width="15%">
-                        <div><?= $flow_detail->member->username ?? ''?></div>
-                    </td>
-					<td width="50%">
-						<div><?= $flow_detail->audit_remark?></div>
-					</td>
-                    <td>
-                        <div><?= Yii::$app->formatter->asDatetime($flow_detail->audit_time)?></div>
-                    </td>
-				</tr>
+                $li = ['部门负责人','部门分管高管','相关部门负责人','相关部门分管高管','财务部','财务部分管高管','董事长办公室','总经理','副董事长','财务部出纳'];
+                foreach ($flow_list as $k=> $flow_detail){
+                    ?>
+                    <tr>
+                        <td width="15%">
+                            <div><?= $li[$k]?></div>
+                        </td>
+
+                        <td width="35%">
+                            <div><?= $flow_detail->audit_remark?></div>
+                        </td>
+                        <td width="15%">
+                            <div><?= $flow_detail->member->department->name ?? ''?></div>
+                        </td>
+                        <td width="15%">
+                            <div><?= $flow_detail->member->username ?? ''?></div>
+                        </td>
+                        <td>
+                            <div><?= Yii::$app->formatter->asDatetime($flow_detail->audit_time)?></div>
+                        </td>
+                    </tr>
                 <?php } ?>
 
 			</table>
