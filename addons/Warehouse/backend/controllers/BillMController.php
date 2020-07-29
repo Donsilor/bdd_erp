@@ -182,11 +182,34 @@ class BillMController extends BaseController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        if($model->goods_num<=0){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try{
+            $model->bill_status = BillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '调拨单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
+
 
     }
 
@@ -201,7 +224,6 @@ class BillMController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
         }
@@ -234,7 +256,7 @@ class BillMController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '调拨单',
-                    'log_msg' => '单据审核：'.AuditStatusEnum::getValue($model->audit_status)
+                    'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
                 \Yii::$app->getSession()->setFlash('success','保存成功');

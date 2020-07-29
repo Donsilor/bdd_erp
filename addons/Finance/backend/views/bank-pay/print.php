@@ -247,7 +247,7 @@
                     <td width="20%">
                         <div><?php
                             $det_name =  $flow_detail->member->department->name ?? '';
-                            echo $det_name == '' ? '' : $det_name."-"
+                            echo $det_name == '' ? '' : $det_name." - "
                             ?>
 
                             <?= $flow_detail->member->username ?? ''?></div>

@@ -116,7 +116,6 @@ class BillAController extends BaseController
                 }else{
                     $log_msg = "修改调整单{$model->bill_no}，出库仓库为{$model->fromWarehouse->name}";
                 }
-
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
@@ -176,11 +175,32 @@ class BillAController extends BaseController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        if($model->goods_num<=0){
+            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try{
+            $model->bill_status = BillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '调整单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
 
     }
 
@@ -211,9 +231,9 @@ class BillAController extends BaseController
                     //更新库存状态和仓库
                     $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $id])->select(['goods_id'])->all();
                     foreach ($billGoods as $goods){
-                        $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK, 'warehouse_id' => $model->to_warehouse_id],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_TRANSFER]);
+                        $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK, 'warehouse_id' => $model->to_warehouse_id],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_ADJUS]);
                         if(!$res){
-                            throw new Exception("商品{$goods->goods_id}不是调拨中或者不存在，请查看原因");
+                            throw new Exception("商品{$goods->goods_id}不是调整状态或者不存在，请查看原因");
                         }
                     }
                 }else{
@@ -227,13 +247,12 @@ class BillAController extends BaseController
                 $log = [
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '调拨单',
-                    'log_msg' => '单据审核：'.AuditStatusEnum::getValue($model->audit_status)
+                    'log_module' => '调整单',
+                    'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
-                \Yii::$app->getSession()->setFlash('success','保存成功');
                 $trans->commit();
-                return $this->redirect(\Yii::$app->request->referrer);
+                $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
