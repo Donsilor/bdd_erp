@@ -21,7 +21,7 @@ class OrderForm extends Order
     public function rules()
     {
         $rules = [
-                
+             [['customer_mobile','customer_email'],'validateCustomer']
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -36,7 +36,16 @@ class OrderForm extends Order
                 
         ]);
     }
-
+    public function validateCustomer($attribute) 
+    {
+        if($this->sale_channel_id ==3 && $this->customer_email=='') {
+            $this->addError($attribute,"客户邮箱必填");
+            return false;
+        }else if($this->sale_channel_id != 3 && $this->customer_mobile ==''){
+            $this->addError($attribute,"客户手机必填");
+            return false;
+        }
+    }
     public function getTargetType(){
         switch ($this->sale_channel_id){
             case 3:
