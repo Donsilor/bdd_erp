@@ -131,12 +131,12 @@ class BillCGoodsController extends BaseController
                     DeliveryTypeEnum::ASSEMBLY,
                 ];
                 if(in_array($bill->delivery_type, $data)){
-                    if($goods->supplier_id != $bill->supplier_id && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                        return $this->message("货号{$goods_id}供应商与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                    if($goods->supplier_id != $bill->supplier_id){
+                        return $this->message("货号{$goods_id}的供应商与单据的供应商不一致", $this->redirect(Yii::$app->request->referrer), 'error');
                     }
-                    if($goods->put_in_type != $bill->put_in_type && !in_array($bill->delivery_type, [DeliveryTypeEnum::BORROW_GOODS])){
-                        return $this->message("货号{$goods_id}入库方式与单据不一致", $this->redirect(Yii::$app->request->referrer), 'error');
-                    }
+                    /*if($goods->put_in_type != $bill->put_in_type){
+                        return $this->message("货号{$goods_id}的入库方式与单据的入库方式不一致", $this->redirect(Yii::$app->request->referrer), 'error');
+                    }*/
                 }
                 $goods_info = [];
                 $goods_info['id'] = null;

@@ -32,6 +32,14 @@ return [
                                 'title' => '订单点款',
                                 'route' => 'order-pay/index',
                         ],
+                        [
+                                'title' => '财务出库单',
+                                'route' => 'finance-sale/index',
+                        ],
+                        [
+                                'title' => '财务入库单',
+                                'route' => 'finance-entry/index',
+                        ],
                 ],
                     
         ],
@@ -54,19 +62,6 @@ return [
                     ],
     
                 ],
-
-        ],
-        [
-            'title' => '财务出入库单',
-            'route' => 'indexFinance',
-            'icon' => 'fa fa-superpowers',
-            'child' => [
-                [
-                    'title' => '财务出库单',
-                    'route' => 'finance-sale/index',
-                ],
-
-            ],
 
         ],
     ],

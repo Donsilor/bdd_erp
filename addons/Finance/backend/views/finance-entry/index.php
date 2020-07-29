@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $searchModel */
 
-$this->title = Yii::t('finance_sale', '财务出库单');
+$this->title = Yii::t('finance_sale', '财务入库单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
