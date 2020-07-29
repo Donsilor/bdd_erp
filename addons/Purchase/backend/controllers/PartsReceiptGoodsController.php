@@ -125,7 +125,7 @@ class PartsReceiptGoodsController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
+            $model->cost_price = bcmul($model->parts_price, $model->goods_weight, 3);
             if(false == $model->save()){
                 return $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }
@@ -266,7 +266,7 @@ class PartsReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至金料收货单
-                Yii::$app->purchaseService->receipt->syncReceiptToGoldL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToPartsL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');

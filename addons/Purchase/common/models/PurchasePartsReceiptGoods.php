@@ -6,7 +6,7 @@ use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
- * This is the model class for table "purchase_parts_receipt_goods".
+ * This is the model class for table "purchase_receipt_parts".
  *
  * @property int $id ID
  * @property int $receipt_id 采购收货单ID
@@ -23,7 +23,7 @@ use Yii;
  * @property string $chain_type 链类型
  * @property string $cramp_ring 扣环
  * @property string $cost_price 成本价
- * @property string $gold_price 金料单价/克
+ * @property string $parts_price 配件单价/克
  * @property string $goods_remark 商品备注
  * @property int $put_in_type 入库方式
  * @property int $to_warehouse_id 入库仓库
@@ -44,7 +44,7 @@ class PurchasePartsReceiptGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('purchase_parts_receipt_goods');
+        return self::tableFullName('purchase_receipt_parts');
     }
 
     /**
@@ -55,7 +55,7 @@ class PurchasePartsReceiptGoods extends BaseModel
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
             [['id', 'receipt_id', 'goods_num', 'put_in_type', 'to_warehouse_id', 'xuhao', 'goods_status', 'purchase_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goods_weight', 'cost_price', 'gold_price'], 'number'],
+            [['goods_weight', 'cost_price', 'parts_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
@@ -86,7 +86,7 @@ class PurchasePartsReceiptGoods extends BaseModel
             'chain_type' => '链类型',
             'cramp_ring' => '扣环',
             'cost_price' => '成本价',
-            'gold_price' => '金料单价/克',
+            'parts_price' => '配件单价/g',
             'goods_remark' => '商品备注',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',

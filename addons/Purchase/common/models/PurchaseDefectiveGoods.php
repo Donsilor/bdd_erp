@@ -23,6 +23,7 @@ use Yii;
  * @property int $receipt_detail_id 收货单明细ID
  * @property string $material_type 商品类型
  * @property double $goods_weight 商品重量
+ * @property string $goods_shape 商品形状
  * @property string $goods_color 颜色
  * @property string $goods_clarity 净度
  * @property string $goods_norms 商品规格
@@ -62,7 +63,7 @@ class PurchaseDefectiveGoods extends BaseModel
             [['style_sn'], 'string', 'max' => 50],
             [['factory_mo', 'produce_sn'], 'string', 'max' => 30],
             [['material_type', 'goods_norms'], 'string', 'max' => 20],
-            [['goods_color', 'goods_clarity', 'parts_type', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
+            [['goods_shape', 'goods_color', 'goods_clarity', 'parts_type', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
             [['goods_size'], 'string', 'max' => 100],
         ];
     }
@@ -87,6 +88,7 @@ class PurchaseDefectiveGoods extends BaseModel
             'receipt_detail_id' => '收货单明细ID',
             'material_type' => '商品类型',
             'goods_weight' => '商品重量',
+            'goods_shape' => '商品形状',
             'goods_color' => '颜色',
             'goods_clarity' => '净度',
             'goods_norms' => '商品规格',

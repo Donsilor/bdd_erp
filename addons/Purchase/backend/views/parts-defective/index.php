@@ -12,7 +12,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('defective', '金料不良返厂单');
+$this->title = Yii::t('defective', '配件不良返厂单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -36,6 +36,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>'white-space:nowrap;'],
         //'options' => ['style'=>' width:120%;'],
         'id'=>'grid',
         'columns' => [

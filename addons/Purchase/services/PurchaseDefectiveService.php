@@ -3,6 +3,7 @@
 namespace addons\Purchase\services;
 
 use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -76,6 +77,19 @@ class PurchaseDefectiveService extends Service
                         $tab = [2=>['name'=>'单据明细','url'=>Url::to(['gold-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
                     }else{
                         $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
+                    }
+                    break;
+                }
+            case PurchaseTypeEnum::MATERIAL_PARTS:
+                {
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['parts-defective/view','id'=>$defective_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['defective-log/index','defective_id'=>$defective_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['parts-defective-goods/index','defective_id'=>$defective_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
+                    }else{
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-defective-goods/edit-all','defective_id'=>$defective_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
                     }
                     break;
                 }
@@ -228,6 +242,8 @@ class PurchaseDefectiveService extends Service
             $model = new PurchaseStoneReceiptGoods();
         }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldReceiptGoods();
+        }elseif($form->purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+            $model = new PurchasePartsReceiptGoods();
         }else{
             $model = new PurchaseReceiptGoods();
         }

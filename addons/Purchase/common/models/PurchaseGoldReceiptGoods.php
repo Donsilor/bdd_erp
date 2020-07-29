@@ -5,7 +5,7 @@ namespace addons\Purchase\common\models;
 use Yii;
 
 /**
- * This is the model class for table "purchase_gold_receipt_goods".
+ * This is the model class for table "purchase_receipt_gold".
  *
  * @property int $id ID
  * @property int $receipt_id 采购收货单ID
@@ -37,7 +37,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('purchase_gold_receipt_goods');
+        return self::tableFullName('purchase_receipt_gold');
     }
 
     /**

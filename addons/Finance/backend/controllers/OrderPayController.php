@@ -54,7 +54,7 @@ class OrderPayController extends BaseController
         ]);
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['=',Order::tableName().".order_status",OrderStatusEnum::CONFORMED]);
+        $dataProvider->query->andWhere(['or',['=',Order::tableName().".pay_status",PayStatusEnum::HAS_PAY],['=',Order::tableName().".order_status",OrderStatusEnum::CONFORMED]]);
         //$dataProvider->query->andWhere(['=',Order::tableName().".pay_status",PayStatusEnum::NO_PAY]);
         
         return $this->render('index', [
@@ -68,7 +68,7 @@ class OrderPayController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionEdit()
+    public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -78,12 +78,10 @@ class OrderPayController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
-                $trans = Yii::$app->db->beginTransaction();
-                $isNewRecord = $model->isNewRecord;
-                
-                
+                $trans = Yii::$app->db->beginTransaction();                
+                $orderPay = \Yii::$app->financeService->orderPay->pay($model);                
                 $trans->commit();
-                return $this->message('操作成功', $this->redirect(['index']), 'success');
+                return $this->message('点款成功,交易号：'.$orderPay->pay_sn, $this->redirect(['index']), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -91,7 +89,7 @@ class OrderPayController extends BaseController
             
         }
         
-        return $this->render($this->action->id, [
+        return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
     }

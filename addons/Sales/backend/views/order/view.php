@@ -30,11 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <table class="table table-hover">
                         <tr>
                             <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('order_sn') ?>：</td>
-                            <td class="col-xs-3 no-border-top"><?= $model->order_sn ?></td>                            
-                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('language') ?>：</td>
-                            <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?></td>
-                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('currency') ?>：</td>
-                            <td class="col-xs-3 no-border-top"><?= common\enums\CurrencyEnum::getValue($model->currency) ?></td>
+                            <td class="col-xs-3 no-border-top"><?= $model->order_sn ?></td> 
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
+                            <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>                             
+                            <td class="col-xs-1 text-right no-border-top">语言/货币：</td>
+                            <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?>（<?= common\enums\CurrencyEnum::getValue($model->currency) ?>）</td>
+                            
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
@@ -42,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
-                            <td><?= addons\Sales\common\enums\PayTypeEnum::getValue($model->pay_type) ?></td>
+                            <td><?= $model->payType->name ??'' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
@@ -55,24 +56,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_name') ?>：</td>
                             <td><?= $model->customer_name ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_mobile') ?>：</td>
-                            <td><?= $model->customer_mobile ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
-                            <td><?= $model->customer_email ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
+                            <td><?= $model->express->name ?? '' ?></td>                          
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_sn') ?>：</td>
+                            <td><?= $model->pay_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
-                            <td><?= $model->express->name ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
+                            <td><?= $model->customer_email ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
+                            <td><?= $model->out_pay_no ?></td>
                         </tr>
 						<tr>
-						    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
-                            <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>
+						    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_mobile') ?>：</td>
+                            <td><?= $model->customer_mobile ?></td> 
+						    
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td><?= $model->out_trade_no ?></td>
                             <td class="col-xs-1 text-right"></td>

@@ -199,13 +199,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'gold_price',
+                                'attribute'=>'parts_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 /*'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
                                 },*/
-                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),

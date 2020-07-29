@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $defective yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_defective_goods', '金料不良返厂单详情');
+$this->title = Yii::t('parts_defective_goods', '配件不良返厂单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($defective->defective_status == \addons\Purchase\common\enums\DefectiveStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['gold-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['parts-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -65,6 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'parts_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->parts_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'material_type',
                                 'value' => function ($model){
                                     return \addons\Style\common\enums\MaterialTypeEnum::getValue($model->material_type);
@@ -83,6 +92,54 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'goods_color',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_color);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods_shape',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->goods_shape);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_size;
+                                    return $str;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'chain_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->chain_type);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'cramp_ring',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->cramp_ring);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_weight',
