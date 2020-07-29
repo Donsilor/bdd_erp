@@ -191,6 +191,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'100'],
             ],
             [
+                'attribute' => 'creator_id',
+                'value' => 'creator.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' =>false,
+
+            ],
+            [
                 'attribute'=>'created_at',
                 'value'=>function($model){
                     return Yii::$app->formatter->asDatetime($model->created_at);

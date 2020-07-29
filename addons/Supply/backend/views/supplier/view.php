@@ -36,6 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->supplier_tag ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
+                                     <td><?= \addons\Supply\common\enums\GoodsTypeEnum::getValue($model->goods_type) ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_status') ?>：</td>
+                                     <td><?= \addons\Supply\common\enums\SupplierStatusEnum::getValue($model->supplier_status) ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
                                      <td><?= $model->pay_type ?></td>
                                  </tr>
@@ -76,10 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('business_address') ?>：</td>
                                      <td><?= $model->business_address ?></td>
                                  </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
-                                     <td><?= $model->address ?></td>
-                                 </tr>
+
 
                              </table>
                          </div>
@@ -90,6 +95,10 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box" style="margin-bottom: 0px;">
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('address') ?>：</td>
+                                     <td><?= $model->address ?></td>
+                                 </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('contactor') ?>：</td>
                                      <td><?= $model->contactor ?></td>
@@ -120,7 +129,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                                     <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                                     <td><?php
+                                         $audit_name_str = '';
+                                         if($model->targetType){
+                                             $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                                             $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                                         }
+                                         echo \common\enums\AuditStatusEnum::getValue($model->audit_status).$audit_name_str;
+                                         ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
@@ -176,7 +192,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                     ]);
                 }
-                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+                if($model->targetType){
+                    $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
+                }else{
+                    $isAudit = true;
+                }
+                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING && $isAudit){
                     echo '&nbsp;';
                     echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                         'class'=>'btn btn-success btn-sm',
@@ -187,6 +208,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
     </div>
-</div>
+    <div id="flow">
 
+    </div>
+</div>
+<script>
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view','flow_type_id'=> $model->targetType,'target_id'=>$model->id])?>")
+
+</script>
 

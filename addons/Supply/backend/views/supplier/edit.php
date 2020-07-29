@@ -49,6 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'balance_type')->dropDownList(\addons\Supply\common\enums\BalanceTypeEnum::getMap()) ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'goods_type')->dropDownList(\addons\Supply\common\enums\GoodsTypeEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'supplier_status')->dropDownList(\addons\Supply\common\enums\SupplierStatusEnum::getMap(),['prompt'=>'请选择']) ?>
+                        </div>
+                    </div>
                     <?php $model->business_scope = !empty($model->business_scope)?array_filter(explode(',', $model->business_scope)):null;?>
                     <?= $form->field($model, 'business_scope')->checkboxList(\addons\Supply\common\enums\BusinessScopeEnum::getMap()) ?>
                     <!-- ./nav-tabs-custom -->

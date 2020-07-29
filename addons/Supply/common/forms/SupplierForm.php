@@ -2,6 +2,8 @@
 
 namespace addons\Supply\common\forms;
 
+use addons\Supply\common\enums\GoodsTypeEnum;
+use common\enums\TargetTypeEnum;
 use common\helpers\ArrayHelper;
 use Yii;
 
@@ -11,6 +13,8 @@ use addons\Supply\common\models\Supplier;
  */
 class SupplierForm extends Supplier
 {
+    //审批流程
+    public $targetType;
     /**
      * {@inheritdoc}
      */
@@ -32,6 +36,19 @@ class SupplierForm extends Supplier
         return ArrayHelper::merge(parent::attributeLabels() , [
             //'id'=>'序号',
         ]);
+    }
+
+    public function getTargetType(){
+        switch ($this->goods_type){
+            case GoodsTypeEnum::COMMODITY:
+                $this->targetType = TargetTypeEnum::SUPPLIER_GOODS_MENT;
+                break;
+            case GoodsTypeEnum::RAW_MATERIAL:
+                $this->targetType = TargetTypeEnum::SUPPLIER_MATERIAL_MENT;
+                break;
+            default:
+                $this->targetType = false;
+        }
     }
 
 }
