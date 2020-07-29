@@ -2,6 +2,7 @@
 
 namespace addons\Finance\backend\controllers;
 
+use addons\Sales\common\models\Payment;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -107,6 +108,7 @@ class FinanceEntryController extends BaseController
             ['货号', 'goods_id' , 'text'],
             ['成本价', 'cost_price' , 'text'],
             ['实际销售价', 'sale_price' , 'text'],
+            ['支付方式', 'pay_name' , 'text'],
             ['外部订单号', 'out_trade_no' , 'text'],
             ['销售人', 'sale_name' , 'text'],
         ];
@@ -117,7 +119,7 @@ class FinanceEntryController extends BaseController
     private function getData($ids){
         $select = ['b.bill_no', 'b.audit_time', 'sc.name as channel_name',
             'o.customer_name', 'bg.goods_name', 'type.name as product_type_name',
-            'bg.goods_id', 'g.cost_price', 'bg.sale_price', 'o.out_trade_no', 'm.username as sale_name'];
+            'bg.goods_id', 'g.cost_price', 'bg.sale_price', 'pay.name as pay_name', 'o.out_trade_no', 'm.username as sale_name'];
         $query = WarehouseBill::find()->alias('b')
             ->leftJoin('bdd_erp.sales_order o','b.order_sn=o.order_sn')
             ->leftJoin(SaleChannel::tableName()." sc",'sc.id=b.channel_id')
@@ -125,6 +127,7 @@ class FinanceEntryController extends BaseController
             ->leftJoin(WarehouseBillGoods::tableName()." bg",'b.id=bg.bill_id')
             ->leftJoin(WarehouseGoods::tableName()." g",'bg.goods_id=g.goods_id')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(Payment::tableName().' pay','pay.id=o.pay_type')
             ->where(['b.bill_type' => BillTypeEnum::BILL_TYPE_S, 'b.bill_status' => BillStatusEnum::CONFIRM])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
