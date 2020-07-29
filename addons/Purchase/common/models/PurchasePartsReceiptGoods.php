@@ -6,7 +6,7 @@ use addons\Sales\common\models\SaleChannel;
 use Yii;
 
 /**
- * This is the model class for table "purchase_parts_receipt_goods".
+ * This is the model class for table "purchase_receipt_parts".
  *
  * @property int $id ID
  * @property int $receipt_id 采购收货单ID
@@ -44,7 +44,7 @@ class PurchasePartsReceiptGoods extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('purchase_parts_receipt_goods');
+        return self::tableFullName('purchase_receipt_parts');
     }
 
     /**
