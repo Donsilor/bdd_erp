@@ -68,7 +68,7 @@ class FinanceSaleController extends BaseController
             list($start_date, $end_date) = explode('/', $searchParams['bill.audit_time']);
             $dataProvider->query->andFilterWhere(['between', 'bill.audit_time', strtotime($start_date), strtotime($end_date) + 86400]);
         }
-        $dataProvider->query->andWhere(['=','bill.bill_type', BillTypeEnum::BILL_TYPE_S]);
+        $dataProvider->query->andWhere(['in','bill.bill_type', [BillTypeEnum::BILL_TYPE_S, BillTypeEnum::BILL_TYPE_C]]);
         $dataProvider->query->andWhere(['=','bill.bill_status', BillStatusEnum::CONFIRM]);
 
         //导出
