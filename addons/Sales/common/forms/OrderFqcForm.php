@@ -17,7 +17,7 @@ class OrderFqcForm extends OrderFqc
     public function rules()
     {
         $rules = [
-            [['order_sn', 'problem'], 'required'],
+            [['order_sn'], 'required'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
