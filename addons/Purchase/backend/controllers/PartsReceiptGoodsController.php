@@ -125,7 +125,7 @@ class PartsReceiptGoodsController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
+            $model->cost_price = bcmul($model->parts_price, $model->goods_weight, 3);
             if(false == $model->save()){
                 return $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }

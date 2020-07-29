@@ -12,6 +12,6 @@ class WarehouseIdEnum
 {
     const GOLD    = 7;//金料库
     const STONE   = 8;//石料库
-    const PARTS   = 8;//配件库
+    const PARTS   = 12;//配件库
 
 }
