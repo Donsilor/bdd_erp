@@ -12,6 +12,8 @@ use addons\Warehouse\common\enums\StoneBillStatusEnum;
 
 $this->title = Yii::t('stone_bill_ms', '领石单');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">

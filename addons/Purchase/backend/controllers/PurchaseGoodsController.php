@@ -81,7 +81,7 @@ class PurchaseGoodsController extends BaseController
                 'searchModel' => $searchModel,
                 'purchase'=> $purchase,
                 'tab'=>Yii::$app->request->get('tab',2),
-                'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$this->purchaseType,$this->returnUrl),
+                'tabList'=>Yii::$app->purchaseService->purchase->menuTabList($purchase_id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
         ]);
     }

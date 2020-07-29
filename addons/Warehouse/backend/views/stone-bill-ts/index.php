@@ -12,6 +12,8 @@ use kartik\daterange\DateRangePicker;
 
 $this->title = Yii::t('stone_bill_ms', '退石单');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">

@@ -12,6 +12,8 @@ use addons\Warehouse\common\enums\StoneStatusEnum;
 
 $this->title = Yii::t('stone', '石料库存');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">

@@ -165,6 +165,16 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'120'],
                             ],
                             [
+                                'label' => '支付方式',
+                                'attribute' => 'bill.order.payType.name',
+                                'format' => 'raw',
+                                'value' => function($model){
+                                    return $model->bill->order->payType->name ?? '';
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'label' => '外部订单号',
                                 'attribute'=>'bill.order.out_trade_no',
                                 'filter' =>false,

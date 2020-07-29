@@ -71,39 +71,52 @@ class WarehouseBillJService extends WarehouseBillService
     public function createBillGoodsJ($form, $bill_goods)
     {
         $bill = WarehouseBillJForm::find()->where(['id' => $form->bill_id])->one();
+
         //批量创建单据明细
         $goods_val = [];
         $goods_id_arr = [];
         foreach ($bill_goods as &$goods) {
             $goods_id = $goods['goods_id'];
+            $goods_id_arr[] = $goods_id;
             $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
             if(empty($goods_info)){
                 throw new \Exception("货号{$goods_id}不存在或者不是库存中");
             }
+
             //是否维修中
-            \Yii::$app->warehouseService->repair->checkRepairStatus($goods);
+            //\Yii::$app->warehouseService->repair->checkRepairStatus($goods);
             $goods['bill_id'] = $bill->id;
             $goods['bill_no'] = $bill->bill_no;
             $goods['bill_type'] = $bill->bill_type;
             $goods['warehouse_id'] = $goods_info->warehouse_id;
             $goods['put_in_type'] = $goods_info->put_in_type;
+
+            $goods_key = array_keys($goods);
             $goods_val[] = array_values($goods);
-            $goods_id_arr[] = $goods_id;
+            if(count($goods_val) > 10){
+                $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
+                if(false === $res){
+                    throw new \Exception('创建单据明细失败1');
+                }
+                $goods_val = [];
+            }
         }
-        $goods_key = array_keys($bill_goods[0]);
-        $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
-        if(false === $res){
-            throw new \Exception('创建单据明细失败');
+        if(!empty($goods_val)){
+            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
+            if(false === $res){
+                throw new \Exception('创建单据明细失败2');
+            }
         }
         //同步单据明细关系表
         $sql = "INSERT INTO ".WarehouseBillGoodsJ::tableName()."(id,lend_status,qc_status) SELECT id,0,0 FROM ".WarehouseBillJGoodsForm::tableName()." WHERE bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
         if(false === $should_num) {
-            throw new \Exception('创建单据明细失败2');
+            throw new \Exception('创建单据明细失败3');
         }
         //更新商品库存状态
         $condition = ['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK];
         $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_LEND], $condition);
+
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
