@@ -38,7 +38,7 @@ class PartsDefectiveGoodsController extends BaseController
      * @var $modelClass PurchaseGoldDefectiveGoodsForm
      */
     public $modelClass = PurchasePartsDefectiveGoodsForm::class;
-    public $purchaseType = PurchaseTypeEnum::MATERIAL_GOLD;
+    public $purchaseType = PurchaseTypeEnum::MATERIAL_PARTS;
     
     /**
      * 首页

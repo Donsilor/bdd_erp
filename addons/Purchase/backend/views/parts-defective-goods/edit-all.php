@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $defective yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_defective_goods', '金料不良返厂单详情');
+$this->title = Yii::t('parts_defective_goods', '配件不良返厂单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($defective->defective_status == \addons\Purchase\common\enums\DefectiveStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['gold-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['parts-defective-goods/index', 'defective_id' => $defective->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
