@@ -1135,13 +1135,18 @@ class PurchaseReceiptService extends Service
         $goods = $ids = [];
         $total_weight = $total_cost = $sale_price = 0;
         foreach ($models as $model){
-            $model = new PurchasePartsReceiptGoods();
+            //$model = new PurchasePartsReceiptGoods();
             $ids[] = $model->id;
             $goods[] = [
                 'parts_name' => $model->goods_name,
                 'parts_type' => $model->parts_type,
                 'material_type' => $model->material_type,
                 'style_sn' => $model->goods_sn,
+                'color' => $model->goods_color,
+                'shape' => $model->goods_shape,
+                'size' => $model->goods_size,
+                'chain_type' => $model->chain_type,
+                'cramp_ring' => $model->cramp_ring,
                 'parts_num' => $model->goods_num,
                 'parts_weight' => $model->goods_weight,
                 'cost_price' => $model->cost_price,
@@ -1170,7 +1175,7 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->goldL->createGoldL($bill, $goods);
+        Yii::$app->warehouseService->partsL->createGoldL($bill, $goods);
         //批量更新采购收货单货品状态
         $data = [
             'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,

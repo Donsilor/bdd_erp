@@ -37,6 +37,12 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseStoneBillTsService $stoneTs 工厂退石单(退石单)
  * @property \addons\Warehouse\services\WarehouseStoneBillWService $stoneW 石料盘点单
  *
+ * @property \addons\Warehouse\services\WarehousePartsService $parts 配件库存
+ * @property \addons\Warehouse\services\WarehousePartsBillService $partsBill 配件单据
+ * @property \addons\Warehouse\services\WarehousePartsBillLService $partsL 入库单
+ * @property \addons\Warehouse\services\WarehousePartsBillCService $partsC 领件单
+ * @property \addons\Warehouse\services\WarehousePartsBillDService $partsD 退件单
+ * @property \addons\Warehouse\services\WarehousePartsBillWService $partsW 盘点单
  */
 class Application extends Service
 {
@@ -73,5 +79,12 @@ class Application extends Service
         'stoneMs' => 'addons\Warehouse\services\WarehouseStoneBillMsService',
         'stoneTs' => 'addons\Warehouse\services\WarehouseStoneBillTsService',
         'stoneW' => 'addons\Warehouse\services\WarehouseStoneBillWService',
+
+        'parts' => 'addons\Warehouse\services\WarehousePartsService',
+        'partsBill' => 'addons\Warehouse\services\WarehousePartsBillService',
+        'partsL' => 'addons\Warehouse\services\WarehousePartsBillLService',
+        'partsC' => 'addons\Warehouse\services\WarehousePartsBillCService',
+        'partsD' => 'addons\Warehouse\services\WarehousePartsBillDService',
+        'partsW' => 'addons\Warehouse\services\WarehousePartsBillWService',
     ];
 }

@@ -121,8 +121,15 @@ class OrderController extends BaseController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         
         $mobile = Yii::$app->request->get('mobile');
+        $email = Yii::$app->request->get('email');
         $channel_id = Yii::$app->request->get('channel_id');
-        $model = Customer::find()->select(['id','realname','mobile','email'])->where(['mobile'=>$mobile,'channel_id'=>$channel_id])->asArray()->one();
+        
+        
+        $model = Customer::find()->select(['id','realname','mobile','email','level','source_id'])
+            ->where(['channel_id'=>$channel_id])
+            ->andFilterWhere(['=','mobile',$mobile])
+            ->andFilterWhere(['=','email',$email])
+            ->asArray()->one();
         return ResultHelper::json(200,'查询成功',$model);
     }
     /**
