@@ -9,6 +9,7 @@ use common\models\backend\Member;
  * This is the model class for table "warehouse_bill_goods_j".
  *
  * @property int $id 单据明细ID
+ * @property int $bill_id 单据ID
  * @property int $lend_status 借货状态
  * @property int $receive_id 接收人
  * @property int $receive_time 接收时间
@@ -34,7 +35,7 @@ class WarehouseBillGoodsJ extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'lend_status', 'receive_id', 'receive_time', 'restore_time', 'qc_status'], 'integer'],
+            [['id', 'bill_id', 'lend_status', 'receive_id', 'receive_time', 'restore_time', 'qc_status'], 'integer'],
             [['receive_remark', 'qc_remark'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
@@ -47,6 +48,7 @@ class WarehouseBillGoodsJ extends BaseModel
     {
         return [
             'id' => '单据明细ID',
+            'bill_id' => '单据ID',
             'lend_status' => '借货状态',
             'receive_id' => '接收人',
             'receive_time' => '接收时间',
