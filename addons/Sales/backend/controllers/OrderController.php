@@ -54,6 +54,7 @@ class OrderController extends BaseController
                 'relations' => [
                         'account' => ['order_amount'],
                         'address' => [],
+                        'creator' =>['username'],
                 ]
         ]);
         

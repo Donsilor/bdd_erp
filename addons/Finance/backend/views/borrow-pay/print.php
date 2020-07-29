@@ -209,17 +209,19 @@
                         <td width="15%">
                             <div><?= $li[$k]?></div>
                         </td>
+                        <td width="20%">
+                            <div><?php
+                                $det_name =  $flow_detail->member->department->name ?? '';
+                                echo $det_name == '' ? '' : $det_name."-"
+                                ?>
 
-                        <td width="35%">
-                            <div><?= $flow_detail->audit_remark?></div>
-                        </td>
-                        <td width="15%">
-                            <div><?= $flow_detail->member->department->name ?? ''?></div>
-                        </td>
-                        <td width="15%">
-                            <div><?= $flow_detail->member->username ?? ''?></div>
+                                <?= $flow_detail->member->username ?? ''?></div>
                         </td>
                         <td>
+                            <div><?= $flow_detail->audit_remark?></div>
+                        </td>
+
+                        <td width="15%">
                             <div><?= Yii::$app->formatter->asDatetime($flow_detail->audit_time)?></div>
                         </td>
                     </tr>

@@ -170,7 +170,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width' => '100'],
-           ], 
+           ],
+            [
+                'attribute' => 'creator_id',
+                'value' => 'creator.username',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'filter' =>false,
+
+            ],
            [
                     'attribute'=>'created_at',
                     'filter' => DateRangePicker::widget([    // 日期组件

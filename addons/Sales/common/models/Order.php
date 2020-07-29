@@ -2,6 +2,7 @@
 
 namespace addons\Sales\common\models;
 
+use common\models\backend\Member;
 use Yii;
 use common\models\common\PayLog;
 use common\helpers\RegularHelper;
@@ -233,6 +234,15 @@ class Order extends BaseModel
     public function getSaleChannel()
     {
         return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id']);
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
     
 }

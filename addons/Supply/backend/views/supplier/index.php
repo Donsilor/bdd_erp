@@ -59,6 +59,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'300'],
                         ],
                         [
+                            'attribute' => 'goods_type',
+                            'headerOptions' => ['class' => 'col-md-1','width'=>'60'],
+                            'value' => function ($model){
+                                return \addons\Supply\common\enums\GoodsTypeEnum::getValue($model->goods_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_type',\addons\Supply\common\enums\GoodsTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute'=>'business_scope',
                             'value' => function($model){
                                 if($model->business_scope){
@@ -173,9 +184,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1', 'width'=>'60'],
                             'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                                $model->getTargetType();
+                                $audit_name_str = '';
+                                if($model->targetType){
+                                    $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
+                                    $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                                }
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status).$audit_name_str;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                        ],
+
+                        [
+                            'attribute' => 'supplier_status',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Supply\common\enums\SupplierStatusEnum::getValue($model->supplier_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'supplier_status',\addons\Supply\common\enums\SupplierStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
@@ -210,7 +239,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             },
                             'audit' => function($url, $model, $key){
-                                   if($model->audit_status == AuditStatusEnum::PENDING){
+                                $model->getTargetType();
+                                if($model->targetType){
+                                    $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
+                                }else{
+                                    $isAudit = true;
+                                }
+                                   if($model->audit_status == AuditStatusEnum::PENDING && $isAudit){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',

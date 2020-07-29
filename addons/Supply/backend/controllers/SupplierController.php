@@ -2,6 +2,7 @@
 
 namespace addons\Supply\backend\controllers;
 
+use common\enums\FlowStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\models\base\SearchModel;
@@ -131,7 +132,8 @@ class SupplierController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
         $model = $this->findModel($id);
-        $model = $model ?? new Supplier();
+        $model = $model ?? new SupplierForm();
+        $model->getTargetType();
         if($model->business_scope){
             $business_scope_arr = explode(',', $model->business_scope);
             $business_scope_arr = array_filter($business_scope_arr);
@@ -166,15 +168,27 @@ class SupplierController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new Supplier();
+        $model = $model ?? new SupplierForm();
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('供应商不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        $model->getTargetType();
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+            if($model->targetType){
+                //审批流程
+                Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->supplier_name);
+            }
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
     }
 
     /**
@@ -186,22 +200,35 @@ class SupplierController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new Supplier();
+        $model = $model ?? new SupplierForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
-                    $model->status = StatusEnum::ENABLED;
-                }else{
-                    $model->status = StatusEnum::DISABLED;
-                    $model->audit_status = AuditStatusEnum::SAVE;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
+
+                $model->getTargetType();
+                if($model->targetType){
+                    $audit = [
+                        'audit_status' =>  $model->audit_status ,
+                        'audit_time' => time(),
+                        'audit_remark' => $model->audit_remark
+                    ];
+                    $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                    //审批完结或者审批不通过才会走下面
+                    if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL) {
+                        if ($model->audit_status == AuditStatusEnum::PASS) {
+                            $model->auditor_id = \Yii::$app->user->id;
+                            $model->audit_time = time();
+                            $model->status = StatusEnum::ENABLED;
+                        } else {
+                            $model->status = StatusEnum::DISABLED;
+                            $model->audit_status = AuditStatusEnum::SAVE;
+                        }
+                        if (false === $model->save()) {
+                            throw new \Exception($this->getError($model));
+                        }
+                    }
                 }
                 $trans->commit();
             }catch (\Exception $e){

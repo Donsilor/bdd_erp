@@ -59,8 +59,8 @@ class Supplier extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_name','supplier_tag'], 'required'],
+            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status','supplier_status','goods_type', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_name','supplier_tag','supplier_status','goods_type'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
             [['business_no', 'tax_no'], 'string', 'max' => 50],
@@ -90,6 +90,8 @@ class Supplier extends BaseModel
             'business_file' => '营业执照文件[文件格式：jpg]',
             'pay_type' => '结算方式',
             'balance_type' => '付款周期',
+            'goods_type' => '供货类型',
+            'supplier_status' => '供应商状态',
             'tax_file' => '税务登记文件[文件格式：jpg]',
             'tax_no' => '税务登记证号',
             'bank_name' => '开户行',

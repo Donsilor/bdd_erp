@@ -67,6 +67,18 @@ $params = $params ? "&".http_build_query($params) : '';
                     //'headerOptions' => ['width'=>'150'],
             ],
             [
+                'attribute' => 'oa_no',
+                'value'=>function($model) {
+                    return $model->oa_no;
+                },
+                'filter' => Html::activeTextInput($searchModel, 'oa_no', [
+                    'class' => 'form-control',
+                    'style'=> 'width:150px;'
+                ]),
+                'format' => 'raw',
+                //'headerOptions' => ['width'=>'150'],
+            ],
+            [
                 'attribute' => 'dept_id',
                 'value'=>function($model) {
                     return $model->department->name ?? '';

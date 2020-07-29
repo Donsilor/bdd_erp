@@ -58,7 +58,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'goods_size')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'gold_price')->textInput() ?>
+                   <?= $form->field($model, 'parts_price')->textInput() ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>

@@ -898,7 +898,7 @@ class PurchaseReceiptService extends Service
                     'chain_type' => $goods->chain_type,
                     'cramp_ring' => $goods->cramp_ring,
                     'cost_price' => $goods->cost_price,
-                    'goods_price' => $goods->gold_price,
+                    'goods_price' => $goods->parts_price,
                     'iqc_reason' => $goods->iqc_reason,
                     'iqc_remark' => $goods->iqc_remark,
                     'created_at' => time(),
@@ -1135,15 +1135,17 @@ class PurchaseReceiptService extends Service
         $goods = $ids = [];
         $total_weight = $total_cost = $sale_price = 0;
         foreach ($models as $model){
+            $model = new PurchasePartsReceiptGoods();
             $ids[] = $model->id;
             $goods[] = [
-                'gold_name' => $model->goods_name,
-                'gold_type' => $model->material_type,
+                'parts_name' => $model->goods_name,
+                'parts_type' => $model->parts_type,
+                'material_type' => $model->material_type,
                 'style_sn' => $model->goods_sn,
-                'gold_num' => $model->goods_num,
-                'gold_weight' => $model->goods_weight,
+                'parts_num' => $model->goods_num,
+                'parts_weight' => $model->goods_weight,
                 'cost_price' => $model->cost_price,
-                'gold_price' => $model->gold_price,
+                'parts_price' => $model->parts_price,
                 'source_detail_id' =>$model->id,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time(),
