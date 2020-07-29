@@ -2,7 +2,6 @@
 
 namespace addons\Finance\backend\controllers;
 
-use addons\Sales\common\models\Payment;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -11,6 +10,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Sales\common\models\SaleChannel;
 use addons\Style\common\models\ProductType;
+use addons\Sales\common\models\Payment;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ExcelHelper;
@@ -68,7 +68,7 @@ class FinanceEntryController extends BaseController
             list($start_date, $end_date) = explode('/', $searchParams['bill.audit_time']);
             $dataProvider->query->andFilterWhere(['between', 'bill.audit_time', strtotime($start_date), strtotime($end_date) + 86400]);
         }
-        $dataProvider->query->andWhere(['=','bill.bill_type', BillTypeEnum::BILL_TYPE_S]);
+        $dataProvider->query->andWhere(['in','bill.bill_type', [BillTypeEnum::BILL_TYPE_L, BillTypeEnum::BILL_TYPE_T]]);
         $dataProvider->query->andWhere(['=','bill.bill_status', BillStatusEnum::CONFIRM]);
 
         //导出

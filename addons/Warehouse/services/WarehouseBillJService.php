@@ -81,7 +81,7 @@ class WarehouseBillJService extends WarehouseBillService
                 throw new \Exception("货号{$goods_id}不存在或者不是库存中");
             }
             //是否维修中
-            \Yii::$app->warehouseService->repair->checkRepairStatus($goods);
+            //\Yii::$app->warehouseService->repair->checkRepairStatus($goods);
             $goods['bill_id'] = $bill->id;
             $goods['bill_no'] = $bill->bill_no;
             $goods['bill_type'] = $bill->bill_type;
