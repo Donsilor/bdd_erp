@@ -2,6 +2,7 @@
 
 namespace addons\Finance\services;
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Finance\common\forms\OrderPayForm;
@@ -64,6 +65,7 @@ class OrderPayService extends Service
         //订单变更
         $form->pay_sn = $orderPay->pay_sn;
         $form->pay_status = PayStatusEnum::HAS_PAY;
+        $form->distribute_status = DistributeStatusEnum::ALLOWED;
         $form->pay_time   = time();
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));

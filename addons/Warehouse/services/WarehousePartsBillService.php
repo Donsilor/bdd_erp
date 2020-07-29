@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -20,15 +21,16 @@ use common\helpers\Url;
 use common\helpers\ArrayHelper;
 
 /**
- * 金料单据
+ * 配件单据
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseGoldBillService extends Service
+class WarehousePartsBillService extends Service
 {
     /**
-     * 金料单据明细 tab
+     * 配件单据明细 tab
      * @param int $bill_id 单据ID
+     * @param int $bill_type
      * @param $returnUrl URL
      * @param $tag
      * @return array
@@ -38,70 +40,70 @@ class WarehouseGoldBillService extends Service
         $tabList = [];
         switch ($bill_type){
 
-            case GoldBillTypeEnum::GOLD_L:
+            case PartsBillTypeEnum::PARTS_L:
                 {
                     if(!$tag){
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['parts-bill-l-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-l-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-l/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-bill-l-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }
                     break;
                 }
-            case GoldBillTypeEnum::GOLD_C:
+            case PartsBillTypeEnum::PARTS_C:
                 {
                     if(!$tag){
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-c/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-c-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-c/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['parts-bill-c-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-c/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-c-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-c/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-bill-c-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }
                     break;
                 }
-            case GoldBillTypeEnum::GOLD_D:
+            case PartsBillTypeEnum::PARTS_D:
                 {
                     if(!$tag){
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-d/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-d-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-d/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['parts-bill-d-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-d/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-d-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-d/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-bill-d-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }
                     break;
                 }
-            case GoldBillTypeEnum::GOLD_W:
+            case PartsBillTypeEnum::PARTS_W:
                 {
                     if(!$tag){
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['parts-bill-w-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }else{
                         $tabList = [
-                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-w-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
-                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                            1=>['name'=>'单据详情','url'=>Url::to(['parts-bill-w/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['parts-bill-w-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['parts-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
                         ];
                     }
                     break;
@@ -111,10 +113,11 @@ class WarehouseGoldBillService extends Service
     }
     /**
      * 单据汇总
-     * @param integer $bill_id
+     * @param int $bill_id
      * @throws
+     * @return
      */
-    public function goldBillSummary($bill_id)
+    public function partsBillSummary($bill_id)
     {
         $sum = WarehouseGoldBillGoods::find()
             ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost'])

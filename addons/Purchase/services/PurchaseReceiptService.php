@@ -1175,7 +1175,7 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->goldL->createGoldL($bill, $goods);
+        Yii::$app->warehouseService->partsL->createGoldL($bill, $goods);
         //批量更新采购收货单货品状态
         $data = [
             'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,

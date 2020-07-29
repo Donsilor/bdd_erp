@@ -25,12 +25,12 @@ use common\helpers\ArrayHelper;
 class WarehousePartsBillLService extends Service
 {
     /**
-     * 创建金料收货单(入库单)
+     * 创建配件收货单(入库单)
      * @param array $bill
      * @param array $details
      * @throws
      */
-    public function createGoldL($bill, $details){
+    public function createPartsL($bill, $details){
         $billM = new WarehousePartsBill();
         $billM->attributes = $bill;
         $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
@@ -67,34 +67,34 @@ class WarehousePartsBillLService extends Service
      * @param object $form
      * @throws
      */
-    public function auditGoldL($form)
+    public function auditPartsL($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
         if($form->audit_status == AuditStatusEnum::PASS){
             $form->bill_status = BillStatusEnum::CONFIRM;
-            $billGoods = WarehouseGoldBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+            $billGoods = WarehousePartsBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
             if(empty($billGoods)){
                 throw new \Exception("单据明细不能为空");
             }
-            //金料入库
-            $gold = WarehouseGoldBillLGoodsForm::findAll(['bill_id'=>$form->id]);
+            //配件入库
+            $gold = WarehousePartsBillLGoodsForm::findAll(['bill_id'=>$form->id]);
             $ids = $g_ids = [];
             foreach ($gold as $detail){
-                $goldM = new WarehouseGold();
+                $goldM = new WarehouseParts();
                 $good = [
-                    'gold_sn' => (string) rand(10000000000,99999999999),//临时
-                    'gold_status' => GoldStatusEnum::IN_STOCK,
+                    'parts_sn' => (string) rand(10000000000,99999999999),//临时
+                    'parts_status' => PartsStatusEnum::IN_STOCK,
                     'style_sn' => $detail->style_sn,
-                    'gold_name' => $detail->gold_name,
-                    'gold_type' => $detail->gold_type,
+                    'parts_name' => $detail->parts_name,
+                    'parts_type' => $detail->parts_type,
                     'put_in_type' => $form->put_in_type,
                     'supplier_id' => $form->supplier_id,
-                    'gold_num' => $detail->gold_num,
-                    'gold_weight' => $detail->gold_weight,
+                    'parts_num' => $detail->parts_num,
+                    'parts_weight' => $detail->parts_weight,
                     'cost_price' => $detail->cost_price,
-                    'gold_price' => $detail->gold_price,
+                    'parts_price' => $detail->parts_price,
                     'warehouse_id' => $form->to_warehouse_id,
                     'remark' => $detail->remark,
                     'status' => StatusEnum::ENABLED,
@@ -112,12 +112,12 @@ class WarehousePartsBillLService extends Service
             }
             if($ids){
                 foreach ($ids as $id){
-                    $stone = WarehouseGold::findOne(['id'=>$id]);
-                    $gold_sn = \Yii::$app->warehouseService->gold->createGoldSn($stone);
+                    $parts = WarehouseParts::findOne(['id'=>$id]);
+                    $parts_sn = \Yii::$app->warehouseService->parts->createPartsSn($parts);
                     //回写收货单货品批次号
                     $g_id = $g_ids[$id]??"";
                     if($g_id){
-                        $res = WarehouseGoldBillGoods::updateAll(['gold_sn' => $gold_sn], ['id' => $g_id]);
+                        $res = WarehousePartsBillGoods::updateAll(['parts_sn' => $parts_sn], ['id' => $g_id]);
                         if(false === $res){
                             throw new \Exception("回写收货单货品批次号失败");
                         }
@@ -125,11 +125,11 @@ class WarehousePartsBillLService extends Service
                 }
             }
             if($form->audit_status == AuditStatusEnum::PASS){
-                //同步金料采购收货单货品状态
+                //同步配件采购收货单货品状态
                 $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-                $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
+                $res = PurchasePartsReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
                 if(false === $res) {
-                    throw new \Exception("同步金料采购收货单货品状态失败");
+                    throw new \Exception("同步配件采购收货单货品状态失败");
                 }
             }
         }else{

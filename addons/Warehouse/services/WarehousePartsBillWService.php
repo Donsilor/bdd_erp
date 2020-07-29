@@ -28,7 +28,7 @@ use yii\db\Exception;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseGoldBillWService extends WarehouseBillService
+class WarehousePartsBillWService extends WarehouseBillService
 {
     /**
      * 创建盘点单
