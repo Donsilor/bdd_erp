@@ -116,6 +116,7 @@ class WarehouseBillJService extends WarehouseBillService
         //更新商品库存状态
         $condition = ['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK];
         $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_LEND], $condition);
+
         if($execute_num <> count($bill_goods)){
             throw new Exception("货品改变状态数量与明细数量不一致");
         }
