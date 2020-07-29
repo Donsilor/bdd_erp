@@ -242,7 +242,7 @@ class ContractPayController extends BaseController
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if($model->audit_status == AuditStatusEnum::PASS){
-                        $model->finance_status = FinanceStatusEnum::FINISH;
+                        $model->finance_status = FinanceStatusEnum::CONFORMED;
                     }else{
                         $model->finance_status = FinanceStatusEnum::SAVE;
                     }
@@ -250,17 +250,6 @@ class ContractPayController extends BaseController
                         throw new \Exception($this->getError($model));
                     }
                 }
-
-//                //日志
-//                $log = [
-//                    'purchase_id' => $id,
-//                    'purchase_sn' => $model->purchase_sn,
-//                    'log_type' => LogTypeEnum::ARTIFICIAL,
-//                    'log_module' => "单据审核",
-//                    'log_msg' => "审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
-//                ];
-//                Yii::$app->purchaseService->purchase->createPurchaseLog($log);
-
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -302,6 +291,33 @@ class ContractPayController extends BaseController
             return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
         }
         return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+
+    }
+
+
+    /**
+     * 确认
+     * @return mixed
+     */
+    public function actionConfirm(){
+
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        if($model->finance_status != FinanceStatusEnum::CONFORMED){
+            return $this->message('单据不是待确认状态', $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+        try {
+            $trans = Yii::$app->db->beginTransaction();
+            $model->finance_status = FinanceStatusEnum::FINISH;
+            if (false === $model->save()) {
+                return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
 
     }
 

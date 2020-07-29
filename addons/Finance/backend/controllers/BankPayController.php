@@ -246,7 +246,7 @@ class BankPayController extends BaseController
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if($model->audit_status == AuditStatusEnum::PASS){
-                        $model->finance_status = FinanceStatusEnum::FINISH;
+                        $model->finance_status = FinanceStatusEnum::CONFORMED;
                     }else{
                         $model->finance_status = FinanceStatusEnum::SAVE;
                     }
@@ -283,7 +283,7 @@ class BankPayController extends BaseController
      * 确认
      * @return mixed
      */
-    public function actionAffirm(){
+    public function actionConfirm(){
 
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);

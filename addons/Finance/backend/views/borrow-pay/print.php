@@ -131,10 +131,10 @@
 						<div><?= $model->finance_no?></div>
 					</td>
 					<td width="15%" class="bold">
-						<div>申请单状态</div>
+						<div>所属部门</div>
 					</td>
 					<td width="35%">
-						<div><?= \addons\Finance\common\enums\FinanceStatusEnum::getValue($model->finance_status)?></div>
+						<div><?= $model->creator->department->name ?? '' ?></div>
 					</td>
 				</tr>
 				<tr>
@@ -154,16 +154,16 @@
 
 				<tr>
 					<td class="bold">
-						<div>填单人所属部门</div>
+						<div>借款人</div>
 					</td>
 					<td>
-						<div><?= $model->creator->department->name ?? '' ?></div>
+						<div><?= $model->loan->username ?? '' ?></div>
 					</td>
 					<td class="bold">
-						<div>单据所属部门</div>
+						<div>借款人所属部门</div>
 					</td>
 					<td>
-						<div><?= $model->creator->department->name ?? '' ?></div>
+						<div><?= $model->loan->department->name ?? '' ?></div>
 					</td>
 				</tr>
 				<tr>

@@ -127,7 +127,7 @@ class FlowTypeService extends Service
 
         //同步流程明细
         $user_id = \Yii::$app->user->identity->id;
-        $flow_detail = FlowDetails::find()->where(['flow_id'=>$flow->id,'user_id'=>$user_id])->one();
+        $flow_detail = FlowDetails::find()->where(['flow_id'=>$flow->id,'user_id'=>$user_id,'audit_status'=>AuditStatusEnum::SAVE])->one();
         $flow_detail->attributes = $audit;
         if($flow_detail->audit_status == AuditStatusEnum::PASS){
             $flow_detail->audit_remark = '同意。'.$flow_detail->audit_remark;

@@ -171,6 +171,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                     ?>
+                    <?php
+                    if($model->finance_status == FinanceStatusEnum::CONFORMED){
+                        echo Html::edit(['confirm','id'=>$model->id], '确认', [
+                            'class'=>'btn btn-success btn-sm',
+                            'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
+                        ]);
+                    }
+                    ?>
                     <?= Html::a('打印',['print','id'=>$model->id],[
                         'target'=>'_blank',
                         'class'=>'btn btn-info btn-ms',

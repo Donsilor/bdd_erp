@@ -166,7 +166,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{goods} {edit} {ajax-audit} {apply} {follower} {close}',
+                'template' => '{goods} {edit} {ajax-audit} {apply} {confirm} {close}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->finance_status == FinanceStatusEnum::SAVE){
@@ -197,6 +197,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'confirm' =>function($url, $model, $key){
+                        if($model->finance_status == FinanceStatusEnum::CONFORMED){
+                            return Html::edit(['confirm','id'=>$model->id], '确认', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => 'rfTwiceAffirm(this,"提交确认", "确定确认吗？");return false;',
                             ]);
                         }
                     },
