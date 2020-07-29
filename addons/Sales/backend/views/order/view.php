@@ -31,15 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                             <td class="col-xs-3 no-border-top"><?= $model->order_sn ?></td> 
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
-                            <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td>                             
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
+                            <td><?= $model->saleChannel->name ??'' ?></td>                        
                             <td class="col-xs-1 text-right no-border-top">语言/货币：</td>
                             <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?>（<?= common\enums\CurrencyEnum::getValue($model->currency) ?>）</td>
                             
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
-                            <td><?= $model->saleChannel->name ??'' ?></td>
+
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_type') ?>：</td>
+                            <td><?= addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type) ?></td> 
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_type') ?>：</td>
@@ -78,6 +79,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"></td>
                             <td></td>
                         </tr>
+                        <tr>
+						    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_account') ?>：</td>
+                            <td><?= $model->customer_account ?></td> 						    
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_account') ?>：</td>
+                            <td><?= $model->store_account ?></td> 
+                            <td class="col-xs-1 text-right"></td>
+                            <td></td>
+                        </tr> 
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
+                            <td colspan="5"><?= $model->pay_remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                            <td colspan="5"><?= $model->remark ?></td>
+                        </tr>                         
                     </table>
                 </div>
                 <div class="box-footer text-center">

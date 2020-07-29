@@ -31,9 +31,19 @@ $form = ActiveForm::begin([
                 </div>
                 <div class="col-lg-6"><?= $form->field($model, 'customer_name')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>
             </div>
-            <div class="row">
-            	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
+            <div class="row" id="customer_info_mobile">
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput()->label("客户手机<font color='red'>[必填]</font>")?></div>
             	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>                
+            </div>
+            <div class="row" id="customer_info_email" style="display:none">
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_email')->textInput()->label("客户邮箱<font color='red'>[必填]</font>")?></div>
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_mobile')->textInput(['readonly'=>$model->isNewRecord ?true:false])?></div>                
+            </div>
+            <div class="row">
+            	<div class="col-lg-6">
+                	<?= $form->field($model, 'customer_source')->dropDownList(Yii::$app->salesService->sources->getDropDown(),['prompt'=>'请选择']);?>
+                </div>
+                <div class="col-lg-6"><?= $form->field($model, 'customer_level')->dropDownList(\addons\Sales\common\enums\CustomerLevelEnum::getMap(),['prompt'=>'请选择']);?></div>
             </div>
             <div class="row">
                 <div class="col-lg-6">
@@ -43,8 +53,25 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']);?>             
                </div>
             </div>
+             
             <div class="row">
-            	<div class="col-lg-6"><?= $form->field($model, 'out_trade_no')->textArea(['options'=>['maxlength' => true]])?></div>
+            	<div class="col-lg-6">
+                	<?= $form->field($model, 'pay_type')->widget(\kartik\select2\Select2::class, [
+                        'data' => Yii::$app->salesService->payment->getDropDown(),
+                        'options' => ['placeholder' => '请选择'],
+                        'pluginOptions' => [
+                            'allowClear' => true,                        
+                        ],
+                    ]);?> 
+                </div>
+                <div class="col-lg-6"><?= $form->field($model, 'out_pay_no')->textInput()?></div>
+            </div>
+            <div class="row">
+            	<div class="col-lg-6"><?= $form->field($model, 'customer_account')->textInput()?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'store_account')->textInput()?></div>
+            </div>
+            <div class="row">
+            	<div class="col-lg-6"><?= $form->field($model, 'pay_remark')->textArea(['options'=>['maxlength' => true]])?></div>
                 <div class="col-lg-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>
             </div>
         </div>    
@@ -57,12 +84,13 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <script>
 var formId = 'orderform';
-function fillCustomerForm(){
+function fillCustomerFormByMobile(){
+	var sale_channel_id = $("#"+formId+"-sale_channel_id").val();	
 	var customer_mobile = $("#"+formId+"-customer_mobile").val();
     var customer_name  = $("#"+formId+"-customer_name").val();
     var customer_email = $("#"+formId+"-customer_email").val();
-    var sale_channel_id = $("#"+formId+"-sale_channel_id").val();
-    if(customer_mobile != '' && sale_channel_id ) {
+    
+    if(customer_mobile != '' && sale_channel_id ) {        
         if((customer_name=='' || customer_email == '')) {
         	$.ajax({
                 type: "get",
@@ -76,16 +104,62 @@ function fillCustomerForm(){
                     if (parseInt(data.code) == 200 && data.data) {                       
                  	   $("#"+formId+"-customer_name").val(data.data.realname).attr("readonly",false);
                  	   $("#"+formId+"-customer_email").val(data.data.email).attr("readonly",false);
+                  	   $("#"+formId+"-customer_level").val(data.data.level).attr("readonly",false);
+                       $("#"+formId+"-customer_source").val(data.data.source_id).attr("readonly",false);
                     }
                 }
             });
         }	   
     }
 }
-$("#"+formId+"-customer_mobile").blur(function(){
-	fillCustomerForm();
+function fillCustomerFormByEmail(){
+	var sale_channel_id = $("#"+formId+"-sale_channel_id").val();	
+	var customer_mobile = $("#"+formId+"-customer_mobile").val();
+    var customer_name  = $("#"+formId+"-customer_name").val();
+    var customer_email = $("#"+formId+"-customer_email").val();
+    
+    if(customer_email !=''  && sale_channel_id ) {        
+        if((customer_name=='' || customer_mobile == '')) {
+        	$.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-customer'])?>',
+                dataType: "json",
+                data: {
+                    'email': customer_email,
+                    'channel_id':sale_channel_id
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {                       
+                 	   $("#"+formId+"-customer_name").val(data.data.realname).attr("readonly",false);
+                 	   $("#"+formId+"-customer_mobile").val(data.data.mobile).attr("readonly",false);
+                  	   $("#"+formId+"-customer_level").val(data.data.level).attr("readonly",false);
+                       $("#"+formId+"-customer_source").val(data.data.source_id).attr("readonly",false);
+                    }
+                }
+            });
+        }	   
+    }
+}
+$("#"+formId+"-customer_mobile").blur(function(){alert(1);
+	if($("#"+formId+"-sale_channel_id") != 3){
+		fillCustomerFormByMobile();
+	}
+});
+$("#"+formId+"-customer_email").blur(function(){
+	if($("#"+formId+"-sale_channel_id")==3){
+		fillCustomerFormByEmail();
+	}
 });
 $("#"+formId+"-sale_channel_id").change(function(){
-	fillCustomerForm();
+	if($(this).val()==3) {
+        $("#customer_info_email").show();
+        $("#customer_info_mobile").hide();
+        fillCustomerFormByEmail();
+	}else{
+		$("#customer_info_mobile").show();
+		$("#customer_info_email").hide();
+		fillCustomerFormByMobile();
+	}
+	
 });
 </script>

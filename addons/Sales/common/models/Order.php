@@ -46,6 +46,9 @@ use addons\Finance\common\models\OrderPay;
  * @property string $customer_mobile 客户手机
  * @property string $customer_email 客户邮箱
  * @property string $customer_message 客户留言
+ * @property string $customer_account 客户付款账户
+ * @property string $store_account 公司收款账户
+ * @property string $pay_remark 付款备注
  * @property string $store_remark 商家备注
  * @property string $remark 订单备注
  * @property int $creator_id 创建人
@@ -54,6 +57,8 @@ use addons\Finance\common\models\OrderPay;
  */
 class Order extends BaseModel
 {
+    public $customer_level;//客户等级
+    public $customer_source;//客户来源
     /**
      * {@inheritdoc}
      */
@@ -68,7 +73,7 @@ class Order extends BaseModel
     public function rules()
     {
         return [
-            [['sale_channel_id','language','currency','customer_mobile','customer_name'], 'required'],
+            [['sale_channel_id','language','currency','customer_name'], 'required'],
             [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time','out_pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
@@ -77,10 +82,10 @@ class Order extends BaseModel
             [['express_no', 'out_trade_no','out_pay_no'], 'string', 'max' => 50],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_mobile'], 'string', 'max' => 30],
-            [['customer_email'], 'string', 'max' => 120],
+            [['customer_email','customer_account','store_account'], 'string', 'max' => 120],
             ['customer_email', 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
             [['customer_message', 'store_remark'], 'string', 'max' => 500],
-            [['remark','audit_remark'], 'string', 'max' => 255],
+            [['remark','audit_remark','pay_remark'], 'string', 'max' => 255],
             [['order_sn'], 'unique'],
         ];
     }
@@ -115,7 +120,7 @@ class Order extends BaseModel
             'order_type' => '订单类型',
             'is_invoice' => '是否开发票',
             'out_trade_no' => '外部订单号',
-            'out_pay_no' => '外部支付单号',
+            'out_pay_no' => '外部支付交易号',
             'out_pay_time' => '外部支付时间',
             'follower_id' => '跟单人',
             'followed_time' => '跟进时间',
@@ -125,11 +130,16 @@ class Order extends BaseModel
             'audit_time' => '审核时间',
             'auditor_id' => '审核人',
             'audit_remark' => '审核备注',
+            'customer_source' => '客户来源',
+            'customer_level' => '客户级别',
             'customer_id' => '客户ID',
             'customer_name' => '客户姓名',
             'customer_mobile' => '客户手机',
             'customer_email' => '客户邮箱',
             'customer_message' => '客户留言',
+            'customer_account' => '客户付款账户',
+            'store_account' => '公司收款账户',
+            'pay_remark' => '付款备注',
             'store_remark' => '商家备注',
             'remark' => '订单备注',
             'creator_id' => '创建人',
