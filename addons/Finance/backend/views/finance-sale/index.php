@@ -13,6 +13,8 @@ use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('finance_sale', '财务出库单');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
