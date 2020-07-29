@@ -215,6 +215,12 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' =>false,
                                 'headerOptions' => ['width'=>'80'],
                             ],
+                            [
+                                'label' => '成本价',
+                                'attribute'=>'goods.cost_price',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
                             /*[
                                 'attribute' => 'bill.bill_status',
                                 'format' => 'raw',

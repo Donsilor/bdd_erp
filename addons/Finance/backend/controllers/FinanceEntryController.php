@@ -61,6 +61,7 @@ class FinanceEntryController extends BaseController
                         'gold_loss',
                         'gold_price',
                         'gold_amount',
+                        'cost_price',
                         'diamond_carat',
                         'main_stone_price',
                         'second_stone_weight1',
