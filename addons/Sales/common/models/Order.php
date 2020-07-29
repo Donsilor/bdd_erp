@@ -96,7 +96,7 @@ class Order extends BaseModel
             'language' => '订单语言',
             'currency' => '订单货币',
             'order_sn' => '订单编号',            
-            'pay_sn' => '支付单号',
+            'pay_sn' => '点款支付单号',
             'pay_type' => '支付方式',
             'pay_status' => '支付状态',
             'pay_time' => '支付时间',
