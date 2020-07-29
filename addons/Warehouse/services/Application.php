@@ -14,9 +14,9 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillLService $billL 收货单据
  * @property \addons\Warehouse\services\WarehouseBillMService $billM 盘点单据
  * @property \addons\Warehouse\services\WarehouseBillWService $billW 调拨单据
- * @property \addons\Warehouse\services\WarehouseBillAService $billA 调拨单据
+ * @property \addons\Warehouse\services\WarehouseBillAService $billA 调整单据
  * @property \addons\Warehouse\services\WarehouseBillJService $billJ 借货单据
- * @property \addons\Warehouse\services\WarehouseBillSService $billS 借货单据
+ * @property \addons\Warehouse\services\WarehouseBillSService $billS 销售单据
  * @property \addons\Warehouse\services\WarehouseBillTService $billT 其他收货单据
  * @property \addons\Warehouse\services\WarehouseBillCService $billC 其他出库单据
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据

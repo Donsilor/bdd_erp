@@ -1105,4 +1105,79 @@ class PurchaseReceiptService extends Service
             throw new \Exception('更新采购收货单货品状态失败');
         }
     }
+
+    /**
+     * 配件收货单同步创建入库单
+     * @param object $form
+     * @param array $detail_ids
+     * @throws \Exception
+     */
+    public function syncReceiptToPartsL($form, $detail_ids = null)
+    {
+        if($form->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('采购收货单没有审核');
+        }
+        if($form->receipt_num <= 0 ){
+            throw new \Exception('采购收货单没有明细');
+        }
+        if(!$detail_ids){
+            $detail_ids = $form->getIds();
+        }
+        $query = PurchasePartsReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::IQC_PASS]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }
+        $models = $query->all();
+        if(!$models){
+            throw new \Exception('采购收货单没有待入库的货品');
+        }
+        $form->to_warehouse_id = WarehouseIdEnum::PARTS;//配件库
+        $goods = $ids = [];
+        $total_weight = $total_cost = $sale_price = 0;
+        foreach ($models as $model){
+            $ids[] = $model->id;
+            $goods[] = [
+                'gold_name' => $model->goods_name,
+                'gold_type' => $model->material_type,
+                'style_sn' => $model->goods_sn,
+                'gold_num' => $model->goods_num,
+                'gold_weight' => $model->goods_weight,
+                'cost_price' => $model->cost_price,
+                'gold_price' => $model->gold_price,
+                'source_detail_id' =>$model->id,
+                'status' => StatusEnum::ENABLED,
+                'created_at' => time(),
+            ];
+            $total_cost = bcadd($total_cost, $model->cost_price, 2);
+            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
+        }
+        $bill = [
+            'bill_type' =>  GoldBillTypeEnum::GOLD_L,
+            'bill_status' => GoldBillStatusEnum::SAVE,
+            'audit_status' => AuditStatusEnum::SAVE,
+            'supplier_id' => $form->supplier_id,
+            'put_in_type' => $form->put_in_type,
+            'to_warehouse_id' => $form->to_warehouse_id,
+            'adjust_type' => AdjustTypeEnum::ADD,
+            'total_num' => count($goods),
+            'total_weight' => $total_weight,
+            'total_cost' => $total_cost,
+            'delivery_no' => $form->receipt_no,
+            'remark' => $form->remark,
+            'status' => StatusEnum::ENABLED,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        Yii::$app->warehouseService->goldL->createGoldL($bill, $goods);
+        //批量更新采购收货单货品状态
+        $data = [
+            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,
+            'put_in_type'=>$form->put_in_type,
+            'to_warehouse_id'=>$form->to_warehouse_id
+        ];
+        $res = PurchasePartsReceiptGoods::updateAll($data, ['id'=>$ids]);
+        if(false === $res){
+            throw new \Exception('更新采购收货单货品状态失败');
+        }
+    }
 }

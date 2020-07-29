@@ -266,7 +266,7 @@ class PartsReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至金料收货单
-                Yii::$app->purchaseService->receipt->syncReceiptToGoldL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToPartsL($model);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','申请入库成功');
                 return ResultHelper::json(200, '申请入库成功');
