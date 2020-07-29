@@ -68,7 +68,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'60'],
                             ],*/
                             [
-                                'label' => '出库单号',
+                                'label' => '入库单号',
                                 'attribute' => 'bill_no',
                                 'value'=>function($model) {
                                     return $model->bill_no??"";
@@ -81,7 +81,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'label' => '出库时间',
+                                'label' => '入库时间',
                                 'attribute' => 'bill.audit_time',
                                 'filter' => DateRangePicker::widget([    // 日期组件
                                     'model' => $searchModel,
@@ -107,27 +107,19 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'160'],
                             ],
                             [
-                                'label' => '销售渠道',
-                                'attribute' => 'bill.channel_id',
-                                'value' => function ($model){
-                                    return $model->bill->saleChannel->name ?? '';
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'bill.channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
+                                'attribute'=>'bill.supplier_id',
+                                'value' => 'bill.supplier.supplier_name',
                                 'format' => 'raw',
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'label' => '客户姓名',
-                                'attribute'=>'bill.order.customer_name',
-                                'value' => function ($model){
-                                    return $model->bill->order->customer_name ?? '';
-                                },
-                                'filter' =>false,
-                                'headerOptions' => ['width'=>'120'],
+                                'filter'=>Select2::widget([
+                                    'name'=>'SearchModel[supplier_id]',
+                                    'value'=>$searchModel->supplier_id,
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'width' => 260
+                                    ],
+                                ]),
                             ],
                             [
                                 'attribute'=>'goods_name',
@@ -153,28 +145,75 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '商品成本价',
-                                'attribute'=>'goods.cost_price',
+                                'attribute'=>'style_sn',
                                 'filter' =>false,
                                 'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '商品实际售价',
-                                'attribute'=>'sale_price',
+                                'label' => '总重',
+                                'attribute'=>'goods.gross_weight',
                                 'filter' =>false,
-                                'headerOptions' => ['width'=>'120'],
+                                'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                'label' => '外部订单号',
-                                'attribute'=>'bill.order.out_trade_no',
+                                'label' => '金重',
+                                'attribute'=>'goods.gold_weight',
                                 'filter' =>false,
-                                'headerOptions' => ['width'=>'120'],
+                                'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                'label' => '订单销售人员',
-                                'attribute'=>'bill.order.follower.username',
+                                'label' => '金损',
+                                'attribute'=>'goods.gold_loss',
                                 'filter' =>false,
-                                'headerOptions' => ['width'=>'120'],
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '金价',
+                                'attribute'=>'goods.gold_price',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '金料额',
+                                'attribute'=>'goods.gold_amount',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '主石重',
+                                'attribute'=>'goods.diamond_carat',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '主石单价',
+                                'attribute'=>'goods.main_stone_price',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '副石重',
+                                'attribute'=>'goods.second_stone_weight1',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '副石单价',
+                                'attribute'=>'goods.second_stone_price1',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '工费',
+                                'attribute'=>'goods.gong_fee',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'label' => '证书费',
+                                'attribute'=>'goods.cert_fee',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
                             ],
                             /*[
                                 'attribute' => 'bill.bill_status',
