@@ -185,14 +185,31 @@ $params = $params ? "&".http_build_query($params) : '';
                     'headerOptions' => ['width'=>'150'],
            ],
            [
+                   'attribute' => 'payLogs.creator',
+                   'value' => function ($model){
+                       $creator = '';
+                       foreach ($model->payLogs ??[] as $payLog){
+                           $creator .= $payLog->creator;
+                       }
+                       return $creator;
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+           ],
+           [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{edit}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                        if($model->pay_status == PayStatusEnum::NO_PAY){
-                            return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'点款',['class'=>'btn btn-primary btn-sm',]);
-                        }
+                           if($model->pay_status == PayStatusEnum::NO_PAY) {
+                                return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '点款', [
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModalLg',
+                                    'class' => 'btn btn-primary btn-sm',
+                                ]);
+                           }
                     }, 
                 ]
             ]

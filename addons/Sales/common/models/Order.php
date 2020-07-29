@@ -19,6 +19,7 @@ use addons\Finance\common\models\OrderPay;
  * @property int $pay_type 支付方式 0待支付 1微信 2支付宝 3银联 6Paypal 100线下
  * @property int $pay_status 支付状态 1已支付 0 未支付
  * @property int $pay_time 支付(付款)时间
+ * @property int $out_pay_time 外部支付时间
  * @property int $finished_time 订单完成时间
  * @property int $order_status 订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已完成;
  * @property int $refund_status 退款状态(0无退款,1部分退款,2全部退款)
@@ -32,6 +33,7 @@ use addons\Finance\common\models\OrderPay;
  * @property int $order_type 订单类型 1现货 2定制 3赠品
  * @property int $is_invoice 是否开发票
  * @property string $out_trade_no 外部订单号
+ * @property string $out_pay_no 外部支付交易号
  * @property int $sale_channel_id 销售渠道
  * @property int $follower_id 跟进人
  * @property int $followed_time 跟进时间
@@ -67,12 +69,12 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency','customer_mobile','customer_name'], 'required'],
-            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time','out_pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
             [['pay_sn'], 'string', 'max' => 32],
-            [['express_no', 'out_trade_no'], 'string', 'max' => 50],
+            [['express_no', 'out_trade_no','out_pay_no'], 'string', 'max' => 50],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_mobile'], 'string', 'max' => 30],
             [['customer_email'], 'string', 'max' => 120],
@@ -113,6 +115,8 @@ class Order extends BaseModel
             'order_type' => '订单类型',
             'is_invoice' => '是否开发票',
             'out_trade_no' => '外部订单号',
+            'out_pay_no' => '外部支付单号',
+            'out_pay_time' => '外部支付时间',
             'follower_id' => '跟单人',
             'followed_time' => '跟进时间',
             'followed_status' => '跟进状态',

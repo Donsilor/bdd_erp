@@ -14,6 +14,7 @@ use addons\Shop\common\models\OrderSync;
 use addons\Shop\common\enums\SyncPlatformEnum;
 use addons\Style\common\enums\MaterialEnum;
 use common\helpers\ArrayHelper;
+use addons\Shop\common\enums\PayEnum;
 
 /**
  * Bdd 订单同步
@@ -112,10 +113,12 @@ class OrderSyncService extends Service
         return [
                 "language"=>$order->language,
                 "currency"=>$order->account->currency,
-                "pay_sn"=>$order->pay_sn,
+                
                 "pay_type"=>$this->getErpPayType($order),
                 "pay_status"=>$order->payment_status,
                 "pay_time"=>$order->payment_time,
+                "out_pay_sn"=>$order->pay_sn,
+                "out_pay_time"=>$order->payment_time,                
                 'goods_num'=>array_sum(array_column($order->goods??[],'goods_num')),
                 "order_status"=>$this->getErpOrderStatus($order),
                 "refund_status"=>0,
@@ -387,8 +390,22 @@ class OrderSyncService extends Service
      * @param Order $order
      */
     public static function getErpPayType($order)
-    {
-        return $order->payment_type;
+    {   
+        $map = [
+                PayEnum::PAY_TYPE_PAYPAL => 6,//Paypal
+                PayEnum::PAY_TYPE_PAYPAL_1 => 6,//Paypal
+                PayEnum::PAY_TYPE_PAYDOLLAR => 3,//PAYDOLLAR
+                PayEnum::PAY_TYPE_PAYDOLLAR_1 => 3,//PAYDOLLAR
+                PayEnum::PAY_TYPE_PAYDOLLAR_2 => 3,//PAYDOLLAR
+                PayEnum::PAY_TYPE_PAYDOLLAR_3 => 3,//PAYDOLLAR
+                PayEnum::PAY_TYPE_PAYDOLLAR_4 => 3,//PAYDOLLAR
+                PayEnum::PAY_TYPE_CARD => 14,//购物卡
+                PayEnum::PAY_TYPE_WIRE_TRANSFER => 13,//电汇
+        ];
+        if(!isset($map[$order->payment_type])) {
+            throw new \Exception("[{$order->order_sn}，{$order->payment_type}]订单支付方式映射失败");
+        }
+        return $map[$order->payment_type];
     }
     /**
      * ERP 订单配货状态

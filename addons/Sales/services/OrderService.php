@@ -17,6 +17,10 @@ use common\enums\AuditStatusEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Style\common\models\Style;
+use addons\Finance\common\models\OrderPay;
+use common\helpers\SnHelper;
+use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\PayStatusEnum;
 
 /**
  * Class SaleChannelService
@@ -148,7 +152,27 @@ class OrderService extends Service
         if(false == $account->save()) {
             throw new \Exception($this->getError($account));
         }
-        //3.同步订单商品明细
+        
+        //3.创建点款记录
+        $orderPay = OrderPay::find()->where(['pay_sn'=>$order->pay_sn])->one();
+        if(!$orderPay) {
+            $orderPay = new OrderPay();
+            $orderPay->order_id = $order->id;
+            $orderPay->pay_sn = SnHelper::createOrderPaySn();
+            $orderPay->pay_amount = $account->paid_amount;
+            $orderPay->pay_type =  $order->pay_type;
+            $orderPay->pay_status = PayStatusEnum::HAS_PAY;
+            $orderPay->currency = $account->currency;
+            $orderPay->exchange_rate = $account->exchange_rate;
+            $orderPay->creator_id = 0;
+            $orderPay->creator = "SYSTEM";
+            if(false === $orderPay->save()) {
+                throw new \Exception($this->getError($orderPay));
+            }
+        }
+        $order->pay_sn = $orderPay->pay_sn;//点款单号
+        
+        //4.同步订单商品明细
         if($is_new === true) {
             foreach ($goodsList as $goodsInfo) {
                 $style_sn = $goodsInfo['style_sn'] ?? '';
@@ -180,7 +204,7 @@ class OrderService extends Service
                 }
             }
         }
-        //4.同步客户信息
+        //5.同步客户信息
         $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
         if(!$customer) {
             //2.创建用户信息
@@ -208,7 +232,7 @@ class OrderService extends Service
             throw new \Exception($this->getError($order));
         }
         
-        //5.同步订单收货地址
+        //6.同步订单收货地址
         $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
         if(!$address) {
             $address = new OrderAddress();            
@@ -218,7 +242,8 @@ class OrderService extends Service
         if(false == $address->save()) {
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }  
-        //5.同步发票
+        //7.同步发票
+        
         
         return $order;        
     }
