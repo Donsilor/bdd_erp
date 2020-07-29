@@ -68,7 +68,7 @@ class BillJGoodsController extends BaseController
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
+        $dataProvider->query->andWhere(['=', WarehouseBillJGoodsForm::tableName().'.bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>',WarehouseBillJGoodsForm::tableName().'.status',-1]);
 
         $bill = WarehouseBillJForm::findOne($bill_id);

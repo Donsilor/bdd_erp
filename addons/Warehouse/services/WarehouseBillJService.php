@@ -94,7 +94,7 @@ class WarehouseBillJService extends WarehouseBillService
             $goods_key = array_keys($goods);
             $goods_val[] = array_values($goods);
             if(count($goods_val) > 10){
-                $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
+                $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
                 if(false === $res){
                     throw new \Exception('创建单据明细失败1');
                 }
@@ -102,13 +102,14 @@ class WarehouseBillJService extends WarehouseBillService
             }
         }
         if(!empty($goods_val)){
-            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillJGoodsForm::tableName(), $goods_key, $goods_val)->execute();
+            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
             if(false === $res){
                 throw new \Exception('创建单据明细失败2');
             }
         }
+        WarehouseBillGoodsJ::deleteAll(['bill_id'=>$bill->id]);
         //同步单据明细关系表
-        $sql = "INSERT INTO ".WarehouseBillGoodsJ::tableName()."(id,lend_status,qc_status) SELECT id,0,0 FROM ".WarehouseBillJGoodsForm::tableName()." WHERE bill_id=".$bill->id;
+        $sql = "INSERT INTO ".WarehouseBillGoodsJ::tableName()."(id,bill_id,lend_status,qc_status) SELECT id,bill_id,0,0 FROM ".WarehouseBillGoods::tableName()." WHERE bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
         if(false === $should_num) {
             throw new \Exception('创建单据明细失败3');
