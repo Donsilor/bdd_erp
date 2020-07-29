@@ -66,7 +66,7 @@ class WarehouseBillCService extends WarehouseBillService
         }
         $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
         if($execute_num <> count($bill_goods)){
-            throw new Exception("货品改变状态数量与明细数量不一致");
+            //throw new Exception("货品改变状态数量与明细数量不一致");
         }
 
         //更新收货单汇总：总金额和总数量

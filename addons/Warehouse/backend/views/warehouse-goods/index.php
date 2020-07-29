@@ -2,6 +2,7 @@
 
 use common\helpers\Html;
 use common\helpers\Url;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 use addons\Style\common\enums\AttrIdEnum;
@@ -451,6 +452,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-2'],
                             'format' => 'raw',
 
+                        ],
+                        [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'width' => 200
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
                             'label' => '首次入库时间',
