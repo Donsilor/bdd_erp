@@ -132,7 +132,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width' => '100'],
                         ],
                         [
-                            'label' => '应盘重量(ct)',
+                            'label' => '应盘重量(g)',
                             'value' => function($model){
                                 return $model->billW->should_weight ?? 0;
                             },
@@ -159,7 +159,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width' => '100'],
                         ],
                         [
-                            'label' => '实盘重量(ct)',
+                            'label' => '实盘重量(g)',
                             'value' => function($model){
                                 return $model->billW->actual_weight ?? 0;
                             },

@@ -36,7 +36,7 @@ class WarehousePartsBillWForm extends WarehousePartsBill
     { 
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'parts_type' => '盘点材质',
+            'parts_type' => '盘点配件',
         ]);
     }
     /**

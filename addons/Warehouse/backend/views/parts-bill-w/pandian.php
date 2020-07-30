@@ -55,11 +55,11 @@ $form = ActiveForm::begin([
                     <td style='color:red'> <?= $model->billW->actual_grain ?? 0;?> </td>
                 </tr>
                 <tr>
-                    <td class="col-xs-1 text-right">应盘重量(ct)：</td>
+                    <td class="col-xs-1 text-right">应盘重量(g)：</td>
                     <td style='color:green'><?= $model->billW->should_weight ?? 0;?></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-1 text-right">实盘重量(ct)：</td>
+                    <td class="col-xs-1 text-right">实盘重量(g)：</td>
                     <td style='color:red'> <?= $model->billW->actual_weight ?? 0;?> </td>
                 </tr>
             </table>

@@ -107,14 +107,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style'=>'color:red'],
                             ],
                             [
-                                'label' => '应盘重量(ct)',
+                                'label' => '应盘重量(g)',
                                 'attribute' => 'parts_weight',
                                 'filter' => true,
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
-                                'label' => '实盘重量(ct)',
+                                'label' => '实盘重量(g)',
                                 'value' => function($model){
                                     return $model->goodsW->actual_weight ?? 0;
                                 },

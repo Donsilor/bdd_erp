@@ -52,7 +52,7 @@ class WarehousePartsBill extends BaseModel
     public function rules()
     {
         return [
-            [['bill_no', 'bill_type', 'bill_status'], 'required'],
+            //[['bill_no'], 'required'],
             [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost'], 'number'],
             [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],

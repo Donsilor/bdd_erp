@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
             <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
             <?= $form->field($model, 'bill_type')->dropDownList(\addons\Warehouse\common\enums\PartsBillTypeEnum::getMap(),['disabled'=>true])?>
-            <?= $form->field($model, 'stone_type')->widget(kartik\select2\Select2::class, [
+            <?= $form->field($model, 'parts_type')->widget(kartik\select2\Select2::class, [
                'data' => \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE),
                'options' => [
                    'placeholder' => '请选择',
