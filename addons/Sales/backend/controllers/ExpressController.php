@@ -66,6 +66,39 @@ class ExpressController extends BaseController
     }
 
     /**
+     * Ajax 编辑/创建
+     * @throws
+     * @return mixed
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new ExpressForm();
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if($model->isNewRecord){
+                    $model->status = StatusEnum::DISABLED;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            \Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * @return mixed
      * 提交审核
      */
