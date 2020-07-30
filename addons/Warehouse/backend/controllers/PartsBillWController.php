@@ -2,35 +2,33 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use Yii;
 use common\traits\Curd;
-use common\models\base\SearchModel;
-use addons\Warehouse\common\forms\WarehouseGoldBillWForm;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\models\WarehouseGoldBillGoodsW;
-use addons\Warehouse\common\models\WarehouseGoods;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\enums\PandianStatusEnum;
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use common\enums\AuditStatusEnum;
-use common\helpers\ExcelHelper;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\GoldBillStatusEnum;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
+use addons\Warehouse\common\forms\WarehousePartsBillWForm;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\models\WarehousePartsBillGoods;
+use addons\Warehouse\common\models\WarehousePartsBillGoodsW;
+use addons\Warehouse\common\models\WarehousePartsBill;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\PageHelper;
+use common\models\base\SearchModel;
+use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 
 /**
- * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
+ * PartsBillWController implements the CRUD actions for PartsBillWController model.
  */
 class PartsBillWController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillWForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_W;
+    public $modelClass = WarehousePartsBillWForm::class;
+    public $billType = PartsBillTypeEnum::PARTS_W;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -48,30 +46,29 @@ class PartsBillWController extends BaseController
                 'pageSize' => $this->pageSize,
                 'relations' => [
                     'creator' => ['username'],
-                    'billW' => ['gold_type'],
+                    'billW' => ['parts_type'],
                 ]
         ]);
-        
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['gold_type','updated_at','created_at']);
+            ->search(Yii::$app->request->queryParams,['parts_type','updated_at','created_at']);
 
-        $gold_type = $searchModel->gold_type;
-        if (!empty($gold_type)) {
-            $dataProvider->query->andWhere(['=', 'billW.gold_type', $gold_type]);
+        $parts_type = $searchModel->parts_type;
+        if (!empty($parts_type)) {
+            $dataProvider->query->andWhere(['=', 'billW.parts_type', $parts_type]);
         }
 
         $created_at = $searchModel->created_at;
-        if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',WarehousePartsBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehousePartsBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',WarehouseGoldBill::tableName().'.bill_type',$this->billType]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBill::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',WarehousePartsBill::tableName().'.bill_type',$this->billType]);
+        $dataProvider->query->andWhere(['>',WarehousePartsBill::tableName().'.status',-1]);
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(WarehouseGoldBill::tableName().'.id');
+            $queryIds = $dataProvider->query->select(WarehousePartsBill::tableName().'.id');
             $this->actionExport($queryIds);
         }
         
@@ -82,7 +79,6 @@ class PartsBillWController extends BaseController
         
         
     }
-    
     /**
      * ajax编辑/创建 盘点单
      *
@@ -91,25 +87,25 @@ class PartsBillWController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = \Yii::$app->request->get('id');
+        $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillWForm();
+        $model = $model ?? new WarehousePartsBillWForm();
         $isNewRecord = $model->isNewRecord;
         if($isNewRecord){
             $model->bill_type = $this->billType;
         }else{
-            $model->gold_type = false;
+            $model->parts_type = false;
         }
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(\Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
             if($isNewRecord){
-                $model->bill_no = SnHelper::createBillSn($this->billType);
+                $model->bill_no   = SnHelper::createBillSn($this->billType);
             }
             try{
-                $trans = \Yii::$app->trans->beginTransaction();
+                $trans = Yii::$app->trans->beginTransaction();               
                 if($isNewRecord) {
-                    $model = \Yii::$app->warehouseService->goldW->createBillW($model);
+                    $model = Yii::$app->warehouseService->partsW->createBillW($model);
                 }else {
                     if(false === $model->save()) {
                         throw new \Exception($this->getError($model));
@@ -132,7 +128,6 @@ class PartsBillWController extends BaseController
                 'model' => $model,
         ]);
     }
-    
     /**
      * ajax 盘点结束
      *
@@ -145,7 +140,7 @@ class PartsBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->goldW->finishBillW($id);
+            \Yii::$app->warehouseService->partsW->finishBillW($id);
             
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -156,7 +151,6 @@ class PartsBillWController extends BaseController
         }
 
     }
-    
     /**
      * ajax 盘点自动校正
      *
@@ -169,7 +163,7 @@ class PartsBillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             //\Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->goldW->billWSummary($id);
+            \Yii::$app->warehouseService->partsW->billWSummary($id);
             $trans->commit();
 
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
@@ -195,25 +189,26 @@ class PartsBillWController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
                 'tab'=>$tab,
-                'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($id,$this->billType,$returnUrl),
+                'tabList'=>\Yii::$app->warehouseService->partsBill->menuTabList($id,$this->billType,$returnUrl),
                 'returnUrl'=>$returnUrl,
         ]);
     }
     /**
      * 盘点
      * @return mixed
+     * @throws
      */
     public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
-        $model->gold_type = false;
+        $model = $this->findModel($id) ?? new WarehousePartsBillWForm();
+        $model->parts_type = false;
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                Yii::$app->warehouseService->goldW->pandianGoods($model);
+                Yii::$app->warehouseService->partsW->pandianGoods($model);
                 
                 $trans->commit();
                 
@@ -223,7 +218,6 @@ class PartsBillWController extends BaseController
                 return $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer),'error');
             }
         }
-        
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
@@ -237,8 +231,8 @@ class PartsBillWController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new WarehouseGoldBillWForm();
-        $model->gold_type = false;
+        $model = $this->findModel($id) ?? new WarehousePartsBillWForm();
+        $model->parts_type = false;
         //默认值
         /*if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
@@ -247,13 +241,13 @@ class PartsBillWController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             
-            try{                
+            try{
                 $trans = \Yii::$app->trans->beginTransaction();
                 
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
-                \Yii::$app->warehouseService->goldW->auditBillW($model);
+                \Yii::$app->warehouseService->partsW->auditBillW($model);
                 
                 $trans->commit();
                 
@@ -318,7 +312,7 @@ class PartsBillWController extends BaseController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '金料盘点单明细';
+        $name = '石料盘点单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -327,14 +321,20 @@ class PartsBillWController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['金料材质', 'gold_type' , 'text'],
-            ['名称', 'gold_name' , 'text'],
-            ['金料编号', 'gold_sn' , 'text'],
+            ['石头类型', 'parts_type' , 'text'],
+            ['名称', 'parts_name' , 'text'],
+            ['石包号', 'parts_sn' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['金重', 'gold_weight' , 'text'],
-            ['库存(数量)', 'gold_num' , 'text'],
-            ['价格	', 'gold_price' , 'text'],
-            ['实盘(重量g)', 'actual_weight' , 'text'],
+            ['色彩', 'color' , 'text'],
+            ['形状', 'shape' , 'text'],
+            ['重量（ct）', 'parts_weight' , 'text'],
+            ['库存数量（个）', 'parts_num' , 'text'],
+            ['单价/ct', 'parts_price' , 'text'],
+            ['尺寸', 'parts_size' , 'text'],
+            ['规格(颜色/净度/切工/石重)', 'spec' , 'text'],
+            ['实盘(数量)', 'actual_num' , 'text'],
+            ['实盘(重量)', 'actual_weight' , 'text'],
+            ['差异(数量)', 'diff_num' , 'text'],
             ['差异(重量)', 'diff_weight' , 'text'],
             ['备注', 'remark' , 'text'],
 
@@ -345,24 +345,36 @@ class PartsBillWController extends BaseController
 
 
     private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id','wbg.actual_weight'];
-        $query = WarehouseGoldBillWForm::find()->alias('w')
-            ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
-            ->leftJoin(WarehouseGoldBillGoodsW::tableName().' wbg','wbg.id=wg.id')
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','wbg.actual_num','wbg.actual_weight'];
+        $query = WarehousePartsBillWForm::find()->alias('w')
+            ->leftJoin(WarehousePartsBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(WarehousePartsBillGoodsW::tableName().' wbg','wbg.id=wg.id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-            'gold_weight_count' => 0,
+            'parts_weight_count' => 0,
+            'parts_num_count' => 0,
             'actual_weight_count' => 0,
+            'actual_num_count' => 0,
         ];
         foreach ($lists as &$list){
-            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
-            $list['diff_weight'] = $list['gold_weight'] - $list['actual_weight'];
+            $list['parts_type'] = \Yii::$app->attr->valueName($list['parts_type']);
+            $clarity = \Yii::$app->attr->valueName($list['clarity']);
+            $cut = $list['carat'];
+            $color = \Yii::$app->attr->valueName($list['color']);
+            $list['color'] = $color;
+            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $list['diff_weight'] = $list['parts_weight'] - $list['actual_weight'];
+            $list['diff_num'] = $list['parts_num'] - $list['actual_num'];
+            $list['spec'] = $color.'/'.$clarity.'/'
+                .$cut.'/'.$list['carat'];
 
-            $total['gold_weight_count'] += $list['gold_weight'];
+            $total['parts_weight_count'] += $list['parts_weight'];
+            $total['parts_num_count'] += $list['parts_num'];
             $total['actual_weight_count'] += $list['actual_weight'];
+            $total['actual_num_count'] += $list['actual_num'];
         }
         return [$lists,$total];
     }

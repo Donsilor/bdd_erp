@@ -19,6 +19,7 @@ use Yii;
  * @property int $account_type 结算方式
  * @property int $adjust_type 调整类型 0扣减 1增加
  * @property int $total_num 配件总数量
+ * @property int $total_grain 粒数/件数
  * @property string $total_weight 配件总重量(g)
  * @property string $total_cost 配件总额
  * @property string $delivery_no 送货单号
@@ -52,8 +53,8 @@ class WarehousePartsBill extends BaseModel
     public function rules()
     {
         return [
-            [['bill_no', 'bill_type', 'bill_status'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            //[['bill_no'], 'required'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'total_grain', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost'], 'number'],
             [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -77,6 +78,7 @@ class WarehousePartsBill extends BaseModel
             'account_type' => '结算方式',
             'adjust_type' => '调整类型',
             'total_num' => '配件总数量',
+            'total_grain' => '明细总数',
             'total_weight' => '配件总重量(g)',
             'total_cost' => '配件总额',
             'delivery_no' => '送货单号',
