@@ -31,18 +31,14 @@ class OrderForm extends Order
         $rules = [
                 [['pay_type'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id != 3) {
-                        if($value == '') {
-                            return true;
-                        }
+                    if(!$this->customer_mobile && $this->sale_channel_id != 3 && $value == '') {
+                        return true;
                     }
                     return false;
                 }],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id == 3 ) {
-                        if($value == '') {
-                            return true;
-                        }
+                    if(!$this->customer_email && $this->sale_channel_id == 3 && $value == '') {
+                        return true;
                     }
                     return false;
                 }],
