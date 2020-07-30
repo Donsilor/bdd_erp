@@ -87,7 +87,7 @@ class WarehouseBillLService extends Service
                 throw new \Exception("创建收货单据明细失败2");
             }
         }
-
+        return $billM;
     }
 
     /**

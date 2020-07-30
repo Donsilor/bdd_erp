@@ -16,7 +16,7 @@ use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use common\helpers\PageHelper;
 use common\models\backend\Member;
@@ -118,7 +118,7 @@ class ReceiptController extends BaseController
                         'receipt_no' => $model->receipt_no,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
                         'log_module' => '创建单据',
-                        'log_msg' => "创建收货单,单号:".$model->receipt_no,
+                        'log_msg' => "创建采购收货单,单号:".$model->receipt_no,
                 ];
                 \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
                 
@@ -141,27 +141,27 @@ class ReceiptController extends BaseController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseReceiptForm();
-        if($model->receipt_status != BillStatusEnum::SAVE){
+        if($model->receipt_status != ReceiptStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if(!$model->receipt_num){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $model->audit_status = AuditStatusEnum::PENDING;
-        $model->receipt_status = BillStatusEnum::PENDING;
+        $model->receipt_status = ReceiptStatusEnum::PENDING;
         try{
             $trans = \Yii::$app->trans->beginTransaction();
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
+            //日志
             $log = [
                     'receipt_id' => $model->id,
                     'receipt_no' => $model->receipt_no,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '申请审核',
-                    'log_msg' => "收货单申请审核"
-            ];
-            
+                    'log_msg' => "采购收货单-申请审核"
+            ];            
             \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
             $trans->commit();            
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');            
@@ -196,13 +196,13 @@ class ReceiptController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $model->receipt_status = ReceiptStatusEnum::CONFIRM;
                     $res = PurchaseReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
                     if(false === $res) {
                         throw new \Exception("更新货品状态失败");
                     }
                 }else{
-                    $model->receipt_status = BillStatusEnum::SAVE;
+                    $model->receipt_status = ReceiptStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
@@ -260,10 +260,10 @@ class ReceiptController extends BaseController
 
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new PurchaseReceiptForm();
-        if($model->receipt_status != BillStatusEnum::SAVE){
+        if($model->receipt_status != ReceiptStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        $model->receipt_status = BillStatusEnum::CANCEL;
+        $model->receipt_status = ReceiptStatusEnum::CANCEL;
         try{
             
             $trans = \Yii::$app->trans->beginTransaction();
@@ -298,7 +298,7 @@ class ReceiptController extends BaseController
 
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new PurchaseReceiptForm();
-        if($model->receipt_status != BillStatusEnum::CANCEL){
+        if($model->receipt_status != ReceiptStatusEnum::CANCEL){
             return $this->message('单据不是取消状态', $this->redirect(Yii::$app->request->referrer), 'error');
         }
 

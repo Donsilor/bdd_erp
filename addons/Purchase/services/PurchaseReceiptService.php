@@ -525,7 +525,7 @@ class PurchaseReceiptService extends Service
             //更新采购收货单汇总：总金额和总数量
             $this->purchaseReceiptSummary($form->id, PurchaseTypeEnum::GOODS);
         }
-        $log_msg = '添加商品';
+        /* $log_msg = '添加商品';
         $log = [
             'receipt_id' => $form->id,
             'receipt_no' => $form->receipt_no,
@@ -533,7 +533,7 @@ class PurchaseReceiptService extends Service
             'log_module' => '成品采购收货单',
             'log_msg' => $log_msg
         ];
-        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log); */
     }
 
     /**
@@ -680,7 +680,7 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->billL->createBillL($bill, $goods);
+        $billL = Yii::$app->warehouseService->billL->createBillL($bill, $goods);
 
         //批量更新采购收货单货品状态
         $data = [
@@ -692,13 +692,13 @@ class PurchaseReceiptService extends Service
         if(false === $res){
             throw new \Exception('更新采购收货单货品状态失败');
         }
-        $log_msg = '申请入库';
+        //日志
         $log = [
             'receipt_id' => $form->id,
             'receipt_no' => $form->receipt_no,
             'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => '成品采购收货单',
-            'log_msg' => $log_msg
+            'log_module' => '申请入库',
+            'log_msg' => "采购收货单-申请入库,入库单号:".$billL->bill_no,
         ];
         \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
     }
@@ -724,7 +724,7 @@ class PurchaseReceiptService extends Service
             foreach ($ids as $id) {
                 $goods = $model::findOne(['id'=>$id]);
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_ING){
-                    throw new Exception("流水号【{$id}】不是待质检状态，不能质检");
+                    throw new \Exception("流水号【{$id}】不是待质检状态，不能质检");
                 }
             }
         }
@@ -739,7 +739,7 @@ class PurchaseReceiptService extends Service
     public function qcIqc($form, $purchase_type)
     {
         if($form->goods_status === ""){
-            throw new Exception("请选择是否质检通过");
+            throw new \Exception("请选择是否质检通过");
         }
         $this->iqcValidate($form, $purchase_type);
         $ids = $form->getIds();
@@ -759,7 +759,7 @@ class PurchaseReceiptService extends Service
         }
         $res = $model::updateAll($goods, ['id'=>$ids]);
         if(false === $res) {
-            throw new Exception("更新货品状态失败");
+            throw new \Exception("更新货品状态失败");
         }
         /*$receipt = PurchaseReceipt::findOne($ids[0]);
         $log_msg = '质检操作';
@@ -794,7 +794,7 @@ class PurchaseReceiptService extends Service
             foreach ($ids as $id) {
                 $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status', 'xuhao'])->one();
                 if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
-                    throw new Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
+                    throw new \Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
                 }
             }
         }
@@ -833,13 +833,13 @@ class PurchaseReceiptService extends Service
         }
         $ids = $form->ids;
         if(!count($ids)){
-            throw new Exception("至少选择一个货品");
+            throw new \Exception("至少选择一个货品");
         }
         if(!$this->checkDistinct($model, 'receipt_no', $ids)){
-            throw new Exception("不是同一个出货单号不允许制单");
+            throw new \Exception("不是同一个出货单号不允许制单");
         }
         if(!$this->checkDistinct($model, 'supplier_id', $ids)){
-            throw new Exception("不是同一个供应商不允许制单");
+            throw new \Exception("不是同一个供应商不允许制单");
         }
         $total_cost = 0;
         $receipt = $defect = $detail = [];
@@ -852,7 +852,7 @@ class PurchaseReceiptService extends Service
             }
             if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_NO_PASS)
             {
-                throw new Exception("流水号【{$id}】不是IQC质检未过状态，不能生成不良品返厂单");
+                throw new \Exception("流水号【{$id}】不是IQC质检未过状态，不能生成不良品返厂单");
             }
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $detail[] = [
@@ -937,7 +937,7 @@ class PurchaseReceiptService extends Service
         \Yii::$app->purchaseService->defective->createDefactiveBill($bill, $detail);
         $res = $model::updateAll(['goods_status' =>ReceiptGoodsStatusEnum::FACTORY_ING], ['id'=>$ids]);
         if(false === $res) {
-            throw new Exception("更新货品状态失败");
+            throw new \Exception("更新货品状态失败");
         }
     }
 

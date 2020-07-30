@@ -23,6 +23,7 @@ use addons\Purchase\common\forms\PurchaseDefectiveForm;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\traits\Curd;
+use common\enums\LogTypeEnum;
 /**
 * PurchaseDefective
 *
@@ -128,7 +129,7 @@ class PartsDefectiveController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();
 
             \Yii::$app->purchaseService->defective->applyAudit($model);
-
+            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
@@ -163,7 +164,7 @@ class PartsDefectiveController extends BaseController
                 $model->audit_time = time();
 
                 \Yii::$app->purchaseService->defective->auditDefect($model);
-
+                
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();

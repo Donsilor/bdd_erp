@@ -20,6 +20,7 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseReceiptService $receipt 采购收货单
  * @property \addons\Purchase\services\ReceiptLogService $receiptLog 采购收货单
  * @property \addons\Purchase\services\PurchaseDefectiveService $defective 不良返厂单
+ * @property \addons\Purchase\services\DefectiveLogService $defectiveLog 不良返厂单日志
  * @property \addons\Purchase\services\PurchaseFqcService $fqc 质检未过原因
  * @var array
  */
@@ -40,6 +41,7 @@ class Application extends Service
             'receipt' => 'addons\Purchase\services\PurchaseReceiptService',
             'receiptLog' => 'addons\Purchase\services\ReceiptLogService',
             'defective' => 'addons\Purchase\services\PurchaseDefectiveService',
+            'defectiveLog' => 'addons\Purchase\services\DefectiveLogService',
             'fqc' => 'addons\Purchase\services\PurchaseFqcService',
     ];
 }
