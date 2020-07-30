@@ -418,7 +418,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 }
                                             },
                                             'untie' => function($url, $model, $key) use($order){
-                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::YES && $model->product_type_id != 15) {
+                                                 if($order->order_status == OrderStatusEnum::SAVE && $model->is_stock == IsStockEnum::YES && $model->product_type_id != 1) {
                                                      return Html::edit(['order-goods/untie', 'id' => $model->id], '解绑', [
                                                          'class' => 'btn btn-primary btn-xs',
                                                          'onclick' => 'rfTwiceAffirm(this,"解绑现货", "确定解绑吗？");return false;',

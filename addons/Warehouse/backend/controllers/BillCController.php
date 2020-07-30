@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
@@ -125,6 +126,20 @@ class BillCController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+
+                if($isNewRecord){
+                    $log_msg = "创建其他出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                }else{
+                    $log_msg = "修改其他出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                }
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其他出库单',
+                    'log_msg' => $log_msg
+                ];
+                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+
                 $trans->commit();
 
                 if($isNewRecord) {
@@ -176,12 +191,29 @@ class BillCController extends BaseController
         if($model->goods_num<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try{
+            $model->bill_status = BillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其他出库单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
     }
 
     /**
@@ -209,6 +241,15 @@ class BillCController extends BaseController
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
                 \Yii::$app->warehouseService->billC->auditBillC($model);
+
+                //日志
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其他出库单',
+                    'log_msg' => '单据审核'
+                ];
+                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
 
                 $trans->commit();
 
@@ -240,6 +281,15 @@ class BillCController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
+
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其他出库单',
+                'log_msg' => '单据取消'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -264,6 +314,13 @@ class BillCController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
 
             \Yii::$app->warehouseService->billC->deleteBillC($model);
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其他出库单',
+                'log_msg' => '单据删除'
+            ];
+            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
