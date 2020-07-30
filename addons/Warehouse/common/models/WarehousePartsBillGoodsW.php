@@ -3,11 +3,13 @@
 namespace addons\Warehouse\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "warehouse_parts_bill_goods_w".
  *
  * @property int $id
+ * @property int $actual_num 实盘件数
  * @property double $actual_weight 实盘重量
  * @property int $fin_status 财务审核状态
  * @property string $fin_checker 财务确认人
@@ -36,7 +38,7 @@ class WarehousePartsBillGoodsW extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'fin_status', 'fin_adjust_status', 'fin_check_time', 'adjust_status', 'adjust_reason', 'status', 'updated_at'], 'integer'],
+            [['id', 'actual_num', 'fin_status', 'fin_adjust_status', 'fin_check_time', 'adjust_status', 'adjust_reason', 'status', 'updated_at'], 'integer'],
             [['actual_weight'], 'number'],
             [['fin_checker'], 'string', 'max' => 30],
             [['fin_remark'], 'string', 'max' => 255],
@@ -51,6 +53,7 @@ class WarehousePartsBillGoodsW extends BaseModel
     {
         return [
             'id' => 'ID',
+            'actual_num' => '实盘件数',
             'actual_weight' => '实盘重量',
             'fin_status' => '财务审核状态',
             'fin_checker' => '财务确认人',
@@ -59,8 +62,16 @@ class WarehousePartsBillGoodsW extends BaseModel
             'fin_remark' => '财务确认备注',
             'adjust_status' => '调整状态',
             'adjust_reason' => '调整原因',
-            'status' => '盘点状态 1已盘点 0未盘点',
+            'status' => '盘点状态',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 财务确认人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFiner()
+    {
+        return $this->hasOne(Member::class, ['id'=>'fin_checker'])->alias('finer');
     }
 }

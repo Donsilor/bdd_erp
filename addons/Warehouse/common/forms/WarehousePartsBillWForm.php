@@ -13,6 +13,7 @@ class WarehousePartsBillWForm extends WarehousePartsBill
 {
     public $parts_sn;
     public $parts_type;
+    public $parts_num;
     public $parts_weight;
     /**
      * {@inheritdoc}
@@ -21,8 +22,9 @@ class WarehousePartsBillWForm extends WarehousePartsBill
     {
         $rules = [
             [['parts_type'], 'required'],
-            [['parts_sn', 'parts_weight'], 'filter', 'filter' => 'trim'],
+            [['parts_sn', 'parts_num', 'parts_weight'], 'filter', 'filter' => 'trim'],
             [['parts_sn'], 'string', 'max'=>30],
+            [['parts_num'], 'integer'],
             [['parts_weight'], 'number'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);

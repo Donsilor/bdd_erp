@@ -10,7 +10,7 @@ $this->title = '盘点单明细';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($bill->bill_status)?></h2>
+    <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo \addons\Warehouse\common\enums\PartsBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -21,10 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php //echo Html::checkboxList('colmun','',\Yii::$app->purchaseService->purchaseGoods->listColmuns(1))?>
                     </h3>
                     <div class="box-tools">
-                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {?>
-                        <?= Html::create(['gold-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE) {?>
+                        <?= Html::create(['parts-bill-w/pandian', 'id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
                     <?php }?>
-                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING) {?>
+                    <?php if($bill->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::PENDING) {?>
                         <?= Html::batchPopButton(['batch-audit', 'check' => 1, 'id' => $bill->id, 'returnUrl'=>Url::getReturnUrl()], '批量审核', ['class'=>'btn btn-primary btn-xs','data-grid'=>'grid']); ?>
                     <?php }?>
                     </div>
@@ -34,7 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'width:120%;'],
+                        //'options' => ['style'=>'width:125%;'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid', 
                         'columns' => [
@@ -54,17 +55,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'80'],
                             ],*/
                             [
-                                'attribute' => 'gold_sn',
+                                'attribute' => 'parts_sn',
                                 'filter' => true,
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'parts_type',
                                 'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                    return Yii::$app->attr->valueName($model->parts_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -72,39 +73,53 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'80'],
                             ],
                             [
-                                'attribute'=>'gold_name',
-                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'attribute'=>'parts_name',
+                                'filter' => Html::activeTextInput($searchModel, 'parts_name', [
                                         'class' => 'form-control',
                                 ]),
                                 'value' => function ($model) {
-                                    return $model->gold_name;
+                                    return $model->parts_name;
                                 },
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'160'],
                             ],
                             [
-                                'attribute' => 'style_sn',
-                                'filter' => true,
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'120'],
+                                    'attribute' => 'style_sn',
+                                    'filter' => true,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '应盘重量(g)',
-                                'format' => 'raw',
-                                'value' => function($model){
-                                    return $model->gold_weight ?? '0.00';
-                                },
-                                'filter' => false,
+                                'label' => '应盘粒数',
+                                'attribute' => 'parts_num',
+                                'filter' => true,
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
-                                'label' => '实盘重量(g)',
-                                'format' => 'raw',
+                                'label' => '实盘粒数',
                                 'value' => function($model){
-                                    return $model->goodsW->actual_weight ?? '0.00';
+                                    return $model->goodsW->actual_num ?? 0;
                                 },
                                 'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:red'],
+                            ],
+                            [
+                                'label' => '应盘重量(ct)',
+                                'attribute' => 'parts_weight',
+                                'filter' => true,
+                                'headerOptions' => ['width' => '100'],
+                                'contentOptions' => ['style'=>'color:green'],
+                            ],
+                            [
+                                'label' => '实盘重量(ct)',
+                                'value' => function($model){
+                                    return $model->goodsW->actual_weight ?? 0;
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:red'],
                             ],
@@ -204,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                     'audit' => function($url, $model, $key) use($bill) {
-                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING && $bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::PENDING){
+                                        if($model->goodsW->fin_status == \addons\Warehouse\common\enums\FinAuditStatusEnum::PENDING && $bill->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::PENDING){
                                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                                 'class'=>'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
