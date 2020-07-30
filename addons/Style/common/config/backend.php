@@ -50,7 +50,7 @@ return [
                             ],
                             [
                                     'title' => '赠品列表',
-                                    'route' => 'gift/index',
+                                    'route' => 'style-gift/index',
                             ],
                     ],
                     
