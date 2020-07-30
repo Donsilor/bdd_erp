@@ -175,7 +175,7 @@ class OrderGoodsController extends BaseController
                 $model->qiban_type = QibanTypeEnum::NON_VERSION;
                 $model->style_sex = StyleSexEnum::COMMON;
                 $model->style_cate_id = 15; //裸钻
-                $model->product_type_id = 15; //钻石
+                $model->product_type_id = 1; //钻石
                 $model->goods_num = $diamond_goods->goods_num;
                 $model->goods_name = $diamond_goods->goods_name;
                 $model->is_stock = $diamond_goods->is_stock;
@@ -246,7 +246,8 @@ class OrderGoodsController extends BaseController
             }
             $model = $this->findModel($id);
             if($model->is_stock == IsStockEnum::YES){
-                throw new \Exception("请先解绑",422);
+                //现货解绑
+                Yii::$app->salesService->orderGoods->toUntie($model);
             }
 
             if (!$model->delete()) {
