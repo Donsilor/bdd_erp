@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\models\Style;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -71,11 +72,16 @@ class StyleGiftController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new StyleGift();
 
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            $style = Style::findOne(['style_sn'=>$model->style_sn]);
+            if(!$style){
+                return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $model->style_id = $style->id;
             $model->status = StatusEnum::DISABLED;
             return $model->save()
                 ? $this->redirect(Yii::$app->request->referrer)

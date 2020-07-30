@@ -51,15 +51,36 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'attribute' => 'gift_name',
+                            'value' => 'gift_name',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'gift_name', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute' => 'style_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->style_sn, ['style/view', 'id' => $model->style_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
                             ]),
+                        ],
+                        [
+                            'attribute' => 'channel_id',
+                            'value' => function ($model){
+                                return $model->saleChannel->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:120px;'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
                         ],
                         /*[
                             'label' => '金料类型',
@@ -80,6 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'remark', [
                                 'class' => 'form-control',
+                                'style'=> 'width:200px;'
                             ]),
                         ],
                         [

@@ -4,11 +4,13 @@ namespace addons\Style\common\models;
 
 use Yii;
 use common\models\backend\Member;
+use addons\Sales\common\models\SaleChannel;
 
 /**
  * This is the model class for table "style_gift".
  *
  * @property int $id ID
+ * @property int $style_id 款式ID
  * @property string $style_sn 款号
  * @property string $gift_name 赠品名称
  * @property string $sale_price 销售价
@@ -31,7 +33,7 @@ class StyleGift extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('style_gift');
+        return self::tableFullName('gift');
     }
 
     /**
@@ -40,9 +42,9 @@ class StyleGift extends BaseModel
     public function rules()
     {
         return [
-            [['style_sn'], 'required'],
+            [['style_sn', 'gift_name'], 'required'],
             [['sale_price'], 'number'],
-            [['channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['style_id', 'channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['style_sn'], 'string', 'max' => 30],
             [['gift_name'], 'string', 'max' => 100],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
@@ -56,6 +58,7 @@ class StyleGift extends BaseModel
     {
         return [
             'id' => 'ID',
+            'style_id' => '款式ID',
             'style_sn' => '款号',
             'gift_name' => '赠品名称',
             'sale_price' => '销售价',
@@ -99,5 +102,13 @@ class StyleGift extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 销售渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSaleChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('saleChannel');
     }
 }

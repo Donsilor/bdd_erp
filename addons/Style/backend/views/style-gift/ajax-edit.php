@@ -19,7 +19,14 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'style_sn')->textInput() ?>
-        <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
+        <?= $form->field($model, 'gift_name')->textInput() ?>
+        <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
+            'data' => Yii::$app->salesService->saleChannel->getDropDown(),
+            'options' => ['placeholder' => '请选择'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);?>
         <?= $form->field($model, 'remark')->textarea() ?>
     </div>
     <div class="modal-footer">
