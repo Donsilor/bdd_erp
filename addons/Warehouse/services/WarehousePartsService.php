@@ -29,7 +29,7 @@ class WarehousePartsService extends Service
     {
         $tabList = [
             1=>['name'=>'配件详情','url'=>Url::to(['parts/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'领件信息','url'=>Url::to(['parts/lingliao','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'领件信息','url'=>Url::to(['parts/lingjian','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
             3=>['name'=>'配件日志','url'=>Url::to(['parts-log/index','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
         ];
         return $tabList;

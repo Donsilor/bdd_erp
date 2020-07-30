@@ -95,9 +95,10 @@ class PartsController extends BaseController
      */
     public function actionLingjian()
     {
+        $id = \Yii::$app->request->get('id');
         $this->modelClass = new WarehousePartsBillGoodsForm();
         $tab = \Yii::$app->request->get('tab',2);
-        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['parts/index']));
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['parts/index', 'id'=>$id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -117,9 +118,8 @@ class PartsController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',WarehousePartsBillGoodsForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehousePartsBillGoodsForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $id = \Yii::$app->request->get('id');
-        $gold = WarehouseParts::findOne(['id'=>$id]);
-        $dataProvider->query->andWhere(['=', 'parts_sn', $gold->parts_sn]);
+        $parts = WarehouseParts::findOne(['id'=>$id]);
+        $dataProvider->query->andWhere(['=', 'parts_sn', $parts->parts_sn]);
         $dataProvider->query->andWhere(['>',WarehousePartsBillGoodsForm::tableName().'.status',-1]);
 
         $dataProvider->query->andWhere(['=', 'bill.bill_type', PartsBillTypeEnum::PARTS_C]);
@@ -127,7 +127,7 @@ class PartsController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'gold' => $gold,
+            'parts' => $parts,
             'tab' => $tab,
             'tabList'=>\Yii::$app->warehouseService->parts->menuTabList($id, $returnUrl),
         ]);
@@ -158,6 +158,7 @@ class PartsController extends BaseController
             ['配件颜色', 'color' , 'text'],
             ['链类型', 'chain_type' , 'text'],
             ['扣环', 'cramp_ring' , 'text'],
+            ['尺寸', 'size' , 'text'],
             ['配件数量', 'parts_num' , 'text'],
             ['库存重量(g)', 'parts_weight' , 'text'],
             ['配件单价', 'parts_price' , 'text'],

@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\ProduceGold;
 use Yii;
 
 /**
@@ -84,9 +85,34 @@ class WarehousePartsBillGoods extends BaseModel
             'sale_price' => '销售价',
             'source_detail_id' => '来源明细ID',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 盘点单明细附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsW()
+    {
+        return $this->hasOne(WarehousePartsBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
+    }
+    /**
+     * 单据
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill()
+    {
+        return $this->hasOne(WarehousePartsBill::class, ['id'=>'bill_id'])->alias('bill');
+    }
+    /**
+     * 配石记录
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceParts()
+    {
+        return $this->hasOne(ProduceParts::class, ['id'=>'source_detail_id'])->alias('produceParts');
     }
 }

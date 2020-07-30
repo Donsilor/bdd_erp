@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_c_goods', '领料单明细');
+$this->title = Yii::t('parts_bill_c_goods', '领件单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+        if($bill->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE){
+            //echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -30,10 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive">
+                    <?php echo Html::batchButtons(false)?>
+                    <span class="summary" style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        配件总数：<span style="color:green;"><?= $bill->total_num?></span>
+                        配件总重：<span style="color:green;"><?= $bill->total_weight?>(g)</span>
+                        配件总额：<span style="color:green;"><?= $bill->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -43,26 +51,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'gold_name',
+                                'attribute'=>'parts_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'style_sn',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'parts_type',
                                 'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                    return Yii::$app->attr->valueName($model->parts_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
@@ -70,12 +68,92 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'material_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->material_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'parts_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_price',
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'color',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->color);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'shape',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->shape);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'size',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'chain_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->chain_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'chain_type',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'cramp_ring',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->cramp_ring);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'parts_num',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'parts_weight',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'parts_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
@@ -84,18 +162,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
+                            /*[
+                                'attribute' => 'sale_price',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],*/
+                            [
+                                'attribute' => 'remark',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
                             [
                                 'label' => '布产编号',
                                 'value' => function ($model){
-                                    return $model->produceGold->produce_sn ?? '';
+                                    return $model->produceParts->produce_sn ?? '';
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '配料状态',
+                                'label' => '配件状态',
                                 'value' => function ($model){
-                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
+                                    return \addons\Supply\common\enums\PeijianStatusEnum::getValue($model->produceParts->peijian_status ??0);
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -106,7 +194,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id]);
                                         }
 

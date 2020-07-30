@@ -170,6 +170,12 @@ class PartsBillLController extends PartsBillController
             ['配件类型', 'parts_type' , 'text'],
             ['名称', 'parts_name' , 'text'],
             ['款号', 'style_sn' , 'text'],
+            ['配件材质', 'material_type' , 'text'],
+            ['配件形状', 'shape' , 'text'],
+            ['配件颜色', 'color' , 'text'],
+            ['链类型', 'chain_type' , 'text'],
+            ['扣环', 'cramp_ring' , 'text'],
+            ['尺寸', 'size' , 'text'],
             ['重量(g)', 'parts_weight' , 'text'],
             ['价格	', 'parts_price' , 'text'],
             ['备注', 'remark' , 'text'],
@@ -191,6 +197,11 @@ class PartsBillLController extends PartsBillController
         ];
         foreach ($lists as &$list){
             $list['parts_type'] = \Yii::$app->attr->valueName($list['parts_type']);
+            $list['material_type'] = \Yii::$app->attr->valueName($list['material_type']);
+            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $list['color'] = \Yii::$app->attr->valueName($list['color']);
+            $list['chain_type'] = \Yii::$app->attr->valueName($list['chain_type']);
+            $list['cramp_ring'] = \Yii::$app->attr->valueName($list['cramp_ring']);
         }
         return [$lists,$total];
     }

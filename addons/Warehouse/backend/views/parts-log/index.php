@@ -9,12 +9,12 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_log', '金料日志');
+$this->title = Yii::t('parts_log', '配件日志');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $gold->gold_sn?> - <?= GoldStatusEnum::getValue($gold->gold_status)?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $parts->parts_sn?> - <?= \addons\Warehouse\common\enums\PartsStatusEnum::getValue($parts->parts_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'parts_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],

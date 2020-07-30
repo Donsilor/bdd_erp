@@ -87,7 +87,7 @@ class WarehouseParts extends BaseModel
             'put_in_type' => '入库方式',
             'warehouse_id' => '所在仓库',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
