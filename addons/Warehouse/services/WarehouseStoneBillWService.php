@@ -339,7 +339,7 @@ class WarehouseStoneBillWService extends Service
                 'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {
-            $billUpdate = ['total_num'=>$sum['goods_num'], 'total_weight'=>$sum['goods_weight'], 'total_grain'=>['goods_grain']];
+            $billUpdate = ['total_num'=>$sum['goods_num'], 'total_weight'=>$sum['goods_weight'], 'total_grain'=>$sum['goods_grain']];
             $billWUpdate = [
                 'save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num'],
                 'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight'],

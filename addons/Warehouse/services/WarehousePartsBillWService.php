@@ -33,6 +33,7 @@ class WarehousePartsBillWService extends Service
     /**
      * 创建盘点单
      * @param object $form
+     * @throws
      */
     public function createBillW($form){
         if(false === $form->validate()) {
@@ -101,7 +102,6 @@ class WarehousePartsBillWService extends Service
         }else{
             throw new \Exception('库存中未查到配件为['.\Yii::$app->attr->valueName($form->parts_type).']的盘点数据');
         }
-
         //同步盘点明细关系表
         $sql = "insert into ".WarehousePartsBillGoodsW::tableName().'(id,adjust_status,status) select id,0,0 from '.WarehousePartsBillGoods::tableName()." where bill_id=".$bill->id;
         $should_num = Yii::$app->db->createCommand($sql)->execute();
@@ -118,6 +118,7 @@ class WarehousePartsBillWService extends Service
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
         }
+
         //更新应盘数量和总金额
         $this->billWSummary($bill->id);
         return $bill;
@@ -342,7 +343,7 @@ class WarehousePartsBillWService extends Service
                 'sum(IFNULL(g.cost_price,0)) as total_cost',
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
         if($sum) {
-            $billUpdate = ['total_num'=>$sum['goods_num'], 'total_weight'=>$sum['goods_weight'], 'total_grain'=>['goods_grain']];
+            $billUpdate = ['total_num'=>$sum['goods_num'], 'total_weight'=>$sum['goods_weight'], 'total_grain'=>$sum['goods_grain']];
             $billWUpdate = [
                 'save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num'],
                 'save_weight'=>$sum['save_weight'],'actual_weight'=>$sum['actual_weight'], 'loss_weight'=>$sum['loss_weight'], 'normal_weight'=>$sum['normal_weight'], 'adjust_weight'=>$sum['adjust_weight'],
