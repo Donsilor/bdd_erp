@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\Supplier;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -90,5 +92,29 @@ class WarehouseParts extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
     }
 }

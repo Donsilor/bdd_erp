@@ -14,6 +14,8 @@ use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Purchase\common\models\PurchasePartsReceiptGoods;
+use addons\Warehouse\common\enums\PartsBillStatusEnum;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\enums\WarehouseIdEnum;
 use addons\Purchase\common\enums\ReceiptStatusEnum;
@@ -1159,8 +1161,8 @@ class PurchaseReceiptService extends Service
             $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
         }
         $bill = [
-            'bill_type' =>  GoldBillTypeEnum::GOLD_L,
-            'bill_status' => GoldBillStatusEnum::SAVE,
+            'bill_type' =>  PartsBillTypeEnum::PARTS_L,
+            'bill_status' => PartsBillStatusEnum::SAVE,
             'audit_status' => AuditStatusEnum::SAVE,
             'supplier_id' => $form->supplier_id,
             'put_in_type' => $form->put_in_type,
@@ -1175,7 +1177,7 @@ class PurchaseReceiptService extends Service
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
-        Yii::$app->warehouseService->partsL->createGoldL($bill, $goods);
+        Yii::$app->warehouseService->partsL->createPartsL($bill, $goods);
         //批量更新采购收货单货品状态
         $data = [
             'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE_ING,

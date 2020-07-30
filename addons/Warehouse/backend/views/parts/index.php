@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold', '金料库存');
+$this->title = Yii::t('parts', '配件库存');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -34,6 +34,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -53,29 +54,40 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
-                            'attribute'=>'gold_sn',
+                            'attribute'=>'parts_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->parts_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
-                            'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                            'filter' => Html::activeTextInput($searchModel, 'parts_sn', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute'=>'gold_name',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                            'attribute'=>'parts_name',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_name', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
-                            'attribute' => 'gold_type',
+                            'attribute' => 'parts_type',
                             'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->gold_type)??"";
+                                return Yii::$app->attr->valueName($model->parts_type)??"";
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                            'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute' => 'material_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->material_type)??"";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                             ]),
@@ -88,23 +100,23 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        /*[
-                            'attribute'=>'gold_num',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_num', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],*/
                         [
-                            'attribute'=>'gold_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                            'attribute'=>'parts_num',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                            'attribute'=>'parts_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_weight', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'parts_price',
+                            'filter' => Html::activeTextInput($searchModel, 'parts_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],
@@ -128,11 +140,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
-                            'attribute' => 'gold_status',
+                            'attribute' => 'parts_status',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\GoldStatusEnum::getValue($model->gold_status);
+                                return \addons\Warehouse\common\enums\PartsStatusEnum::getValue($model->parts_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_status',\addons\Warehouse\common\enums\GoldStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'parts_status',\addons\Warehouse\common\enums\PartsStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:100px;'

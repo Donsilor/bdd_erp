@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\Supplier;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -92,5 +94,65 @@ class WarehousePartsBill extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId();
+        }
+        return parent::beforeSave($insert);
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
+    }
+    /**
+     * 盘点单附属表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBillW()
+    {
+        return $this->hasOne(WarehousePartsBillW::class, ['id'=>'id'])->alias('billW');
     }
 }

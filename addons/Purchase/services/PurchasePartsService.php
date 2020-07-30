@@ -32,7 +32,7 @@ class PurchasePartsService extends Service
     }
     
     /**
-     * 金料采购单汇总
+     * 配件采购单汇总
      * @param int $purchase_id
      */
     public function summary($purchase_id)

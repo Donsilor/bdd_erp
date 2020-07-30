@@ -2,10 +2,10 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Warehouse\common\enums\GoldBillStatusEnum;
 use Yii;
 use addons\Warehouse\common\models\WarehouseParts;
+use addons\Purchase\common\models\PurchaseReceipt;
+use addons\Warehouse\common\enums\PartsBillStatusEnum;
 use common\helpers\ArrayHelper;
 
 /**
@@ -40,10 +40,10 @@ class WarehousePartsForm extends WarehouseParts
      */
     public function getBillInfo(){
         //入库单
-        $billL = WarehouseGoldBillLForm::find()->alias('l')
-            ->leftJoin(WarehouseGoldBillLGoodsForm::tableName().' lg', 'lg.bill_id=l.id')
+        $billL = WarehousePartsBillLForm::find()->alias('l')
+            ->leftJoin(WarehousePartsBillLGoodsForm::tableName().' lg', 'lg.bill_id=l.id')
             ->select(['l.bill_no','l.delivery_no'])
-            ->where(['lg.gold_sn'=>$this->gold_sn, 'l.bill_status'=>GoldBillStatusEnum::CONFIRM])
+            ->where(['lg.parts_sn'=>$this->parts_sn, 'l.bill_status'=>PartsBillStatusEnum::CONFIRM])
             ->one();
         $bill_l_no = $billL->bill_no??"";
         $delivery_no = $billL->delivery_no??"";

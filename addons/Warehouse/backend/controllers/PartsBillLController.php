@@ -2,29 +2,28 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use common\helpers\PageHelper;
-use setasign\Fpdi\PdfReader\Page;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehousePartsBill;
+use addons\Warehouse\common\models\WarehousePartsBillGoods;
+use addons\Warehouse\common\forms\WarehousePartsBillLForm;
+use addons\Warehouse\common\enums\PartsBillStatusEnum;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use common\enums\AuditStatusEnum;
-use common\helpers\Url;
-use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
+use common\helpers\Url;
 
 /**
- * StyleChannelController implements the CRUD actions for StyleChannel model.
+ * PartsBillLController implements the CRUD actions for StyleChannel model.
  */
-class PartsBillLController extends GoldBillController
+class PartsBillLController extends PartsBillController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillLForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_L;
+    public $modelClass = WarehousePartsBillLForm::class;
+    public $billType = PartsBillTypeEnum::PARTS_L;
 
     /**
      * Lists all StyleChannel models.
@@ -52,16 +51,16 @@ class PartsBillLController extends GoldBillController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehousePartsBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehousePartsBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>', WarehouseGoldBill::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=', WarehouseGoldBill::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>', WarehousePartsBill::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=', WarehousePartsBill::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(WarehouseGoldBill::tableName().'.id');
+            $queryIds = $dataProvider->query->select(WarehousePartsBill::tableName().'.id');
             $this->actionExport($queryIds);
         }
 
@@ -74,19 +73,19 @@ class PartsBillLController extends GoldBillController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
         $bill_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l/index', 'bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-bill-l/index', 'bill_id'=>$bill_id]));
         $model = $this->findModel($bill_id);
-        $model = $model ?? new WarehouseGoldBill();
+        $model = $model ?? new WarehousePartsBill();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->partsBill->menuTabList($bill_id, $this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -98,15 +97,15 @@ class PartsBillLController extends GoldBillController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        $model = $model ?? new WarehousePartsBill();
+        if($model->bill_status != PartsBillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $goods = WarehouseGoldBillGoods::findOne(['bill_id'=>$id]);
+        $goods = WarehousePartsBillGoods::findOne(['bill_id'=>$id]);
         if(!$goods){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
+        $model->bill_status = PartsBillStatusEnum::PENDING;
         $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -125,7 +124,7 @@ class PartsBillLController extends GoldBillController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillLForm();
+        $model = $model ?? new WarehousePartsBillLForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -136,7 +135,7 @@ class PartsBillLController extends GoldBillController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->id;
 
-                \Yii::$app->warehouseService->goldL->auditGoldL($model);
+                \Yii::$app->warehouseService->partsL->auditPartsL($model);
 
                 $trans->commit();
 
@@ -155,11 +154,10 @@ class PartsBillLController extends GoldBillController
     /**
      * @param null $ids
      * @return bool|mixed
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws
      */
     public function actionExport($ids = null){
-        $name = '金料入库单明细';
+        $name = '配件入库单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -169,22 +167,21 @@ class PartsBillLController extends GoldBillController
         list($list,) = $this->getData($ids);
         $header = [
             ['单据编号', 'bill_no', 'text'],
-            ['金料类型', 'gold_type' , 'text'],
-            ['名称', 'gold_name' , 'text'],
+            ['配件类型', 'parts_type' , 'text'],
+            ['名称', 'parts_name' , 'text'],
             ['款号', 'style_sn' , 'text'],
-            ['重量(g)', 'gold_weight' , 'text'],
-            ['价格	', 'gold_price' , 'text'],
+            ['重量(g)', 'parts_weight' , 'text'],
+            ['价格	', 'parts_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
-
     private function getData($ids){
         $select = ['wg.*','w.bill_no','w.to_warehouse_id','w.bill_status'];
-        $query = WarehouseGoldBillLForm::find()->alias('w')
-            ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
+        $query = WarehousePartsBillLForm::find()->alias('w')
+            ->leftJoin(WarehousePartsBillGoods::tableName()." wg",'w.id=wg.bill_id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
@@ -193,7 +190,7 @@ class PartsBillLController extends GoldBillController
 
         ];
         foreach ($lists as &$list){
-            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+            $list['parts_type'] = \Yii::$app->attr->valueName($list['parts_type']);
         }
         return [$lists,$total];
     }
@@ -201,12 +198,10 @@ class PartsBillLController extends GoldBillController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {
-
-
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
