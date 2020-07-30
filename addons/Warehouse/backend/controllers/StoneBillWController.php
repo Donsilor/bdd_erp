@@ -301,7 +301,7 @@ class StoneBillWController extends BaseController
                 'log_module' => '盘点单',
                 'log_msg' => '单据关闭'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);*/
+            \Yii::$app->warehouseService->billLog->createBillLog($log);*/
             $trans->commit();
             return $this->message('关闭成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

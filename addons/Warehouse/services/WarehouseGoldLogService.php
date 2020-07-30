@@ -3,10 +3,10 @@
 namespace addons\Warehouse\services;
 
 
+use addons\Warehouse\common\models\WarehouseGoldLog;
+use addons\Warehouse\common\queues\GoldLogJob;
 use Yii;
 use common\components\Service;
-use addons\Warehouse\common\models\WarehouseBillLog;
-use addons\Warehouse\common\queues\BillLogJob;
 
 
 /**
@@ -15,7 +15,7 @@ use addons\Warehouse\common\queues\BillLogJob;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillLogService extends Service
+class WarehouseGoldLogService extends Service
 {
     public $switchQueue = false;
     /**
@@ -33,27 +33,27 @@ class WarehouseBillLogService extends Service
      * 单据日志
      * @param array $log
      * @throws \Exception
-     * @return \addons\Warehouse\common\models\WarehouseBillLog
+     * @return \addons\Warehouse\common\models\WarehouseGoldLog
      */
-    public function createBillLog($log)
+    public function createGoldLog($log)
     {
         if($this->switchQueue === true) {
             //队列
-            $messageId = Yii::$app->queue->push(new BillLogJob($log));            
+            $messageId = Yii::$app->queue->push(new GoldLogJob($log));
             return $messageId;
         }else {
-            return $this->realCreateBillLog($log);
+            return $this->realCreateGoldLog($log);
         }      
     }
     /**
      * 创建日志
      * @param unknown $log
      * @throws \Exception
-     * @return \addons\Warehouse\common\models\WarehouseBillLog
+     * @return \addons\Warehouse\common\models\WarehouseGoldLog
      */
-    public function realCreateBillLog($log) 
+    public function realCreateGoldLog($log)
     {
-        $model = new WarehouseBillLog();
+        $model = new WarehouseGoldLog();
         $model->attributes = $log;
         if(false === $model->save()){
             throw new \Exception($this->getError($model));

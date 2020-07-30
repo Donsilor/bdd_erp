@@ -112,7 +112,7 @@ class OrderGoodsController extends BaseController
                 $model->style_sex = $wareshouse_goods->style_sex;
                 $model->style_cate_id = $wareshouse_goods->style_cate_id;
                 $model->product_type_id = $wareshouse_goods->product_type_id;
-                $model->goods_num = $wareshouse_goods->goods_num;
+                $model->goods_num = 1;
                 $model->goods_name = $wareshouse_goods->goods_name;
                 $model->style_sn = $wareshouse_goods->style_sn;
                 $model->qiban_sn = $wareshouse_goods->qiban_sn;
@@ -176,7 +176,7 @@ class OrderGoodsController extends BaseController
                 $model->style_sex = StyleSexEnum::COMMON;
                 $model->style_cate_id = 15; //裸钻
                 $model->product_type_id = 1; //钻石
-                $model->goods_num = $diamond_goods->goods_num;
+                $model->goods_num = 1;
                 $model->goods_name = $diamond_goods->goods_name;
                 $model->is_stock = $diamond_goods->is_stock;
                 $model->goods_pay_price = $diamond_goods->sale_price;

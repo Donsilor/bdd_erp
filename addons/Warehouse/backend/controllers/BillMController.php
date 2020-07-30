@@ -132,7 +132,7 @@ class BillMController extends BaseController
                     'log_module' => '调拨单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
 
                 if($isNewRecord) {
@@ -200,7 +200,7 @@ class BillMController extends BaseController
                 'log_module' => '调拨单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -258,7 +258,7 @@ class BillMController extends BaseController
                     'log_module' => '调拨单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 $trans->commit();
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -307,7 +307,7 @@ class BillMController extends BaseController
                 'log_module' => '调拨单',
                 'log_msg' => '单据取消'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','关闭成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

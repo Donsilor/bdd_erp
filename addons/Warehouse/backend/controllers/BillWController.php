@@ -113,6 +113,20 @@ class BillWController extends BaseController
                         throw new \Exception($this->getError($model));
                     }
                 }
+                if($isNewRecord){
+                    $log_msg = "创建盘点单{$model->bill_no}，盘点仓库：".$model->toWarehouse->name;
+                }else{
+                    $log_msg = "修改盘点单{$model->bill_no}，盘点仓库：".$model->toWarehouse->name;
+                }
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '盘点单',
+                    'log_msg' => $log_msg
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
+
+
                 $trans->commit();
 
                 if($isNewRecord) {
@@ -145,8 +159,15 @@ class BillWController extends BaseController
         try{
             $trans = Yii::$app->trans->beginTransaction();
             
-            \Yii::$app->warehouseService->billW->finishBillW($id); 
-            
+            \Yii::$app->warehouseService->billW->finishBillW($id);
+            //日志
+            $log = [
+                'bill_id' => $id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '盘点单',
+                'log_msg' => '盘点完成'
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             
@@ -170,8 +191,16 @@ class BillWController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();
             \Yii::$app->warehouseService->billW->adjustBillW($id);
             \Yii::$app->warehouseService->billW->billWSummary($id);
-            $trans->commit();
 
+            //日志
+            $log = [
+                'bill_id' => $id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '盘点单',
+                'log_msg' => '盘点单校正'
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            $trans->commit();
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
 
         }catch (\Exception $e) {
@@ -213,7 +242,15 @@ class BillWController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 
                 Yii::$app->warehouseService->billW->pandianGoods($model);
-                
+
+                //日志
+                $log = [
+                    'bill_id' => $id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '盘点单',
+                    'log_msg' => '盘点单盘点'
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 
                 return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
@@ -255,7 +292,14 @@ class BillWController extends BaseController
                 $model->auditor_id = \Yii::$app->user->identity->id;
                 
                 \Yii::$app->warehouseService->billW->auditBillW($model);
-                
+                //日志
+                $log = [
+                    'bill_id' => $id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '盘点单',
+                    'log_msg' => '盘点单审核'
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -302,7 +346,7 @@ class BillWController extends BaseController
                 'log_module' => '盘点单',
                 'log_msg' => '单据关闭'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('关闭成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

@@ -3,7 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Style\common\enums\LogTypeEnum;
+use common\enums\LogTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -126,7 +126,7 @@ class BillAController extends BaseController
                     'log_module' => '调整单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
@@ -193,7 +193,7 @@ class BillAController extends BaseController
                 'log_module' => '调整单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -250,7 +250,7 @@ class BillAController extends BaseController
                     'log_module' => '调整单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -298,7 +298,7 @@ class BillAController extends BaseController
                 'log_module' => '调整单',
                 'log_msg' => '单据取消'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','关闭成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

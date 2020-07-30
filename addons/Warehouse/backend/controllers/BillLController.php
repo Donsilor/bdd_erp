@@ -114,6 +114,7 @@ class BillLController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -161,11 +162,28 @@ class BillLController extends BaseController
         if($model->goods_num<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try{
+            $model->bill_status = BillStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '入库单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
@@ -189,6 +207,14 @@ class BillLController extends BaseController
                 $model->auditor_id = Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->billL->auditBillL($model);
+                //日志
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '入库单',
+                    'log_msg' => '单据审核'
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -238,7 +264,7 @@ class BillLController extends BaseController
                 'log_module' => '收货单',
                 'log_msg' => '取消单据'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','取消成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
@@ -291,10 +317,10 @@ class BillLController extends BaseController
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '收货单',
-                'log_msg' => '取消单据'
+                'log_msg' => '删除单据'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
-            \Yii::$app->getSession()->setFlash('success','取消成功');
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->getSession()->setFlash('success','删除成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
         }catch (\Exception $e){

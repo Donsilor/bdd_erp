@@ -2,13 +2,10 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Style\common\enums\LogTypeEnum;
+use common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
-use addons\Warehouse\common\enums\PutInTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseBillJForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -24,7 +21,6 @@ use common\helpers\SnHelper;
 use common\helpers\ExcelHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
@@ -131,7 +127,7 @@ class BillJController extends BaseController
                     'log_module' => '借货单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
 
                 $trans->commit();
                 if($isNewRecord) {
@@ -199,7 +195,7 @@ class BillJController extends BaseController
                 'log_module' => '借货单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -243,7 +239,7 @@ class BillJController extends BaseController
                     'log_module' => '借货单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -281,7 +277,7 @@ class BillJController extends BaseController
                 'log_module' => '借货单',
                 'log_msg' => '单据取消'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -312,7 +308,7 @@ class BillJController extends BaseController
                 'log_module' => '借货单',
                 'log_msg' => '单据删除'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

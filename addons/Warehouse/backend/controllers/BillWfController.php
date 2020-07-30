@@ -121,7 +121,7 @@ class BillWfController extends BaseController
                     'log_module' => BillTypeEnum::getValue($this->billType),
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -200,7 +200,7 @@ class BillWfController extends BaseController
                     'log_module' => BillTypeEnum::getValue($this->billType),
                     'log_msg' => '单据审核：'.AuditStatusEnum::getValue($model->audit_status)
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 $trans->commit();
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -249,7 +249,7 @@ class BillWfController extends BaseController
                 'log_module' => BillTypeEnum::getValue($this->billType),
                 'log_msg' => '单据取消'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','删除成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

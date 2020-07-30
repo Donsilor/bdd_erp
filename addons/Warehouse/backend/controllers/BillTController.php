@@ -110,6 +110,20 @@ class BillTController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+
+                if($isNewRecord){
+                    $log_msg = "创建其他入库单{$model->bill_no}";
+                }else{
+                    $log_msg = "修改其他入库单{$model->bill_no}";
+                }
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其他入库单',
+                    'log_msg' => $log_msg
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
+                \Yii::$app->warehouseService->billT->warehouseBillTSummary($model->id);
                 $trans->commit();
 
                 if($isNewRecord) {
@@ -162,12 +176,28 @@ class BillTController extends BaseController
         if($model->goods_num<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        $trans = \Yii::$app->db->beginTransaction();
+        try{
+            $model->bill_status = BillStatusEnum::PENDING;
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            //日志
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其他入库单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        \Yii::$app->warehouseService->billT->warehouseBillTSummary($model->id);
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
@@ -191,6 +221,14 @@ class BillTController extends BaseController
                 $model->auditor_id = Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->billL->auditBillL($model);
+                //日志
+                $log = [
+                    'bill_id' => $model->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其他入库单',
+                    'log_msg' => '单据取消'
+                ];
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -228,7 +266,7 @@ class BillTController extends BaseController
                 'log_module' => '其他收货单',
                 'log_msg' => '取消单据'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','操作成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
@@ -263,6 +301,13 @@ class BillTController extends BaseController
             if(false === $model->delete()){
                 throw new \Exception($this->getError($model));
             }
+            $log = [
+                'bill_id' => $model->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其他出库单',
+                'log_msg' => '单据删除'
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','操作成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

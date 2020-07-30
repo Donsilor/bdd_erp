@@ -3,7 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
-use addons\Style\common\enums\LogTypeEnum;
+use common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
@@ -128,7 +128,7 @@ class BillBController extends BaseController
                     'log_module' => '退货返厂单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
 
                 if($isNewRecord) {
@@ -195,7 +195,7 @@ class BillBController extends BaseController
                 'log_module' => '退货返厂单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -237,7 +237,7 @@ class BillBController extends BaseController
                     'log_module' => '退货返厂单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+                \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -274,7 +274,7 @@ class BillBController extends BaseController
                 'log_module' => '退货返厂单',
                 'log_msg' => '单据取消'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -304,7 +304,7 @@ class BillBController extends BaseController
                 'log_module' => '退货返厂单',
                 'log_msg' => '单据删除'
             ];
-            \Yii::$app->warehouseService->bill->createWarehouseBillLog($log);
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
