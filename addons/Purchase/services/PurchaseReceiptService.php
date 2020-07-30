@@ -217,6 +217,8 @@ class PurchaseReceiptService extends Service
                 throw new \Exception($this->getError($goods));
             }
         }
+        
+        return $billM;
     }
 
     /**

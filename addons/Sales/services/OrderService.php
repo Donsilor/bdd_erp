@@ -170,7 +170,7 @@ class OrderService extends Service
             $orderPay->currency = $account->currency;
             $orderPay->exchange_rate = $account->exchange_rate;
             $orderPay->creator_id = 0;
-            $orderPay->creator = "SYSTEM";
+            $orderPay->creator = "system";
             if(false === $orderPay->save()) {
                 throw new \Exception($this->getError($orderPay));
             }
