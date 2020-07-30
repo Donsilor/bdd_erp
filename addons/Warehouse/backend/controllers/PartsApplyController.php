@@ -2,11 +2,11 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Supply\common\models\ProduceGold;
+use addons\Supply\common\models\ProduceParts;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
@@ -23,7 +23,7 @@ use addons\Warehouse\common\enums\GoldBillStatusEnum;
 class PartsApplyController extends BaseController
 {
     use Curd;
-    public $modelClass = ProduceGold::class;
+    public $modelClass = ProduceParts::class;
     /**
      * 
      * @return mixed
@@ -68,7 +68,7 @@ class PartsApplyController extends BaseController
             foreach ($ids as $id) {
                 $model = ProduceGold::find()->where(['id'=>$id])->one();
                 if($model && $model->peiliao_status >= PeiliaoStatusEnum::TO_LINGLIAO) {
-                    return ResultHelper::json(422,"(ID={$id})配料单不允许批量配料");
+                    return ResultHelper::json(422,"(ID={$id})配件单不允许批量配件");
                 }
             }
             return ResultHelper::json(200,'初始化成功',['url'=>Url::to(['peiliao','ids'=>implode(',',$ids)])]);
