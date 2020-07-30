@@ -91,9 +91,9 @@ class OrderController extends BaseController
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {            
-            $isNewRecord = $model->isNewRecord;
-            try{
+        if ($model->load(Yii::$app->request->post())) {
+            $isNewRecord = $model->isNewRecord;            
+            try{                
                 $trans = Yii::$app->trans->beginTransaction();
                 $model = Yii::$app->salesService->order->createOrder($model);                
                 $trans->commit();
@@ -106,7 +106,13 @@ class OrderController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        
+        //初始化 默认值
+        $model->customer_email_1 = $model->customer_email;
+        $model->customer_email_2 = $model->customer_email;
+        $model->customer_mobile_1 = $model->customer_mobile;
+        $model->customer_mobile_2 = $model->customer_mobile;
+        $model->customer_source = $model->customer->source_id ?? '';
+        $model->customer_level = $model->customer->level ?? '';
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
@@ -123,8 +129,9 @@ class OrderController extends BaseController
         $mobile = Yii::$app->request->get('mobile');
         $email = Yii::$app->request->get('email');
         $channel_id = Yii::$app->request->get('channel_id');
-        
-        
+        if(empty($mobile) && empty($email)) {
+            return ResultHelper::json(200,'查询成功',[]);
+        }        
         $model = Customer::find()->select(['id','realname','mobile','email','level','source_id'])
             ->where(['channel_id'=>$channel_id])
             ->andFilterWhere(['=','mobile',$mobile])

@@ -58,8 +58,6 @@ use addons\Finance\common\models\OrderPay;
  */
 class Order extends BaseModel
 {
-    public $customer_level;//客户等级
-    public $customer_source;//客户来源
     /**
      * {@inheritdoc}
      */
@@ -130,9 +128,7 @@ class Order extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'auditor_id' => '审核人',
-            'audit_remark' => '审核备注',
-            'customer_source' => '客户来源',
-            'customer_level' => '客户级别',
+            'audit_remark' => '审核备注',            
             'customer_id' => '客户ID',
             'customer_name' => '客户姓名',
             'customer_mobile' => '客户手机',
