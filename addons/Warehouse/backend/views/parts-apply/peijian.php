@@ -4,8 +4,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\Html;
 
-
-$this->title = '批量配料';
+$this->title = '批量配件';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -30,24 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => true,
                             ], 
                             [
-                                    'attribute' => 'peiliao_status',
+                                    'attribute' => 'peijian_status',
                                     'value' => function ($model){
-                                        return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
+                                        return \addons\Supply\common\enums\PeijianStatusEnum::getValue($model->peijian_status);
                                     },
                                     'filter' => false,
                                     'format' => 'raw',
                             ],
                             [
-                                    'attribute' => 'gold_type',
+                                    'attribute' => 'parts_type',
                                     'value'  => function($model) {
-                                        return $model->gold_type ?? '无';
+                                        return $model->parts_type ?? '无';
                                     },
                                     'filter' => false,
                                     
                             ],
                             [
-                                    'attribute' => 'gold_weight',
-                                    'value' => 'gold_weight',
+                                    'attribute' => 'parts_weight',
+                                    'value' => 'parts_weight',
                                     'filter' => false,
 
                             ], 
@@ -57,34 +56,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,                                    
                             ], 
                             [
-                                    'label' => '配石信息(金料编号/金料总重)',
+                                    'label' => '配件信息(领件编号/领件总重)',
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['style'=>'width:400px'],
                                     'value' => function($model) {
                                           return unclead\multipleinput\MultipleInput::widget([
                                                 'max'=>1,
-                                                'name' => "ProduceGold[{$model->id}][ProduceGoldGoods]",
-                                                'value' => $model->goldGoods ??[],
+                                                'name' => "ProduceParts[{$model->id}][ProducePartsGoods]",
+                                                'value' => $model->partsGoods ??[],
                                                 'columns' => [
                                                         [
-                                                                'name' => 'gold_sn',
+                                                                'name' => 'parts_sn',
                                                                 'title'=>false,
                                                                 'enableError'=>false,
                                                                 'options' => [
                                                                         'class' => 'input-priority',
                                                                         //'style'=>'width:150px',
-                                                                        'placeholder'=>'金料编号',
+                                                                        'placeholder'=>'领件编号',
                                                                 ]
                                                         ],
                                                         [
-                                                                'name' => "gold_weight",
+                                                                'name' => "parts_num",
+                                                                'title'=>false,
+                                                                'enableError'=>false,
+                                                                'options' => [
+                                                                    'class' => 'input-priority',
+                                                                    'style'=>'width:100px',
+                                                                    'placeholder'=>'领件数量',
+                                                                ]
+                                                        ],
+                                                        [
+                                                                'name' => "parts_weight",
                                                                 'title'=>false,
                                                                 'enableError'=>false,
                                                                 'options' => [
                                                                         'class' => 'input-priority',
                                                                         'style'=>'width:100px',
-                                                                        'placeholder'=>'领料总重',
+                                                                        'placeholder'=>'领件总重',
                                                                 ]
                                                         ]
                                                 ]
@@ -93,9 +102,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                     'attribute'=>'peiliao_remark',
+                                     'attribute'=>'peijian_remark',
                                      'value'=>function($model){
-                                            return Html::activeTextarea($model, "[{$model->id}]peiliao_remark",['class' => 'form-control']);
+                                            return Html::activeTextarea($model, "[{$model->id}]peijian_remark",['class' => 'form-control']);
                                      },
                                      'filter' => false,                                 
                                      'headerOptions' => [],

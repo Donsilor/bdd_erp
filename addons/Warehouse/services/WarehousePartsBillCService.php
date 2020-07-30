@@ -22,7 +22,7 @@ class WarehousePartsBillCService extends Service
      * @param array $details
      * @throws
      */
-    public function createGoldC($bill, $details){
+    public function createPartsC($bill, $details){
         $billM = new WarehousePartsBill();
         $billM->attributes = $bill;
         $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
