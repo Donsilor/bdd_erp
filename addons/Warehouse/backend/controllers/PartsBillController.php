@@ -4,6 +4,9 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
+use addons\Warehouse\common\forms\WarehousePartsBillForm;
+use addons\Warehouse\common\forms\WarehousePartsBillGoodsForm;
+use addons\Warehouse\common\models\WarehousePartsBill;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseGoldBill;
@@ -18,7 +21,7 @@ use Yii;
 class PartsBillController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillForm::class;
+    public $modelClass = WarehousePartsBillForm::class;
     /**
      * 列表
      * @return mixed
@@ -27,14 +30,14 @@ class PartsBillController extends BaseController
     {
         $model = new $this->modelClass;
         $searchParams = Yii::$app->request->get('SearchModel');
-        $model->gold_sn = $searchParams['gold_sn']??"";
-        if(empty($model->gold_sn)){
+        $model->parts_sn = $searchParams['parts_sn']??"";
+        if(empty($model->parts_sn)){
             $relations = [
                 'creator' => ['username'],
                 'auditor' => ['username'],
             ];
         }else{
-            $this->modelClass = WarehouseGoldBillGoodsForm::class;
+            $this->modelClass = WarehousePartsBillGoodsForm::class;
             $relations = [
                 'bill' => [
                     'id',
@@ -56,21 +59,21 @@ class PartsBillController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => $relations,
         ]);
-        if(empty($model->gold_sn)) {
+        if(empty($model->parts_sn)) {
             $dataProvider = $searchModel
                 ->search(Yii::$app->request->queryParams, ['created_at']);
             $created_at = $searchModel->created_at;
             if (!empty($created_at)) {
-                $dataProvider->query->andFilterWhere(['>=', WarehouseGoldBill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-                $dataProvider->query->andFilterWhere(['<', WarehouseGoldBill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+                $dataProvider->query->andFilterWhere(['>=', WarehousePartsBill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+                $dataProvider->query->andFilterWhere(['<', WarehousePartsBill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
             }
-            $dataProvider->query->andWhere(['>', WarehouseGoldBill::tableName() . '.status', -1]);
+            $dataProvider->query->andWhere(['>', WarehousePartsBill::tableName() . '.status', -1]);
         }else{
             $dataProvider = $searchModel
                 ->search(Yii::$app->request->queryParams, ['supplier_id']);
             $supplier_id = $searchModel->supplier_id;
-            if($model->gold_sn){
-                $dataProvider->query->andWhere(['=','gold_sn', $model->gold_sn]);
+            if($model->parts_sn){
+                $dataProvider->query->andWhere(['=','parts_sn', $model->parts_sn]);
             }
             if($supplier_id){
                 $dataProvider->query->andWhere(['=','bill.supplier_id', $supplier_id]);
@@ -93,13 +96,13 @@ class PartsBillController extends BaseController
     {
         $bill_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-bill/index']));
         $model = $this->findModel($bill_id);
-        $model = $model ?? new WarehouseGoldBill();
+        $model = $model ?? new WarehousePartsBill();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $model->bill_type, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->partsBill->menuTabList($bill_id, $model->bill_type, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

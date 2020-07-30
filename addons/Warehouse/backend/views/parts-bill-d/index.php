@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_d', '退料单');
+$this->title = Yii::t('parts_bill_d', '退件单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -34,7 +34,8 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:100%;'],
+                    //'options' => ['style'=>'width:100%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -187,7 +188,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'template' => '{edit} {apply} {goods}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
+                                    if(in_array($model->bill_status, [\addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
@@ -195,7 +196,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'apply' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -203,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status,[BillStatusEnum::PENDING])){
+                                    if(in_array($model->bill_status,[\addons\Warehouse\common\enums\PartsBillStatusEnum::PENDING])){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -212,10 +213,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['gold-bill-d-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['parts-bill-d-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE) {
                                         return Html::delete(['delete', 'id' => $model->id],'取消');
                                     }
                                 },

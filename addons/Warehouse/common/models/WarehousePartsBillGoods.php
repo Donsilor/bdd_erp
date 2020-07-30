@@ -55,6 +55,7 @@ class WarehousePartsBillGoods extends BaseModel
             [['bill_no', 'parts_name', 'parts_sn', 'style_sn'], 'string', 'max' => 30],
             [['bill_type', 'parts_type', 'material_type', 'color', 'shape', 'size', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
+            [['supplier_id','creator_id','auditor_id'], 'safe']
         ];
     }
 
