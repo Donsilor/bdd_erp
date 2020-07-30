@@ -165,7 +165,7 @@ class StyleGiftController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->styleService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->styleService->parts->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
