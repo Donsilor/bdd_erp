@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                    'label' => '配件信息(金件编号/配件类型/配件重)',
+                                    'label' => '配件信息(配件编号/配件类型/配件重量)',
                                     'value' => function($model){
                                         $str = '';
                                         foreach ($model->partsGoods ?? [] as $partsGoods){
