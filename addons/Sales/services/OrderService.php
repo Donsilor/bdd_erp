@@ -92,6 +92,7 @@ class OrderService extends Service
         if($form->isNewRecord){
             $account = new OrderAccount();
             $account->order_id = $order->id;
+            $account->currency = $order->currency;
             if(false == $account->save()) {
                 throw new \Exception($this->getError($account));
             }
