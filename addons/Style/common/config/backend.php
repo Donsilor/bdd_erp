@@ -33,12 +33,12 @@ return [
                                     'route' => 'style/index',
                             ],
                             [
-                                'title' => '起版列表',
-                                'route' => 'qiban/index',
+                                    'title' => '起版列表',
+                                    'route' => 'qiban/index',
                             ],
                             [
-                                'title' => '待起版列表',
-                                'route' => 'qiban/apply',
+                                    'title' => '待起版列表',
+                                    'route' => 'qiban/apply',
                             ],
                             [
                                     'title' => '商品列表',
@@ -47,6 +47,10 @@ return [
                             [
                                     'title' => '裸钻列表',
                                     'route' => 'diamond/index',
+                            ],
+                            [
+                                    'title' => '赠品列表',
+                                    'route' => 'gift/index',
                             ],
                     ],
                     
@@ -92,24 +96,24 @@ return [
                                     'route' => 'attribute-spec/index',
                             ],
                             [
-                                'title' => '款式渠道',
-                                'route' => 'style-channel/index',
+                                    'title' => '款式渠道',
+                                    'route' => 'style-channel/index',
                             ],
                             [
-                                'title' => '款式来源',
-                                'route' => 'style-source/index',
+                                    'title' => '款式来源',
+                                    'route' => 'style-source/index',
                             ],
                             [
-                                'title' => '金损配置',
-                                'route' => 'gold-loss-rate/index',
+                                    'title' => '金损配置',
+                                    'route' => 'gold-loss-rate/index',
                             ],
                             [
-                                'title' => '材质税率信息',
-                                'route' => 'material-tax/index',
+                                    'title' => '材质税率信息',
+                                    'route' => 'material-tax/index',
                             ],
                             [
-                                'title' => '毛利率配置',
-                                'route' => 'profit-rate/index',
+                                    'title' => '毛利率配置',
+                                    'route' => 'profit-rate/index',
                             ],
 
 
