@@ -13,12 +13,12 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold', '领料信息');
+$this->title = Yii::t('parts', '领件信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $gold->gold_sn?> - <?= GoldStatusEnum::getValue($gold->gold_status)?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $parts->parts_sn?> - <?= \addons\Warehouse\common\enums\PartsStatusEnum::getValue($parts->parts_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12">
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'label' => '领料单号',
+                                'label' => '领件单号',
                                 'value' => function ($model){
                                     return $model->bill->bill_no ?? '';
                                 },
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'label' => '领料时间',
+                                'label' => '领件时间',
                                 'attribute'=>'audit_time',
                                 'filter' => false,
                                 'value' => function($model){
@@ -58,14 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '布产编号',
                                 'value' => function ($model){
-                                    return $model->produceGold->produce_sn ?? '';
+                                    return $model->produceParts->produce_sn ?? '';
                                 },
                                 'filter' => false,
                             ],
                             [
                                 'label' => '订单号',
                                 'value' => function ($model){
-                                    return $model->produceGold->from_order_sn ?? '';
+                                    return $model->produceParts->from_order_sn ?? '';
                                 },
                                 'filter' => false,
                             ],
@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],*/
                             [
                                 'label' => '领料克重(g)',
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'parts_weight',
                                 'filter' => false,
                             ],
                             /*[
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '状态',
                                 'value' => function ($model){
-                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
+                                    return \addons\Supply\common\enums\PeijianStatusEnum::getValue($model->produceParts->peijian_status ??0);
                                 },
                                 'filter' => false,
                             ],

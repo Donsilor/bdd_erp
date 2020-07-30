@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\models\WarehousePartsBill;
+use addons\Warehouse\common\models\WarehousePartsBillLog;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -20,9 +22,9 @@ class PartsBillLogController extends BaseController
     use Curd;
 
     /**
-     * @var Attribute
+     * @var WarehousePartsBillLog
      */
-    public $modelClass = WarehouseGoldBillLog::class;
+    public $modelClass = WarehousePartsBillLog::class;
     /**
     * 首页
     *
@@ -31,9 +33,8 @@ class PartsBillLogController extends BaseController
     public function actionIndex()
     {
         $bill_id = Yii::$app->request->get('bill_id');
-        $billInfo = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
         $tab = Yii::$app->request->get('tab');
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -45,27 +46,24 @@ class PartsBillLogController extends BaseController
             'relations' => [
                 'member' => ['username']
             ]
-
         ]);
-
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['created_at']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehousePartsBillLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehousePartsBillLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
-        $dataProvider->query->andWhere(['=','bill_id',$bill_id]);
-
-        return $this->render('index', [
+        $dataProvider->query->andWhere(['=','bill_id', $bill_id]);
+        $billInfo = WarehousePartsBill::find()->where(['id'=>$bill_id])->one();
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill_id' => $bill_id,
             'billInfo' => $billInfo,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id,$billInfo->bill_type,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->partsBill->menuTabList($bill_id,$billInfo->bill_type,$returnUrl),
         ]);
     }
 

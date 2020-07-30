@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Supply\common\models\Supplier;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -85,10 +87,34 @@ class WarehouseParts extends BaseModel
             'put_in_type' => '入库方式',
             'warehouse_id' => '所在仓库',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
     }
 }

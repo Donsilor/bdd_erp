@@ -2,23 +2,14 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use Yii;
 use common\components\Service;
-use common\helpers\SnHelper;
-use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\models\WarehouseStone;
-use addons\Warehouse\common\models\WarehouseStoneBill;
-use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
+use addons\Warehouse\common\models\WarehouseParts;
+use addons\Warehouse\common\models\WarehousePartsBill;
+use addons\Warehouse\common\models\WarehousePartsBillGoods;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\Url;
-use common\helpers\ArrayHelper;
 
 /**
  * 配件单据
@@ -119,12 +110,12 @@ class WarehousePartsBillService extends Service
      */
     public function partsBillSummary($bill_id)
     {
-        $sum = WarehouseGoldBillGoods::find()
-            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost'])
+        $sum = WarehousePartsBillGoods::find()
+            ->select(['sum(1) as total_num','sum(parts_weight) as total_weight','sum(cost_price) as total_cost'])
             ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
             ->asArray()->one();
         if($sum) {
-            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
+            $result = WarehousePartsBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
         }
         return $result?:null;
     }
@@ -135,23 +126,29 @@ class WarehousePartsBillService extends Service
      */
     public function createBillGoods($form)
     {
-        $stone = WarehouseStone::findOne(['stone_sn'=>$form->stone_sn]);
+        $parts = WarehouseParts::findOne(['parts_sn'=>$form->parts_sn]);
         $goods = [
             'bill_id' => $form->bill_id,
             'bill_no' => $form->bill_no,
             'bill_type' => $form->bill_type,
-            'stone_name' => $stone->stone_name,
-            'stone_type' => $stone->stone_type,
-            'stone_num' => $form->stone_num,
-            'stone_weight' => $form->stone_weight,
-            'color' => $stone->stone_color,
-            'clarity' => $stone->stone_clarity,
-            'cost_price' => $stone->cost_price,
-            'sale_price' => $stone->sale_price,
+            'parts_sn' => $parts->parts_sn,
+            'parts_name' => $parts->parts_name,
+            'style_sn' => $parts->style_sn,
+            'parts_type' => $parts->parts_type,
+            'material_type' => $parts->material_type,
+            'parts_num' => $form->stone_num,
+            'parts_weight' => $form->stone_weight,
+            'color' => $parts->color,
+            'shape' => $parts->shape,
+            'size' => $parts->size,
+            'chain_type' => $parts->chain_type,
+            'cramp_ring' => $parts->cramp_ring,
+            'cost_price' => $parts->cost_price,
+            'sale_price' => $parts->sale_price,
             'status' => StatusEnum::ENABLED,
             'created_at' => time()
         ];
-        $billGoods = new WarehouseStoneBillGoods();
+        $billGoods = new WarehousePartsBillGoods();
         $billGoods->attributes = $goods;
         if(false === $billGoods->save()) {
             throw new \Exception($this->getError($billGoods));

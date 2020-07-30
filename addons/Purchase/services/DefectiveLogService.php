@@ -4,15 +4,15 @@ namespace addons\Purchase\services;
 
 use Yii;
 use common\components\Service;
-use addons\Purchase\common\models\PurchaseReceiptLog;
+use addons\Purchase\common\models\PurchaseDefectiveLog;
 
 /**
  * 收货单日志
- * Class ReceiptLogService
+ * Class DefectiveLogService
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class ReceiptLogService extends Service
+class DefectiveLogService extends Service
 {
     public $switchQueue = false;
     /**
@@ -32,15 +32,15 @@ class ReceiptLogService extends Service
      * @throws
      * @return int
      */
-    public function createReceiptLog($log,$purchase_type)
+    public function createDefectiveLog($log)
     {
         if($this->switchQueue === true) {
             //队列
-            //$messageId = Yii::$app->queue->push(new ReceiptLogJob($log));
+            //$messageId = Yii::$app->queue->push(new DefectiveLogJob($log));
             //return $messageId;
         }else {
-            return $this->realCreateReceiptLog($log);
-        }      
+            return $this->realCreateDefectiveLog($log);
+        }
     }
     /**
      * 创建日志
@@ -48,9 +48,9 @@ class ReceiptLogService extends Service
      * @throws \Exception
      * @return object
      */
-    public function realCreateReceiptLog($log)
-    {        
-        $model = new PurchaseReceiptLog();
+    public function realCreateDefectiveLog($log)
+    {
+        $model = new PurchaseDefectiveLog();
         $model->attributes = $log;
         $model->log_time = time();
         $model->creator_id = \Yii::$app->user->id;

@@ -72,7 +72,10 @@ $form = ActiveForm::begin([
             </div>
             <div class="row">
             	<div class="col-lg-6"><?= $form->field($model, 'pay_remark')->textArea(['options'=>['maxlength' => true]])?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>
+            	<div class="col-lg-6"><?= $form->field($model, 'out_trade_no')->textArea(['options'=>['maxlength' => true]])?></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>            
             </div>
         </div>    
                    

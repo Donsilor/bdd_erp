@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('gold_bill_l', '金料入库单');
+$this->title = Yii::t('parts_bill_l', '配件入库单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -34,7 +34,8 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    //'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -88,7 +89,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
                                 'pluginOptions' => [
                                     'allowClear' => true,
-                                    'width' => '120',
+                                    'width' => '200',
                                 ],
                             ]),
                             'format' => 'raw',
@@ -109,14 +110,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],
+                        ],*/
                         [
                             'attribute'=>'total_num',
                             'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
-                        ],*/
+                        ],
                         [
                             'attribute'=>'total_weight',
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
@@ -152,7 +153,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'width:100px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -185,7 +186,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute' => 'bill_status',
                             'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                                return \addons\Warehouse\common\enums\PartsBillStatusEnum::getValue($model->bill_status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
@@ -203,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'template' => '{apply} {audit} {goods} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
+                                    if(in_array($model->bill_status, [\addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
@@ -211,7 +212,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'apply' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -219,7 +220,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status,[BillStatusEnum::PENDING])){
+                                    if(in_array($model->bill_status,[\addons\Warehouse\common\enums\PartsBillStatusEnum::PENDING])){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -228,10 +229,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['gold-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['parts-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\PartsBillStatusEnum::SAVE) {
                                         return Html::delete(['delete', 'id' => $model->id],'取消');
                                     }
                                 },

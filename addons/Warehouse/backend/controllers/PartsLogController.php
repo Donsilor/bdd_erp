@@ -2,15 +2,16 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+
 use common\helpers\Url;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseGold;
-use addons\Warehouse\common\models\WarehouseGoldLog;
+use addons\Warehouse\common\models\WarehouseParts;
+use addons\Warehouse\common\models\WarehousePartsLog;
 use common\traits\Curd;
 use Yii;
 
 /**
- * 金料库存日志
+ * 配件库存日志
  *
  * Class DefaultController
  * @package addons\Supply\backend\controllers
@@ -22,7 +23,7 @@ class PartsLogController extends BaseController
     /**
      * @var Attribute
      */
-    public $modelClass = WarehouseGoldLog::class;
+    public $modelClass = WarehousePartsLog::class;
     /**
     * 首页
     *
@@ -30,8 +31,9 @@ class PartsLogController extends BaseController
     */
     public function actionIndex()
     {
+        $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab', 2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index', 'id'=>$id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -45,24 +47,22 @@ class PartsLogController extends BaseController
             ]
 
         ]);
-
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['created_at']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehousePartsLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehousePartsLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $id = Yii::$app->request->get('id');
-        $dataProvider->query->andWhere(['=','gold_id', $id]);
-        $gold = WarehouseGold::find()->where(['id'=>$id])->one();
-        $dataProvider->query->andWhere(['>',WarehouseGoldLog::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=','parts_id', $id]);
+        $parts = WarehouseParts::find()->where(['id'=>$id])->one();
+        $dataProvider->query->andWhere(['>',WarehousePartsLog::tableName().'.status',-1]);
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'gold' => $gold,
+            'parts' => $parts,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->parts->menuTabList($id, $returnUrl),
         ]);
     }
 

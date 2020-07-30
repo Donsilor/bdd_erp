@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -64,5 +65,34 @@ class WarehousePartsLog extends BaseModel
             'created_at' => '操作时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->getId();
+            $this->creator = \Yii::$app->user->identity->username;
+        }
+        return parent::beforeSave($insert);
+    }
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id']);
+    }
+    /**
+     * 配件库存
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParts()
+    {
+        return $this->hasOne(WarehouseParts::class, ['id'=>'parts_id'])->alias('parts');
     }
 }

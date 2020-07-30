@@ -1,5 +1,6 @@
 <?php
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -11,7 +12,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $searchModel */
 
-$this->title = Yii::t('gold_bill', '出入库列表');
+$this->title = Yii::t('parts_bill', '出入库列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -26,18 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <?php $form = ActiveForm::begin(['action' => ['index'], 'method'=>'get']); ?>
                         <div class="col-xs-3">
-                            <?= $form->field($searchModel, 'gold_sn')->textInput(["placeholder"=>"请输入批次号"]) ?>
+                            <?= $form->field($searchModel, 'parts_sn')->textInput(["placeholder"=>"请输入批次号"]) ?>
                         </div>
                         <div class="col-xs-3" style="padding-top: 26px;padding-left: 0px;">
                             <?= Html::submitButton('搜索', ['class' => 'btn btn-primary btn-sm']) ?>
                         </div>
                     <?php ActiveForm::end(); ?>
                 </div>
-                <?php if(empty($model->gold_sn)){?>
+                <?php if(empty($model->parts_sn)){?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         //'options' => ['style'=>'width:120%;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
@@ -71,9 +73,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'bill_type',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                                    return \addons\Warehouse\common\enums\PartsBillTypeEnum::getValue($model->bill_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\PartsBillTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -113,14 +115,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => [],
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'total_num',
                                 'filter' => Html::activeTextInput($searchModel, 'total_num', [
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['width'=>'120'],
-                            ],*/
+                            ],
                             [
                                 'attribute'=>'total_weight',
                                 'filter' => Html::activeTextInput($searchModel, 'total_weight', [
@@ -189,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'bill_status',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
+                                    return \addons\Warehouse\common\enums\PartsBillStatusEnum::getValue($model->bill_status);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                     'prompt' => '全部',
@@ -207,7 +209,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'width:110%;'],
+                        //'options' => ['style'=>'width:110%;'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -227,16 +230,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'80'],
                             ],*/
                             [
-                                'attribute'=>'gold_sn',
+                                'attribute'=>'parts_sn',
                                 'filter' =>false,
                                 'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'attribute' => 'bill_type',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type);
+                                    return \addons\Warehouse\common\enums\PartsBillTypeEnum::getValue($model->bill_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\GoldBillTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'bill_type',\addons\Warehouse\common\enums\PartsBillTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -260,13 +263,95 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'bill.bill_status',
                                 'format' => 'raw',
                                 'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill->bill_status);
+                                    return \addons\Warehouse\common\enums\PartsBillStatusEnum::getValue($model->bill->bill_status);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'bill.bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'parts_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->parts_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'material_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->material_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'style_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'color',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->color);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'shape',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->shape);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'size',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'chain_type',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->chain_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'chain_type',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'cramp_ring',
+                                'value' => function ($model){
+                                    return Yii::$app->attr->valueName($model->cramp_ring);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             /*[
                                 'attribute' => 'to_warehouse_id',
@@ -283,17 +368,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => [],
-                            ],
+                            ],*/
                             [
-                                'attribute'=>'total_num',
-                                'filter' => Html::activeTextInput($searchModel, 'total_num', [
+                                'attribute'=>'parts_num',
+                                'filter' => Html::activeTextInput($searchModel, 'parts_num', [
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['width'=>'120'],
-                            ],*/
+                            ],
                             [
-                                'attribute'=>'gold_weight',
-                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                                'attribute'=>'parts_weight',
+                                'filter' => Html::activeTextInput($searchModel, 'parts_weight', [
                                     'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['width'=>'120'],
@@ -315,7 +400,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
-                                        'width' => '120',
+                                        'width' => '160',
                                     ],
                                 ]),
                                 'format' => 'raw',
@@ -334,7 +419,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'model' => $searchModel,
                                     'attribute' => 'bill.created_at',
                                     'value' => '',
-                                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                                    'options' => ['readonly' => false, 'class' => 'form-control', 'style'=> 'width:160px;'],
                                     'pluginOptions' => [
                                         'format' => 'yyyy-mm-dd',
                                         'locale' => [
@@ -366,7 +451,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'model' => $searchModel,
                                     'attribute' => 'bill.audit_time',
                                     'value' => '',
-                                    'options' => ['readonly' => true, 'class' => 'form-control', 'style'=> 'width:120px;'],
+                                    'options' => ['readonly' => false, 'class' => 'form-control', 'style'=> 'width:160px;'],
                                     'pluginOptions' => [
                                         'format' => 'yyyy-mm-dd',
                                         'locale' => [

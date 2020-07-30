@@ -21,34 +21,46 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择','disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
-               <div class="col-lg-6">
+               <div class="col-lg-4">
                    <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
                </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_name')->textInput() ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_sn')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_name')->textInput() ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_num')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_num')->textInput() ?>
                </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_weight')->textInput() ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_weight')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_price')->textInput() ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
-               <div class="col-lg-6">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'chain_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE),['prompt'=>'请选择']) ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'cramp_ring')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE),['prompt'=>'请选择']) ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'size')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'parts_price')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
                    <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
                </div>
            </div>

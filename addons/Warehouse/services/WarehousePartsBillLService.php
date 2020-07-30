@@ -12,7 +12,7 @@ use addons\Warehouse\common\forms\WarehousePartsBillLGoodsForm;
 use addons\Warehouse\common\enums\PartsStatusEnum;
 use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\PartsBillStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -24,11 +24,14 @@ use common\helpers\ArrayHelper;
  */
 class WarehousePartsBillLService extends Service
 {
+
     /**
      * 创建配件收货单(入库单)
-     * @param array $bill
-     * @param array $details
+     *
+     * @param WarehousePartsBill $bill
+     * @param WarehousePartsBillGoods $details
      * @throws
+     * @return
      */
     public function createPartsL($bill, $details){
         $billM = new WarehousePartsBill();
@@ -53,17 +56,26 @@ class WarehousePartsBillLService extends Service
         $key = array_keys($details[0]);
         foreach ($details as $detail) {
             $value[] = array_values($detail);
+            if(count($value)>10){
+                $res = \Yii::$app->db->createCommand()->batchInsert(WarehousePartsBillGoods::tableName(), $key, $value)->execute();
+                if(false === $res){
+                    throw new \Exception("创建收货单明细失败1");
+                }
+                $value=[];
+            }
         }
-        $res = \Yii::$app->db->createCommand()->batchInsert(WarehousePartsBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建收货单明细失败");
+        if(!empty($value)){
+            $res = \Yii::$app->db->createCommand()->batchInsert(WarehousePartsBillGoods::tableName(), $key, $value)->execute();
+            if(false === $res){
+                throw new \Exception("创建收货单明细失败2");
+            }
         }
         //单据汇总
         \Yii::$app->warehouseService->partsBill->partsBillSummary($billM->id);
         return $billM;
     }
     /**
-     * 审核金料收货单(入库单)
+     * 审核配件收货单(入库单)
      * @param object $form
      * @throws
      */
@@ -73,22 +85,28 @@ class WarehousePartsBillLService extends Service
             throw new \Exception($this->getError($form));
         }
         if($form->audit_status == AuditStatusEnum::PASS){
-            $form->bill_status = BillStatusEnum::CONFIRM;
-            $billGoods = WarehousePartsBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+            $form->bill_status = PartsBillStatusEnum::CONFIRM;
+            $billGoods = WarehousePartsBillGoods::find()->select(['parts_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
             if(empty($billGoods)){
                 throw new \Exception("单据明细不能为空");
             }
             //配件入库
-            $gold = WarehousePartsBillLGoodsForm::findAll(['bill_id'=>$form->id]);
+            $parts = WarehousePartsBillLGoodsForm::findAll(['bill_id'=>$form->id]);
             $ids = $g_ids = [];
-            foreach ($gold as $detail){
-                $goldM = new WarehouseParts();
+            foreach ($parts as $detail){
+                $partsM = new WarehouseParts();
                 $good = [
                     'parts_sn' => (string) rand(10000000000,99999999999),//临时
                     'parts_status' => PartsStatusEnum::IN_STOCK,
                     'style_sn' => $detail->style_sn,
                     'parts_name' => $detail->parts_name,
                     'parts_type' => $detail->parts_type,
+                    'material_type' => $detail->material_type,
+                    'shape' => $detail->shape,
+                    'color' => $detail->color,
+                    'size' => $detail->size,
+                    'chain_type' => $detail->chain_type,
+                    'cramp_ring' => $detail->cramp_ring,
                     'put_in_type' => $form->put_in_type,
                     'supplier_id' => $form->supplier_id,
                     'parts_num' => $detail->parts_num,
@@ -102,11 +120,11 @@ class WarehousePartsBillLService extends Service
                     'created_at' => time(),
 
                 ];
-                $goldM->attributes = $good;
-                if(false === $goldM->save()){
-                    throw new \Exception($this->getError($goldM));
+                $partsM->attributes = $good;
+                if(false === $partsM->save()){
+                    throw new \Exception($this->getError($partsM));
                 }
-                $id = $goldM->attributes['id'];
+                $id = $partsM->attributes['id'];
                 $ids[] = $id;
                 $g_ids[$id] = $detail->id;
             }
@@ -133,7 +151,7 @@ class WarehousePartsBillLService extends Service
                 }
             }
         }else{
-            $form->bill_status = BillStatusEnum::SAVE;
+            $form->bill_status = PartsBillStatusEnum::SAVE;
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));

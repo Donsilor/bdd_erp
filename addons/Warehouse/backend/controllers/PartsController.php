@@ -5,10 +5,10 @@ namespace addons\Warehouse\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseGold;
-use addons\Warehouse\common\forms\WarehouseGoldForm;
-use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\models\WarehouseParts;
+use addons\Warehouse\common\forms\WarehousePartsForm;
+use addons\Warehouse\common\forms\WarehousePartsBillGoodsForm;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
 use addons\Supply\common\models\Supplier;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
@@ -16,12 +16,12 @@ use common\helpers\PageHelper;
 use common\helpers\Url;
 
 /**
- * StyleChannelController implements the CRUD actions for StyleChannel model.
+ * PartsController implements the CRUD actions for StyleChannel model.
  */
 class PartsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGoldForm::class;
+    public $modelClass = WarehousePartsForm::class;
     /**
      * Lists all StyleChannel models.
      * @return mixed
@@ -32,7 +32,7 @@ class PartsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['gold_name'], // 模糊查询
+            'partialMatchAttributes' => ['parts_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -47,11 +47,11 @@ class PartsController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGold::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGold::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseParts::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseParts::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',WarehouseGold::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseParts::tableName().'.status',-1]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -77,26 +77,28 @@ class PartsController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldForm();
+        $model = $model ?? new WarehousePartsForm();
         $bill = $model->getBillInfo();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->parts->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
             'bill'=>$bill,
         ]);
     }
 
     /**
-     * 领料信息
+     * 领件信息
      * @return mixed
+     * @throws
      */
-    public function actionLingliao()
+    public function actionLingjian()
     {
-        $this->modelClass = new WarehouseGoldBillGoodsForm();
+        $id = \Yii::$app->request->get('id');
+        $this->modelClass = new WarehousePartsBillGoodsForm();
         $tab = \Yii::$app->request->get('tab',2);
-        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['gold/index']));
+        $returnUrl = \Yii::$app->request->get('returnUrl',Url::to(['parts/index', 'id'=>$id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -113,33 +115,31 @@ class PartsController extends BaseController
             ->search(Yii::$app->request->queryParams,['created_at']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillGoodsForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillGoodsForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehousePartsBillGoodsForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehousePartsBillGoodsForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $id = \Yii::$app->request->get('id');
-        $gold = WarehouseGold::findOne(['id'=>$id]);
-        $dataProvider->query->andWhere(['=', 'gold_sn', $gold->gold_sn]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
+        $parts = WarehouseParts::findOne(['id'=>$id]);
+        $dataProvider->query->andWhere(['=', 'parts_sn', $parts->parts_sn]);
+        $dataProvider->query->andWhere(['>',WarehousePartsBillGoodsForm::tableName().'.status',-1]);
 
-        $dataProvider->query->andWhere(['=', 'bill.bill_type', GoldBillTypeEnum::GOLD_C]);
+        $dataProvider->query->andWhere(['=', 'bill.bill_type', PartsBillTypeEnum::PARTS_C]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'gold' => $gold,
+            'parts' => $parts,
             'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->parts->menuTabList($id, $returnUrl),
         ]);
     }
 
     /**
      * @param null $ids
      * @return bool|mixed
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws
      */
     public function actionExport($ids = null){
-        $name = '金料';
+        $name = '配件';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -148,24 +148,29 @@ class PartsController extends BaseController
         }
         list($list,) = $this->getData($ids);
         $header = [
-            ['批次号', 'gold_sn' , 'text'],
+            ['批次号', 'parts_sn' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
-            ['金料类型', 'gold_type' , 'text'],
-            ['金料名称', 'gold_name' , 'text'],
-            ['金料款号', 'style_sn' , 'text'],
-            ['金料数量', 'gold_num' , 'text'],
-            ['库存重量(g)', 'gold_weight' , 'text'],
-            ['金料单价', 'gold_price' , 'text'],
+            ['配件类型', 'parts_type' , 'text'],
+            ['配件名称', 'parts_name' , 'text'],
+            ['配件款号', 'style_sn' , 'text'],
+            ['配件材质', 'material_type' , 'text'],
+            ['配件形状', 'shape' , 'text'],
+            ['配件颜色', 'color' , 'text'],
+            ['链类型', 'chain_type' , 'text'],
+            ['扣环', 'cramp_ring' , 'text'],
+            ['尺寸', 'size' , 'text'],
+            ['配件数量', 'parts_num' , 'text'],
+            ['库存重量(g)', 'parts_weight' , 'text'],
+            ['配件单价', 'parts_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
-
     private function getData($ids){
         $select = ['g.*','sup.supplier_name'];
-        $query = WarehouseGold::find()->alias('g')
+        $query = WarehouseParts::find()->alias('g')
             ->leftJoin(Supplier::tableName().' sup','sup.id=g.supplier_id')
             ->where(['g.id' => $ids])
             ->select($select);
@@ -175,7 +180,12 @@ class PartsController extends BaseController
 
         ];
         foreach ($lists as &$list){
-            $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+            $list['parts_type'] = \Yii::$app->attr->valueName($list['parts_type']);
+            $list['material_type'] = \Yii::$app->attr->valueName($list['material_type']);
+            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
+            $list['color'] = \Yii::$app->attr->valueName($list['color']);
+            $list['chain_type'] = \Yii::$app->attr->valueName($list['chain_type']);
+            $list['cramp_ring'] = \Yii::$app->attr->valueName($list['cramp_ring']);
         }
         return [$lists,$total];
     }
