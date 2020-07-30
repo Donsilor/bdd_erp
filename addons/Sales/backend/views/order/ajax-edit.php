@@ -143,6 +143,8 @@ function fillCustomerFormByEmail(){
                 success: function (data) {
                     if (parseInt(data.code) == 200 && data.data) {    
                        if($.isEmptyObject(data.data) == false) { 
+                    	   $("#"+formId+"-customer_email_1").val(data.data.email).attr("readonly",false);
+                           $("#"+formId+"-customer_email_2").val(data.data.email).attr("readonly",false);
                     	   $("#"+formId+"-customer_mobile_2").val(data.data.mobile).attr("readonly",false); 
                     	   $("#"+formId+"-customer_mobile_1").val(data.data.mobile).attr("readonly",false);                 
                      	   $("#"+formId+"-customer_name").val(data.data.realname).attr("readonly",false);                  	  
@@ -161,12 +163,19 @@ $("#"+formId+"-customer_mobile_1").blur(function(){
 	if($("#"+formId+"-sale_channel_id").val() != 3){
 		fillCustomerFormByMobile();
 	}
+	$("#"+formId+"-customer_mobile_2").val($(this).val());
 });
- $("#"+formId+"-customer_email_2").blur(function(){
+$("#"+formId+"-customer_mobile_2").blur(function(){
+	$("#"+formId+"-customer_mobile_1").val($(this).val());
+});
+$("#"+formId+"-customer_email_1").blur(function(){
+	$("#"+formId+"-customer_email_2").val($(this).val());
+});
+$("#"+formId+"-customer_email_1").blur(function(){
 	if($("#"+formId+"-sale_channel_id").val() ==3){
 		fillCustomerFormByEmail();
 	}
-});  
+});
 $("#"+formId+"-sale_channel_id").change(function(){
 	if($(this).val()==3) {
         $("#customer_info_email").show();

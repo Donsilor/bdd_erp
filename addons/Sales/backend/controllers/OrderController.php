@@ -106,11 +106,13 @@ class OrderController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        //初始化
+        //初始化 默认值
         $model->customer_email_1 = $model->customer_email;
         $model->customer_email_2 = $model->customer_email;
         $model->customer_mobile_1 = $model->customer_mobile;
         $model->customer_mobile_2 = $model->customer_mobile;
+        $model->customer_source = $model->customer->source_id ?? '';
+        $model->customer_level = $model->customer->level ?? '';
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);

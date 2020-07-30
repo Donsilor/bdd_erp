@@ -21,18 +21,22 @@ class OrderForm extends Order
     public $customer_mobile_2;
     public $customer_email_1;
     public $customer_email_2;
+    public $customer_source;
+    public $customer_level;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
+                [['pay_type'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
                     if($this->sale_channel_id != 3) {
                         if($value == '') {
                             return true;
                         }
                     }
+                    return false;
                 }],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
                     if($this->sale_channel_id == 3 ) {
@@ -40,10 +44,12 @@ class OrderForm extends Order
                             return true;
                         }
                     }
+                    return false;
                 }],
                 [['customer_email_1','customer_email_2'], 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
                 [['customer_mobile_1','customer_mobile_2'], 'string', 'max' => 30],
-                [['customer_mobile_1','customer_email_2'],'buildCustomerInfo']
+                [['customer_mobile_1','customer_email_2'],'buildCustomerInfo'],
+                [['customer_source','customer_level'],'safe']
         ];
         return ArrayHelper::merge(parent::rules(),$rules);
     }    
@@ -57,7 +63,9 @@ class OrderForm extends Order
                 'customer_mobile_1'=>'客户手机',
                 'customer_mobile_2'=>'客户手机',
                 'customer_email_1'=>'客户邮箱',
-                'customer_email_2'=>'客户邮箱'
+                'customer_email_2'=>'客户邮箱',
+                'customer_source' => '客户来源',
+                'customer_level' => '客户级别',
         ]);
     }
     
