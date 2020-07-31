@@ -3,6 +3,8 @@
 namespace addons\Purchase\common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "purchase_gift_log".
@@ -57,6 +59,22 @@ class PurchaseGiftLog extends BaseModel
             'creator' => '操作人',
             'creator_id' => 'Creator ID',
             'created_at' => '创建时间',
+        ];
+    }
+    /**
+     * behaviors
+     * {@inheritDoc}
+     * @see \yii\base\Component::behaviors()
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
         ];
     }
 }

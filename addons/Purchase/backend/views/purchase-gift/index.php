@@ -9,12 +9,11 @@ use addons\Purchase\common\enums\PurchaseStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '配件采购单';
+$this->title = '赠品采购单';
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
 ?>
-
 <div class="row">
     <div class="col-sm-12">
         <div class="box">
@@ -194,7 +193,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('商品列表', ['purchase-parts-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('商品列表', ['purchase-gift-goods/index', 'purchase_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'apply' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){

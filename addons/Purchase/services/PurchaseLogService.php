@@ -40,7 +40,7 @@ class PurchaseLogService extends Service
         return $this;
     }
     /**
-     * 收货单日志
+     * 采购单日志
      * @param array $log
      * @throws
      * @return int

@@ -2,25 +2,21 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\models\PurchaseGift;
 use Yii;
-use common\models\base\SearchModel;
 use common\traits\Curd;
 use common\helpers\ResultHelper;
-use addons\Purchase\common\enums\PurchaseTypeEnum;
+use common\models\base\SearchModel;
+use addons\Purchase\common\models\PurchaseGift;
 use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
-use common\helpers\Url;
-use addons\Purchase\common\forms\PurchaseGoodsForm;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 use common\enums\AuditStatusEnum;
-use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
-use addons\Purchase\common\forms\PurchaseGoldGoodsForm;
-use addons\Purchase\common\models\PurchaseGold;
+use common\helpers\Url;
 
 /**
  * Attribute
  *
  * Class AttributeController
- * @property PurchaseGoodsForm $modelClass
+ * @property PurchaseGiftGoodsForm $modelClass
  * @package backend\modules\goods\controllers
  */
 class PurchaseGiftGoodsController extends BaseController
@@ -28,7 +24,7 @@ class PurchaseGiftGoodsController extends BaseController
     use Curd;
     
     /**
-     * @var PurchaseGoldGoodsForm
+     * @var PurchaseGiftGoodsForm
      */
     public $modelClass = PurchaseGiftGoodsForm::class;
     /**
@@ -70,7 +66,7 @@ class PurchaseGiftGoodsController extends BaseController
     }
     /**
      * 编辑/创建
-     * @var PurchaseGoodsForm $model
+     * @var PurchaseGiftGoodsForm $model
      * @return mixed
      */
     public function actionEdit()
@@ -114,12 +110,12 @@ class PurchaseGiftGoodsController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $this->modelClass = PurchaseGoodsForm::class;
+        $this->modelClass = PurchaseGiftGoodsForm::class;
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
                 'model' => $model,
@@ -141,7 +137,7 @@ class PurchaseGiftGoodsController extends BaseController
             
             $trans = Yii::$app->trans->beginTransaction();
             
-            $purchase = PurchaseGold::find()->where(['id'=>$purchase_id])->one();
+            $purchase = PurchaseGiftGoodsForm::find()->where(['id'=>$purchase_id])->one();
             if($purchase->audit_status != AuditStatusEnum::PENDING) {
                 throw new \Exception("采购单已审核,不允许删除",422);
             }
@@ -166,7 +162,7 @@ class PurchaseGiftGoodsController extends BaseController
     }
     /**
      * 申请编辑
-     * @property PurchaseGoodsForm $model
+     * @property PurchaseGiftGoodsForm $model
      * @return mixed
      */
     public function actionApplyEdit()
@@ -201,16 +197,16 @@ class PurchaseGiftGoodsController extends BaseController
     }
     /**
      * 查看审批
-     * @property PurchaseGoodsForm $model
+     * @property PurchaseGiftGoodsForm $model
      * @return mixed
      */
     public function actionApplyView()
     {
         
         $id = Yii::$app->request->get('id');
-        $this->modelClass = PurchaseGoodsForm::class;
+        $this->modelClass = PurchaseGiftGoodsForm::class;
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseGoldGoodsForm();
+        $model = $model ?? new PurchaseGiftGoodsForm();
         $model->initApplyView();
         
         return $this->render($this->action->id, [
@@ -220,7 +216,7 @@ class PurchaseGiftGoodsController extends BaseController
     }
     /**
      * 申请编辑-审核(ajax)
-     * @property PurchaseGoodsForm $model
+     * @property PurchaseGiftGoodsForm $model
      * @return mixed
      */
     public function actionApplyAudit()
@@ -230,9 +226,9 @@ class PurchaseGiftGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');
         
-        $this->modelClass = PurchaseGoodsForm::class;
+        $this->modelClass = PurchaseGiftGoodsForm::class;
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseGoldGoodsForm();
+        $model = $model ?? new PurchaseGiftGoodsForm();
         
         $form  = new PurchaseGoodsAuditForm();
         $form->id = $id;
@@ -252,7 +248,7 @@ class PurchaseGiftGoodsController extends BaseController
                 $model->is_apply = 0;
                 $model->save(false);
                 //金额汇总
-                Yii::$app->purchaseService->gold->purchaseSummary($model->purchase_id);                
+                Yii::$app->purchaseService->gift->purchaseSummary($model->purchase_id);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){

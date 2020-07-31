@@ -8,7 +8,7 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '配件采购详情';
+$this->title = '赠品采购详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                                 'data-toggle' => 'modal',
                                 'class' => 'btn btn-primary btn-ms',
-                                'data-target' => '#ajaxModalLg',
+                                'data-target' => '#ajaxModal',
                             ]);
                         }
                     ?>

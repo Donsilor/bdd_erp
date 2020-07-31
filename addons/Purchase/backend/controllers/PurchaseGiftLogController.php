@@ -5,8 +5,8 @@ namespace addons\Purchase\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Purchase\common\models\PurchaseParts;
-use addons\Purchase\common\models\PurchasePartsLog;
+use addons\Purchase\common\models\PurchaseGift;
+use addons\Purchase\common\models\PurchaseGiftLog;
 
 /**
  * 采购日志
@@ -14,13 +14,13 @@ use addons\Purchase\common\models\PurchasePartsLog;
  * Class PurchaseLogController
  * @package addons\Purchase\backend\controllers
  */
-class PurchasePartsLogController extends BaseController
+class PurchaseGiftLogController extends BaseController
 {
     use Curd;
     /**
-     * @var PurchaseLog
+     * @var PurchaseGiftLog
      */
-    public $modelClass = PurchasePartsLog::class;
+    public $modelClass = PurchaseGiftLog::class;
 
     /**
      * Lists all PurchaseChannel models.
@@ -30,7 +30,7 @@ class PurchasePartsLogController extends BaseController
     {
         $purchase_id = Yii::$app->request->get('purchase_id');     
         
-        $purchase = PurchaseParts::find()->where(['id'=>$purchase_id])->one();
+        $purchase = PurchaseGift::find()->where(['id'=>$purchase_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
@@ -45,14 +45,14 @@ class PurchasePartsLogController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         
-        $dataProvider->query->andWhere(['=',PurchasePartsLog::tableName().'.purchase_id',$purchase_id]);
+        $dataProvider->query->andWhere(['=',PurchaseGiftLog::tableName().'.purchase_id',$purchase_id]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'purchase' => $purchase,
                 'tab'=>Yii::$app->request->get('tab',3),
-                'tabList'=>\Yii::$app->purchaseService->parts->menuTabList($purchase_id,$this->returnUrl),
+                'tabList'=>\Yii::$app->purchaseService->gift->menuTabList($purchase_id,$this->returnUrl),
         ]);
     }
     
