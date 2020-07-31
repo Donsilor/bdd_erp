@@ -29,8 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
         			     </div>
         			     <?php }else{?>
-        			     <div class="col-lg-4">         
-                			<?= $form->field($model, 'goods_sn')->textInput(['disabled'=>'disabled']) ?>
+        			     <div class="col-lg-4">
+                             <?php
+                             $disabled = ['disabled'=>'disabled'];
+                             if($model->qiban_type == QibanTypeEnum::NON_VERSION ){
+                                 //非起版
+                                 $is_exeist = Yii::$app->styleService->style->isExist($model->goods_sn);
+                                 if(!$is_exeist){
+                                     $disabled = [];
+                                 }
+                             }else{
+                                 //起版
+                                 $is_exeist = Yii::$app->styleService->qiban->isExist($model->goods_sn);
+                                 if(!$is_exeist){
+                                     $disabled = [];
+                                 }
+                             }
+                             ?>
+                			<?= $form->field($model, 'goods_sn')->textInput($disabled) ?>
             			 </div>
         			     <?php }?>
         			     <div class="col-lg-4">

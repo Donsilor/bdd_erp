@@ -366,8 +366,9 @@ class OrderService extends Service
                 $order_account->order_id = $order_id;
             }
             $order_account->discount_amount = $sum['total_goods_discount'];
-            $order_account->goods_amount = $sum['total_goods_price'];
-            $order_account->order_amount = $sum['total_pay_price'];
+            $order_account->goods_amount = $sum['total_pay_price'];
+            $order_account->order_amount = $order_account->goods_amount + $order_account->shipping_fee + $order_account->tax_fee + $order_account->safe_fee
+                        + $order_account->other_fee; // 商品总金额+运费，税费，保险费
             $order_account->pay_amount = $order_account->order_amount - $order_account->discount_amount;
             $order_account->save();
         }

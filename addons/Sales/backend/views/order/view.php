@@ -213,7 +213,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                     [
                                         'attribute'=>'style_sn',
-                                        'value' => 'style_sn',
+                                        'value' => function($model){
+                                            $style_sn = $model->style_sn;
+                                            $is_exist = Yii::$app->styleService->style->isExist($style_sn);
+                                            if(!$is_exist && $style_sn){
+                                                $style_sn = "<font color='red'>{$style_sn}（erp无此款）</font>";
+                                            }
+                                            return $style_sn;
+                                        },
+                                        'format' => 'raw',
                                         'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
