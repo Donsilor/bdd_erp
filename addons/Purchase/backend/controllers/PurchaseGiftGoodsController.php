@@ -284,7 +284,7 @@ class PurchaseGiftGoodsController extends BaseController
         $model->ids = $ids;
         if($check){
             try{
-                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_PARTS);
+                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_GIFT);
                 return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
@@ -294,7 +294,7 @@ class PurchaseGiftGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 //同步采购单至采购收货单
-                \Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_PARTS, $model->getIds());
+                \Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_GIFT, $model->getIds());
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','操作成功');
                 return ResultHelper::json(200, '操作成功');

@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('parts_receipt', '配件收货单');
+$this->title = Yii::t('gift_receipt', '赠品收货单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -225,7 +225,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'goods' => function($url, $model, $key){
-                        return Html::a('单据明细', ['parts-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('单据明细', ['gift-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
                     'delete' => function($url, $model, $key){
                         if($model->receipt_status == ReceiptStatusEnum::SAVE) {
