@@ -8,27 +8,28 @@ use addons\Purchase\common\models\Purchase;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Purchase\common\enums\DefectiveStatusEnum;
-use addons\Purchase\common\enums\PurchaseTypeEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 use addons\Purchase\common\models\PurchasePartsReceiptGoods;
-use addons\Warehouse\common\enums\PartsBillStatusEnum;
-use addons\Warehouse\common\enums\PartsBillTypeEnum;
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Warehouse\common\enums\WarehouseIdEnum;
-use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Purchase\common\models\PurchaseGiftReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
-use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Warehouse\common\models\WarehouseStone;
 use addons\Supply\common\models\ProduceGold;
 use addons\Supply\common\models\ProduceGoldGoods;
 use addons\Supply\common\models\ProduceStone;
 use addons\Supply\common\models\ProduceStoneGoods;
-use addons\Warehouse\common\models\WarehouseStone;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceShipment;
+use addons\Purchase\common\enums\DefectiveStatusEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\PartsBillStatusEnum;
+use addons\Warehouse\common\enums\PartsBillTypeEnum;
+use addons\Warehouse\common\enums\WarehouseIdEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
@@ -116,6 +117,19 @@ class PurchaseReceiptService extends Service
                     }
                     break;
                 }
+            case PurchaseTypeEnum::MATERIAL_GIFT:
+                {
+                    $tabList = [
+                        1=>['name'=>'基础信息','url'=>Url::to(['gift-receipt/view','id'=>$receipt_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        4=>['name'=>'日志信息','url'=>Url::to(['receipt-log/index','receipt_id'=>$receipt_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                    ];
+                    if($tag!=3){
+                        $tab = [2=>['name'=>'单据明细','url'=>Url::to(['gift-receipt-goods/index','receipt_id'=>$receipt_id,'tab'=>2,'returnUrl'=>$returnUrl])]];
+                    }else{
+                        $tab = [3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gift-receipt-goods/edit-all','receipt_id'=>$receipt_id,'tab'=>3,'returnUrl'=>$returnUrl])]];
+                    }
+                    break;
+                }
         }
         $tabList = ArrayHelper::merge($tabList, $tab);
         ksort($tabList);
@@ -146,6 +160,10 @@ class PurchaseReceiptService extends Service
             $model = new PurchasePartsReceiptGoods();
             $parts = ["sum(goods_weight) as total_weight"];
             $select = ArrayHelper::merge($select, $parts);
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+            $model = new PurchaseGiftReceiptGoods();
+            $parts = ["sum(goods_weight) as total_weight"];
+            $select = ArrayHelper::merge($select, $parts);
         }else{
             $model = new PurchaseReceiptGoods();
         }
@@ -166,6 +184,8 @@ class PurchaseReceiptService extends Service
                 $data['total_stone_num'] = $sum['total_stone_num']/1;
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
                 $data['total_weight'] = $sum['total_weight']/1;
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+                $data['total_weight'] = $sum['total_weight']/1;
             }
             $result = PurchaseReceipt::updateAll($data, ['id'=>$receipt_id]);
         }
@@ -176,7 +196,7 @@ class PurchaseReceiptService extends Service
      * 创建采购收货单
      * @param array $bill
      * @param array $detail
-     * @throws \Exception
+     * @throws
      */
     public function createReceipt($bill, $detail)
     {
@@ -198,6 +218,8 @@ class PurchaseReceiptService extends Service
                 $goods = new PurchaseGoldReceiptGoods();
             }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
                 $goods = new PurchasePartsReceiptGoods();
+            }elseif($billM->purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+                $goods = new PurchaseGiftReceiptGoods();
             }else{
                 $goods = new PurchaseReceiptGoods();
             }

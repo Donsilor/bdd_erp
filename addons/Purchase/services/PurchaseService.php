@@ -249,7 +249,7 @@ class PurchaseService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
-            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_shape'] = $model->stone_shape;
                 $goods[$k]['goods_color'] = $model->stone_color;
@@ -261,14 +261,13 @@ class PurchaseService extends Service
                 $goods[$k]['goods_colour'] = $model->stone_colour;
                 $goods[$k]['cert_type'] = $model->cert_type;
                 $goods[$k]['cert_id'] = $model->cert_id;
-                $goods[$k]['goods_norms'] =  $model->spec_remark;
-                $goods[$k]['goods_size'] =  $model->stone_size;
+                $goods[$k]['goods_norms'] = $model->spec_remark;
+                $goods[$k]['goods_size'] = $model->stone_size;
                 $goods[$k]['stone_num'] = $model->stone_num;
                 $goods[$k]['stone_price'] = $model->stone_price;
                 $goods[$k]['channel_id'] = $model->channel_id;
-
                 $total_stone_num = bcadd($total_stone_num, $model->stone_num);
-            }else{
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
                 $goods[$k]['parts_type'] = $model->parts_type;
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['goods_shape'] = $model->goods_shape;
@@ -277,6 +276,21 @@ class PurchaseService extends Service
                 $goods[$k]['chain_type'] = $model->chain_type;
                 $goods[$k]['cramp_ring'] =  $model->cramp_ring;
                 $goods[$k]['parts_price'] = $model->gold_price;
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+                $goods[$k]['product_type_id'] = $model->product_type_id;
+                $goods[$k]['style_cate_id'] = $model->style_cate_id;
+                $goods[$k]['style_sex'] = $model->style_sex;
+                $goods[$k]['material_type'] = $model->material_type;
+                $goods[$k]['material_color'] = $model->material_color;
+                $goods[$k]['finger'] = $model->finger;
+                $goods[$k]['finger_hk'] = $model->finger_hk;
+                $goods[$k]['chain_length'] = $model->chain_length;
+                $goods[$k]['main_stone_type'] = $model->main_stone_type;
+                $goods[$k]['main_stone_num'] = $model->main_stone_num;
+                $goods[$k]['goods_size'] =  $model->goods_size;
+                $goods[$k]['gold_price'] = $model->gold_price;
+            }else{
+                //成品采购
             }
             $total_weight = bcadd($total_weight, $model->goods_weight, 3);
             $total_cost = bcadd($total_cost, $model->cost_price, 2);

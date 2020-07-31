@@ -271,9 +271,10 @@ class PurchaseGiftGoodsController extends BaseController
     }
 
     /**
-     * 分批收货
      *
+     * 分批收货
      * @return mixed
+     * @throws
      */
     public function actionWarehouse()
     {
