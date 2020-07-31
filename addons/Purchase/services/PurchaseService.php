@@ -2,39 +2,34 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use addons\Purchase\common\forms\PurchasePartsGoodsForm;
-use addons\Purchase\common\models\PurchaseGold;
-use addons\Purchase\common\models\PurchaseGoldGoods;
-use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
-use addons\Purchase\common\models\PurchaseParts;
-use addons\Purchase\common\models\PurchasePartsGoods;
-use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Purchase\common\models\PurchaseStone;
-use addons\Purchase\common\models\PurchaseStoneGoods;
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\PutInTypeEnum;
-use common\enums\ConfirmEnum;
-use common\helpers\ArrayHelper;
 use Yii;
-use common\components\Service;
-use common\enums\AuditStatusEnum;
 use common\helpers\Url;
-use common\enums\StatusEnum;
-
+use common\components\Service;
 use addons\Purchase\common\models\Purchase;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Purchase\common\models\PurchaseGift;
+use addons\Purchase\common\models\PurchaseGiftGoods;
+use addons\Purchase\common\models\PurchaseGold;
+use addons\Purchase\common\models\PurchaseGoldGoods;
+use addons\Purchase\common\models\PurchaseParts;
+use addons\Purchase\common\models\PurchasePartsGoods;
+use addons\Purchase\common\models\PurchaseStone;
+use addons\Purchase\common\models\PurchaseStoneGoods;
 use addons\Purchase\common\models\PurchaseLog;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Purchase\common\models\PurchaseGoods;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
-use yii\db\Exception;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Supply\common\enums\PeiliaoTypeEnum;
-use addons\Supply\common\enums\PeishiStatusEnum;
-use addons\Supply\common\enums\PeiliaoStatusEnum;
 use addons\Supply\common\enums\PeishiTypeEnum;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
+use common\enums\ConfirmEnum;
+use common\helpers\ArrayHelper;
+use yii\db\Exception;
 
 /**
  * Class PurchaseService
@@ -43,26 +38,23 @@ use addons\Supply\common\enums\PeishiTypeEnum;
  */
 class PurchaseService extends Service
 {
-    
     /**
      * 采购单菜单
-     * @param int $id 款式ID
-     * @return array
+     * @param int $purchase_id 采购ID
+     * @return array $returnUrl
      */
     public function menuTabList($purchase_id, $returnUrl = null)
     {
-
-            return [
-                    1=>['name'=>'基础信息','url'=>Url::to(['purchase/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                    2=>['name'=>'采购商品','url'=>Url::to(['purchase-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-                    3=>['name'=>'日志信息','url'=>Url::to(['purchase-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
-            ];
-
+        return [
+                1=>['name'=>'基础信息','url'=>Url::to(['purchase/view','id'=>$purchase_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                2=>['name'=>'采购商品','url'=>Url::to(['purchase-goods/index','purchase_id'=>$purchase_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                3=>['name'=>'日志信息','url'=>Url::to(['purchase-log/index','purchase_id'=>$purchase_id,'tab'=>3,'returnUrl'=>$returnUrl])]
+        ];
     }
     
     /**
      * 采购单汇总
-     * @param unknown $purchase_id
+     * @param int $purchase_id
      */
     public function purchaseSummary($purchase_id) 
     {
@@ -77,8 +69,8 @@ class PurchaseService extends Service
     
     /**
     * 同步采购单生成布产单
-    * @param unknown $purchase_id
-    * @param unknown $detail_ids
+    * @param int $purchase_id
+    * @param array $detail_ids
     * @throws \Exception
     */
     public function syncPurchaseToProduce($purchase_id, $detail_ids = null)
@@ -162,6 +154,7 @@ class PurchaseService extends Service
      * 采购收货验证
      * @param object $form
      * @param int $purchase_type
+     * @throws
      */
     public function receiptValidate($form, $purchase_type)
     {
@@ -171,8 +164,12 @@ class PurchaseService extends Service
                 $model = new PurchaseStoneGoods();
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $model = new PurchaseGoldGoods();
-            }else{
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
                 $model = new PurchasePartsGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+                $model = new PurchaseGiftGoods();
+            }else{
+                $model = new PurchaseGoods();
             }
             foreach ($ids as $id) {
                 $goods = $model::findOne(['id'=>$id]);
@@ -202,9 +199,15 @@ class PurchaseService extends Service
         }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
             $model = new PurchaseGoldGoods();
             $PurchaseModel = new PurchaseGold();
-        }else{
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
             $model = new PurchasePartsGoods();
             $PurchaseModel = new PurchaseParts();
+        }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
+            $model = new PurchaseGiftGoods();
+            $PurchaseModel = new PurchaseGift();
+        }else{
+            $model = new PurchaseGoods();
+            $PurchaseModel = new Purchase();
         }
         if(!empty($detail_ids)) {
             $goods = $model::find()->select('purchase_id')->where(['id'=>$detail_ids[0]])->one();

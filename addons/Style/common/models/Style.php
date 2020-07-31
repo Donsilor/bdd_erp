@@ -14,6 +14,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $style_sn 款式编号
  * @property int $style_cate_id 产品分类
  * @property int $product_type_id 产品线
+ * @property int $style_sex 性别
  * @property string $style_image 商品主图
  * @property string $style_material 款式材质
  * @property string $sale_price 销售价

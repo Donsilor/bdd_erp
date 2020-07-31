@@ -7,6 +7,7 @@ namespace addons\Purchase\services;
  * Class ReceiptLogService
 */
 
+use addons\Purchase\common\models\PurchaseGiftLog;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\PurchaseReceiptLog;
@@ -39,7 +40,7 @@ class PurchaseLogService extends Service
         return $this;
     }
     /**
-     * 收货单日志
+     * 采购单日志
      * @param array $log
      * @throws
      * @return int
@@ -75,6 +76,10 @@ class PurchaseLogService extends Service
             }
             case  PurchaseTypeEnum::MATERIAL_PARTS :{
                 $model = new PurchasePartsLog();
+                break;
+            }
+            case  PurchaseTypeEnum::MATERIAL_GIFT :{
+                $model = new PurchaseGiftLog();
                 break;
             }
             default:{
