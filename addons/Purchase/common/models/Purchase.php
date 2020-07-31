@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Style\common\models\StyleChannel;
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
@@ -141,5 +142,14 @@ class Purchase extends BaseModel
     public function getAuditor()
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
+    }
+
+    /**
+     * 渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }

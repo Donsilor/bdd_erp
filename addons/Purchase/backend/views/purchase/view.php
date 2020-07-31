@@ -38,6 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($model->purchase_status)?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
+                            <td><?= $model->channel->name ?? ''?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
                             <td><?= $model->total_num ?></td>
                         </tr>
