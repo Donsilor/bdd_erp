@@ -245,7 +245,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'attribute'=>'qiban_type',
                                         'value' => function($model){
-                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type).'<br/>'.$model->qiban_sn;
+                                            $qiban_sn = $model->qiban_sn;
+                                            $is_exist = Yii::$app->styleService->qiban->isExist($qiban_sn);
+                                            if(!$is_exist && $qiban_sn){
+                                                $qiban_sn = "<font color='red'>{$qiban_sn}（erp无此起版号）</font>";
+                                            }
+                                            return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type).'<br/>'.$qiban_sn;
                                         },
                                         'format' => 'raw',
                                     ],

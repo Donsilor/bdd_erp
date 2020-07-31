@@ -110,7 +110,7 @@ class StyleService extends Service
     }
 
     public function isExist($style_sn=null){
-        if($style_sn = null) return false;
+        if($style_sn == null) return false;
         $style = Style::find()->where(['style_sn'=>$style_sn])->select(['id'])->one();
         return $style;
     }

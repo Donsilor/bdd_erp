@@ -434,6 +434,22 @@ class OrderGoodsController extends BaseController
                 if($model['is_bc'] == ConfirmEnum::YES){
                     return $this->message("商品{$model->id}为已经布产", $this->redirect(\Yii::$app->request->referrer), 'warning');
                 }
+
+                if($model->qiban_type == QibanTypeEnum::NON_VERSION ){
+                    //非起版
+                    $is_exeist = Yii::$app->styleService->style->isExist($model->style_sn);
+                    if(!$is_exeist){
+                        return $this->message("款式库没有此款号{$model->style_sn},请确认", $this->redirect(\Yii::$app->request->referrer), 'warning');
+                    }
+                }else{
+                    //起版
+                    $is_exeist = Yii::$app->styleService->qiban->isExist($model->qiban_sn);
+                    if(!$is_exeist){
+                        return $this->message("起版库没有此起版号{$model->qiban_sn},请确认", $this->redirect(\Yii::$app->request->referrer), 'warning');
+                    }
+                }
+
+
                 $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,

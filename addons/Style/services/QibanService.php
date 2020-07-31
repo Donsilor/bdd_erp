@@ -61,7 +61,7 @@ class QibanService extends Service
     }
 
     public function isExist($qiban_sn=null){
-        if($qiban_sn = null) return false;
+        if($qiban_sn == null) return false;
         $qiban = Qiban::find()->where(['qiban_sn'=>$qiban_sn])->select(['id'])->one();
         return $qiban;
     }

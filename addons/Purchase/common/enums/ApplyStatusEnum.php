@@ -27,10 +27,10 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
     {
         return [
                 self::SAVE    => '已保存',
-                self::PENDING => '待审核',
-                self::CONFIRM => '已审核（业务）',
-                self::AUDITED => '已审核（商品部）',
-                self::AFFIRM => '已确认',
+                self::PENDING => '待审核（业务）',
+                self::CONFIRM => '待审核（商品）',
+                self::AUDITED => '已审核',
+                self::AFFIRM => '已完成',
                 self::CANCEL => '已取消',
         ];
     }
@@ -39,10 +39,10 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
     {
         return [
             self::SAVE    => '已保存',
-            self::PENDING => '待审核',
-            self::CONFIRM => '待审核',
+            self::PENDING => '待审核（业务）',
+            self::CONFIRM => '待审核（商品）',
             self::AUDITED => '已审核',
-            self::AFFIRM => '已确认',
+            self::AFFIRM => '已完成',
             self::CANCEL => '已取消',
         ];
     }
