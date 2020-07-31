@@ -11,7 +11,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('parts_receipt_goods', '配件收货单详情');
+$this->title = Yii::t('gift_receipt_goods', '赠品收货单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($receipt->receipt_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['parts-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回列表', ['gift-receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
                             ],
                             [
                                 'attribute'=>'xuhao',
@@ -64,87 +63,166 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'parts_type',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->parts_type);
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->gift->getStyleImage($model),90,90);
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width'=>'90'],
                             ],
                             [
                                 'attribute'=>'goods_name',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
                                 'value' => function ($model, $key, $index, $column){
                                     return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:260px;'
-                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'300'],
                             ],
                             [
                                 'attribute'=>'goods_sn',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_sn', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
                                 ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_sn;
+                                    return $str;
+                                },
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'100'],
                             ],
-                            /*[
-                                'attribute'=>'goods_num',
+                            [
+                                'attribute' => 'style_cate_id',
+                                'value' => function ($model){
+                                    return $model->cate->name ??'';
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id',Yii::$app->styleService->styleCate->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=>'width:100px'
+                                ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_num', $model->goods_num, ['data-id'=>$model->id]);
+                            ],
+                            [
+                                'attribute' => 'product_type_id',
+                                'value' => function($model){
+                                    return $model->type->name ?? '';
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:60px;'
+                                    'style'=>'width:100px'
                                 ]),
-                            ],*/
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'style_sex',
+                                'format' => 'raw',
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return Yii::$app->attr->valueName($model->material_type)??"";
-                                    //return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    //return Yii::$app->attr->valueName($model->material_type)??"";
+                                    return  Html::ajaxSelect($model,'material_type', Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'material_color',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    //return Yii::$app->attr->valueName($model->material_color)??"";
+                                    return  Html::ajaxSelect($model,'material_color', Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_color',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'finger_hk',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    //return Yii::$app->attr->valueName($model->finger_hk)??"";
+                                    return  Html::ajaxSelect($model,'finger_hk', Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute' => 'goods_color',
+                                'attribute' => 'finger',
+                                'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return Yii::$app->attr->valueName($model->goods_color)??"";
-                                    //return  Html::ajaxSelect($model,'goods_color', Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    //return Yii::$app->attr->valueName($model->finger)??"";
+                                    return  Html::ajaxSelect($model,'finger', Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
                                     'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'chain_length',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('chain_length', $model->chain_length, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'chain_length', [
                                     'class' => 'form-control',
                                     'style'=> 'width:100px;'
                                 ]),
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'goods_shape',
+                                'attribute' => 'main_stone_type',
+                                'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return Yii::$app->attr->valueName($model->goods_shape)??"";
-                                    //return  Html::ajaxSelect($model,'goods_shape', Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    //return Yii::$app->attr->valueName($model->main_stone_type)??"";
+                                    return  Html::ajaxSelect($model,'main_stone_type', Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_shape',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style'=> 'width:80px;'
                                 ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'main_stone_num',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('main_stone_num', $model->main_stone_num, ['data-id'=>$model->id]);
+                                },
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -159,68 +237,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'chain_type',
+                                'attribute'=>'goods_num',
+                                'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return Yii::$app->attr->valueName($model->chain_type)??"";
-                                    //return  Html::ajaxSelect($model,'chain_type', Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxInput('goods_num', $model->goods_num, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'chain_type',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'format' => 'raw',
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'cramp_ring',
-                                'value' => function ($model, $key, $index, $column){
-                                    return Yii::$app->attr->valueName($model->cramp_ring)??"";
-                                    //return  Html::ajaxSelect($model,'cramp_ring', Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                'attribute' => 'goods_weight',
+                                'value' => function ($model) {
+                                    return $model->goods_weight ;
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring',Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => false,
+                                'headerOptions' => ['width'=>'150'],
                             ],
                             [
-                                'attribute'=>'goods_weight',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                /*'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_weight', $model->goods_weight, ['data-id'=>$model->id]);
-                                },*/
-                                'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'parts_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                /*'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
-                                },*/
-                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
+                                'attribute'=>'gold_price',
+                                'filter' => false,
+                                'value' => function ($model) {
+                                    return $model->gold_price ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                 'attribute'=>'cost_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                /*'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },*/
-                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'value' => function ($model) {
+                                    return $model->cost_price ;
+                                },
+                                'headerOptions' => ['width'=>'150'],
                             ],
                             [
                                 'attribute' => 'goods_status',

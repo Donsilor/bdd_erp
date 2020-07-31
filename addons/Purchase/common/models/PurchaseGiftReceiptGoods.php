@@ -3,6 +3,8 @@
 namespace addons\Purchase\common\models;
 
 use Yii;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 
 /**
  * This is the model class for table "purchase_receipt_gift".
@@ -22,7 +24,7 @@ use Yii;
  * @property string $finger_hk 手寸(港)
  * @property string $chain_length 链长
  * @property string $main_stone_type 主石类型
- * @property string $main_stone_num 主石数量
+ * @property int $main_stone_num 主石数量
  * @property string $goods_size 商品尺寸
  * @property double $goods_weight 商品重量(g)
  * @property string $cost_price 成本价
@@ -56,13 +58,13 @@ class PurchaseGiftReceiptGoods extends BaseModel
     public function rules()
     {
         return [
-            [['receipt_id', 'purchase_sn'], 'required'],
-            [['receipt_id', 'goods_num', 'product_type_id', 'style_cate_id', 'style_sex', 'put_in_type', 'to_warehouse_id', 'xuhao', 'goods_status', 'purchase_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['receipt_id', 'purchase_sn', 'goods_sn'], 'required'],
+            [['receipt_id', 'goods_num', 'product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'put_in_type', 'to_warehouse_id', 'xuhao', 'goods_status', 'purchase_detail_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['goods_weight', 'cost_price', 'gold_price'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
             [['goods_sn', 'chain_length'], 'string', 'max' => 60],
-            [['material_type', 'material_color', 'finger', 'finger_hk', 'main_stone_type', 'main_stone_num'], 'string', 'max' => 10],
+            [['material_type', 'material_color', 'finger', 'finger_hk', 'main_stone_type'], 'string', 'max' => 10],
             [['goods_size'], 'string', 'max' => 100],
         ];
     }
@@ -77,7 +79,7 @@ class PurchaseGiftReceiptGoods extends BaseModel
             'receipt_id' => '采购收货单ID',
             'purchase_sn' => '采购单编号',
             'goods_name' => '商品名称',
-            'goods_sn' => '商品编号',
+            'goods_sn' => '款式编号',
             'goods_num' => '商品数量',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
@@ -106,5 +108,22 @@ class PurchaseGiftReceiptGoods extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
 }
