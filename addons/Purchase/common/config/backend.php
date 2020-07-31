@@ -28,26 +28,26 @@ return [
             'route' => 'indexPurchase',
             'icon' => 'fa fa-superpowers',
             'child' => [ 
-                    [
-                            'title' => '采购申请单',
-                            'route' => 'purchase-apply/index',
-                    ],
-                    [
-                            'title' => '采购订单',
-                            'route' => 'purchase/index',
-                    ],                    
-                    [
-                            'title' => '采购收货单',
-                            'route' => 'receipt/index',
-                    ],
-                    [
-                            'title' => '不良返厂单',
-                            'route' => 'defective/index',
-                    ],
-                    [
-                            'title' => '质检列表',
-                            'route' => 'receipt-goods/iqc-index',
-                    ],
+                        [
+                                'title' => '采购申请单',
+                                'route' => 'purchase-apply/index',
+                        ],
+                        [
+                                'title' => '采购订单',
+                                'route' => 'purchase/index',
+                        ],
+                        [
+                                'title' => '采购收货单',
+                                'route' => 'receipt/index',
+                        ],
+                        [
+                                'title' => '不良返厂单',
+                                'route' => 'defective/index',
+                        ],
+                        [
+                                'title' => '质检列表',
+                                'route' => 'receipt-goods/iqc-index',
+                        ],
             ],
 
         ],
@@ -104,32 +104,47 @@ return [
                 'icon' => 'fa fa-superpowers',
                 'child' => [
                         [
-                            'title' => '配件采购单',
-                            'route' => 'purchase-parts/index',
+                                'title' => '配件采购单',
+                                'route' => 'purchase-parts/index',
                         ],
                         [
-                            'title' => '配件收货单',
-                            'route' => 'parts-receipt/index',
+                                'title' => '配件收货单',
+                                'route' => 'parts-receipt/index',
                         ],
                         [
-                            'title' => '配件返厂单',
-                            'route' => 'parts-defective/index',
+                                'title' => '配件返厂单',
+                                'route' => 'parts-defective/index',
                         ],
                         [
-                            'title' => '配件质检列表',
-                            'route' => 'parts-receipt-goods/iqc-index',
+                                'title' => '配件质检列表',
+                                'route' => 'parts-receipt-goods/iqc-index',
                         ],
                 ],
         ],
         [
-            'title' => '功能配置',
-            'route' => 'indexPurchaseConfig',
-            'icon' => 'fa fa-superpowers',
-            'child' => [
-                    [
-                            'title' => '质检未过原因',
-                            'route' => 'fqc-config/index',
-                    ]
+                'title' => '赠品采购',
+                'route' => 'indexPurchase',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                                'title' => '赠品采购单',
+                                'route' => 'purchase-gift/index',
+                        ],
+                        [
+                                'title' => '赠品收货单',
+                                'route' => 'gift-receipt/index',
+                        ],
+                ],
+        ],
+        [
+                'title' => '功能配置',
+                'route' => 'indexPurchaseConfig',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                        [
+                                'title' => '质检未过原因',
+                                'route' => 'fqc-config/index',
+                        ]
             ],
 
         ],
