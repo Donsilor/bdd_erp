@@ -18,8 +18,10 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseStoneGoodsService $stoneGoods 石料采购明细
  * @property \addons\Purchase\services\PurchasePartsService $parts 石料采购订单
  * @property \addons\Purchase\services\PurchaseReceiptService $receipt 采购收货单
- * @property \addons\Purchase\services\ReceiptLogService $receiptLog 采购收货单
+ * @property \addons\Purchase\services\ReceiptLogService $receiptLog 采购收货单日志
+ * @property \addons\Purchase\services\PurchaseLogService $purchaseLog 采购单日志
  * @property \addons\Purchase\services\PurchaseDefectiveService $defective 不良返厂单
+ * @property \addons\Purchase\services\DefectiveLogService $defectiveLog 采购单日志
  * @property \addons\Purchase\services\PurchaseFqcService $fqc 质检未过原因
  * @var array
  */
@@ -39,6 +41,8 @@ class Application extends Service
             'parts' => 'addons\Purchase\services\PurchasePartsService',
             'receipt' => 'addons\Purchase\services\PurchaseReceiptService',
             'receiptLog' => 'addons\Purchase\services\ReceiptLogService',
+            'purchaseLog' => 'addons\Purchase\services\PurchaseLogService',
+            'defectiveLog' => 'addons\Purchase\services\DefectiveLogService',
             'defective' => 'addons\Purchase\services\PurchaseDefectiveService',
             'fqc' => 'addons\Purchase\services\PurchaseFqcService',
     ];

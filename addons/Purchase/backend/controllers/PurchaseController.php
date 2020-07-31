@@ -130,7 +130,7 @@ class PurchaseController extends BaseController
                             'log_module' => "创建单据",
                             'log_msg' => "创建采购单，单号:".$model->purchase_sn
                     ];
-                    Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                    Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
                     $trans->commit();
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
@@ -178,7 +178,7 @@ class PurchaseController extends BaseController
                 'log_module' => "申请审核",
                 'log_msg' => "采购单提交申请，审批编号:".$flow->id,
             ];
-            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+            Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
         }catch (\Exception $e){
@@ -216,7 +216,7 @@ class PurchaseController extends BaseController
                     'log_module' => "关闭单据",
                     'log_msg' => "关闭单据"
             ];
-            Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+            Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e) {
@@ -274,7 +274,7 @@ class PurchaseController extends BaseController
                     'log_module' => "单据审核",
                     'log_msg' => "采购申请单审核,审批编号:".$flow->id.",审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
-                Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
 
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -323,7 +323,7 @@ class PurchaseController extends BaseController
                     'log_module' => "分配跟单人",
                     'log_msg' => "分配跟单人：".$model->follower->username ?? ''
                 ];
-                Yii::$app->purchaseService->purchase->createPurchaseLog($log);
+                Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
                 $trans->commit();
 
                 Yii::$app->getSession()->setFlash('success','保存成功');

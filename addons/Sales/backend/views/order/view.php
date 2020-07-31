@@ -217,12 +217,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
-                                        'label'=>'证书号',
+                                        'label'=>'裸钻证书号',
                                         'value' => function($model){
                                             $order_goods_attr = \addons\Sales\common\models\OrderGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>\addons\Style\common\enums\AttrIdEnum::DIA_CERT_NO])->one();
                                             $cert_id = $order_goods_attr->attr_value ?? '';
                                             return $cert_id;
                                         }
+                                    ],
+                                    [
+                                        'label'=>'证书类型',
+                                        'value'=> function($model){
+                                            return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
+                                        },
                                     ],
                                     /* [
                                         'attribute'=>'qiban_sn',
@@ -240,6 +246,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'value' => function($model){
                                             return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
                                         }
+                                    ],
+                                    [
+                                        'attribute'=>'style_cate_id',
+                                        'value' => function($model){
+                                            return $model->cate->name ?? '';
+                                        },
+                                        'format' => 'raw',
+                                    ],
+                                    [
+                                        'attribute'=>'product_type_id',
+                                        'value' => function($model){
+                                            return $model->type->name ?? '';
+                                        },
+                                        'format' => 'raw',
                                     ],
                                     [
                                         'attribute'=>'goods_num',
@@ -402,7 +422,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             },
                                             'edit' => function($url, $model, $key) use($order){
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
-                                                    if($model->product_type_id == 15){
+                                                    if($model->product_type_id == 1){
                                                         return Html::edit(['order-goods/edit-diamond','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }elseif($model->is_stock == IsStockEnum::NO){
                                                         return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);

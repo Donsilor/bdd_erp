@@ -372,7 +372,7 @@ class PurchaseGoodsController extends BaseController
                 $styleForm->style_id = $style->id;
                 $styleForm->initAttrs();
                 $model->attr_custom = $styleForm->attr_custom;
-                $model->attr_require = $styleForm->attr_require;
+                $model->attr_require = [];
             }
             //非镶切 配石类型默认不配石
             $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "";

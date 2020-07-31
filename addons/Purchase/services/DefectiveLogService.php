@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\queues\DefectiveLogJob;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\PurchaseDefectiveLog;
@@ -36,8 +37,8 @@ class DefectiveLogService extends Service
     {
         if($this->switchQueue === true) {
             //队列
-            //$messageId = Yii::$app->queue->push(new DefectiveLogJob($log));
-            //return $messageId;
+            $messageId = Yii::$app->queue->push(new DefectiveLogJob($log));
+            return $messageId;
         }else {
             return $this->realCreateDefectiveLog($log);
         }

@@ -342,7 +342,8 @@ class OrderGoodsController extends BaseController
                 $styleForm->initAttrs();
 
                 $model->attr_custom = $styleForm->attr_custom;
-                $model->attr_require = $styleForm->attr_require;
+                $model->attr_require = [];
+
             }
         }
 

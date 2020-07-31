@@ -2,7 +2,8 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\queues\ReceiptLogJob;
+use addons\Purchase\common\models\PurchaseLog;
+use addons\Purchase\common\queues\PurchaseLogJob;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\PurchaseReceiptLog;
@@ -13,7 +14,7 @@ use addons\Purchase\common\models\PurchaseReceiptLog;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class ReceiptLogService extends Service
+class PurchaseLogService extends Service
 {
     public $switchQueue = false;
     /**
@@ -33,14 +34,14 @@ class ReceiptLogService extends Service
      * @throws
      * @return int
      */
-    public function createReceiptLog($log)
+    public function createPurchaseLog($log)
     {
         if($this->switchQueue === true) {
             //队列
-            $messageId = Yii::$app->queue->push(new ReceiptLogJob($log));
+            $messageId = Yii::$app->queue->push(new PurchaseLogJob($log));
             return $messageId;
         }else {
-            return $this->realCreateReceiptLog($log);
+            return $this->realCreatePurchaseLog($log);
         }      
     }
     /**
@@ -49,9 +50,9 @@ class ReceiptLogService extends Service
      * @throws \Exception
      * @return object
      */
-    public function realCreateReceiptLog($log)
+    public function realCreatePurchaseLog($log)
     {        
-        $model = new PurchaseReceiptLog();
+        $model = new PurchaseLog();
         $model->attributes = $log;
         $model->log_time = time();
         $model->creator_id = \Yii::$app->user->id;

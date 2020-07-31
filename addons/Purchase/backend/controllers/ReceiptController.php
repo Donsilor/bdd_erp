@@ -275,7 +275,7 @@ class ReceiptController extends BaseController
                     'receipt_id' => $model->id,
                     'receipt_no' => $model->receipt_no,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '关闭收货单',
+                    'log_module' => '采购收货单',
                     'log_msg' => '关闭采购收货单'
             ];
             \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
@@ -308,7 +308,15 @@ class ReceiptController extends BaseController
             PurchaseReceiptGoodsForm::deleteAll(['receipt_id'=>$model->id]);
 
             $model->delete();
-            
+
+            $log = [
+                'receipt_id' => $model->id,
+                'receipt_no' => $model->receipt_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '采购收货单',
+                'log_msg' => '采购收货单删除'
+            ];
+            \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

@@ -108,4 +108,8 @@ class StyleService extends Service
         if(empty($list)) return [];
         return array_column($list,'image');
     }
+
+    public function isExist($style_sn){
+
+    }
 }

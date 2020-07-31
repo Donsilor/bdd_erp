@@ -16,6 +16,7 @@ use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use common\enums\LogTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
@@ -132,6 +133,16 @@ class DefectiveController extends BaseController
 
             \Yii::$app->purchaseService->defective->applyAudit($model);
 
+            //日志
+            $log = [
+                'defective_id' => $model->id,
+                'defective_no' => $model->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "不良返厂单",
+                'log_msg' => "不良返厂单提交审核",
+            ];
+            Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
+
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
@@ -159,6 +170,16 @@ class DefectiveController extends BaseController
                 $model->audit_time = time();
 
                 \Yii::$app->purchaseService->defective->auditDefect($model);
+
+                //日志
+                $log = [
+                    'defective_id' => $model->id,
+                    'defective_no' => $model->defective_no,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => "不良返厂单",
+                    'log_msg' => "不良返厂单审核",
+                ];
+                Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
 
                 $trans->commit();
             }catch (\Exception $e){
@@ -189,6 +210,16 @@ class DefectiveController extends BaseController
 
             \Yii::$app->purchaseService->defective->cancelDefect($model);
 
+            //日志
+            $log = [
+                'defective_id' => $model->id,
+                'defective_no' => $model->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "不良返厂单",
+                'log_msg' => "不良返厂单取消",
+            ];
+            Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
+
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
@@ -212,6 +243,16 @@ class DefectiveController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();
 
             \Yii::$app->purchaseService->defective->DeleteDefect($model);
+
+            //日志
+            $log = [
+                'defective_id' => $model->id,
+                'defective_no' => $model->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "不良返厂单",
+                'log_msg' => "不良返厂单删除",
+            ];
+            Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
 
             $trans->commit();
         }catch (\Exception $e){
