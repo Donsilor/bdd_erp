@@ -46,24 +46,34 @@ class PurchaseGoodsPrintForm extends PurchaseGoodsPrint
         $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value'])->where(['id'=>$this->purchase_goods_id])->asArray()->all();
         $attrs = array_column($attrs,'attr_value','attr_id');
 
-        $this->supplier_name = $purchase_goods->purchase->supplier->supplier_name ?? '';
-        $this->purchase_sn = $purchase_goods->purchase->purchase_sn ?? '';
-        $this->goods_name = $purchase_goods->goods_name ?? '';
-        $this->created_at = \Yii::$app->formatter->asDate($purchase_goods->purchase->created_at) ?? '';
-        $this->delivery_time = \Yii::$app->formatter->asDate($purchase_goods->purchase->delivery_time) ?? '';
-        $this->material = $attrs[AttrIdEnum::MATERIAL] ?? '';
-        $this->goods_num = $purchase_goods->goods_num;
-        $this->factory_model = $purchase_goods->factory_mo;
-        $this->circle = $this->material = $attrs[AttrIdEnum::FINGER] ?? '';
-        $this->main_stone_type = $attrs[AttrIdEnum::MAIN_STONE_TYPE] ?? '';
-        $this->main_stone_num = $attrs[AttrIdEnum::MAIN_STONE_NUM] ?? '';
-        $this->dia_carat = $attrs[AttrIdEnum::DIA_CARAT] ?? '';
-        $this->side_stone1_type = $attrs[AttrIdEnum::SIDE_STONE1_TYPE] ?? '';
-        $this->side_stone1_num = $attrs[AttrIdEnum::SIDE_STONE1_NUM] ?? '';
-        $this->side_stone1_weight = $attrs[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? '';
-        $this->image = $purchase_goods->goods_image ?? '';
-
-
+        $supplier_name = $purchase_goods->purchase->supplier->supplier_name ?? '';
+        $this->supplier_name = $this->supplier_name ?? $supplier_name;
+        $purchase_sn = $purchase_goods->purchase->purchase_sn ?? '';
+        $this->purchase_sn = $this->purchase_sn ?? $purchase_sn;
+        $this->goods_name = $this->goods_name ?? $purchase_goods->goods_name;
+        $created_at = \Yii::$app->formatter->asDate($purchase_goods->purchase->created_at) ?? '';
+        $this->created_at = $this->created_at ?? $created_at;
+        $delivery_time = \Yii::$app->formatter->asDate($purchase_goods->purchase->delivery_time) ?? '';
+        $this->delivery_time = $this->delivery_time ?? $delivery_time;
+        $material = $attrs[AttrIdEnum::MATERIAL] ?? '';
+        $this->material = $this->material ?? $material;
+        $this->goods_num = $this->goods_num ?? $purchase_goods->goods_num;
+        $this->factory_model = $this->factory_model ?? $purchase_goods->factory_mo;
+        $circle = $attrs[AttrIdEnum::FINGER] ?? '';
+        $this->circle = $this->circle ?? $circle;
+        $main_stone_type = $attrs[AttrIdEnum::MAIN_STONE_TYPE] ?? '';
+        $this->main_stone_type = $this->main_stone_type ?? $main_stone_type;
+        $main_stone_num = $attrs[AttrIdEnum::MAIN_STONE_NUM] ?? '';
+        $this->main_stone_num = $this->main_stone_num ?? $main_stone_num;
+        $dia_carat = $attrs[AttrIdEnum::DIA_CARAT] ?? '';
+        $this->dia_carat = $this->dia_carat ?? $dia_carat;
+        $side_stone1_type = $attrs[AttrIdEnum::SIDE_STONE1_TYPE] ?? '';
+        $this->side_stone1_type = $this->side_stone1_type ?? $side_stone1_type;
+        $side_stone1_num = $attrs[AttrIdEnum::SIDE_STONE1_NUM] ?? '';
+        $this->side_stone1_num = $this->side_stone1_num ?? $side_stone1_num;
+        $side_stone1_weight = $attrs[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? '';
+        $this->side_stone1_weight = $this->side_stone1_weight ?? $side_stone1_weight;
+        $this->image = $this->image ?? $purchase_goods->goods_image;
 
     }
 
