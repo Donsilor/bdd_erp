@@ -4,10 +4,12 @@ namespace addons\Purchase\services;
 
 use Yii;
 use common\components\Service;
-use common\helpers\Url;
-use common\enums\StatusEnum;
 use addons\Purchase\common\models\PurchaseGift;
 use addons\Purchase\common\models\PurchaseGiftGoods;
+use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
+use addons\Shop\common\models\Style;
+use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * Class PurchaseGiftService
@@ -45,5 +47,14 @@ class PurchaseGiftService extends Service
         if($sum) {
             PurchaseGift::updateAll(['total_num'=>$sum['total_num'],'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
         }
+    }
+    /**
+     * 商品图片
+     * @param PurchaseGiftGoodsForm $model
+     */
+    public function getStyleImage($model){
+        $style = Style::find()->where(['style_sn'=>$model->goods_sn])->one();
+        $image = $style->style_image ?? '';
+        return $image;
     }
 }

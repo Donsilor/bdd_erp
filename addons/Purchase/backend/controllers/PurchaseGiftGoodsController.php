@@ -7,8 +7,10 @@ use common\traits\Curd;
 use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseGift;
+use addons\Purchase\common\models\PurchaseGiftGoods;
 use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
+use addons\Style\common\models\Style;
 use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 
@@ -75,7 +77,7 @@ class PurchaseGiftGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $model = $this->findModel($id);                
+        $model = $this->findModel($id) ?? new PurchaseGiftGoods();
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
@@ -85,8 +87,14 @@ class PurchaseGiftGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$stone = GoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
-                //$model->goods_sn = $stone->style_sn??"";
+                $style = Style::findOne(['style_sn'=>$model->goods_sn]);
+                if(!$style){
+                    return ResultHelper::json(422, "款号不存在");
+                }
+                $model->product_type_id = $style->product_type_id??"";
+                $model->style_cate_id = $style->style_cate_id??"";
+                $model->style_sex = $style->style_sex??"";
+                $model->goods_image = $style->style_image??"";
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));

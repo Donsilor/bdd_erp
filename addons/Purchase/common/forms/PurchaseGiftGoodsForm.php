@@ -27,7 +27,6 @@ class PurchaseGiftGoodsForm extends PurchaseGiftGoods
         ];
         return array_merge(parent::rules() , $rules);
     }
-
     /**
      * 材质列表
      * @return array
@@ -37,44 +36,20 @@ class PurchaseGiftGoodsForm extends PurchaseGiftGoods
         return Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE);
     }
     /**
-     * 赠品类型
+     * 材质颜色列表
      * @return array
      */
-    public function getGiftTypeMap()
-    {
-        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE);
-    }
-    /**
-     * 颜色
-     * @return array
-     */
-    public function getColorMap()
+    public function getMaterialColorMap()
     {
         return Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR);
     }
     /**
-     * 形状
+     * 主石类型列表
      * @return array
      */
-    public function getShapeMap()
+    public static function getMainStoneTypeMap()
     {
-        return Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE);
-    }
-    /**
-     * 链类型
-     * @return array
-     */
-    public function getChainTypeMap()
-    {
-        return Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE);
-    }
-    /**
-     * 扣环
-     * @return array
-     */
-    public function getCrampRingMap()
-    {
-        return Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE);
+        return Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE);
     }
     /**
      * 采购商品申请编辑-创建
