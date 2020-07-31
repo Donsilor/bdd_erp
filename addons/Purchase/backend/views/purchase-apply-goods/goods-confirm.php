@@ -21,6 +21,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
         <div class="tab-content">
             <?= $form->field($model, 'qiban_type')->dropDownList(\addons\Style\common\enums\QibanTypeEnum::getStyleMap()) ?>
+            <?= $form->field($model, 'supplier_id')->dropDownList(\Yii::$app->supplyService->supplier->getDropDown(),['prompt'=>'请选择']);?>
             <?= $form->field($model, 'is_design_qiban')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
             <?= $form->field($model, 'audit_remark')->textArea(); ?>
             <!-- /.tab-pane -->

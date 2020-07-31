@@ -121,7 +121,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_status') ?>：</td>
                                     <td><?= \addons\Purchase\common\enums\ApplyConfirmEnum::getValue($model->confirm_status)?></td>
                                 </tr>
-
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                                    <td><?= $model->supplier->name ?? ''?></td>
+                                </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('confirm_design_id') ?>：</td>
                                     <td><?= $model->designMember->username ?? ''  ?></td>

@@ -355,6 +355,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                             ],
                             'format_sn',
+                            [
+                                'attribute' => 'supplier_id',
+                                'value' =>"supplier.supplier_name",
+                                'filter'=>\kartik\select2\Select2::widget([
+                                    'name'=>'SearchModel[supplier_id]',
+                                    'value'=>$searchModel->supplier_id,
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'options' => ['placeholder' =>"请选择",'style'=>"width:180px"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
 
 
                             [

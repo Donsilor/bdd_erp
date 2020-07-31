@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
+use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
 use addons\Style\common\forms\StyleAttrForm;
 use common\enums\ConfirmEnum;
 use common\helpers\ArrayHelper;
@@ -520,6 +521,7 @@ class PurchaseApplyGoodsController extends BaseController
     public function actionGoodsConfirm()
     {
         $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseApplyGoodsConfimForm::class;
         $model = $this->findModel($id);
         // ajax 校验
         $this->activeFormValidate($model);

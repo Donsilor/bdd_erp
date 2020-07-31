@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
 use Yii;
 use addons\Style\common\models\ProductType;
@@ -55,7 +56,7 @@ class PurchaseApplyGoods extends BaseModel
         return [
             [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type','goods_name'], 'required'],
             [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply',
-                'status', 'created_at', 'updated_at','format_creator_id','format_created_at','is_design_qiban','confirm_status','confirm_design_id','confirm_design_time','confirm_goods_id','confirm_goods_time'], 'integer'],
+                'status', 'created_at', 'updated_at','format_creator_id','format_created_at','is_design_qiban','confirm_status','confirm_design_id','confirm_design_time','confirm_goods_id','confirm_goods_time','supplier_id'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
@@ -109,6 +110,7 @@ class PurchaseApplyGoods extends BaseModel
             'format_images' => '版式图片',
             'format_video' => '上传视频',
             'format_remark' => '版式备注',
+            'supplier_id' => '供应商',
             'format_info' => '工艺信息',
             'format_creator_id' => '版式添加人',
             'format_created_at' => '版式添加时间',
@@ -211,5 +213,13 @@ class PurchaseApplyGoods extends BaseModel
         return $this->hasOne(Member::class, ['id'=>'confirm_design_id'])->alias('designMember');
     }
 
+    /**
+     * 供应商 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'supplier_id'])->alias('supplier');
+    }
 
 }

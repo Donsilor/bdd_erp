@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }elseif($model->apply_status == ApplyStatusEnum::CONFIRM && $isAudit1){
                         echo Html::edit(['final-audit','id'=>$model->id], '审核', [
-                            'class'=>'btn btn-success btn-sm',
+                            'class'=>'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
                         ]);
