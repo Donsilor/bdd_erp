@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use Yii;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
@@ -30,6 +32,9 @@ use common\models\backend\Member;
  * @property string $cost_price 金价总额
  * @property string $sale_price 销售价
  * @property int $supplier_id 供应商
+ * @property string $purchase_sn 采购单号
+ * @property string $receipt_no 收货单号
+ * @property int $source_detail_id 商品来源ID
  * @property int $put_in_type 入库方式
  * @property int $warehouse_id 所在仓库
  * @property int $gift_status 赠品状态
@@ -56,9 +61,9 @@ class WarehouseGift extends BaseModel
     {
         return [
             [['gift_sn', 'style_sn'], 'required'],
-            [['product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'gift_num', 'supplier_id', 'put_in_type', 'warehouse_id', 'gift_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'gift_num', 'supplier_id', 'put_in_type', 'warehouse_id', 'source_detail_id', 'gift_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gift_weight', 'gold_price', 'cost_price', 'sale_price'], 'number'],
-            [['gift_sn', 'style_sn'], 'string', 'max' => 30],
+            [['gift_sn', 'style_sn', 'purchase_sn', 'receipt_no'], 'string', 'max' => 30],
             [['gift_name', 'chain_length'], 'string', 'max' => 100],
             [['material_type', 'material_color', 'finger', 'finger_hk', 'main_stone_type', 'gift_size'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
@@ -93,10 +98,13 @@ class WarehouseGift extends BaseModel
             'sale_price' => '销售价',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',
+            'purchase_sn' => '采购单编号',
+            'receipt_no' => '收货单编号',
+            'source_detail_id' => '商品来源ID',
             'warehouse_id' => '所在仓库',
             'gift_status' => '赠品状态',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -125,5 +133,21 @@ class WarehouseGift extends BaseModel
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
+    /**
+     * 关联产品线分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(ProductType::class, ['id'=>'product_type_id'])->alias('type');
+    }
+    /**
+     * 款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
 }

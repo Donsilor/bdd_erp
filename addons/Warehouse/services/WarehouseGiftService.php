@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
+use addons\Shop\common\models\Style;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -46,9 +48,8 @@ class WarehouseGiftService extends Service
     {
         //1.供应商
         $gift_sn = $model->supplier->supplier_tag ?? '00';
-        //2.类型
-        $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE,'id','code');
-        //$gift_sn .= $type_codes[$model->gift_type] ?? '0';
+        //2.款式类型
+        $gift_sn .= $model->cate->tag ?? '00';
         //3.数字编号
         $gift_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT);
         if($save === true) {
@@ -59,6 +60,19 @@ class WarehouseGiftService extends Service
         }
         return $gift_sn;
     }
+
+    /**
+     * 商品图片
+     * @param WarehouseGift $model
+     * @throws
+     * @return
+     */
+    public function getStyleImage($model){
+        $style = Style::find()->where(['style_sn'=>$model->style_sn])->one();
+        $image = $style->style_image ?? '';
+        return $image;
+    }
+
     /**
      *
      * 更改赠品库存

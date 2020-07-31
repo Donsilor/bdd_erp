@@ -72,6 +72,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'200'],
                         ],
                         [
+                            'label' => '商品图片',
+                            'value' => function ($model) {
+                                return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->gift->getStyleImage($model),90,90);
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'90'],
+                        ],
+                        [
                             'attribute'=>'style_sn',
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',

@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\services;
 
+use addons\Warehouse\common\enums\GiftStatusEnum;
+use addons\Warehouse\common\models\WarehouseGift;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -1248,42 +1250,65 @@ class PurchaseReceiptService extends Service
             throw new \Exception('采购收货单没有待入库的货品');
         }
         $form->to_warehouse_id = WarehouseIdEnum::GIFT;//配件库
-        $goods = $ids = [];
-        $total_weight = $total_cost = $sale_price = 0;
+        //$form = new PurchaseReceipt();
+        $ids = $g_ids = [];
         foreach ($models as $model){
-            //$model = new PurchasePartsReceiptGoods();
+            //$model = new PurchaseGiftReceiptGoods();
+            $giftM = new WarehouseGift();
             $ids[] = $model->id;
-            $goods[] = [
-                'parts_name' => $model->goods_name,
-                'parts_type' => $model->parts_type,
-                'material_type' => $model->material_type,
+            $goods = [
+                'gift_sn' => (string) rand(10000000000,99999999999),//临时
                 'style_sn' => $model->goods_sn,
-                'color' => $model->goods_color,
-                'shape' => $model->goods_shape,
-                'size' => $model->goods_size,
-                'chain_type' => $model->chain_type,
-                'cramp_ring' => $model->cramp_ring,
-                'parts_num' => $model->goods_num,
-                'parts_weight' => $model->goods_weight,
+                'gift_name' => $model->goods_name,
+                'product_type_id' => $model->product_type_id,
+                'style_cate_id' => $model->style_cate_id,
+                'style_sex' => $model->style_sex,
+                'material_type' => $model->material_type,
+                'material_color' => $model->material_color,
+                'finger' => $model->finger,
+                'finger_hk' => $model->finger_hk,
+                'chain_length' => $model->chain_length,
+                'main_stone_type' => $model->main_stone_type,
+                'main_stone_num' => $model->main_stone_num,
+                'gift_size' => $model->goods_size,
+                'gift_num' => $model->goods_num,
+                'gift_weight' => $model->goods_weight,
+                'gold_price' => $model->gold_price,
                 'cost_price' => $model->cost_price,
-                'parts_price' => $model->parts_price,
+                'purchase_sn' => $model->purchase_sn,
+                'receipt_no' => $form->receipt_no,
+                'supplier_id' => $form->supplier_id,
+                'put_in_type' => $form->put_in_type,
+                'warehouse_id' => $form->to_warehouse_id,
                 'source_detail_id' =>$model->id,
+                'gift_status' => GiftStatusEnum::IN_STOCK,
                 'status' => StatusEnum::ENABLED,
+                'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),
             ];
-            $total_cost = bcadd($total_cost, $model->cost_price, 2);
-            $total_weight = bcadd($total_weight, bcmul($model->goods_num, $model->goods_weight, 2), 2);
+            $giftM->attributes = $goods;
+            if(false === $giftM->save()){
+                throw new \Exception($this->getError($giftM));
+            }
+            $g_ids[] = $giftM->attributes['id'];
         }
-        Yii::$app->warehouseService->gift->createGift($goods);
-        //批量更新采购收货单货品状态
-        $data = [
-            'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE,
-            'put_in_type'=>$form->put_in_type,
-            'to_warehouse_id'=>$form->to_warehouse_id
-        ];
-        $res = PurchaseGiftReceiptGoods::updateAll($data, ['id'=>$ids]);
-        if(false === $res){
-            throw new \Exception('更新采购收货单货品状态失败');
+        if($g_ids) {
+            foreach ($g_ids as $id) {
+                $gift = WarehouseGift::findOne(['id' => $id]);
+                \Yii::$app->warehouseService->gift->createGiftSn($gift);
+            }
+        }
+        if($ids){
+            //批量更新采购收货单货品状态
+            $data = [
+                'goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE,
+                'put_in_type'=>$form->put_in_type,
+                'to_warehouse_id'=>$form->to_warehouse_id
+            ];
+            $res = PurchaseGiftReceiptGoods::updateAll($data, ['id'=>$ids]);
+            if(false === $res){
+                throw new \Exception('更新采购收货单货品状态失败');
+            }
         }
     }
 }

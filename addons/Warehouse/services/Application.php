@@ -22,6 +22,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseBillRepairService $repair 维修单据
+ * @property \addons\Warehouse\services\WarehouseGiftService $gift 赠品库存
  *
  * @property \addons\Warehouse\services\WarehouseGoldService $gold 金料库存
  * @property \addons\Warehouse\services\WarehouseGoldBillService $goldBill 金料单据
@@ -66,6 +67,7 @@ class Application extends Service
         'billS' => 'addons\Warehouse\services\WarehouseBillSService',
         'billLog' => 'addons\Warehouse\services\WarehouseBillLogService',
         'repair' => 'addons\Warehouse\services\WarehouseBillRepairService',
+        'gift' => 'addons\Warehouse\services\WarehouseGiftService',
 
         'gold' => 'addons\Warehouse\services\WarehouseGoldService',
         'goldBill' => 'addons\Warehouse\services\WarehouseGoldBillService',

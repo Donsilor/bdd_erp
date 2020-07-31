@@ -238,7 +238,7 @@ class GiftReceiptGoodsController extends BaseController
     }
 
     /**
-     * 申请入库
+     * 入库
      * @return mixed
      * @throws
      */
@@ -266,10 +266,10 @@ class GiftReceiptGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //同步采购收货单至金料收货单
-                Yii::$app->purchaseService->receipt->syncReceiptToGiftL($model);
+                Yii::$app->purchaseService->receipt->syncReceiptToGift($model);
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','申请入库成功');
-                return ResultHelper::json(200, '申请入库成功');
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
