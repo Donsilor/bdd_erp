@@ -47,7 +47,7 @@ class PurchaseGiftGoodsForm extends PurchaseGiftGoods
      * 主石类型列表
      * @return array
      */
-    public static function getMainStoneTypeMap()
+    public function getMainStoneTypeMap()
     {
         return Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE);
     }
