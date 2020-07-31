@@ -2,9 +2,15 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use Yii;
+use common\helpers\Url;
+use common\models\base\SearchModel;
+use common\enums\AuditStatusEnum;
+use common\traits\Curd;
 
+use addons\Purchase\common\models\PurchaseDefective;
+use addons\Purchase\common\forms\PurchaseDefectiveForm;
 use addons\Purchase\common\enums\DefectiveStatusEnum;
-use addons\Purchase\common\enums\PurchaseStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\models\PurchaseDefectiveGoods;
 use addons\Purchase\common\models\PurchaseFqcConfig;
@@ -14,23 +20,13 @@ use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\models\Supplier;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\enums\LogTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
-use common\helpers\SnHelper;
 use common\helpers\StringHelper;
-use common\models\backend\Member;
-use Yii;
-use common\helpers\Url;
-use common\models\base\SearchModel;
-use addons\Purchase\common\models\PurchaseDefective;
-use addons\Purchase\common\forms\PurchaseDefectiveForm;
-use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
-use common\traits\Curd;
+
 /**
 * PurchaseDefective
 *
@@ -122,10 +118,10 @@ class DefectiveController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
 
-        if($model->defective_status != BillStatusEnum::SAVE){
+        if($model->defective_status != DefectiveStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->defective_status = BillStatusEnum::PENDING;
+        $model->defective_status = DefectiveStatusEnum::PENDING;
         // ajax 校验
         $this->activeFormValidate($model);
         try{
@@ -170,7 +166,6 @@ class DefectiveController extends BaseController
                 $model->audit_time = time();
 
                 \Yii::$app->purchaseService->defective->auditDefect($model);
-
                 //日志
                 $log = [
                     'defective_id' => $model->id,

@@ -13,12 +13,11 @@ use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Purchase\common\enums\ReceiptStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use common\enums\AuditStatusEnum;
-use common\enums\WhetherEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
@@ -102,27 +101,35 @@ class StoneReceiptController extends BaseController
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseReceiptForm();
-        if($model->receipt_status != BillStatusEnum::SAVE){
+        if($model->receipt_status != ReceiptStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if(!$model->receipt_num){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        $model->receipt_status = BillStatusEnum::PENDING;
-        if(false === $model->save()){
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            
+            $model->audit_status = AuditStatusEnum::PENDING;
+            $model->receipt_status = ReceiptStatusEnum::PENDING;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            $log = [
+                    'receipt_id' => $model->id,
+                    'receipt_no' => $model->receipt_no,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '申请审核',
+                    'log_msg' => "石料收货单-申请审核"
+            ];
+            \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e) {
+            $trans->rollback();
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $log_msg = "申请审核";
-        $log = [
-            'receipt_id' => $model->id,
-            'receipt_no' => $model->receipt_no,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => '石料采购收货单',
-            'log_msg' => $log_msg
-        ];
-        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        
 
     }
 
@@ -148,17 +155,26 @@ class StoneReceiptController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->receipt_status = BillStatusEnum::CONFIRM;
+                    $model->receipt_status = ReceiptStatusEnum::CONFIRM;
                     $res = PurchaseStoneReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
                     if(false === $res) {
                         throw new \Exception("更新货品状态失败");
                     }
                 }else{
-                    $model->receipt_status = BillStatusEnum::SAVE;
+                    $model->receipt_status = ReceiptStatusEnum::SAVE;
                 }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                $log = [
+                        'receipt_id' => $model->id,
+                        'receipt_no' => $model->receipt_no,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => '申请审核',
+                        'log_msg' => "石料收货单审核,审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                ];
+                \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);
+                
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){

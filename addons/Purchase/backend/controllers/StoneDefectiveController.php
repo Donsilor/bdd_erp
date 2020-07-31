@@ -10,10 +10,8 @@ use addons\Purchase\common\models\PurchaseReceipt;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
-use common\helpers\SnHelper;
 use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
@@ -21,8 +19,8 @@ use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseDefective;
 use addons\Purchase\common\forms\PurchaseDefectiveForm;
 use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
 use common\traits\Curd;
+
 /**
 * PurchaseDefective
 *
@@ -117,17 +115,17 @@ class StoneDefectiveController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
 
-        if($model->defective_status != BillStatusEnum::SAVE){
+        if($model->defective_status != DefectiveStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->defective_status = BillStatusEnum::PENDING;
+        $model->defective_status = DefectiveStatusEnum::PENDING;
         // ajax 校验
         $this->activeFormValidate($model);
         try{
             $trans = Yii::$app->trans->beginTransaction();
 
             \Yii::$app->purchaseService->defective->applyAudit($model);
-
+            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();
@@ -161,7 +159,7 @@ class StoneDefectiveController extends BaseController
                 $model->audit_time = time();
 
                 \Yii::$app->purchaseService->defective->auditDefect($model);
-
+                
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
@@ -171,7 +169,7 @@ class StoneDefectiveController extends BaseController
         }
 
         return $this->renderAjax($this->action->id, [
-            'model' => $model,
+            'model' => $model,·98
         ]);
     }
 
@@ -190,7 +188,7 @@ class StoneDefectiveController extends BaseController
             $trans = Yii::$app->trans->beginTransaction();
 
             \Yii::$app->purchaseService->defective->cancelDefect($model);
-
+            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollBack();

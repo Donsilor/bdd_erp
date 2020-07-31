@@ -2,21 +2,22 @@
 
 namespace addons\Style\backend\controllers;
 
-use common\helpers\Url;
+use addons\Style\common\models\Style;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Style\common\models\GoldStyle;
+use addons\Style\common\models\StyleGift;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use common\helpers\Url;
 
 /**
  * GoldStyleController implements the CRUD actions for GoldStyle model.
  */
-class GoldStyleController extends BaseController
+class StyleGiftController extends BaseController
 {
     use Curd;
-    public $modelClass = GoldStyle::class;
+    public $modelClass = StyleGift::class;
     /**
      * Lists all GoldStyle models.
      * @return mixed
@@ -42,8 +43,8 @@ class GoldStyleController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',GoldStyle::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',GoldStyle::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StyleGift::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StyleGift::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $dataProvider = $searchModel
@@ -51,11 +52,11 @@ class GoldStyleController extends BaseController
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',GoldStyle::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',GoldStyle::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',StyleGift::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',StyleGift::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',GoldStyle::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',StyleGift::tableName().'.status',-1]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -71,11 +72,16 @@ class GoldStyleController extends BaseController
     public function actionAjaxEdit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new StyleGift();
 
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            $style = Style::findOne(['style_sn'=>$model->style_sn]);
+            if(!$style){
+                return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $model->style_id = $style->id;
             $model->status = StatusEnum::DISABLED;
             return $model->save()
                 ? $this->redirect(Yii::$app->request->referrer)
@@ -93,7 +99,7 @@ class GoldStyleController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new StyleGift();
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -105,15 +111,16 @@ class GoldStyleController extends BaseController
     }
 
     /**
-     * 审核
+     * 供应商-审核
      *
      * @return mixed
+     * @throws
      */
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new StyleGift();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -152,13 +159,13 @@ class GoldStyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index', 'id'=>$id]));
         $model = $this->findModel($id);
-        $model = $model ?? new GoldStyle();
+        $model = $model ?? new StyleGift();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->styleService->gold->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->styleService->parts->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

@@ -30,7 +30,7 @@ class GoldBillWGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-w/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-w/index', 'bill_id'=>$bill_id]));
         $bill = WarehouseGoldBillWForm::find()->where(['id'=>$bill_id])->one();
         
         $searchModel = new SearchModel([

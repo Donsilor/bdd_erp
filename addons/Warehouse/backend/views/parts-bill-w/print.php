@@ -29,7 +29,7 @@
 	<body>
 		<div class="container" id="wdf">
 			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>盘点单表</div>
+			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>石料盘点单明细表</div>
 			
 			<!-- 基础信息 -->
 			<div class="order-info">
@@ -49,28 +49,46 @@
                         <div>序号</div>
                     </td>
                     <td>
-                        <div>金料材质</div>
+                        <div>石头类型</div>
                     </td>
                     <td>
                         <div>名称</div>
                     </td>
                     <td>
-                        <div>金料编号</div>
+                        <div>石包号</div>
                     </td>
                     <td>
                         <div>款号</div>
                     </td>
                     <td>
-                        <div>金重</div>
+                        <div>色彩</div>
                     </td>
                     <td>
-                        <div>库存(数量)</div>
+                        <div>形状</div>
                     </td>
                     <td>
-                        <div>价格</div>
+                        <div>重量（ct）</div>
                     </td>
                     <td>
-                        <div>实盘(重量g)</div>
+                        <div>库存数量（个）</div>
+                    </td>
+                    <td>
+                        <div>单价/ct</div>
+                    </td>
+                    <td>
+                        <div>尺寸</div>
+                    </td>
+                    <td>
+                        <div>规格(颜色/净度/切工/石重)</div>
+                    </td>
+                    <td>
+                        <div>实盘(数量)</div>
+                    </td>
+                    <td>
+                        <div>实盘(重量)</div>
+                    </td>
+                    <td>
+                        <div>差异(数量)</div>
                     </td>
                     <td>
                         <div>差异(重量)</div>
@@ -78,6 +96,7 @@
                     <td>
                         <div>备注</div>
                     </td>
+
                 </tr>
                 <!-- 列表内容 -->
                 <?php
@@ -89,28 +108,46 @@
                         <div><?= $key + 1 ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_type'] ?></div>
+                        <div><?= $val['parts_type'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_name'] ?></div>
+                        <div><?= $val['parts_name'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_sn'] ?></div>
+                        <div><?= $val['parts_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['style_sn'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_weight'] ?></div>
+                        <div><?= $val['color'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_num'] ?></div>
+                        <div><?= $val['shape'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_price'] ?></div>
+                        <div><?= $val['parts_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_num'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['parts_size'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['spec'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['actual_num'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['actual_weight'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['diff_num'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['diff_weight'] ?></div>
@@ -128,28 +165,46 @@
                             <div>序号</div>
                         </td>
                         <td>
-                            <div>金料材质</div>
+                            <div>配件类型</div>
                         </td>
                         <td>
                             <div>名称</div>
                         </td>
                         <td>
-                            <div>金料编号</div>
+                            <div>配件编号</div>
                         </td>
                         <td>
                             <div>款号</div>
                         </td>
                         <td>
-                            <div>金重</div>
+                            <div>色彩</div>
                         </td>
                         <td>
-                            <div>库存(数量)</div>
+                            <div>形状</div>
                         </td>
                         <td>
-                            <div>价格</div>
+                            <div>重量（ct）</div>
                         </td>
                         <td>
-                            <div>实盘(重量g)</div>
+                            <div>库存数量（个）</div>
+                        </td>
+                        <td>
+                            <div>单价/ct</div>
+                        </td>
+                        <td>
+                            <div>尺寸</div>
+                        </td>
+                        <td>
+                            <div>规格(颜色/净度/切工/石重)</div>
+                        </td>
+                        <td>
+                            <div>实盘(数量)</div>
+                        </td>
+                        <td>
+                            <div>实盘(重量)</div>
+                        </td>
+                        <td>
+                            <div>差异(数量)</div>
                         </td>
                         <td>
                             <div>差异(重量)</div>
@@ -166,10 +221,16 @@
                     <td colspan="3"><div>合计</div></td>
                     <td></td>
                     <td></td>
-                    <td><div><?= $total['gold_weight_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><?= $total['parts_weight_count']?></div></td>
+                    <td><div><?= $total['parts_num_count']?></div></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td><div><?= $total['actual_weight_count']?></div></td>
+                    <td><div><?= $total['actual_num_count']?></div></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>

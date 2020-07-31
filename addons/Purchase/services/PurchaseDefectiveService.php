@@ -21,6 +21,7 @@ use common\helpers\ArrayHelper;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use yii\db\Exception;
+use common\enums\LogTypeEnum;
 
 /**
  * Class TypeService
@@ -169,6 +170,16 @@ class PurchaseDefectiveService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        
+        //日志
+        $log = [
+                'defective_id' => $form->id,
+                'defective_no' => $form->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "申请审核",
+                'log_msg' => "不良返厂单-申请审核"
+        ];
+        Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
     }
 
     /**
@@ -192,6 +203,16 @@ class PurchaseDefectiveService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        
+        //日志
+        $log = [
+                'defective_id' => $form->id,
+                'defective_no' => $form->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "单据审核",
+                'log_msg' => "不良返厂单审核, 审核状态：".AuditStatusEnum::getValue($form->audit_status).",审核备注：".$form->audit_remark
+        ];
+        Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
     }
 
     /**
@@ -210,6 +231,16 @@ class PurchaseDefectiveService extends Service
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
+        
+        //日志
+        $log = [
+                'defective_id' => $form->id,
+                'defective_no' => $form->defective_no,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "单据取消",
+                'log_msg' => "不良返厂单取消"
+        ];
+        Yii::$app->purchaseService->defectiveLog->createDefectiveLog($log);
     }
 
     /**

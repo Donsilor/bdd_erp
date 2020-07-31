@@ -25,8 +25,8 @@ class PurchaseLogJob extends RetryJob
      * @return mixed|void
      * @throws \yii\base\InvalidConfigException
      */
-    public function execute($queue)
+    public function execute($queue,$purchase_type=null)
     {
-        Yii::$app->purchaseService->purchaseLog->realCreatePurchaseLog($this->data);
+        Yii::$app->purchaseService->purchaseLog->realCreatePurchaseLog($this->data,$purchase_type );
     }
 }

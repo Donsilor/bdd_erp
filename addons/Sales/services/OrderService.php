@@ -92,6 +92,7 @@ class OrderService extends Service
         if($form->isNewRecord){
             $account = new OrderAccount();
             $account->order_id = $order->id;
+            $account->currency = $order->currency;
             if(false == $account->save()) {
                 throw new \Exception($this->getError($account));
             }
@@ -169,7 +170,7 @@ class OrderService extends Service
             $orderPay->currency = $account->currency;
             $orderPay->exchange_rate = $account->exchange_rate;
             $orderPay->creator_id = 0;
-            $orderPay->creator = "SYSTEM";
+            $orderPay->creator = "system";
             if(false === $orderPay->save()) {
                 throw new \Exception($this->getError($orderPay));
             }

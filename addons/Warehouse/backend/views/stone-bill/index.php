@@ -38,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'width:130%;'],
+                        //'options' => ['style'=>'width:130%;'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -95,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
-                                        'width'=>'260px',
+                                        'width'=>'200px',
                                     ],
                                 ]),
                                 'format' => 'raw',

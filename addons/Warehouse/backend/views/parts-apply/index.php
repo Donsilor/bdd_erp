@@ -5,7 +5,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '配料列表';
+$this->title = '配件列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -15,26 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::a('批量配料', ['peiliao','check'=>1],  [
+                        echo Html::a('批量配件', ['peiliao','check'=>1],  [
                             'class'=>'btn btn-primary btn-xs',
                             "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
                             'data-width'=>'90%',
                             'data-height'=>'90%',
                             'data-offset'=>'20px',
-                            'data-title'=>'批量配料',
+                            'data-title'=>'批量配件',
                         ]);
                         echo '&nbsp;';                        
                     ?>
                     <?php
-                        echo Html::a('创建领料单', ['lingliao','check'=>1],  [
+                        echo Html::a('创建领件单', ['lingliao','check'=>1],  [
                             'class'=>'btn btn-success btn-xs',
                             "onclick" => "batchPop(this);return false;",
                             'data-grid'=>'grid',
                             'data-width'=>'90%',
                             'data-height'=>'90%',
                             'data-offset'=>'20px',
-                            'data-title'=>'创建领料单-预览',
+                            'data-title'=>'创建领件单-预览',
                         ]);
                         echo '&nbsp;';                        
                     ?>
@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -91,11 +92,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                             ],
                             [
-                                    'attribute' => 'peiliao_status',
+                                    'attribute' => 'peijian_status',
                                     'value' => function ($model){
-                                        return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->peiliao_status);
+                                        return \addons\Supply\common\enums\PeijianStatusEnum::getValue($model->peijian_status);
                                     },
-                                    'filter' =>Html::activeDropDownList($searchModel, 'peiliao_status',\addons\Supply\common\enums\PeiliaoStatusEnum::getMap(), [
+                                    'filter' =>Html::activeDropDownList($searchModel, 'peijian_status',\addons\Supply\common\enums\PeijianStatusEnum::getMap(), [
                                             'prompt' => '全部',
                                             'class' => 'form-control',
                                             'style' => 'width:80px;',
@@ -103,21 +104,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                             ],
                             [
-                                    'attribute' => 'gold_type',
+                                    'attribute' => 'parts_type',
                                     'value'  => function($model) {
-                                        return $model->gold_type ?? '无';
+                                        return $model->parts_type ?? '无';
                                     },
                                     'filter' => false,
                                     
                             ],
                             [
-                                    'attribute' => 'gold_weight',
-                                    'value' => 'gold_weight',
+                                    'attribute' => 'parts_weight',
+                                    'value' => 'parts_weight',
                                     'filter' => false,
 
                             ],
                             [
-                                    'label' => '领料单号',
+                                    'label' => '领件单号',
                                     'attribute' => 'delivery_no',
                                     'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
                                             'class' => 'form-control',
@@ -127,12 +128,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                    'label' => '配料信息(金料编号/金料类型/金重)',
+                                    'label' => '配件信息(配件编号/配件类型/配件重量)',
                                     'value' => function($model){
                                         $str = '';
-                                        foreach ($model->goldGoods ?? [] as $goldGoods){
-                                            $gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type ??'');
-                                            $str .= $goldGoods->gold_sn.'/'.$gold_type.'/'.$goldGoods->gold_weight."g<br/>";
+                                        foreach ($model->partsGoods ?? [] as $partsGoods){
+                                            $parts_type = Yii::$app->attr->valueName($partsGoods->parts->parts_type ??'');
+                                            $str .= $partsGoods->parts_sn.'/'.$parts_type.'/'.$partsGoods->parts_weight."g<br/>";
                                         }
                                         return $str;
                                     },
@@ -140,19 +141,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                             ],
                             [
-                                    'attribute' => 'peiliao_user',
+                                    'attribute' => 'peijian_user',
                                     'value' => 'peiliao_user',
                                     'filter' => false,
                             ],
                             [
-                                    'attribute' => 'peiliao_time',
+                                    'attribute' => 'peijian_time',
                                     'value' =>  function($model){
-                                        return Yii::$app->formatter->asDatetime($model->peiliao_time);
+                                        return Yii::$app->formatter->asDatetime($model->peijian_time);
                                     },
                                     'filter' => false,
                             ],
                             [
-                                    'attribute'=>'peiliao_remark',
+                                    'attribute'=>'peijian_remark',
                                     'filter' => false,
                             ],
                             [

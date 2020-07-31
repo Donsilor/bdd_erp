@@ -39,7 +39,7 @@ class StoneBillWGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-w/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-w/index', 'bill_id'=>$bill_id]));
         $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,

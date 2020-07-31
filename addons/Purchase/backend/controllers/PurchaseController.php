@@ -155,7 +155,6 @@ class PurchaseController extends BaseController
 
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $this->returnUrl = \Yii::$app->request->referrer;
 
         if($model->purchase_status != PurchaseStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect($this->returnUrl), 'error');
@@ -168,7 +167,7 @@ class PurchaseController extends BaseController
             $model->purchase_status = PurchaseStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
-                return $this->message($this->getError($model), $this->redirect($this->returnUrl), 'error');
+                throw new \Exception($this->getError($model));
             }
             //日志
             $log = [
@@ -180,7 +179,7 @@ class PurchaseController extends BaseController
             ];
             Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
             $trans->commit();
-            return $this->message('操作成功', $this->redirect($this->returnUrl), 'success');
+            return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
