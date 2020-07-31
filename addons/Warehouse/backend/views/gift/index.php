@@ -201,12 +201,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute'=>'goods_size',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                            'attribute'=>'gift_size',
+                            'filter' => Html::activeTextInput($searchModel, 'gift_size', [
                                 'class' => 'form-control',
                             ]),
                             'value' => function ($model) {
-                                $str = $model->goods_size;
+                                $str = $model->gift_size;
                                 return $str;
                             },
                             'format' => 'raw',
