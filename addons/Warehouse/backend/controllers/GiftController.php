@@ -28,7 +28,6 @@ class GiftController extends BaseController
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -41,23 +40,18 @@ class GiftController extends BaseController
                 'creator' => ['username'],
             ]
         ]);
-
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['created_at']);
-
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseGift::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseGift::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
         $dataProvider->query->andWhere(['>',WarehouseGift::tableName().'.status',-1]);
-
         //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->actionExport($dataProvider);
         }
-
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -90,7 +84,7 @@ class GiftController extends BaseController
      * @throws
      */
     public function actionExport($ids = null){
-        $name = '配件';
+        $name = '赠品';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }

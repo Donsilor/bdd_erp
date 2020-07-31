@@ -20,6 +20,7 @@ use common\models\backend\Member;
  * @property string $material_color 材质颜色
  * @property string $finger 手寸(美)
  * @property string $finger_hk 手寸(港)
+ * @property string $chain_length 链长
  * @property string $main_stone_type 主石类型
  * @property int $main_stone_num 主石数量
  * @property string $gift_size 赠品尺寸
@@ -58,7 +59,7 @@ class WarehouseGift extends BaseModel
             [['product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'gift_num', 'supplier_id', 'put_in_type', 'warehouse_id', 'gift_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gift_weight', 'gold_price', 'cost_price', 'sale_price'], 'number'],
             [['gift_sn', 'style_sn'], 'string', 'max' => 30],
-            [['gift_name'], 'string', 'max' => 100],
+            [['gift_name', 'chain_length'], 'string', 'max' => 100],
             [['material_type', 'material_color', 'finger', 'finger_hk', 'main_stone_type', 'gift_size'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
         ];
@@ -81,6 +82,7 @@ class WarehouseGift extends BaseModel
             'material_color' => '材质颜色',
             'finger' => '手寸(美)',
             'finger_hk' => '手寸(港)',
+            'chain_length' => '链长',
             'main_stone_type' => '主石类型',
             'main_stone_num' => '主石数量',
             'gift_size' => '赠品尺寸',
