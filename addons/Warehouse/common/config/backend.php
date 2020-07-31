@@ -33,6 +33,10 @@ return [
                         'route' => 'warehouse-goods/index',
                     ],
                     [
+                        'title' => '赠品库存',
+                        'route' => 'gift/index',
+                    ],
+                    [
                         'title' => '入库单',
                         'route' => 'bill-l/index',
                     ],

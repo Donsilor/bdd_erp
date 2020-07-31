@@ -135,7 +135,7 @@ class GiftReceiptController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new PurchaseReceiptForm();
         if($model->audit_status == AuditStatusEnum::PASS){
             $model->audit_status = AuditStatusEnum::PASS;
         }else{
@@ -150,10 +150,10 @@ class GiftReceiptController extends BaseController
                 $model->auditor_id = \Yii::$app->user->id;
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->receipt_status = ReceiptStatusEnum::CONFIRM;
-                    $res = PurchaseGiftReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
+                    /*$res = PurchaseGiftReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::IQC_ING], ['receipt_id'=>$model->id, 'goods_status'=>ReceiptGoodsStatusEnum::SAVE]);
                     if(false === $res) {
                         throw new \Exception("更新货品状态失败");
-                    }
+                    }*/
                 }else{
                     $model->receipt_status = ReceiptStatusEnum::SAVE;
                 }

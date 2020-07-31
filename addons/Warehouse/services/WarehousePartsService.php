@@ -50,7 +50,7 @@ class WarehousePartsService extends Service
         $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE,'id','code');
         $parts_sn .= $type_codes[$model->parts_type] ?? '0';
         //3.数字编号
-        $parts_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT);
+        $parts_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT).'P';
         if($save === true) {
             $model->parts_sn = $parts_sn;
             if(false === $model->save()) {
