@@ -34,7 +34,7 @@ return [
                     ],
                     [
                         'title' => '赠品库存',
-                        'route' => 'warehouse-gift/index',
+                        'route' => 'gift/index',
                     ],
                     [
                         'title' => '入库单',
