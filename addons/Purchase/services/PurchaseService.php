@@ -66,6 +66,13 @@ class PurchaseService extends Service
             Purchase::updateAll(['total_num'=>$sum['total_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$purchase_id]);
         }
     }
+    /**
+     *  根据采购申请单创建采购单
+     */
+    public function createPurchase($apply_ids)
+    {
+        
+    }
     
     /**
     * 同步采购单生成布产单
