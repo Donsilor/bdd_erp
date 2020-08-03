@@ -45,6 +45,11 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehousePartsBillCService $partsC 领件单
  * @property \addons\Warehouse\services\WarehousePartsBillDService $partsD 退件单
  * @property \addons\Warehouse\services\WarehousePartsBillWService $partsW 盘点单
+ *
+ * @property \addons\Warehouse\services\WarehouseTempletService $templet 样板库存
+ * @property \addons\Warehouse\services\WarehouseTempletBillService $templetBill 样板单据
+ * @property \addons\Warehouse\services\WarehouseTempletBillLService $$templetL 入库单
+ * @property \addons\Warehouse\services\WarehouseTempletBillCService $$templetC 出库单
  */
 class Application extends Service
 {
@@ -90,5 +95,10 @@ class Application extends Service
         'partsC' => 'addons\Warehouse\services\WarehousePartsBillCService',
         'partsD' => 'addons\Warehouse\services\WarehousePartsBillDService',
         'partsW' => 'addons\Warehouse\services\WarehousePartsBillWService',
+
+        'templet' => 'addons\Warehouse\services\WarehouseTempletService',
+        'templetBill' => 'addons\Warehouse\services\WarehouseTempletBillService',
+        'templetL' => 'addons\Warehouse\services\WarehouseTempletBillLService',
+        'templetC' => 'addons\Warehouse\services\WarehouseTempletBillCService',
     ];
 }

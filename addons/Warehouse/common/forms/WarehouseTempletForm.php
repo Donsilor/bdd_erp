@@ -3,14 +3,14 @@
 namespace addons\Warehouse\common\forms;
 
 use Yii;
-use addons\Warehouse\common\models\WarehouseGift;
+use addons\Warehouse\common\models\WarehouseTemplet;
 use common\helpers\ArrayHelper;
 
 /**
- * 赠品 Form
+ * 样板 Form
  *
  */
-class WarehouseGiftForm extends WarehouseGift
+class WarehouseTempletForm extends WarehouseTemplet
 {
     /**
      * {@inheritdoc}
