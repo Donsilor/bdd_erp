@@ -33,7 +33,6 @@ class TempletBillLController extends TempletBillController
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

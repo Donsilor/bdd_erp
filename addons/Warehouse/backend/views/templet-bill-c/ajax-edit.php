@@ -57,6 +57,7 @@ $form = ActiveForm::begin([
             ]);?>
         </div>
     </div>
+    <?= $form->field($model, 'delivery_no')->textInput(); ?>
     <?= $form->field($model, 'remark')->textArea(); ?>
 </div>
 <div class="modal-footer">

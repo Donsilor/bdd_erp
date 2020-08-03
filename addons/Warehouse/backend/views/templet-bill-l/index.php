@@ -216,13 +216,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{apply} {audit} {goods} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
+                                            'data-target' => '#ajaxModal',
                                         ]);
                                     }
                                 },

@@ -15,7 +15,7 @@ use common\models\base\SearchModel;
  * Class DefaultController
  * @package addons\Supply\backend\controllers
  */
-class TempleBillLogController extends BaseController
+class TempletBillLogController extends BaseController
 {
     use Curd;
 
