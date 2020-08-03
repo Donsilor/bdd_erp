@@ -18,7 +18,7 @@ class WarehouseTempletBillLForm extends WarehouseTempletBill
     public function rules()
     {
          $rules = [
-             [[ 'supplier_id','channel_id', 'delivery_no'], 'required'],
+             [['supplier_id', 'channel_id', 'delivery_no'], 'required'],
              [['created_at'], 'integer'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);

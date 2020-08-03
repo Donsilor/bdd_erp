@@ -18,6 +18,7 @@ class WarehouseTempletBillCForm extends WarehouseTempletBill
     public function rules()
     {
          $rules = [
+             [['supplier_id', 'channel_id', 'delivery_no'], 'required'],
              [['created_at'], 'integer'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
@@ -30,7 +31,8 @@ class WarehouseTempletBillCForm extends WarehouseTempletBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'put_in_type' => '出库方式',
+            'delivery_no' => '参考编号',
         ]);
     }
 

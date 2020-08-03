@@ -54,7 +54,7 @@ $form = ActiveForm::begin([
                 'pluginOptions' => [
                     'allowClear' => false
                 ],
-            ])->label("出库方式");?>
+            ]);?>
         </div>
     </div>
     <?= $form->field($model, 'remark')->textArea(); ?>
