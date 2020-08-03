@@ -143,6 +143,7 @@ class PurchaseApplyGoods extends BaseModel
             'confirm_design_time' => '确认时间（设计师）',
             'confirm_goods_id' => '商品部',
             'confirm_goods_time' => '确认时间（商品部）',
+            'order_detail_id'=>'顾客订单明细ID',    
         ];
     }
     /**
