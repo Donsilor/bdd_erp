@@ -65,20 +65,25 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
+                            'attribute' => 'layout_type',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\LayoutTypeEnum::getValue($model->layout_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                        ],
+                        [
                             'attribute'=>'goods_name',
                             'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'200'],
-                        ],
-                        [
-                            'label' => '商品图片',
-                            'value' => function ($model) {
-                                return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->gift->getStyleImage($model),90,90);
-                            },
-                            'filter' => false,
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'90'],
                         ],
                         [
                             'attribute'=>'style_sn',
@@ -90,6 +95,40 @@ $params = $params ? "&".http_build_query($params) : '';
                                 return $str;
                             },
                             'format' => 'raw',
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'label' => '款式图片',
+                            'value' => function ($model) {
+                                return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->templet->getStyleImage($model),90,90);
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'90'],
+                        ],
+                        [
+                            'attribute'=>'goods_num',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
+                            'attribute'=>'suttle_weight',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return $model->suttle_weight ?? '';
+                            },
+                            'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'stone_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'stone_weight', [
+                                'class' => 'form-control',
+                            ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
@@ -117,69 +156,28 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'chain_length',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return $model->chain_length ?? '';
-                            },
-                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'main_stone_type',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->main_stone_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'main_stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;'
-                            ]),
-                            'headerOptions' => [],
-                        ],
-                        [
-                            'attribute'=>'main_stone_num',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return $model->main_stone_num ?? '';
-                            },
-                            'filter' => false,
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'gift_size',
-                            'filter' => Html::activeTextInput($searchModel, 'gift_size', [
+                            'attribute'=>'goods_size',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                 'class' => 'form-control',
                             ]),
                             'value' => function ($model) {
-                                $str = $model->gift_size;
+                                $str = $model->goods_size;
                                 return $str;
                             },
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute'=>'gift_num',
-                            'filter' => Html::activeTextInput($searchModel, 'gift_num', [
+                            'attribute'=>'stone_size',
+                            'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute'=>'gift_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'gift_weight', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'100'],
-                        ],
-                        [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
+                            'value' => function ($model) {
+                                $str = $model->goods_size;
+                                return $str;
+                            },
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'cost_price',
@@ -206,7 +204,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width' => '100'],
                         ],
-                        /*[
+                        [
+                            'attribute' => 'channel_id',
+                            'value' => function ($model){
+                                return $model->channel->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:120px;'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -221,7 +232,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => [],
-                        ],*/
+                        ],
                         [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件

@@ -26,7 +26,7 @@ class TempletBillController extends BaseController
         $model = new $this->modelClass;
         $searchParams = Yii::$app->request->get('SearchModel');
         $model->batch_sn = $searchParams['batch_sn']??"";
-        if(empty($model->gold_sn)){
+        if(empty($model->batch_sn)){
             $relations = [
                 'creator' => ['username'],
                 'auditor' => ['username'],
@@ -54,7 +54,7 @@ class TempletBillController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => $relations,
         ]);
-        if(empty($model->gold_sn)) {
+        if(empty($model->batch_sn)) {
             $dataProvider = $searchModel
                 ->search(Yii::$app->request->queryParams, ['created_at']);
             $created_at = $searchModel->created_at;
@@ -67,7 +67,7 @@ class TempletBillController extends BaseController
             $dataProvider = $searchModel
                 ->search(Yii::$app->request->queryParams, ['supplier_id']);
             $supplier_id = $searchModel->supplier_id;
-            if($model->gold_sn){
+            if($model->batch_sn){
                 $dataProvider->query->andWhere(['=','batch_sn', $model->batch_sn]);
             }
             if($supplier_id){

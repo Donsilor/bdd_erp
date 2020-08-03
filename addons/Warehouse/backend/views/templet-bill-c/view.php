@@ -100,11 +100,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box-footer text-center">
             <?php
-            if($model->bill_status == BillStatusEnum::SAVE) {
+            if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
                 echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class' => 'btn btn-primary btn-ms',
-                    'data-target' => '#ajaxModalLg',
+                    'data-target' => '#ajaxModal',
                 ]);
                 echo '&nbsp;';
                 echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [

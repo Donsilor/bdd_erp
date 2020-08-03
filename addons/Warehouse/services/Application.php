@@ -48,8 +48,8 @@ use common\components\Service;
  *
  * @property \addons\Warehouse\services\WarehouseTempletService $templet 样板库存
  * @property \addons\Warehouse\services\WarehouseTempletBillService $templetBill 样板单据
- * @property \addons\Warehouse\services\WarehouseTempletBillLService $$templetL 入库单
- * @property \addons\Warehouse\services\WarehouseTempletBillCService $$templetC 出库单
+ * @property \addons\Warehouse\services\WarehouseTempletBillLService $templetL 入库单
+ * @property \addons\Warehouse\services\WarehouseTempletBillCService $templetC 出库单
  */
 class Application extends Service
 {

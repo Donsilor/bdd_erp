@@ -22,6 +22,10 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
+                    <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -34,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:100%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -184,18 +188,18 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {goods}',
+                            'template' => '{edit} {apply} {audit} {goods}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
+                                    if(in_array($model->bill_status, [\addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE])){
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
+                                            'data-target' => '#ajaxModal',
                                         ]);
                                     }
                                 },
                                 'apply' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE){
                                         return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                                             'class'=>'btn btn-success btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -203,7 +207,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'audit' => function($url, $model, $key){
-                                    if(in_array($model->bill_status,[BillStatusEnum::PENDING])){
+                                    if(in_array($model->bill_status,[\addons\Warehouse\common\enums\TempletBillStatusEnum::PENDING])){
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -212,10 +216,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['gold-bill-c-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('明细', ['templet-bill-c-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                    if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
                                         return Html::delete(['delete', 'id' => $model->id],'取消');
                                     }
                                 },

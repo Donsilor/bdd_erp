@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
@@ -125,5 +126,13 @@ class WarehouseTemplet extends BaseModel
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
+    /**
+     * 销售渠道 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }

@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+        if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE){
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -43,12 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'attribute'=>'gold_sn',
+                                'attribute'=>'batch_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute'=>'gold_name',
+                                'attribute'=>'goods_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
@@ -58,47 +59,117 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_type',
-                                'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                'label' => '款式图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->templet->getStyleImage($model),90,90);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'attribute' => 'layout_type',
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\LayoutTypeEnum::getValue($model->layout_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style' => 'width:100px;'
+
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                            ],
+                            [
+                                'attribute'=>'goods_num',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute'=>'suttle_weight',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->suttle_weight ?? '';
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                    'class' => 'form-control',
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'attribute'=>'stone_weight',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
-                                'attribute' => 'gold_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'label' => '布产编号',
-                                'value' => function ($model){
-                                    return $model->produceGold->produce_sn ?? '';
+                                'attribute' => 'finger_hk',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->finger_hk);
                                 },
-                                'filter' => false,
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'finger',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->finger);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_size;
+                                    return $str;
+                                },
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'label' => '配料状态',
-                                'value' => function ($model){
-                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
+                                'attribute'=>'stone_size',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_size', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    $str = $model->goods_size;
+                                    return $str;
                                 },
-                                'filter' => false,
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'cost_price',
+                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width' => '120'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
+                                ]),
+                                'value' => function ($model) {
+                                    return $model->remark??"";
+                                },
+                                'headerOptions' => ['width'=>'100'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
