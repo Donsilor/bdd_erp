@@ -112,8 +112,7 @@ class OrderSyncService extends Service
     {
         return [
                 "language"=>$order->language,
-                "currency"=>$order->account->currency,
-                
+                "currency"=>$order->account->currency,                
                 "pay_type"=>$this->getErpPayType($order),
                 "pay_status"=>$order->payment_status,
                 "pay_time"=>$order->payment_time,
@@ -204,7 +203,7 @@ class OrderSyncService extends Service
             $erpGoods = [
                     "goods_name" => $model->goods_name,
                     "goods_image"=> $model->goods_image,
-                    "style_sn"=> $model->style->style_sn ?? '',                    
+                    "style_sn"=> trim($model->style->style_sn ?? '','-1'),                    
                     "goods_sn"=> $model->goods_sn,
                     "jintuo_type"=> $this->getErpJintuoType($model),
                     "goods_num"=> $model->goods_num,
