@@ -51,9 +51,9 @@ class OrderForm extends Order
                 },
                 'whenClient' => "function (attribute, value) {
                      if($('#orderform-sale_channel_id') == 3){
-                          return false;
+                          return true;
                      }
-                     return true;
+                     return false;
                 }"
                 ],
                 [['customer_email_1','customer_email_2'], 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
