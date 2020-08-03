@@ -3,7 +3,9 @@
 namespace addons\Warehouse\services;
 
 use addons\Shop\common\models\Style;
+use addons\Warehouse\common\enums\LayoutTypeEnum;
 use addons\Warehouse\common\models\WarehouseGift;
+use addons\Warehouse\common\models\WarehouseTemplet;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -38,7 +40,7 @@ class WarehouseTempletService extends Service
     }
     /**
      * 创建批次号
-     * @param WarehouseStone $model
+     * @param WarehouseTemplet $model
      * @param string $save
      * @throws
      *
@@ -46,19 +48,22 @@ class WarehouseTempletService extends Service
     public function createBatchSn($model, $save = true)
     {
         //1.供应商
-        $gold_sn = $model->supplier->supplier_tag ?? '00';
+        $batch_sn = $model->supplier->supplier_tag ?? '00';
         //2.样板类型
-        $type_codes = Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE,'id','code');
-        $gold_sn .= $type_codes[$model->gold_type] ?? '0';
+        if($model->layout_type == LayoutTypeEnum::SILVER){
+            $batch_sn .="S";
+        }elseif($model->layout_type == LayoutTypeEnum::RUBBER){
+            $batch_sn .="R";
+        }
         //3.数字编号
-        $gold_sn .= str_pad($model->id,6,'0',STR_PAD_LEFT)."G";
+        $batch_sn .= str_pad($model->id,7,'0',STR_PAD_LEFT);
         if($save === true) {
-            $model->gold_sn = $gold_sn;
+            $model->batch_sn = $batch_sn;
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model));
             }
         }
-        return $gold_sn;
+        return $batch_sn;
     }
     /**
      * 商品图片
