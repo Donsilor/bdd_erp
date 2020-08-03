@@ -133,6 +133,6 @@ class WarehouseTemplet extends BaseModel
      */
     public function getChannel()
     {
-        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }

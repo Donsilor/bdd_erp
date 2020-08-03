@@ -2,6 +2,12 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\TempletBillStatusEnum;
+use addons\Warehouse\common\enums\TempletStatusEnum;
+use addons\Warehouse\common\forms\WarehouseTempletBillLForm;
+use addons\Warehouse\common\forms\WarehouseTempletBillLGoodsForm;
+use addons\Warehouse\common\models\WarehouseTemplet;
+use addons\Warehouse\common\models\WarehouseTempletBillGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -63,50 +69,50 @@ class WarehouseTempletBillLService extends Service
         return $billM;
     }
     /**
-     * 审核金料收货单(入库单)
-     * @param object $form
+     * 审核样板收货单(入库单)
+     * @param WarehouseTempletBillLForm $form
      * @throws
      */
-    public function auditGoldL($form)
+    public function auditTempletL($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
         if($form->audit_status == AuditStatusEnum::PASS){
-            $form->bill_status = BillStatusEnum::CONFIRM;
-            $billGoods = WarehouseGoldBillGoods::find()->select(['gold_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
+            $form->bill_status = TempletBillStatusEnum::CONFIRM;
+            $billGoods = WarehouseTempletBillGoods::find()->select(['goods_name', 'source_detail_id'])->where(['bill_id' => $form->id])->asArray()->all();
             if(empty($billGoods)){
                 throw new \Exception("单据明细不能为空");
             }
-            //金料入库
-            $gold = WarehouseGoldBillLGoodsForm::findAll(['bill_id'=>$form->id]);
+            //样板入库
+            $templet = WarehouseTempletBillLGoodsForm::findAll(['bill_id'=>$form->id]);
             $ids = $g_ids = [];
-            foreach ($gold as $detail){
-                $goldM = new WarehouseGold();
+            foreach ($templet as $detail){
+                $templetM = new WarehouseTemplet();
                 $good = [
                     'gold_sn' => (string) rand(10000000000,99999999999),//临时
-                    'gold_status' => GoldStatusEnum::IN_STOCK,
+                    'goods_status' => TempletStatusEnum::IN_STOCK,
                     'style_sn' => $detail->style_sn,
-                    'gold_name' => $detail->gold_name,
-                    'gold_type' => $detail->gold_type,
+                    'qiban_sn' => $detail->qiban_sn,
+                    'goods_name' => $detail->goods_name,
+                    'goods_image' => $detail->goods_image,
+                    'layout_type' => $detail->layout_type,
                     'put_in_type' => $form->put_in_type,
                     'supplier_id' => $form->supplier_id,
-                    'gold_num' => $detail->gold_num,
-                    'gold_weight' => $detail->gold_weight,
+                    'goods_num' => $detail->goods_num,
+                    'goods_weight' => $detail->goods_weight,
                     'cost_price' => $detail->cost_price,
-                    'gold_price' => $detail->gold_price,
                     'warehouse_id' => $form->to_warehouse_id,
                     'remark' => $detail->remark,
                     'status' => StatusEnum::ENABLED,
                     'creator_id'=>\Yii::$app->user->identity->getId(),
                     'created_at' => time(),
-
                 ];
-                $goldM->attributes = $good;
-                if(false === $goldM->save()){
-                    throw new \Exception($this->getError($goldM));
+                $templetM->attributes = $good;
+                if(false === $templetM->save()){
+                    throw new \Exception($this->getError($templetM));
                 }
-                $id = $goldM->attributes['id'];
+                $id = $templetM->attributes['id'];
                 $ids[] = $id;
                 $g_ids[$id] = $detail->id;
             }

@@ -22,6 +22,10 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
+                    <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -34,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:120%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -64,6 +68,21 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
+                        [
+                            'attribute' => 'supplier_id',
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:160px;'],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
+                        ],
                         /*[
                             'attribute' => 'bill_type',
                             'value' => function ($model){
@@ -78,22 +97,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                         ],*/
-                        [
-                            'attribute' => 'supplier_id',
-                            'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[supplier_id]',
-                                'value'=>$searchModel->supplier_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                    'width' => '120',
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => [],
-                        ],
                         /*[
                             'attribute' => 'to_warehouse_id',
                             'value' =>"toWarehouse.name",
@@ -122,14 +125,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeTextInput($searchModel, 'total_weight', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'120'],
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'attribute'=>'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => ['width'=>'120'],
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'attribute'=>'delivery_no',
@@ -137,6 +140,19 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'120'],
+                        ],
+                        [
+                            'attribute' => 'channel_id',
+                            'value' => function ($model){
+                                return $model->channel->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:120px;'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute' => 'creator_id',
@@ -152,7 +168,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'width:100px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'width:160px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [

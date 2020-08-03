@@ -15,6 +15,7 @@ use Yii;
  * @property string $goods_image 图片
  * @property string $batch_sn 批次号
  * @property string $style_sn 款号
+ * @property string $qiban_sn 起版号
  * @property int $layout_type 版式类型
  * @property string $finger 手寸(美)
  * @property string $finger_hk 手寸(港)
@@ -51,7 +52,7 @@ class WarehouseTempletBillGoods extends BaseModel
             [['bill_id', 'bill_no', 'bill_type', 'goods_name'], 'required'],
             [['bill_id', 'layout_type', 'goods_num', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['suttle_weight', 'goods_weight', 'stone_weight', 'cost_price', 'sale_price'], 'number'],
-            [['bill_no', 'goods_name', 'batch_sn', 'style_sn'], 'string', 'max' => 30],
+            [['bill_no', 'goods_name', 'batch_sn', 'style_sn', 'qiban_sn'], 'string', 'max' => 30],
             [['bill_type', 'finger', 'finger_hk'], 'string', 'max' => 10],
             [['goods_image', 'remark'], 'string', 'max' => 255],
             [['goods_size', 'stone_size'], 'string', 'max' => 100],
@@ -72,6 +73,7 @@ class WarehouseTempletBillGoods extends BaseModel
             'goods_image' => '图片',
             'batch_sn' => '批次号',
             'style_sn' => '款号',
+            'qiban_sn' => '起版号',
             'layout_type' => '版式类型',
             'finger' => '手寸(美)',
             'finger_hk' => '手寸(港)',
@@ -85,7 +87,7 @@ class WarehouseTempletBillGoods extends BaseModel
             'sale_price' => '销售价',
             'source_detail_id' => '来源明细ID',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

@@ -5,16 +5,17 @@ namespace addons\Warehouse\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
-use addons\Warehouse\common\forms\WarehouseGoldBillLForm;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\models\WarehouseTempletBill;
+use addons\Warehouse\common\models\WarehouseTempletBillGoods;
+use addons\Warehouse\common\forms\WarehouseTempletBillLForm;
+use addons\Warehouse\common\forms\WarehouseTempletBillLGoodsForm;
+use addons\Warehouse\common\enums\TempletBillStatusEnum;
+use addons\Warehouse\common\enums\TempletBillTypeEnum;
 use common\enums\AuditStatusEnum;
-use common\helpers\Url;
-use common\helpers\PageHelper;
-use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
+use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
+use common\helpers\Url;
 
 /**
  * StyleChannelController implements the CRUD actions for StyleChannel model.
@@ -22,8 +23,8 @@ use common\helpers\StringHelper;
 class TempletBillLController extends TempletBillController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillLForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_L;
+    public $modelClass = WarehouseTempletBillLForm::class;
+    public $billType = TempletBillTypeEnum::TEMPLET_L;
 
     /**
      * Lists all StyleChannel models.
@@ -51,16 +52,16 @@ class TempletBillLController extends TempletBillController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseTempletBill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseTempletBill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>', WarehouseGoldBill::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=', WarehouseGoldBill::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>', WarehouseTempletBill::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=', WarehouseTempletBill::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(WarehouseGoldBill::tableName().'.id');
+            $queryIds = $dataProvider->query->select(WarehouseTempletBill::tableName().'.id');
             $this->actionExport($queryIds);
         }
 
@@ -73,19 +74,19 @@ class TempletBillLController extends TempletBillController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
         $bill_id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-l/index', 'bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['templet-bill-l/index', 'bill_id'=>$bill_id]));
         $model = $this->findModel($bill_id);
-        $model = $model ?? new WarehouseGoldBill();
+        $model = $model ?? new WarehouseTempletBill();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->templetBill->menuTabList($bill_id, $this->billType, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -97,15 +98,15 @@ class TempletBillLController extends TempletBillController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBill();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        $model = $model ?? new WarehouseTempletBill();
+        if($model->bill_status != TempletBillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $goods = WarehouseGoldBillGoods::findOne(['bill_id'=>$id]);
+        $goods = WarehouseTempletBillGoods::findOne(['bill_id'=>$id]);
         if(!$goods){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->bill_status = BillStatusEnum::PENDING;
+        $model->bill_status = TempletBillStatusEnum::PENDING;
         $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -115,7 +116,7 @@ class TempletBillLController extends TempletBillController
     }
 
     /**
-     * ajax 收货单-审核
+     * ajax 入库单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -124,7 +125,7 @@ class TempletBillLController extends TempletBillController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillLForm();
+        $model = $model ?? new WarehouseTempletBillLForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -133,9 +134,9 @@ class TempletBillLController extends TempletBillController
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
+                $model->auditor_id = \Yii::$app->user->identity->getId();
 
-                \Yii::$app->warehouseService->goldL->auditGoldL($model);
+                \Yii::$app->warehouseService->templetL->auditTempletL($model);
 
                 $trans->commit();
 
@@ -158,7 +159,7 @@ class TempletBillLController extends TempletBillController
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids = null){
-        $name = '金料入库单明细';
+        $name = '样板入库单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -175,15 +176,13 @@ class TempletBillLController extends TempletBillController
             ['价格	', 'gold_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
-
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
-
     private function getData($ids){
         $select = ['wg.*','w.bill_no','w.to_warehouse_id','w.bill_status'];
-        $query = WarehouseGoldBillLForm::find()->alias('w')
-            ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
+        $query = WarehouseTempletBillLForm::find()->alias('w')
+            ->leftJoin(WarehouseTempletBillLGoodsForm::tableName()." wg",'w.id=wg.bill_id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
@@ -200,12 +199,10 @@ class TempletBillLController extends TempletBillController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {
-
-
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
