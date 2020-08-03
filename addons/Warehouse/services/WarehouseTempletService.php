@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Shop\common\models\Style;
+use addons\Warehouse\common\models\WarehouseGift;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -57,6 +59,17 @@ class WarehouseTempletService extends Service
             }
         }
         return $gold_sn;
+    }
+    /**
+     * 商品图片
+     * @param WarehouseGift $model
+     * @throws
+     * @return
+     */
+    public function getStyleImage($model){
+        $style = Style::find()->where(['style_sn'=>$model->style_sn])->one();
+        $image = $style->style_image ?? '';
+        return $image;
     }
     /**
      * 更改库存
