@@ -11,8 +11,8 @@ namespace addons\Warehouse\common\enums;
  */
 class TempletBillTypeEnum extends \common\enums\BaseEnum
 {
-    const GOLD_L   = 'YL';
-    const GOLD_C   = 'YC';
+    const TEMPLET_L   = 'YL';
+    const TEMPLET_C   = 'YC';
 
     /**
      * @return array
@@ -20,8 +20,8 @@ class TempletBillTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GOLD_L   => '入库单',
-            self::GOLD_C   => '出库单',
+            self::TEMPLET_L   => '入库单',
+            self::TEMPLET_C   => '出库单',
         ];
     }
 
