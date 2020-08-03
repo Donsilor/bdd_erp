@@ -412,9 +412,6 @@ class OrderGoodsController extends BaseController
             'returnUrl'=>$this->returnUrl,
         ]);
     }
-
-
-
     /**
      * @return mixed
      * 布产

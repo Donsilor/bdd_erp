@@ -131,7 +131,7 @@ class OrderService extends Service
      * @throws \Exception
      * @return \addons\Sales\common\models\Order
      */
-    public function syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $noticeInfo = [])
+    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $noticeInfo = [])
     {
         if(empty($orderInfo['out_trade_no'])) {
             throw new \Exception("orderInfo->out_trade_no 不能为空");
@@ -253,12 +253,56 @@ class OrderService extends Service
         return $order;        
     }
     /**
+     * 同步订单商品生成采购申请单
+     * @param int $order_id
+     * @param array|int $detail_ids
+     */
+    public function syncPurchaseApply($order_id, $detail_ids = null)
+    {
+        $applyInfo = [];
+        $applyGoodsList = [];
+        
+        $order = Order::find()->where(['id'=>$order_id])->one();
+        if($order->total_num <= 0 ){
+            throw new \Exception('订单没有明细');
+        }
+        if($order->audit_status != AuditStatusEnum::PASS){
+            throw new \Exception('订单没有审核');
+        }
+        $query = OrderGoods::find()->where(['order_id'=>$order_id,'is_stock'=>IsStockEnum::NO]);
+        if(!empty($detail_ids)) {
+            $query->andWhere(['id'=>$detail_ids]);
+        }        
+        $models = $query->all();        
+        foreach ($models as $model){
+            $goods = [
+                    'id' =>$model->id,
+                    'goods_image'=>$model->goods_image,
+                    'goods_name' =>$model->style->style_name ?? '',
+                    'goods_num' =>$model->goods_num,                    
+                    'style_sn' => $model->style_sn,
+                    'qiban_sn' => $model->qiban_sn,
+                    'qiban_type'=>$model->qiban_type,
+                    'jintuo_type'=>$model->jintuo_type,
+                    'style_sex' =>$model->style_sex,
+                    'is_inlay' =>$model->is_inlay,
+                    'product_type_id'=>$model->product_type_id,
+                    'style_cate_id'=>$model->style_cate_id,                    
+            ];            
+            $goods['goods_attrs'] = OrderGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+            $applyGoodsList[] = $goods;
+        }
+        //同步采购申请单
+        $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);
+        return $apply;
+    }
+    /**
      * 同步订单商品生成布产单
      * @param int $order_id
      * @param array $detail_ids
      * @throws \Exception
      */
-    public function syncProduce($order_id, $detail_ids = null)
+    /* public function syncProduce($order_id, $detail_ids = null)
     {
         $order = Order::find()->where(['id'=>$order_id])->one();
         if($order->total_num <= 0 ){
@@ -308,9 +352,9 @@ class OrderService extends Service
                     $goods['id'] = $model->produce->id;
                     //如果是配料中的，不同步配料类型和配料状态
                     if($model->produce->bc_status == BuChanEnum::IN_PEILIAO) {
-                        /* unset($goods['peiliao_type']);
+                        unset($goods['peiliao_type']);
                         unset($goods['peishi_status']);
-                        unset($goods['peiliao_status']); */
+                        unset($goods['peiliao_status']);
                     }
                 }
             }
@@ -323,7 +367,7 @@ class OrderService extends Service
                 throw new \Exception($this->getError($model),422);
             }
         }
-    }
+    } */
     
     /**
      * 创建订单编号

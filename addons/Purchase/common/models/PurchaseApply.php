@@ -13,19 +13,24 @@ use addons\Warehouse\common\models\Warehouse;
  *
  * @property int $id
  * @property string $apply_sn 申请单号
- * @property string $total_cost 总成本
- * @property int $total_num 总数量
+ * @property string $order_sn 客订单编号
  * @property int $channel_id 采购渠道
  * @property int $warehouse_id 入库仓库
  * @property int $delivery_time 预计交货时间
+ * @property int $total_num 总数量
+ * @property string $total_cost 总成本
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态：0待审核 1通过 2不通过
  * @property int $audit_time 审核时间
  * @property string $audit_remark 审核备注
- * @property int $status 状态
- * @property int $apply_status 订单状态
- * @property string $remark 采购备注
+ * @property int $final_auditor_id 最终审核人
+ * @property int $final_audit_time 最终审核时间
+ * @property int $final_audit_status 最终审核时间
+ * @property string $final_audit_remark 最终审核备注
+ * @property int $apply_status 单据状态
  * @property int $follower_id 跟单人
+ * @property int $status 状态
+ * @property string $remark 采购备注
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
@@ -49,7 +54,7 @@ class PurchaseApply extends BaseModel
             [['channel_id'], 'required'],
             [['total_cost'], 'number'],
             [['warehouse_id','total_num','channel_id', 'auditor_id', 'audit_status', 'audit_time', 'final_auditor_id', 'final_audit_status', 'final_audit_time', 'status', 'apply_status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['apply_sn'], 'string', 'max' => 30],            
+            [['apply_sn','order_sn'], 'string', 'max' => 30],            
             [['audit_remark', 'remark','final_audit_remark'], 'string', 'max' => 255],
             [['delivery_time'], 'safe'],
         ];
@@ -63,6 +68,7 @@ class PurchaseApply extends BaseModel
         return [
             'id' => 'ID',
             'apply_sn' => '申请单号',
+            'order_sn' => '客订单编号',                
             'total_cost' => '总成本',
             'total_num' => '总数量',
             'channel_id' => "采购渠道",
@@ -76,7 +82,7 @@ class PurchaseApply extends BaseModel
             'final_audit_status' => '审核状态',
             'final_audit_time' => '审核时间',
             'final_audit_remark' => '审核备注',
-            //'status' => '状态',
+            'status' => '状态',
             'apply_status' => '申请单状态',
             'remark' => '采购备注',
             'follower_id' => '跟单人',

@@ -73,7 +73,7 @@ class ProduceService extends Service
      * 创建布产单
      * @return array
      */
-    public function createProduce($goods, $attr_list){
+    public function createSyncProduce($goods, $attr_list){
        
         $produce_id = $goods['id'] ?? 0;
         $is_new = true;

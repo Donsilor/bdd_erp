@@ -399,6 +399,23 @@ class OrderController extends BaseController
                 'model' => $model,
         ]);
     }
+    /**
+     * 申请采购
+     * @return array|mixed
+     */
+    public function actionAjaxPurchaseApply()
+    {
+        $id = Yii::$app->request->get('id');        
+        try {
+            $trans = Yii::$app->db->beginTransaction();
+            Yii::$app->salesService->order->syncPurchaseApply($id);
+            $trans->commit();
+            return ResultHelper::json(200, '操作成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, '操作失败！'.$e->getMessage());
+        }       
+    }
         
     
 }

@@ -73,7 +73,7 @@ class PurchaseService extends Service
     * @param array $detail_ids
     * @throws \Exception
     */
-    public function syncPurchaseToProduce($purchase_id, $detail_ids = null)
+    public function syncProduce($purchase_id, $detail_ids = null)
     {
         $purchase = Purchase::find()->where(['id'=>$purchase_id])->one();
         if($purchase->total_num <= 0 ){
@@ -140,7 +140,7 @@ class PurchaseService extends Service
                 }
             }
             $goods_attrs = PurchaseGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
-            $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
+            $produce = Yii::$app->supplyService->produce->createSyncProduce($goods ,$goods_attrs);
             if($produce) {
                 $model->produce_id = $produce->id;
             }            

@@ -12,6 +12,7 @@ use common\components\Service;
  * @property \addons\Purchase\services\PurchaseGoodsService $purchaseGoods 采购明细
  * @property \addons\Purchase\services\PurchaseLogService $purchaseLog 采购订单日志
  * @property \addons\Purchase\services\PurchaseApplyService $apply 采购申请单
+ * @property \addons\Purchase\services\ApplyLogService $applyLog 采购申请单日志
  * @property \addons\Purchase\services\PurchaseApplyGoodsService $applyGoods 采购申请单
  * @property \addons\Purchase\services\PurchaseGoldService $gold 金料采购订单
  * @property \addons\Purchase\services\PurchaseStoneService $stone 石料采购订单
@@ -34,7 +35,7 @@ class Application extends Service
         'purchaseLog'=>'addons\Purchase\services\PurchaseLogService',
         'apply' => 'addons\Purchase\services\PurchaseApplyService',
         'applyGoods' => 'addons\Purchase\services\PurchaseApplyGoodsService',
-
+        'applyLog' => 'addons\Purchase\services\ApplyLogService',
         'gold' => 'addons\Purchase\services\PurchaseGoldService',
         'stone' => 'addons\Purchase\services\PurchaseStoneService',
         'parts' => 'addons\Purchase\services\PurchasePartsService',

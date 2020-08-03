@@ -14,17 +14,22 @@ use addons\Style\common\models\StyleChannel;
  *
  * @property int $id ID
  * @property int $apply_id 采购单ID
+ * @property int $order_detail_id 订单明细ID
  * @property string $goods_sn 款号/起版号
- * @property int $goods_type 商品类型
  * @property int $goods_num 商品数量
  * @property string $goods_name 商品名称
- * @property string $style_id 款号/起版id
- * @property string $style_sn 款号
- * @property string $qiban_sn
+ * @property string $goods_image 商品主图
+ * @property string $goods_images 商品图片
+ * @property string $goods_video 视频
+ * @property int $goods_type 商品类型
+ * @property int $style_id 款号/起版ID
+ * @property string $style_sn 商品编号
+ * @property string $qiban_sn 起版号
  * @property int $qiban_type 起版类型 0非起版 1有款起版 2无款起版 
  * @property int $style_cate_id 款式分类
  * @property int $product_type_id 产品线
  * @property int $style_channel_id 归属渠道
+ * @property int $supplier_id 供应商ID
  * @property int $style_sex 款式性别
  * @property int $jintuo_type 金托类型
  * @property int $is_inlay 是否镶嵌
@@ -35,8 +40,26 @@ use addons\Style\common\models\StyleChannel;
  * @property string $stone_info 石料信息
  * @property string $parts_info 配件信息
  * @property string $remark 采购备注
+ * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
+ * @property int $audit_status 审核状态
+ * @property int $auditor_id 审核人
+ * @property int $audit_time 审核时间
+ * @property string $audit_remark 审核备注
+ * @property string $format_sn 图纸编号
+ * @property string $format_images 图纸图片
+ * @property string $format_video 版式视频
+ * @property string $format_info 版式内容
+ * @property string $format_remark 版式备注
+ * @property int $format_creator_id 版式添加人
+ * @property int $format_created_at 版式添加时间
+ * @property int $is_design_qiban 是否设计师起版
+ * @property int $confirm_status 确认状态
+ * @property int $confirm_design_id 设计师ID
+ * @property int $confirm_design_time 设计师确认时间
+ * @property int $confirm_goods_id 商品确认
+ * @property int $confirm_goods_time 商品确认时间
  */
 class PurchaseApplyGoods extends BaseModel
 {
@@ -55,7 +78,7 @@ class PurchaseApplyGoods extends BaseModel
     {
         return [
             [['apply_id','goods_sn','style_cate_id','product_type_id','jintuo_type','goods_name'], 'required'],
-            [['style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply',
+            [['order_detail_id','style_id','apply_id','goods_type', 'goods_num','creator_id','created_at','auditor_id', 'audit_status', 'audit_time',  'qiban_type', 'style_cate_id', 'product_type_id', 'style_channel_id', 'style_sex', 'jintuo_type', 'is_inlay', 'is_apply',
                 'status', 'created_at', 'updated_at','format_creator_id','format_created_at','is_design_qiban','confirm_status','confirm_design_id','confirm_design_time','confirm_goods_id','confirm_goods_time','supplier_id'], 'integer'],
             [['cost_price'], 'number'],
             [['apply_info','format_info'], 'string'],

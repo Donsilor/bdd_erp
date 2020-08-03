@@ -193,15 +193,15 @@ $params = $params ? "&".http_build_query($params) : '';
                         $audit_name = Yii::$app->services->flowType->getCurrentUsersName(\common\enums\TargetTypeEnum::PURCHASE_APPLY_S_MENT,$model->id);
                         $audit_name_str = $audit_name ? "({$audit_name})" : "";
                     }
-                    return ApplyStatusEnum::getValue($model->apply_status,'getMapList') .$audit_name_str;
+                    return ApplyStatusEnum::getValue($model->apply_status) .$audit_name_str;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'apply_status',ApplyStatusEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
-                    'style'=> 'width:80px;'
+                    'style'=> 'width:120px;'
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'100'],
+                'headerOptions' => ['width'=>'120'],
             ],            
             [
                 'class' => 'yii\grid\ActionColumn',

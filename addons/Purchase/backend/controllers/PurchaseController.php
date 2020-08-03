@@ -261,7 +261,7 @@ class PurchaseController extends BaseController
                         throw new \Exception($this->getError($model));
                     }
                     if($model->audit_status == AuditStatusEnum::PASS){
-                        Yii::$app->purchaseService->purchase->syncPurchaseToProduce($id);
+                        Yii::$app->purchaseService->purchase->syncProduce($id);
                     }
                 }
 

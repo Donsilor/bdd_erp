@@ -280,7 +280,7 @@ class PurchaseGoodsController extends BaseController
                 //金额汇总
                 Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
                 //同步布产单
-                Yii::$app->purchaseService->purchase->syncPurchaseToProduce($model->purchase_id,$model->id);
+                Yii::$app->purchaseService->purchase->syncProduce($model->purchase_id,$model->id);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){
