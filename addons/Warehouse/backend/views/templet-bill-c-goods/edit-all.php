@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+        if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
             echo Html::a('返回列表', ['templet-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>

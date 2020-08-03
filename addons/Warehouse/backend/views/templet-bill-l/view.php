@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class' => 'btn btn-primary btn-ms',
-                    'data-target' => '#ajaxModalLg',
+                    'data-target' => '#ajaxModal',
                 ]);
                 echo '&nbsp;';
                 echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <?php
-            if($model->bill_status == BillStatusEnum::PENDING){
+            if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::PENDING){
                 echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                     'class'=>'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
