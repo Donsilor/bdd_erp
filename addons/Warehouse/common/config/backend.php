@@ -205,6 +205,25 @@ return [
                 ],
             ],
             [
+                'title' => '样板管理',
+                'route' => 'indexTemplet',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '样板库存',
+                        'route' => 'templet/index',
+                    ],
+                    [
+                        'title' => '入库单',
+                        'route' => 'templet-bill-l/index',
+                    ],
+                    [
+                        'title' => '出库单',
+                        'route' => 'templet-bill-c/index',
+                    ],
+                ],
+            ],
+            [
                 'title' => '功能配置',
                 'route' => 'indexWarehouseConfig',
                 'icon' => 'fa fa-superpowers',
