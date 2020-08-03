@@ -110,6 +110,8 @@ class WarehouseTempletBillLService extends Service
                     'goods_weight' => $detail->goods_weight,
                     'cost_price' => $detail->cost_price,
                     'warehouse_id' => $form->to_warehouse_id,
+                    'purchase_sn' => $form->delivery_no,
+                    'receipt_no' => $form->bill_no,
                     'remark' => $detail->remark,
                     'status' => StatusEnum::ENABLED,
                     'creator_id'=>\Yii::$app->user->identity->getId(),
@@ -130,9 +132,9 @@ class WarehouseTempletBillLService extends Service
                     //回写收货单货品批次号
                     $g_id = $g_ids[$id]??"";
                     if($g_id){
-                        $res = WarehouseTempletBillGoods::updateAll(['gold_sn' => $batch_sn], ['id' => $g_id]);
+                        $res = WarehouseTempletBillGoods::updateAll(['batch_sn' => $batch_sn], ['id' => $g_id]);
                         if(false === $res){
-                            throw new \Exception("回写收货单货品批次号失败");
+                            throw new \Exception("回写入库单货品批次号失败");
                         }
                     }
                 }

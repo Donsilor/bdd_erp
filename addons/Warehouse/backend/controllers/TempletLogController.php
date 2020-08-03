@@ -21,7 +21,7 @@ class TempletLogController extends BaseController
     use Curd;
 
     /**
-     * @var WarehouseGiftLog
+     * @var WarehouseTempletLog
      */
     public $modelClass = WarehouseTempletLog::class;
     /**
@@ -51,18 +51,18 @@ class TempletLogController extends BaseController
             ->search(Yii::$app->request->queryParams,['created_at']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGiftLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGiftLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseTempletLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseTempletLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $dataProvider->query->andWhere(['=','gift_id', $id]);
-        $gift = WarehouseGift::find()->where(['id'=>$id])->one();
-        $dataProvider->query->andWhere(['>',WarehouseGiftLog::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=','templet_id', $id]);
+        $templet = WarehouseTemplet::find()->where(['id'=>$id])->one();
+        $dataProvider->query->andWhere(['>',WarehouseTempletLog::tableName().'.status',-1]);
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'gift' => $gift,
+            'templet' => $templet,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->templet->menuTabList($id, $returnUrl),
         ]);
     }
 
