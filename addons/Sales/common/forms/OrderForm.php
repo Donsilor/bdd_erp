@@ -37,10 +37,10 @@ class OrderForm extends Order
                     return false;
                 },
                 'whenClient' => "function (attribute, value) {
-                     if($('#orderform-sale_channel_id') != 3){
-                          return false;
+                     if($('#orderform-sale_channel_id').val() != 3){
+                          return true;
                      }
-                    return true;
+                    return false;
                 }"
                 ],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
@@ -50,7 +50,7 @@ class OrderForm extends Order
                     return false;
                 },
                 'whenClient' => "function (attribute, value) {
-                     if($('#orderform-sale_channel_id') == 3){
+                     if($('#orderform-sale_channel_id').val() == 3){
                           return true;
                      }
                      return false;
