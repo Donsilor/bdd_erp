@@ -54,7 +54,7 @@ class WarehouseTempletBill extends BaseModel
     public function rules()
     {
         return [
-            [['bill_no', 'bill_type', 'bill_status'], 'required'],
+            //[['bill_no', 'bill_type', 'bill_status'], 'required'],
             [['bill_status', 'supplier_id', 'channel_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost'], 'number'],
             [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],
@@ -78,7 +78,7 @@ class WarehouseTempletBill extends BaseModel
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'account_type' => '结算方式',
-            'adjust_type' => '调整类型 0扣减 1增加',
+            'adjust_type' => '调整类型',
             'total_num' => '总数量',
             'total_weight' => '总重量(g)',
             'total_cost' => '样板总额',
@@ -92,7 +92,7 @@ class WarehouseTempletBill extends BaseModel
             'fin_check_time' => '财务确认时间',
             'fin_remark' => '财务确认备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

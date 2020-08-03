@@ -40,7 +40,7 @@ $form = ActiveForm::begin([
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-                'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
                 'options' => ['placeholder' => '请选择'],
                 'pluginOptions' => [
                     'allowClear' => false

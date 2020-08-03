@@ -5,10 +5,10 @@ namespace addons\Warehouse\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillLGoodsForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\forms\WarehouseTempletBillLGoodsForm;
+use addons\Warehouse\common\enums\TempletBillTypeEnum;
 use common\helpers\Url;
 use common\helpers\ExcelHelper;
 
@@ -18,8 +18,8 @@ use common\helpers\ExcelHelper;
 class TempletBillLGoodsController extends GoldBillGoodsController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillLGoodsForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_L;
+    public $modelClass = WarehouseTempletBillLGoodsForm::class;
+    public $billType = TempletBillTypeEnum::TEMPLET_L;
     /**
      * Lists all StyleChannel models.
      * @return mixed
