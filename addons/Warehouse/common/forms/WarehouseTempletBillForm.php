@@ -3,22 +3,24 @@
 namespace addons\Warehouse\common\forms;
 
 use Yii;
-use addons\Warehouse\common\models\WarehouseGift;
+use addons\Warehouse\common\models\WarehouseTempletBill;
 use common\helpers\ArrayHelper;
 
 /**
- * 赠品 Form
+ * 单据列表 Form
  *
  */
-class WarehouseGiftForm extends WarehouseGift
+class WarehouseTempletBillForm extends WarehouseTempletBill
 {
+    public $batch_sn;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
          $rules = [
-
+             [['batch_sn'], 'string', 'max'=>30],
+             [['batch_sn'], 'filter', 'filter' => 'trim'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -30,7 +32,9 @@ class WarehouseGiftForm extends WarehouseGift
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'batch_sn' => '批次号',
         ]);
     }
+
+   
 }

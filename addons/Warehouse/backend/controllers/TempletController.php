@@ -3,6 +3,8 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\forms\WarehouseTempletForm;
+use addons\Warehouse\common\models\WarehouseTemplet;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -18,12 +20,12 @@ use common\helpers\PageHelper;
 use common\helpers\Url;
 
 /**
- * 赠品库存
+ * 样板库存
  */
-class GiftController extends BaseController
+class TempletController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGiftForm::class;
+    public $modelClass = WarehouseTempletForm::class;
 
     /**
      * 列表
@@ -48,10 +50,10 @@ class GiftController extends BaseController
             ->search(Yii::$app->request->queryParams,['created_at']);
         $created_at = $searchModel->created_at;
         if (!empty($updated_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGift::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGift::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseTemplet::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseTemplet::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $dataProvider->query->andWhere(['>',WarehouseGift::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseTemplet::tableName().'.status',-1]);
         //导出
         if(Yii::$app->request->get('action') === 'export'){
             $this->actionExport($dataProvider);
@@ -71,13 +73,13 @@ class GiftController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gift/index', 'id'=>$id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['templet/index', 'id'=>$id]));
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseGiftForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->templet->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

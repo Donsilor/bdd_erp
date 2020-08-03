@@ -35,14 +35,14 @@ use Yii;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class OrderGoods extends \addons\Sales\common\models\BaseModel
+class OrderGoods extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'sales_order_goods';
+        return self::tableFullName('order_goods');
     }
 
     /**

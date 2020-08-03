@@ -1,7 +1,6 @@
 <?php
 
 use addons\Style\common\enums\AttrIdEnum;
-use addons\Warehouse\common\enums\GoldStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
@@ -13,15 +12,22 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('parts', '领件信息');
+$this->title = Yii::t('templet_bill_c_goods', '样板出库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $parts->parts_sn?> - <?= \addons\Warehouse\common\enums\PartsStatusEnum::getValue($parts->parts_status)?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div class="tab-content">
-        <div class="row col-xs-12">
+    <div style="float:right;margin-top:-40px;margin-right: 20px;">
+        <?php
+        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+        }
+        ?>
+    </div>
+    <div class="tab-content" style="padding-right: 10px;">
+        <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive">
                     <?= GridView::widget([
@@ -37,39 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
                             [
-                                'label' => '领件单号',
-                                'value' => function ($model){
-                                    return $model->bill->bill_no ?? '';
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'label' => '领件时间',
-                                'attribute'=>'audit_time',
-                                'filter' => false,
-                                'value' => function($model){
-                                    if($model->bill->audit_time){
-                                        return Yii::$app->formatter->asDatetime($model->bill->audit_time) ?? "";
-                                    }
-                                    return "";
-                                },
-                            ],
-                            [
-                                'label' => '布产编号',
-                                'value' => function ($model){
-                                    return $model->produceParts->produce_sn ?? '';
-                                },
-                                'filter' => false,
-                            ],
-                            [
-                                'label' => '订单号',
-                                'value' => function ($model){
-                                    return $model->produceParts->from_order_sn ?? '';
-                                },
-                                'filter' => false,
-                            ],
-                            /*[
                                 'attribute'=>'gold_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -95,13 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],*/
-                            [
-                                'label' => '领料克重(g)',
-                                'attribute' => 'parts_weight',
-                                'filter' => false,
                             ],
-                            /*[
+                            [
+                                'attribute' => 'gold_weight',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'gold_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -110,14 +83,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                            ],*/
+                            ],
                             [
-                                'label' => '状态',
+                                'label' => '布产编号',
                                 'value' => function ($model){
-                                    return \addons\Supply\common\enums\PeijianStatusEnum::getValue($model->produceParts->peijian_status ??0);
+                                    return $model->produceGold->produce_sn ?? '';
                                 },
                                 'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
+                            [
+                                'label' => '配料状态',
+                                'value' => function ($model){
+                                    return \addons\Supply\common\enums\PeiliaoStatusEnum::getValue($model->produceGold->peiliao_status ??0);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function($url, $model, $key) use($bill){
+                                        if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        }
+
+                                    },
+                                ],
+                                //'headerOptions' => ['class' => 'col-md-1'],
+                            ]
                         ]
                     ]); ?>
                 </div>

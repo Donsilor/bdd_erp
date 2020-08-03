@@ -3,14 +3,14 @@
 namespace addons\Warehouse\common\forms;
 
 use Yii;
-use addons\Warehouse\common\models\WarehouseGift;
+use addons\Warehouse\common\models\WarehouseTempletBill;
 use common\helpers\ArrayHelper;
 
 /**
- * 赠品 Form
+ * 样板单据 Form
  *
  */
-class WarehouseGiftForm extends WarehouseGift
+class WarehouseTempletBillCForm extends WarehouseTempletBill
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class WarehouseGiftForm extends WarehouseGift
     public function rules()
     {
          $rules = [
-
+             [['created_at'], 'integer'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -33,4 +33,6 @@ class WarehouseGiftForm extends WarehouseGift
 
         ]);
     }
+
+   
 }
