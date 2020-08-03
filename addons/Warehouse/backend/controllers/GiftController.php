@@ -2,11 +2,15 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseGift;
 use addons\Warehouse\common\forms\WarehouseGiftForm;
+use addons\Sales\common\models\Order;
+use addons\Sales\common\forms\OrderForm;
+use addons\Sales\common\models\OrderGoods;
 use addons\Supply\common\models\Supplier;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
@@ -73,6 +77,49 @@ class GiftController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
+            'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+    /**
+     * 客户订单列表
+     * @return string
+     * @throws
+     */
+    public function actionOrder()
+    {
+        $this->modelClass = OrderForm::class;
+        $id = Yii::$app->request->get('id');
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index', 'id'=>$id]));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'goods' => ['style_sn'],
+                'account' => ['order_amount', 'refund_amount'],
+            ]
+        ]);
+        $gift = WarehouseGift::findOne($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
+        $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
+        $dataProvider->query->andWhere(['=', OrderGoods::tableName().'.style_sn', $gift->style_sn]);
+        //创建时间过滤
+        if (!empty($searchParams['order_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['order_time']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
+        }
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tab'=>$tab,
+            'gift' => $gift,
             'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
