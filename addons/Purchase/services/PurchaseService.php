@@ -67,11 +67,36 @@ class PurchaseService extends Service
         }
     }
     /**
-     *  根据采购申请单创建采购单
+     * 创建采购单
+     * @param array $info 采购单-单头
+     * @param array $goods_list 采购单-明细列表
+     * @throws \Exception
+     * @return \addons\Purchase\common\models\Purchase
      */
-    public function createPurchase($apply_ids)
+    public function createPurchase($info, $goods_list)
     {
-        
+         $purchase = new Purchase();
+         $purchase->attributes = $info;
+         if(false === $purchase->save()){
+             throw new \Exception($this->getError($purchase));
+         }
+         
+         foreach ($goods_list as $goods) {
+             $purchaseGoods = new PurchaseGoods();
+             $purchaseGoods->attributes = $goods;
+             if(false === $purchaseGoods->save()) {
+                 throw new \Exception($this->getError($purchaseGoods));
+             }
+             foreach ($goods['goods_attrs'] ?? [] as $attr) {
+                 $goodsAttr = new PurchaseGoodsAttribute();
+                 $goodsAttr->attributes = $attr;
+                 if(false === $goodsAttr->save()) {
+                     throw new \Exception($this->getError($goodsAttr));
+                 }
+             }
+         }
+         
+         return $purchase;
     }
     
     /**

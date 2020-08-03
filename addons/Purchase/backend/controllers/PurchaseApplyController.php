@@ -404,7 +404,7 @@ class PurchaseApplyController extends BaseController
 
             Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model->id);
 
-            $model->apply_status = ApplyStatusEnum::AFFIRM;
+            $model->apply_status = ApplyStatusEnum::FINISHED;
             if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
             }

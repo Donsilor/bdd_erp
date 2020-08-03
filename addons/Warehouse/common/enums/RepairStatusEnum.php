@@ -13,7 +13,7 @@ class RepairStatusEnum extends \common\enums\BaseEnum
 {
     const SAVE      = 0;
     const APPLY     = 1;
-    const AFFIRM    = 2;
+    const FINISHED    = 2;
     const AWAIT     = 3;
     const ORDERS    = 4;
     const FINISH    = 5;
@@ -28,7 +28,7 @@ class RepairStatusEnum extends \common\enums\BaseEnum
         return [
             self::SAVE      => '保存',
             self::APPLY     => '申请',
-            self::AFFIRM    => '确认',
+            self::FINISHED    => '确认',
             self::AWAIT     => '等待',
             self::ORDERS    => '下单',
             self::FINISH    => '完毕',

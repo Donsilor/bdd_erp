@@ -145,7 +145,7 @@ class WarehouseBillRepairService extends Service
         $goods = WarehouseGoods::find()->where(['goods_id'=>$form->goods_id])->one();
         if($form->audit_status == AuditStatusEnum::PASS){
             $goods->weixiu_status = WeixiuStatusEnum::ACCEPT;
-            $form->repair_status = RepairStatusEnum::AFFIRM;
+            $form->repair_status = RepairStatusEnum::FINISHED;
             $form->audit_status = AuditStatusEnum::PASS;
         }else{
             $goods->weixiu_status = WeixiuStatusEnum::SAVE;
@@ -177,7 +177,7 @@ class WarehouseBillRepairService extends Service
         if (false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if($form->repair_status != RepairStatusEnum::AFFIRM){
+        if($form->repair_status != RepairStatusEnum::FINISHED){
             throw new Exception("单据不是确认状态");
         }
         $form->repair_status = RepairStatusEnum::ORDERS;

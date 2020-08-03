@@ -16,7 +16,7 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
     const PENDING    = 2;
     const CONFIRM   = 3;
     const AUDITED   = 4;
-    const AFFIRM   = 5;
+    const FINISHED   = 5;
     const CANCEL = 9;
     
     /**
@@ -30,7 +30,7 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
                 self::PENDING => '待审核-业务部',
                 self::CONFIRM => '待审核-商品部',
                 self::AUDITED => '已审核',
-                self::AFFIRM => '已完成',
+                self::FINISHED => '已完成',
                 self::CANCEL => '已取消',
         ];
     }
@@ -42,7 +42,7 @@ class ApplyStatusEnum extends \common\enums\BaseEnum
             self::PENDING => '待审核（业务）',
             self::CONFIRM => '待审核（商品）',
             self::AUDITED => '已审核',
-            self::AFFIRM => '已完成',
+            self::FINISHED => '已完成',
             self::CANCEL => '已取消',
         ];
     }

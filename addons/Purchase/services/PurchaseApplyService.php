@@ -104,7 +104,21 @@ class PurchaseApplyService extends Service
          
          return $apply;
     }
-
+    /**
+     * 根据采购申请单生成采购单
+     * @param array|int $apply_ids
+     */
+    public function createPurchase(array $apply_ids) 
+    {
+        $count = PurchaseApply::find()->where(['id'=>$apply_ids,'apply_status'=>ApplyStatusEnum::FINISHED])->count();
+        if($count != count($apply_ids) ) {
+            throw new \Exception("采购申请单未完成 申请流程");
+        }
+        $channel_ids = PurchaseApply::find()->distinct("channel_id")->where(['id'=>$apply_ids])->asArray()->all();
+        foreach ($channel_ids as $channel_id){
+            
+        }
+    }
     /**
      * 创建采购单日志
      * @return array
