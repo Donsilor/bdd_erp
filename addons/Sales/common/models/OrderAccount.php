@@ -80,7 +80,7 @@ class OrderAccount extends BaseModel
             'card_amount' => '优惠券优惠金额',
             'paid_amount' => '实际支付金额',
             'paid_currency' => '支付货币代号',
-            'unpay_amount'=>'应收尾款',    
+            'unpay_amount'=>'剩余尾款',    
         ];
     }
 }
