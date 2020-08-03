@@ -8,12 +8,12 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '配件详情';
+$this->title = '赠品详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title;?> - <?= $model->parts_sn?> - <?= \addons\Warehouse\common\enums\PartsStatusEnum::getValue($model->parts_status)?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?= $model->gift_sn?> - <?= \addons\Warehouse\common\enums\GiftStatusEnum::getValue($model->gift_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="row">
         <div class="col-xs-12">
@@ -23,52 +23,64 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-body table-responsive">
                             <table class="table table-hover">
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_sn') ?>：</td>
-                                    <td><?= $model->parts_sn ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_name') ?>：</td>
-                                    <td><?= $model->parts_name ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_sn') ?>：</td>
+                                    <td><?= $model->gift_sn ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                                     <td><?= $model->style_sn ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_type') ?>：</td>
-                                    <td><?= Yii::$app->attr->valueName($model->parts_type)??"" ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_name') ?>：</td>
+                                    <td><?= $model->gift_name ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                                    <td><?= $model->type->name ?? '' ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                                    <td><?= $model->cate->name ?? '' ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
+                                    <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('material_type') ?>：</td>
                                     <td><?= Yii::$app->attr->valueName($model->material_type)??"" ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('shape') ?>：</td>
-                                    <td><?= Yii::$app->attr->valueName($model->shape)??"" ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
+                                    <td><?= Yii::$app->attr->valueName($model->material_color)??"" ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('color') ?>：</td>
-                                    <td><?= Yii::$app->attr->valueName($model->color)??"" ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finger') ?>：</td>
+                                    <td><?= Yii::$app->attr->valueName($model->finger)??"" ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('size') ?>：</td>
-                                    <td><?= $model->size ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finger_hk') ?>：</td>
+                                    <td><?= Yii::$app->attr->valueName($model->finger_hk)??"" ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('chain_type') ?>：</td>
-                                    <td><?= Yii::$app->attr->valueName($model->chain_type)??"" ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('chain_length') ?>：</td>
+                                    <td><?= $model->chain_length ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cramp_ring') ?>：</td>
-                                    <td><?= Yii::$app->attr->valueName($model->cramp_ring)??"" ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('main_stone_type') ?>：</td>
+                                    <td><?= $model->main_stone_type ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_num') ?>：</td>
-                                    <td><?= $model->parts_num ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>
+                                    <td><?= $model->main_stone_num ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_weight') ?>：</td>
-                                    <td><?= $model->parts_weight ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_size') ?>：</td>
+                                    <td><?= $model->gift_size ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_num') ?>：</td>
+                                    <td><?= $model->gift_num ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -80,8 +92,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="box-body table-responsive" >
                             <table class="table table-hover">
                                 <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
-                                    <td><?= $model->parts_price ?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_weight') ?>：</td>
+                                    <td><?= $model->gift_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
+                                    <td><?= $model->gold_price ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                                    <td><?= $model->cost_price ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
+                                    <td><?= $model->purchase_sn ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('receipt_no') ?>：</td>
+                                    <td><?= $model->receipt_no ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
+                                    <td><?= $model->gold_price ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
@@ -100,16 +132,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->warehouse->name??""?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-3 text-right">入库单号：</td>
-                                    <td><?= $bill['bill_no']??""?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-3 text-right">采购收货单号：</td>
-                                    <td><?= $bill['receipt_no']??""?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-3 text-right">采购单号：</td>
-                                    <td><?= $bill['purchase_sn']??""?></td>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gift_status') ?>：</td>
+                                    <td><?= \addons\Warehouse\common\enums\GiftStatusEnum::getValue($model->gift_status)?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('status') ?>：</td>

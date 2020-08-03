@@ -33,7 +33,7 @@ class PartsLogController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab', 2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index', 'id'=>$id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['parts-log/index', 'id'=>$id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

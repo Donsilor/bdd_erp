@@ -2,16 +2,15 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use common\helpers\Url;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseParts;
-use addons\Warehouse\common\models\WarehousePartsLog;
+use addons\Warehouse\common\models\WarehouseGift;
+use addons\Warehouse\common\models\WarehouseGiftLog;
 use common\traits\Curd;
 use Yii;
 
 /**
- * 配件库存日志
+ * 赠品库存日志
  *
  * Class DefaultController
  * @package addons\Supply\backend\controllers
@@ -21,9 +20,9 @@ class GiftLogController extends BaseController
     use Curd;
 
     /**
-     * @var WarehousePartsLog
+     * @var WarehouseGiftLog
      */
-    public $modelClass = WarehousePartsLog::class;
+    public $modelClass = WarehouseGiftLog::class;
     /**
     * 首页
     *
@@ -33,7 +32,7 @@ class GiftLogController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab', 2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold/index', 'id'=>$id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gift-log/index', 'id'=>$id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -51,18 +50,18 @@ class GiftLogController extends BaseController
             ->search(Yii::$app->request->queryParams,['created_at']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehousePartsLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehousePartsLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGiftLog::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGiftLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-        $dataProvider->query->andWhere(['=','parts_id', $id]);
-        $parts = WarehouseParts::find()->where(['id'=>$id])->one();
-        $dataProvider->query->andWhere(['>',WarehousePartsLog::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=','gift_id', $id]);
+        $gift = WarehouseGift::find()->where(['id'=>$id])->one();
+        $dataProvider->query->andWhere(['>',WarehouseGiftLog::tableName().'.status',-1]);
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'parts' => $parts,
+            'gift' => $gift,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->parts->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
         ]);
     }
 

@@ -2,9 +2,9 @@
 
 namespace addons\Warehouse\common\models;
 
+use Yii;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use Yii;
 use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
 

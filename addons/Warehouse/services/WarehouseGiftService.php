@@ -2,15 +2,13 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
-use addons\Shop\common\models\Style;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGift;
+use addons\Shop\common\models\Style;
 use addons\Warehouse\common\enums\GiftStatusEnum;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
-use addons\Style\common\enums\AttrIdEnum;
 use yii\db\Expression;
 
 /**
