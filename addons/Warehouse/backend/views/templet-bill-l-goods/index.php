@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-            echo Html::create(['ajax-edit'], '创建', [
+            echo Html::create(['ajax-edit', 'bill_id'=>$bill->id], '创建', [
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModalLg',
             ]);
@@ -198,7 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {
-                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModalLg',

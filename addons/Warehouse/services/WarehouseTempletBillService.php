@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\models\WarehouseTemplet;
+use addons\Warehouse\common\models\WarehouseTempletBill;
+use addons\Warehouse\common\models\WarehouseTempletBillGoods;
 use Yii;
 use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoldBill;
@@ -76,12 +79,12 @@ class WarehouseTempletBillService extends Service
      */
     public function BillSummary($bill_id)
     {
-        $sum = WarehouseGoldBillGoods::find()
-            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost'])
+        $sum = WarehouseTempletBillGoods::find()
+            ->select(['sum(1) as total_num','sum(goods_weight) as total_weight','sum(cost_price) as total_cost'])
             ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
             ->asArray()->one();
         if($sum) {
-            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
+            $result = WarehouseTempletBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
         }
         return $result?:null;
     }
@@ -92,23 +95,25 @@ class WarehouseTempletBillService extends Service
      */
     public function createBillGoods($form)
     {
-        $stone = WarehouseStone::findOne(['stone_sn'=>$form->stone_sn]);
+        $templet = WarehouseTemplet::findOne(['batch_sn'=>$form->batch_sn]);
         $goods = [
             'bill_id' => $form->bill_id,
             'bill_no' => $form->bill_no,
             'bill_type' => $form->bill_type,
-            'stone_name' => $stone->stone_name,
-            'stone_type' => $stone->stone_type,
-            'stone_num' => $form->stone_num,
-            'stone_weight' => $form->stone_weight,
-            'color' => $stone->stone_color,
-            'clarity' => $stone->stone_clarity,
-            'cost_price' => $stone->cost_price,
-            'sale_price' => $stone->sale_price,
+            'layout_type' => $templet->layout_type,
+            'goods_name' => $templet->goods_name,
+            'goods_image' => $templet->goods_image,
+            'stone_weight' => $templet->stone_weight,
+            'style_sn' => $templet->style_sn,
+            'qiban_sn' => $templet->qiban_sn,
+            'finger' => $templet->finger,
+            'finger_hk' => $templet->finger_hk,
+            'suttle_weight' => $templet->suttle_weight,
+            'stone_size' => $templet->stone_size,
             'status' => StatusEnum::ENABLED,
             'created_at' => time()
         ];
-        $billGoods = new WarehouseStoneBillGoods();
+        $billGoods = new WarehouseTempletBillGoods();
         $billGoods->attributes = $goods;
         if(false === $billGoods->save()) {
             throw new \Exception($this->getError($billGoods));

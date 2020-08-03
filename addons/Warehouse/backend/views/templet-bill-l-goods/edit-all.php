@@ -193,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == \addons\Warehouse\common\enums\GoldBillStatusEnum::SAVE) {
-                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModalLg',

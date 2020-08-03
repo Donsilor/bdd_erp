@@ -79,13 +79,18 @@ class TempletBillLGoodsController extends TempletBillGoodsController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
+        $bill_id = \Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseTempletBillGoods();
+        $bill = WarehouseTempletBill::findOne($bill_id);
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
+                $model->bill_id = $bill_id;
+                $model->bill_no = $bill->bill_no;
+                $model->bill_type = $bill->bill_type;
                 $model->cost_price = bcmul($model->cost_price, $model->goods_weight, 3);
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
