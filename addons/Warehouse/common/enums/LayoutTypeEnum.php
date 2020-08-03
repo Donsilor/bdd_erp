@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\common\enums;
 
-
 /**
  *
  * 版式类型

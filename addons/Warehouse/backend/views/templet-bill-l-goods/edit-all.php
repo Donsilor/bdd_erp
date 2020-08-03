@@ -21,11 +21,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no?> - <?= \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($bill->bill_status)?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no?> - <?= \addons\Warehouse\common\enums\TempletBillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+        if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
             echo Html::a('返回列表', ['templet-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
@@ -37,13 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php echo Html::batchButtons(false)?>
                     <span class="summary" style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
-                        金料总重：<span style="color:green;"><?= $bill->total_weight?>/克</span>
-                        金料总额：<span style="color:green;"><?= $bill->total_cost?></span>
+                        样板总重：<span style="color:green;"><?= $bill->total_weight?>/克</span>
+                        样板总额：<span style="color:green;"><?= $bill->total_cost?></span>
                     </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
