@@ -21,39 +21,54 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择','disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_name')->textInput() ?>
                </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'layout_type')->dropDownList(\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(),['prompt'=>'请选择']) ?>
                </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_name')->textInput() ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_sn')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'style_sn')->textInput() ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_num')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'qiban_sn')->textInput() ?>
                </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_weight')->textInput() ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'finger_hk')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO),['prompt'=>'请选择']) ?>
                </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_price')->textInput() ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'finger')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::FINGER),['prompt'=>'请选择']) ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-12">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_num')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'suttle_weight')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_weight')->textInput() ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_size')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'stone_weight')->textInput() ?>
+               </div>
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'stone_size')->textInput() ?>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'cost_price')->textInput() ?>
+               </div>
+               <div class="col-lg-8">
                    <?= $form->field($model, 'remark')->textarea() ?>
                </div>
            </div>
