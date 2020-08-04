@@ -70,10 +70,11 @@ $form = ActiveForm::begin([
 </div>
 <?php ActiveForm::end(); ?>
 <script>
+    var formId = 'warehousebillcform';
     $(document).ready(function(){
-        var id = $("#warehousebillcform-delivery_type").find(':checked').val();
+        var id = $("#"+formId+"-delivery_type").find(':checked').val();
         load(id);
-        $("#warehousebillcform-delivery_type").change(function(){
+        $("#"+formId+"-delivery_type").change(function(){
             var id = $(this).find(':checked').val();
             load(id);
         })
@@ -82,13 +83,13 @@ $form = ActiveForm::begin([
         if($.inArray(id,['2','3','4'])>=0){
             $("#div1").show();
         }else {
-            $("#warehousebillcform-supplier_id").select2("val",'');
+            $("#"+formId+"-supplier_id").select2("val",'');
             $("#div1").hide();
         }
         if($.inArray(id,['1'])>=0){
             $("#div2").show();
         }else {
-            $("#warehousebillcform-channel_id").select2("val",'');
+            $("#"+formId+"-channel_id").select2("val",'');
             $("#div2").hide();
         }
     }

@@ -104,6 +104,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                    'headerOptions' => ['width'=>'100'],
                             ],
                             [
+                                'attribute' => 'stone_weight',
+                                //'filter' => Html::activeTextInput($searchModel, 'stone_weight', [
+                                //   'class' => 'form-control',
+                                //]),
+                                'value' => function ($model) {
+                                    return $model->stone_weight??"0.00";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
                                     'attribute' => 'goods_weight',
                                     //'filter' => Html::activeTextInput($searchModel, 'goods_weight', [
                                     //   'class' => 'form-control',

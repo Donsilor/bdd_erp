@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'stone_num')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_weight')->textInput() ?>
+                        <?= $form->field($model, 'stone_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_price')->textInput() ?>
@@ -54,22 +54,22 @@ $this->params['breadcrumbs'][] = $this->title;
                    </div>
 			   </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 div1">
                         <?= $form->field($model, 'stone_cut')->dropDownList($model->getCutMap(),['prompt'=>'请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 div1">
                         <?= $form->field($model, 'stone_symmetry')->dropDownList($model->getSymmetryMap(),['prompt'=>'请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 div1">
                         <?= $form->field($model, 'stone_polish')->dropDownList($model->getPolishMap(),['prompt'=>'请选择']) ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 div1">
                         <?= $form->field($model, 'stone_fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'stone_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
+                        <?= $form->field($model, 'stone_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择', 'disabled'=>'disabled']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_colour')->dropDownList($model->getColourMap(),['prompt'=>'请选择']) ?>
@@ -124,6 +124,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (parseInt(data.code) == 200 && data.data) {
                         $("#"+formId+"-goods_name").val(data.data.goods_name);
                         $("#"+formId+"-stone_type").val(data.data.stone_type);
+                        $("#"+formId+"-stone_shape").val(data.data.stone_shape);
+                        load(data.data.stone_type);
                     }
                 }
             });
@@ -132,4 +134,22 @@ $this->params['breadcrumbs'][] = $this->title;
     $("#"+formId+"-goods_sn").change(function(){
         fillStoneForm();
     });
+
+    $(document).ready(function(){
+        var id = $("#"+formId+"-stone_type").find(':checked').val();
+        load(id);
+    });
+
+    function load(id) {
+        if($.inArray(id,['241', 241])>=0){
+            $(".div1").hide();
+
+            $("#"+formId+"-stone_cut").select2("val",'');
+            $("#"+formId+"-stone_symmetry").select2("val",'');
+            $("#"+formId+"-stone_polish").select2("val",'');
+            $("#"+formId+"-stone_fluorescence").select2("val",'');
+        }else {
+            $(".div1").show();
+        }
+    }
 </script>
