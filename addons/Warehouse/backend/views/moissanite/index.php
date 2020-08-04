@@ -76,11 +76,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -146,6 +142,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '颜色范围',
                             'attribute'=>'color_scope',
                             'filter' => Html::activeTextInput($searchModel, 'color_scope', [
                                 'class' => 'form-control',
@@ -153,6 +150,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '净度范围',
                             'attribute'=>'clarity_scope',
                             'filter' => Html::activeTextInput($searchModel, 'clarity_scope', [
                                 'class' => 'form-control',
