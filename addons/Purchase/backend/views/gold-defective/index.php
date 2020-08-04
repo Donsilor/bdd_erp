@@ -36,6 +36,7 @@ $params = $params ? "&".http_build_query($params) : '';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>'white-space:nowrap;'],
         //'options' => ['style'=>' width:120%;'],
         'id'=>'grid',
         'columns' => [
