@@ -26,7 +26,8 @@ class WarehouseBillJForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-            [['channel_id', 'lender_id', 'est_restore_time'], 'required'],
+             [['channel_id', 'lender_id', 'est_restore_time'], 'required'],
+             [['lend_status'], 'integer'],
          ];
          return array_merge(parent::rules() , $rules);
     }
