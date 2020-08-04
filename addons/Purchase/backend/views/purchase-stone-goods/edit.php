@@ -136,12 +136,12 @@ $this->params['breadcrumbs'][] = $this->title;
     });
 
     $(document).ready(function(){
-        var id = $("#"+formId+"-goods_sn").find(':checked').val();
+        var id = $("#"+formId+"-stone_type").find(':checked').val();
         load(id);
     });
 
     function load(id) {
-        if($.inArray(id,['241'])>=0){
+        if($.inArray(id,['241', 241])>=0){
             $(".div1").hide();
 
             $("#"+formId+"-stone_cut").select2("val",'');

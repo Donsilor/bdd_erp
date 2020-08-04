@@ -93,7 +93,7 @@ class PurchaseStoneGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                $stoneStyle = StoneStyle::find()->select(['stone_type'])->where(['style_sn'=>$model->goods_sn])->one();
+                $stoneStyle = StoneStyle::find()->select(['stone_type','stone_shape'])->where(['style_sn'=>$model->goods_sn])->one();
 
                 $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 3);
                 $model->stone_type = $stoneStyle->stone_type;
