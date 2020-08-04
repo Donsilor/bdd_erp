@@ -83,15 +83,10 @@ class DiamondAttrForm extends Diamond
         $attr_list_l = \Yii::$app->styleService->diamond->getMapping();
         $attr_list = [];
         foreach ($attr_list_l as $attr){
-            if($attr['input_type'] == InputTypeEnum::INPUT_SELECT){
-                $attr_list[$attr['attr_id']] = \Yii::$app->attr->valueName($diamond->$attr['attr_field'])?? '';
-            }else{
-                $attr_list[$attr['attr_id']] = $diamond->$attr['attr_field']?? '';
-            }
+            $attr_list[$attr['attr_id']] = $diamond->{$attr['attr_field']};
 
         }
         if(!empty($attr_list)) {
-            $attr_list = array_column($attr_list,'attr_values','attr_id');
             $this->attr_custom  = $attr_list;
             $this->attr_require = $attr_list;
         }

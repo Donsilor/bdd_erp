@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px">
                 <?= $form->field($model, 'apply_id')->hiddenInput()->label(false) ?>
-                <?php if($model->style_id) {?>
+                <?php if($model->cert_id) {?>
                     <div class="row">
                         <?php if($model->isNewRecord) {?>
                             <div class="col-lg-3">
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }//end foreach $attr_list
                 ?>
                 <!-- ./box-body -->
-                <?php if($model->style_id) {?>
+                <?php if($model->cert_id) {?>
                     <div style="margin: 0px 0 20px 0;">
                         <h3 class="box-title"> 其他信息</h3>
                     </div>

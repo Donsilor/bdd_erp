@@ -77,7 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($apply){
                                          if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
-                                             $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                             if($model->product_type_id == 1){
+                                                 $action = 'edit-diamond';
+                                             }else{
+                                                 $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                             }
                                              return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                          }
                                     },
@@ -480,7 +484,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'edit' => function($url, $model, $key) use($apply){
                                         if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
-                                            $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                            if($model->product_type_id == 1){
+                                                $action = 'edit-diamond';
+                                            }else{
+                                                $action = ($model->goods_type == PurchaseGoodsTypeEnum::OTHER) ? 'edit-no-style' :'edit';
+                                            }
                                             return Html::edit([$action,'id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },

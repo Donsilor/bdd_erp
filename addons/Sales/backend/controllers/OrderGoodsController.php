@@ -182,7 +182,7 @@ class OrderGoodsController extends BaseController
                 $model->goods_name = $diamond_goods->goods_name;
                 $model->is_stock = $diamond_goods->is_stock;
                 $model->goods_pay_price = $diamond_goods->sale_price;
-                $model->goods_price = $diamond_goods->sale_price;
+                //$model->goods_price = $diamond_goods->sale_price;
                 $model->style_sn = '';
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;

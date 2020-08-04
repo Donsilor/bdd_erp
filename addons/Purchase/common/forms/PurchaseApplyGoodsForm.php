@@ -176,12 +176,11 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     {
         PurchaseApplyGoodsAttribute::deleteAll(['id'=>$this->id]);
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
-            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->asArray()->one();
             $model = new PurchaseApplyGoodsAttribute();
             $model->id = $this->id;
             $model->attr_id  = $attr_id;
-            
-            if(InputTypeEnum::isText($spec->input_type) || intval($attr_value_id) != $attr_value_id) {
+            if(InputTypeEnum::isText($spec['input_type']) || intval($attr_value_id) != $attr_value_id) {
                 $model->attr_value_id  = 0;
                 $model->attr_value = $attr_value_id;
             }else if(is_numeric($attr_value_id)){
@@ -198,7 +197,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
             }else{
                 continue;
             }
-            $model->sort = $spec->sort;
+            $model->sort = $spec['sort'];
             if(false === $model->save()) {
                 throw new \Exception($this->getErrors($model));
             }

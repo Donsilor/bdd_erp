@@ -158,7 +158,7 @@ class PurchaseApplyGoodsController extends BaseController
             $search = Yii::$app->request->get('search');
             $apply_id = Yii::$app->request->get('apply_id');
             if($search && $cert_id) {
-                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, '','status'=>StatusEnum::ENABLED])->one();
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS,'status'=>StatusEnum::ENABLED])->one();
                 if(empty($diamond_goods)){
                     $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
                     return $this->message('此裸钻不存在或者审核没通过或者已下架', $this->redirect($skiUrl), 'error');
@@ -175,6 +175,7 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
                 $model->cert_id = $cert_id;
+                $model->goods_sn = $cert_id;
                 $model->apply_id = $apply_id;
                 $model->cost_price = $diamond_goods->cost_price;
                 $diamondForm = new DiamondAttrForm();
@@ -194,14 +195,19 @@ class PurchaseApplyGoodsController extends BaseController
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->confirm_status = ApplyConfirmEnum::GOODS;
+
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                Yii::$app->salesService->orderGoods->addDiamond($model);
+
+                //创建属性关系表数据
+                $model->createAttrs();
+                //更新采购汇总：总金额和总数量
+                Yii::$app->purchaseService->apply->applySummary($model->apply_id);
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -211,7 +217,7 @@ class PurchaseApplyGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-
+        $model->initAttrs();
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
