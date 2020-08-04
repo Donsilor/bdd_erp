@@ -96,11 +96,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
+                            'attribute'=>'first_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'first_weight', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'attribute'=>'gold_weight',
                             'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                            'contentOptions' => ['style'=>'color:red'],
                         ],
                         [
                             'attribute'=>'gold_price',
