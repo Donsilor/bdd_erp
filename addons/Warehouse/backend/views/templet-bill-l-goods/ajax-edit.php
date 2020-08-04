@@ -1,6 +1,7 @@
 <?php
 
 use addons\Style\common\enums\AttrIdEnum;
+use common\widgets\webuploader\Files;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use kartik\date\DatePicker;
@@ -68,7 +69,16 @@ $form = ActiveForm::begin([
                <div class="col-lg-4">
                    <?= $form->field($model, 'cost_price')->textInput() ?>
                </div>
-               <div class="col-lg-8">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'goods_image')->widget(common\widgets\webuploader\Files::class, [
+                       'config' => [
+                           'pick' => [
+                               'multiple' => false,
+                           ],
+                       ]
+                   ]); ?>
+               </div>
+               <div class="col-lg-4">
                    <?= $form->field($model, 'remark')->textarea() ?>
                </div>
            </div>

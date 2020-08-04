@@ -81,6 +81,7 @@ class TempletBillCGoodsController extends TempletBillGoodsController
     public function actionAjaxEdit()
     {
         $id = \Yii::$app->request->get('id');
+        $bill_id = \Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseTempletBillGoods();
         // ajax 校验
@@ -88,9 +89,8 @@ class TempletBillCGoodsController extends TempletBillGoodsController
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+                $model->bill_id = $bill_id;
+                \Yii::$app->warehouseService->templetC->createBillGoods($model);
                 $trans->commit();
                 return $this->message('保存成功',$this->redirect(Yii::$app->request->referrer),'success');
             }catch (\Exception $e){

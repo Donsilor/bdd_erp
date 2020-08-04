@@ -64,7 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_name',
-                                'filter' => true,
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:200px;'
+                                ]),
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
@@ -82,9 +89,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'90'],
                             ],
                             [
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
                                 'attribute' => 'layout_type',
-                                'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\LayoutTypeEnum::getValue($model->layout_type);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'layout_type', \addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
                                     'prompt' => '全部',
@@ -92,7 +109,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
 
                                 ]),
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                             ],
                             [
@@ -122,8 +138,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'finger_hk',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->finger_hk);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger_hk', \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
                                     'prompt' => '全部',
@@ -134,10 +151,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'finger',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->finger);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -146,26 +164,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    $str = $model->goods_size;
-                                    return $str;
-                                },
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'stone_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('stone_size', $model->stone_size, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    $str = $model->goods_size;
-                                    return $str;
-                                },
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -177,13 +195,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'remark',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('remark', $model->remark, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'remark', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    return $model->remark??"";
-                                },
-                                'headerOptions' => ['width'=>'100'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

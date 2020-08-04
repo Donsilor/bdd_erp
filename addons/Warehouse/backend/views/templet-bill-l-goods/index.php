@@ -87,6 +87,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['width'=>'90'],
                             ],
                             [
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
                                 'attribute' => 'layout_type',
                                 'value' => function ($model){
                                     return \addons\Warehouse\common\enums\LayoutTypeEnum::getValue($model->layout_type);

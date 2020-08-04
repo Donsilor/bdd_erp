@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['templet-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['templet-bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -53,47 +53,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'batch_sn',
-                                'format' => 'raw',
-                                'value'=>function($model) {
-                                    return Html::a($model->batch_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'batch_sn', [
-                                    'class' => 'form-control',
-                                ]),
-                                'headerOptions' => ['width'=>'100'],
-                            ],
-                            [
-                                'attribute' => 'layout_type',
-                                'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\LayoutTypeEnum::getValue($model->layout_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'goods_name',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['width'=>'200'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute'=>'style_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                ]),
-                                'value' => function ($model) {
-                                    $str = $model->style_sn;
-                                    return $str;
-                                },
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'label' => '款式图片',
@@ -103,6 +81,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'attribute' => 'layout_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'layout_type', \addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                             ],
                             [
                                 'attribute'=>'goods_num',
@@ -131,8 +132,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'finger_hk',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->finger_hk);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger_hk', \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
                                     'prompt' => '全部',
@@ -143,10 +145,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'finger',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->finger);
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
@@ -155,26 +158,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    $str = $model->goods_size;
-                                    return $str;
-                                },
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute'=>'stone_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('stone_size', $model->stone_size, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    $str = $model->goods_size;
-                                    return $str;
-                                },
-                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
@@ -186,13 +189,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'remark',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('remark', $model->remark, ['data-id'=>$model->id]);
+                                },
                                 'filter' => Html::activeTextInput($searchModel, 'remark', [
                                     'class' => 'form-control',
+                                    'style'=> 'width:200px;'
                                 ]),
-                                'value' => function ($model) {
-                                    return $model->remark??"";
-                                },
-                                'headerOptions' => ['width'=>'100'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
