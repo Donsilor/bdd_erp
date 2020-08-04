@@ -114,7 +114,6 @@ class Express extends BaseModel
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->identity->getId();
         }
-
         return parent::beforeSave($insert);
     }
 

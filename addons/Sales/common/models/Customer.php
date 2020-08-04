@@ -2,6 +2,7 @@
 
 namespace addons\Sales\common\models;
 
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -42,6 +43,7 @@ use Yii;
  * @property string $invoice_email 接收发票邮箱
  * @property string $remark 备注
  * @property int $status 状态[-1:删除;0:禁用;1启用]
+ * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
  */
@@ -61,7 +63,7 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'invoice_title'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
@@ -114,9 +116,23 @@ class Customer extends BaseModel
             'invoice_email' => '接收发票邮箱',
             'remark' => '备注',
             'status' => '状态',
+            'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId();
+        }
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -180,5 +196,13 @@ class Customer extends BaseModel
     public function getCity()
     {
         return $this->hasOne(\common\models\common\Country::class, ['id'=>'city_id'])->alias('city');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
 }
