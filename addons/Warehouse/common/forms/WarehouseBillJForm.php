@@ -14,6 +14,7 @@ class WarehouseBillJForm extends WarehouseBill
 {
     public $ids;
     public $lender_id;
+    public $lend_status;
     public $restore_num;
     public $est_restore_time;
     public $returned_time;
@@ -25,7 +26,8 @@ class WarehouseBillJForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-            [['channel_id', 'lender_id', 'est_restore_time'], 'required'],
+             [['channel_id', 'lender_id', 'est_restore_time'], 'required'],
+             [['lend_status'], 'integer'],
          ];
          return array_merge(parent::rules() , $rules);
     }
@@ -39,6 +41,7 @@ class WarehouseBillJForm extends WarehouseBill
             'order_sn'=>'参考编号',
             'goods_num'=>'借货数量',
             'lender_id'=>'借货人',
+            'lend_status'=>'借货状态',
             'channel_id'=>'借货渠道',
             'restore_num'=>'还货数量',
             'creator_id'=>'制单人',

@@ -10,6 +10,7 @@ use Yii;
  *
  * @property int $id ID
  * @property string $gold_type 金料材质
+ * @property string $gold_name 金料名称
  * @property string $style_sn 款号
  * @property string $remark 备注
  * @property int $auditor_id 审核人
@@ -43,6 +44,7 @@ class GoldStyle extends BaseModel
             [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_type'], 'string', 'max' => 10],
             [['style_sn'], 'string', 'max' => 30],
+            [['gold_name'], 'string', 'max' => 100],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
     }
@@ -54,6 +56,7 @@ class GoldStyle extends BaseModel
     {
         return [
             'id' => 'ID',
+            'gold_name' => '金料名称',
             'gold_type' => '金料材质',
             'style_sn' => '款号',
             'remark' => '备注',

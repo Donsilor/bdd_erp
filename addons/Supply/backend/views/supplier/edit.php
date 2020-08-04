@@ -175,6 +175,77 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             </div>
+            <div class="box-body col-lg-12" style="padding-left:30px">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'structure_cert')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                    // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'production_licence')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                    // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'taxpayer_cert')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                    // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'account_licence')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                    // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'insure_cert')->widget(common\widgets\webuploader\Files::class, [
+                            'type' => 'files',
+                            'config' => [
+                                'pick' => [
+                                    'multiple' => false,
+                                ],
+                                'formData' => [
+                                    // 'drive' => 'local',// 默认本地 支持 qiniu/oss 上传
+                                ],
+                            ]
+                        ]); ?>
+                    </div>
+                </div>
+            </div>
         </div>
       <!-- ./row -->
     </div>

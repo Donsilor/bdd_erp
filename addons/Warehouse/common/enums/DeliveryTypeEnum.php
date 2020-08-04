@@ -15,6 +15,7 @@ class DeliveryTypeEnum extends \common\enums\BaseEnum
     const PROXY_PRODUCE = 2;
     const PART_GOODS = 3;
     const ASSEMBLY = 4;
+    const PLATFORM = 5;
 
     /**
      * @return array
@@ -26,6 +27,7 @@ class DeliveryTypeEnum extends \common\enums\BaseEnum
             self::PROXY_PRODUCE => '委托加工',
             self::PART_GOODS => '拆货',
             self::ASSEMBLY => '货品组装',
+            self::PLATFORM => '平台出库',
         ];
     }
 

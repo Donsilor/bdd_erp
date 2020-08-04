@@ -35,7 +35,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'stone_num')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'goods_weight')->textInput() ?>
+                   <?= $form->field($model, 'stone_weight')->textInput() ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'stone_price')->textInput() ?>
@@ -53,22 +53,22 @@ $form = ActiveForm::begin([
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-4">
+               <div class="col-lg-4 div1">
                    <?= $form->field($model, 'goods_cut')->dropDownList($model->getCutMap(),['prompt'=>'请选择']) ?>
                </div>
-               <div class="col-lg-4">
+               <div class="col-lg-4 div1">
                    <?= $form->field($model, 'goods_symmetry')->dropDownList($model->getSymmetryMap(),['prompt'=>'请选择']) ?>
                </div>
-               <div class="col-lg-4">
+               <div class="col-lg-4 div1">
                    <?= $form->field($model, 'goods_polish')->dropDownList($model->getPolishMap(),['prompt'=>'请选择']) ?>
                </div>
            </div>
            <div class="row">
-               <div class="col-lg-4">
+               <div class="col-lg-4 div1">
                    <?= $form->field($model, 'goods_fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'goods_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'goods_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择', 'disabled'=>true]) ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'goods_colour')->dropDownList($model->getColourMap(),['prompt'=>'请选择']) ?>
@@ -109,3 +109,23 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+    var formId = "purchasestonereceiptgoodsform";
+    $(document).ready(function(){
+        var id = $("#"+formId+"-material_type").find(':checked').val();
+        load(id);
+    });
+
+    function load(id) {
+        if($.inArray(id,['241', 241])>=0){
+            $(".div1").hide();
+
+            $("#"+formId+"-goods_cut").select2("val",'');
+            $("#"+formId+"-goods_symmetry").select2("val",'');
+            $("#"+formId+"-goods_polish").select2("val",'');
+            $("#"+formId+"-goods_fluorescence").select2("val",'');
+        }else {
+            $(".div1").show();
+        }
+    }
+</script>

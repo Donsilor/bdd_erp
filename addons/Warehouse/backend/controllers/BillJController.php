@@ -52,29 +52,31 @@ class BillJController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 //'auditor' => ['username'],
-                'billJ' => ['lender_id', 'restore_num', 'est_restore_time'],
+                'billJ' => ['lender_id', 'lend_status', 'restore_num', 'est_restore_time'],
             ]
         ]);
 
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['lender_id', 'est_restore_time']);
+            ->search(\Yii::$app->request->queryParams,['lender_id', 'lend_status', 'est_restore_time']);
 
         $lender_id = $searchModel->lender_id;
         if (!empty($lender_id)) {
             $dataProvider->query->andWhere(['like', 'creator.username', $lender_id]);
+        }
+        $lend_status = $searchModel->lend_status;
+        if (!empty($lend_status)) {
+            $dataProvider->query->andWhere(['=', 'billJ.lend_status', $lend_status]);
         }
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseBillJForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',WarehouseBillJForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
-
         $est_restore_time = $searchModel->est_restore_time;
         if (!empty($est_restore_time)) {
             $dataProvider->query->andFilterWhere(['>=','billJ.est_restore_time', strtotime(explode('/', $est_restore_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<','billJ.est_restore_time', (strtotime(explode('/', $est_restore_time)[1]) + 86400)] );//结束时间
         }
-
         $dataProvider->query->andWhere(['>',WarehouseBillJForm::tableName().'.status', -1]);
         $dataProvider->query->andWhere(['=',WarehouseBillJForm::tableName().'.bill_type', $this->billType]);
 
@@ -215,7 +217,7 @@ class BillJController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $this->modelClass = WarehouseBill::class;
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new WarehouseBill();
 
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;

@@ -127,7 +127,10 @@ class StoneReceiptGoodsController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 3);
+
+            $model->cost_price = bcmul($model->stone_price, $model->goods_weight, 2);
+            $model->goods_weight = bcmul($model->stone_weight, $model->goods_num, 3);
+
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect(['index']), 'error');
             }

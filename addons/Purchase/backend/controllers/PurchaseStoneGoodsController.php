@@ -32,6 +32,7 @@ class PurchaseStoneGoodsController extends BaseController
      * @var PurchaseStoneGoodsForm
      */
     public $modelClass = PurchaseStoneGoodsForm::class;
+    public $purchase_type = PurchaseTypeEnum::MATERIAL_STONE;
     /**
      * 首页
      *
@@ -132,26 +133,6 @@ class PurchaseStoneGoodsController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
-    }
-
-    /**
-     * 查询石料款号信息
-     * @return array
-     */
-    public function actionAjaxGetStone()
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        $goods_sn = \Yii::$app->request->get('goods_sn');
-        $model = StoneStyle::find()->select(['stone_type','stone_shape','product_size_min','product_size_max'])->where(['style_sn'=>$goods_sn])->one();
-        $stone_type = \Yii::$app->attr->valueName($model->stone_type)??"";
-        $stone_shape = \Yii::$app->attr->valueName($model->stone_shape)??"";
-        $data = [
-            'stone_type' => $model->stone_type,
-            'stone_shape' => $model->stone_shape,
-            'goods_name' => $stone_type.$stone_shape.$model->product_size_min.$model->product_size_max,
-        ];
-        return ResultHelper::json(200,'查询成功', $data);
     }
 
     /**
@@ -296,6 +277,7 @@ class PurchaseStoneGoodsController extends BaseController
      * 分批收货
      *
      * @return mixed
+     * @throws
      */
     public function actionWarehouse()
     {
@@ -305,7 +287,7 @@ class PurchaseStoneGoodsController extends BaseController
         $model->ids = $ids;
         if($check){
             try{
-                \Yii::$app->purchaseService->purchase->receiptValidate($model, PurchaseTypeEnum::MATERIAL_STONE);
+                \Yii::$app->purchaseService->purchase->receiptValidate($model, $this->purchase_type);
                 return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
@@ -315,7 +297,7 @@ class PurchaseStoneGoodsController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 //同步采购单至采购收货单
-                Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, PurchaseTypeEnum::MATERIAL_STONE, $model->getIds());
+                Yii::$app->purchaseService->purchase->syncPurchaseToReceipt($model, $this->purchase_type, $model->getIds());
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','操作成功');
                 return ResultHelper::json(200, '操作成功');
@@ -327,5 +309,25 @@ class PurchaseStoneGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询石料款号信息
+     * @return array
+     */
+    public function actionAjaxGetStone()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = StoneStyle::find()->select(['stone_type','stone_shape','product_size_min','product_size_max'])->where(['style_sn'=>$goods_sn])->one();
+        $stone_type = \Yii::$app->attr->valueName($model->stone_type)??"";
+        $stone_shape = \Yii::$app->attr->valueName($model->stone_shape)??"";
+        $data = [
+            'stone_type' => $model->stone_type,
+            'stone_shape' => $model->stone_shape,
+            'goods_name' => $stone_type.$stone_shape.$model->product_size_min.$model->product_size_max,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }
