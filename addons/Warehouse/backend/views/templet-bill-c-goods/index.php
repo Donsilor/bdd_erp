@@ -22,6 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE){
+            echo Html::create(['ajax-edit', 'bill_id'=>$bill->id], '创建', [
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         ?>
@@ -62,6 +67,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '款式图片',
                                 'value' => function ($model) {
                                     return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->templet->getStyleImage($model),90,90);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
                                 },
                                 'filter' => false,
                                 'format' => 'raw',

@@ -5,13 +5,18 @@ namespace addons\Sales\services;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Diamond;
+use addons\Style\common\models\Qiban;
+use addons\Style\common\models\Style;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
+use common\enums\InputTypeEnum;
 use common\enums\StatusEnum;
+use common\helpers\ArrayHelper;
 
 
 /**
@@ -105,135 +110,25 @@ class OrderGoodsService extends Service
         }
         //删除商品属性
         OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
-
-        $attr_list = array(
-            //证书类型
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CERT_TYPE,
-                'attr_value_id' => $diamond_goods->cert_type ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->cert_type)
-            ],
-            //证书号
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CERT_NO,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->cert_id
-            ],
-            //石重
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CARAT,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->carat
-            ],
-            //净度
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CLARITY,
-                'attr_value_id' => $diamond_goods->clarity ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->clarity)
-            ],
-            //切工
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CUT,
-                'attr_value_id' => $diamond_goods->cut ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->cut)
-            ],
-            //颜色
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_COLOR,
-                'attr_value_id' => $diamond_goods->color ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->color)
-            ],
-            //形状
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_SHAPE,
-                'attr_value_id' => $diamond_goods->shape ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->shape)
-            ],
-            //切割深度
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_CUT_DEPTH,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->depth_lv
-            ],
-            //台宽比
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_TABLE_LV,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->table_lv
-            ],
-            //对称
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_SYMMETRY,
-                'attr_value_id' => $diamond_goods->symmetry ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->symmetry)
-            ],
-            //抛光
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_POLISH,
-                'attr_value_id' => $diamond_goods->polish ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->polish)
-            ],
-            //荧光
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_FLUORESCENCE,
-                'attr_value_id' => $diamond_goods->fluorescence ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->fluorescence)
-            ],
-            //石底层
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_STONE_FLOOR,
-                'attr_value_id' => $diamond_goods->stone_floor ?? 0,
-                'attr_value' => \Yii::$app->attr->valueName($diamond_goods->stone_floor)
-            ],
-            //长度
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_LENGTH,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->length
-            ],
-            //宽度
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_WIDTH,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->width
-            ],
-            //长宽比
-            [
-                'id' => $model->id,
-                'attr_id' => AttrIdEnum::DIA_ASPECT_RATIO,
-                'attr_value_id' => 0,
-                'attr_value' => $diamond_goods->aspect_ratio
-            ],
-        );
-
+        $attr_list = \Yii::$app->styleService->diamond->getMapping();
         foreach ($attr_list as  $attr){
+            $attr_value_id = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? 0 : $diamond_goods->$attr['attr_field'] ?? 0;
+            $attr_value = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? $diamond_goods->$attr['attr_field'] : \Yii::$app->attr->valueName($attr_value_id) ?? '';
             $order_goods_attr = new OrderGoodsAttribute();
-            $order_goods_attr->attributes = $attr;
+            $order_goods_attr->id = $model->id;
+            $order_goods_attr->attr_id = $attr['attr_id'];
+            $order_goods_attr->attr_value_id = $attr_value_id;
+            $order_goods_attr->attr_value = $attr_value;
             if(false === $order_goods_attr->save()){
                 throw new \Exception($this->getError($order_goods_attr));
             }
         }
 
+        //修改裸钻状态
         $diamond_goods->status = StatusEnum::DISABLED;
         if(false === $diamond_goods->save(true,['status'])){
             throw new \Exception($this->getError($diamond_goods));
         }
-
 
         //更新采购汇总：总金额和总数量
         \Yii::$app->salesService->order->orderSummary($model->order_id);
@@ -447,4 +342,36 @@ class OrderGoodsService extends Service
             ],
         ];
     }
+
+
+
+    public function getCostPrice($order_goods){
+
+        if($order_goods->product_type_id == 1){
+            //裸钻
+            $attr = OrderGoodsAttribute::find()->where(['id'=>$order_goods->id,'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+            $cert_id = $attr->attr_value ?? 0;
+            $diamond = Diamond::find()->where(['cert_id'=>$cert_id])->one();
+            $cost_price = $diamond->cost_price ?? 0;
+        }elseif($order_goods->is_stock == IsStockEnum::YES){
+            //现货
+            $goods_id = $order_goods->goods_id ?? 0;
+            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            $cost_price = $goods->cost_price ?? 0;
+        }elseif ($order_goods->qiban_type == QibanTypeEnum::NON_VERSION){
+            //款式库
+            $style_sn = $order_goods->style_sn ?? 0;
+            $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+            $cost_price = $style->cost_price ?? 0;
+        }else{
+            //起版
+            $qiban_sn = $order_goods->qiban_sn ?? 0;
+            $qiban = Qiban::find()->where(['qiban_sn'=>$qiban_sn])->one();
+            $cost_price = $qiban->cost_price ?? 0;
+        }
+        return $cost_price;
+
+    }
 }
+
+

@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
-                            <td><?= Yii::$app->attr->valueName($model->is_inlay) ?></td>
+                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
@@ -202,8 +202,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->attr->valueName($model->material_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_color') ?>：</td>
-                            <td><?= $model->goods_color ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
+                            <td><?= $model->material_color ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>

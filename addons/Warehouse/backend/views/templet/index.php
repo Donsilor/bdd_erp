@@ -107,6 +107,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'90'],
                         ],
                         [
+                            'label' => '商品图片',
+                            'value' => function ($model) {
+                                return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'90'],
+                        ],
+                        [
                             'attribute'=>'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                 'class' => 'form-control',
@@ -185,6 +194,20 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],
+                        ],
+                        [
+                            'attribute' => 'goods_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\TempletStatusEnum::getValue($model->goods_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\TempletStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'remark',

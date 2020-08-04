@@ -2,8 +2,11 @@
 
 namespace addons\Sales\services;
 
+use addons\Purchase\common\enums\ApplyStatusEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
+use addons\Style\common\enums\QibanTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -263,7 +266,7 @@ class OrderService extends Service
         $applyGoodsList = [];
         
         $order = Order::find()->where(['id'=>$order_id])->one();
-        if($order->total_num <= 0 ){
+        if($order->goods_num <= 0 ){
             throw new \Exception('订单没有明细');
         }
         if($order->audit_status != AuditStatusEnum::PASS){
@@ -276,22 +279,34 @@ class OrderService extends Service
         $models = $query->all();        
         foreach ($models as $model){
             $goods = [
-                    'id' =>$model->id,
+                    'order_detail_id' =>$model->id,
                     'goods_image'=>$model->goods_image,
-                    'goods_name' =>$model->style->style_name ?? '',
-                    'goods_num' =>$model->goods_num,                    
+                    'goods_images'=>$model->goods_image,
+                    'goods_name' =>$model->goods_name,
+                    'goods_num' =>$model->goods_num,
                     'style_sn' => $model->style_sn,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
                     'jintuo_type'=>$model->jintuo_type,
+                    'goods_type' => $model->qiban_type == QibanTypeEnum::NO_STYLE ? PurchaseGoodsTypeEnum::OTHER : PurchaseGoodsTypeEnum::STYLE,
                     'style_sex' =>$model->style_sex,
                     'is_inlay' =>$model->is_inlay,
                     'product_type_id'=>$model->product_type_id,
-                    'style_cate_id'=>$model->style_cate_id,                    
+                    'style_cate_id'=>$model->style_cate_id,
+                    'cost_price' => Yii::$app->salesService->orderGoods->getCostPrice($model),
+                    'style_channel_id' => $model->style_channel_id,
+                    'remark' => $model->remark,
+
+
             ];            
             $goods['goods_attrs'] = OrderGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
             $applyGoodsList[] = $goods;
         }
+
+
+        //采购申请单头
+        $applyInfo['order_sn'] = $order->order_sn;
+        $applyInfo['channel_id'] = $order->sale_channel_id;
         //同步采购申请单
         $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);
         return $apply;

@@ -1,6 +1,7 @@
 <?php
 
 use common\helpers\Url;
+use kartik\daterange\DateRangePicker;
 use yii\grid\GridView;
 use common\helpers\Html;
 use common\helpers\ImageHelper;
@@ -74,6 +75,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'gender',\common\enums\GenderEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
@@ -102,6 +104,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'marriage',\addons\Sales\common\enums\MarriageEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:80px;',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
@@ -114,6 +117,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'channel_id',\Yii::$app->salesService->saleChannel->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
@@ -126,8 +130,40 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'source_id',\Yii::$app->salesService->sources->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:100px;',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' => '创建人',
+                            'attribute' => 'creator.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
+                            'attribute'=>'created_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'created_at',
+                                'value' => $searchModel->created_at,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            }
                         ],
                         [
                             'attribute' => 'status',
@@ -139,7 +175,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-
+                                'style'=> 'width:60px;',
                             ]),
                         ],
                         [

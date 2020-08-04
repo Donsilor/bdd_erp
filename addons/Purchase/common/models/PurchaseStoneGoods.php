@@ -14,6 +14,7 @@ use Yii;
  * @property string $goods_name 商品名称
  * @property double $goods_weight 石料总重(ct)
  * @property int $goods_num 商品数量
+ * @property double $stone_weight 单颗石重(ct)
  * @property string $cost_price 石料总额
  * @property string stone_type 石料类型
  * @property string $stone_price 石料价格/克拉
@@ -57,7 +58,7 @@ class PurchaseStoneGoods extends BaseModel
         return [
             [['purchase_id','goods_name','goods_sn','stone_num'], 'required'],
             [['purchase_id', 'goods_num', 'stone_num', 'channel_id', 'is_apply', 'is_receipt', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goods_weight', 'cost_price', 'stone_price'], 'number'],
+            [['goods_weight', 'stone_weight', 'cost_price', 'stone_price'], 'number'],
             [['apply_info'], 'string'],
             [['goods_sn'], 'string', 'max' => 60],
             [['goods_name', 'spec_remark', 'remark'], 'string', 'max' => 255],
@@ -78,10 +79,11 @@ class PurchaseStoneGoods extends BaseModel
             'purchase_id' => '采购单',
             'goods_sn' => '石料款号',
             'goods_name' => '石料名称',
-            'goods_weight' => '石料重量(ct)',
+            'goods_weight' => '石料总重(ct)',
             'goods_num' => '石料数量',
             'cost_price' => '石料总额',
             'stone_type' => '石料类型',
+            'stone_weight' => '单颗石重(ct)',
             'stone_price' => '石料单价/ct',
             'stone_num' => '石料粒数',
             'stone_shape' => '石料形状',

@@ -45,7 +45,10 @@ class CustomerController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->pageSize
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'creator' => ['username'],
+            ]
         ]);
 
         $dataProvider = $searchModel

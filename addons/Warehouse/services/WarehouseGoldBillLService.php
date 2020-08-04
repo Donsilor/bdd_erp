@@ -93,6 +93,7 @@ class WarehouseGoldBillLService extends Service
                     'supplier_id' => $form->supplier_id,
                     'gold_num' => $detail->gold_num,
                     'gold_weight' => $detail->gold_weight,
+                    'first_weight' => $detail->gold_weight,
                     'cost_price' => $detail->cost_price,
                     'gold_price' => $detail->gold_price,
                     'warehouse_id' => $form->to_warehouse_id,

@@ -17,9 +17,10 @@ use addons\Supply\common\models\Supplier;
  * @property int $gold_status 库存状态
  * @property int $supplier_id 供应商
  * @property int $gold_num 金料数量
- * @property string $gold_weight 库存重量/克
+ * @property string $gold_weight 库存重量(g)
+ * @property string $first_weight 原重量(g)
  * @property string $cost_price 金料总额
- * @property string $gold_price 金料单价/克
+ * @property string $gold_price 金料单价/g
  * @property string $sale_price 销售价
  * @property int $put_in_type 入库方式
  * @property int $warehouse_id 所在仓库
@@ -47,7 +48,7 @@ class WarehouseGold extends BaseModel
         return [
             [['gold_sn', 'gold_name', 'gold_type'], 'required'],
             [['supplier_id', 'gold_num', 'warehouse_id', 'put_in_type', 'gold_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['gold_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
+            [['gold_weight', 'first_weight', 'cost_price', 'gold_price', 'sale_price'], 'number'],
             [['gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
             [['gold_type'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
@@ -69,8 +70,9 @@ class WarehouseGold extends BaseModel
             'style_sn' => '金料款号',
             'gold_num' => '金料数量',
             'gold_weight' => '库存重量(g)',
+            'first_weight' => '入库金重(g)',
             'cost_price' => '金料总额',
-            'gold_price' => '金料单价/克',
+            'gold_price' => '金料单价/g',
             'sale_price' => '销售价',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',

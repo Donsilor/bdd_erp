@@ -199,11 +199,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'goods_color',
+                            'attribute' => 'material_color',
                             'value' => function($model){
-                                return Yii::$app->attr->valueName($model->goods_color);
+                                return Yii::$app->attr->valueName($model->material_color);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'goods_color',Yii::$app->attr->valueMap(AttrIdEnum::GOODS_COLOR), [
+                            'filter' => Html::activeDropDownList($searchModel, 'material_color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -425,7 +425,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function($model){
                                 return $model->channel->name ?? '';
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'style_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:120px;'

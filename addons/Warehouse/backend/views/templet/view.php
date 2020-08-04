@@ -134,6 +134,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                 </div>
+                <div class="col-xs-12" style="padding: 0px;">
+                    <div class="box">
+                        <div class="box-body table-responsive" >
+                            <table class="table table-hover">
+                                <tr>
+                                    <?php if($model->goods_image){?><td class="col-xs-4 text-center"><?= \common\helpers\ImageHelper::fancyBox($model->goods_image,90,90) ?></td><?php } ?>
+                                </tr>
+                                <tr>
+                                    <?php if($model->goods_image){?><td class="col-xs-4 text-center"><?= $model->getAttributeLabel('goods_image') ?>：</td><?php } ?>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="box-footer text-center">

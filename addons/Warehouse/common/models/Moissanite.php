@@ -16,8 +16,9 @@ use Yii;
  * @property string $ref_carat 尺寸参考石重(ct)
  * @property string $real_carat 实际石重(ct)
  * @property int $karat_num 克拉数量
- * @property string $karat_price 克拉成本
- * @property string $est_cost 预估成本/ct
+ * @property string $karat_price 克拉成本/ct
+ * @property string $est_cost 预估成本
+ * @property string $nominal_price 名义采购成本
  * @property string $color_scope 颜色范围
  * @property string $clarity_scope 净度范围
  * @property string $remark 备注
@@ -43,7 +44,7 @@ class Moissanite extends BaseModel
     public function rules()
     {
         return [
-            [['ref_carat', 'real_carat', 'karat_price', 'est_cost'], 'number'],
+            [['ref_carat', 'real_carat', 'karat_price', 'est_cost', 'nominal_price'], 'number'],
             [['karat_num', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['name', 'style_sn', 'size', 'color_scope', 'clarity_scope'], 'string', 'max' => 30],
             [['remark'], 'string', 'max' => 255],
@@ -66,8 +67,9 @@ class Moissanite extends BaseModel
             'ref_carat' => '尺寸参考钻石重(ct)',
             'real_carat' => '实际石重(ct)',
             'karat_num' => '克拉数量',
-            'karat_price' => '克拉成本',
-            'est_cost' => '预估成本/ct',
+            'karat_price' => '克拉成本/ct',
+            'est_cost' => '预估成本',
+            'nominal_price' => '名义采购成本',
             'color_scope' => '颜色范围(D-Z)',
             'clarity_scope' => '净度范围(FL-SI2)',
             'remark' => '备注',
