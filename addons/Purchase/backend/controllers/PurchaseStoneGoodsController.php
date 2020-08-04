@@ -136,26 +136,6 @@ class PurchaseStoneGoodsController extends BaseController
     }
 
     /**
-     * 查询石料款号信息
-     * @return array
-     */
-    public function actionAjaxGetStone()
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        $goods_sn = \Yii::$app->request->get('goods_sn');
-        $model = StoneStyle::find()->select(['stone_type','stone_shape','product_size_min','product_size_max'])->where(['style_sn'=>$goods_sn])->one();
-        $stone_type = \Yii::$app->attr->valueName($model->stone_type)??"";
-        $stone_shape = \Yii::$app->attr->valueName($model->stone_shape)??"";
-        $data = [
-            'stone_type' => $model->stone_type,
-            'stone_shape' => $model->stone_shape,
-            'goods_name' => $stone_type.$stone_shape.$model->product_size_min.$model->product_size_max,
-        ];
-        return ResultHelper::json(200,'查询成功', $data);
-    }
-
-    /**
      * 删除
      *
      * @param $id
@@ -329,5 +309,25 @@ class PurchaseStoneGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询石料款号信息
+     * @return array
+     */
+    public function actionAjaxGetStone()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = StoneStyle::find()->select(['stone_type','stone_shape','product_size_min','product_size_max'])->where(['style_sn'=>$goods_sn])->one();
+        $stone_type = \Yii::$app->attr->valueName($model->stone_type)??"";
+        $stone_shape = \Yii::$app->attr->valueName($model->stone_shape)??"";
+        $data = [
+            'stone_type' => $model->stone_type,
+            'stone_shape' => $model->stone_shape,
+            'goods_name' => $stone_type.$stone_shape.$model->product_size_min.$model->product_size_max,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }

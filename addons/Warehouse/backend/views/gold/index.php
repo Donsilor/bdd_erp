@@ -101,6 +101,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                            'contentOptions' => ['style'=>'color:green'],
                         ],
                         [
                             'attribute'=>'gold_weight',

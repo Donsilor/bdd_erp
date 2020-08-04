@@ -5,6 +5,7 @@ namespace addons\Purchase\backend\controllers;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\forms\PurchaseStoneGoodsForm;
 use addons\Style\common\models\GoldStyle;
+use addons\Style\common\models\StoneStyle;
 use common\helpers\Url;
 use Yii;
 use addons\Style\common\models\Attribute;
@@ -79,7 +80,7 @@ class PurchaseGoldGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $model = $this->findModel($id);                
+        $model = $this->findModel($id) ?? new PurchaseGoldGoodsForm();
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
@@ -89,8 +90,8 @@ class PurchaseGoldGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$stone = GoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
-                //$model->goods_sn = $stone->style_sn??"";
+                $stone = GoldStyle::find()->select(['gold_type'])->where(['gold_type'=>$model->material_type])->one();
+                $model->material_type = $stone->gold_type??"";
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
@@ -301,5 +302,22 @@ class PurchaseGoldGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询石料款号信息
+     * @return array
+     */
+    public function actionAjaxGetGold()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = GoldStyle::find()->select(['gold_type','gold_name'])->where(['style_sn'=>$goods_sn])->one();
+        $data = [
+            'gold_type' => $model->gold_type??"",
+            'goods_name' => $model->gold_name??"",
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }
