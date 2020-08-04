@@ -32,6 +32,11 @@ use common\models\backend\Member;
  * @property string $bdd_contactor BDD紧急联系人
  * @property string $bdd_mobile BDD紧急联系人手机
  * @property string $bdd_telephone BDD紧急联系人电话
+ * @property string $structure_cert 组织机构代码证
+ * @property string $production_licence 生产许可证
+ * @property string $taxpayer_cert 纳税人资格证
+ * @property string $account_licence 开户许可证
+ * @property string $insure_cert 保险复印件
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
@@ -59,16 +64,15 @@ class Supplier extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'balance_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status','supplier_status','goods_type', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'balance_type', 'goods_type', 'supplier_status', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['supplier_name','supplier_tag','supplier_status','goods_type'], 'required'],
             [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone'], 'string', 'max' => 30],
+            [['supplier_tag'], 'string', 'max' => 10],
             [['supplier_name', 'business_address', 'address'], 'string', 'max' => 120],
             [['business_no', 'tax_no'], 'string', 'max' => 50],
-            [['business_scope'], 'parseBusinessScope'],
-            [['pay_type'], 'parsePayTypeScope'],
-            [['supplier_tag'], 'string', 'max' => 2, 'min'=>2],
-            [['contract_file', 'business_file', 'tax_file', 'bank_name'], 'string', 'max' => 100],
-            [['audit_remark', 'remark'], 'string', 'max' => 255],
+            [['contract_file', 'business_file', 'tax_file', 'structure_cert', 'production_licence', 'taxpayer_cert', 'account_licence', 'insure_cert', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['bank_name'], 'string', 'max' => 100],
+            [['business_scope', 'pay_type'], 'safe'],
         ];
     }
 
@@ -104,6 +108,11 @@ class Supplier extends BaseModel
             'bdd_contactor' => 'BDD紧急联系人',
             'bdd_mobile' => 'BDD紧急联系人手机',
             'bdd_telephone' => 'BDD紧急联系人电话',
+            'structure_cert' => '组织机构代码证[文件格式：jpg,doc,zip,rar]',
+            'production_licence' => '生产许可证[文件格式：jpg,doc,zip,rar]',
+            'taxpayer_cert' => '纳税人资格证[文件格式：jpg,doc,zip,rar]',
+            'account_licence' => '开户许可证[文件格式：jpg,doc,zip,rar]',
+            'insure_cert' => '保险复印件[文件格式：jpg,doc,zip,rar]',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',

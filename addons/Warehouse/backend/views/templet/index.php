@@ -196,6 +196,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width' => '120'],
                         ],
                         [
+                            'attribute' => 'goods_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\TempletStatusEnum::getValue($model->goods_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Warehouse\common\enums\TempletStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
+                        ],
+                        [
                             'attribute' => 'remark',
                             'filter' => Html::activeTextInput($searchModel, 'remark', [
                                 'class' => 'form-control',
