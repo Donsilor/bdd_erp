@@ -8,6 +8,7 @@ use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
 use addons\Shop\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\forms\DiamondAttrForm;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\Diamond;
 use common\enums\ConfirmEnum;
@@ -157,10 +158,10 @@ class PurchaseApplyGoodsController extends BaseController
             $search = Yii::$app->request->get('search');
             $apply_id = Yii::$app->request->get('apply_id');
             if($search && $cert_id) {
-                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, '','status'=>StatusEnum::ENABLED])->one();
                 if(empty($diamond_goods)){
                     $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
-                    return $this->message('此裸钻不存在或者审核没通过', $this->redirect($skiUrl), 'error');
+                    return $this->message('此裸钻不存在或者审核没通过或者已下架', $this->redirect($skiUrl), 'error');
                 }
 
                 $model->jintuo_type = JintuoTypeEnum::Chengpin;
@@ -170,15 +171,18 @@ class PurchaseApplyGoodsController extends BaseController
                 $model->product_type_id = 1; //钻石
                 $model->goods_num = 1;
                 $model->goods_name = $diamond_goods->goods_name;
-                $model->is_stock = $diamond_goods->is_stock;
-                $model->goods_pay_price = $diamond_goods->sale_price;
-                $model->goods_price = $diamond_goods->sale_price;
                 $model->style_sn = '';
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
                 $model->cert_id = $cert_id;
                 $model->apply_id = $apply_id;
                 $model->cost_price = $diamond_goods->cost_price;
+                $diamondForm = new DiamondAttrForm();
+                $diamondForm->cert_id = $cert_id;
+                $diamondForm->initAttrs();
+
+                $model->attr_custom = $diamondForm->attr_custom;
+                $model->attr_require = $diamondForm->attr_require;
             }
 
         }else{
