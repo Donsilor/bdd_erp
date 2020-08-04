@@ -131,6 +131,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
 
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
+                        echo Html::edit(['ajax-purchase-apply','id'=>$model->id], '申请采购', [
+                            'class'=>'btn btn-success btn-ms',
+                            'onclick' => 'rfTwiceAffirm(this,"申请采购", "确定申请采购吗？");return false;',
+                        ]);
+                    }
+                    ?>
+
 
                 </div>
             </div>

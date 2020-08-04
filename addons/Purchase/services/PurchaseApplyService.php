@@ -4,6 +4,7 @@ namespace addons\Purchase\services;
 
 
 use common\enums\TargetTypeEnum;
+use common\helpers\SnHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\Url;
@@ -61,48 +62,64 @@ class PurchaseApplyService extends Service
      */
     public function createSyncApply($applyInfo, $applyGoodsList)
     {
-         $isNewRecod = false;
-         if(empty($applyInfo['order_sn'])) {
-             throw new \Exception("参数 applyInfo->order_sn 不能为空");
-         }
-         $apply = PurchaseApply::find()->where(['order_sn'=>$applyInfo['order_sn']])->one();
-         if(!$apply) {
-             $apply = new PurchaseApply();
-             $apply->attributes = $applyInfo;
-             $apply->creator_id = Yii::$app->user->id;
-             $isNewRecod = true;
-         } else if($apply->apply_status != ApplyStatusEnum::SAVE){
-             return $apply;
-         }
-         //采购申请商品
-         foreach ($applyGoodsList as $goodsInfo) {
-             if(empty($goodsInfo['id'])) {
-                 throw new \Exception("参数 applyGoodsList->id 不能为空");
-             }
-             if($isNewRecod === false) {
-                 $applyGoods = PurchaseApplyGoods::find()->where(['order_detail_id'=>$goodsInfo['id'],'apply_id'=>$apply->id])->one();
-             }
-             if(empty($applyGoods)) {
-                 $applyGoods = new PurchaseApplyGoods();
-             }
-             $applyGoods->attributes = $goodsInfo;
-             if(false === $applyGoods->save()) {
-                 throw new \Exception($this->getError($applyGoods));
-             }
-             //商品属性
-             if($isNewRecod === false) {
-                 PurchaseApplyGoodsAttribute::deleteAll(['id'=>$applyGoods->id]);
-             }
-             foreach ($goodsInfo['goods_attrs'] ?? [] as $goods_attr) {
-                 $goodsAttr = new PurchaseApplyGoodsAttribute();
-                 $goodsAttr->attributes = $goods_attr;
-                 if(false === $goodsAttr->save()) {
-                     throw new \Exception($this->getError($goodsAttr));
-                 }
-             }
-         }
-         
-         return $apply;
+        try{
+            $isNewRecod = false;
+            if(empty($applyInfo['order_sn'])) {
+                throw new \Exception("参数 applyInfo->order_sn 不能为空");
+            }
+            $apply = PurchaseApply::find()->where(['order_sn'=>$applyInfo['order_sn']])->one();
+            if(!$apply) {
+                $apply = new PurchaseApply();
+                $apply->attributes = $applyInfo;
+                $apply->creator_id = Yii::$app->user->id;
+                $apply->apply_sn = SnHelper::createPurchaseApplySn();
+                $apply->total_num = count($applyGoodsList);
+                $isNewRecod = true;
+            } else if($apply->apply_status != ApplyStatusEnum::SAVE){
+                return $apply;
+            }
+            if(false === $apply->save()) {
+                throw new \Exception($this->getError($apply));
+            }
+            //采购申请商品
+            foreach ($applyGoodsList as $goodsInfo) {
+                if(empty($goodsInfo['order_detail_id'])) {
+                    throw new \Exception("参数 applyGoodsList->order_detail_id 不能为空");
+                }
+                if($isNewRecod === false) {
+                    $applyGoods = PurchaseApplyGoods::find()->where(['order_detail_id'=>$goodsInfo['order_detail_id'],'apply_id'=>$apply->id])->one();
+                }
+                if(empty($applyGoods)) {
+                    $applyGoods = new PurchaseApplyGoods();
+                }
+                $applyGoods->attributes = $goodsInfo;
+                $applyGoods->apply_id = $apply->id;
+                $applyGoods->goods_sn = $goodsInfo['qiban_sn'] ? $goodsInfo['qiban_sn'] : $goodsInfo['style_sn'];
+                $applyGoods->created_at = time();
+                $applyGoods->updated_at = time();
+                $applyGoods->creator_id = Yii::$app->user->id;
+
+                if(false === $applyGoods->save()) {
+                    throw new \Exception($this->getError($applyGoods));
+                }
+                //商品属性
+                if($isNewRecod === false) {
+                    PurchaseApplyGoodsAttribute::deleteAll(['id'=>$applyGoods->id]);
+                }
+                foreach ($goodsInfo['goods_attrs'] ?? [] as $goods_attr) {
+                    $goodsAttr = new PurchaseApplyGoodsAttribute();
+                    $goodsAttr->attributes = $goods_attr;
+                    $goodsAttr->id = $applyGoods->id;
+                    if(false === $goodsAttr->save()) {
+                        throw new \Exception($this->getError($goodsAttr));
+                    }
+                }
+            }
+            return $apply;
+        }catch (\Exception $e){
+            throw $e;
+        }
+
     }
 
     /**

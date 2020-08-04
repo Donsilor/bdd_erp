@@ -1,12 +1,15 @@
 <?php
 
 namespace addons\Style\services;
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\DiamondLog;
 use common\components\Service;
 use addons\Style\common\models\Diamond;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\Goods;
 use addons\Style\common\models\StyleLang;
+use common\enums\AuditStatusEnum;
+use common\enums\InputTypeEnum;
 use yii\base\Exception;
 use yii\db\Expression;
 
@@ -120,6 +123,135 @@ class DiamondService extends Service
             throw new \Exception($this->getError($model));
         }
         return $model;
+    }
+
+
+    /**
+     * @param $model
+     * @return array
+     * 裸钻字段映射
+     */
+    public function getMapping(){
+
+        $attr_list = array(
+            //证书类型
+            [
+                'attr_id' => AttrIdEnum::DIA_CERT_TYPE,
+                'attr_field' => 'cert_type',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 1,
+
+            ],
+            //证书号
+            [
+                'attr_id' => AttrIdEnum::DIA_CERT_NO,
+                'attr_field' => 'cert_id',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 1,
+
+            ],
+            //石重
+            [
+                'attr_id' => AttrIdEnum::DIA_CARAT,
+                'attr_field' => 'carat',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 1
+
+            ],
+            //净度
+            [
+                'attr_id' => AttrIdEnum::DIA_CLARITY,
+                'attr_field' => 'clarity',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 1
+
+            ],
+            //切工
+            [
+                'attr_id' => AttrIdEnum::DIA_CUT,
+                'attr_field' => 'cut',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 1
+            ],
+            //颜色
+            [
+                'attr_id' => AttrIdEnum::DIA_COLOR,
+                'attr_field' => 'color',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 1
+            ],
+            //形状
+            [
+                'attr_id' => AttrIdEnum::DIA_SHAPE,
+                'attr_field' => 'shape',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 1
+            ],
+            //切割深度
+            [
+                'attr_id' => AttrIdEnum::DIA_CUT_DEPTH,
+                'attr_field' => 'depth_lv',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //台宽比
+            [
+                'attr_id' => AttrIdEnum::DIA_TABLE_LV,
+                'attr_field' => 'table_lv',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //对称
+            [
+                'attr_id' => AttrIdEnum::DIA_SYMMETRY,
+                'attr_field' => 'symmetry',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+            ],
+            //抛光
+            [
+                'attr_id' => AttrIdEnum::DIA_POLISH,
+                'attr_field' => 'polish',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+            ],
+            //荧光
+            [
+                'attr_id' => AttrIdEnum::DIA_FLUORESCENCE,
+                'attr_field' => 'fluorescence',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+            ],
+            //石底层
+            [
+                'attr_id' => AttrIdEnum::DIA_STONE_FLOOR,
+                'attr_field' => 'stone_floor',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //长度
+            [
+                'attr_id' => AttrIdEnum::DIA_LENGTH,
+                'attr_field' => 'length',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //宽度
+            [
+                'attr_id' => AttrIdEnum::DIA_WIDTH,
+                'attr_field' => 'width',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //长宽比
+            [
+                'attr_id' => AttrIdEnum::DIA_ASPECT_RATIO,
+                'attr_field' => 'aspect_ratio',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+        );
+        return $attr_list;
     }
 
 }

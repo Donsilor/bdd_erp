@@ -5,7 +5,11 @@ namespace addons\Purchase\backend\controllers;
 use addons\Purchase\common\enums\ApplyConfirmEnum;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
 use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
+use addons\Shop\common\enums\AttrIdEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\models\Diamond;
 use common\enums\ConfirmEnum;
 use common\helpers\ArrayHelper;
 use Yii;
@@ -134,6 +138,80 @@ class PurchaseApplyGoodsController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
+    }
+
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     * 添加裸钻
+     */
+    public function actionEditDiamond(){
+
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new PurchaseApplyGoodsForm();
+        if($model->isNewRecord){
+            $cert_id = Yii::$app->request->get('cert_id');
+            $search = Yii::$app->request->get('search');
+            $apply_id = Yii::$app->request->get('apply_id');
+            if($search && $cert_id) {
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+                if(empty($diamond_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此裸钻不存在或者审核没通过', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 1; //钻石
+                $model->goods_num = 1;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_pay_price = $diamond_goods->sale_price;
+                $model->goods_price = $diamond_goods->sale_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $cert_id;
+                $model->apply_id = $apply_id;
+                $model->cost_price = $diamond_goods->cost_price;
+            }
+
+        }else{
+            $order_goods_attr = PurchaseApplyGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+            $model->cert_id = $order_goods_attr->attr_value;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+
     }
 
 
@@ -331,6 +409,11 @@ class PurchaseApplyGoodsController extends BaseController
                 'model' => $model,
         ]);
     }
+
+
+
+
+
     /**
      * 查看审批
      * @property PurchaseApplyGoodsForm $model

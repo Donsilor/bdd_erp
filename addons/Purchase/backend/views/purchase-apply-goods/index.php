@@ -30,6 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-height'=>'90%',
                     'data-offset'=>'20px',
                 ]);?>
+                <?= Html::create(['edit-diamond', 'apply_id' => $apply->id], '裸钻添加', [
+                    'class' => 'btn btn-primary btn-xs openIframe',
+                    'data-width'=>'90%',
+                    'data-height'=>'90%',
+                    'data-offset'=>'20px',
+                ]);?>
         <?php         
             }
         ?>

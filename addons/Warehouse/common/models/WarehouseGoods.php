@@ -216,7 +216,7 @@ class WarehouseGoods extends BaseModel
             'cramp_ring' => '扣环',
             'biaomiangongyi' => '表面工艺',
             'talon_head_type' => '爪头形状',
-            'goods_color' => '金料颜色',
+            'goods_color' => '货品外部颜色',
             'xiangqian_craft' => '镶嵌工艺',
             'markup_rate' => '加价率',
             'remark' => '商品备注',

@@ -27,12 +27,15 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     public $attr_custom;
     
     public $attr;
+
+    public $cert_id;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
+                [['cert_id'],'required'],
                 [['attr_require'], 'required','isEmpty'=>function($value){
                     if(!empty($value)) {
                         foreach ($value as $k=>$v) {
@@ -59,6 +62,7 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
         return parent::attributeLabels() + [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
+                'cert_id' => '证书号'
         ];
     }
 

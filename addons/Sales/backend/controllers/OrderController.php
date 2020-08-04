@@ -286,6 +286,8 @@ class OrderController extends BaseController
                         $model->audit_time = time();
                         if($model->audit_status == AuditStatusEnum::PASS){
                             $model->order_status = OrderStatusEnum::CONFORMED;
+                        }else{
+                            $model->order_status = OrderStatusEnum::SAVE;
                         }
                         if(false === $model->save()){
                             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -296,6 +298,8 @@ class OrderController extends BaseController
                     $model->audit_time = time();
                     if($model->audit_status == AuditStatusEnum::PASS){
                         $model->order_status = OrderStatusEnum::CONFORMED;
+                    }else{
+                        $model->order_status = OrderStatusEnum::SAVE;
                     }
                     if(false === $model->save()){
                         return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -410,10 +414,10 @@ class OrderController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             Yii::$app->salesService->order->syncPurchaseApply($id);
             $trans->commit();
-            return ResultHelper::json(200, '操作成功');
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         } catch (\Exception $e) {
             $trans->rollBack();
-            return ResultHelper::json(422, '操作失败！'.$e->getMessage());
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }       
     }
         

@@ -136,7 +136,9 @@ class OrderGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                Yii::$app->salesService->orderGoods->toStock($model);
+                if($model->isNewRecord) {
+                    Yii::$app->salesService->orderGoods->toStock($model);
+                }
                 $trans->commit();
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');

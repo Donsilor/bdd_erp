@@ -44,15 +44,33 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="col-lg-4">
                              <?= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
                          </div>
-
-        			 </div>
-        			 <div class="row">
                          <div class="col-lg-4">
                              <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['disabled'=>true]) ?>
                          </div>
                          <div class="col-lg-4">
-                                <?= $form->field($model, 'goods_name')->textInput(['disabled'=>true]) ?>
-            			 </div>
+                             <?php
+                             $disabled = ['disabled'=>'disabled'];
+                             $is_exeist = Yii::$app->styleService->style->isExist($model->style_sn);
+                             if(!$is_exeist){
+                                 $disabled = [];
+                             }
+                             ?>
+                             <?= $form->field($model, 'style_sn')->textInput($disabled) ?>
+                         </div>
+                         <div class="col-lg-4">
+                             <?php
+                             $disabled = ['disabled'=>'disabled'];
+                             $is_exeist = Yii::$app->styleService->qiban->isExist($model->qiban_sn);
+                             if(!$is_exeist){
+                                 $disabled = [];
+                             }
+                             ?>
+                             <?= $form->field($model, 'qiban_sn')->textInput($disabled) ?>
+                         </div>
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'goods_name')->textInput(['disabled'=>true]) ?>
+                         </div>
+
         			 </div>
                      <div class="row">
                          <div class="col-lg-4">
