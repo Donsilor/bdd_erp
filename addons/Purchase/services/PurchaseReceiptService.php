@@ -1107,7 +1107,7 @@ class PurchaseReceiptService extends Service
                 'sale_price' => $model->stone_price,
                 'remark' => $model->goods_remark,
                 'status' => StatusEnum::ENABLED,
-                'created_at' => time()
+                'created_at' => time(),
             ];
             $total_stone_num = bcadd($total_stone_num, $model->stone_num);
             $total_weight = bcadd($total_weight, $model->goods_weight, 3);
