@@ -22,20 +22,15 @@ use common\helpers\SnHelper;
 use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
+use common\helpers\ResultHelper;
 use common\models\backend\Member;
-
 use addons\Purchase\common\models\Purchase;
 use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Purchase\common\models\PurchaseApply;
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
-use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
-use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
-use addons\Supply\common\models\Supplier;
 
 /**
  * 
@@ -168,7 +163,32 @@ class PurchaseApplyController extends BaseController
             'model' => $model,
         ]);
     }
+    /**
+     * 批量创建采购单
+     */
+    public function actionAjaxPurchase()
+    {
+        $ids = Yii::$app->request->post('ids');
+        if(empty($ids)) {            
+            return ResultHelper::json(422,'ids参数不能为空');
+        }
+        $ids = StringHelper::explodeIds($ids);        
 
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();
+            //批量创建采购单
+            Yii::$app->purchaseService->apply->createPurchase($ids);
+            $trans->rollback();
+            //$trans->commit();
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return resultesultHelper::json(200,"保存成功");
+        } catch (\Exception $e){
+            $trans->rollback();
+            return ResultHelper::json(422,$e->getMessage());
+        }
+        
+        
+    }
     /** 
      * 申请审核
      * @return mixed

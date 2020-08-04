@@ -21,12 +21,21 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
+                
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?php
+                        echo Html::a('批量生成采购单', ['ajax-purchase'],  [
+                            'class'=>'btn btn-success btn-xs',
+                            "onclick" => "batchPop2(this);return false;",
+                            'data-grid'=>'grid',                            
+                            'data-title'=>'批量生成采购单',
+                        ]);                          
+                    ?> 
                     <?= Html::button('导出', [
-                        'class'=>'btn btn-success btn-xs',
+                        'class'=>'btn btn-primary btn-xs',
                         'onclick' => 'batchExport()',
                     ]);?>
                 </div>
