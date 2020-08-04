@@ -1087,7 +1087,7 @@ class PurchaseReceiptService extends Service
                 'style_sn' => $model->goods_sn,
                 'cert_type' => $model->cert_type,
                 'cert_id' => $model->cert_id,
-                'carat' => $model->goods_weight,
+                'carat' => $model->stone_weight,
                 'shape' => $model->goods_shape,
                 'color' => $model->goods_color,
                 'clarity' => $model->goods_clarity,
