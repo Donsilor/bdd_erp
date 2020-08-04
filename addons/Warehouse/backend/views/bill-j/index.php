@@ -38,7 +38,8 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:120%;'],
+                    //'options' => ['style'=>' width:120%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -221,6 +222,19 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
 
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'billJ.lend_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->billJ->lend_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'billJ.lend_status',\addons\Warehouse\common\enums\LendStatusEnum::getBillMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
                             ]),
                         ],
                         [
