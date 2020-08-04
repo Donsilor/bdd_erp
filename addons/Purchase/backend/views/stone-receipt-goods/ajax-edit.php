@@ -35,7 +35,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'stone_num')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'goods_weight')->textInput() ?>
+                   <?= $form->field($model, 'stone_weight')->textInput() ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'stone_price')->textInput() ?>
@@ -68,7 +68,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'goods_fluorescence')->dropDownList($model->getFluorescenceMap(),['prompt'=>'请选择']) ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'goods_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择']) ?>
+                   <?= $form->field($model, 'goods_shape')->dropDownList($model->getShapeMap(),['prompt'=>'请选择', 'disabled'=>true]) ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'goods_colour')->dropDownList($model->getColourMap(),['prompt'=>'请选择']) ?>
