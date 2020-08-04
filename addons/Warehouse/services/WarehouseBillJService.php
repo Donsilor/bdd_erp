@@ -138,6 +138,7 @@ class WarehouseBillJService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        $billJ = WarehouseBillJ::findOne($form->id);
         if($form->audit_status == AuditStatusEnum::PASS){
             $goods = WarehouseBillGoods::find()->select(['id', 'goods_id'])->where(['bill_id' => $form->id])->all();
             if(!$goods){
@@ -150,10 +151,14 @@ class WarehouseBillJService extends WarehouseBillService
                 throw new \Exception("同步更新商品明细状态失败");
             }
             $form->bill_status = BillStatusEnum::CONFIRM;
+            $billJ->lend_status = LendStatusEnum::HAS_LEND;
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
+            $billJ->lend_status = LendStatusEnum::SAVE;
         }
-
+        if(false === $billJ->save()){
+            throw new \Exception($this->getError($billJ));
+        }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -321,6 +326,18 @@ class WarehouseBillJService extends WarehouseBillService
             if(!$res){
                 throw new \Exception("商品{$goods->goods_id}状态不是已借货或者不存在，请查看原因");
             }
+        }
+
+        //同步更新单据附表
+        $billJ = WarehouseBillJ::findOne($form->bill_id);
+        $count = WarehouseBillGoods::find()->where(['bill_id'=>$form->bill_id, 'lend_status'=>LendStatusEnum::HAS_LEND])->count();
+        if($count>0){
+            $billJ->lend_status = LendStatusEnum::PORTION_RETURN;
+        }else{
+            $billJ->lend_status = LendStatusEnum::HAS_RETURN;
+        }
+        if(false === $billJ->save()){
+            throw new \Exception($this->getError($billJ));
         }
 
         //同步更新借货单附表

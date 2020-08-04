@@ -217,7 +217,7 @@ class BillJController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $this->modelClass = WarehouseBill::class;
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new WarehouseBill();
 
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
