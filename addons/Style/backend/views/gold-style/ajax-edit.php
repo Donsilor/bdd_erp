@@ -19,6 +19,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'style_sn')->textInput() ?>
+        <?= $form->field($model, 'gold_name')->textInput() ?>
         <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']);?>
         <?= $form->field($model, 'remark')->textarea() ?>
     </div>

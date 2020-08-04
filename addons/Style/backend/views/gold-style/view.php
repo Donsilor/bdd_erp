@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->style_sn ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_name') ?>：</td>
+                                     <td><?= $model->gold_name ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                                      <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                                  </tr>

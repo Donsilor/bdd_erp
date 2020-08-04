@@ -85,13 +85,15 @@ class PurchaseGoldGoodsController extends BaseController
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
             }
+
+            $stone = GoldStyle::find()->select(['gold_type'])->where(['style_sn'=>$model->goods_sn])->one();
+            $model->material_type = $stone->gold_type??"";
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                $stone = GoldStyle::find()->select(['gold_type'])->where(['gold_type'=>$model->material_type])->one();
-                $model->material_type = $stone->gold_type??"";
+
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
