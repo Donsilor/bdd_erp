@@ -24,7 +24,7 @@ class StyleMaterialEnum extends BaseEnum
                 self::SILVER => "银",
                 self::COPPER => "铜",
                 self::ALLOY => "合金",
-                self::OTHER => "其他",
+                self::OTHER => "其它",
         ];
     }
 }

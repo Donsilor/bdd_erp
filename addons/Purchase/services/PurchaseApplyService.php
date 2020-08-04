@@ -117,7 +117,7 @@ class PurchaseApplyService extends Service
         $applyModels = PurchaseApply::find()->select(['id','apply_sn','channel_id','apply_status'])->where(['id'=>$apply_ids])->all();
         foreach ($applyModels as $apply) {
             if($apply->apply_status != ApplyStatusEnum::FINISHED) {
-                throw new \Exception("[{$apply->apply_sn}]采购申请单未完成申请流程");                
+                throw new \Exception("[{$apply->apply_sn}]未完成申请流程");                
             }
             $group_apply_ids[$apply->channel_id][] = $apply->id;
             $group_apply_sns[$apply->channel_id][] = $apply->apply_sn;

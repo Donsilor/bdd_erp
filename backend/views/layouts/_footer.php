@@ -165,7 +165,7 @@ $this->registerJs($script);
     $('#ajaxModalMax').on('shown.bs.modal', function (e) {
         autoFontColor()
     });
-    //批量审核
+    //批量确认
     function batchAudit(obj) {
         let $e = $(obj);
         let url = $e.attr('href');
@@ -396,7 +396,7 @@ $this->registerJs($script);
         return false;
     }
 
-    //批量操作弹框
+    //批量操作-Iframe弹框
     function batchPop(obj) {
     	let $e = $(obj);
         let url = $e.attr('href');
@@ -441,7 +441,7 @@ $this->registerJs($script);
         });
     }
 
-    //批量操作弹框
+    //批量确认操作
     function batchPop2(obj) {
         let $e = $(obj);
         let url = $e.attr('href');
@@ -462,27 +462,26 @@ $this->registerJs($script);
         if($.isArray(ids)){
             ids = ids.join(',');
         }
-        $.ajax({
-            type: "get",
-            url: url,
-            dataType: "json",
-            data: {
-                ids: ids
-            },
-            success: function (data) {
-                if (parseInt(data.code) !== 200) {
-                    rfAffirm(data.message);
-                } else {
-                    var title = $e.data('title') || '基本信息';
-                    var width = $e.data('width') || '80%';
-                    var height = $e.data('height') || '80%';
-                    var offset = $e.data('offset') || '10%';
-                    url = data.data.url || url+"?ids="+ids;
-                    openIframe(title, width, height, url, offset);
-                    //$e.preventDefault();
-                    return false;
-                }
+        appConfirm("确定要"+text+"吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
             }
+
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
         });
     }
 
