@@ -4,6 +4,7 @@
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
+use common\helpers\Url;
 use yii\grid\GridView;
 use kartik\select2\Select2;
 
@@ -23,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::a('返回列表', ['templet-bill-l-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+        if($bill->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
+            echo Html::a('返回列表', ['templet-bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -37,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -50,12 +52,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                'attribute'=>'gold_name',
+                                'attribute'=>'batch_sn',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'goods_name',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_name', $model->gold_name, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('goods_name', $model->goods_name, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
@@ -63,61 +70,134 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'style_sn',
-                                'format' => 'raw',
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_type',
-                                'format' => 'raw',
-                                'value' => function ($model){
-                                    return Yii::$app->attr->valueName($model->gold_type);
+                                'label' => '款式图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox(Yii::$app->warehouseService->templet->getStyleImage($model),90,90);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'label' => '商品图片',
+                                'value' => function ($model) {
+                                    return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                                },
+                                'filter' => false,
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>'90'],
+                            ],
+                            [
+                                'attribute' => 'layout_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'layout_type', \addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'layout_type',\addons\Warehouse\common\enums\LayoutTypeEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style' => 'width:100px;'
+
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute'=>'goods_num',
+                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute'=>'suttle_weight',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->suttle_weight ?? '';
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute'=>'stone_weight',
+                                'filter' => Html::activeTextInput($searchModel, 'stone_weight', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                'attribute' => 'finger_hk',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
+                                    return  Html::ajaxSelect($model,'finger_hk', \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'finger',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'finger', \Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_size',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('goods_size', $model->goods_size, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_price',
+                                'attribute'=>'stone_size',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('stone_size', $model->stone_size, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                                     'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'cost_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },
+                                'attribute'=>'cost_price',
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['width' => '120'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('remark', $model->remark, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'remark', [
+                                    'class' => 'form-control',
                                     'style'=> 'width:200px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

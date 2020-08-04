@@ -15,6 +15,7 @@ use common\enums\AuditStatusEnum;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
+use common\helpers\SnHelper;
 use common\helpers\Url;
 
 /**
@@ -32,7 +33,6 @@ class TempletBillLController extends TempletBillController
      */
     public function actionIndex()
     {
-
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -68,6 +68,43 @@ class TempletBillLController extends TempletBillController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseTempletBillLForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                if($model->isNewRecord){
+                    $model->bill_no = SnHelper::createBillSn($this->billType);
+                    $model->bill_type = $this->billType;
+                    $model->bill_status = TempletBillStatusEnum::SAVE;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success','保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 

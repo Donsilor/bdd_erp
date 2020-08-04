@@ -14,6 +14,8 @@ use addons\Purchase\common\models\PurchaseApply;
 use addons\Purchase\common\models\PurchaseApplyLog;
 use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
+use addons\Purchase\common\enums\PurchaseCateEnum;
+use addons\Purchase\common\enums\PurchaseTypeEnum;
 
 /**
  * Class PurchaseApplyService
@@ -121,7 +123,69 @@ class PurchaseApplyService extends Service
         }
 
     }
-
+    /**
+     * 根据采购申请单生成采购单
+     * @param array|int $apply_ids
+     */
+    public function createPurchase(array $apply_ids) 
+    {
+        $group_apply_ids = [];//采购申请单ID分组
+        $group_apply_sns = [];//采购申请单SN分组
+        $applyModels = PurchaseApply::find()->select(['id','apply_sn','channel_id','apply_status'])->where(['id'=>$apply_ids])->all();
+        foreach ($applyModels as $apply) {
+            if($apply->apply_status != ApplyStatusEnum::FINISHED) {
+                throw new \Exception("[{$apply->apply_sn}]采购申请单未完成申请流程");                
+            }
+            $group_apply_ids[$apply->channel_id][] = $apply->id;
+            $group_apply_sns[$apply->channel_id][] = $apply->apply_sn;
+        }
+        $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->all();
+        foreach ($group_apply_ids as $channel_id=>$apply_ids){
+            foreach ($supplierIds as $supplierId){
+                $supplier_id = $supplierId['supplier_id'];
+                $info = [
+                        "purchase_type"=>PurchaseTypeEnum::GOODS,
+                        "purchase_cate"=>PurchaseCateEnum::ORDER,
+                        "channel_id"=>$channel_id,
+                        "supplier_id"=>$supplier_id,
+                        "apply_sn" =>implode(',',$group_apply_sns[$channel_id] ??''),
+                ];
+                $goods_list = [];
+                $goodsModels = PurchaseApplyGoods::find()->where(['supplier_id'=>$supplier_id,'apply_id'=>$apply_ids])->all();
+                foreach ($goodsModels as $goods) {
+                     $goods = [
+                             "apply_detail_id"=>$goods->id,//申请单明细ID
+                             "order_detail_id"=>$goods->order_detail_id,//顾客订单明细ID
+                             "goods_sn"=>$goods->goods_sn,
+                             "goods_num"=>$goods->goods_num,
+                             "goods_name"=>$goods->goods_name,
+                             "goods_image"=>$goods->goods_image,
+                             "goods_type"=>$goods->goods_type,
+                             "style_id"=>$goods->style_id,
+                             "style_sn"=>$goods->style_sn,
+                             "qiban_sn"=>$goods->qiban_sn,
+                             "qiban_type"=>$goods->qiban_type,
+                             "style_cate_id"=>$goods->style_cate_id,
+                             "product_type_id"=>$goods->product_type_id,
+                             "style_channel_id"=>$goods->style_channel_id,
+                             "style_sex"=>$goods->style_sex,
+                             "jintuo_type"=>$goods->jintuo_type,
+                             "is_inlay"=>$goods->is_inlay,
+                             "cost_price"=>$goods->cost_price,
+                             "stone_info"=>$goods->stone_info,
+                             "parts_info"=>$goods->parts_info,
+                             "remark"=>$goods->remark,
+                             "created_at"=>time(),
+                             "updated_at"=>time(),
+                     ];
+                     $goods['goods_attrs'] = PurchaseApplyGoodsAttribute::find()->where(['id'=>$goods->id])->asArray()->all();
+                     $goods_list[] = $goods;
+                }
+                
+                Yii::$app->purchaseService->purchase->createPurchase($info, $goods_list);
+            }            
+        }
+    }
     /**
      * 创建采购单日志
      * @return array

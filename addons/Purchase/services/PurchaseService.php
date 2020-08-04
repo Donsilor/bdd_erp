@@ -66,6 +66,38 @@ class PurchaseService extends Service
             Purchase::updateAll(['total_num'=>$sum['total_num']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$purchase_id]);
         }
     }
+    /**
+     * 创建采购单
+     * @param array $info 采购单-单头
+     * @param array $goods_list 采购单-明细列表
+     * @throws \Exception
+     * @return \addons\Purchase\common\models\Purchase
+     */
+    public function createPurchase($info, $goods_list)
+    {
+         $purchase = new Purchase();
+         $purchase->attributes = $info;
+         if(false === $purchase->save()){
+             throw new \Exception($this->getError($purchase));
+         }
+         
+         foreach ($goods_list as $goods) {
+             $purchaseGoods = new PurchaseGoods();
+             $purchaseGoods->attributes = $goods;
+             if(false === $purchaseGoods->save()) {
+                 throw new \Exception($this->getError($purchaseGoods));
+             }
+             foreach ($goods['goods_attrs'] ?? [] as $attr) {
+                 $goodsAttr = new PurchaseGoodsAttribute();
+                 $goodsAttr->attributes = $attr;
+                 if(false === $goodsAttr->save()) {
+                     throw new \Exception($this->getError($goodsAttr));
+                 }
+             }
+         }
+         
+         return $purchase;
+    }
     
     /**
     * 同步采购单生成布产单

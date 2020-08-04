@@ -399,7 +399,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     }
                 },
                 'orders' => function($url, $model, $key){
-                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::AFFIRM){
+                    if($model->repair_status == \addons\Warehouse\common\enums\RepairStatusEnum::FINISHED){
                         return Html::edit(['ajax-orders','id'=>$model->id], '下单', [
                             'class'=>'btn btn-success btn-sm',
                             'onclick' => 'rfTwiceAffirm(this,"提交下单", "确定操作吗？");return false;',

@@ -16,7 +16,7 @@ $form = ActiveForm::begin([
     <h4 class="modal-title">基本信息</h4>
 </div>
 <div class="modal-body">
-    <?= $form->field($model, 'delivery_no')->textInput() ?>
+    <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
@@ -40,7 +40,7 @@ $form = ActiveForm::begin([
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-                'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                'data' => Yii::$app->warehouseService->warehouse->getDropDown(),
                 'options' => ['placeholder' => '请选择'],
                 'pluginOptions' => [
                     'allowClear' => false
@@ -57,6 +57,7 @@ $form = ActiveForm::begin([
             ]);?>
         </div>
     </div>
+    <?= $form->field($model, 'delivery_no')->textInput(); ?>
     <?= $form->field($model, 'remark')->textArea(); ?>
 </div>
 <div class="modal-footer">

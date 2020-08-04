@@ -18,7 +18,8 @@ class WarehouseTempletBillCGoodsForm extends WarehouseTempletBillGoods
     public function rules()
     {
          $rules = [
-
+             [['batch_sn'], 'required'],
+             [['batch_sn'], 'filter', 'filter' => 'trim'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }

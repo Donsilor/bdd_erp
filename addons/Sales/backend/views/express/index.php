@@ -134,10 +134,10 @@ $params = $params ? "&".http_build_query($params) : '';
 
                         ],
                         [
-                            'attribute'=>'updated_at',
+                            'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
-                                'attribute' => 'updated_at',
+                                'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
                                 'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
@@ -150,13 +150,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
-
-
                                 ],
-
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->updated_at);
+                                return Yii::$app->formatter->asDatetime($model->created_at);
                             }
                         ],
                         [

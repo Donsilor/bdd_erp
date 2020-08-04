@@ -31,17 +31,31 @@ class OrderForm extends Order
         $rules = [
                 [['pay_type'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
-                    if(!$this->customer_mobile && $this->sale_channel_id != 3 && $value == '') {
-                        return true;
+                    if($this->sale_channel_id != 3 && $value == '') {
+                        return true;//提示 为空 错误
                     }
-                    return false;
-                }],
+                    return false;//不验证
+                },
+                'whenClient' => "function (attribute, value) {
+                     if($('#orderform-sale_channel_id').val() != 3){
+                          return true;//启用 必填 功能
+                     }
+                    return false;//禁用  必填 功能
+                }"
+                ],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
-                    if(!$this->customer_email && $this->sale_channel_id == 3 && $value == '') {
+                    if($this->sale_channel_id == 3 && $value == '') {
                         return true;
                     }
                     return false;
-                }],
+                },
+                'whenClient' => "function (attribute, value) {
+                     if($('#orderform-sale_channel_id').val() == 3){
+                          return true;//启用 必填 功能
+                     }
+                     return false;//禁用  必填 功能
+                }"
+                ],
                 [['customer_email_1','customer_email_2'], 'match', 'pattern' => RegularHelper::email(), 'message' => '邮箱地址不合法'],
                 [['customer_mobile_1','customer_mobile_2'], 'string', 'max' => 30],
                 [['customer_mobile_1','customer_email_2'],'buildCustomerInfo'],

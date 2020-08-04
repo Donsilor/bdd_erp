@@ -107,6 +107,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'90'],
                         ],
                         [
+                            'label' => '商品图片',
+                            'value' => function ($model) {
+                                return \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60);
+                            },
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'90'],
+                        ],
+                        [
                             'attribute'=>'goods_num',
                             'filter' => Html::activeTextInput($searchModel, 'goods_num', [
                                 'class' => 'form-control',

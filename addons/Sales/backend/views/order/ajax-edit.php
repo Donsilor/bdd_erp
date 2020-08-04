@@ -168,16 +168,18 @@ $("#"+formId+"-customer_mobile_1").blur(function(){
 	}
 	$("#"+formId+"-customer_mobile_2").val($(this).val());
 });
+$("#"+formId+"-customer_email_2").blur(function(){
+	if($("#"+formId+"-sale_channel_id").val() ==3){
+		fillCustomerFormByEmail();
+	}
+	$("#"+formId+"-customer_mobile_1").val($(this).val());
+});
+
 $("#"+formId+"-customer_mobile_2").blur(function(){
 	$("#"+formId+"-customer_mobile_1").val($(this).val());
 });
 $("#"+formId+"-customer_email_1").blur(function(){
 	$("#"+formId+"-customer_email_2").val($(this).val());
-});
-$("#"+formId+"-customer_email_1").blur(function(){
-	if($("#"+formId+"-sale_channel_id").val() ==3){
-		fillCustomerFormByEmail();
-	}
 });
 $("#"+formId+"-sale_channel_id").change(function(){
 	if($(this).val()==3) {

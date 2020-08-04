@@ -68,6 +68,7 @@ class WarehouseTempletBillLService extends Service
         \Yii::$app->warehouseService->goldBill->goldBillSummary($billM->id);
         return $billM;
     }
+
     /**
      * 审核样板收货单(入库单)
      * @param WarehouseTempletBillLForm $form
@@ -90,19 +91,27 @@ class WarehouseTempletBillLService extends Service
             foreach ($templet as $detail){
                 $templetM = new WarehouseTemplet();
                 $good = [
-                    'gold_sn' => (string) rand(10000000000,99999999999),//临时
+                    'batch_sn' => (string) rand(10000000000,99999999999),//临时
                     'goods_status' => TempletStatusEnum::IN_STOCK,
                     'style_sn' => $detail->style_sn,
                     'qiban_sn' => $detail->qiban_sn,
                     'goods_name' => $detail->goods_name,
                     'goods_image' => $detail->goods_image,
                     'layout_type' => $detail->layout_type,
+                    'finger' => $detail->finger,
+                    'finger_hk' => $detail->finger_hk,
+                    'suttle_weight' => $detail->suttle_weight,
+                    'goods_size' => $detail->goods_size,
+                    'stone_weight' => $detail->stone_weight,
+                    'stone_size' => $detail->stone_size,
                     'put_in_type' => $form->put_in_type,
                     'supplier_id' => $form->supplier_id,
                     'goods_num' => $detail->goods_num,
                     'goods_weight' => $detail->goods_weight,
                     'cost_price' => $detail->cost_price,
                     'warehouse_id' => $form->to_warehouse_id,
+                    'purchase_sn' => $form->delivery_no,
+                    'receipt_no' => $form->bill_no,
                     'remark' => $detail->remark,
                     'status' => StatusEnum::ENABLED,
                     'creator_id'=>\Yii::$app->user->identity->getId(),
@@ -118,28 +127,20 @@ class WarehouseTempletBillLService extends Service
             }
             if($ids){
                 foreach ($ids as $id){
-                    $stone = WarehouseGold::findOne(['id'=>$id]);
-                    $gold_sn = \Yii::$app->warehouseService->gold->createGoldSn($stone);
+                    $templet = WarehouseTemplet::findOne(['id'=>$id]);
+                    $batch_sn = \Yii::$app->warehouseService->templet->createBatchSn($templet);
                     //回写收货单货品批次号
                     $g_id = $g_ids[$id]??"";
                     if($g_id){
-                        $res = WarehouseGoldBillGoods::updateAll(['gold_sn' => $gold_sn], ['id' => $g_id]);
+                        $res = WarehouseTempletBillGoods::updateAll(['batch_sn' => $batch_sn], ['id' => $g_id]);
                         if(false === $res){
-                            throw new \Exception("回写收货单货品批次号失败");
+                            throw new \Exception("回写入库单货品批次号失败");
                         }
                     }
                 }
             }
-            if($form->audit_status == AuditStatusEnum::PASS){
-                //同步金料采购收货单货品状态
-                $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-                $res = PurchaseGoldReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
-                if(false === $res) {
-                    throw new \Exception("同步金料采购收货单货品状态失败");
-                }
-            }
         }else{
-            $form->bill_status = BillStatusEnum::SAVE;
+            $form->bill_status = TempletBillStatusEnum::SAVE;
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
