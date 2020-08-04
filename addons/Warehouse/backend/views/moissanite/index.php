@@ -139,6 +139,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'nominal_price',
+                            'filter' => Html::activeTextInput($searchModel, 'nominal_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute'=>'color_scope',
                             'filter' => Html::activeTextInput($searchModel, 'color_scope', [
                                 'class' => 'form-control',

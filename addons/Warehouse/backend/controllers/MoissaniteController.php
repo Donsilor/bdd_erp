@@ -90,6 +90,7 @@ class MoissaniteController extends BaseController
                 $stone_shape = \Yii::$app->attr->valueName($model->shape)??"";
                 $model->name = $stone_type.$stone_shape.$model->size;
                 $model->est_cost = bcmul($model->real_carat, $model->karat_price, 2);
+                $model->nominal_price = bcadd($model->est_cost, bcmul($model->est_cost, 0.05, 2), 2);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
