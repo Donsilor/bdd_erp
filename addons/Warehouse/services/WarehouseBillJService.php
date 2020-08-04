@@ -330,7 +330,7 @@ class WarehouseBillJService extends WarehouseBillService
 
         //同步更新单据附表
         $billJ = WarehouseBillJ::findOne($form->bill_id);
-        $count = WarehouseBillGoods::find()->where(['bill_id'=>$form->bill_id, 'lend_status'=>LendStatusEnum::HAS_LEND])->count();
+        $count = WarehouseBillGoodsJ::find()->where(['bill_id'=>$form->bill_id, 'lend_status'=>LendStatusEnum::HAS_LEND])->count();
         if($count>0){
             $billJ->lend_status = LendStatusEnum::PORTION_RETURN;
         }else{
