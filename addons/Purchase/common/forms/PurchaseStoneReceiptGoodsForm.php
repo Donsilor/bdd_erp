@@ -15,15 +15,28 @@ use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
 class PurchaseStoneReceiptGoodsForm extends PurchaseStoneReceiptGoods
 {
     public $ids;
+    public $remark;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-
+            [['remark'], 'string', 'max'=>255],
         ];
         return array_merge(parent::rules() , $rules);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        //合并
+        return ArrayHelper::merge(parent::attributeLabels() , [
+            'id'=>'流水号',
+            'remark'=>'备注',
+        ]);
     }
 
     /**
@@ -105,17 +118,6 @@ class PurchaseStoneReceiptGoodsForm extends PurchaseStoneReceiptGoods
     public static function getColourMap()
     {
         return Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        //合并
-        return ArrayHelper::merge(parent::attributeLabels() , [
-            'id'=>'流水号',
-        ]);
     }
 
     /**

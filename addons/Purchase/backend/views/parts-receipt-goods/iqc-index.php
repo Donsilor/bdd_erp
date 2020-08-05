@@ -25,17 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?php
-                        echo Html::batchPopButton(['iqc','check'=>1],'IQC批量质检', [
+                        echo Html::batchPopButton(['iqc', 'check'=>1],'IQC批量质检', [
                             'class'=>'btn btn-success btn-xs',
                             'data-width'=>'40%',
                             'data-height'=>'60%',
                             'data-offset'=>'20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
+                        /*echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'data-grid' => 'grid',
                             'onclick' => 'batchAudit(this);return false;',
+                        ]);*/
+                        echo Html::batchPopButton(['defective', 'check'=>1], '批量生成返厂单', [
+                            'class'=>'btn btn-danger btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                     ?>
                 </div>

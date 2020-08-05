@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Warehouse\common\enums\GiftStatusEnum;
 use addons\Warehouse\common\models\WarehouseGift;
 use Yii;
@@ -787,16 +788,6 @@ class PurchaseReceiptService extends Service
         if(false === $res) {
             throw new \Exception("更新货品状态失败");
         }
-        /*$receipt = PurchaseReceipt::findOne($ids[0]);
-        $log_msg = '质检操作';
-        $log = [
-            'receipt_id' => $receipt->id,
-            'receipt_no' => $receipt->receipt_no,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_module' => '成品采购收货单',
-            'log_msg' => $log_msg
-        ];
-        \Yii::$app->purchaseService->receiptLog->createReceiptLog($log);*/
     }
 
     /**
@@ -854,6 +845,42 @@ class PurchaseReceiptService extends Service
      * @param integer $purchase_type
      * @throws \Exception
      */
+    public function DefectiveValidate($form, $purchase_type){
+        $ids = $form->getIds();
+        if(!count($ids)){
+            throw new \Exception("至少选择一个货品");
+        }
+        if(is_array($ids)){
+            if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
+                $model = new PurchaseGoldReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE){
+                $model = new PurchaseStoneReceiptGoods();
+            }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS){
+                $model = new PurchasePartsReceiptGoods();
+            }else{
+                $model = new PurchaseReceiptGoods();
+            }
+            foreach ($ids as $id) {
+                $goods = $model::findOne(['id'=>$id]);
+                if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_NO_PASS){
+                    throw new \Exception("流水号【{$id}】不是IQC质检未过状态，不能制单");
+                }
+            }
+            if(!$this->checkDistinct($model, 'receipt_no', $ids)){
+                throw new \Exception("不是同一个出货单号不允许制单");
+            }
+            if(!$this->checkDistinct($model, 'supplier_id', $ids)){
+                throw new \Exception("不是同一个供应商不允许制单");
+            }
+        }
+    }
+
+    /**
+     *  批量生成不良返厂单
+     * @param PurchaseReceiptGoodsForm $form
+     * @param integer $purchase_type
+     * @throws \Exception
+     */
     public function batchDefective($form, $purchase_type)
     {
         if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
@@ -865,7 +892,7 @@ class PurchaseReceiptService extends Service
         }else{
             $model = new PurchaseReceiptGoods();
         }
-        $ids = $form->ids;
+        $ids = $form->getIds();
         if(!count($ids)){
             throw new \Exception("至少选择一个货品");
         }
@@ -965,6 +992,7 @@ class PurchaseReceiptService extends Service
             'total_cost' => $total_cost,
             'audit_status' => AuditStatusEnum::PENDING,
             'defective_status' => DefectiveStatusEnum::PENDING,
+            'remark'=> $form->remark,
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
         ];
