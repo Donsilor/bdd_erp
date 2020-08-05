@@ -53,7 +53,7 @@
 				</div>
                 <div class="list clf">
                     <div class="child fl clf">
-                        <div class="child-attr fl">供应商：</div>
+                        <div class="child-attr fl">加工商：</div>
                         <div class="child-val fl"><?= $model->supplier->supplier_name??"" ?> </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <div>证书号</div>
                     </td>
                     <td>
-                        <div>规格(颜色/净度/切工/石重/对称/抛光/荧光)</div>
+                        <div>规格(颜色/净度/切工/对称/抛光/荧光)</div>
                     </td>
                     <td>
                         <div>布产单号</div>

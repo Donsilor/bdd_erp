@@ -53,7 +53,7 @@
 				</div>
                 <div class="list clf">
                     <div class="child fl clf">
-                        <div class="child-attr fl">供应商：</div>
+                        <div class="child-attr fl">加工商：</div>
                         <div class="child-val fl"><?= $model->supplier->supplier_name??"" ?> </div>
                     </div>
                 </div>
