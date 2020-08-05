@@ -229,7 +229,7 @@ class Order extends BaseModel
      */
     public function getSaleChannel()
     {
-        return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id']);
+        return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id'])->alias('saleChannel');
     }
 
     /**

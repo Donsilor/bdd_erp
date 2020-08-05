@@ -2,6 +2,8 @@
 
 namespace addons\Finance\common\models;
 
+use addons\Sales\common\models\Order;
+use common\models\backend\Member;
 use Yii;
 
 /**
@@ -62,5 +64,22 @@ class OrderPay extends BaseModel
             'created_at' => '点款时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 订单
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class, ['id'=>'order_id'])->alias('order');
+    }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
     }
 }

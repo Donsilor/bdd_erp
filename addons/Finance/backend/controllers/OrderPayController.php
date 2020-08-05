@@ -3,6 +3,12 @@
 namespace addons\Finance\backend\controllers;
 
 use addons\Finance\common\models\OrderPay;
+use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\Payment;
+use addons\Sales\common\models\SaleChannel;
+use common\enums\PayTypeEnum;
+use common\helpers\AmountHelper;
+use common\helpers\ArrayHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
 use common\helpers\StringHelper;
@@ -60,7 +66,15 @@ class OrderPayController extends BaseController
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['or',['=',Order::tableName().".pay_status",PayStatusEnum::HAS_PAY],['=',Order::tableName().".order_status",OrderStatusEnum::CONFORMED]]);
         //$dataProvider->query->andWhere(['=',Order::tableName().".pay_status",PayStatusEnum::NO_PAY]);
-        
+
+        //导出
+        if(Yii::$app->request->get('action') === 'export'){
+            $dataProvider->setPagination(false);
+            $list = $dataProvider->models;
+            $list = ArrayHelper::toArray($list);
+            $ids = array_column($list,'id');
+            $this->actionExport($ids);
+        }
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
@@ -109,23 +123,26 @@ class OrderPayController extends BaseController
         if(!$ids){
             return $this->message('ID不为空', $this->redirect(['index']), 'warning');
         }
-        list($list,) = $this->getData($ids);
+        $list = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
-            ['订单时间', 'add_time', 'date',''],
-            ['订单编号', 'goods_id', 'text'],
-            ['客户姓名', 'style_sn', 'text'],
-            ['应付金额', 'product_type_name' , 'text'],
-            ['实际支付金额', 'style_cate_name' , 'text'],
-            ['剩余尾款', 'warehouse_name' , 'text'],
-            ['订单状态', 'material' , 'text'],
-            ['支付方式', 'gold_weight' , 'text'],
-            ['支付状态', 'main_stone_type' , 'text'],
-            ['支付单号', 'diamond_carat' , 'text'],
-            ['点款人', 'main_stone_num' , 'text'],
+            ['订单时间', 'order_time', 'date','Y-m-d H:i:s'],
+            ['订单编号', 'order_sn', 'text'],
+            ['客户姓名', 'customer_name', 'text'],
+            ['销售渠道', 'channel_name', 'text'],
+            ['订单货币', 'currency', 'text'],
+            ['应付金额', 'pay_amount' , 'text'],
+            ['实际支付金额', 'paid_amount' , 'text'],
+            ['剩余尾款', 'unpay_amount' , 'text'],
+            ['订单状态', 'order_status' , 'text'],
+            ['支付方式', 'payment_name' , 'text'],
+            ['支付状态', 'pay_status' , 'text'],
+            ['支付单号', 'pay_sn' , 'text'],
+            ['点款人', 'pay_user' , 'text'],
+            ['点款时间', 'pay_time' , 'date','Y-m-d H:i:s'],
         ];
 
-        return ExcelHelper::exportData($list, $header, '退货返厂单_' . date('YmdHis',time()));
+        return ExcelHelper::exportData($list, $header, '订单点款_' . date('YmdHis',time()));
 
     }
 
@@ -137,30 +154,25 @@ class OrderPayController extends BaseController
      */
     public function getData($ids)
     {
-        $select = ['p.*','o.order_sn','o.created_at as add_time'];
-        $query = OrderPay::find()->alias('p')
-            ->leftJoin(Order::tableName().' o','o.id=p.order_id')
+        $select = ['o.*','p.name as payment_name','a.pay_amount','a.paid_amount','a.currency','c.name as channel_name','pay.creator as pay_user'];
+        $query = Order::find()->alias('o')
+            ->innerJoin(OrderPay::tableName().' pay','pay.order_id = o.id')
+            ->leftJoin(OrderAccount::tableName().' a','o.id = a.order_id')
+            ->leftJoin(Payment::tableName().' p','o.pay_type = p.id')
+            ->leftJoin(SaleChannel::tableName().' c','o.sale_channel_id=c.id')
+            ->where(['o.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
 
         foreach ($lists as &$list){
-            $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
-            $list['material'] = \Yii::$app->attr->valueName($list['material']);
-            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
-            $diamond_color = $list['diamond_color'] ? \Yii::$app->attr->valueName($list['diamond_color']): '无';
-            $diamond_clarity = $list['diamond_clarity'] ?\Yii::$app->attr->valueName($list['diamond_clarity']): '无';
-            $diamond_cut = $list['diamond_cut'] ?\Yii::$app->attr->valueName($list['diamond_cut']): '无';
-            $diamond_polish = $list['diamond_polish'] ?\Yii::$app->attr->valueName($list['diamond_polish']): '无';
-            $diamond_symmetry = $list['diamond_symmetry'] ?\Yii::$app->attr->valueName($list['diamond_symmetry']): '无';
-            $diamond_fluorescence = $list['diamond_fluorescence'] ?\Yii::$app->attr->valueName($list['diamond_fluorescence']): '无';
-            $list['main_stone_info'] = $diamond_color . '/' . $diamond_clarity . '/' . $diamond_cut . '/'
-                . $diamond_polish . '/' . $diamond_symmetry . '/' . $diamond_fluorescence;
-
-
+            $unpay_amount = $list['pay_amount'] - $list['paid_amount'];
+            $list['unpay_amount'] = AmountHelper::outputAmount($unpay_amount,2,$list['currency']);
+            $list['pay_amount'] = AmountHelper::outputAmount($list['pay_amount'],2,$list['currency']);
+            $list['paid_amount'] = AmountHelper::outputAmount($list['paid_amount'],2,$list['currency']);
+            $list['order_status'] = OrderStatusEnum::getValue($list['order_status']);
+            $list['pay_status'] = PayStatusEnum::getValue($list['pay_status']);
         }
-        return $list;
-
-
+        return $lists;
 
     }
     

@@ -101,6 +101,29 @@ $params = $params ? "&".http_build_query($params) : '';
                     'headerOptions' => ['width'=>'100'],
             ],
             [
+                'attribute' => 'sale_channel_id',
+                'value' => function ($model){
+                    return $model->saleChannel->name ?? '';
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel::getDropDown(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' =>'width:80px'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                'attribute' => 'currency',
+                'filter' => Html::activeDropDownList($searchModel, 'currency',\common\enums\CurrencyEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' =>'width:80px'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
                     'attribute' => 'account.pay_amount',
                     'value' => function ($model){
                         return AmountHelper::outputAmount($model->account->pay_amount,2,$model->account->currency);
@@ -205,6 +228,31 @@ $params = $params ? "&".http_build_query($params) : '';
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
            ],
+            [
+                'label'=>'点款时间',
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDatetime($model->pay_time);
+                },
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                    'model' => $searchModel,
+                    'attribute' => 'pay_time',
+                    'value' => $searchModel->pay_time,
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'locale' => [
+                            'separator' => '/',
+                        ],
+                        'endDate' => date('Y-m-d',time()),
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'todayBtn' => 'linked',
+                        'clearBtn' => true,
+                    ],
+                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
+
+            ],
            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
