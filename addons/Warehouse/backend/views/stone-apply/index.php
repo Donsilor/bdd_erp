@@ -1,5 +1,6 @@
 <?php
 use common\helpers\Html;
+use kartik\select2\Select2;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -47,7 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>' width:130%;'],
+                        //'options' => ['style'=>' width:130%;'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -81,6 +83,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]),
                                     'format' => 'raw',
                             
+                            ],
+                            [
+                                'label' => '加工商',
+                                'attribute' => 'supplier_id',
+                                'value' =>"supplier.supplier_name",
+                                'filter'=>Select2::widget([
+                                    'name'=>'SearchModel[supplier_id]',
+                                    'value'=>$searchModel->supplier_id,
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'options' => ['placeholder' =>"请选择",'class' => 'col-md-4', 'style'=> 'width:120px;'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'width'=>'200px',
+                                    ],
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => [],
                             ],
                             [
                                     'attribute' => 'from_type',

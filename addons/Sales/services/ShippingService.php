@@ -88,18 +88,7 @@ class ShippingService extends Service
         if(false === $order->save()){
             throw new \Exception($this->getError($order));
         }
-        //创建订单日志
-        $log_msg = "订单发货";
-        $log = [
-            'order_id' => $order->id,
-            'order_sn' => $order->order_sn,
-            'order_status' => $order->order_status,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_time' => time(),
-            'log_module' => '订单发货',
-            'log_msg' => $log_msg
-        ];
-        \Yii::$app->salesService->orderLog->createOrderLog($log);
+        
         //创建快递单
         $form->sale_channel_id = $order->sale_channel_id;
         $form->out_trade_no = $order->out_trade_no;
@@ -108,7 +97,18 @@ class ShippingService extends Service
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
-
+        
+        //创建订单日志
+        $log = [
+                'order_id' => $order->id,
+                'order_sn' => $order->order_sn,
+                'order_status' => $order->order_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '订单发货',
+                'log_msg' => "订单发货, 快递单号:".$order->express_no
+        ];
+        \Yii::$app->salesService->orderLog->createOrderLog($log);
         return $order;
     }
 }

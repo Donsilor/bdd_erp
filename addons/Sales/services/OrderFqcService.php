@@ -16,6 +16,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use common\helpers\ArrayHelper;
 use yii\db\Exception;
+use common\enums\LogTypeEnum;
 
 /**
  * Class OrderFqcService
@@ -80,17 +81,24 @@ class OrderFqcService extends Service
         if(false === $order->save()){
             throw new \Exception($this->getError($order));
         }
-
-
-        //创建订单日志
-
         //创建质检日志
         $form->creator_id = \Yii::$app->user->identity->getId();
         $form->created_at = time();
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
-
+        //创建订单日志
+        $log = [
+                'order_id' => $order->id,
+                'order_sn' => $order->order_sn,
+                'order_status' => $order->order_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => 'FQC质检',
+                'log_msg' => $form->is_pass ? "FQC质检通过" : "FQC质检不通过",
+        ];
+        \Yii::$app->salesService->orderLog->createOrderLog($log);
+        
         return $order;
     }
 }
