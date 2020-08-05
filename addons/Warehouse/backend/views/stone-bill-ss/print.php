@@ -38,7 +38,25 @@
 						<div class="child-attr fl">单据编号：</div>
 						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
 					</div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">单据状态：</div>
+                        <div class="child-val fl"><?= \addons\Warehouse\common\enums\StoneBillStatusEnum::getValue($model->bill_status) ?? '' ?> </div>
+                    </div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">领料人：</div>
+                        <div class="child-val fl"><?= $model->auditor->username??"" ?> </div>
+                    </div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">领料时间：</div>
+                        <div class="child-val fl"><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?? '' ?> </div>
+                    </div>
 				</div>
+                <div class="list clf">
+                    <div class="child fl clf">
+                        <div class="child-attr fl">供应商：</div>
+                        <div class="child-val fl"><?= $model->supplier->supplier_name??"" ?> </div>
+                    </div>
+                </div>
 			</div>
 
 			<!-- 订单列表 -->
@@ -61,16 +79,25 @@
                         <div>石头形状</div>
                     </td>
                     <td>
-                        <div>石头颜色</div>
+                        <div>数量</div>
                     </td>
                     <td>
-                        <div>数量</div>
+                        <div>重量</div>
                     </td>
                     <td>
                         <div>尺寸（ct）</div>
                     </td>
                     <td>
-                        <div>规格(颜色/净度/切工/石重)</div>
+                        <div>色彩</div>
+                    </td>
+                    <td>
+                        <div>证书号</div>
+                    </td>
+                    <td>
+                        <div>规格(颜色/净度/切工/石重/对称/抛光/荧光)</div>
+                    </td>
+                    <td>
+                        <div>布产单号</div>
                     </td>
                     <td>
                         <div>单价/ct</div>
@@ -105,16 +132,25 @@
                         <div><?= $val['shape'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['color'] ?></div>
+                        <div><?= $val['stone_num'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['stone_num'] ?></div>
+                        <div><?= $val['stone_weight'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['stone_size'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['stone_colour'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['cert_id'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['spec'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['produce_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['stone_price'] ?></div>
@@ -147,16 +183,25 @@
                             <div>石头形状</div>
                         </td>
                         <td>
-                            <div>石头颜色</div>
+                            <div>数量</div>
                         </td>
                         <td>
-                            <div>数量</div>
+                            <div>重量</div>
                         </td>
                         <td>
                             <div>尺寸（ct）</div>
                         </td>
                         <td>
-                            <div>规格(颜色/净度/切工/石重)</div>
+                            <div>色彩</div>
+                        </td>
+                        <td>
+                            <div>证书号</div>
+                        </td>
+                        <td>
+                            <div>规格(颜色/净度/切工/对称/抛光/荧光)</div>
+                        </td>
+                        <td>
+                            <div>布产单号</div>
                         </td>
                         <td>
                             <div>单价/ct</div>
@@ -176,8 +221,11 @@
                     <td colspan="3"><div>合计</div></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td><div><?= $total['stone_num_count']?></div></td>
+                    <td><div><?= $total['stone_weight_count']?></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
