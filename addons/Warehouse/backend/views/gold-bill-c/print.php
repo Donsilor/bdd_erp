@@ -38,7 +38,25 @@
 						<div class="child-attr fl">单据编号：</div>
 						<div class="child-val fl"><?= $model->bill_no ?? '' ?> </div>
 					</div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">单据状态：</div>
+                        <div class="child-val fl"><?= \addons\Warehouse\common\enums\GoldBillStatusEnum::getValue($model->bill_status) ?? '' ?> </div>
+                    </div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">领料人：</div>
+                        <div class="child-val fl"><?= $model->auditor->username??"" ?> </div>
+                    </div>
+                    <div class="child fl clf">
+                        <div class="child-attr fl">领料时间：</div>
+                        <div class="child-val fl"><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?? '' ?> </div>
+                    </div>
 				</div>
+                <div class="list clf">
+                    <div class="child fl clf">
+                        <div class="child-attr fl">加工商：</div>
+                        <div class="child-val fl"><?= $model->supplier->supplier_name??"" ?> </div>
+                    </div>
+                </div>
 			</div>
 
 			<!-- 订单列表 -->
@@ -61,7 +79,7 @@
                         <div>重量(g)</div>
                     </td>
                     <td>
-                        <div>价格</div>
+                        <div>布产单号</div>
                     </td>
                     <td>
                         <div>备注</div>
@@ -90,7 +108,7 @@
                         <div><?= $val['gold_weight'] ?></div>
                     </td>
                     <td>
-                        <div><?= $val['gold_price'] ?></div>
+                        <div><?= $val['produce_sn'] ?></div>
                     </td>
                     <td>
                         <div><?= $val['remark'] ?></div>

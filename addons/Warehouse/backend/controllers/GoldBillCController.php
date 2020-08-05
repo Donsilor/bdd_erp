@@ -180,7 +180,8 @@ class GoldBillCController extends GoldBillController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function actionExport($ids = null){
+    public function actionExport($ids = null)
+    {
         $name = '领料单明细';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
@@ -204,11 +205,12 @@ class GoldBillCController extends GoldBillController
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
-
-    private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id','sup.supplier_name'];
+    private function getData($ids)
+    {
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id','sup.supplier_name','pg.produce_sn'];
         $query = WarehouseGoldBillCForm::find()->alias('w')
             ->leftJoin(WarehouseGoldBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(ProduceGold::tableName()." pg", 'pg.id=wg.source_detail_id')
             ->leftJoin(Supplier::tableName().' sup','sup.id=w.supplier_id')
             ->where(['w.id' => $ids])
             ->select($select);
@@ -226,12 +228,10 @@ class GoldBillCController extends GoldBillController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {
-
-
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);

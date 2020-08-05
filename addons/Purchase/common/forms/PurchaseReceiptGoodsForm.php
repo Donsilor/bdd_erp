@@ -14,13 +14,14 @@ use addons\Purchase\common\models\PurchaseReceiptGoods;
 class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
 {
     public $ids;
+    public $remark;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-
+            [['remark'], 'string', 'max'=>255],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -34,6 +35,7 @@ class PurchaseReceiptGoodsForm extends PurchaseReceiptGoods
         return ArrayHelper::merge(parent::attributeLabels() , [
             'id'=>'流水号',
             'jintuo_type'=>'金托类型',
+            'remark'=>'备注',
         ]);
     }
 

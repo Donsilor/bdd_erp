@@ -2,7 +2,9 @@
 
 namespace addons\Sales\services;
 
+use addons\Purchase\common\enums\ApplyFromEnum;
 use addons\Purchase\common\enums\ApplyStatusEnum;
+use addons\Purchase\common\enums\PurchaseCateEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
@@ -335,6 +337,7 @@ class OrderService extends Service
 
         //采购申请单头
         $applyInfo['order_sn'] = $order->order_sn;
+        $applyInfo['purchase_cate'] = PurchaseCateEnum::ORDER;
         $applyInfo['channel_id'] = $order->sale_channel_id;
         //同步采购申请单
         $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);

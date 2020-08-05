@@ -29,7 +29,7 @@ class WarehouseBillTForm extends WarehouseBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-            'supplier_id' => '加工商',
+            //'supplier_id' => '加工商',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
         ]);

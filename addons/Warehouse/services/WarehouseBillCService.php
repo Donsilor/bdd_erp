@@ -26,7 +26,7 @@ class WarehouseBillCService extends WarehouseBillService
 
     /**
      * 创建其他出库单明细
-     * @param object $form
+     * @param WarehouseBillCForm $form
      * @param array $bill_goods
      * @throws
      *
@@ -36,15 +36,14 @@ class WarehouseBillCService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-
         //批量创建单据明细
-        $goods_val = [];
-        $goods_id_arr = [];
+        $goods_ids = $goods_val = [];
         foreach ($bill_goods as &$goods) {
             $goods_id = $goods['goods_id'];
+            $goods_ids[] = $goods_id;
             $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
             if(empty($goods_info)){
-                throw new \yii\base\Exception("货号{$goods_id}不存在或者不是库存中");
+                throw new Exception("货号{$goods_id}不存在或者不是库存中");
             }
             $goods['bill_id'] = $form->id;
             $goods['bill_no'] = $form->bill_no;
@@ -52,23 +51,33 @@ class WarehouseBillCService extends WarehouseBillService
             $goods['warehouse_id'] = $goods_info->warehouse_id;
             $goods['put_in_type'] = $goods_info->put_in_type;
             $goods_val[] = array_values($goods);
-            $goods_id_arr[] = $goods_id;
+            $goods_key = array_keys($goods);
+            if(count($goods_val)>=10){
+                $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
+                if(false === $res){
+                    throw new Exception('更新单据汇总失败1');
+                }
+                $goods_val = [];
+            }
         }
-        $goods_key = array_keys($bill_goods[0]);
-        \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
-
+        if(!empty($goods_val)){
+            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
+            if(false === $res){
+                throw new Exception('更新单据汇总失败2');
+            }
+        }
         //更新商品库存状态
-        if($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
+        if(in_array($form->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM]))
+        {
             $status = GoodsStatusEnum::IN_SALE;
         }else{
             //其他出库类型
             $status = GoodsStatusEnum::IN_STOCK;//待定
         }
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_id_arr, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
         if($execute_num <> count($bill_goods)){
-            //throw new Exception("货品改变状态数量与明细数量不一致");
+            throw new Exception("货品改变状态数量与明细数量不一致");
         }
-
         //更新收货单汇总：总金额和总数量
         $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id);
         if(false === $res){
@@ -79,6 +88,7 @@ class WarehouseBillCService extends WarehouseBillService
     /**
      * 其他出库单审核
      * @param WarehouseBillCForm $form
+     * @throws
      */
     public function auditBillC($form)
     {
@@ -90,17 +100,14 @@ class WarehouseBillCService extends WarehouseBillService
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
         }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
-        }
         $billGoods = WarehouseBillGoods::find()->select(['id', 'goods_id'])->where(['bill_id' => $form->id])->asArray()->all();
-        if(empty($billGoods) && $form->audit_status == AuditStatusEnum::PASS){
+        if(empty($billGoods)){
             throw new \Exception("单据明细不能为空");
         }
         if($form->audit_status == AuditStatusEnum::PASS){
             $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
             //更新商品库存状态
-            if($form->delivery_type == DeliveryTypeEnum::QUICK_SALE){
+            if(in_array($form->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM])){
                 $status = GoodsStatusEnum::HAS_SOLD;
                 $conStatus = GoodsStatusEnum::IN_SALE;
             }else{
@@ -113,6 +120,9 @@ class WarehouseBillCService extends WarehouseBillService
             if(false === $res){
                 throw new \Exception("更新货品状态失败");
             }
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
         }
     }
 
@@ -154,54 +164,5 @@ class WarehouseBillCService extends WarehouseBillService
         if(false === $form->delete()){
             throw new \Exception($this->getError($form));
         }
-    }
-
-    /**
-     *  还货
-     * @param object $form
-     * @throws \Exception
-     */
-    public function returnGoods($form){
-
-        $ids = $form->getIds();
-        if(empty($ids)) {
-            throw new \Exception("ID不能为空");
-        }
-        //更新库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id'])->all();
-        foreach ($billGoods as $goods){
-            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::HAS_LEND]);
-            if(!$res){
-                throw new Exception("商品{$goods->goods_id}不是已借货状态或者不存在，请查看原因");
-            }
-        }
-        $returned_time = empty($form->returned_time)?0:strtotime($form->returned_time);
-        WarehouseBillGoods::updateAll(['status'=>$form->status, 'goods_remark'=>$form->goods_remark, 'returned_time'=>$returned_time], ['id'=>$ids]);
-
-        //if(false === $form->save()) {
-        //    throw new \Exception($this->getError($form));
-        //}
-        //$execute_num = WarehouseBillGoods::updateAll(['status'=>$form->status, 'goods_remark'=>$form->goods_remark], ['id'=>$ids]);
-        //if($execute_num <> count($ids)){
-        //    throw new Exception("货品改变状态数量与明细数量不一致");
-        //}
-    }
-
-    /**
-     *  还货验证
-     * @param object $form
-     * @throws \Exception
-     */
-    public function returnGoodsValidate($form){
-        $ids = $form->getIds();
-        if(is_array($ids)){
-            foreach ($ids as $id) {
-                $goods = WarehouseBillGoods::find()->where(['id'=>$id])->select(['status', 'bill_id', 'goods_id'])->one();
-                if($goods->status != LendStatusEnum::LEND){
-                    throw new Exception("货号【{$goods->goods_id}】不是借货状态");
-                }
-            }
-        }
-        return $goods->bill_id??"";
     }
 }

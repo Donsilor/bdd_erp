@@ -237,6 +237,47 @@ class GoldReceiptGoodsController extends BaseController
     }
 
     /**
+     *
+     * 批量生成不良返厂单2
+     * @return mixed
+     * @throws
+     */
+    public function actionDefective()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
+        $model = new PurchaseGoldReceiptGoodsForm();
+        $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->DefectiveValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->purchaseService->receipt->batchDefective($model, $this->purchaseType);
+
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * 申请入库
      * @return mixed
      * @throws
