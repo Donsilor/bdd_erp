@@ -85,7 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                            ],                        [
+                            ],
+                            [
                                 'label' => '加工商',
                                 'attribute' => 'supplier_id',
                                 'value' =>"supplier.supplier_name",
