@@ -145,7 +145,7 @@ class BillTController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
@@ -202,10 +202,10 @@ class BillTController extends BaseController
     }
 
     /**
-     * ajax收货单审核
      *
+     * ajax收货单审核
      * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * @throws
      */
     public function actionAjaxAudit()
     {
@@ -243,10 +243,11 @@ class BillTController extends BaseController
     }
 
     /**
-     * 取消单据
      *
+     * 取消单据
      * @param $id
      * @return mixed
+     * @throws
      */
     public function actionCancel($id)
     {
@@ -277,10 +278,11 @@ class BillTController extends BaseController
     }
 
     /**
-     * 删除单据
      *
+     * 删除单据
      * @param $id
      * @return mixed
+     * @throws
      */
     public function actionDelete($id)
     {
@@ -321,7 +323,6 @@ class BillTController extends BaseController
      * @param null $ids
      * @return bool|mixed
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function actionExport($ids=null){
         $name = '入库单明细';
