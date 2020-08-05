@@ -15,13 +15,14 @@ use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
 class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
 {
     public $ids;
+    public $remark;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-
+            [['remark'], 'string', 'max'=>255],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -34,6 +35,7 @@ class PurchaseGoldReceiptGoodsForm extends PurchaseGoldReceiptGoods
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'id'=>'流水号',
+            'remark'=>'备注',
         ]);
     }
 

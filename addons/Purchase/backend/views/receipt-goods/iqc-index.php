@@ -26,12 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                         echo Html::batchPopButton(['iqc','check'=>1],'IQC批量质检', [
                             'class'=>'btn btn-success btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
+                        /*echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'data-grid' => 'grid',
                             'onclick' => 'batchAudit(this);return false;',
+                        ]);*/
+                        echo Html::batchPopButton(['defective', 'check'=>1], '批量生成返厂单', [
+                            'class'=>'btn btn-danger btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                     ?>
                 </div>
@@ -78,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '采购收货单号',
                                 'attribute'=>'receipt.receipt_no',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
@@ -160,14 +170,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'purchase_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'produce_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],

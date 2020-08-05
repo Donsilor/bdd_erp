@@ -217,7 +217,7 @@ class Html extends BaseHtml
     {
         $options = ArrayHelper::merge([
             'class' => "btn btn-success btn-sm",
-            'onclick' => "batchPop2(this);return false;"
+            'onclick' => "batchPop(this);return false;"
         ], $options);
 
         return self::a($content, $url, $options);
