@@ -17,7 +17,7 @@ class m200311_020626_backend_notify_pull_time extends Migration
             'alert_type' => "varchar(20) NULL DEFAULT '0' COMMENT '提醒消息类型[sys:系统;wechat:微信]'",
             'last_time' => "int(10) NULL COMMENT '最后拉取时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='系统_消息拉取表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='系统_消息拉取表'");
         
         /* 索引设置 */
         

@@ -219,7 +219,7 @@ class SearchModel extends Model
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$ignores = [])
     {
         $query = call_user_func([$this->modelClassName, 'find']);
         $dataProvider = new ActiveDataProvider(
@@ -265,7 +265,9 @@ class SearchModel extends Model
                 foreach ((array)$attributes as $attribute) {
                     // $attributeName = str_replace('.', '_', $relation) . '_' . $attribute;
                     $attributeName = $relation . '.' . $attribute;
-                    $tableAttribute = $this->internalRelations[$relation]['tableName'] . '.' . $attribute;
+
+                   //$tableAttribute = $this->internalRelations[$relation]['tableName'] . '.' . $attribute; // 2020-04-02 连表查询用别名
+                    $tableAttribute = $attributeName;
                     $this->rules[] = [$attributeName, 'safe'];
                     $this->scenarios[$this->scenario][] = $attributeName;
                     $this->attributes[$attributeName] = '';
@@ -290,6 +292,9 @@ class SearchModel extends Model
 
         $this->load($params);
         foreach ($this->attributes as $name => $value) {
+            if(in_array($name,$ignores)){
+                continue;
+            }
             $this->addCondition($query, $name, in_array($name, $this->partialMatchAttributes));
         }
 

@@ -31,6 +31,7 @@ class AuthItemChild extends \common\models\base\BaseModel
     {
         return [
             [['role_id', 'item_id', 'is_addon'], 'integer'],
+            [['item_key'], 'string', 'max' => 32],
             [['name'], 'string', 'max' => 64],
             [['app_id'], 'string', 'max' => 20],
             [['addons_name'], 'string', 'max' => 100],
@@ -45,6 +46,7 @@ class AuthItemChild extends \common\models\base\BaseModel
         return [
             'role_id' => '角色id',
             'item_id' => '权限id',
+            'item_key' => '权限key',
             'name' => '别名',
             'app_id' => '类别',
             'is_addon' => '是否插件',
@@ -57,8 +59,8 @@ class AuthItemChild extends \common\models\base\BaseModel
      */
     public function getItem()
     {
-        return $this->hasOne(AuthItem::class, ['id' => 'item_id'])
-            ->orderBy('sort asc, id asc')
-            ->where(['status' => StatusEnum::ENABLED]);
+         return $this->hasOne(AuthItem::class, ['id' => 'item_id'])
+                ->orderBy('sort asc, id asc')
+                ->where(['status' => StatusEnum::ENABLED]);  
     }
 }

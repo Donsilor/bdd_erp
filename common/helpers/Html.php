@@ -159,6 +159,89 @@ class Html extends BaseHtml
         return self::input('text', 'sort', $value, $options);
     }
 
+
+    /**
+     * 列表input更新字段
+     *
+     * @param $value
+     * @return string
+     */
+    public static function ajaxInput($name,$value, $options = [])
+    {
+        $url = isset($options['data-url']) ?? 'ajax-update';
+        // 权限校验
+        if (!self::beforVerify($url)) {
+            return $value;
+        }
+        $options = ArrayHelper::merge([
+            'data-url' => $url,
+            'class' => 'form-control',
+            'onblur' => 'rfAjaxUpdate(this)',
+        ], $options);
+
+        return self::input('text', $name, $value, $options);
+    }
+
+    /**
+     * 列表select更新字段
+     *
+     * @param $value
+     * @return string
+     */
+    public static function ajaxSelect($model, $name, $items, $options = [])
+    {
+        $url = isset($options['ajax-update']) ?? 'ajax-update';
+        // 权限校验
+        if (!self::beforVerify($url)) {
+            return $model->$name;
+        }
+        $options = ArrayHelper::merge([
+            'ajax-update' => $url,
+            'name' => $name,
+            'class' => 'form-control',
+            'onchange' => 'rfAjaxUpdate(this)',
+        ], $options);
+
+        return self::activeDropDownList($model, $name, $items, $options);
+    }
+
+    /**
+     * 批量操作弹框
+     *
+     * @param $url
+     * @param array $options
+     * @param string $content
+     * @return string
+     */
+    public static function batchPopButton(array $url, $content, $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-success btn-sm",
+            'onclick' => "batchPop2(this);return false;"
+        ], $options);
+
+        return self::a($content, $url, $options);
+    }
+
+    /**
+     * 批量填充按钮
+     *
+     * @param $url
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchFullButton(array $url, $content = "批量填充", $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'data-grid'=>'grid',
+            'class' => "btn btn-info btn-xs",
+            'onclick' => "rfBatchFull(this);return false;"
+        ], $options);
+
+        return self::a($content, $url, $options);
+    }
+
     /**
      * 是否标签
      *
@@ -298,5 +381,187 @@ Css
         }
 
         return Auth::verify($route);
+    }
+    
+    /**
+     * 多语言表单input的name值生成
+     * @param unknown $lang
+     * @param unknown $field
+     * @return string
+     */
+    public static function langInputName ($model,$language,$field)
+    {
+        $className = substr(strrchr($model->className(), '\\'), 1);
+        return "{$className}[{$language}][{$field}]";
+    }
+    /**
+     * 多语言input参数
+     * @param unknown $model
+     * @param unknown $language
+     * @param unknown $field
+     * @param array $attrKeys
+     * @param array $options
+     * @return array
+     */
+    public static function langInputOptions($model, $language, $field, $options = [])
+    {
+        $options['name'] = self::langInputName($model, $language, $field);
+        $options['id'] = $field."_".$language;
+        return $options;
+    }
+    
+    /**
+     * 多语言tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+    public static function langTab($tab = 'tab',$title = null)
+    {
+        return self::tab(Yii::$app->params['languages'],Yii::$app->language,$tab,$title);
+    }
+    /**
+     * 地区tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+   /*  public static function areaTab($tab = 'areaTab',$title = null)
+    {
+        return self::tab(AreaEnum::getMap(),Yii::$app->params['areaId'],$tab,$title);
+    } */
+    /**
+     * tab 标签初始化
+     * @param array $options
+     * @param string $tab
+     */
+    public static function tab($options,$curValue,$tab = 'tab',$title = null)
+    {
+        $str = '<ul class="nav nav-tabs">';
+        if($title){
+            $str .= '<li><a href="javascript:void(0)">'.$title.'</a></li>';
+        }
+        foreach ($options as $key=>$name){
+            $active = $curValue == $key?"active":"";
+            $id = $tab.'_'.$key;
+            $str.='<li class="'.$active.'"><a href="#'.$id.'" id="a_'.$id.'" data-toggle="tab" aria-expanded="false">'.$name.'</a></li>';
+            if($key === 0){
+                $str .='<script type="text/javascript">';
+                $str .= '$("#a_'.$id.'").click(function(){';
+                foreach ($options as $k=>$v){
+                    if($k > 0){
+                        $str .='$("#'.$tab.'_'.$k.'").removeClass("active").addClass("active");';
+                    }
+                }
+                $str .= '})</script>';
+            }
+        }
+        $str .='</ul>';
+        return $str;
+    }
+    /**
+     * 动态导航页签
+     * @param array $options
+     * @param string $value 当前标签ID
+     * @return string
+     */
+    public static function menuTab($options,$value)
+    {
+        $str = '<ul class="nav nav-tabs">';
+        foreach ($options as $key=>$option){
+            $active = $value == $key?"active":"";
+            $str.='<li class="'.$active.'"><a href="'.$option['url'].'" >'.$option['name'].'</a></li>';            
+        }
+        $str .='</ul>';
+        return $str;
+    }
+    
+    /**
+     * 批量审核
+     * @param array|string $url
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchAudit($url = ['ajax-batch-audit'], $content = '审核', $options = [])
+    {
+        $options = ArrayHelper::merge([
+                'class' => "btn btn-primary btn-sm",
+                'onclick' => "batchAudit(this);return false;"
+        ], $options);
+        
+        return self::a($content, $url, $options);
+    }
+
+    /**
+     * 批量弹框操作
+     * @param array|string $url
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function batchPop($url = [], $content = '批量弹框', $options = [])
+    {
+        $options = ArrayHelper::merge([
+            'class' => "btn btn-primary btn-sm",
+            'onclick' => "batchPop(this);return false;"
+        ], $options);
+
+        return self::a($content, $url, $options);
+    }
+    
+    /**
+     * 批量操作按钮
+     * @param array $options
+     * @return string
+     */
+    public static function batchButtons($options = [])
+    {
+        if($options === false) return '';
+        
+        $listBut = [
+                'status_enabled' => self::tag('span', '批量启用',
+                        [
+                                'class' => "btn btn-success btn-sm jsBatchStatus",
+                                "data-grid"=>"grid",
+                                "data-value"=>"1",
+                        ]),
+                'status_disabled' => self::tag('span', '批量禁用',
+                        [
+                                'class' => "btn btn-default btn-sm jsBatchStatus",
+                                "data-grid"=>"grid",
+                                "data-value"=>"0",
+                        ]),
+                 'search_export' => self::tag('span', '批量导出',
+                         [
+                         'class' => "btn btn-primary btn-sm jsBatchExport",
+                         "data-grid"=>"grid",
+                         ]), 
+                /* 'status_delete' => self::tag('span', '批量删除',
+                 [
+                 'class' => "btn btn-danger btn-sm jsBatchStatus",
+                 "data-grid"=>"grid",
+                 "data-value"=>"-1",
+                 ]), */
+                'batch_delete' => self::tag('span', '批量删除',
+                        [
+                                'class' => "btn btn-danger btn-sm jsBatchStatus",
+                                "data-grid"=>"grid",
+                                "data-url"=>Url::to(['ajax-batch-delete']),
+                        ]),
+        ];
+        $buttonHtml = "";
+        if(is_array($options) && !empty($options)){
+            foreach ($options as $key=>$val){
+                if(isset($listBut[$val]) && (is_numeric($key) || empty($val))){
+                    $buttonHtml .= $listBut[$val].'  ';
+                }else{
+                    $buttonHtml .= $val.'  ';
+                }
+            }
+        }else{
+            foreach ($listBut as $key=>$val){
+                $buttonHtml .= $val.'  ';
+            }
+        }
+        return $buttonHtml;
     }
 }

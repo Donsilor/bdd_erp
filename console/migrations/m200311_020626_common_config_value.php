@@ -17,7 +17,7 @@ class m200311_020626_common_config_value extends Migration
             'merchant_id' => "int(10) unsigned NULL DEFAULT '0' COMMENT '商户id'",
             'data' => "text NULL COMMENT '配置内'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_配置值表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_配置值表'");
         
         /* 索引设置 */
         

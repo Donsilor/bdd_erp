@@ -95,7 +95,8 @@ return [
     'controllerMap' => [
         'file' => 'common\controllers\FileBaseController', // 文件上传公共控制器
         'ueditor' => 'common\widgets\ueditor\UeditorController', // 百度编辑器
-        'provinces' => 'common\widgets\provinces\ProvincesController', // 省市区
+        'country' => 'common\widgets\country\CountryController', // 国家地区
+		'provinces' => 'common\widgets\provinces\ProvincesController', // 省市区
         'select-map' => 'common\widgets\selectmap\MapController', // 经纬度选择
         'cropper' => 'common\widgets\cropper\CropperController', // 图片裁剪
     ],

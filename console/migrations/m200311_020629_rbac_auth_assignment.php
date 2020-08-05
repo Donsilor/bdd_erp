@@ -14,7 +14,7 @@ class m200311_020629_rbac_auth_assignment extends Migration
             'role_id' => "int(11) NOT NULL",
             'user_id' => "int(11) NOT NULL",
             'app_id' => "varchar(20) NULL DEFAULT '' COMMENT '类型'",
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公用_会员授权角色表'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公用_会员授权角色表'");
         
         /* 索引设置 */
         

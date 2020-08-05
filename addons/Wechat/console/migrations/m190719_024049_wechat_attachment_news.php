@@ -31,7 +31,7 @@ class m190719_024049_wechat_attachment_news extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='微信_文章表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='微信_文章表'");
         
         /* 索引设置 */
         $this->createIndex('attachment_id','{{%addon_wechat_attachment_news}}','attachment_id',0);

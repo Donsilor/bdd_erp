@@ -16,7 +16,7 @@ class m190719_024050_wechat_fans_tag_map extends Migration
             'fans_id' => "int(11) unsigned NOT NULL DEFAULT '0' COMMENT '粉丝id'",
             'tag_id' => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '标签id'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='微信_粉丝标签关联表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='微信_粉丝标签关联表'");
         
         /* 索引设置 */
         $this->createIndex('mapping','{{%addon_wechat_fans_tag_map}}','fans_id, tag_id',1);

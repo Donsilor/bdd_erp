@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.sidebar-menu').tree();
+	$('.sidebar-menu').tree({accordion:false});
     if ($(this).width() < 769) {
         config.isMobile = true;
     }
@@ -210,7 +210,7 @@ function openIframe(title, width, height, content, offset) {
         btn: ['保存', '关闭'],
         yes: function (index, layero) {
             var body = layer.getChildFrame('body', index);
-            var form = body.find('#w0');
+            var form = body.find('form');
             var postUrl = form.attr('action');
             $.ajax({
                 type: "post",
@@ -352,5 +352,33 @@ function rfText(text) {
         return text;
     }
 
-    return '小手一抖就打开了一个框';
+    return '';
+}
+
+/**
+ *
+ * @param title
+ * @param onPrompt
+ * @param formType 输入框类型，支持0（文本）默认1（密码）2（多行文本）
+ * @param dValue 初始时的值，默认空字符
+ * @param area  ['800px', '350px'] //自定义文本域宽高 formType=2时才有效
+ * @param maxlength 可输入文本的最大长度，默认500
+ *
+ */
+function rfPrompt(title,onPrompt, formType=0, dValue='',maxlength=500,area=[]) {
+    layer.prompt({title: title, formType: formType,value:dValue, area:area}, function(value, index, elem){
+        onPrompt(value);
+        layer.close(index);
+    });
+}
+
+function rfExport(url) {
+    appConfirm("确定全部导出吗",'可能会很慢，请谨慎操作',function (value) {
+        switch (value) {
+            case "defeat":
+                window.location = url;
+                break;
+            default:
+        }
+    });
 }

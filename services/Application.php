@@ -32,6 +32,8 @@ use common\components\Service;
  * @property \services\member\BankAccountService $memberBankAccount 会员提现账号
  * @property \services\member\CreditsLogService $memberCreditsLog 会员积分/余额变动日志
  * @property \services\member\RechargeConfigService $memberRechargeConfig 会员充值
+ * @property \services\common\FlowTypeService $flowType 审批流程
+ * @property \services\common\FlowService $flow 审批流程
  * @property \services\common\ActionLogService $actionLog 行为日志
  * @property \services\common\ActionBehaviorService $actionBehavior 可被记录的行为
  * @property \services\common\AttachmentService $attachment 公用资源
@@ -48,8 +50,10 @@ use common\components\Service;
  * @property \services\common\AuthService $auth 权限验证
  * @property \services\common\ConfigService $config 基础配置
  * @property \services\common\ConfigCateService $configCate 基础配置分类
- * @property \services\common\ProvincesService $provinces ip黑名单
- * @property \services\common\IpBlacklistService $ipBlacklist 省市区
+ * @property \services\common\ProvincesService $provinces ip黑名单省市区
+ * @property \services\common\CountryService $country 国家地区
+ * @property \services\common\IpBlacklistService $ipBlacklist ip黑名单
+ * @property \services\common\DepartmentService $department 部门
  * @property \services\rbac\AuthItemService $rbacAuthItem 权限
  * @property \services\rbac\AuthItemChildService $rbacAuthItemChild 授权的权限
  * @property \services\rbac\AuthRoleService $rbacAuthRole 角色
@@ -106,6 +110,8 @@ class Application extends Service
             'timeout' => 720, // 缓存过期时间，单位秒
         ],
         /** ------ 公用部分 ------ **/
+        'flowType' => 'services\common\FlowTypeService',
+        'flow' => 'services\common\FlowService',
         'menu' => 'services\common\MenuService',
         'menuCate' => 'services\common\MenuCateService',
         'config' => 'services\common\ConfigService',
@@ -117,6 +123,7 @@ class Application extends Service
         'actionBehavior' => 'services\common\ActionBehaviorService',
         'ipBlacklist' => 'services\common\IpBlacklistService',
         'provinces' => 'services\common\ProvincesService',
+        'country' => 'services\common\CountryService',
         'attachment' => 'services\common\AttachmentService',
         'addons' => 'services\common\AddonsService',
         'addonsConfig' => 'services\common\AddonsConfigService',
@@ -138,6 +145,7 @@ class Application extends Service
             'class' => 'services\common\MailerService',
             'queueSwitch' => false, // 是否丢进队列
         ],
+        'department' => 'services\common\DepartmentService',
         /** ------ rbac ------ **/
         'rbacAuthItem' => 'services\rbac\AuthItemService',
         'rbacAuthItemChild' => 'services\rbac\AuthItemChildService',
@@ -149,5 +157,8 @@ class Application extends Service
         'oauth2AccessToken' => 'services\oauth2\AccessTokenService',
         'oauth2RefreshToken' => 'services\oauth2\RefreshTokenService',
         'oauth2AuthorizationCode' => 'services\oauth2\AuthorizationCodeService',
+            
+        /***-----------新增通用service-------------**/    
+        'currency'=>'services\common\CurrencyService', 
     ];
 }

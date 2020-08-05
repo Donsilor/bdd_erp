@@ -20,7 +20,7 @@ class m200311_020626_common_addons_binding extends Migration
             'icon' => "varchar(50) NULL DEFAULT '' COMMENT '图标'",
             'params' => "json NULL COMMENT '参数'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_插件菜单表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_插件菜单表'");
         
         /* 索引设置 */
         $this->createIndex('addons_name','{{%common_addons_binding}}','addons_name',0);

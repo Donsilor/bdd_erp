@@ -192,14 +192,14 @@ class ArrayHelper extends BaseArrayHelper
     {
         $str = '';
         for ($i = 1; $i < $level; $i++) {
-            $str .= '　　';
-
+            //$str .= '　';
+            $str .= '　';
             if ($i == $level - $treeStat) {
                 if (isset($models[$k + 1])) {
-                    return $str . "├──";
+                    return $str . "├─";
                 }
 
-                return $str . "└──";
+                return $str . "└─";
             }
         }
 
@@ -407,5 +407,50 @@ class ArrayHelper extends BaseArrayHelper
 
         $xml .= "</xml>";
         return $xml;
+    }
+    
+    /**
+     * 多维转一维度
+     * @param unknown $array
+     * @return unknown[]
+     */
+    public static function multiToArray($array) {
+        static $result_array = array();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                self::multiToArray($value);
+            }
+            else{
+                $result_array[$key] = $value;
+            }
+        }
+        return $result_array;
+    }
+    /**
+     * 分组下拉框
+     * @param unknown $models
+     * @param number $pid
+     * @param string $idField
+     * @param string $titleField
+     * @param string $pidField
+     * @param number $treeStat
+     * @return string[]|string[][]|unknown[][]
+     */
+    public static function itemsMergeGrpDropDown($models,$pid = 0, $idField = 'id',$titleField = 'name',$pidField = 'pid', $treeStat = 1)
+    {
+        $tree = array();                                //每次都声明一个新数组用来放子元素
+        foreach($models as $key=>$model){
+            if($model[$pidField] == $pid){                      //匹配子记录
+                $attr = self::itemsMergeGrpDropDown($models,$model[$idField],$idField,$titleField,$pidField, $treeStat);
+                $title = self::itemsLevel($model['level'], $models, $key,$treeStat) . "" . $model[$titleField];
+                if(empty($attr)){
+                    $tree[$model[$idField]] = $title;
+                }else{
+                    $tree[$title] = $attr;//将记录存入新数组
+                }
+                
+            }
+        }
+        return $tree;
     }
 }

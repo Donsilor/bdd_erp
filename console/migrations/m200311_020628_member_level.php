@@ -26,7 +26,7 @@ class m200311_020628_member_level extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='会员等级表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='会员等级表'");
         
         /* 索引设置 */
         

@@ -435,4 +435,142 @@ class StringHelper extends BaseStringHelper
 
         return $string;
     }
+
+
+
+    /**
+     * 根据汉字字符串获取对应的首字母
+     */
+    public static function getFirstCode($str){
+        $len = mb_strlen(trim($str),'utf-8');
+        $code = '';
+        for($i=0;$i<$len;$i++){
+            $word = trim(mb_substr($str,$i,1));
+            if(mb_detect_encoding($word) == 'UTF-8'){
+                $code .= self::getFirstCharter($word);
+            }else{
+                $code .= $word;
+            }
+        }
+        return $code;
+    }
+
+    /**
+     * 根据汉字获取首字母
+     */
+    protected static function getFirstCharter($str){
+        if(empty($str)){return '';}
+        $fchar=ord($str{0});
+        if($fchar>=ord('A')&&$fchar<=ord('z')) return strtoupper($str{0});
+        $s1=@iconv('UTF-8','GBK',$str);
+        $s2=@iconv('GBK','UTF-8',$s1);
+        $s=$s2==$str?$s1:$str;
+        $asc=ord($s{0})*256+ord($s{1})-65536;
+        if($asc>=-20319&&$asc<=-20284) return 'A';
+        if($asc>=-20283&&$asc<=-19776) return 'B';
+        if($asc>=-19775&&$asc<=-19219) return 'C';
+        if($asc>=-19218&&$asc<=-18711) return 'D';
+        if($asc>=-18710&&$asc<=-18527) return 'E';
+        if($asc>=-18526&&$asc<=-18240) return 'F';
+        if($asc>=-18239&&$asc<=-17923) return 'G';
+        if($asc>=-17922&&$asc<=-17418) return 'H';
+        if($asc>=-17417&&$asc<=-16475) return 'J';
+        if($asc>=-16474&&$asc<=-16213) return 'K';
+        if($asc>=-16212&&$asc<=-15641) return 'L';
+        if($asc>=-15640&&$asc<=-15166) return 'M';
+        if($asc>=-15165&&$asc<=-14923) return 'N';
+        if($asc>=-14922&&$asc<=-14915) return 'O';
+        if($asc>=-14914&&$asc<=-14631) return 'P';
+        if($asc>=-14630&&$asc<=-14150) return 'Q';
+        if($asc>=-14149&&$asc<=-14091) return 'R';
+        if($asc>=-14090&&$asc<=-13319) return 'S';
+        if($asc>=-13318&&$asc<=-12839) return 'T';
+        if($asc>=-12838&&$asc<=-12557) return 'W';
+        if($asc>=-12556&&$asc<=-11848) return 'X';
+        if($asc>=-11847&&$asc<=-11056) return 'Y';
+        if($asc>=-11055&&$asc<=-10247) return 'Z';
+        return null;
+    }
+    /**
+     * 
+     * @param unknown $string
+     * @param string $delimiter
+     * @param string $trim
+     * @param string $skipEmpty
+     * @return array
+     */
+    public static function explodeIds($string, $delimiters = [',','，'])
+    {        
+        $string = preg_replace("/\s+/is", ' ', trim($string));
+        
+        if($string == '') return [];
+
+        if(!empty($delimiters)) {
+            foreach ($delimiters as $d) {
+                $string = str_replace($d, ' ', $string);
+            } 
+        }
+        $array = parent::explode($string, ' ', true, true);
+        return array_unique($array);
+    }
+
+
+    /***
+     * @param n $
+     * @return string
+     */
+    public static function smalltoBIG($num)
+    {
+        $c1 = "零壹贰叁肆伍陆柒捌玖";
+        $c2 = "分角元拾佰仟万拾佰仟亿";
+        $num = round($num, 2);
+        $num = $num * 100;
+        if (strlen($num) > 10) {
+            return "数据太长，没有这么大的钱吧，检查下";
+        }
+        $i = 0;
+        $c = "";
+        while (1) {
+            if ($i == 0) {
+                $n = substr($num, strlen($num)-1, 1);
+            } else {
+                $n = $num % 10;
+            }
+            $p1 = substr($c1, 3 * $n, 3);
+            $p2 = substr($c2, 3 * $i, 3);
+            if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '万' || $p2 == '元'))) {
+                $c = $p1 . $p2 . $c;
+            } else {
+                $c = $p1 . $c;
+            }
+            $i = $i + 1;
+            $num = $num / 10;
+            $num = (int)$num;
+            if ($num == 0) {
+                break;
+            }
+        }
+        $j = 0;
+        $slen = strlen($c);
+        while ($j < $slen) {
+            $m = substr($c, $j, 6);
+            if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
+                $left = substr($c, 0, $j);
+                $right = substr($c, $j + 3);
+                $c = $left . $right;
+                $j = $j-3;
+                $slen = $slen-3;
+            }
+            $j = $j + 3;
+        }
+
+        if (substr($c, strlen($c)-3, 3) == '零') {
+            $c = substr($c, 0, strlen($c)-3);
+        }
+        if (empty($c)) {
+            return "零元整";
+        }else{
+            return $c . "整";
+        }
+    }
 }

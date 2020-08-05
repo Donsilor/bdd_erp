@@ -27,7 +27,7 @@ class AuthItemService extends Service
     public function delByAddonsName($name)
     {
         AuthItem::deleteAll(['is_addon' => WhetherEnum::ENABLED, 'addons_name' => $name]);
-        AuthItemChild::deleteAll(['is_addon' => WhetherEnum::ENABLED, 'addons_name' => $name]);
+        //AuthItemChild::deleteAll(['is_addon' => WhetherEnum::ENABLED, 'addons_name' => $name]);
     }
 
     /**
@@ -43,7 +43,7 @@ class AuthItemService extends Service
             ->where(['>=', 'status', StatusEnum::DISABLED])
             ->andWhere(['app_id' => $app_id, 'is_addon' => WhetherEnum::DISABLED])
             ->andFilterWhere(['<>', 'id', $id])
-            ->select(['id', 'title', 'pid', 'level'])
+            ->select(['id','key', 'title', 'pid', 'level'])
             ->orderBy('sort asc')
             ->asArray()
             ->all();
@@ -65,7 +65,7 @@ class AuthItemService extends Service
             ->where(['status' => StatusEnum::ENABLED])
             ->andWhere(['app_id' => $app_id])
             ->andFilterWhere(['in', 'id', $ids])
-            ->select(['id', 'title', 'name', 'pid', 'level', 'app_id', 'is_addon', 'addons_name'])
+            ->select(['id','key', 'title', 'name', 'pid', 'level', 'app_id', 'is_addon', 'addons_name'])
             ->orderBy('sort asc, id asc')
             ->asArray()
             ->all();

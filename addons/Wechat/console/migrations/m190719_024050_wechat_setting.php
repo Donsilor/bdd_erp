@@ -19,7 +19,7 @@ class m190719_024050_wechat_setting extends Migration
             'created_at' => "int(10) NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='微信_参数设置'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='微信_参数设置'");
         
         /* 索引设置 */
         

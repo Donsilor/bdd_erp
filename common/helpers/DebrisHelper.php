@@ -63,30 +63,11 @@ class DebrisHelper
      */
     public static function getPageSkipUrl()
     {
-        $defautlUrl = Yii::$app->request->getHostInfo() . Yii::$app->request->url;
-        $urlArr = explode('?', $defautlUrl);
-        $defautlUrl = $urlArr[0];
-        $getQueryParam = urldecode($urlArr[1] ?? '');
-        $getQueryParamArr = explode('&', $getQueryParam);
-
-        // 查询字符串是否有page
-        foreach ($getQueryParamArr as $key => $value) {
-            if (StringHelper::strExists($value, 'page=') || !StringHelper::strExists($value, 'per-page=')) {
-                unset($getQueryParamArr[$key]);
-            }
-        }
-
-        $connector = !empty($getQueryParamArr) ? '?' : '';
-        $fullUrl = $defautlUrl . $connector;
-        $pageConnector = '?';
-        if (!empty($getQueryParamArr)) {
-            $fullUrl .= implode('&', $getQueryParamArr);
-            $pageConnector = '&';
-        }
-
-        $fullUrl = Html::encode($fullUrl);
-        $pageConnector = Html::encode($pageConnector);
-
+        
+        $defautlUrl = Yii::$app->request->getHostInfo() . Yii::$app->request->url;       
+        $fullUrl = Url::buildUrl($defautlUrl,[],['page','per-page']);       
+        $pageConnector = preg_match("/\?/is", $fullUrl) ? "&" :'?';            
+        
         return [$fullUrl, $pageConnector];
     }
 

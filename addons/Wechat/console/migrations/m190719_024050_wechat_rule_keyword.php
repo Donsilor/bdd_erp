@@ -20,7 +20,7 @@ class m190719_024050_wechat_rule_keyword extends Migration
             'sort' => "tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '优先级'",
             'status' => "tinyint(1) NULL DEFAULT '1' COMMENT '状态[-1:删除;0:禁用;1启用]'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='微信_回复关键字表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='微信_回复关键字表'");
         
         /* 索引设置 */
         $this->createIndex('idx_content','{{%addon_wechat_rule_keyword}}','content',0);

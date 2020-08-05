@@ -37,12 +37,13 @@ class ActionLogService extends Service
      * @param $url
      * @throws \yii\base\InvalidConfigException
      */
-    public function create($behavior, $remark, $noRecordData = true, $url = '', $level = '')
+    public function create($behavior, $remark, $noRecordData = true, $url = '', $level = '', $object = '')
     {
         empty($url) && $url = DebrisHelper::getUrl();
 
         $ip = Yii::$app->request->userIP;
         $model = new ActionLog();
+        $model->object = $object;
         $model->behavior = $behavior;
         $model->remark = $remark;
         $model->user_id = Yii::$app->user->id ?? 0;

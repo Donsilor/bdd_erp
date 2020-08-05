@@ -218,7 +218,6 @@ use common\helpers\StringHelper;
         if (data.length === 0) {
             return;
         }
-
         let multiple =  $('#' + boxId).data('multiple');
         // 判断是否是多图上传
         let obj = $('#' + boxId + ' .upload-box');

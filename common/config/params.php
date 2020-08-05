@@ -11,10 +11,25 @@ return [
         'password_hash',
         'password_repetition',
     ],
+        
+    //自定义配置 begin
+    'languages'=>[
+            'zh-CN'=>'简体中文',
+            'zh-TW'=>'繁体中文',
+            'en-US'=>'English',
+    ],
+    'areaId'  =>1,//默认地区
+    'language'=>'zh-CN',//默认语言
+    'currency' =>'CNY',//当前货币代号
+    'currencyBase' =>'CNY',//基础货币代号
+    'currencySign' =>'CNY',//当前货币符号
+    'cachePrefix'=>'erp',//缓存前缀
+    //自定义配置 end
+    
     // 是否在模块内
     'inAddon' => false,
     // 系统管理员账号id
-    'adminAccount' => '0',
+    'adminAccount' => '1',
     // 请求全局唯一ID
     'uuid' => '',
     // 真实 app id
@@ -50,7 +65,7 @@ return [
             'takeOverUrl' => '', // 配置后，接管所有的上传地址
             'drive' => 'local', // 默认本地 可修改 qiniu/oss/cos 上传
             'maxSize' => 1024 * 1024 * 50,// 最大上传大小,默认50M
-            'extensions' => ['mp4'],// 可上传文件后缀不填写即为不限
+            'extensions' => ['mp4','wmv'],// 可上传文件后缀不填写即为不限
             'path' => 'videos/',// 创建路径
             'subName' => 'Y/m/d',// 上传子目录规则
             'prefix' => 'video_',// 名称前缀

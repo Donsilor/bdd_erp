@@ -32,7 +32,7 @@ class m200311_020626_common_attachment extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_文件管理'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_文件管理'");
         
         /* 索引设置 */
         $this->createIndex('md5','{{%common_attachment}}','md5',0);

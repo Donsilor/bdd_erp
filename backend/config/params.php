@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'adminAcronym' => 'RF',
-    'adminTitle' => 'RageFrame',
+    'adminEmail' => 'admin@bddco.com',
+    'adminAcronym' => 'ERP',
+    'adminTitle' => 'BDD ERP SYSTEM',
     'adminDefaultHomePage' => ['main/system'], // 默认主页
 
     /** ------ 总管理员配置 ------ **/
@@ -31,5 +31,6 @@ return [
         '/main/system',// 系统首页
         '/main/member-between-count',
         '/main/member-credits-log-between-count',
+        '/common/flow/audit-view'  //审批流程
     ],
 ];

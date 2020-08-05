@@ -37,12 +37,19 @@ class AddonsController extends Controller
     public $isHook = false;
 
     /**
+     * 回调地址
+     * @var string
+     */
+    public $returnUrl  = null;
+    
+    /**
      * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
         parent::init();
-
+        
+        $this->returnUrl = Yii::$app->request->get('returnUrl');
         // 后台视图默认载入模块视图
         if (!$this->layout && in_array(Yii::$app->id, [AppEnum::BACKEND, AppEnum::MERCHANT])) {
             $this->layout = '@' . Yii::$app->id . '/views/layouts/addon';
@@ -74,7 +81,7 @@ class AddonsController extends Controller
         }
 
         // 每页数量
-        $this->pageSize = Yii::$app->request->get('per-page', 10);
+        $this->pageSize = $this->getPageSize();
         $this->pageSize > 50 && $this->pageSize = 50;
 
         // 后台进行权限校验
@@ -83,6 +90,11 @@ class AddonsController extends Controller
             $permissionName = '/' . Yii::$app->controller->route;
             // 判断是否忽略校验
             if (in_array($permissionName, Yii::$app->params['noAuthRoute'])) {
+                return true;
+            }
+            //权限白名单
+            $actionId = Yii::$app->controller->action->id;
+            if(in_array($actionId,$this->noAuthOptional)) {
                 return true;
             }
             // 开始权限校验
@@ -113,5 +125,16 @@ class AddonsController extends Controller
     protected function setConfig($config)
     {
         return AddonHelper::setConfig($config);
+    }
+    /**
+     * Iframe 渲染
+     * @param unknown $view
+     * @param array $params
+     * @return string
+     */
+    protected function rendIframe($view,$params = [])
+    {
+        $this->layout = "@backend/views/layouts/iframe";
+        return $this->render($view,$params);
     }
 }

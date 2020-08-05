@@ -29,7 +29,7 @@ class m190719_024050_wechat_qrcode extends Migration
             'created_at' => "int(10) NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='微信_二维码表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='微信_二维码表'");
         
         /* 索引设置 */
         $this->createIndex('idx_qrcid','{{%addon_wechat_qrcode}}','scene_id',0);

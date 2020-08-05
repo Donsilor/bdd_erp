@@ -18,7 +18,9 @@ class AppEnum extends BaseEnum
     const OAUTH2 = 'oauth2';
     const STORAGE = 'storage';
     const CONSOLE = 'console';
-
+    
+    const STYLE = 'style';
+  
     /**
      * @return array
      */
@@ -34,6 +36,8 @@ class AppEnum extends BaseEnum
             self::OAUTH2 => 'oauth2',
             self::STORAGE => '存储',
             self::CONSOLE => '控制台',
+                
+            self::STYLE => '款式管理',
         ];
     }
 

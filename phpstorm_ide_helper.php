@@ -24,14 +24,21 @@ class Yii
  * @property \common\components\Logistics $logistics
  * @property \common\components\UploadDrive $uploadDrive
  * @property \common\components\BaseAddonModule $addons
- * @property \addons\TinyShop\services\Application $tinyShopService
- * @property \addons\TinyDistribution\services\Application $tinyDistributionService
  * @property \addons\Wechat\services\Application $wechatService
- * @property \addons\RfOnlineDoc\services\Application $rfOnlineDocService
+ * @property \addons\Style\services\Application $styleService
+ * @property \addons\Supply\services\Application $supplyService
+ * @property \addons\Purchase\services\Application $purchaseService
+ * @property \addons\Warehouse\services\Application $warehouseService
+ * @property \addons\Sales\services\Application $salesService
+ * @property \addons\Finance\services\Application $financeService
+ * @property \addons\Shop\services\Application $shopService
  * @property \Detection\MobileDetect $mobileDetect
  * @property \jianyan\easywechat\Wechat $wechat
  * @property \Da\QrCode\Component\QrCodeComponent $qr
- *
+ * @property \common\components\Attribute $attr
+ * @property \common\components\ShopAttribute $shopAttr
+ * @property \common\components\Transaction $trans
+ * @property \common\components\Area $area
  * @author jianyan74 <751393839@qq.com>
  */
 class MyApplication

@@ -83,17 +83,17 @@ class AuthItemChildService extends Service
         $defaultAuth = [];
         // 默认后台权限
         if (!empty($allAuthItem[AppEnum::BACKEND])) {
-            $defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::BACKEND, $name), $defaultAuth);
+            //$defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::BACKEND, $name), $defaultAuth);
         }
 
         // 默认商家权限
         if (!empty($allAuthItem[AppEnum::MERCHANT])) {
-            $defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::MERCHANT, $name), $defaultAuth);
+            //$defaultAuth = ArrayHelper::merge(AddonDefaultRouteEnum::route(AppEnum::MERCHANT, $name), $defaultAuth);
         }
-
         // 重组路由
         $allAuth = [];
         foreach ($allAuthItem as $key => $item) {
+            $menu = [];
             if (isset($allMenu[$key])) {
                 $menu = ArrayHelper::regroupMapToArr($allMenu[$key]);
                 $menu = ArrayHelper::getColumn(ArrayHelper::getRowsByItemsMerge($menu, 'child'), 'route');
@@ -103,13 +103,17 @@ class AuthItemChildService extends Service
             $is_menu = in_array($key, $removeAppIds) ? AuthMenuEnum::TOP : AuthMenuEnum::LEFT;
             $allAuth = ArrayHelper::merge($allAuth, $this->regroupByAddonsData($item, $menu, $is_menu, $name, $key));
         }
-
         // 创建权限
         $rows = $this->createByAddonsData(ArrayHelper::merge($defaultAuth, $allAuth));
-        // 批量写入数据
-        $field = ['title', 'name', 'app_id', 'is_addon', 'addons_name', 'pid', 'level', 'sort', 'tree', 'created_at', 'updated_at'];
-        !empty($rows) && Yii::$app->db->createCommand()->batchInsert(AuthItem::tableName(), $field, $rows)->execute();
-
+        // 批量写入数据        
+        if(!empty($rows)){
+            $field = ['key','title','name', 'app_id', 'is_addon', 'addons_name','pid', 'level', 'sort', 'tree', 'created_at', 'updated_at'];
+            Yii::$app->db->createCommand()->batchInsert(AuthItem::tableName(), $field, $rows)->execute();
+            
+            $sql = "update ".AuthItemChild::tableName()." child inner join ".AuthItem::tableName()." item on child.item_key=item.key set child.item_id=item.id";
+            Yii::$app->db->createCommand($sql)->execute();
+        }
+        
         unset($data, $allAuth, $installData, $defaultAuth);
     }
 
@@ -125,28 +129,32 @@ class AuthItemChildService extends Service
     public function accredit(int $role_id, array $data, int $is_addon, string $app_id)
     {
         // 删除原先所有权限
-        AuthItemChild::deleteAll(['role_id' => $role_id, 'is_addon' => $is_addon]);
+       AuthItemChild::deleteAll(['role_id' => $role_id]);
 
         if (empty($data)) {
             return;
         }
-
+        
         $rows = [];
         $items = Yii::$app->services->rbacAuthItem->findByAppId($app_id, $data);
-
+        //print_R($items);exit; 
         foreach ($items as $value) {
             $rows[] = [
                 $role_id,
                 $value['id'],
+                $value['key'],
                 $value['name'],
                 $value['app_id'],
                 $value['is_addon'],
                 $value['addons_name'],
-            ];
+            ];            
         }
-
-        $field = ['role_id', 'item_id', 'name', 'app_id', 'is_addon', 'addons_name'];
-        !empty($rows) && Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();
+        $field = ['role_id', 'item_id','item_key', 'name', 'app_id', 'is_addon', 'addons_name'];       
+        if(!empty($rows)) {
+            $sql = Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->getSql();
+            Yii::$app->db->createCommand(str_replace("INSERT", "REPLACE", $sql))->execute();
+            //Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();            
+        }
     }
 
     /**
@@ -163,6 +171,7 @@ class AuthItemChildService extends Service
             $rows[] = [
                 $role->id,
                 $child['item_id'],
+                $child['item_key'],
                 $child['name'],
                 $child['app_id'],
                 $child['is_addon'],
@@ -170,7 +179,7 @@ class AuthItemChildService extends Service
             ];
         }
 
-        $field = ['role_id', 'item_id', 'name', 'app_id', 'is_addon', 'addons_name'];
+        $field = ['role_id', 'item_id','item_key', 'name', 'app_id', 'is_addon', 'addons_name'];
         !empty($rows) && Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();
     }
 
@@ -187,7 +196,6 @@ class AuthItemChildService extends Service
             ->with(['item'])
             ->asArray()
             ->all();
-
         return array_column($auth, 'item');
     }
 
@@ -224,8 +232,7 @@ class AuthItemChildService extends Service
      */
     protected function createByAddonsData(array $data, $pid = 0, $level = 1, $parent = '')
     {
-        $rows = [];
-
+        $rows = [];        
         foreach ($data as $datum) {
             $model = new AuthItem();
             $model = $model->loadDefaultValues();
@@ -235,6 +242,7 @@ class AuthItemChildService extends Service
             $model->pid = $pid;
             $model->level = $level;
             $model->name = '/' . StringHelper::toUnderScore($model->addons_name) . '/' . $model->name;
+            $model->key = md5($model->name.'::'.$model->app_id.'::'.$model->addons_name);//新增
             $model->setScenario('addonsBatchCreate');
             if (!$model->validate()) {
                 throw new UnprocessableEntityHttpException($this->getError($model));
@@ -252,6 +260,7 @@ class AuthItemChildService extends Service
                 $model->tree = !empty($parent) ?  $parent->tree . TreeHelper::prefixTreeKey($parent->id) : TreeHelper::defaultTreeKey();
 
                 $rows[] = [
+                    $model->key,    
                     $model->title,
                     $model->name,
                     $model->app_id,

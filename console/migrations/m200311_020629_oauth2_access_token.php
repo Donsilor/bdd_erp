@@ -23,7 +23,7 @@ class m200311_020629_oauth2_access_token extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='oauth2_授权令牌'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='oauth2_授权令牌'");
         
         /* 索引设置 */
         $this->createIndex('client_id','{{%oauth2_access_token}}','client_id',0);

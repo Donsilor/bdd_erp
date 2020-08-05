@@ -1,0 +1,156 @@
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clf::after {
+    display: block;
+    content: '.';
+    opacity: 0;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+html{
+    font-size: 12px;
+}
+
+table,tr,td{
+    table-layout:fixed;
+}
+
+.container{
+    display: inline-block;
+}
+
+.title{
+    font-size: 2.2rem;
+    text-align: center;
+    font-weight: bold;
+    line-height: 5rem;
+}
+
+.list{
+    /*height: 1.8rem;*/
+    line-height: 1.8rem;
+    font-size: 1rem;
+}
+
+.child:not(:first-child){
+    margin-left: 3rem;
+}
+
+.child-attr{
+    width: 6.2rem;
+}
+.child-val{
+    width: 12rem;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.bold span:nth-child(3),
+.bold span:nth-child(4),
+.bold span:nth-child(5){
+    margin-left: 3rem;
+}
+
+.settle-accounts{
+    margin-right: 3rem;
+    font-weight: bold;
+}
+
+.t-head,
+.total{
+    background-color: #ccc;
+    font-size: #333;
+    text-align: center;
+}
+
+.table{
+    margin-top: 20px;
+}
+
+.bg-blue{
+    background-color: #00B0F0;
+}
+.bg-orange{
+    background-color: #C65911;
+}
+
+td{
+    padding: 6px 2px;
+    box-sizing: border-box;
+}
+
+td div{
+    max-height: 4.1rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: center;
+    word-break: break-all;
+
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.btn-ms {
+    display: inline-block;
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -ms-touch-action: manipulation;
+    user-select: none;
+    margin-bottom: 3px !important;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+    background-color: #0bb2d4;
+    border-color: #0bb2d4;
+    border: 1px solid transparent;
+
+
+
+}
+
+.text-center{
+    padding: 20px 15px 20px 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top: 1px solid #f4f4f4;
+    padding: 10px;
+    background-color: #fff;
+    text-align: center;
+}

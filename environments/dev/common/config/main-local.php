@@ -3,11 +3,11 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=127.0.0.1;dbname=rageframe',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=bdd_erp',
             'username' => 'root',
-            'password' => '',
+            'password' => 'root',
             'charset' => 'utf8',
-            'tablePrefix' => 'rf_',
+            'tablePrefix' => '',
             'attributes' => [
                 // PDO::ATTR_STRINGIFY_FETCHES => false, // 提取的时候将数值转换为字符串
                 // PDO::ATTR_EMULATE_PREPARES => false, // 启用或禁用预处理语句的模拟

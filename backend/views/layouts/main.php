@@ -27,9 +27,10 @@ AppAsset::register($this);
         <section class="content-header">
             <a href="<?= Yii::$app->request->getUrl(); ?>" class="rfHeaderFont">
                 <i class="glyphicon glyphicon-refresh"></i> 刷新
-            </a>
+            </a>            
             <?php if (Yii::$app->request->referrer != Yii::$app->request->hostInfo . Yii::$app->request->getBaseUrl() . '/') { ?>
-                <a href="javascript:history.go(-1)" class="rfHeaderFont">
+            	<?php $returnUrl = \Yii::$app->request->get('returnUrl');?>
+                <a href="<?php echo $returnUrl ? $returnUrl : 'javascript:history.go(-1)';?>" class="rfHeaderFont">
                     <i class="fa fa-mail-reply"></i> 返回
                 </a>
             <?php } ?>

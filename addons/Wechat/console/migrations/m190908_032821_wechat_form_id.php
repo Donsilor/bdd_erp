@@ -21,7 +21,7 @@ class m190908_032821_wechat_form_id extends Migration
             'created_at' => "int(10) unsigned DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         /* 索引设置 */
         /* 表数据 */
         /* 设置外键约束 */

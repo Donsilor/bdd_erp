@@ -28,7 +28,7 @@ class m200311_030250_merchant_member_auth extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户_第三方登录'");
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户_第三方登录'");
         
         /* 索引设置 */
         $this->createIndex('oauth_client','{{%merchant_member_auth}}','oauth_client, oauth_client_user_id',0);

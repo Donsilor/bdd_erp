@@ -2,11 +2,18 @@
 
 use common\helpers\Url;
 use common\enums\StatusEnum;
-
 ?>
-
-<?php foreach ($menus as $item) { ?>
-    <li class="treeview hide rfLeftMenu <?= (isset($item['cate']['is_default_show']) && $item['cate']['is_default_show'] == StatusEnum::ENABLED) ? 'is_default_show' : ''; ?> rfLeftMenu-<?= $item['cate_id']; ?>">
+<?php 
+$menuOpens = [];
+foreach ($menus as $k=>$item) {     
+    if(empty($menuOpens[$item['cate_id']]) || count($menuOpens[$item['cate_id']]) < 1) {
+        $menuOpen = true;
+        $menuOpens[$item['cate_id']][] = true;
+    }else{
+        $menuOpen = false;
+    }
+    ?>
+    <li class="treeview hide<?= $menuOpen ?' menu-open':''?> rfLeftMenu <?= (isset($item['cate']['is_default_show']) && $item['cate']['is_default_show'] == StatusEnum::ENABLED) ? 'is_default_show' : ''; ?> rfLeftMenu-<?= $item['cate_id']; ?>">
         <?php if (!empty($item['-'])) { ?>
             <a href="#">
                 <i class="fa <?= $level == 1 ? $item['icon'] : ''; ?> rf-i"></i> <span><?= $item['title']; ?></span>
@@ -14,7 +21,7 @@ use common\enums\StatusEnum;
                     <i class="fa fa-angle-left pull-right"></i>
                 </span>
             </a>
-            <ul class="treeview-menu">
+            <ul class="treeview-menu" <?= $menuOpen ?'style="display: block"':''?>>
                 <?= $this->render('menu-tree', [
                     'menus' => $item['-'],
                     'level' => $level + 1,

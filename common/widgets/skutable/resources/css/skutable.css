@@ -1,0 +1,59 @@
+/*实例标题*/
+/*sku选择样式*/
+.sku_type,.sku_value {
+	padding-inline-start: 0px; float: left;
+}
+.sku_value li,.sku_type li{list-style: none;margin-right:10px;}
+.sku_value li label{cursor: pointer;}
+.sku_value li{float: left;line-height:25px;}
+.sku_type li em{
+	color: #f00;
+	width: 8px;
+	font-style: normal;
+    vertical-align: sub;
+}
+.skuTable .required em{
+	color: #f00;
+	width: 8px;
+	font-style: normal;
+    vertical-align: sub;
+}
+.clear{
+	clear: both;
+} 
+.delCusSkuVal,
+.delCusSkuType {
+	font-size: 14px;
+    text-decoration: none;
+    color: #666;
+}
+/*表格样式*/
+table.skuTable {
+    font-size:14px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #ddd;
+    margin:10px 0px 20px 0px;
+    border-collapse: collapse;
+}
+table.skuTable th {
+    border-width: 1px;
+    padding: 10px 10px;
+    border-style: solid;
+    border-color: #ddd;
+    color:#666;
+    background-color: #ededed;	
+    font-size:11px;
+}
+table.skuTable td {
+    border-width: 1px;
+    padding: 5px 10px;
+    border-style: solid;
+    border-color: #ddd;
+    background-color: #ffffff;
+    color:#777;
+    widows: auto;
+    text-align: center;
+    font-size: 12px;
+	white-space: nowrap;
+}

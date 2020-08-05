@@ -25,7 +25,7 @@ class m200311_021641_rbac_auth_item extends Migration
             'created_at' => "int(11) NULL DEFAULT '0'",
             'updated_at' => "int(11) NULL DEFAULT '0'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公用_权限表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='公用_权限表'");
         
         /* 索引设置 */
         

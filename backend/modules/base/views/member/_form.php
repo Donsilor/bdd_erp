@@ -66,6 +66,13 @@ $actionLog = Yii::$app->services->actionLog->findByAppId(Yii::$app->id, $model['
                         <?= $form->field($model, 'realname')->textInput() ?>
                         <?= $form->field($model, 'gender')->radioList(GenderEnum::getMap()) ?>
                         <?= $form->field($model, 'mobile')->textInput() ?>
+                        <?= $form->field($model, 'dept_id')->widget(kartik\select2\Select2::class, [
+                            'data' => Yii::$app->services->department->getDropDownForEdit(),
+                            'options' => ['placeholder' => '请选择'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);?>
                         <?= \common\widgets\provinces\Provinces::widget([
                             'form' => $form,
                             'model' => $model,

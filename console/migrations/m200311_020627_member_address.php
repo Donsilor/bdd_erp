@@ -28,7 +28,7 @@ class m200311_020627_member_address extends Migration
             'created_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '创建时间'",
             'updated_at' => "int(10) unsigned NULL DEFAULT '0' COMMENT '修改时间'",
             'PRIMARY KEY (`id`)'
-        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户_收货地址表'");
+        ], "ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='用户_收货地址表'");
         
         /* 索引设置 */
         $this->createIndex('member_id','{{%member_address}}','member_id',0);

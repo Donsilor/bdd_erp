@@ -2,6 +2,7 @@
 
 namespace common\models\backend;
 
+use common\models\common\Department;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -47,7 +48,7 @@ class Member extends User
      */
     public static function tableName()
     {
-        return '{{%backend_member}}';
+        return self::tableFullName('backend_member');
     }
 
     /**
@@ -56,7 +57,7 @@ class Member extends User
     public function rules()
     {
         return [
-            [['type', 'gender', 'province_id', 'city_id', 'area_id', 'visit_count', 'last_time', 'role', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'gender', 'province_id', 'city_id', 'area_id', 'visit_count', 'last_time', 'role', 'status', 'created_at', 'updated_at','dept_id'], 'integer'],
             [['birthday'], 'safe'],
             [['username', 'qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
             [['password_hash', 'password_reset_token', 'head_portrait'], 'string', 'max' => 150],
@@ -83,6 +84,7 @@ class Member extends User
             'type' => '类型',
             'realname' => '真实姓名',
             'head_portrait' => '头像',
+            'dept_id' => '部门',
             'gender' => '性别',
             'qq' => 'QQ',
             'email' => '邮箱',
@@ -141,5 +143,14 @@ class Member extends User
                 ],
             ]
         ];
+    }
+
+    /**
+     * 部门
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartment()
+    {
+        return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
 }

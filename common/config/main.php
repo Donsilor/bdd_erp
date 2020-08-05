@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'RageFrame',
+    'name' => 'BDD ERP',
     'version' => '2.6.10',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -12,18 +12,38 @@ return [
     'timeZone' => 'Asia/Shanghai',
     'bootstrap' => [
         'queue', // 队列系统
-        'common\components\Init', // 加载默认的配置
+        'common\components\Init', // 加载默认的配置8.129.190.33
     ],
     'components' => [
+        'db' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
+                'charset' => 'utf8',
+        ],
+        //BDD官网
+        'bddDb' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
+                'charset' => 'utf8',
+                'tablePrefix'=>'',
+                'attributes' => [
+
+                ],
+        ],
         /** ------ 缓存 ------ **/
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
+            //'class' => 'yii\caching\FileCache',
             /**
              * 文件缓存一定要有，不然有可能会导致缓存数据获取失败的情况
              *
              * 注意如果要改成非文件缓存请删除，否则会报错
              */
-            'cachePath' => '@backend/runtime/cache'
+            //'cachePath' => '@backend/runtime/cache'
         ],
         /** ------ 格式化时间 ------ **/
         'formatter' => [
@@ -32,6 +52,7 @@ return [
             'decimalSeparator' => ',',
             'thousandSeparator' => ' ',
             'currencyCode' => 'CNY',
+            'nullDisplay' => ''
         ],
         /** ------ 服务层 ------ **/
         'services' => [
@@ -40,9 +61,10 @@ return [
         /** ------ redis配置 ------ **/
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '127.0.0.1',
+            'hostname' => '127.0.0.1',            
             'port' => 6379,
-            'database' => 3,
+            'database' => 3
+            
         ],
         /** ------ 网站碎片管理 ------ **/
         'debris' => [
@@ -54,10 +76,12 @@ return [
         ],
         /** ------ 队列设置 ------ **/
         'queue' => [
-            'class' => 'yii\queue\redis\Queue',
-            'redis' => 'redis', // 连接组件或它的配置
-            'channel' => 'queue', // Queue channel key
-            'as log' => 'yii\queue\LogBehavior',// 日志
+                'class' => yii\queue\redis\Queue::class,
+                'as log' => yii\queue\LogBehavior::class,
+                'redis' => 'redis', // 连接组件或它的配置
+                'channel' => 'queue', // Queue channel key
+                'ttr' => 1200, // Max time for job execution
+                'attempts' => 3,  // Max number of attempts
         ],
         /** ------ 公用支付 ------ **/
         'pay' => [
@@ -86,5 +110,21 @@ return [
                 'cache' => 'common\components\WechatCache',
             ]
         ],
+        /** ------ i18n 国际化 ------ **/
+        'i18n' => [
+                'translations' => [
+                        '*' => [
+                                'class' => 'yii\i18n\PhpMessageSource',
+                                'basePath' => '@app/languages',
+                                'fileMap' => [
+                                        
+                                ],
+                        ],
+                ],
+        ],
+        'area' => ['class' => 'common\components\Area'],
+		'attr' => ['class' => 'common\components\Attribute'],
+        'trans'=>['class'=>'common\components\Transaction'],
+        'shopAttr'=>['class'=>'common\components\ShopAttribute']
     ],
 ];
