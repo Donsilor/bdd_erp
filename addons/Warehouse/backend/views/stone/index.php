@@ -141,6 +141,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
@@ -152,8 +153,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'stone_clarity',
@@ -163,8 +165,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'stone_symmetry',
@@ -174,8 +177,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'stone_polish',
@@ -185,8 +189,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'stone_fluorescence',
@@ -196,8 +201,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'stone_colour',
@@ -207,8 +213,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
-                            'headerOptions' => ['width'=>'80'],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute' => 'cert_id',
