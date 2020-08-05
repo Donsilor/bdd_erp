@@ -92,7 +92,6 @@ class CustomerController extends BaseController
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }
-                $this->creator_id =  Yii::$app->user->identity->getId();
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
