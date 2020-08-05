@@ -82,10 +82,10 @@
                         <div>数量</div>
                     </td>
                     <td>
-                        <div>重量</div>
+                        <div>重量（ct）</div>
                     </td>
                     <td>
-                        <div>尺寸（ct）</div>
+                        <div>尺寸（mm）</div>
                     </td>
                     <td>
                         <div>色彩</div>
@@ -186,10 +186,10 @@
                             <div>数量</div>
                         </td>
                         <td>
-                            <div>重量</div>
+                            <div>重量（ct）</div>
                         </td>
                         <td>
-                            <div>尺寸（ct）</div>
+                            <div>尺寸（mm）</div>
                         </td>
                         <td>
                             <div>色彩</div>
