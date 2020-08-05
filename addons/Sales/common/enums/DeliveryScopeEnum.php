@@ -8,10 +8,11 @@ namespace addons\Sales\common\enums;
  */
 class DeliveryScopeEnum extends \common\enums\BaseEnum
 {
-    
-    const CHINA  = 1;
-    const GAT = 2;
-    const FOREIGN = 3;
+    const China = 1;
+    const HongKong = 2;
+    const MaCao = 3;
+    const TaiWan = 4;
+    const Other = 99;
 
     /**
      * @return array
@@ -19,9 +20,11 @@ class DeliveryScopeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::CHINA => "大陆地区",
-                self::GAT => "港澳台",
-                self::FOREIGN => "国外",
+            self::China => '中国',
+            self::HongKong => '香港',
+            self::MaCao => '澳门',
+            self::TaiWan => '台湾',
+            self::Other => '国外',
         ];
     }
     
