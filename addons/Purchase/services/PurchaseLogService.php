@@ -46,7 +46,7 @@ class PurchaseLogService extends Service
      * @return int
      */
 
-    public function createPurchaseLog($log,$purchase_type)
+    public function createPurchaseLog($log,$purchase_type = null)
     {
         if($this->switchQueue === true) {
             //队列
@@ -90,8 +90,8 @@ class PurchaseLogService extends Service
         }
         $model->attributes = $log;
         $model->log_time = time();
-        $model->creator_id = \Yii::$app->user->id;
-        $model->creator = \Yii::$app->user->identity->username;
+        $model->creator_id = \Yii::$app->user->id ?? 0;
+        $model->creator = \Yii::$app->user->identity->username ?? '';
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }

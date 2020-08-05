@@ -82,7 +82,7 @@ class PurchaseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price','peiliao_type','peishi_type'], 'required'],
+            [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price'], 'required'],
 
             [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price', 'main_stone_price','single_stone_weight', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',

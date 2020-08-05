@@ -20,7 +20,10 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">                 
@@ -158,7 +161,12 @@ $params = $params ? "&".http_build_query($params) : '';
            [
                    'attribute' => 'pay_status',
                    'value' => function ($model){
-                        return \addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status);
+                        if($model->pay_status == PayStatusEnum::NO_PAY){
+                            return "<font color='red'>".PayStatusEnum::getValue($model->pay_status)."</font>";
+                        }else{
+                            return PayStatusEnum::getValue($model->pay_status);
+                        }
+
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'pay_status',\addons\Sales\common\enums\PayStatusEnum::getMap(), [
                             'prompt' => '全部',

@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
+use addons\Purchase\common\forms\PurchaseApplyDiamondForm;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
 use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
 use addons\Shop\common\enums\AttrIdEnum;
@@ -151,8 +152,9 @@ class PurchaseApplyGoodsController extends BaseController
 
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseApplyDiamondForm::class;
         $model = $this->findModel($id);
-        $model = $model ?? new PurchaseApplyGoodsForm();
+        $model = $model ?? new PurchaseApplyDiamondForm();
         if($model->isNewRecord){
             $cert_id = Yii::$app->request->get('cert_id');
             $search = Yii::$app->request->get('search');

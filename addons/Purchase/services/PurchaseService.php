@@ -2,6 +2,8 @@
 
 namespace addons\Purchase\services;
 
+use addons\Style\common\enums\LogTypeEnum;
+use common\helpers\SnHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -75,28 +77,45 @@ class PurchaseService extends Service
      */
     public function createPurchase($info, $goods_list)
     {
-         $purchase = new Purchase();
-         $purchase->attributes = $info;
-         if(false === $purchase->save()){
-             throw new \Exception($this->getError($purchase));
-         }
-         
-         foreach ($goods_list as $goods) {
-             $purchaseGoods = new PurchaseGoods();
-             $purchaseGoods->attributes = $goods;
-             if(false === $purchaseGoods->save()) {
-                 throw new \Exception($this->getError($purchaseGoods));
-             }
-             foreach ($goods['goods_attrs'] ?? [] as $attr) {
-                 $goodsAttr = new PurchaseGoodsAttribute();
-                 $goodsAttr->attributes = $attr;
-                 if(false === $goodsAttr->save()) {
-                     throw new \Exception($this->getError($goodsAttr));
-                 }
-             }
-         }
-         
-         return $purchase;
+            $purchase = new Purchase();
+            $purchase->attributes = $info;
+            $purchase->purchase_sn = SnHelper::createPurchaseSn();
+            $purchase->creator_id  = \Yii::$app->user->identity->id ?? 0;
+            $purchase->created_at  = time();
+
+            if(false === $purchase->save()){
+                throw new \Exception($this->getError($purchase));
+            }
+
+            //日志
+            $log = [
+                'purchase_id' => $purchase->id,
+                'purchase_sn' => $purchase->purchase_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "采购单",
+                'log_msg' => "采购申请单同步创建采购单"
+            ];
+            Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
+
+            foreach ($goods_list as $goods) {
+                $purchaseGoods = new PurchaseGoods();
+                $purchaseGoods->attributes = $goods;
+                $purchaseGoods->purchase_id = $purchase->id;
+                if(false === $purchaseGoods->save()) {
+                    throw new \Exception($this->getError($purchaseGoods));
+                }
+                foreach ($goods['goods_attrs'] ?? [] as $attr) {
+                    $goodsAttr = new PurchaseGoodsAttribute();
+                    $goodsAttr->attributes = $attr;
+                    $goodsAttr->id = $purchaseGoods->id;
+                    if(false === $goodsAttr->save()) {
+                        throw new \Exception($this->getError($goodsAttr));
+                    }
+                }
+            }
+            return $purchase;
+
+
     }
     
     /**
