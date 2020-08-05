@@ -78,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '采购收货单号',
                                 'attribute'=>'receipt.receipt_no',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'receipt_no', [
@@ -160,14 +161,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'purchase_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                                     'class' => 'form-control',
                                     'style'=> 'width:120px;'
                                 ]),
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'produce_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
