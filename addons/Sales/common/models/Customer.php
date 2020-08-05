@@ -130,7 +130,7 @@ class Customer extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->identity->getId();
+            $this->creator_id = isset(Yii::$app->user) ? Yii::$app->user->identity->getId() : 0;
         }
         return parent::beforeSave($insert);
     }

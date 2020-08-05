@@ -15,13 +15,14 @@ use addons\Style\common\enums\AttrIdEnum;
 class PurchasePartsReceiptGoodsForm extends PurchasePartsReceiptGoods
 {
     public $ids;
+    public $remark;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-
+            [['remark'], 'string', 'max'=>255],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -34,8 +35,10 @@ class PurchasePartsReceiptGoodsForm extends PurchasePartsReceiptGoods
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'id'=>'流水号',
+            'remark'=>'备注',
         ]);
     }
+
     /**
      * 材质列表
      * @return array

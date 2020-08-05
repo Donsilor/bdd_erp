@@ -113,7 +113,7 @@ class BillCController extends BaseController
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
             }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE])){
+            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM])){
                 if(!$model->channel_id){
                     return $this->message("渠道不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
                 }
@@ -160,14 +160,14 @@ class BillCController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index']));
-        $model = $this->findModel($id);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index', 'id'=>$id]));
+        $model = $this->findModel($id) ?? new WarehouseBillCForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
@@ -184,7 +184,7 @@ class BillCController extends BaseController
      */
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new WarehouseBillCForm();
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -225,7 +225,7 @@ class BillCController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id)  ?? new WarehouseBillCForm();
 
         if($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
@@ -238,7 +238,7 @@ class BillCController extends BaseController
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
+                $model->auditor_id = \Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->billC->auditBillC($model);
 

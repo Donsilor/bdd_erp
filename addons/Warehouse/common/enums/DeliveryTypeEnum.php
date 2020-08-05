@@ -24,9 +24,9 @@ class DeliveryTypeEnum extends \common\enums\BaseEnum
     {
         return [
             self::QUICK_SALE => '订单快捷出库',
-            self::PROXY_PRODUCE => '委托加工',
-            self::PART_GOODS => '拆货',
-            self::ASSEMBLY => '货品组装',
+            //self::PROXY_PRODUCE => '委托加工',
+            //self::PART_GOODS => '拆货',
+            //self::ASSEMBLY => '货品组装',
             self::PLATFORM => '平台出库',
         ];
     }

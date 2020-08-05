@@ -2,11 +2,10 @@
 
 namespace addons\Purchase\backend\controllers;
 
-use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
-use addons\Purchase\common\models\PurchaseGoldReceiptGoods;
+use addons\Purchase\common\models\PurchasePartsReceiptGoods;
 use addons\Purchase\common\forms\PurchaseReceiptForm;
 use addons\Purchase\common\forms\PurchaseGoldReceiptGoodsForm;
 use addons\Purchase\common\forms\PurchasePartsReceiptGoodsForm;
@@ -16,7 +15,6 @@ use addons\Supply\common\enums\QcTypeEnum;
 use common\helpers\ResultHelper;
 use common\helpers\Url;
 use common\traits\Curd;
-use yii\base\Exception;
 
 /**
  * PartsReceiptGoods
@@ -235,6 +233,47 @@ class PartsReceiptGoodsController extends BaseController
             $trans->rollBack();
             return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
+    }
+
+    /**
+     *
+     * 批量生成不良返厂单2
+     * @return mixed
+     * @throws
+     */
+    public function actionDefective()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
+        $model = new PurchasePartsReceiptGoodsForm();
+        $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->purchaseService->receipt->DefectiveValidate($model, $this->purchaseType);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->purchaseService->receipt->batchDefective($model, $this->purchaseType);
+
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
     }
 
     /**

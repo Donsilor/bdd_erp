@@ -86,10 +86,11 @@ $form = ActiveForm::begin([
             $("#"+formId+"-supplier_id").select2("val",'');
             $("#div1").hide();
         }
-        if($.inArray(id,['1'])>=0){
+        if($.inArray(id,['1','5'])>=0){
             $("#div2").show();
         }else {
             $("#"+formId+"-channel_id").select2("val",'');
+            $("#"+formId+"-salesman_id").select2("val",'');
             $("#div2").hide();
         }
     }

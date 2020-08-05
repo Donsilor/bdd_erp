@@ -84,6 +84,7 @@ class WarehouseBillTService extends Service
                 if($form->cost_price){
                     $qiban->cost_price = $form->cost_price;
                 }
+                //$qiban = new Qiban();
                 $goods = [
                     'goods_sn'=>$form->goods_sn,
                     'goods_name' =>$qiban->qiban_name,
@@ -99,6 +100,7 @@ class WarehouseBillTService extends Service
                     'jintuo_type' => $qiban->jintuo_type,
                     'cost_price' => bcmul($qiban->cost_price,$goods_num,3),
                     //'market_price' => $style->market_price,
+                    'is_inlay' => $qiban->is_inlay,
                     'remark' => $qiban->remark,
                     'creator_id' => \Yii::$app->user->identity->getId(),
                     'created_at' => time(),
@@ -110,6 +112,7 @@ class WarehouseBillTService extends Service
             if($form->cost_price){
                 $style->cost_price = $form->cost_price;
             }
+            //$style = new Style();
             $goods = [
                 'goods_sn'=>$form->goods_sn,
                 'goods_name' =>$style->style_name,
@@ -124,6 +127,7 @@ class WarehouseBillTService extends Service
                 'goods_num' => $goods_num,
                 'jintuo_type' => JintuoTypeEnum::Chengpin,
                 'cost_price' => bcmul($style->cost_price,$goods_num,3),
+                'is_inlay' => $style->is_inlay,
                 //'market_price' => $style->market_price,
                 'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),

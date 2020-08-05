@@ -32,10 +32,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset'=>'20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
+                        /*echo Html::edit(['ajax-defective'], '批量生成不良返厂单', [
                             'class'=>'btn btn-danger btn-xs',
                             'data-grid' => 'grid',
                             'onclick' => 'batchAudit(this);return false;',
+                        ]);*/
+                        echo Html::batchPopButton(['defective', 'check'=>1], '批量生成返厂单', [
+                            'class'=>'btn btn-danger btn-xs',
+                            'data-width'=>'40%',
+                            'data-height'=>'60%',
+                            'data-offset'=>'20px',
                         ]);
                     ?>
                 </div>
@@ -90,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter'=>Select2::widget([
                                     'name'=>'SearchModel[supplier_id]',
                                     'value'=>$searchModel->supplier_id,
-                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(['like', 'business_scope', ',9,']),
                                     'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
