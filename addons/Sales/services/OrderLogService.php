@@ -52,9 +52,7 @@ class OrderLogService extends Service
     public function realCreateOrderLog($log)
     {
         $model = new OrderLog();
-        $model->attributes = $log;
-        $model->creator_id = Yii::$app->user->identity->getId();
-        $model->creator = \Yii::$app->user->identity->username;
+        $model->attributes = $log;        
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }

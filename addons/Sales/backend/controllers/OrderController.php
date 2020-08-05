@@ -17,6 +17,7 @@ use common\helpers\ResultHelper;
 use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
+use common\enums\LogTypeEnum;
 
 /**
  * Default controller for the `order` module
@@ -238,15 +239,26 @@ class OrderController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             if($model->targetType){
                 //审批流程
-                Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);
+                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);               
             }
 
             $model->order_status = OrderStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
-                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                throw new \Exception($this->getError($model));
             }
-
+            
+            //订单日志
+            $log = [
+                    'order_id' => $model->id,
+                    'order_sn' => $model->order_sn,
+                    'order_status' => $model->order_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '申请审核',
+                    'log_msg' => $model->targetType ? "订单提交申请，审批编号:".$flow->id : '订单提交申请',
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -293,6 +305,7 @@ class OrderController extends BaseController
                             return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
                         }
                     }
+                    $log_msg = "订单审核：".AuditStatusEnum::getValue($model->audit_status)."，审核备注：".$model->audit_remark."，审批编号:".$flow->id;
                 }else{
                     $model->auditor_id = \Yii::$app->user->id;
                     $model->audit_time = time();
@@ -304,7 +317,20 @@ class OrderController extends BaseController
                     if(false === $model->save()){
                         return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
                     }
+                    $log_msg = "订单审核：".AuditStatusEnum::getValue($model->audit_status)."，审核备注：".$model->audit_remark;
                 }
+                
+                //订单日志
+                $log = [
+                        'order_id' => $model->id,
+                        'order_sn' => $model->order_sn,
+                        'order_status' => $model->order_status,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_time' => time(),
+                        'log_module' => '订单审核',
+                        'log_msg' => $log_msg,
+                ];
+                \Yii::$app->salesService->orderLog->createOrderLog($log);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();

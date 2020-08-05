@@ -31,7 +31,7 @@ class OrderForm extends Order
         $rules = [
                 [['pay_type'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id != 3 && $value == '') {
+                    if($this->sale_channel_id != 3 && $value !== null && empty($value)) {
                         return true;//提示 为空 错误
                     }
                     return false;//不验证
@@ -44,7 +44,7 @@ class OrderForm extends Order
                 }"
                 ],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id == 3 && $value == '') {
+                    if($this->sale_channel_id == 3 && $value !== null && empty($value)) {
                         return true;
                     }
                     return false;
@@ -104,6 +104,8 @@ class OrderForm extends Order
                 $this->targetType = false;
 
         }
+        
+        return $this->targetType;
     }
     
 }
