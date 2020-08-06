@@ -6,6 +6,7 @@ use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
+use function MongoDB\BSON\toJSON;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -381,4 +382,32 @@ class PurchaseGoodsController extends BaseController
         return true;
     }
 
+    /**
+     * ajax编辑/创建(配件)
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxParts()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new PurchaseGoodsForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->parts_info = !empty($model->parts_info)?serialize($model->parts_info):'';
+            if(false == $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            Yii::$app->getSession()->setFlash('success','保存成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        }
+        if($model->parts_info){
+            $parts_list = unserialize($model->parts_info);
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'parts_list' => $parts_list??[],
+        ]);
+    }
 }

@@ -180,6 +180,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute' => 'peijian_type',
+                                'value' => function($model){
+                                    $button = "";
+                                    if($model->peijian_type>1){
+                                        $button = Html::edit(['ajax-parts','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑配件',[
+                                                'class' => 'btn btn-primary btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
+                                            ]);
+                                    }
+                                    return \addons\Supply\common\enums\PeijianTypeEnum::getValue($model->peijian_type).$button;
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'peijian_type',\addons\Supply\common\enums\PeijianTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=>'width:100px'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'templet_type',
+                                'value' => function($model){
+                                    return \addons\Supply\common\enums\TempletTypeEnum::getValue($model->templet_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'templet_type',\addons\Supply\common\enums\TempletTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=>'width:100px'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                     'attribute' => 'style_cate_id',
                                     'value' => function ($model){
                                            return $model->cate->name ??'';

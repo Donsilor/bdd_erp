@@ -23,9 +23,9 @@ class PeijianTypeEnum extends BaseEnum
     {
         return [
                 self::None => "不需配件",
-                self::PeiJian => "一种配件",
-                self::TwoPeiJian => "二种配件",
-                self::ThreePeiJian => "三种配件",
+                self::PeiJian => "需一种配件",
+                self::TwoPeiJian => "需二种配件",
+                self::ThreePeiJian => "需三种配件",
         ];
     }
     /**
