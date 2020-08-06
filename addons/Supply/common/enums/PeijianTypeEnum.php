@@ -32,11 +32,13 @@ class PeijianTypeEnum extends BaseEnum
      * 配件状态
      * @return string[][]|number[][]
      */
-    public static function getPeiliaoStatus($peijian_type)
+    public static function getPeijianStatus($peijian_type)
     {
         $map = [
                 self::None=>PeijianStatusEnum::NONE,
                 self::PeiJian=>PeijianStatusEnum::PENDING,
+                self::TwoPeiJian=>PeijianStatusEnum::PENDING,
+                self::ThreePeiJian=>PeijianStatusEnum::PENDING,
         ];
         return $map[$peijian_type] ?? PeijianStatusEnum::NONE;
     }
