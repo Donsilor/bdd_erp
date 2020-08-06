@@ -102,7 +102,7 @@ $form = ActiveForm::begin([
 <script>
     var formId = 'purchasegoodsform-parts_info';
 
-    function fillStoneForm(i) {
+    function fillPartsForm(i) {
         var style_sn = $("#" + formId + "-" + i + "-style_sn").val();
         if (style_sn != '') {
             $.ajax({
@@ -123,12 +123,15 @@ $form = ActiveForm::begin([
     }
 
     $("#" + formId + "-0-style_sn").blur(function () {
-        fillStoneForm(0);
+        console.log(0);
+        fillPartsForm(0);
     });
     $("#" + formId + "-1-style_sn").blur(function () {
-        fillStoneForm(1);
+        console.log(1);
+        fillPartsForm(1);
     });
     $("#" + formId + "-2-style_sn").blur(function () {
-        fillStoneForm(2);
+        console.log(2);
+        fillPartsForm(2);
     });
 </script>

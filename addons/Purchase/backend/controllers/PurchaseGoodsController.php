@@ -396,19 +396,19 @@ class PurchaseGoodsController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $model->parts_info = !empty($model->parts_info)?serialize($model->parts_info):'';
-            if(false == $model->save(true, ['parts_info'])){
+            $model->parts_info = !empty($model->parts_info) ? serialize($model->parts_info) : '';
+            if (false == $model->save(true, ['parts_info'])) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            Yii::$app->getSession()->setFlash('success','保存成功');
+            Yii::$app->getSession()->setFlash('success', '保存成功');
             return $this->redirect(\Yii::$app->request->referrer);
         }
-        if($model->parts_info){
+        if (!empty($model->parts_info)) {
             $parts_list = unserialize($model->parts_info);
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
-            'parts_list' => $parts_list??[],
+            'parts_list' => $parts_list ?? [],
         ]);
     }
 
