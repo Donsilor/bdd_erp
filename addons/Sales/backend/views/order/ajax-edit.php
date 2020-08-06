@@ -114,6 +114,9 @@ function fillCustomerFormByMobile(){
                            $("#"+formId+"-customer_mobile_2").val(data.data.mobile);
                            $("#"+formId+"-customer_email_1").val(data.data.email);
                            $("#"+formId+"-customer_email_2").val(data.data.email);
+                           rfMsg("手机号为老用户，系统已自动填充用户信息");
+                    	} else {
+                    	   rfMsg("该手机号为新用户，请手动完善客户信息");
                     	}
                     	$("#"+formId+"-customer_name").attr("readonly",false);
                     	$("#"+formId+"-customer_mobile_1").attr("readonly",false);
