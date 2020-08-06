@@ -34,8 +34,11 @@ use common\models\backend\Member;
  * @property int $inlay_type 镶嵌方式
  * @property int $peiliao_type 配料类型
  * @property int $peishi_type 配石类型
+ * @property int $peijian_type 配件类型
+ * @property int $templet_type 样板类型
  * @property int $peiliao_status 配料状态
  * @property int $peishi_status 配石状态
+ * @property int $peijian_status 配件状态
  * @property int $bc_status 布产状态 1初始化 2待确认 3待生产 4生产中 5待出厂 6部分出厂 7已出厂
  * @property int $prc_status 生产状态
  * @property int $follower_id 跟单人ID
@@ -64,7 +67,7 @@ class Produce extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id','is_inlay','peiliao_type','peishi_type','peishi_status','peiliao_status', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
+            [['merchant_id','is_inlay','peiliao_type','peishi_type','peijian_type','templet_type','peishi_status','peiliao_status','peijian_status', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
             [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
             [['goods_name','audit_followe_remark'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
@@ -102,8 +105,11 @@ class Produce extends BaseModel
             'inlay_type' => '镶嵌方式',
             'peiliao_type' => '配料类型',
             'peishi_type' => '配石类型(公司)',
+            'peijian_type' => '配件类型',
+            'templet_type' => '样板类型',
             'peiliao_status' => '配料状态',
             'peishi_status' => '配石状态',
+            'peijian_status' => '配件状态',
             'bc_status' => '布产状态',
             'prc_status' => '生产状态',
             'follower_id' => '跟单人id',
