@@ -396,7 +396,7 @@ class PurchaseGoodsController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
             $model->parts_info = !empty($model->parts_info)?serialize($model->parts_info):'';
-            if(false == $model->save()){
+            if(false == $model->save(true, ['parts_info'])){
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
             Yii::$app->getSession()->setFlash('success','保存成功');
