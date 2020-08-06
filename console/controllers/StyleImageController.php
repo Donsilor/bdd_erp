@@ -7,7 +7,6 @@ use yii\helpers\Console;
 use common\helpers\FileHelper;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
-use addons\Style\common\enums\ImagePositionEnum;
 
 
 /**
@@ -24,7 +23,7 @@ class StyleImageController extends Controller
     public function actionImport()
     {
         $dir = dirname(dirname(dirname(__FILE__)));
-        $newDir = $dir.'/docs/'.date("Y/m/d");
+        $newDir = $dir.'/upload/'.date("Y/m/d");
         $imageUrlDir = 'https://cdn-erp.bddco.cn/images/'.date("Y/m/d");
         FileHelper::createDirectory($newDir);
         
