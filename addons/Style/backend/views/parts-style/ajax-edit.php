@@ -24,12 +24,12 @@ $form = ActiveForm::begin([
             <?= $form->field($model, 'style_sn')->textInput() ?>
         </div>
         <div class="col-lg-6">
-            <?= $form->field($model, 'parts_name')->textInput() ?>
+            <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), ['prompt' => '请选择']); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-6">
-            <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), ['prompt' => '请选择']); ?>
+            <?= $form->field($model, 'parts_name')->textInput() ?>
         </div>
         <div class="col-lg-6">
             <?= $form->field($model, 'metal_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), ['prompt' => '请选择']); ?>
