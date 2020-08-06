@@ -57,6 +57,17 @@ $form = ActiveForm::begin([
                         'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE)
                     ],
                     [
+                        'name' => 'parts_num',
+                        'title' => '配件数量',
+                        'enableError' => false,
+                        'defaultValue' => '1',
+                        'options' => [
+                            'class' => 'input-priority',
+                            'type' => 'number',
+                            'style' => 'width:80px'
+                        ]
+                    ],
+                    [
                         'name' => 'parts_weight',
                         'title' => '配件金重',
                         'enableError' => false,
