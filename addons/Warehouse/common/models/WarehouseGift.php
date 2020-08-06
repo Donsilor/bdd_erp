@@ -27,6 +27,7 @@ use common\models\backend\Member;
  * @property int $main_stone_num 主石数量
  * @property string $gift_size 赠品尺寸
  * @property int $gift_num 赠品库存
+ * @property int $first_num 原库存
  * @property string $gift_weight 赠品重量(g)
  * @property string $gold_price 金价/g
  * @property string $cost_price 金价总额
@@ -61,7 +62,7 @@ class WarehouseGift extends BaseModel
     {
         return [
             [['gift_sn', 'style_sn'], 'required'],
-            [['product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'gift_num', 'supplier_id', 'put_in_type', 'warehouse_id', 'source_detail_id', 'gift_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_type_id', 'style_cate_id', 'style_sex', 'main_stone_num', 'gift_num', 'first_num', 'supplier_id', 'put_in_type', 'warehouse_id', 'source_detail_id', 'gift_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gift_weight', 'gold_price', 'cost_price', 'sale_price'], 'number'],
             [['gift_sn', 'style_sn', 'purchase_sn', 'receipt_no'], 'string', 'max' => 30],
             [['gift_name', 'chain_length'], 'string', 'max' => 100],
@@ -93,6 +94,7 @@ class WarehouseGift extends BaseModel
             'gift_size' => '赠品尺寸',
             'gift_num' => '赠品库存',
             'gift_weight' => '赠品重量(g)',
+            'first_num' => '原数量',
             'gold_price' => '金价/g',
             'cost_price' => '成本价',
             'sale_price' => '销售价',

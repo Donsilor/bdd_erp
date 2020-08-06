@@ -55,12 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gift_weight',
+                                'attribute' => 'gift_num',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'stock_weight',
+                                'attribute' => 'stock_num',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],

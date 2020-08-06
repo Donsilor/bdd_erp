@@ -33,7 +33,7 @@ class OrderController extends BaseController
 
     public function actionTest()
     {
-        Yii::$app->shopService->orderSync->syncOrder(1405);
+        Yii::$app->shopService->orderSync->syncOrder(1369);
         exit;
     }
     /**
@@ -356,7 +356,8 @@ class OrderController extends BaseController
         $id = Yii::$app->request->get('id');
         $this->modelClass = OrderAddress::class;
         $model = $this->findModel($id);
-        if($model->isNewRecord) {
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord) {
             $model->order_id = $id;     
         }        
         // ajax 校验
@@ -384,7 +385,7 @@ class OrderController extends BaseController
         if(!$model->email) {
             $model->email = $model->order->customer_email ?? null;
         }
-        if(!$model->country_id) {
+        if($isNewRecord && isset($model->customer)) {
             $model->country_id = $model->customer->country_id ?? null;
             $model->province_id = $model->customer->province_id ?? null;
             $model->city_id = $model->customer->city_id ?? null;

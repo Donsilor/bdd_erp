@@ -1301,6 +1301,7 @@ class PurchaseReceiptService extends Service
                 'gift_size' => $model->goods_size,
                 'gift_num' => $model->goods_num,
                 'gift_weight' => $model->goods_weight,
+                'first_num' => $model->goods_num,
                 'gold_price' => $model->gold_price,
                 'cost_price' => $model->cost_price,
                 'purchase_sn' => $model->purchase_sn,

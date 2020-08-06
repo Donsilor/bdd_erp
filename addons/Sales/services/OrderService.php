@@ -74,10 +74,11 @@ class OrderService extends Service
             $customer->email = $order->customer_email;
             $customer->channel_id = $order->sale_channel_id;
             $customer->level = $form->customer_level;
-            $customer->source_id = $form->customer_source;
+            $customer->source_id = $form->customer_source;            
             if(false == $customer->save()) {
                 throw new \Exception("创建用户失败：".$this->getError($customer));
             }
+            \Yii::$app->salesService->customer->createCustomerNo($customer,true);
         }else{
             //更新用户信息
             $customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
@@ -240,6 +241,7 @@ class OrderService extends Service
             if(false == $customer->save()) {
                 throw new \Exception("创建用户失败：".$this->getError($customer));
             }
+            \Yii::$app->salesService->customer->createCustomerNo($customer,true);
         }else{
             //更新用户信息
             //$customer->realname = $customer->realname ? $customer->realname : $order->customer_name;

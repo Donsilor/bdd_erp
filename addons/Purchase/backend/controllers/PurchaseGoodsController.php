@@ -4,8 +4,10 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\models\PartsStyle;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
+use function MongoDB\BSON\toJSON;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -381,4 +383,50 @@ class PurchaseGoodsController extends BaseController
         return true;
     }
 
+    /**
+     * ajax编辑/创建(配件)
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxParts()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id) ?? new PurchaseGoodsForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->parts_info = !empty($model->parts_info) ? serialize($model->parts_info) : '';
+            if (false == $model->save(true, ['parts_info'])) {
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            Yii::$app->getSession()->setFlash('success', '保存成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        }
+        if (!empty($model->parts_info)) {
+            $parts_list = unserialize($model->parts_info);
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'parts_list' => $parts_list ?? [],
+        ]);
+    }
+
+    /**
+     * 查询配件款式信息
+     * @return array
+     */
+    public function actionAjaxGetParts()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $style_sn = \Yii::$app->request->get('style_sn');
+        $model = PartsStyle::find()->select(['parts_name','parts_type','metal_type'])->where(['style_sn'=>$style_sn])->one();
+        $data = [
+            'parts_name' => $model->parts_name??"",
+            'parts_type' => $model->parts_type??"",
+            'metal_type' => $model->metal_type??"",
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
+    }
 }

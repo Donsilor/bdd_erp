@@ -146,8 +146,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->stone_info ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_info') ?>：</td>
-                                    <td><?= $model->parts_info ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_remark') ?>：</td>
+                                    <td><?= $model->parts_remark ?></td>
                                 </tr>
 
                             </table>

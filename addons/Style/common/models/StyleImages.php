@@ -71,8 +71,11 @@ class StyleImages extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->identity->getId();
-
+            if(isset(Yii::$app->user)) {
+                $this->creator_id = Yii::$app->user->identity->getId();
+            }else {
+                $this->creator_id = 1;
+            }
             //如果第一次添加，则强制默认为第一张
             $style_image = self::find()->where(['style_id'=>$this->style_id])->all();
             if(empty($style_image)) $this->is_default = ConfirmEnum::YES;
