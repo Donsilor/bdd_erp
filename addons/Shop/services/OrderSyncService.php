@@ -69,7 +69,7 @@ class OrderSyncService extends Service
      * @param int $order_id 订单Id
      */
     public function syncOrder($order_id)
-    {  //$order_id = 1405;
+    {  
         //数据校验
         $order = Order::find()->where(['id'=>$order_id])->one();
         if(!$order) {
