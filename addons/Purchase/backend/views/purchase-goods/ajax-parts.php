@@ -45,6 +45,18 @@ $form = ActiveForm::begin([
                         ]
                     ],
                     [
+                        'name' => "parts_type",
+                        'title' => '配件类型',
+                        'enableError' => false,
+                        'type' => 'dropDownList',
+                        'options' => [
+                            'class' => 'input-priority',
+                            'style' => 'width:100px',
+                            'prompt' => '请选择',
+                        ],
+                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE)
+                    ],
+                    [
                         'name' => "material_type",
                         'title' => '配件材质',
                         'enableError' => false,
@@ -115,6 +127,7 @@ $form = ActiveForm::begin([
                 success: function (data) {
                     if (parseInt(data.code) == 200 && data.data) {
                         $("#" + formId + "-" + i + "-parts_name").val(data.data.parts_name);
+                        $("#" + formId + "-" + i + "-parts_type").val(data.data.parts_type);
                         $("#" + formId + "-" + i + "-material_type").val(data.data.metal_type);
                     }
                 }

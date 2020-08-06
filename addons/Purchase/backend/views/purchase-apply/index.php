@@ -89,6 +89,19 @@ $params = $params ? "&".http_build_query($params) : '';
                     //'headerOptions' => ['width'=>'150'],
             ],
             [
+                'attribute' => 'purchase_cate',
+                'value'=>function($model) {
+                    return \addons\Purchase\common\enums\PurchaseCateEnum::getValue($model->purchase_cate);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'purchase_cate',\addons\Purchase\common\enums\PurchaseCateEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
+                'format' => 'raw',
+                //'headerOptions' => ['width'=>'150'],
+            ],
+            [
                     'attribute' => 'total_num',
                     'value' => "total_num",
                     'filter' => false,

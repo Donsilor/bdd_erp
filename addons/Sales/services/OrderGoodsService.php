@@ -3,6 +3,7 @@
 namespace addons\Sales\services;
 
 use addons\Sales\common\enums\IsStockEnum;
+use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\QibanTypeEnum;
@@ -10,7 +11,10 @@ use addons\Style\common\models\Diamond;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
 use addons\Supply\common\enums\BuChanEnum;
+use addons\Warehouse\common\enums\GiftBillStatusEnum;
+use addons\Warehouse\common\enums\GiftBillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseGift;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
@@ -103,7 +107,6 @@ class OrderGoodsService extends Service
      * 添加裸钻
      */
     public function addDiamond($model){
-//        try{
         $diamond_goods = Diamond::find()->where(['cert_id'=>$model->cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
         if(empty($diamond_goods)){
             throw new \Exception("此裸钻不存在或者不是审核状态",422);
@@ -133,11 +136,120 @@ class OrderGoodsService extends Service
         //更新采购汇总：总金额和总数量
         \Yii::$app->salesService->order->orderSummary($model->order_id);
 
-//        }catch (\Exception $e){
-//            echo $e;
-//            exit;
-//        }
+    }
 
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * 删除裸钻
+     */
+    public function delDiamond($model){
+        $diamond_goods = Diamond::find()->where(['cert_id'=>$model->cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+        if(empty($diamond_goods)){
+            throw new \Exception("此裸钻不存在或者不是审核状态",422);
+        }
+        //删除商品属性
+        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+
+        //修改裸钻状态
+        $diamond_goods->status = StatusEnum::ENABLED;
+        if(false === $diamond_goods->save(true,['status'])){
+            throw new \Exception($this->getError($diamond_goods));
+        }
+        //更新采购汇总：总金额和总数量
+        \Yii::$app->salesService->order->orderSummary($model->order_id);
+
+    }
+
+
+
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * 添加赠品
+     */
+    public function addGift($model,$num){
+        $order = Order::find()->where(['id'=>$model->order_id])->one();
+        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>','gift_num',0])->one();
+        if(empty($gift_goods)){
+            throw new \Exception("此赠品不存在或者没有库存",422);
+        }
+        //删除商品属性
+        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+        $attr_list = \Yii::$app->warehouseService->gift->getMapping();
+        foreach ($attr_list as  $attr){
+            $attr_value_id = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? 0 : $diamond_goods->$attr['attr_field'] ?? 0;
+            $attr_value = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? $diamond_goods->$attr['attr_field'] : \Yii::$app->attr->valueName($attr_value_id) ?? '';
+            $order_goods_attr = new OrderGoodsAttribute();
+            $order_goods_attr->id = $model->id;
+            $order_goods_attr->attr_id = $attr['attr_id'];
+            $order_goods_attr->attr_value_id = $attr_value_id;
+            $order_goods_attr->attr_value = $attr_value;
+            if(false === $order_goods_attr->save()){
+                throw new \Exception($this->getError($order_goods_attr));
+            }
+        }
+
+        $stock_num = bcadd($gift_goods->stock_num, $num);
+        if($stock_num < 0){
+            throw new \Exception("赠品库存不够",422);
+        }
+        $bill_status = $num > 0 ? GiftBillStatusEnum::GIFT_CANCE_LOCK : GiftBillStatusEnum::GIFT_LOCK;
+        $gift_bill_info = [
+            'gift_id' => $gift_goods->id,
+            'bill_no' => $order->order_sn,
+            'bill_type' => GiftBillTypeEnum::GIFT_ORDER,
+            'num' => $num ,
+            'stock_num' => $stock_num,
+            'channel_id' => $order->sale_cahnnel_id,
+            'bill_status' => $bill_status,
+            'remark' => '订单明细添加/编辑赠品'
+
+
+        ];
+        //修改赠品信息
+        $gift_bill = \Yii::$app->warehouseService->gift->createBill($gift_bill_info);
+        //更新采购汇总：总金额和总数量
+        \Yii::$app->salesService->order->orderSummary($model->order_id);
+        return $gift_bill;
+    }
+
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * 删除赠品
+     */
+    public function delGift($model){
+        $order = Order::find()->where(['id'=>$model->order_id])->one();
+        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>','gift_num',0])->one();
+        if(empty($gift_goods)){
+            throw new \Exception("此赠品不存在或者没有库存",422);
+        }
+        //删除商品属性
+        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
+        $num = $model->goods_num;
+        $stock_num = bcadd($gift_goods->stock_num, $num);
+        $bill_status =  GiftBillStatusEnum::GIFT_CANCE_LOCK ;
+        $gift_bill_info = [
+            'gift_id' => $gift_goods->id,
+            'bill_no' => $order->order_sn,
+            'bill_type' => GiftBillTypeEnum::GIFT_ORDER,
+            'num' => $num ,
+            'stock_num' => $stock_num,
+            'channel_id' => $order->sale_cahnnel_id,
+            'bill_status' => $bill_status,
+            'remark' => '订单明细删除赠品'
+
+
+        ];
+        //修改赠品信息
+        $gift_bill = \Yii::$app->warehouseService->gift->createBill($gift_bill_info);
+        //更新采购汇总：总金额和总数量
+        \Yii::$app->salesService->order->orderSummary($model->order_id);
+        return $gift_bill;
     }
 
 

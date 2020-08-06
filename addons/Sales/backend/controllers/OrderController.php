@@ -291,9 +291,9 @@ class OrderController extends BaseController
                         'audit_time' => time(),
                         'audit_remark' => $model->audit_remark
                     ];
-                    $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                    $flow = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
                     //审批完结或者审批不通过才会走下面
-					if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
+					if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                         $model->auditor_id = \Yii::$app->user->id;
                         $model->audit_time = time();
                         if($model->audit_status == AuditStatusEnum::PASS){
@@ -436,10 +436,23 @@ class OrderController extends BaseController
      */
     public function actionAjaxPurchaseApply()
     {
-        $id = Yii::$app->request->get('id');        
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
         try {
             $trans = Yii::$app->db->beginTransaction();
-            Yii::$app->salesService->order->syncPurchaseApply($id);
+            $apply = Yii::$app->salesService->order->syncPurchaseApply($id);
+            //订单日志
+            $log_msg = "生成采购申请单。采购申请单号：{$apply->apply_sn}";
+            $log = [
+                'order_id' => $model->id,
+                'order_sn' => $model->order_sn,
+                'order_status' => $model->order_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '生成采购申请单',
+                'log_msg' => $log_msg,
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         } catch (\Exception $e) {

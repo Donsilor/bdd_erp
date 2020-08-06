@@ -413,47 +413,58 @@ class ProduceService extends Service
     {
         $is_new = false;
         $reset = false;
-        $parts = [
-            'supplier_id' => $form->supplier_id,
-            'material_type' => $attrValues[AttrIdEnum::MATERIAL] ?? '',
-            'parts_num' => $form->goods_num,
-            'parts_weight' => $form->goods_num * ($attrValues[AttrIdEnum::JINZHONG] ?? 0),
-        ];
-        $model = ProduceParts::find()->where(['produce_id' => $form->id])->one();
-        if (!$model) {
-            $model = new ProduceParts();
-            $model->attributes = $parts;
-            $model->produce_id = $form->id;
-            $model->produce_sn = $form->produce_sn;
-            $model->from_order_sn = $form->from_order_sn;
-            $model->from_type = $form->from_type;
-            $model->peijian_status = ($form->peijian_status == PeijianStatusEnum::NONE) ? PeijianStatusEnum::NONE : PeijianStatusEnum::IN_PEIJIAN;
-            $is_new = true;
-        } else {
-            if ($model->peijian_status == PeijianStatusEnum::HAS_LINGJIAN) {
-                //已领料禁止更新
-                return;
-            }
-            $fields = ['parts_type', 'parts_num', 'parts_weight'];
-            //如果有重要字段变动，配件状态还原成 配件中
-            if ($form->peijian_status == PeijianStatusEnum::NONE) {
-                $model->peijian_status = PeijianStatusEnum::NONE;
-                $form->peijian_status = PeijianStatusEnum::NONE;
-                $reset = true;
-            } else {
-                foreach ($fields as $field) {
-                    if ($model->{$field} != $parts[$field]) {
-                        $model->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
-                        $form->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
-                        $reset = true;
-                        break;
+        if (!empty($form->parts_info)) {
+            $parts_info = unserialize($form->parts_info)??[];
+            if (is_array($parts_info)) {
+                foreach ($parts_info as $item) {
+                    $style_sn = $item['style_sn'] ?? "";
+                    $parts = [
+                        'supplier_id' => $form->supplier_id,
+                        'style_sn' => $style_sn,
+                        'parts_name' => $item['parts_name'] ?? "",
+                        'parts_type' => $item['parts_type'] ?? "",
+                        'material_type' => $item['material_type'] ?? '',
+                        'parts_num' => $form->goods_num * ($item['parts_num'] ?? 0),
+                        'parts_weight' => $form->goods_num * ($item['parts_weight'] ?? 0),
+                    ];
+                    $model = ProduceParts::find()->where(['produce_id' => $form->id, 'style_sn' => $style_sn])->one();
+                    if (!$model) {
+                        $model = new ProduceParts();
+                        $model->attributes = $parts;
+                        $model->produce_id = $form->id;
+                        $model->produce_sn = $form->produce_sn;
+                        $model->from_order_sn = $form->from_order_sn;
+                        $model->from_type = $form->from_type;
+                        $model->peijian_status = ($form->peijian_status == PeijianStatusEnum::NONE) ? PeijianStatusEnum::NONE : PeijianStatusEnum::IN_PEIJIAN;
+                        $is_new = true;
+                    } else {
+                        if ($model->peijian_status == PeijianStatusEnum::HAS_LINGJIAN) {
+                            //已领料禁止更新
+                            return;
+                        }
+                        $fields = ['parts_name', 'parts_type', 'material_type', 'parts_num', 'parts_weight'];
+                        //如果有重要字段变动，配件状态还原成 配件中
+                        if ($form->peijian_status == PeijianStatusEnum::NONE) {
+                            $model->peijian_status = PeijianStatusEnum::NONE;
+                            $form->peijian_status = PeijianStatusEnum::NONE;
+                            $reset = true;
+                        } else {
+                            foreach ($fields as $field) {
+                                if ($model->{$field} != $parts[$field]) {
+                                    $model->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
+                                    $form->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
+                                    $reset = true;
+                                    break;
+                                }
+                            }
+                        }
+                        $model->attributes = ArrayHelper::merge($model->attributes, $parts);
+                    }
+                    if (false === $model->save()) {
+                        throw new \Exception($this->getError($model));
                     }
                 }
             }
-            $model->attributes = ArrayHelper::merge($model->attributes, $parts);
-        }
-        if (false === $model->save()) {
-            throw new \Exception($this->getError($model));
         }
         //重置配件单
         if ($reset === true) {
@@ -461,7 +472,6 @@ class ProduceService extends Service
                 throw new \Exception($this->getError($form));
             }
         }
-
         //日志
         $log = [
             'produce_id' => $form->id,

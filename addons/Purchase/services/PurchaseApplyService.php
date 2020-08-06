@@ -92,7 +92,7 @@ class PurchaseApplyService extends Service
                 'apply_sn' => $apply->apply_sn,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => "采购申请单",
-                'log_msg' => "客订单同步生成采购申请单"
+                'log_msg' => "客订单同步生成采购申请单;订单号：{$apply->order_sn}"
             ];
             Yii::$app->purchaseService->apply->createApplyLog($log);
 
@@ -147,6 +147,7 @@ class PurchaseApplyService extends Service
         $group_purchase_cates = [];//申请来源分组
         $group_apply_sns = [];//采购申请单SN分组
         $applyModels = PurchaseApply::find()->select(['id','apply_sn','channel_id','purchase_cate','apply_status'])->where(['id'=>$apply_ids])->all();
+        $purchase_cate = [];
         foreach ($applyModels as $apply) {
             if($apply->apply_status != ApplyStatusEnum::FINISHED) {
                 throw new \Exception("[{$apply->apply_sn}]未完成申请流程");                
@@ -154,7 +155,12 @@ class PurchaseApplyService extends Service
             $group_apply_ids[$apply->channel_id][] = $apply->id;
             $group_apply_sns[$apply->channel_id][] = $apply->apply_sn;
             $group_purchase_cates[$apply->channel_id][] = $apply->purchase_cate;
+            $purchase_cate[] =  $apply->purchase_cate;
         }
+        if(count($purchase_cate) <>1){
+            throw new \Exception("请选择同一采购分类的申请单");
+        }
+
         $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->all();
         foreach ($group_apply_ids as $channel_id=>$apply_ids){
             foreach ($supplierIds as $supplierId){

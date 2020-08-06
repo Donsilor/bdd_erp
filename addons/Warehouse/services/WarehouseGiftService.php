@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Warehouse\common\models\WarehouseGiftBill;
+use common\enums\InputTypeEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -115,6 +118,98 @@ class WarehouseGiftService extends Service
             }
         }
         
+    }
+
+
+    /***
+     * 生成赠品出入库单
+     */
+    public function createBill($gift_bill_info){
+        $gift = WarehouseGift::find()->where(['id'=>$gift_bill_info['gift_id']])->one();
+        $gift->stock_num = $gift_bill_info['stock_num'];
+        if(false === $gift->save(true,['stock_num'])){
+            throw new \Exception($this->getError($gift));
+        }
+
+        $gift_bill = new WarehouseGiftBill();
+        $gift_bill->attributes = $gift_bill_info;
+        $gift_bill->creator_id = Yii::$app->user->identity->id;
+        $gift_bill->created_at = time();
+        $gift_bill->updated_at = time();
+        if(false === $gift_bill->save()){
+            throw new \Exception($this->getError($gift_bill));
+        }
+        return $gift_bill;
+    }
+
+
+
+
+
+
+    /**
+     * @param $model
+     * @return array
+     * 赠品字段映射
+     */
+    public function getMapping(){
+
+        $attr_list = array(
+            //材质
+            [
+                'attr_id' => AttrIdEnum::MATERIAL_TYPE,
+                'attr_field' => 'material_type',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0,
+
+            ],
+            //材质颜色
+            [
+                'attr_id' => AttrIdEnum::MATERIAL_COLOR,
+                'attr_field' => 'material_color',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0,
+
+            ],
+            //手寸(美)
+            [
+                'attr_id' => AttrIdEnum::FINGER,
+                'attr_field' => 'finger',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+
+            ],
+            //手寸(港)
+            [
+                'attr_id' => AttrIdEnum::PORT_NO,
+                'attr_field' => 'finger_hk',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+
+            ],
+            //链长
+            [
+                'attr_id' => AttrIdEnum::CHAIN_LENGTH,
+                'attr_field' => 'chain_length',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+            //主石类型
+            [
+                'attr_id' => AttrIdEnum::MAIN_STONE_TYPE,
+                'attr_field' => 'main_stone_type',
+                'input_type' => InputTypeEnum::INPUT_SELECT,
+                'is_require' => 0
+            ],
+            //主石数量
+            [
+                'attr_id' => AttrIdEnum::MAIN_STONE_NUM,
+                'attr_field' => 'main_stone_num',
+                'input_type' => InputTypeEnum::INPUT_TEXT,
+                'is_require' => 0
+            ],
+        );
+        return $attr_list;
     }
 
 }
