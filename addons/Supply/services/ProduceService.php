@@ -78,6 +78,7 @@ class ProduceService extends Service
     /**
      * 创建布产单
      * @return array
+     * @throws
      */
     public function createSyncProduce($goods, $attr_list)
     {
@@ -182,17 +183,20 @@ class ProduceService extends Service
     /**
      * 更新配料单
      * @param Produce $form
+     * @throws
      */
     public function updatePeiliao($form)
     {
         $attrValues = ArrayHelper::map($form->attrs ?? [], 'attr_id', 'attr_value');
         $this->createProduceGold($form, $attrValues);
         $this->createProduceStone($form, $attrValues);
+        $this->createProduceParts($form, $attrValues);
     }
 
     /**
      * 创建配料单
      * @param Produce $form
+     * @throws
      */
     private function createProduceGold($form, $attrValues)
     {
@@ -261,6 +265,7 @@ class ProduceService extends Service
     /**
      * 创建配石单
      * @param Produce $form
+     * @throws
      */
     private function createProduceStone($form, $attrValues)
     {
@@ -402,6 +407,7 @@ class ProduceService extends Service
     /**
      * 创建配件单
      * @param Produce $form
+     * @throws
      */
     private function createProduceParts($form, $attrValues)
     {
@@ -471,6 +477,8 @@ class ProduceService extends Service
     /**
      * 创建布产日志
      * @return array
+     * @throws
+     * @return
      */
     public function createProduceLog($log)
     {
@@ -489,6 +497,8 @@ class ProduceService extends Service
     /**
      * 批量更新布产单，配石状态
      * @param array $produce_sns
+     * @throws
+     * @return
      */
     public function autoPeishiStatus(array $produce_sns)
     {
@@ -503,6 +513,8 @@ class ProduceService extends Service
     /**
      * 批量更新布产单，配石状态
      * @param array $produce_sns
+     * @throws
+     * @return
      */
     public function autoPeiliaoStatus(array $produce_sns)
     {
@@ -514,5 +526,19 @@ class ProduceService extends Service
         return false;
     }
 
-
+    /**
+     * 批量更新布产单，配件状态
+     * @param array $produce_sns
+     * @throws
+     * @return
+     */
+    public function autoPeijianStatus(array $produce_sns)
+    {
+        if (!empty($produce_sns)) {
+            //同步更新布产单配件状态
+            $sql = "update " . Produce::tableName() . " p set peijian_status = (select min(pg.peijian_status) from " . ProduceParts::tableName() . " pg where pg.produce_sn=p.produce_sn) where p.produce_sn in('" . implode("','", $produce_sns) . "')";
+            return \Yii::$app->db->createCommand($sql)->execute();
+        }
+        return false;
+    }
 }

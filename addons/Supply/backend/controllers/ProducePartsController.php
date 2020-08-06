@@ -106,23 +106,23 @@ class ProducePartsController extends BaseController
     }
     
     /**
-     * 重置配料
+     * 重置配件
      */
     public function actionAjaxReset()
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         //单据校验
-        if($model->peiliao_status != PeiliaoStatusEnum::TO_LINGSHI) {
-            return $this->message('不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
+        if($model->peijian_status != PeiJianStatusEnum::TO_LINGJIAN) {
+            return $this->message('不是待配件状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try {
             $trans = \Yii::$app->trans->beginTransaction();
-            $model->peiliao_status = PeiliaoStatusEnum::IN_PEISHI;
+            $model->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model));
             }
-            Yii::$app->supplyService->produce->autoPeiliaoStatus([$model->produce_sn]);
+            Yii::$app->supplyService->produce->autoPeijianStatus([$model->produce_sn]);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
