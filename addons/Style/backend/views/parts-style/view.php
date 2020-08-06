@@ -56,10 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                                      <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                                  </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                     <td><?= $model->remark ?></td>
-                                 </tr>
                              </table>
                          </div>
                      </div>
@@ -97,8 +93,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"></td>
-                                     <td></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                     <td><?= $model->remark ?></td>
                                  </tr>
                              </table>
                          </div>
@@ -110,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
                 echo Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]);
             ?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
