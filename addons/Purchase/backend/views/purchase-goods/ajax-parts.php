@@ -88,3 +88,36 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+    var formId = 'purchasegoodsform-parts_info';
+
+    function fillStoneForm(i) {
+        var style_sn = $("#" + formId + "-" + i + "-style_sn").val();
+        if (style_sn != '') {
+            $.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-parts'])?>',
+                dataType: "json",
+                data: {
+                    'style_sn': style_sn,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {
+                        $("#" + formId + "-" + i + "-parts_name").val(data.data.parts_name);
+                        $("#" + formId + "-" + i + "-material_type").val(data.data.metal_type);
+                    }
+                }
+            });
+        }
+    }
+
+    $("#" + formId + "-0-style_sn").blur(function () {
+        fillStoneForm(0);
+    });
+    $("#" + formId + "-1-style_sn").blur(function () {
+        fillStoneForm(1);
+    });
+    $("#" + formId + "-2-style_sn").blur(function () {
+        fillStoneForm(2);
+    });
+</script>

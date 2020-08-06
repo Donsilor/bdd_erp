@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
+use addons\Style\common\models\PartsStyle;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
 use function MongoDB\BSON\toJSON;
@@ -409,5 +410,22 @@ class PurchaseGoodsController extends BaseController
             'model' => $model,
             'parts_list' => $parts_list??[],
         ]);
+    }
+
+    /**
+     * 查询配件款式信息
+     * @return array
+     */
+    public function actionAjaxGetParts()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $style_sn = \Yii::$app->request->get('style_sn');
+        $model = PartsStyle::find()->select(['parts_name','metal_type'])->where(['style_sn'=>$style_sn])->one();
+        $data = [
+            'parts_name' => $model->parts_name??"",
+            'metal_type' => $model->metal_type??"",
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }
