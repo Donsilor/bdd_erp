@@ -421,9 +421,10 @@ class PurchaseGoodsController extends BaseController
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $style_sn = \Yii::$app->request->get('style_sn');
-        $model = PartsStyle::find()->select(['parts_name','metal_type'])->where(['style_sn'=>$style_sn])->one();
+        $model = PartsStyle::find()->select(['parts_name','parts_type','metal_type'])->where(['style_sn'=>$style_sn])->one();
         $data = [
             'parts_name' => $model->parts_name??"",
+            'parts_type' => $model->parts_type??"",
             'metal_type' => $model->metal_type??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);

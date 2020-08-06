@@ -14,6 +14,8 @@ use Yii;
  * @property string $delivery_no 送件单号
  * @property string $from_order_sn 来源单号
  * @property int $from_type 来源类型
+ * @property string $style_sn 配件款号
+ * @property string $parts_name 配件名称
  * @property string $parts_type 配件类型
  * @property int $parts_num 配件数量
  * @property string $parts_weight 配件重量
@@ -57,9 +59,10 @@ class ProduceParts extends BaseModel
             [['produce_id', 'supplier_id', 'from_type', 'parts_num', 'caigou_time', 'songjian_time', 'peijian_time', 'peijian_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['parts_weight'], 'number'],
             [['created_at', 'updated_at'], 'required'],
-            [['produce_sn', 'delivery_no', 'from_order_sn', 'caigou_user', 'songjian_user', 'peijian_user', 'creator_name'], 'string', 'max' => 30],
+            [['produce_sn', 'delivery_no', 'from_order_sn', 'caigou_user', 'songjian_user', 'style_sn', 'peijian_user', 'creator_name'], 'string', 'max' => 30],
             [['parts_type', 'material_type', 'parts_shape', 'parts_color', 'parts_size', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
             [['parts_spec', 'remark', 'peijian_remark'], 'string', 'max' => 255],
+            [['parts_name'], 'string', 'max' => 100],
         ];
     }
 
@@ -76,6 +79,8 @@ class ProduceParts extends BaseModel
             'delivery_no' => '送件单号',
             'from_order_sn' => '来源单号',
             'from_type' => '来源类型',
+            'style_sn' => '配件款号',
+            'parts_name' => '配件名称',
             'parts_type' => '配件类型',
             'parts_num' => '配件数量',
             'parts_weight' => '配件重量',
