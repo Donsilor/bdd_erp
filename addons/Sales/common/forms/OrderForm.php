@@ -82,7 +82,7 @@ class OrderForm extends Order
     /**
      * 格式化客户信息
      */
-    public function buildCustomerInfo() 
+    public function buildCustomerInfo($attribute,$params) 
     {
         if($this->sale_channel_id == 3) {
             if($this->customer_email_2) {
