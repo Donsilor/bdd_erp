@@ -3,6 +3,7 @@
 namespace addons\Purchase\services;
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Supply\common\enums\PeijianTypeEnum;
 use common\helpers\SnHelper;
 use Yii;
 use common\helpers\Url;
@@ -145,11 +146,13 @@ class PurchaseService extends Service
             
             $peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
             $peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
-            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
+            $peijian_status = PeijianTypeEnum::getPeijianStatus($model->peijian_type);
+            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type) || PeijianTypeEnum::isPeijian($model->peijian_type)) {
                 $buchan_status = BuChanEnum::TO_PEILIAO;
             } else {
                 $buchan_status = BuChanEnum::TO_PRODUCTION;
             }
+            //$model = new PurchaseGoods();
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,                   
@@ -160,8 +163,11 @@ class PurchaseService extends Service
                     'style_sn' => $model->style_sn,
                     'peiliao_type'=>$model->peiliao_type,
                     'peishi_type'=>$model->peishi_type,
+                    'peijian_type'=>$model->peijian_type,
+                    'templet_type'=>$model->templet_type,
                     'peishi_status'=>$peishi_status,
                     'peiliao_status'=>$peiliao_status,
+                    'peijian_status'=>$peijian_status,
                     'bc_status' => $buchan_status,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
@@ -187,6 +193,7 @@ class PurchaseService extends Service
                         unset($goods['peiliao_type']);
                         unset($goods['peishi_status']);
                         unset($goods['peiliao_status']);
+                        unset($goods['peijian_status']);
                     }
                 }
             }
