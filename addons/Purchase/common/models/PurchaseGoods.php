@@ -90,11 +90,12 @@ class PurchaseGoods extends BaseModel
             [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type','peijian_type','templet_type','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price', 'main_stone_price','single_stone_weight', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','factory_total_price','company_total_price','parts_fee'], 'number'],
-            [['apply_info', 'parts_info'], 'string'],
+            [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
             [['product_size','goods_color','goods_image'], 'string', 'max' => 100],
             [['style_sn', 'qiban_sn','factory_mo'], 'string', 'max' => 30],
+            [['parts_info'], 'safe'],
         ];
     }
 
