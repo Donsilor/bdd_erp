@@ -34,7 +34,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function rules()
     {      
          $rules = [
-             [['peiliao_type','peishi_type'], 'required'],
+             [['peiliao_type','peishi_type', 'peijian_type', 'templet_type'], 'required'],
             [['attr_require'], 'required','isEmpty'=>function($value){
                 if(!empty($value)) {
                     foreach ($value as $k=>$v) {

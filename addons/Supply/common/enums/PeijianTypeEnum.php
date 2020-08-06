@@ -12,6 +12,8 @@ class PeijianTypeEnum extends BaseEnum
 {
     const None = 1;
     const PeiJian = 2;
+    const TwoPeiJian = 3;
+    const ThreePeiJian = 4;
     
     /**
      *
@@ -21,7 +23,9 @@ class PeijianTypeEnum extends BaseEnum
     {
         return [
                 self::None => "不需配件",
-                self::PeiJian => "需配件",
+                self::PeiJian => "一种配件",
+                self::TwoPeiJian => "二种配件",
+                self::ThreePeiJian => "三种配件",
         ];
     }
     /**
