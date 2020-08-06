@@ -3,6 +3,7 @@ namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\forms\OrderGiftForm;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
@@ -20,6 +21,7 @@ use addons\Style\common\models\Style;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseGift;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
@@ -27,6 +29,7 @@ use common\enums\StatusEnum;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
+use common\models\base\SearchModel;
 use common\traits\Curd;
 use Yii;
 
@@ -223,6 +226,105 @@ class OrderGoodsController extends BaseController
             'model' => $model,
         ]);
 
+    }
+
+
+    /****
+     * 选择赠品
+     */
+    public function actionSelectGift(){
+        $order_id = Yii::$app->request->get('order_id');
+        $searchModel = new SearchModel([
+            'model' => WarehouseGift::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => 5
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['>', 'gift_num', 0]);
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'order_id' => $order_id
+
+        ]);
+    }
+
+    /***
+     * 添加赠品
+     */
+    public function actionEditGift(){
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderGiftForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGiftForm();
+        if($model->isNewRecord){
+            $gift_id = Yii::$app->request->get('gift_id');
+            $search = Yii::$app->request->get('search');
+            $order_id = Yii::$app->request->get('order_id');
+            if($search && $gift_id) {
+                $gift_goods = WarehouseGift::find()->where(['id'=>$gift_id])->andWhere(['>','gift_num',0])->one();
+                if(empty($gift_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此赠品不存在或者没有库存', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = $gift_goods->style_sex;
+                $model->style_cate_id = $gift_goods->style_cate_id;
+                $model->product_type_id = $gift_goods->product_type_id;
+                $model->goods_num = 1;
+                $model->goods_name = $gift_goods->gift_name;
+                $model->is_stock = IsStockEnum::YES;
+                $model->goods_pay_price = $gift_goods->sale_price;
+                $model->style_sn = $gift_goods->style_sn;
+                $model->qiban_sn = '';
+                $model->goods_sn = $gift_goods->gift_sn;
+                $model->goods_image = Yii::$app->warehouseService->gift->getStyleImage($gift_goods);
+                $model->cert_id = '';
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = '';
+            }
+        }
+        //获取更改前赠品数量
+        $goods_num = $model->goods_num;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+
+                $num = bcsub($goods_num, $model->goods_num);
+                if($num != 0){
+                    Yii::$app->salesService->orderGoods->addGift($model,$num);
+                }
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
     }
 
 

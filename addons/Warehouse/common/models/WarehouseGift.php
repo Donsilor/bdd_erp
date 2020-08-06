@@ -94,7 +94,7 @@ class WarehouseGift extends BaseModel
             'gift_num' => '赠品库存',
             'gift_weight' => '赠品重量(g)',
             'gold_price' => '金价/g',
-            'cost_price' => '金价总额',
+            'cost_price' => '成本价',
             'sale_price' => '销售价',
             'supplier_id' => '供应商',
             'put_in_type' => '入库方式',

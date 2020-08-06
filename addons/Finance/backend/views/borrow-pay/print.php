@@ -45,6 +45,7 @@
 
 			.bold{
 				text-align: center;
+                font-weight: bold;
 			}
 
 			.height_4{
@@ -206,7 +207,7 @@
                 foreach ($flow_list as $k=> $flow_detail){
                     ?>
                     <tr>
-                        <td width="15%">
+                        <td width="15%" class="bold">
                             <div><?= $li[$k]?></div>
                         </td>
                         <td width="20%">
