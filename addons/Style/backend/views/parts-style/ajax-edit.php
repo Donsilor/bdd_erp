@@ -19,6 +19,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'style_sn')->textInput() ?>
+        <?= $form->field($model, 'parts_name')->textInput() ?>
         <div class="row">
             <div class="col-lg-6">
                 <?= $form->field($model, 'parts_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE),['prompt'=>'请选择']);?>

@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->style_sn ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('parts_name') ?>：</td>
+                                     <td><?= $model->parts_name ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('metal_type') ?>：</td>
                                      <td><?= \Yii::$app->attr->valueName($model->metal_type)??''?></td>
                                  </tr>

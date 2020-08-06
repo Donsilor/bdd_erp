@@ -62,6 +62,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'attribute' => 'parts_name',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                    return $model->parts_name??"";
+                            },
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'parts_name', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute' => 'parts_type',
                             'value' => function ($model){
                                 return Yii::$app->attr->valueName($model->parts_type);
