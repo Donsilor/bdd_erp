@@ -179,6 +179,7 @@ class PurchaseService extends Service
                     'supplier_id'=>$purchase->supplier_id,
                     'follower_id'=>$purchase->follower_id,
                     'factory_mo'=>$model->factory_mo,
+                    'parts_info'=>$model->parts_info,
                     'factory_distribute_time' => time()
             ]; 
             if($model->produce_id && $model->produce){

@@ -71,12 +71,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                    'label' => '配件信息(配件编号/配件类型/配件重量)',
+                                    'label' => '配件信息(配件编号/配件类型/配件数量/配件重量)',
                                     'value' => function($model){
                                             $str = '';
                                             foreach ($model->goldGoods ?? [] as $goldGoods){
                                                 $gold_type = Yii::$app->attr->valueName($goldGoods->gold->gold_type ??'');
-                                                $str .= $goldGoods->gold_sn.'/'.$gold_type.'/'.$goldGoods->gold_weight."g<br/>";
+                                                $str .= $goldGoods->gold_sn.'/'.$gold_type.'/'.$goldGoods->gold_num.'/'.$goldGoods->gold_weight."g<br/>";
                                             }
                                             return $str;
                                     },

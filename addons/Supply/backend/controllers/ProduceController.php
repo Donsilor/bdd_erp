@@ -333,7 +333,7 @@ class ProduceController extends BaseController
     public function actionApplyPeiliao(){
         
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $model = $this->findModel($id) ?? new Produce();
         
         try{
             

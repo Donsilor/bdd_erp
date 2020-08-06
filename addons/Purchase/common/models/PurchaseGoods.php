@@ -68,6 +68,7 @@ use addons\Supply\common\models\Produce;
  * @property string $cert_fee
  * @property int $apply_detail_id 采购申请单明细ID
  * @property int $order_detail_id 客订单明细ID
+ * @property string $factory_mo 模号
  */
 class PurchaseGoods extends BaseModel
 {

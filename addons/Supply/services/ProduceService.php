@@ -14,6 +14,7 @@ use addons\Supply\common\models\Factory;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceLog;
+use addons\Supply\common\models\ProduceParts;
 use addons\Supply\common\models\ProduceShipment;
 use common\components\Service;
 use common\enums\StatusEnum;
@@ -151,6 +152,7 @@ class ProduceService extends Service
     /**
      * 创建配料单
      * @param Produce $form
+     * @throws
      */
     public function createPeiliao($form)
     {
@@ -167,6 +169,10 @@ class ProduceService extends Service
         if ($form->peishi_status == PeishiStatusEnum::PENDING) {
             $form->peishi_status = PeishiStatusEnum::IN_PEISHI;
             $this->createProduceStone($form, $attrValues);
+        }
+        if ($form->peijian_status == PeijianStatusEnum::PENDING) {
+            $form->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
+            $this->createProduceParts($form, $attrValues);
         }
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
@@ -389,6 +395,75 @@ class ProduceService extends Service
             'bc_status' => $form->bc_status,
             'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
             'log_msg' => $log_msg
+        ];
+        $this->createProduceLog($log);
+    }
+
+    /**
+     * 创建配件单
+     * @param Produce $form
+     */
+    private function createProduceParts($form, $attrValues)
+    {
+        $is_new = false;
+        $reset = false;
+        $parts = [
+            'supplier_id' => $form->supplier_id,
+            'material_type' => $attrValues[AttrIdEnum::MATERIAL] ?? '',
+            'parts_num' => $form->goods_num,
+            'parts_weight' => $form->goods_num * ($attrValues[AttrIdEnum::JINZHONG] ?? 0),
+        ];
+        $model = ProduceParts::find()->where(['produce_id' => $form->id])->one();
+        if (!$model) {
+            $model = new ProduceParts();
+            $model->attributes = $parts;
+            $model->produce_id = $form->id;
+            $model->produce_sn = $form->produce_sn;
+            $model->from_order_sn = $form->from_order_sn;
+            $model->from_type = $form->from_type;
+            $model->peijian_status = ($form->peijian_status == PeijianStatusEnum::NONE) ? PeijianStatusEnum::NONE : PeijianStatusEnum::IN_PEIJIAN;
+            $is_new = true;
+        } else {
+            if ($model->peijian_status == PeijianStatusEnum::HAS_LINGJIAN) {
+                //已领料禁止更新
+                return;
+            }
+            $fields = ['parts_type', 'parts_num', 'parts_weight'];
+            //如果有重要字段变动，配件状态还原成 配件中
+            if ($form->peijian_status == PeijianStatusEnum::NONE) {
+                $model->peijian_status = PeijianStatusEnum::NONE;
+                $form->peijian_status = PeijianStatusEnum::NONE;
+                $reset = true;
+            } else {
+                foreach ($fields as $field) {
+                    if ($model->{$field} != $parts[$field]) {
+                        $model->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
+                        $form->peijian_status = PeijianStatusEnum::IN_PEIJIAN;
+                        $reset = true;
+                        break;
+                    }
+                }
+            }
+            $model->attributes = ArrayHelper::merge($model->attributes, $parts);
+        }
+        if (false === $model->save()) {
+            throw new \Exception($this->getError($model));
+        }
+        //重置配件单
+        if ($reset === true) {
+            if (false === $form->save(true, ['id', 'peijian_status'])) {
+                throw new \Exception($this->getError($form));
+            }
+        }
+
+        //日志
+        $log = [
+            'produce_id' => $form->id,
+            'produce_sn' => $form->produce_sn,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'bc_status' => $form->bc_status,
+            'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
+            'log_msg' => ($is_new ? "生成" : "更新") . "配件单:" . $model->id,
         ];
         $this->createProduceLog($log);
     }

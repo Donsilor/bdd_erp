@@ -88,7 +88,7 @@ class ProduceParts extends BaseModel
             'parts_spec' => '配件规格',
             'caigou_time' => '采购时间',
             'songjian_time' => '已送生产部时间',
-            'peijian_time' => '配件中时间',
+            'peijian_time' => '配件最新时间',
             'caigou_user' => '采购人',
             'songjian_user' => '送件人',
             'remark' => '备注',

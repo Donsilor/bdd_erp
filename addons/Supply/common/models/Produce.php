@@ -50,6 +50,7 @@ use common\models\backend\Member;
  * @property int $factory_distribute_time 分配工厂时间
  * @property int $factory_delivery_time 工厂交货时间
  * @property int $standard_delivery_time 标准出厂时间
+ * @property string $parts_info 配件信息
  */
 class Produce extends BaseModel
 {
@@ -73,6 +74,7 @@ class Produce extends BaseModel
             [['customer'], 'string', 'max' => 50],
             [['follower_name','factory_mo'], 'string', 'max' => 30],
             [['inlay_type'], 'string', 'max' => 10],
+            [['parts_info'], 'safe'],
         ];
     }
 
@@ -124,6 +126,7 @@ class Produce extends BaseModel
             'factory_distribute_time' => '分配工厂时间',
             'factory_delivery_time' => '工厂交货时间',
             'standard_delivery_time' => '标准出厂时间',
+            'parts_info'=> '配件信息',
         ];
     }
 
