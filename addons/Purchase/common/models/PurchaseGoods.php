@@ -23,6 +23,8 @@ use addons\Supply\common\models\Produce;
  * @property int $qiban_type 起版类型 0非起版 1有款起版 2无款起版
  * @property int $peiliao_type 配料类型
  * @property int $peishi_type 配石类型
+ * @property int $peijian_type 配件类型
+ * @property int $templet_type 样板类型
  * @property int $style_channel_id
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
@@ -84,7 +86,7 @@ class PurchaseGoods extends BaseModel
         return [
             [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price'], 'required'],
 
-            [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type', 'product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type','peijian_type','templet_type','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id', 'is_apply', 'status', 'created_at', 'updated_at'], 'integer'],
             [['cost_price', 'main_stone_price','single_stone_weight', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','factory_total_price','company_total_price','parts_fee'], 'number'],
             [['apply_info'], 'string'],
@@ -112,6 +114,8 @@ class PurchaseGoods extends BaseModel
             'qiban_type' => '起版类型',
             'peiliao_type' => '配料类型',
             'peishi_type' => '配石类型（公司）',
+            'peijian_type' => '配件类型',
+            'templet_type' => '样板类型',
             'product_type_id' => '产品线',
             'style_channel_id' => '所属渠道',
             'style_cate_id' => '款式分类',
