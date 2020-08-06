@@ -154,7 +154,7 @@ function fillCustomerFormByEmail(){
                       	   $("#"+formId+"-customer_level").val(data.data.level).attr("readonly",false);
                            $("#"+formId+"-customer_source").val(data.data.source_id).attr("readonly",false);
                        }else{
-                    	   rfError("客户邮箱不存在，请先添加客户");
+                    	   //rfError("客户邮箱不存在，请先添加客户");
                        }
                     }
                 }

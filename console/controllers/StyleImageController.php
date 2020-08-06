@@ -27,7 +27,7 @@ class StyleImageController extends Controller
         $imageUrlDir = 'https://cdn-erp.bddco.cn/images/'.date("Y/m/d");
         FileHelper::createDirectory($newDir);
         
-        $list = FileHelper::findFiles($dir."/docs/styleImages01/");
+        $list = FileHelper::findFiles($dir."/upload/styleImages01/");
         $style_image_list = [];
         foreach ($list as $file){
             if(!preg_match("/\.db$/is", $file)){
@@ -83,10 +83,10 @@ class StyleImageController extends Controller
         if(!$style) {
             console::output($style_sn.": [{$style_sn}]款号不存在");
             return ;
-        }else if($style->style_image) {
+        }/* else if($style->style_image) {
             console::output($style_sn.": [{$style_sn}]款号已导入过图片");
             return ;
-        }
+        } */
         foreach ($image_list as $image) {
             $model = StyleImages::find()->where(['style_id'=>$style->id,'image'=>$image])->one();
             if(!$model) {
