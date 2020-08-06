@@ -181,9 +181,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'peijian_type',
-                                'value' => function($model){
+                                'value' => function($model) use ($purchase){
                                     $button = "";
-                                    if($model->peijian_type>1){
+                                    if($model->peijian_type>1 && $purchase->purchase_status == PurchaseStatusEnum::SAVE){
                                         $button = Html::edit(['ajax-parts','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑配件',[
                                                 'class' => 'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',

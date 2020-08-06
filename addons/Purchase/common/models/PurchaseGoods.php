@@ -50,6 +50,7 @@ use addons\Supply\common\models\Produce;
  * @property string $gold_amount 金料额
  * @property string $parts_info 配件信息
  * @property string $parts_weight 配件重量
+ * @property string $parts_remark 配件备注
  * @property string $jiagong_fee 加工费/件
  * @property string $xiangqian_fee 镶石费/件
  * @property string $gong_fee 工费总额/件(jiagong+xiangqian)
@@ -90,7 +91,7 @@ class PurchaseGoods extends BaseModel
             [['cost_price', 'main_stone_price','single_stone_weight', 'second_stone_price1','second_stone_price2', 'gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','factory_total_price','company_total_price','parts_fee'], 'number'],
             [['apply_info', 'parts_info'], 'string'],
-            [['goods_name', 'remark', 'stone_info'], 'string', 'max' => 255],
+            [['goods_name', 'remark', 'stone_info', 'parts_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
             [['product_size','goods_color','goods_image'], 'string', 'max' => 100],
             [['style_sn', 'qiban_sn','factory_mo'], 'string', 'max' => 30],
@@ -139,6 +140,7 @@ class PurchaseGoods extends BaseModel
             'gold_price' => '金价/g',
             'gold_cost_price' => '单件银额/件',
             'parts_info' => '配件信息',
+            'parts_remark' => '配件备注',
             'jiagong_fee' => '金属加工费/件',
             'xiangqian_fee' => '镶石费/件',
             'gong_fee' => '工费总额/件',
