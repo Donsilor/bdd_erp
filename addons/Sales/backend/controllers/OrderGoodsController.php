@@ -93,8 +93,66 @@ class OrderGoodsController extends BaseController
         ]);
     }
 
+    /****
+     * 选择现货
+     */
+    public function actionSelectStock(){
+        $order_id = Yii::$app->request->get('order_id');
 
-    public function actionEditStock(){
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if (Yii::$app->request->post()) {
+            $stock_id = Yii::$app->request->post('stock_id');
+            if($stock_id == null){
+                return ResultHelper::json(422, '请选择');
+            }
+            $warehouse_goods = WarehouseGoods::find()->where(['id'=>$stock_id])->andWhere(['=','goods_status',GoodsStatusEnum::IN_STOCK])->one();
+            $model->goods_num = 1;
+            $model->order_id = $order_id;
+            $model->goods_sn = $warehouse_goods->goods_id;
+            $model->goods_id = $warehouse_goods->goods_id;
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model = Yii::$app->salesService->orderGoods->addStock($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        $searchModel = new SearchModel([
+            'model' => WarehouseGoods::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => 5
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=', 'goods_status', GoodsStatusEnum::IN_STOCK]);
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'order_id' => $order_id,
+            'model' =>$model
+
+        ]);
+    }
+
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     *备份
+     */
+    public function actionEditStockBackups(){
 
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
@@ -243,7 +301,7 @@ class OrderGoodsController extends BaseController
         if (Yii::$app->request->post()) {
             $gift_id = Yii::$app->request->post('gift_id');
             if($gift_id == null){
-                return ResultHelper::json(422, '请选择裸钻');
+                return ResultHelper::json(422, '请选择赠品');
             }
             $gift_goods = WarehouseGift::find()->where(['id'=>$gift_id])->andWhere(['>','gift_num',0])->one();
             $model->goods_num = 1;
