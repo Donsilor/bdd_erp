@@ -22,9 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true]) ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'produce_sn')->textInput(['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
@@ -253,6 +250,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">费用信息</h5>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_cost')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'markup_rate')->textInput() ?>

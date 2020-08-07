@@ -94,10 +94,15 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
             $this->language = $this->order->language ?? null;
         }
         //更新地区名称
-        $this->country_name = Yii::$app->area->name($this->country_id,$this->language);
-        $this->province_name = Yii::$app->area->name($this->province_id,$this->language);
-        $this->city_name = Yii::$app->area->name($this->city_id,$this->language);
-
+        if($this->country_id > 0) {
+            $this->country_name = Yii::$app->area->name($this->country_id,$this->language);
+        }
+        if($this->province_id > 0) {
+            $this->province_name = Yii::$app->area->name($this->province_id,$this->language);
+        }
+        if($this->city_id > 0) {
+            $this->city_name = Yii::$app->area->name($this->city_id,$this->language);
+        }
         return parent::beforeSave($insert);
     }
     

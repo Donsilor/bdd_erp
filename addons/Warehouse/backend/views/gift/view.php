@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('main_stone_type') ?>：</td>
-                                    <td><?= $model->main_stone_type ?></td>
+                                    <td><?= Yii::$app->attr->valueName($model->main_stone_type)??"" ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>

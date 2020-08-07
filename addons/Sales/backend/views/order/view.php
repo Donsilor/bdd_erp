@@ -167,7 +167,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset' => '20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::create(['order-goods/edit-diamond', 'order_id' => $model->id], '添加裸钻', [
+                        echo Html::create(['order-goods/edit-diamond', 'order_id' => $model->id], '裸钻商品', [
+                            'class' => 'btn btn-primary btn-xs openIframe',
+                            'data-width' => '90%',
+                            'data-height' => '90%',
+                            'data-offset' => '20px',
+                        ]);
+                        echo '&nbsp;';
+                        echo Html::create(['order-goods/select-gift', 'order_id' => $model->id], '赠品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '90%',
                             'data-height' => '90%',
@@ -219,6 +226,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'attribute'=>'goods_id',
                                             'value' => 'goods_id',
                                             'headerOptions' => ['class' => 'col-md-1'],
+                                    ],
+                                    [
+                                        'attribute'=>'goods_sn',
+                                        'value' => 'goods_sn',
+                                        'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
                                         'attribute'=>'style_sn',
@@ -446,6 +458,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
                                                     if($model->product_type_id == 1){
                                                         return Html::edit(['order-goods/edit-diamond','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    }elseif ($model->is_gift == \addons\Sales\common\enums\IsGiftEnum::YES){
+                                                        return Html::edit(['order-goods/edit-gift','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }elseif($model->is_stock == IsStockEnum::NO){
                                                         return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }else{

@@ -251,9 +251,10 @@ class StoneBillSsController extends StoneBillController
 
 
     private function getData($ids){
-        $select = ['wg.*','w.bill_no','w.to_warehouse_id'];
+        $select = ['wg.*','w.bill_no','w.to_warehouse_id', 'ps.produce_sn'];
         $query = WarehouseStoneBillSsForm::find()->alias('w')
             ->leftJoin(WarehouseStoneBillGoods::tableName()." wg",'w.id=wg.bill_id')
+            ->leftJoin(ProduceStone::tableName()." ps", 'ps.id=wg.source_detail_id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
@@ -268,12 +269,16 @@ class StoneBillSsController extends StoneBillController
             $clarity = \Yii::$app->attr->valueName($list['clarity']);
             $cut = $list['carat'];
             $color = \Yii::$app->attr->valueName($list['color']);
+            $symmetry = \Yii::$app->attr->valueName($list['symmetry']);
+            $polish = \Yii::$app->attr->valueName($list['polish']);
+            $fluorescence = \Yii::$app->attr->valueName($list['fluorescence']);
+            $list['stone_colour'] = \Yii::$app->attr->valueName($list['stone_colour']);
             $list['color'] = $color;
             $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
-            $list['spec'] = $color.'/'.$clarity.'/'
-                .$cut.'/'.$list['carat'];
+            $list['spec'] = $color.'/'.$clarity.'/'.$cut.'/'.$symmetry.'/'.$polish.'/'.$fluorescence;
             $list['stone_sum_price'] = $list['stone_price'] * $list['stone_weight'];
             $total['stone_num_count'] += $list['stone_num'];
+            $total['stone_weight_count'] += $list['stone_weight'];
             $total['stone_sum_price_count'] += $list['stone_sum_price'];
         }
         return [$lists,$total];

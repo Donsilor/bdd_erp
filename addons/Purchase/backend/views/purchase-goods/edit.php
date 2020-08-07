@@ -8,6 +8,8 @@ use addons\Supply\common\enums\PeiliaoTypeEnum;
 use addons\Style\common\enums\AttrModuleEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Supply\common\enums\PeishiTypeEnum;
+use addons\Supply\common\enums\PeijianTypeEnum;
+use addons\Supply\common\enums\TempletTypeEnum;
 
 $this->title = $model->isNewRecord ? '创建' : '编辑';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -60,14 +62,20 @@ $this->params['breadcrumbs'][] = $this->title;
             			 	<?= $form->field($model, 'cost_price')->textInput() ?>
             			 </div> 
         			 </div>
-					<div class="row">
-						 <div class="col-lg-4">
-                            <?= $form->field($model, 'peishi_type')->dropDownList(PeishiTypeEnum::getMap(),['prompt'=>'请选择','disabled'=>$model->is_inlay == \addons\Style\common\enums\InlayEnum::No]) ?>
-            			 </div>
-            			 <div class="col-lg-4">
-                            <?= $form->field($model, 'peiliao_type')->dropDownList(PeiliaoTypeEnum::getMap(),['prompt'=>'请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?> 
-            			 </div>            			 
-        			 </div>
+                     <div class="row">
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'peishi_type')->dropDownList(PeishiTypeEnum::getMap(), ['prompt' => '请选择', 'disabled' => $model->is_inlay == \addons\Style\common\enums\InlayEnum::No]) ?>
+                         </div>
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'peiliao_type')->dropDownList(PeiliaoTypeEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                         </div>
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'peijian_type')->dropDownList(PeijianTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                         </div>
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'templet_type')->dropDownList(TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                         </div>
+                     </div>
 					<div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
                     </div>
@@ -231,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'stone_info')->textarea() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'parts_info')->textarea() ?>
+                            <?= $form->field($model, 'parts_remark')->textarea() ?>
                         </div>
                          <div class="col-lg-4">
                             <?= $form->field($model, 'remark')->textarea() ?>

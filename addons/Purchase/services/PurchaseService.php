@@ -2,6 +2,9 @@
 
 namespace addons\Purchase\services;
 
+use addons\Style\common\enums\LogTypeEnum;
+use addons\Supply\common\enums\PeijianTypeEnum;
+use common\helpers\SnHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -75,28 +78,45 @@ class PurchaseService extends Service
      */
     public function createPurchase($info, $goods_list)
     {
-         $purchase = new Purchase();
-         $purchase->attributes = $info;
-         if(false === $purchase->save()){
-             throw new \Exception($this->getError($purchase));
-         }
-         
-         foreach ($goods_list as $goods) {
-             $purchaseGoods = new PurchaseGoods();
-             $purchaseGoods->attributes = $goods;
-             if(false === $purchaseGoods->save()) {
-                 throw new \Exception($this->getError($purchaseGoods));
-             }
-             foreach ($goods['goods_attrs'] ?? [] as $attr) {
-                 $goodsAttr = new PurchaseGoodsAttribute();
-                 $goodsAttr->attributes = $attr;
-                 if(false === $goodsAttr->save()) {
-                     throw new \Exception($this->getError($goodsAttr));
-                 }
-             }
-         }
-         
-         return $purchase;
+            $purchase = new Purchase();
+            $purchase->attributes = $info;
+            $purchase->purchase_sn = SnHelper::createPurchaseSn();
+            $purchase->creator_id  = \Yii::$app->user->identity->id ?? 0;
+            $purchase->created_at  = time();
+
+            if(false === $purchase->save()){
+                throw new \Exception($this->getError($purchase));
+            }
+
+            //日志
+            $log = [
+                'purchase_id' => $purchase->id,
+                'purchase_sn' => $purchase->purchase_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => "采购单",
+                'log_msg' => "采购申请单同步创建采购单"
+            ];
+            Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log);
+
+            foreach ($goods_list as $goods) {
+                $purchaseGoods = new PurchaseGoods();
+                $purchaseGoods->attributes = $goods;
+                $purchaseGoods->purchase_id = $purchase->id;
+                if(false === $purchaseGoods->save()) {
+                    throw new \Exception($this->getError($purchaseGoods));
+                }
+                foreach ($goods['goods_attrs'] ?? [] as $attr) {
+                    $goodsAttr = new PurchaseGoodsAttribute();
+                    $goodsAttr->attributes = $attr;
+                    $goodsAttr->id = $purchaseGoods->id;
+                    if(false === $goodsAttr->save()) {
+                        throw new \Exception($this->getError($goodsAttr));
+                    }
+                }
+            }
+            return $purchase;
+
+
     }
     
     /**
@@ -126,11 +146,13 @@ class PurchaseService extends Service
             
             $peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
             $peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
-            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type)) {
+            $peijian_status = PeijianTypeEnum::getPeijianStatus($model->peijian_type);
+            if(PeishiTypeEnum::isPeishi($model->peishi_type) || PeiliaoTypeEnum::isPeiliao($model->peiliao_type) || PeijianTypeEnum::isPeijian($model->peijian_type)) {
                 $buchan_status = BuChanEnum::TO_PEILIAO;
             } else {
                 $buchan_status = BuChanEnum::TO_PRODUCTION;
             }
+            //$model = new PurchaseGoods();
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,                   
@@ -141,8 +163,11 @@ class PurchaseService extends Service
                     'style_sn' => $model->style_sn,
                     'peiliao_type'=>$model->peiliao_type,
                     'peishi_type'=>$model->peishi_type,
+                    'peijian_type'=>$model->peijian_type,
+                    'templet_type'=>$model->templet_type,
                     'peishi_status'=>$peishi_status,
                     'peiliao_status'=>$peiliao_status,
+                    'peijian_status'=>$peijian_status,
                     'bc_status' => $buchan_status,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
@@ -154,6 +179,7 @@ class PurchaseService extends Service
                     'supplier_id'=>$purchase->supplier_id,
                     'follower_id'=>$purchase->follower_id,
                     'factory_mo'=>$model->factory_mo,
+                    'parts_info'=>$model->parts_info,
                     'factory_distribute_time' => time()
             ]; 
             if($model->produce_id && $model->produce){
@@ -168,6 +194,7 @@ class PurchaseService extends Service
                         unset($goods['peiliao_type']);
                         unset($goods['peishi_status']);
                         unset($goods['peiliao_status']);
+                        unset($goods['peijian_status']);
                     }
                 }
             }

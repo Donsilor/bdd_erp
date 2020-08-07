@@ -1,8 +1,10 @@
 <?php
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\IsGiftEnum;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\forms\OrderGiftForm;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\StockGoodsForm;
 use addons\Sales\common\models\Order;
@@ -20,6 +22,7 @@ use addons\Style\common\models\Style;
 use addons\Supply\common\enums\BuChanEnum;
 use addons\Supply\common\enums\FromTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseGift;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
@@ -27,6 +30,7 @@ use common\enums\StatusEnum;
 use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use common\helpers\Url;
+use common\models\base\SearchModel;
 use common\traits\Curd;
 use Yii;
 
@@ -226,6 +230,105 @@ class OrderGoodsController extends BaseController
     }
 
 
+    /****
+     * 选择赠品
+     */
+    public function actionSelectGift(){
+        $order_id = Yii::$app->request->get('order_id');
+
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderGiftForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGiftForm();
+        if (Yii::$app->request->post()) {
+            $gift_id = Yii::$app->request->post('gift_id');
+            if($gift_id == null){
+                return ResultHelper::json(422, '请选择裸钻');
+            }
+            $gift_goods = WarehouseGift::find()->where(['id'=>$gift_id])->andWhere(['>','gift_num',0])->one();
+            $model->goods_num = 1;
+            $model->order_id = $order_id;
+            $model->goods_sn = $gift_goods->gift_sn;
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                $num = bcsub(0, $model->goods_num);
+                $model = Yii::$app->salesService->orderGoods->addGift($model,$num);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        $searchModel = new SearchModel([
+            'model' => WarehouseGift::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => 5
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['>', 'gift_num', 0]);
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'order_id' => $order_id,
+            'model' =>$model
+
+        ]);
+    }
+
+    /***
+     * 添加赠品
+     */
+    public function actionEditGift(){
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderGiftForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGiftForm();
+
+        if($model->isNewRecord){
+            $gift_id = Yii::$app->request->get('gift_id');
+            $order_id = Yii::$app->request->get('order_id');
+            $model->goods_num = 1;
+            $model->order_id = $order_id;
+            $model->gift_id = $gift_id;
+        }
+        //获取更改前赠品数量
+        $goods_num = $model->goods_num;
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                $num = bcsub($goods_num, $model->goods_num);
+                $model = Yii::$app->salesService->orderGoods->addGift($model,$num);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
     /**
      * 删除
      *
@@ -247,7 +350,13 @@ class OrderGoodsController extends BaseController
                 throw new \Exception("订单已审核,不允许删除",422);
             }
             $model = $this->findModel($id);
-            if($model->is_stock == IsStockEnum::YES){
+            if($model->product_type_id == 1){
+                //裸钻
+                Yii::$app->salesService->orderGoods->delDiamond($model);
+            }elseif ($model->is_gift == IsGiftEnum::YES){
+                //赠品
+                Yii::$app->salesService->orderGoods->delGift($model);
+            }elseif($model->is_stock == IsStockEnum::YES){
                 //现货解绑
                 Yii::$app->salesService->orderGoods->toUntie($model);
             }

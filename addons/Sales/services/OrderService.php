@@ -2,7 +2,7 @@
 
 namespace addons\Sales\services;
 
-use addons\Purchase\common\enums\ApplyStatusEnum;
+use addons\Purchase\common\enums\PurchaseCateEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\OrderGoodsAttribute;
@@ -15,15 +15,14 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderAddress;
-use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
-use addons\Supply\common\enums\FromTypeEnum;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Style\common\models\Style;
 use addons\Finance\common\models\OrderPay;
 use common\helpers\SnHelper;
-use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\PayStatusEnum;
+use common\enums\LogTypeEnum;
+use addons\Sales\common\enums\OrderFromEnum;
 
 /**
  * Class SaleChannelService
@@ -53,10 +52,9 @@ class OrderService extends Service
         if(false == $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        $isNewOrder = $form->isNewRecord;
         //1.创建订单
         $order = clone $form;
-        $order->creator_id  = \Yii::$app->user->identity->id;
-        $order->order_time = time();
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }
@@ -69,10 +67,11 @@ class OrderService extends Service
             $customer->email = $order->customer_email;
             $customer->channel_id = $order->sale_channel_id;
             $customer->level = $form->customer_level;
-            $customer->source_id = $form->customer_source;
+            $customer->source_id = $form->customer_source;            
             if(false == $customer->save()) {
                 throw new \Exception("创建用户失败：".$this->getError($customer));
             }
+            \Yii::$app->salesService->customer->createCustomerNo($customer,true);
         }else{
             //更新用户信息
             $customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
@@ -92,7 +91,7 @@ class OrderService extends Service
             throw new \Exception($this->getError($order));
         }
         //3.创建订单金额
-        if($form->isNewRecord){
+        if($isNewOrder === true){
             $account = new OrderAccount();
             $account->order_id = $order->id;
             $account->currency = $order->currency;
@@ -121,6 +120,19 @@ class OrderService extends Service
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }
 
+        //创建订单日志
+        if($isNewOrder === true) {
+            $log = [
+                    'order_id' => $order->id,
+                    'order_sn' => $order->order_sn,
+                    'order_status' => $order->order_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '创建订单',
+                    'log_msg' => "创建订单, 订单号:".$order->order_sn
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
+        }
         return $order;        
     }
     /**
@@ -140,10 +152,10 @@ class OrderService extends Service
             throw new \Exception("orderInfo->out_trade_no 不能为空");
         }
         //1.同步订单
-        $is_new = false;
+        $isNewOrder = false;
         $order = Order::find()->where(['out_trade_no'=>$orderInfo['out_trade_no']])->one();
         if(!$order) {
-            $is_new = true;
+            $isNewOrder = true;
             $order = new Order();
         }
         $order->attributes = $orderInfo;
@@ -181,7 +193,7 @@ class OrderService extends Service
         $order->pay_sn = $orderPay->pay_sn;//点款单号
         
         //4.同步订单商品明细
-        if($is_new === true) {
+        if($isNewOrder === true) {
             foreach ($goodsList as $goodsInfo) {
                 $style_sn = $goodsInfo['style_sn'] ?? '';
                 $style = Style::find()->where(['style_sn'=>$style_sn])->one();
@@ -222,6 +234,7 @@ class OrderService extends Service
             if(false == $customer->save()) {
                 throw new \Exception("创建用户失败：".$this->getError($customer));
             }
+            \Yii::$app->salesService->customer->createCustomerNo($customer,true);
         }else{
             //更新用户信息
             //$customer->realname = $customer->realname ? $customer->realname : $order->customer_name;
@@ -252,6 +265,19 @@ class OrderService extends Service
         }  
         //7.同步发票
         
+        //创建订单日志
+        if($isNewOrder === true) {
+            $log = [
+                    'order_id' => $order->id,
+                    'order_sn' => $order->order_sn,
+                    'order_status' => $order->order_status,
+                    'log_type' => LogTypeEnum::SYSTEM,
+                    'log_time' => time(),
+                    'log_module' => '外部订单同步',
+                    'log_msg' => "同步创建订单,订单号:".$order->order_sn.', 同步来源：'.OrderFromEnum::getValue($order->order_from).', 外部订单号:'.$order->out_trade_no
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
+        }
         
         return $order;        
     }
@@ -306,6 +332,7 @@ class OrderService extends Service
 
         //采购申请单头
         $applyInfo['order_sn'] = $order->order_sn;
+        $applyInfo['purchase_cate'] = PurchaseCateEnum::ORDER;
         $applyInfo['channel_id'] = $order->sale_channel_id;
         //同步采购申请单
         $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);

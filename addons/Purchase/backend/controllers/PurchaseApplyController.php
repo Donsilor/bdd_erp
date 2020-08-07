@@ -141,7 +141,7 @@ class PurchaseApplyController extends BaseController
                             'apply_id' => $model->id,
                             'apply_sn' => $model->apply_sn,
                             'log_type' => LogTypeEnum::ARTIFICIAL,
-                            'log_module' => "创建单据",
+                            'log_module' => "手动创建单据",
                             'log_msg' => "创建采购申请单,单号：".$model->apply_sn
                     ];
                     Yii::$app->purchaseService->apply->createApplyLog($log);
@@ -178,10 +178,8 @@ class PurchaseApplyController extends BaseController
             $trans = \Yii::$app->trans->beginTransaction();
             //批量创建采购单
             Yii::$app->purchaseService->apply->createPurchase($ids);
-            $trans->rollback();
-            //$trans->commit();
-            Yii::$app->getSession()->setFlash('success','保存成功');
-            return resultesultHelper::json(200,"保存成功");
+            $trans->commit();
+            return ResultHelper::json(200,"保存成功");
         } catch (\Exception $e){
             $trans->rollback();
             return ResultHelper::json(422,$e->getMessage());

@@ -698,6 +698,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
                                     'class' => 'form-control',
@@ -707,6 +710,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_price',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_price', [
                                     'class' => 'form-control',
@@ -1012,6 +1018,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'gong_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('gong_fee', $model->gong_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gong_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
                                     'class' => 'form-control',
@@ -1021,6 +1030,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'bukou_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
                                     'class' => 'form-control',
@@ -1030,6 +1042,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'xianqian_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
                                     'class' => 'form-control',
@@ -1039,6 +1054,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'cert_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('cert_fee', $model->cert_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
                                     'class' => 'form-control',
@@ -1048,6 +1066,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'markup_rate',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('markup_rate', $model->markup_rate, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'markup_rate'],
                                 'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
                                     'class' => 'form-control',
@@ -1057,6 +1078,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'fense_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
                                     'class' => 'form-control',
@@ -1066,6 +1090,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'biaomiangongyi_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
                                     'class' => 'form-control',

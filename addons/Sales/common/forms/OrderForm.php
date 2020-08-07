@@ -7,6 +7,7 @@ use Yii;
 use common\helpers\ArrayHelper;
 use addons\Sales\common\models\Order;
 use common\helpers\RegularHelper;
+use addons\Sales\common\models\Customer;
 
 /**
  * 订单 Form
@@ -31,7 +32,7 @@ class OrderForm extends Order
         $rules = [
                 [['pay_type'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id != 3 && $value == '') {
+                    if($this->sale_channel_id != 3 && $value !== null && empty($value)) {
                         return true;//提示 为空 错误
                     }
                     return false;//不验证
@@ -44,7 +45,7 @@ class OrderForm extends Order
                 }"
                 ],
                 [['customer_email_2'],'required','isEmpty'=>function($value){
-                    if($this->sale_channel_id == 3 && $value == '') {
+                    if($this->sale_channel_id == 3 && $value !== null && empty($value)) {
                         return true;
                     }
                     return false;
@@ -78,10 +79,18 @@ class OrderForm extends Order
                 'customer_level' => '客户级别',
         ]);
     }
-    
-    public function buildCustomerInfo() 
+    /**
+     * 格式化客户信息
+     */
+    public function buildCustomerInfo($attribute,$params) 
     {
         if($this->sale_channel_id == 3) {
+            if($this->customer_email_2) {
+                $exist = Customer::find()->where(['email'=>$this->customer_email_2,'channel_id'=>$this->sale_channel_id])->count();
+                if(!$exist) {
+                    $this->addError('customer_email_2',"客户邮箱不存在，请先添加客户");
+                }
+            }
             $this->customer_mobile = $this->customer_mobile_2;
             $this->customer_email = $this->customer_email_2;               
         }else if($this->sale_channel_id != 3){            
@@ -89,6 +98,18 @@ class OrderForm extends Order
             $this->customer_email = $this->customer_email_1;
         }
     }
+    /**
+     * 验证客户邮箱
+     */
+    /* public function validateEmail()
+    {
+        if($this->sale_channel_id == 3 && $this->customer_mobile_2) {
+            $exist = Customer::find()->where(['email'=>$this->customer_mobile_2,'channel_id'=>$this->sale_channel_id])->count();
+            if(!$exist) {
+                $this->addError('customer_mobile_2',"客户邮箱不存在，请先添加客户信息");
+            }
+        }
+    } */
     public function getTargetType(){
         switch ($this->sale_channel_id){
             case 3:
@@ -104,6 +125,8 @@ class OrderForm extends Order
                 $this->targetType = false;
 
         }
+        
+        return $this->targetType;
     }
     
 }

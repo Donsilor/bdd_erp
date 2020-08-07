@@ -145,7 +145,24 @@ class Order extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
-    
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            if(isset(Yii::$app->user)) {
+                $this->creator_id = Yii::$app->user->identity->getId();
+                if(!$this->order_time) {
+                    $this->order_time = time();
+                }
+            }else{
+                $this->creator_id = 0;
+            }
+        }
+        return parent::beforeSave($insert);
+    }
     /**
      * 对应订单付款信息模型
      * @return \yii\db\ActiveQuery
@@ -229,7 +246,7 @@ class Order extends BaseModel
      */
     public function getSaleChannel()
     {
-        return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id']);
+        return $this->hasOne(SaleChannel::class, ['id'=>'sale_channel_id'])->alias('saleChannel');
     }
 
     /**

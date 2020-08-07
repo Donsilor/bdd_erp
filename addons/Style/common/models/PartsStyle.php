@@ -10,6 +10,7 @@ use common\models\backend\Member;
  *
  * @property int $id ID
  * @property string $style_sn 款号
+ * @property string $parts_name 配件名称
  * @property string $parts_type 配件类型
  * @property string $metal_type 金属类型
  * @property string $color 配件颜色
@@ -44,6 +45,7 @@ class PartsStyle extends BaseModel
             [['style_sn', 'parts_type'], 'required'],
             [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['style_sn'], 'string', 'max' => 30],
+            [['parts_name'], 'string', 'max' => 100],
             [['parts_type', 'metal_type', 'color', 'shape'], 'string', 'max' => 10],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
         ];
@@ -57,6 +59,7 @@ class PartsStyle extends BaseModel
         return [
             'id' => 'ID',
             'style_sn' => '款号',
+            'parts_name' => '配件名称',
             'parts_type' => '配件类型',
             'metal_type' => '金属材质',
             'color' => '配件颜色',

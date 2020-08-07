@@ -4,6 +4,7 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use common\helpers\ImageHelper;
+use addons\Style\common\enums\AttrIdEnum;
 
 $id = $searchModel->id;
 $goods_name = $searchModel->goods_name;
@@ -39,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
+        'options' => ['style'=>' width:120%;white-space:nowrap;'],
         'id'=>'grid',
         'columns' => [
             [
@@ -57,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'goods_image',
@@ -66,16 +68,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => false,
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'80'],
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             [
                 'attribute' => 'goods_name',
-                'value' => 'goods_name',
+                'value' => function($model){
+                    return Html::a($model->goods_name,['view','id' => $model->id,'returnUrl'=>Url::getReturnUrl()] ,['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                },
                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'300'],
+                'headerOptions' => ['class' => 'col-md-2'],
             ],
             [
                 'attribute' => 'goods_sn',
@@ -84,7 +88,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                 ]),
                 'format' => 'raw',
-                'headerOptions' => ['width'=>'120'],
+                'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'cert_type',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->cert_type);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
             ],
             [
                 'attribute' => 'cert_id',
@@ -94,31 +110,104 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style' =>'width:100px'
                 ]),
                 'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
 
             [
                 'attribute' => 'sale_price',
                 'filter' => true,
                 'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1'],
             ],
             //'cost_price',
             [
                 'attribute' => 'carat',
                 'filter' => true,
+                'headerOptions' => ['class' => 'col-md-1'],
                 'format' => 'raw',
             ],
-
-            //'clarity',
-            //'cut',
-            //'color',
-            //'shape',
-            //'depth_lv',
-            //'table_lv',
-            //'symmetry',
-            //'polish',
-            //'fluorescence',
-            //'source_id',
-            //'source_discount',
+            [
+                'attribute' => 'shape',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->shape);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'color',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->color);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'clarity',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->clarity);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'cut',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->cut);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'cut',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'polish',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->polish);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'fluorescence',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->fluorescence);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
+            [
+                'attribute' => 'symmetry',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'col-md-1','style'=>'min-width:80px;'],
+                'value' => function ($model){
+                    return Yii::$app->attr->valueName($model->symmetry);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+            ],
             [
                 'attribute' => 'is_stock',
                 'format' => 'raw',

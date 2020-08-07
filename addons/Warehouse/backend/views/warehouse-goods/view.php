@@ -203,7 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
-                            <td><?= $model->material_color ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->material_color) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>

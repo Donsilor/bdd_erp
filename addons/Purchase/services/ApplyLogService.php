@@ -13,7 +13,7 @@ use addons\Purchase\common\queues\ApplyLogJob;
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class ReceiptLogService extends Service
+class ApplyLogService extends Service
 {
     public $switchQueue = false;
     /**

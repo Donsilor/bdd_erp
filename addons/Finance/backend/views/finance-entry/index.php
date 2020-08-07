@@ -204,6 +204,12 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'80'],
                             ],
                             [
+                                'label' => '工厂成本',
+                                'attribute'=>'goods.factory_cost',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
                                 'label' => '工费',
                                 'attribute'=>'goods.gong_fee',
                                 'filter' =>false,

@@ -37,7 +37,7 @@ class BillLGoodsController extends BaseController
 
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -70,7 +70,7 @@ class BillLGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',3);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -190,7 +190,7 @@ class BillLGoodsController extends BaseController
         }
         $check = Yii::$app->request->get('check',null);
         if($check){
-            return ResultHelper::json(200, '', ['url'=>Url::to(['batch-edit', 'ids'=>$ids, 'name'=>$name, 'attr_id'=>$attr_id])]);
+            return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids, 'name'=>$name, 'attr_id'=>$attr_id])]);
         }
         $style_arr = $model::find()->where(['id'=>$id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if(count($style_arr) != 1){

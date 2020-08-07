@@ -18,7 +18,7 @@ class BaseModel extends \common\models\base\BaseModel
      */
     public static function getDb() 
     {
-         return \Yii::$app->db;
+        return \Yii::$app->db;
     }
     
     /**

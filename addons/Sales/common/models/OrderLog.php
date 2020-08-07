@@ -38,7 +38,7 @@ class OrderLog extends BaseModel
     public function rules()
     {
         return [
-            [['order_id', 'log_time', 'log_module', 'creator_id'], 'required'],
+            [['order_id', 'log_time', 'log_module'], 'required'],
             [['order_id', 'order_status', 'log_type', 'log_time', 'creator_id', 'created_at'], 'integer'],
             [['order_sn', 'log_module', 'creator'], 'string', 'max' => 30],
             [['log_msg'], 'string', 'max' => 500],
@@ -86,8 +86,13 @@ class OrderLog extends BaseModel
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-            $this->creator_id = Yii::$app->user->identity->getId();
-            $this->creator = \Yii::$app->user->identity->username;
+            if(isset(Yii::$app->user)) {
+                $this->creator_id = Yii::$app->user->identity->getId();
+                $this->creator = \Yii::$app->user->identity->username;
+            }else{
+                $this->creator_id = 0;
+                $this->creator = 'system';
+            }
         }
         return parent::beforeSave($insert);
     }

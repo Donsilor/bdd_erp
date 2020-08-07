@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter'=>Select2::widget([
                                     'name'=>'SearchModel[supplier_id]',
                                     'value'=>$searchModel->supplier_id,
-                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(['like', 'business_scope', ',9,']),
                                     'options' => ['placeholder' =>"请选择",'class'=>'form-control'],
                                     'pluginOptions' => [
                                         'allowClear' => true,
