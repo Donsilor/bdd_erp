@@ -249,7 +249,7 @@ class OrderGoodsService extends Service
      */
     public function delGift($model){
         $order = Order::find()->where(['id'=>$model->order_id])->one();
-        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>','gift_num',0])->one();
+        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->one();
         if(empty($gift_goods)){
             throw new \Exception("此赠品不存在或者没有库存",422);
         }
@@ -262,7 +262,7 @@ class OrderGoodsService extends Service
             'bill_type' => GiftBillTypeEnum::GIFT_ORDER,
             'num' => $num ,
             'stock_num' => $stock_num,
-            'channel_id' => $order->sale_cahnnel_id,
+            'channel_id' => $order->sale_channel_id,
             'bill_status' => $bill_status,
             'remark' => '订单明细删除赠品'
 
