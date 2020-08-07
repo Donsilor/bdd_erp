@@ -2,8 +2,6 @@
 
 namespace addons\Sales\services;
 
-use addons\Purchase\common\enums\ApplyFromEnum;
-use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Purchase\common\enums\PurchaseCateEnum;
 use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Sales\common\models\OrderGoods;
@@ -17,14 +15,11 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Customer;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\models\OrderAddress;
-use addons\Supply\common\enums\BuChanEnum;
 use common\enums\AuditStatusEnum;
-use addons\Supply\common\enums\FromTypeEnum;
 use addons\Sales\common\enums\IsStockEnum;
 use addons\Style\common\models\Style;
 use addons\Finance\common\models\OrderPay;
 use common\helpers\SnHelper;
-use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\enums\LogTypeEnum;
 use addons\Sales\common\enums\OrderFromEnum;
@@ -60,8 +55,6 @@ class OrderService extends Service
         $isNewOrder = $form->isNewRecord;
         //1.创建订单
         $order = clone $form;
-        $order->creator_id  = \Yii::$app->user->identity->id;
-        $order->order_time = time();
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }

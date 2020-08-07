@@ -137,7 +137,7 @@ class BillLController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-l/index', 'id'=>$id]));
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         return $this->render($this->action->id, [

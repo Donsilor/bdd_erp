@@ -87,13 +87,13 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <script>
 var formId = 'orderform';
+var org_customer_mobile = '<?php echo $model->customer_mobile?>';
 function fillCustomerFormByMobile(){
 	var sale_channel_id = $("#"+formId+"-sale_channel_id").val();	
 	var customer_mobile = $("#"+formId+"-customer_mobile_1").val();
     var customer_name  = $("#"+formId+"-customer_name").val();
-    var customer_email = $("#"+formId+"-customer_email_1").val();
-    
-    if(customer_mobile != '' && sale_channel_id ) {        
+    var customer_email = $("#"+formId+"-customer_email_1").val();    
+    if(customer_mobile != '' && org_customer_mobile != customer_mobile && sale_channel_id ) {        
         //if((customer_name=='' || customer_email == '')) {
         	$.ajax({
                 type: "get",
@@ -114,7 +114,7 @@ function fillCustomerFormByMobile(){
                            $("#"+formId+"-customer_mobile_2").val(data.data.mobile);
                            $("#"+formId+"-customer_email_1").val(data.data.email);
                            $("#"+formId+"-customer_email_2").val(data.data.email);
-                           rfMsg("手机号为老用户，系统已自动填充用户信息");
+                     	   rfMsg("该手机号为老用户，系统已自动填充用户信息");
                     	} else {
                     	   rfMsg("该手机号为新用户，请手动完善客户信息");
                     	}
@@ -130,6 +130,7 @@ function fillCustomerFormByMobile(){
             });
         //}	   
     }
+    org_customer_mobile =  customer_mobile;  
 }
 function fillCustomerFormByEmail(){
 	var sale_channel_id = $("#"+formId+"-sale_channel_id").val();	
