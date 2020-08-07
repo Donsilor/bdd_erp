@@ -982,6 +982,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'factory_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_price'],
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('factory_price', $model->factory_price, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'factory_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'markup_rate',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'markup_rate'],
