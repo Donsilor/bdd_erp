@@ -2,7 +2,7 @@
 use common\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = '部门管理';
+$this->title = '金价管理';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
