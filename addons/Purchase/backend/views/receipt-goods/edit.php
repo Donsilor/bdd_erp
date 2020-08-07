@@ -22,9 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true]) ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'produce_sn')->textInput(['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-4">
