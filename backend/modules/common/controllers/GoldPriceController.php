@@ -4,11 +4,9 @@ namespace backend\modules\common\controllers;
 
 use backend\controllers\BaseController;
 use common\models\base\SearchModel;
-use common\models\common\Department;
 use common\models\common\Goldprice;
 use Yii;
 use common\traits\Curd;
-use yii\data\ActiveDataProvider;
 
 /**
  * 商品分类
@@ -24,7 +22,7 @@ class GoldPriceController extends BaseController
     /**
      * @var StyleCateController
      */
-    public $modelClass = Goldprice::class;
+    public $modelClass = GoldPrice::class;
 
     /**
      * Lists all Tree models.

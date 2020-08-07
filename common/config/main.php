@@ -125,6 +125,7 @@ return [
         'area' => ['class' => 'common\components\Area'],
 		'attr' => ['class' => 'common\components\Attribute'],
         'trans'=>['class'=>'common\components\Transaction'],
+        'goldTool'=>['class'=>'common\components\GoldTool'],
         'shopAttr'=>['class'=>'common\components\ShopAttribute']
     ],
 ];

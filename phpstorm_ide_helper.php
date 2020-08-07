@@ -39,6 +39,7 @@ class Yii
  * @property \common\components\ShopAttribute $shopAttr
  * @property \common\components\Transaction $trans
  * @property \common\components\Area $area
+ * @property \common\components\GoldTool $goldTool
  * @author jianyan74 <751393839@qq.com>
  */
 class MyApplication
