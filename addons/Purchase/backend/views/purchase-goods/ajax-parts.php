@@ -147,16 +147,4 @@ $form = ActiveForm::begin([
     $("#" + formId + "-2-style_sn").blur(function () {
         fillPartsForm(2);
     });
-    $("#" + formId + "-3-style_sn").blur(function () {
-        fillPartsForm(3);
-    });
-    $("#" + formId + "-4-style_sn").blur(function () {
-        fillPartsForm(4);
-    });
-    $("#" + formId + "-5-style_sn").blur(function () {
-        fillPartsForm(5);
-    });
-    $("#" + formId + "-6-style_sn").blur(function () {
-        fillPartsForm(6);
-    });
 </script>
