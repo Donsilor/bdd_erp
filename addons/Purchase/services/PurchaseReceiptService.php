@@ -661,6 +661,7 @@ class PurchaseReceiptService extends Service
                 'second_stone_color2' => $model->second_stone_color2,
                 'second_stone_clarity2' => $model->second_stone_clarity2,
                 'second_stone_size2' => $model->second_stone_size2,
+                'factory_cost' => $model->factory_cost,
                 'bukou_fee' => $model->bukou_fee,
                 'tax_fee' => $model->tax_fee,
                 'other_fee' => $model->other_fee,
