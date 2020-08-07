@@ -4,7 +4,7 @@ namespace backend\modules\common\controllers;
 
 use backend\controllers\BaseController;
 use common\models\base\SearchModel;
-use common\models\common\Goldprice;
+use common\models\common\GoldPrice;
 use Yii;
 use common\traits\Curd;
 

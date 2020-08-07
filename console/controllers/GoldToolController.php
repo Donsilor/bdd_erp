@@ -4,7 +4,7 @@ namespace console\controllers;
 
 use yii\console\Controller;
 use yii\helpers\Console;
-use common\models\common\Goldprice;
+use common\models\common\GoldPrice;
 use common\enums\StatusEnum;
 
 
