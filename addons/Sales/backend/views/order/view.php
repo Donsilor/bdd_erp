@@ -228,6 +228,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'headerOptions' => ['class' => 'col-md-1'],
                                     ],
                                     [
+                                        'attribute'=>'goods_sn',
+                                        'value' => 'goods_sn',
+                                        'headerOptions' => ['class' => 'col-md-1'],
+                                    ],
+                                    [
                                         'attribute'=>'style_sn',
                                         'value' => function($model){
                                             $style_sn = $model->style_sn;

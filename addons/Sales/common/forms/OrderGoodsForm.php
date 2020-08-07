@@ -63,7 +63,7 @@ class OrderGoodsForm extends OrderGoods
         return ArrayHelper::merge(parent::attributeLabels() , [
                 'attr_require'=>'当前属性',
                 'attr_custom'=>'当前属性',
-                'goods_sn' => '款号/起版号',
+                'goods_sn' => '款号/起版号/批次号',
                 'cert_id' => '证书号',
             ]);
     }

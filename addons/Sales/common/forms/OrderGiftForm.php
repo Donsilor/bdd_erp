@@ -12,15 +12,13 @@ use common\helpers\ArrayHelper;
 class OrderGiftForm extends OrderGoods
 {
 
-    //审批流程
-    public $gift_id;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-                [['gift_id'],'required'],
+
         ];
         return ArrayHelper::merge(parent::rules(),$rules);
     }    
@@ -31,7 +29,6 @@ class OrderGiftForm extends OrderGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                'gift_id' => '赠品',
                 'goods_sn' => '批次号'
         ]);
     }

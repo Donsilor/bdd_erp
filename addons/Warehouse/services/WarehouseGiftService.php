@@ -126,8 +126,8 @@ class WarehouseGiftService extends Service
      */
     public function createBill($gift_bill_info){
         $gift = WarehouseGift::find()->where(['id'=>$gift_bill_info['gift_id']])->one();
-        $gift->stock_num = $gift_bill_info['stock_num'];
-        if(false === $gift->save(true,['stock_num'])){
+        $gift->gift_num = $gift_bill_info['stock_num'];
+        if(false === $gift->save(true,['gift_num'])){
             throw new \Exception($this->getError($gift));
         }
 

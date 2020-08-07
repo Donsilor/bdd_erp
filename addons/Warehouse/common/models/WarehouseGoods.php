@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\models;
 
+use addons\Sales\common\models\SaleChannel;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Style\common\models\StyleChannel;
@@ -257,7 +258,7 @@ class WarehouseGoods extends BaseModel
      */
     public function getChannel()
     {
-        return $this->hasOne(StyleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
+        return $this->hasOne(SaleChannel::class, ['id'=>'style_channel_id'])->alias('channel');
     }
     /**
      * 关联供应商一对一
