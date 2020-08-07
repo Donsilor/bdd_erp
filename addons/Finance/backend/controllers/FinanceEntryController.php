@@ -67,6 +67,7 @@ class FinanceEntryController extends BaseController
                         'second_stone_weight1',
                         'second_stone_price1',
                         'product_type_id',
+                        'factory_cost',
                         'gong_fee',
                         'cert_fee',
                     ]
