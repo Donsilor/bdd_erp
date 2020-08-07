@@ -698,6 +698,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_fee',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
                                     'class' => 'form-control',
@@ -707,6 +710,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'parts_price',
                                 'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
+                                },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_price', [
                                     'class' => 'form-control',
