@@ -233,7 +233,7 @@ use addons\Style\common\enums\AttrIdEnum;
         </div>
         <?php $form = ActiveForm::begin([
             'enableAjaxValidation' => false,
-            'validationUrl' => Url::to(['edit-gift', 'order_id' => $order_id]),
+            'validationUrl' => Url::to(['select-gift', 'order_id' => $order_id]),
         ]); ?>
         <input type="hidden" name="gift_id" id="gift_id">
         <?php ActiveForm::end(); ?>

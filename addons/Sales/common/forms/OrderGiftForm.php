@@ -2,14 +2,14 @@
 
 namespace addons\Sales\common\forms;
 
+use addons\Sales\common\models\OrderGoods;
 use Yii;
 use common\helpers\ArrayHelper;
-use addons\Sales\common\models\Order;
 
 /**
  * 订单 Form
  */
-class OrderGiftForm extends Order
+class OrderGiftForm extends OrderGoods
 {
 
     //审批流程
@@ -31,7 +31,8 @@ class OrderGiftForm extends Order
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                'gift_id'=>'赠品',
+                'gift_id' => '赠品',
+                'goods_sn' => '批次号'
         ]);
     }
 

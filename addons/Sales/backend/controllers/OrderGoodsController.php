@@ -234,6 +234,14 @@ class OrderGoodsController extends BaseController
      */
     public function actionSelectGift(){
         $order_id = Yii::$app->request->get('order_id');
+        if (Yii::$app->request->post()) {
+            $gift_id = Yii::$app->request->post('gift_id');
+            if($gift_id == null){
+                return $this->message("保存失败", $this->redirect([$this->action->id,'order_id'=>$order_id]), 'error');
+            }
+            $this->message("添加成功", $this->redirect(['edit-gift','order_id'=>$order_id,'gift_id'=>$gift_id]), 'success');
+        }
+
         $searchModel = new SearchModel([
             'model' => WarehouseGift::class,
             'scenario' => 'default',
@@ -307,7 +315,6 @@ class OrderGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-
                 $num = bcsub($goods_num, $model->goods_num);
                 if($num != 0){
                     Yii::$app->salesService->orderGoods->addGift($model,$num);
