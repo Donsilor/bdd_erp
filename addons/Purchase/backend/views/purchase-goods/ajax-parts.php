@@ -15,101 +15,102 @@ $form = ActiveForm::begin([
 ]);
 ?>
 
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title">基本信息</h4>
-    </div>
-    <div class="modal-body">
-        <div class="col-sm-12">
-            <?= $form->field($model, 'parts_info')->widget(unclead\multipleinput\MultipleInput::class, [
-                'max' => 3,
-                'value' => $parts_list,
-                'columns' => [
-                    [
-                        'name' => 'style_sn',
-                        'title' => '配件款号',
-                        'enableError' => false,
-                        'options' => [
-                            'class' => 'input-priority',
-                            'style' => 'width:120px'
-                        ]
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">基本信息</h4>
+</div>
+<div class="modal-body">
+    <div class="col-sm-12">
+        <?= $form->field($model, 'parts_info')->widget(unclead\multipleinput\MultipleInput::class, [
+            'max' => ($model->peijian_type-1),
+            'value' => $parts_list ?? [],
+            'columns' => [
+                [
+                    'name' => 'style_sn',
+                    'title' => '配件款号',
+                    'enableError' => false,
+                    'options' => [
+                        'class' => 'input-priority',
+                        'style' => 'width:120px',
+                        'Onblur' => 'fillPartsForm(this)',
+                    ]
+                ],
+                [
+                    'name' => 'parts_name',
+                    'title' => '配件名称',
+                    'enableError' => false,
+                    'options' => [
+                        'class' => 'input-priority',
+                        'style' => 'width:120px'
+                    ]
+                ],
+                [
+                    'name' => "parts_type",
+                    'title' => '配件类型',
+                    'enableError' => false,
+                    'type' => 'dropDownList',
+                    'options' => [
+                        'class' => 'input-priority',
+                        'style' => 'width:100px',
+                        'prompt' => '请选择',
                     ],
-                    [
-                        'name' => 'parts_name',
-                        'title' => '配件名称',
-                        'enableError' => false,
-                        'options' => [
-                            'class' => 'input-priority',
-                            'style' => 'width:120px'
-                        ]
+                    'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE)
+                ],
+                [
+                    'name' => "material_type",
+                    'title' => '配件材质',
+                    'enableError' => false,
+                    'type' => 'dropDownList',
+                    'options' => [
+                        'class' => 'input-priority',
+                        'style' => 'width:100px',
+                        'prompt' => '请选择',
                     ],
-                    [
-                        'name' => "parts_type",
-                        'title' => '配件类型',
-                        'enableError' => false,
-                        'type' => 'dropDownList',
-                        'options' => [
-                            'class' => 'input-priority',
-                            'style' => 'width:100px',
-                            'prompt' => '请选择',
-                        ],
-                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE)
-                    ],
-                    [
-                        'name' => "material_type",
-                        'title' => '配件材质',
-                        'enableError' => false,
-                        'type' => 'dropDownList',
-                        'options' => [
-                            'class' => 'input-priority',
-                            'style' => 'width:100px',
-                            'prompt' => '请选择',
-                        ],
-                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE)
-                    ],
-                    [
-                        'name' => 'parts_num',
-                        'title' => '配件数量',
-                        'enableError' => false,
-                        'defaultValue' => '1',
-                        'options' => [
-                            'class' => 'input-priority',
-                            'type' => 'number',
-                            'style' => 'width:80px'
-                        ]
-                    ],
-                    [
-                        'name' => 'parts_weight',
-                        'title' => '配件金重',
-                        'enableError' => false,
-                        'defaultValue' => '0.000',
-                        'options' => [
-                            'class' => 'input-priority',
-                            'type' => 'number',
-                            'style' => 'width:80px'
-                        ]
-                    ],
-                    [
-                        'name' => 'parts_price',
-                        'title' => '配件金额',
-                        'enableError' => false,
-                        'defaultValue' => '0.00',
-                        'options' => [
-                            'class' => 'input-priority',
-                            'type' => 'number',
-                            'style' => 'width:80px'
-                        ]
+                    'items' => \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE)
+                ],
+                [
+                    'name' => 'parts_num',
+                    'title' => '配件数量',
+                    'enableError' => false,
+                    'defaultValue' => '1',
+                    'options' => [
+                        'class' => 'input-priority',
+                        'type' => 'number',
+                        'style' => 'width:80px'
+                    ]
+                ],
+                [
+                    'name' => 'parts_weight',
+                    'title' => '配件金重',
+                    'enableError' => false,
+                    'defaultValue' => '0.000',
+                    'options' => [
+                        'class' => 'input-priority',
+                        'type' => 'number',
+                        'style' => 'width:80px'
+                    ]
+                ],
+                [
+                    'name' => 'parts_price',
+                    'title' => '配件金额',
+                    'enableError' => false,
+                    'defaultValue' => '0.00',
+                    'options' => [
+                        'class' => 'input-priority',
+                        'type' => 'number',
+                        'style' => 'width:80px'
                     ]
                 ]
-            ])->label("");
-            ?>
-        </div>
+            ]
+        ])->label("");
+        ?>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-        <button class="btn btn-primary" type="submit">保存</button>
-    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+    <button class="btn btn-primary" type="submit">保存</button>
+</div>
 <?php ActiveForm::end(); ?>
 <script>
     var formId = 'purchasegoodsform-parts_info';
@@ -129,22 +130,33 @@ $form = ActiveForm::begin([
                         $("#" + formId + "-" + i + "-parts_name").val(data.data.parts_name);
                         $("#" + formId + "-" + i + "-parts_type").val(data.data.parts_type);
                         $("#" + formId + "-" + i + "-material_type").val(data.data.metal_type);
+                    } else {
+                        rfInfo(data.message);
+                        $("#" + formId + "-" + i + "-style_sn").val("");
                     }
                 }
             });
         }
     }
-
     $("#" + formId + "-0-style_sn").blur(function () {
-        console.log(0);
         fillPartsForm(0);
     });
     $("#" + formId + "-1-style_sn").blur(function () {
-        console.log(1);
         fillPartsForm(1);
     });
     $("#" + formId + "-2-style_sn").blur(function () {
-        console.log(2);
         fillPartsForm(2);
+    });
+    $("#" + formId + "-3-style_sn").blur(function () {
+        fillPartsForm(3);
+    });
+    $("#" + formId + "-4-style_sn").blur(function () {
+        fillPartsForm(4);
+    });
+    $("#" + formId + "-5-style_sn").blur(function () {
+        fillPartsForm(5);
+    });
+    $("#" + formId + "-6-style_sn").blur(function () {
+        fillPartsForm(6);
     });
 </script>
