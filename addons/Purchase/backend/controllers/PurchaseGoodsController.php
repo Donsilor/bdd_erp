@@ -421,11 +421,14 @@ class PurchaseGoodsController extends BaseController
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $style_sn = \Yii::$app->request->get('style_sn');
-        $model = PartsStyle::find()->select(['parts_name','parts_type','metal_type'])->where(['style_sn'=>$style_sn])->one();
+        $style = PartsStyle::find()->select(['parts_name','parts_type','metal_type'])->where(['style_sn'=>$style_sn])->one();
+        if(empty($style)){
+            return ResultHelper::json(422,$style_sn.'款号不存在', []);
+        }
         $data = [
-            'parts_name' => $model->parts_name??"",
-            'parts_type' => $model->parts_type??"",
-            'metal_type' => $model->metal_type??"",
+            'parts_name' => $style->parts_name??"",
+            'parts_type' => $style->parts_type??"",
+            'metal_type' => $style->metal_type??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);
     }
