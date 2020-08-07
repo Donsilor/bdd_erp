@@ -169,7 +169,7 @@ class OrderGoodsService extends Service
      */
     public function addGift($model,$num){
 
-        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>','gift_num',0])->one();
+        $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>=','gift_num',($num * -1)])->one();
         if(empty($gift_goods)){
             throw new \Exception("此赠品不存在或者没有库存",422);
         }
@@ -181,9 +181,9 @@ class OrderGoodsService extends Service
         $model->goods_name = $gift_goods->gift_name;
         $model->is_stock = IsStockEnum::YES;
         $model->is_gift = IsGiftEnum::YES;
-        $model->goods_price = 0;
-        $model->goods_pay_price = 0;
-        $model->goods_discount = 0;
+        $model->goods_price = $model->goods_price ?? 0;
+        $model->goods_pay_price = $model->goods_price ?? 0;
+        $model->goods_discount = $model->goods_price - $model->goods_pay_price;
         $model->style_sn = $gift_goods->style_sn;
         $model->qiban_sn = '';
         $model->goods_sn = $gift_goods->gift_sn;

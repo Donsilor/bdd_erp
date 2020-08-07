@@ -458,6 +458,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 if($order->order_status == OrderStatusEnum::SAVE) {
                                                     if($model->product_type_id == 1){
                                                         return Html::edit(['order-goods/edit-diamond','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
+                                                    }elseif ($model->is_gift == \addons\Sales\common\enums\IsGiftEnum::YES){
+                                                        return Html::edit(['order-goods/edit-gift','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }elseif($model->is_stock == IsStockEnum::NO){
                                                         return Html::edit(['order-goods/edit','id' => $model->id],'编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                                     }else{

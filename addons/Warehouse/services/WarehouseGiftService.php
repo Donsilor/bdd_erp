@@ -32,7 +32,7 @@ class WarehouseGiftService extends Service
     {
         $tabList = [
             1=>['name'=>'赠品详情','url'=>Url::to(['gift/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'赠品订单','url'=>Url::to(['gift/order','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'赠品订单','url'=>Url::to(['gift-bill/index','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
             3=>['name'=>'赠品日志','url'=>Url::to(['gift-log/index','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
         ];
         return $tabList;

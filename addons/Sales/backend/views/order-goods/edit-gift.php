@@ -36,9 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType->getDropDown(),['disabled'=>true]) ?>
             			 </div>
-                         <div class="col-lg-4">
-                             <?= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
-                         </div>
+
 
         			 </div>
         			 <div class="row">
@@ -50,6 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
             			 </div>
         			 </div>
                      <div class="row">
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'goods_num')->textInput() ?>
+                         </div>
                          <div class="col-lg-4">
                              <?= $form->field($model, 'goods_price')->textInput()->label('商品价格（<font color="red">价格以：订单选择的货币类型为准）</font>') ?>
                          </div>
