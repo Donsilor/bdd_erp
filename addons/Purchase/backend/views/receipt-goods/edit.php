@@ -255,7 +255,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">费用信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_price')->textInput() ?>
+                        <?= $form->field($model, 'factory_cost')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'markup_rate')->textInput() ?>

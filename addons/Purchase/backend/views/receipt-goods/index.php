@@ -877,10 +877,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'factory_price',
+                                'attribute'=>'factory_cost',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'factory_price', [
+                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),

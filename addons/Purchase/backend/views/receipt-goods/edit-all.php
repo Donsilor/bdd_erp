@@ -982,13 +982,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute'=>'factory_price',
+                                'attribute'=>'factory_cost',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_price'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost'],
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('factory_price', $model->factory_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id'=>$model->id]);
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'factory_price', [
+                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
                                     'class' => 'form-control',
                                     'style'=> 'width:60px;'
                                 ]),
