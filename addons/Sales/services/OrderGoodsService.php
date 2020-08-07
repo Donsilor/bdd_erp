@@ -38,8 +38,6 @@ class OrderGoodsService extends Service
      * 绑定现货
      */
     public function toStock($model){
-//        try{
-
             if($model->is_stock == IsStockEnum::YES){
                 throw new \Exception('请先解绑');
             }
@@ -95,10 +93,37 @@ class OrderGoodsService extends Service
           //更新采购汇总：总金额和总数量
           \Yii::$app->salesService->order->orderSummary($model->order_id);
 
-//        }catch (\Exception $e){
-//            echo $e;
-//            exit;
-//        }
+
+    }
+
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * 添加现货
+     */
+    public function addStock($model){
+        $wareshouse_goods = WarehouseGoods::find()->where(['goods_id'=>$model->goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
+        if(empty($wareshouse_goods)){
+            throw new \Exception("不存在或者不是库存状态",422);
+        }
+        $model->jintuo_type = $wareshouse_goods->jintuo_type;
+        $model->qiban_type = $wareshouse_goods->qiban_type;
+        $model->style_sex = $wareshouse_goods->style_sex;
+        $model->style_cate_id = $wareshouse_goods->style_cate_id;
+        $model->product_type_id = $wareshouse_goods->product_type_id;
+        $model->goods_num = 1;
+        $model->goods_name = $wareshouse_goods->goods_name;
+        $model->style_sn = $wareshouse_goods->style_sn;
+        $model->qiban_sn = $wareshouse_goods->qiban_sn;
+        $model->currency = $model->order->currency;
+        if(false === $model->save(false)){
+            throw new \Exception($this->getError($model));
+        }
+        if($model->isNewRecord) {
+            Yii::$app->salesService->orderGoods->toStock($model);
+        }
+        return $model;
 
     }
 
@@ -171,7 +196,7 @@ class OrderGoodsService extends Service
 
         $gift_goods = WarehouseGift::find()->where(['gift_sn'=>$model->goods_sn])->andWhere(['>=','gift_num',($num * -1)])->one();
         if(empty($gift_goods)){
-            throw new \Exception("此赠品不存在或者没有库存",422);
+            throw new \Exception("此赠品不存在或者库存不足",422);
         }
         $model->jintuo_type = JintuoTypeEnum::Chengpin;
         $model->qiban_type = QibanTypeEnum::NON_VERSION;
