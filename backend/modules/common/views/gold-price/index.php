@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         [
                             'label' => '参考金价(元/克)',
                             'value' => function ($model, $key, $index){
-                                return \Yii::$app->goldTool->getGoldRmbPrice($model->code,$model->adjust_range);
+                                return \Yii::$app->goldTool->getGoldRmbPrice($model->code);
                             },
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],

@@ -25,7 +25,7 @@ class GoldToolController extends Controller
         $models = GoldPrice::find()->where(['status'=>StatusEnum::ENABLED])->all();
         foreach ($models as $model) {
             $model->usd_price = \Yii::$app->goldTool->getGoldUsdPrice($model->code);
-            $model->price = \Yii::$app->goldTool->getGoldRmbPrice($model->code,-12.9);
+            $model->price = \Yii::$app->goldTool->getGoldRmbPrice($model->code);
             $model->rmb_rate = \Yii::$app->goldTool->getExchangeRate('USDCNY');
             $model->api_time = time();
             if($model->usd_price && $model->price) {
