@@ -1,6 +1,7 @@
 <?php
 use common\helpers\Html;
 use yii\grid\GridView;
+use common\helpers\AmountHelper;
 
 $this->title = '金价管理';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
@@ -15,7 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ])?>
                 </div>
             </div>
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->name;
                             },
-
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
 
                         [
@@ -52,33 +53,48 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->code;
                             },
-
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'price',
                             'value' => function ($model, $key, $index){
                                 return $model->price;
                             },
-                            'filter' => false
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
 
                         ],
                         [
-                            'attribute' => 'usd_price',
+                            'label' => '参考金价(元/克)',
                             'value' => function ($model, $key, $index){
-                                return $model->usd_price;
+                                return \Yii::$app->goldTool->getGoldRmbPrice($model->code,$model->adjust_range);
                             },
-                            'filter' => false
-
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                       ],
+                       [
+                            'attribute' => 'notice_range',
+                            'value' => function ($model, $key, $index){
+                                return $model->notice_range;
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'rmb_rate',
+                            'attribute' => 'notice_users',
                             'value' => function ($model, $key, $index){
-                                return $model->rmb_rate;
+                                return $model->notice_users;
                             },
-                            'filter' => false
-
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-2'],
+                       ],
+                        [
+                            'attribute'=>'api_time',
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->api_time);
+                            },
+                            'filter' => false,                       
                         ],
-
 
                         [
                             'header' => "操作",
@@ -88,7 +104,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['ajax-edit','id' => $model->id], '编辑', [
                                         'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
+                                        'data-target' => '#ajaxModal',
                                     ]);
                                 },
                                 'status' => function ($url, $model, $key) {

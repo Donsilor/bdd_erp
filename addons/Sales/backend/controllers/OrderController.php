@@ -33,7 +33,10 @@ class OrderController extends BaseController
 
     public function actionTest()
     {
-        Yii::$app->shopService->orderSync->syncOrder(1369);
+        echo $rmbPrice = Yii::$app->goldTool->getGoldRmbPrice(),'-';
+        echo $rmbPrice = Yii::$app->goldTool->getGoldUsdPrice();
+        
+        //Yii::$app->shopService->orderSync->syncOrder(1369);
         exit;
     }
     /**

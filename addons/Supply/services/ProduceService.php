@@ -407,6 +407,7 @@ class ProduceService extends Service
     /**
      * 创建配件单
      * @param Produce $form
+     * @param array $attrValues
      * @throws
      */
     private function createProduceParts($form, $attrValues)
@@ -428,6 +429,7 @@ class ProduceService extends Service
                         'parts_weight' => $form->goods_num * ($item['parts_weight'] ?? 0),
                     ];
                     $model = ProduceParts::find()->where(['produce_id' => $form->id, 'style_sn' => $style_sn])->one();
+                    //$model = new ProduceParts();
                     if (!$model) {
                         $model = new ProduceParts();
                         $model->attributes = $parts;

@@ -220,8 +220,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },
+                    'cancel' => function($url, $model, $key){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                            return Html::delete(['cancel', 'id' => $model->id],'取消',[
+                                'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
+                            ]);
+                        }
+                    },
                     'delete' => function($url, $model, $key){
-                        if($model->purchase_status != PurchaseStatusEnum::CONFIRM){
+                        if($model->purchase_status == PurchaseStatusEnum::CANCEL){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

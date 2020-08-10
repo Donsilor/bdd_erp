@@ -210,6 +210,32 @@ class PartsReceiptController extends BaseController
     }
 
     /**
+     * 取消
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function actionCancel($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->receipt_status = ReceiptStatusEnum::CANCEL;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            \Yii::$app->getSession()->setFlash('success','取消成功');
+            $trans->commit();
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
      * 删除/关闭
      *
      * @param $id

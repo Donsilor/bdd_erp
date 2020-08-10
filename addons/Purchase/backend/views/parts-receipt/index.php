@@ -227,8 +227,15 @@ $params = $params ? "&".http_build_query($params) : '';
                     'goods' => function($url, $model, $key){
                         return Html::a('单据明细', ['parts-receipt-goods/index', 'receipt_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                     },
-                    'delete' => function($url, $model, $key){
+                    'cancel' => function($url, $model, $key){
                         if($model->receipt_status == ReceiptStatusEnum::SAVE) {
+                            return Html::delete(['cancel', 'id' => $model->id],'取消',[
+                                'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
+                            ]);
+                        }
+                    },
+                    'delete' => function($url, $model, $key){
+                        if($model->receipt_status == ReceiptStatusEnum::CANCEL) {
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },

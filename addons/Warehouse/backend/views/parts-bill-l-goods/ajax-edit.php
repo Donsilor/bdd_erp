@@ -39,33 +39,36 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'parts_weight')->textInput() ?>
                </div>
                <div class="col-lg-4">
-                   <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR),['prompt'=>'请选择','disabled'=>true]) ?>
+                   <?= $form->field($model, 'material_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), ['prompt' => '请选择', 'disabled' => true]) ?>
                </div>
            </div>
            <div class="row">
+               <div class="col-lg-4">
+                   <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR),['prompt'=>'请选择','disabled'=>true]) ?>
+               </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_SHAPE),['prompt'=>'请选择','disabled'=>true]) ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'chain_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE),['prompt'=>'请选择']) ?>
                </div>
+           </div>
+           <div class="row">
                <div class="col-lg-4">
                    <?= $form->field($model, 'cramp_ring')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE),['prompt'=>'请选择']) ?>
                </div>
-           </div>
-           <div class="row">
                <div class="col-lg-4">
                    <?= $form->field($model, 'size')->textInput() ?>
                </div>
                <div class="col-lg-4">
                    <?= $form->field($model, 'parts_price')->textInput() ?>
                </div>
+           </div>
+           <div class="row">
                <div class="col-lg-4">
                    <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
                </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-12">
+               <div class="col-lg-8">
                    <?= $form->field($model, 'remark')->textarea() ?>
                </div>
            </div>
