@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -54,7 +53,8 @@ class GiftController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseGift::tableName().'.status',-1]);
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->actionExport($dataProvider);
+            $queryIds = $dataProvider->query->select(WarehouseGift::tableName().'.id');
+            $this->actionExport($queryIds);
         }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -142,18 +142,21 @@ class GiftController extends BaseController
         $header = [
             ['批次号', 'gift_sn' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
-            ['配件类型', 'gift_type' , 'text'],
-            ['配件名称', 'gift_name' , 'text'],
-            ['配件款号', 'style_sn' , 'text'],
-            ['配件材质', 'material_type' , 'text'],
-            ['配件形状', 'shape' , 'text'],
-            ['配件颜色', 'color' , 'text'],
-            ['链类型', 'chain_type' , 'text'],
-            ['扣环', 'cramp_ring' , 'text'],
-            ['尺寸', 'size' , 'text'],
-            ['配件数量', 'gift_num' , 'text'],
+            //['赠品类型', 'gift_type' , 'text'],
+            ['赠品名称', 'gift_name' , 'text'],
+            ['赠品款号', 'style_sn' , 'text'],
+            ['赠品材质', 'material_type' , 'text'],
+            ['赠品颜色', 'material_color' , 'text'],
+            ['手寸(美)', 'finger' , 'text'],
+            ['手寸(港)', 'finger_hk' , 'text'],
+            ['链长', 'chain_length' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石数量', 'main_stone_num' , 'text'],
+            ['尺寸', 'gift_size' , 'text'],
+            ['原数量', 'first_num' , 'text'],
+            ['赠品数量', 'gift_num' , 'text'],
             ['库存重量(g)', 'gift_weight' , 'text'],
-            ['配件单价', 'gift_price' , 'text'],
+            ['成本价', 'cost_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
 
@@ -172,12 +175,12 @@ class GiftController extends BaseController
 
         ];
         foreach ($lists as &$list){
-            $list['gift_type'] = \Yii::$app->attr->valueName($list['gift_type']);
+            //$list['gift_type'] = \Yii::$app->attr->valueName($list['gift_type']);
             $list['material_type'] = \Yii::$app->attr->valueName($list['material_type']);
-            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
-            $list['color'] = \Yii::$app->attr->valueName($list['color']);
-            $list['chain_type'] = \Yii::$app->attr->valueName($list['chain_type']);
-            $list['cramp_ring'] = \Yii::$app->attr->valueName($list['cramp_ring']);
+            $list['material_color'] = \Yii::$app->attr->valueName($list['material_color']);
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
+            //$list['chain_type'] = \Yii::$app->attr->valueName($list['chain_type']);
+            //$list['cramp_ring'] = \Yii::$app->attr->valueName($list['cramp_ring']);
         }
         return [$lists,$total];
     }
