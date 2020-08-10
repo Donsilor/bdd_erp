@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\models\PurchaseParts;
+use addons\Purchase\common\models\PurchasePartsGoods;
 use addons\Style\common\models\PartsStyle;
 use Yii;
 use common\models\base\SearchModel;
@@ -72,6 +73,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 编辑/创建
      * @var PurchaseGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionEdit()
@@ -80,7 +82,7 @@ class PurchasePartsGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $model = $this->findModel($id);                
+        $model = $this->findModel($id) ?? new PurchasePartsGoods();
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
@@ -90,8 +92,8 @@ class PurchasePartsGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$stone = GoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
-                //$model->goods_sn = $stone->style_sn??"";
+                //$parts = PartsStyle::find()->select(['parts_name','parts_type','metal_type','color','shape'])->where(['style_sn'=>$model->goods_sn])->one();
+                //$model->goods_sn = $parts->style_sn??"";
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
@@ -115,7 +117,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {

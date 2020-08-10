@@ -56,16 +56,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_num')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'goods_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput(['disabled' => 'disabled']) ?>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'remark')->textarea() ?>
                     </div>

@@ -14,6 +14,7 @@ use Yii;
  * @property int $supplier_id 供应商ID
  * @property string $total_cost 总成本
  * @property int $total_num 总数量
+ * @property string $total_weight 总重量
  * @property int $delivery_time 交货时间
  * @property int $purchase_status 采购单状态：1保存 2待审核 3已审核 9已取消
  * @property int $auditor_id 审核人
@@ -44,7 +45,7 @@ class PurchaseParts extends BaseModel
     {
         return [
             [['supplier_id', 'total_num', 'purchase_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['total_cost'], 'number'],
+            [['total_weight', 'total_cost'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['delivery_time'], 'safe'],
@@ -62,6 +63,7 @@ class PurchaseParts extends BaseModel
             'supplier_id' => '供应商',
             'total_cost' => '总成本',
             'total_num' => '总数量',
+            'total_weight' => '总重量',
             'delivery_time' => '交货时间',
             'purchase_status' => '采购单状态',
             'auditor_id' => '审核人',
