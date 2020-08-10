@@ -159,7 +159,7 @@ class PurchaseGiftGoodsController extends BaseController
                 throw new \Exception("删除失败",422);
             }
             //更新单据汇总
-            Yii::$app->purchaseService->gold->summary($purchase_id);
+            Yii::$app->purchaseService->gift->summary($purchase_id);
             $trans->commit();
             
             return $this->message("删除成功", $this->redirect($this->returnUrl));
