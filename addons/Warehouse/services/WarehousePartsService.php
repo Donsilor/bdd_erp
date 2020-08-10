@@ -63,12 +63,13 @@ class WarehousePartsService extends Service
      *
      * 更改配件库存
      * @param string $parts_sn
+     * @param integer $adjust_num
      * @param double $adjust_weight
      * @param integer $adjust_type
      * @throws
      *
      */
-    public function adjustPartsStock($parts_sn, $adjust_weight, $adjust_type) {
+    public function adjustPartsStock($parts_sn, $adjust_num, $adjust_weight, $adjust_type) {
         
         $adjust_weight = abs(floatval($adjust_weight));
         
@@ -82,24 +83,40 @@ class WarehousePartsService extends Service
                 throw new \Exception("({$parts_sn})配件库存不足");
             }
         }
+        if($adjust_num <= 0){
+            throw new \Exception("({$parts_sn})配件调整数量不能为0");
+        }
         if($adjust_weight <= 0){
-            throw new \Exception("({$parts_sn})配件调整重量不能为0");
+            //throw new \Exception("({$parts_sn})配件调整重量不能为0");
         }
         if($adjust_type == AdjustTypeEnum::ADD) {
-            $update = ['parts_weight'=>new Expression("parts_weight+{$adjust_weight}"),'parts_status'=>PartsStatusEnum::IN_STOCK];
+            $update = ['parts_num'=>new Expression("parts_num+{$adjust_num}"),'parts_status'=>PartsStatusEnum::IN_STOCK];
             $result = WarehouseParts::updateAll($update,new Expression("parts_sn='{$parts_sn}'"));
             if(!$result) {
                 throw new \Exception("({$parts_sn})配件库存变更失败");
             }
+            /*$update = ['parts_weight'=>new Expression("parts_weight+{$adjust_weight}"),'parts_status'=>PartsStatusEnum::IN_STOCK];
+            $result = WarehouseParts::updateAll($update,new Expression("parts_sn='{$parts_sn}'"));
+            if(!$result) {
+                throw new \Exception("({$parts_sn})配件库存变更失败");
+            }*/
         }else{
-            $update = ['parts_weight'=>new Expression("parts_weight-{$adjust_weight}")];
-            $result = WarehouseParts::updateAll($update,new Expression("parts_sn='{$parts_sn}' and parts_weight>={$adjust_weight}"));
+            $update = ['parts_num'=>new Expression("parts_num-{$adjust_num}")];
+            $result = WarehouseParts::updateAll($update,new Expression("parts_sn='{$parts_sn}' and parts_num>={$adjust_num}"));
             if(!$result) {
                 throw new \Exception("({$parts_sn})配件库存不足");
             }
+            /*$update = ['parts_weight'=>new Expression("parts_weight-{$adjust_weight}")];
+            $result = WarehouseParts::updateAll($update,new Expression("parts_sn='{$parts_sn}' and parts_weight>={$adjust_weight}"));
+            if(!$result) {
+                throw new \Exception("({$parts_sn})配件库存不足");
+            }*/
             //更新为已售馨
+            if($model->parts_num <= $adjust_num){
+                $result = WarehouseParts::updateAll(['parts_status'=>PartsStatusEnum::SOLD_OUT],new Expression("parts_sn='{$parts_sn}' and parts_num <= 0"));
+            }
             if($model->parts_weight <= $adjust_weight){
-                $result = WarehouseParts::updateAll(['parts_status'=>PartsStatusEnum::SOLD_OUT],new Expression("parts_sn='{$parts_sn}' and parts_weight <= 0"));
+                //$result = WarehouseParts::updateAll(['parts_status'=>PartsStatusEnum::SOLD_OUT],new Expression("parts_sn='{$parts_sn}' and parts_weight <= 0"));
             }
         }
         
