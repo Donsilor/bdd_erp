@@ -223,7 +223,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     },
                     'cancel' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
-                            return Html::delete(['close', 'id' => $model->id],'取消',[
+                            return Html::delete(['cancel', 'id' => $model->id],'取消',[
                                 'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
                             ]);
                         }
