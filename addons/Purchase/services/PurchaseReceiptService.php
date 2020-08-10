@@ -228,7 +228,11 @@ class PurchaseReceiptService extends Service
             }
             $purchase_detail_id = $good['purchase_detail_id']??"";
             if($purchase_detail_id){
-                $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
+                $data = [ReceiptStatusEnum::SAVE, ReceiptStatusEnum::PENDING, ReceiptStatusEnum::CONFIRM];
+                $count = $goods::find()->alias('g')
+                    ->innerJoin(PurchaseReceipt::tableName()." as pr", "pr.id = g.receipt_id")
+                    ->where(['pr.receipt_status'=>$data, 'g.purchase_detail_id'=>$purchase_detail_id])
+                    ->count(1);
                 if($count){
                     throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
                 }
