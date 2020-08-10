@@ -88,7 +88,7 @@ class PurchaseGiftGoods extends BaseModel
             'material_color' => '材质颜色',
             'main_stone_type' => '主石类型',
             'main_stone_num' => '主石数量',
-            'goods_size' => '尺寸',
+            'goods_size' => '尺寸(mm)',
             'gold_price' => '金价/g',
             'cost_price' => '成本价',
             'incl_tax_price' => '含税总额',
