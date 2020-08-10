@@ -38,9 +38,9 @@ class WarehouseTempletService extends Service
     /**
      * 创建批次号
      * @param WarehouseTemplet $model
-     * @param string $save
+     * @param bool $save
+     * @return string
      * @throws
-     *
      */
     public function createBatchSn($model, $save = true)
     {
