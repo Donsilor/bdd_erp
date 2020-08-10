@@ -36,6 +36,7 @@ class CacheEnum
             'goodsAttr'=>$merchant_id,//商品属性
             'goodsAttrValue'=>$merchant_id,//商品属性值
             'currency'=>$merchant_id, //货币汇率
+            'goldPrice'=>'', //金价价格
         ];
     }
 

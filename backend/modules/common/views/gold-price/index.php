@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->name;
                             },
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
 
                         [
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->code;
                             },
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'price',
@@ -64,24 +64,15 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
 
                         ],
-                        /* [
-                            'attribute' => 'usd_price',
+                        [
+                            'label' => '参考金价(元/克)',
                             'value' => function ($model, $key, $index){
-                                return AmountHelper::outputAmount($model->usd_price,2,'USD');
+                                return \Yii::$app->goldTool->getGoldRmbPrice($model->code,$model->adjust_range);
                             },
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
-
-                        ], 
-                        [
-                            'attribute' => 'rmb_rate',
-                            'value' => function ($model, $key, $index){
-                                return $model->rmb_rate;
-                            },
-                            'filter' => false,
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],*/
-                        [
+                       ],
+                       [
                             'attribute' => 'notice_range',
                             'value' => function ($model, $key, $index){
                                 return $model->notice_range;
@@ -89,6 +80,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
+                        [
+                            'attribute' => 'notice_users',
+                            'value' => function ($model, $key, $index){
+                                return $model->notice_users;
+                            },
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-2'],
+                       ],
                         [
                             'attribute'=>'api_time',
                             'value'=>function($model){

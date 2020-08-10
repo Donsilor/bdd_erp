@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Component;
 use common\components\goldtool\HuiTongApi;
 use common\helpers\AmountHelper;
+use common\models\common\GoldPrice;
+use common\enums\CacheEnum;
 
 
 
@@ -23,6 +25,7 @@ class GoldTool extends Component
      private $exchangeRates;
      private $goldPrices;
      private $ounce = 31.1034768;
+     public $dbCache  = false;
      
      public function init()
      {
@@ -66,4 +69,29 @@ class GoldTool extends Component
          $rmbPrice = AmountHelper::formatAmount(($usdPrice/$this->ounce)*$rmbRate+$cha, 2);
          return $rmbPrice;
      }
+     /**
+      * 获取金价
+      * @param string $code
+      * @return number
+      */
+     public function getGoldPrice($code = 'XAU')
+     {
+         $model = $this->getDbRow($code);
+         return $model['price'] ?? 0;
+     }
+     /**
+      * 获取金价信息
+      * @param string $code
+      * @return \yii\db\ActiveRecord|array|NULL
+      */
+     private function getDbRow($code = 'XAU')
+     {
+         $cacheKey = CacheEnum::getPrefix('goldPrice').':'.$code;
+         if (!($model = Yii::$app->cache->get($cacheKey)) || $this->dbCache == false) {
+             $model = GoldPrice::find()->select(['code','price'])->where(['code'=>$code])->asArray()->one();
+             Yii::$app->cache->set($cacheKey, $model,3600);
+         }
+         return $model;
+     }
+     
 }

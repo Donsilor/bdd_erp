@@ -40,7 +40,7 @@ class GoldPrice extends BaseModel
             [['price', 'usd_price', 'rmb_rate','notice_range'], 'number'],
             [['name'], 'string', 'max' => 50],
             [['code'], 'string', 'max' => 5],
-            //[['notice_users'], 'string', 'max' => 255],
+            [['notice_users'], 'string', 'max' => 255],
         ];
     }
 
@@ -61,6 +61,7 @@ class GoldPrice extends BaseModel
             'api_time'=>'同步时间',
             'api_remark'=>'同步备注',
             'notice_range'=>'预警差价',
+            'notice_users'=>'预警通知用户',
             'created_at' => '添加时间',
             'updated_at' => '更新时间',
         ];
