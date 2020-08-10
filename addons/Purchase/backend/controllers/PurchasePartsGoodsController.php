@@ -3,6 +3,7 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\models\PurchaseParts;
+use addons\Style\common\models\PartsStyle;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -267,8 +268,9 @@ class PurchasePartsGoodsController extends BaseController
     }
 
     /**
-     * 分批收货
      *
+     * 分批收货
+     * @throws
      * @return mixed
      */
     public function actionWarehouse()
@@ -301,5 +303,26 @@ class PurchasePartsGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询配件款号信息
+     * @return array
+     */
+    public function actionAjaxGetParts()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = PartsStyle::find()->select(['parts_name','parts_type','metal_type','color','shape'])->where(['style_sn'=>$goods_sn])->one();
+        //$model = new PartsStyle();
+        $data = [
+            'parts_name' => $model->parts_name,
+            'parts_type' => $model->parts_type,
+            'metal_type' => $model->metal_type,
+            'color' => $model->color,
+            'shape' => $model->shape,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }
