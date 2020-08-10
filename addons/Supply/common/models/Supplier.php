@@ -73,6 +73,8 @@ class Supplier extends BaseModel
             [['contract_file', 'business_file', 'tax_file', 'structure_cert', 'production_licence', 'taxpayer_cert', 'account_licence', 'insure_cert', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['bank_name'], 'string', 'max' => 100],
             [['business_scope', 'pay_type'], 'safe'],
+            [['business_scope'], 'parseBusinessScope'],
+            [['pay_type'], 'parsePayTypeScope'],
         ];
     }
 
