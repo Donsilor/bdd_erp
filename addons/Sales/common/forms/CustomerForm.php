@@ -53,31 +53,7 @@ class CustomerForm extends Customer
             //[['email', 'mobile'], 'validateCustomer'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
-    }
-    /**
-     * 验证客户信息
-     * @param unknown $attribute
-     * @param unknown $params
-     */
-    public function validateCustomer($attribute,$params)
-    {
-        $this->addError("mobile","[非国际批发]客户手机号码必填222");
-        return ;
-        /* if($this->channel_id == 3) {
-            //国际批发
-            if(empty($this->email)) {
-                $this->addError($attribute,"[国际批发]客户邮箱必填");
-                return;
-            }
-        }else{
-            //国际批发
-            if(empty($this->mobile)) {
-                $this->addError($attribute,"[非国际批发]客户手机号码必填");
-                return;
-            }
-        } */
-        
-    }
+    }    
     /**
      * {@inheritdoc}
      */

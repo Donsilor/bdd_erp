@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
                         ],
                         [
-                            'label' => '参考金价(元/克)',
+                            'attribute' => 'refer_price',
                             'value' => function ($model, $key, $index){
                                 return \Yii::$app->goldTool->getGoldRmbPrice($model->code);
                             },
@@ -78,33 +78,60 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 return $model->notice_range;
                             },
                             'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],                            
+                        ],
+                        [
+                            'attribute' => 'notice_status',
+                            'value' => function ($model, $key, $index){
+                                return common\enums\ConfirmEnum::getValue($model->notice_status);
+                            },
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'notice_users',
                             'value' => function ($model, $key, $index){
-                                return $model->notice_users;
+                                if($model->notice_users) {
+                                    $model->notice_users = explode(',',$model->notice_users);
+                                    $users = Yii::$app->services->backendMember->findAllByIds($model->notice_users);
+                                    $str = '';
+                                    foreach ($users as $user) {
+                                        $str .= $user->username.'('.$user->mobile.')<br/>';
+                                    }
+                                    return $str;
+                                }
                             },
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-2'],
+                            'format' => 'raw',
                        ],
                         [
-                            'attribute'=>'api_time',
+                            'attribute'=>'sync_time',
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->api_time);
+                                $sync_type = common\enums\OperateTypeEnum::getValue($model->sync_type);
+                                $sync_time =  Yii::$app->formatter->asDatetime($model->sync_time);
+                                return $sync_type.'('.$model->sync_user.')<br/>'.$sync_time;
                             },
-                            'filter' => false,                       
+                            'filter' => false,   
+                            'format' => 'raw',
                         ],
 
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
-                            'template'=> '{edit} {status}',
+                            'template'=> '{edit} {price} {status}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['ajax-edit','id' => $model->id], '编辑', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModal',
+                                    ]);
+                                },
+                                'price' => function ($url, $model, $key) {
+                                    return Html::edit(['ajax-price','id' => $model->id], '更新金价', [
+                                            'class' => 'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
                                     ]);
                                 },
                                 'status' => function ($url, $model, $key) {
