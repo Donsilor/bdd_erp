@@ -90,14 +90,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'headerOptions' => ['width'=>'120'],
                             ],
                             [
-                                'label' => '应盘粒数',
+                                'label' => '应盘数量',
                                 'attribute' => 'parts_num',
                                 'filter' => true,
                                 'headerOptions' => ['width' => '100'],
                                 'contentOptions' => ['style'=>'color:green'],
                             ],
                             [
-                                'label' => '实盘粒数',
+                                'label' => '实盘数量',
                                 'value' => function($model){
                                     return $model->goodsW->actual_num ?? 0;
                                 },
