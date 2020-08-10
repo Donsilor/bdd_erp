@@ -79,7 +79,10 @@ class OrderGoodsService extends Service
             }
 
             $wareshouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
-            if(false === $wareshouse_goods->save(true,['goods_status'])){
+            //销售后更新出库成本
+            $outbound_cost = \Yii::$app->warehouseService->warehouseGoods->getOutboundCost($wareshouse_goods->goods_id);
+            $wareshouse_goods->outbound_cost = $outbound_cost;
+            if(false === $wareshouse_goods->save(true,['goods_status','outbound_cost'])){
                 throw new \Exception($this->getError($wareshouse_goods));
             }
 

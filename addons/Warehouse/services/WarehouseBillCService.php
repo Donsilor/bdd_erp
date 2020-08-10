@@ -74,10 +74,19 @@ class WarehouseBillCService extends WarehouseBillService
             //其他出库类型
             $status = GoodsStatusEnum::IN_STOCK;//待定
         }
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
-        if($execute_num <> count($bill_goods)){
-            throw new Exception("货品改变状态数量与明细数量不一致");
+//        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+//        if($execute_num <> count($bill_goods)){
+//            throw new Exception("货品改变状态数量与明细数量不一致");
+//        }
+
+        foreach ($goods_ids as $goods_id){
+            $outbound_cost = Yii::$app->warehouseService->warehouseGoods->getOutboundCost($goods_id);
+            $res = WarehouseGoods::updateAll(['goods_status'=> $status,'outbound_cost'=>$outbound_cost],['goods_id'=>$goods_id, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+            if(false === $res){
+                throw new Exception('更新库存信息失败');
+            }
         }
+
         //更新收货单汇总：总金额和总数量
         $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id);
         if(false === $res){

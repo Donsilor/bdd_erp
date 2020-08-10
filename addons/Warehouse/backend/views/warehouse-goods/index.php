@@ -255,6 +255,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'outbound_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'outbound_cost', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'market_price',
                             'filter' => Html::activeTextInput($searchModel, 'market_price', [
                                 'class' => 'form-control',

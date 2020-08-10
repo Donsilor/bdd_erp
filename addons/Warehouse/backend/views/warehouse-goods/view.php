@@ -81,6 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->cost_price ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('outbound_cost') ?>：</td>
+                            <td><?= $model->outbound_cost ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('market_price') ?>：</td>
                             <td><?= $model->market_price ?></td>
                         </tr>
