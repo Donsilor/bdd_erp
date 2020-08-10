@@ -2,19 +2,16 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
-use addons\Warehouse\common\enums\LayoutTypeEnum;
-use addons\Warehouse\common\forms\WarehouseTempletForm;
-use addons\Warehouse\common\models\WarehouseTemplet;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseGift;
-use addons\Warehouse\common\forms\WarehouseGiftForm;
+use addons\Warehouse\common\models\WarehouseTemplet;
+use addons\Warehouse\common\forms\WarehouseTempletForm;
 use addons\Sales\common\models\Order;
-use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\forms\OrderForm;
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\LayoutTypeEnum;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
@@ -57,7 +54,7 @@ class TempletController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseTemplet::tableName().'.status',-1]);
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(WarehouseGift::tableName().'.id');
+            $queryIds = $dataProvider->query->select(WarehouseTemplet::tableName().'.id');
             $this->actionExport($queryIds);
         }
         return $this->render($this->action->id, [
@@ -77,7 +74,7 @@ class TempletController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['templet/index', 'id'=>$id]));
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGiftForm();
+        $model = $model ?? new WarehouseTempletForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
@@ -110,10 +107,10 @@ class TempletController extends BaseController
                 'account' => ['order_amount', 'refund_amount'],
             ]
         ]);
-        $gift = WarehouseGift::findOne($id);
+        $templet = WarehouseTemplet::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
         $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
-        $dataProvider->query->andWhere(['=', OrderGoods::tableName().'.style_sn', $gift->style_sn]);
+        $dataProvider->query->andWhere(['=', OrderGoods::tableName().'.style_sn', $templet->style_sn]);
         //创建时间过滤
         if (!empty($searchParams['order_time'])) {
             list($start_date, $end_date) = explode('/', $searchParams['order_time']);
@@ -123,8 +120,8 @@ class TempletController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'tab'=>$tab,
-            'gift' => $gift,
-            'tabList'=>\Yii::$app->warehouseService->gift->menuTabList($id, $returnUrl),
+            'templet' => $templet,
+            'tabList'=>\Yii::$app->warehouseService->templet->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
