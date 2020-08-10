@@ -235,7 +235,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if ($model->receipt_status == ReceiptStatusEnum::SAVE) {
+                                    if ($model->receipt_status == ReceiptStatusEnum::CANCEL) {
                                         return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },
