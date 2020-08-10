@@ -83,7 +83,7 @@ class PurchaseGiftGoods extends BaseModel
             'style_sex' => '款式性别',
             'finger_hk' => '手寸(港)',
             'finger' => '手寸(美)',
-            'chain_length' => '链长',
+            'chain_length' => '链长(cm)',
             'material_type' => '材质',
             'material_color' => '材质颜色',
             'main_stone_type' => '主石类型',
