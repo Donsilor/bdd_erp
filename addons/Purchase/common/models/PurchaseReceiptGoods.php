@@ -200,7 +200,7 @@ class PurchaseReceiptGoods extends BaseModel
             'product_size' => '成品尺寸(mm)',
             'biaomiangongyi' => '表面工艺',
             'single_stone_weight' => '单件连石重(g)',
-            'chain_long' => '链长(mm)',
+            'chain_long' => '链长(cm)',
             'chain_type' => '链类型',
             'cramp_ring' => '扣环',
             'talon_head_type' => '爪头形状',
