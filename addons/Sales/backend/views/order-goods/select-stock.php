@@ -471,7 +471,7 @@ use addons\Style\common\enums\AttrIdEnum;
                         [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
-                            'filter'=>Select2::widget([
+                            'filter'=>\kartik\select2\Select2::widget([
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
                                 'data'=>Yii::$app->supplyService->supplier->getDropDown(),
@@ -487,7 +487,7 @@ use addons\Style\common\enums\AttrIdEnum;
                         [
                             'label' => '首次入库时间',
                             'attribute'=>'created_at',
-                            'filter' => DateRangePicker::widget([    // 日期组件
+                            'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,

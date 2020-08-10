@@ -222,6 +222,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'first_num',
+                            'filter' => Html::activeTextInput($searchModel, 'first_num', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'100'],
+                        ],
+                        [
                             'attribute'=>'gift_num',
                             'filter' => Html::activeTextInput($searchModel, 'gift_num', [
                                 'class' => 'form-control',

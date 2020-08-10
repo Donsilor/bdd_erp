@@ -79,7 +79,10 @@ class OrderGoodsService extends Service
             }
 
             $wareshouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
-            if(false === $wareshouse_goods->save(true,['goods_status'])){
+            //销售后更新出库成本
+            $outbound_cost = \Yii::$app->warehouseService->warehouseGoods->getOutboundCost($wareshouse_goods->goods_id);
+            $wareshouse_goods->outbound_cost = $outbound_cost;
+            if(false === $wareshouse_goods->save(true,['goods_status','outbound_cost'])){
                 throw new \Exception($this->getError($wareshouse_goods));
             }
 
@@ -107,22 +110,29 @@ class OrderGoodsService extends Service
         if(empty($wareshouse_goods)){
             throw new \Exception("不存在或者不是库存状态",422);
         }
+
         $model->jintuo_type = $wareshouse_goods->jintuo_type;
         $model->qiban_type = $wareshouse_goods->qiban_type;
         $model->style_sex = $wareshouse_goods->style_sex;
         $model->style_cate_id = $wareshouse_goods->style_cate_id;
         $model->product_type_id = $wareshouse_goods->product_type_id;
         $model->goods_num = 1;
+        $model->goods_price = 0;
+        $model->goods_pay_price = 0;
         $model->goods_name = $wareshouse_goods->goods_name;
         $model->style_sn = $wareshouse_goods->style_sn;
         $model->qiban_sn = $wareshouse_goods->qiban_sn;
         $model->currency = $model->order->currency;
+        $isNewRecord = $model->isNewRecord;
+
         if(false === $model->save(false)){
             throw new \Exception($this->getError($model));
         }
-        if($model->isNewRecord) {
-            Yii::$app->salesService->orderGoods->toStock($model);
+
+        if($isNewRecord) {
+            \Yii::$app->salesService->orderGoods->toStock($model);
         }
+
         return $model;
 
     }

@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\TempletStatusEnum;
+use addons\Warehouse\common\models\WarehouseTemplet;
 use addons\Warehouse\common\models\WarehouseTempletBill;
 use addons\Warehouse\common\models\WarehouseTempletBillGoods;
 use Yii;
@@ -163,6 +165,7 @@ class TempletBillLGoodsController extends TempletBillGoodsController
             $trans = Yii::$app->trans->beginTransaction();
 
             $model = $this->findModel($id) ?? new WarehouseTempletBillGoods();
+            WarehouseTemplet::updateAll(['goods_status'=>TempletStatusEnum::IN_STOCK], ['batch_sn'=>$model->batch_sn]);
             if (!$model->delete()) {
                 throw new \Exception("删除失败", 422);
             }

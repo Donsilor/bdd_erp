@@ -160,7 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset' => '20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::create(['order-goods/edit-stock', 'order_id' => $model->id], '现货商品', [
+                        echo Html::create(['order-goods/select-stock', 'order_id' => $model->id], '现货商品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '90%',
                             'data-height' => '90%',
