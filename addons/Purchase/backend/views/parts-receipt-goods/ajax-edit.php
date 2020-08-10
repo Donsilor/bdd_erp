@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-lg-4">
-                    <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(), ['prompt' => '请选择']) ?>
+                    <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(), ['prompt' => '请选择', 'disabled' => true]) ?>
                 </div>
                 <div class="col-lg-4">
                     <?= $form->field($model, 'goods_sn')->textInput(['disabled' => true]) ?>
