@@ -298,7 +298,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
                                         if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {

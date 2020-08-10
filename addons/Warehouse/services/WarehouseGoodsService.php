@@ -2,15 +2,12 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\models\Warehouse;
-use addons\Warehouse\common\models\WarehouseGoodsLog;
-use common\components\Service;
-use common\enums\ConfirmEnum;
 use common\helpers\Url;
+use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseGoodsLog;
 use addons\Style\common\enums\StyleSexEnum;
 use common\enums\AuditStatusEnum;
-
 
 /**
  * Class TypeService
@@ -31,9 +28,9 @@ class WarehouseGoodsService extends Service
 
     /**
      * 创建货号操作日志
-     * @param unknown $log
+     * @param string $log
      * @throws \Exception
-     * @return \addons\Warehouse\common\models\WarehouseGoodsLog
+     * @return object
      */ 
     public function createWarehouseGoodsLog($log){
         $model = new WarehouseGoodsLog();
