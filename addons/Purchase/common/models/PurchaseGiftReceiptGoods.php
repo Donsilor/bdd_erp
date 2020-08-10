@@ -100,7 +100,7 @@ class PurchaseGiftReceiptGoods extends BaseModel
             'to_warehouse_id' => '入库仓库',
             'xuhao' => '序号',
             'goods_status' => '收货单货品状态',
-            'purchase_detail_id' => '采购单商品明细ID',
+            'purchase_detail_id' => '来源明细ID',
             'iqc_reason' => '质检未过原因',
             'iqc_remark' => '质检备注',
             'sort' => '排序',
