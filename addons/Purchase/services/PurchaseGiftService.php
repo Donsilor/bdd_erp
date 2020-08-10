@@ -7,7 +7,7 @@ use common\components\Service;
 use addons\Purchase\common\models\PurchaseGift;
 use addons\Purchase\common\models\PurchaseGiftGoods;
 use addons\Purchase\common\forms\PurchaseGiftGoodsForm;
-use addons\Shop\common\models\Style;
+use addons\Style\common\models\Style;
 use common\enums\StatusEnum;
 use common\helpers\Url;
 
