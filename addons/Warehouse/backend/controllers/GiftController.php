@@ -167,7 +167,7 @@ class GiftController extends BaseController
         $select = ['g.*','sup.supplier_name'];
         $query = WarehouseGift::find()->alias('g')
             ->leftJoin(Supplier::tableName().' sup','sup.id=g.supplier_id')
-            ->where(['g.id' => $ids])
+            //->where(['g.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
         //统计
