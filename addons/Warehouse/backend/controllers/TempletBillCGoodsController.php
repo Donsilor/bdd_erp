@@ -143,6 +143,34 @@ class TempletBillCGoodsController extends TempletBillGoodsController
         ]);
     }
 
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        $purchase_id = Yii::$app->request->get('purchase_id');
+        try {
+            $trans = Yii::$app->trans->beginTransaction();
+
+            $model = $this->findModel($id) ?? new WarehouseTempletBillGoods();
+            if (!$model->delete()) {
+                throw new \Exception("删除失败", 422);
+            }
+            //更新单据汇总
+            Yii::$app->warehouseService->templetBill->BillSummary($purchase_id);
+            $trans->commit();
+            return $this->message('删除成功',$this->redirect(Yii::$app->request->referrer),'success');
+        } catch (\Exception $e) {
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+    }
+
     public function getExport($dataProvider)
     {
         $list = $dataProvider->models;
