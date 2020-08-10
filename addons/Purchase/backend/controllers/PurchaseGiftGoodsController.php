@@ -70,6 +70,7 @@ class PurchaseGiftGoodsController extends BaseController
     /**
      * 编辑/创建
      * @var PurchaseGiftGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionEdit()
@@ -172,6 +173,7 @@ class PurchaseGiftGoodsController extends BaseController
     /**
      * 申请编辑
      * @property PurchaseGiftGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionApplyEdit()

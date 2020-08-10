@@ -228,7 +228,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         }
                     },
                     'delete' => function($url, $model, $key){
-                        if($model->purchase_status != PurchaseStatusEnum::CONFIRM){
+                        if($model->purchase_status == PurchaseStatusEnum::CANCEL){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

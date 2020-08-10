@@ -170,6 +170,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 申请编辑
      * @property PurchaseGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionApplyEdit()
