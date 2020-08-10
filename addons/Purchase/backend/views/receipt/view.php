@@ -53,16 +53,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->creator ? $model->creator->username:''  ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
                             <td><?= $model->audit_remark ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
