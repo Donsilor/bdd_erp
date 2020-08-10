@@ -197,4 +197,12 @@ class Produce extends BaseModel
     {
         return $this->hasMany(ProduceStone::class, ['produce_id'=>'id'])->alias('stone');
     }
+    /**
+     * 配件列表  一对多
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduceParts()
+    {
+        return $this->hasMany(ProduceParts::class, ['produce_id'=>'id'])->alias('gold');
+    }
 }

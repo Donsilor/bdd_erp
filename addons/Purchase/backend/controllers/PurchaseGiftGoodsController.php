@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use addons\Style\common\models\StyleGift;
 use Yii;
 use common\traits\Curd;
 use common\helpers\ResultHelper;
@@ -69,6 +70,7 @@ class PurchaseGiftGoodsController extends BaseController
     /**
      * 编辑/创建
      * @var PurchaseGiftGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionEdit()
@@ -158,7 +160,7 @@ class PurchaseGiftGoodsController extends BaseController
                 throw new \Exception("删除失败",422);
             }
             //更新单据汇总
-            Yii::$app->purchaseService->gold->summary($purchase_id);
+            Yii::$app->purchaseService->gift->summary($purchase_id);
             $trans->commit();
             
             return $this->message("删除成功", $this->redirect($this->returnUrl));
@@ -171,6 +173,7 @@ class PurchaseGiftGoodsController extends BaseController
     /**
      * 申请编辑
      * @property PurchaseGiftGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionApplyEdit()
@@ -306,5 +309,25 @@ class PurchaseGiftGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询赠品款号信息
+     * @return array
+     */
+    public function actionAjaxGetGift()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = StyleGift::find()->select(['gift_name','sale_price','channel_id'])->where(['style_sn'=>$goods_sn])->one();
+        //$model = new StyleGift();
+        $style = Style::findOne(['style_sn'=>$goods_sn]);
+        $data = [
+            'gift_name' => $model->gift_name,
+            'style_cate_id' => $style->style_cate_id,
+            'product_type_id' => $style->product_type_id,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }

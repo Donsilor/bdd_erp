@@ -38,12 +38,12 @@ class PurchasePartsService extends Service
     public function summary($purchase_id)
     {
         $sum = PurchasePartsGoods::find()
-            ->select(['sum(goods_num) as total_num','sum(cost_price*goods_num) as total_cost'])
+            ->select(['sum(goods_num) as total_num','sum(goods_weight) as total_weight','sum(cost_price*goods_num) as total_cost'])
             ->where(['purchase_id'=> $purchase_id,'status'=> StatusEnum::ENABLED])
             ->asArray()->one();
         
         if($sum) {
-            PurchaseParts::updateAll(['total_num'=>$sum['total_num'],'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
+            PurchaseParts::updateAll(['total_num'=>$sum['total_num'],'total_weight'=>$sum['total_weight'],'total_cost'=>$sum['total_cost']],['id'=>$purchase_id]);
         }
     }
 }

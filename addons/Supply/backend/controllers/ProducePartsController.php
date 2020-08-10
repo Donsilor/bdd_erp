@@ -2,14 +2,12 @@
 
 namespace addons\Supply\backend\controllers;
 
-use addons\Supply\common\enums\PeijianStatusEnum;
-use addons\Supply\common\models\ProduceParts;
 use Yii;
-use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Supply\common\models\ProduceGold;
+use common\models\base\SearchModel;
 use addons\Supply\common\models\Produce;
-use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceParts;
+use addons\Supply\common\enums\PeijianStatusEnum;
 use addons\Supply\common\enums\BuChanEnum;
 
 /**
@@ -76,9 +74,9 @@ class ProducePartsController extends BaseController
         } elseif($produce->peijian_status != PeijianStatusEnum::TO_LINGJIAN) {
             return $this->message('布产单不是待领件状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        foreach($produce->produceGolds ?? [] as $produceGold) {
-            if($produceGold->peiliao_status != PeijianStatusEnum::TO_LINGJIAN){
-                return $this->message("(ID={$produceGold->id})配件单不是待领件状态", $this->redirect(Yii::$app->request->referrer), 'error');
+        foreach($produce->ProduceParts ?? [] as $produceParts) {
+            if($produceParts->peijian_status != PeijianStatusEnum::TO_LINGJIAN){
+                return $this->message("(ID={$produceParts->id})配件单不是待领件状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }        
         try {
