@@ -200,6 +200,7 @@ class PurchaseReceiptService extends Service
      * @param array $bill
      * @param array $detail
      * @throws
+     * @return object
      */
     public function createReceipt($bill, $detail)
     {
@@ -252,8 +253,9 @@ class PurchaseReceiptService extends Service
 
     /**
      * 布产单号批量查询可出货商品
-     * @param object $form
+     * @param PurchaseReceiptForm $form
      * @throws \Exception
+     * @return array
      */
     public function getGoodsByProduceSn($form)
     {
