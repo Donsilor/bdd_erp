@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     var formId = 'purchasepartsgoodsform';
 
-    function fillStoneForm() {
+    function fillPartsForm() {
         var goods_sn = $("#" + formId + "-goods_sn").val();
         if (goods_sn != '') {
             $.ajax({
@@ -105,6 +105,6 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     $("#" + formId + "-goods_sn").change(function () {
-        fillStoneForm();
+        fillPartsForm();
     });
 </script>

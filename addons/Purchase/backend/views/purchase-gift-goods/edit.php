@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\Url;
 use yii\widgets\ActiveForm;
 use addons\Style\common\enums\AttrIdEnum;
 
@@ -16,7 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
                 <div class="row">
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'goods_sn')->textInput() ?>
+                        <?= $form->field($model, 'goods_sn')->widget(\kartik\select2\Select2::class, [
+                            'data' => Yii::$app->styleService->gift->getDropDown(),
+                            'options' => ['placeholder' => '请选择'],
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                        ]); ?>
                     </div>
                     <div class="col-lg-3">
                         <?= $form->field($model, 'goods_name')->textInput() ?>
@@ -80,3 +87,31 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script>
+    var formId = 'purchasegiftgoodsform';
+
+    function fillGiftForm() {
+        var goods_sn = $("#" + formId + "-goods_sn").val();
+        if (goods_sn != '') {
+            $.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-gift'])?>',
+                dataType: "json",
+                data: {
+                    'goods_sn': goods_sn,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {
+                        $("#" + formId + "-goods_name").val(data.data.gift_name);
+                        $("#" + formId + "-style_cate_id").val(data.data.style_cate_id);
+                        $("#" + formId + "-product_type_id").val(data.data.product_type_id);
+                    }
+                }
+            });
+        }
+    }
+
+    $("#" + formId + "-goods_sn").change(function () {
+        fillGiftForm();
+    });
+</script>
