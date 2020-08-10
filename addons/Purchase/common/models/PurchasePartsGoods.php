@@ -73,7 +73,7 @@ class PurchasePartsGoods extends BaseModel
             'goods_weight' => '商品重量(g)',
             'goods_color' => '颜色',
             'goods_shape' => '形状',
-            'goods_size' => '尺寸',
+            'goods_size' => '尺寸(mm)',
             'chain_type' => '链类型',
             'cramp_ring' => '扣环',
             'material_type' => '金属材质',
