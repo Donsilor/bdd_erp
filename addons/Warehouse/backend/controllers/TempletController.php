@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 
+use addons\Warehouse\common\enums\LayoutTypeEnum;
 use addons\Warehouse\common\forms\WarehouseTempletForm;
 use addons\Warehouse\common\models\WarehouseTemplet;
 use Yii;
@@ -56,7 +57,8 @@ class TempletController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseTemplet::tableName().'.status',-1]);
         //导出
         if(Yii::$app->request->get('action') === 'export'){
-            $this->actionExport($dataProvider);
+            $queryIds = $dataProvider->query->select(WarehouseGift::tableName().'.id');
+            $this->actionExport($queryIds);
         }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -133,7 +135,7 @@ class TempletController extends BaseController
      * @throws
      */
     public function actionExport($ids = null){
-        $name = '赠品';
+        $name = '样板';
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
@@ -144,18 +146,18 @@ class TempletController extends BaseController
         $header = [
             ['批次号', 'gift_sn' , 'text'],
             ['供应商', 'supplier_name' , 'text'],
-            ['配件类型', 'gift_type' , 'text'],
-            ['配件名称', 'gift_name' , 'text'],
-            ['配件款号', 'style_sn' , 'text'],
-            ['配件材质', 'material_type' , 'text'],
-            ['配件形状', 'shape' , 'text'],
-            ['配件颜色', 'color' , 'text'],
-            ['链类型', 'chain_type' , 'text'],
-            ['扣环', 'cramp_ring' , 'text'],
-            ['尺寸', 'size' , 'text'],
-            ['配件数量', 'gift_num' , 'text'],
-            ['库存重量(g)', 'gift_weight' , 'text'],
-            ['配件单价', 'gift_price' , 'text'],
+            ['版式类型', 'layout_type' , 'text'],
+            ['样板名称', 'goods_name' , 'text'],
+            ['样板款号', 'style_sn' , 'text'],
+            ['起版号', 'qiban_sn' , 'text'],
+            ['手寸(美号)', 'finger' , 'text'],
+            ['手寸(港号)', 'finger_hk' , 'text'],
+            ['样板数量', 'goods_num' , 'text'],
+            ['净重(g)', 'suttle_weight' , 'text'],
+            ['成品尺寸(mm)', 'goods_size' , 'text'],
+            ['总石重(ct)', 'stone_weight' , 'text'],
+            ['石头规格', 'stone_size' , 'text'],
+            ['成本价', 'cost_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
 
@@ -164,9 +166,9 @@ class TempletController extends BaseController
 
     private function getData($ids){
         $select = ['g.*','sup.supplier_name'];
-        $query = WarehouseGift::find()->alias('g')
+        $query = WarehouseTemplet::find()->alias('g')
             ->leftJoin(Supplier::tableName().' sup','sup.id=g.supplier_id')
-            ->where(['g.id' => $ids])
+            //->where(['g.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
         //统计
@@ -174,12 +176,9 @@ class TempletController extends BaseController
 
         ];
         foreach ($lists as &$list){
-            $list['gift_type'] = \Yii::$app->attr->valueName($list['gift_type']);
-            $list['material_type'] = \Yii::$app->attr->valueName($list['material_type']);
-            $list['shape'] = \Yii::$app->attr->valueName($list['shape']);
-            $list['color'] = \Yii::$app->attr->valueName($list['color']);
-            $list['chain_type'] = \Yii::$app->attr->valueName($list['chain_type']);
-            $list['cramp_ring'] = \Yii::$app->attr->valueName($list['cramp_ring']);
+            $list['finger'] = \Yii::$app->attr->valueName($list['finger']);
+            $list['finger_hk'] = \Yii::$app->attr->valueName($list['finger_hk']);
+            $list['layout_type'] = LayoutTypeEnum::getValue($list['layout_type']);
         }
         return [$lists,$total];
     }
