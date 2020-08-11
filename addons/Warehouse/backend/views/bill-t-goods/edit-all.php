@@ -201,6 +201,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                            ],
+                            [
                                 'attribute'=>'gold_weight',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_weight'],
                                 'format' => 'raw',
@@ -318,6 +322,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute' => 'material',
@@ -486,6 +494,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                            ],
+                            [
                                 'attribute' => 'diamond_color',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
@@ -639,6 +651,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
+                            ],
+                            [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
@@ -747,6 +763,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'main_stone_type','attr-id'=>AttrIdEnum::MAIN_STONE_TYPE],
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute'=>'main_stone_sn',
@@ -866,6 +886,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_color1','attr-id'=>AttrIdEnum::SIDE_STONE1_COLOR],
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute' => 'second_stone_clarity1',
@@ -1006,6 +1030,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                                 'headerOptions' => [],
+                            ],
+                            [
+                                'class'=>'yii\grid\CheckboxColumn',
+                                'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute'=>'second_stone_size2',
