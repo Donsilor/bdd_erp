@@ -155,8 +155,7 @@ class GoldBillLController extends GoldBillController
     /**
      * @param null $ids
      * @return bool|mixed
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws
      */
     public function actionExport($ids = null){
         $name = '金料入库单明细';
@@ -173,10 +172,11 @@ class GoldBillLController extends GoldBillController
             ['名称', 'gold_name' , 'text'],
             ['款号', 'style_sn' , 'text'],
             ['重量(g)', 'gold_weight' , 'text'],
-            ['价格	', 'gold_price' , 'text'],
+            ['金价	', 'gold_price' , 'text'],
+            ['金料总额	', 'cost_price' , 'text'],
+            ['含税总额	', 'incl_tax_price' , 'text'],
             ['备注', 'remark' , 'text'],
         ];
-
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 
@@ -190,10 +190,16 @@ class GoldBillLController extends GoldBillController
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
-
+            'total_weight' => 0,
+            'total_cost_price' => 0,
+            'total_tax_price' => 0,
         ];
         foreach ($lists as &$list){
             $list['gold_type'] = \Yii::$app->attr->valueName($list['gold_type']);
+
+            $total['total_weight'] = bcadd($total['total_weight'], $list['gold_weight'], 3);
+            $total['total_cost_price'] = bcadd($total['total_cost_price'], $list['cost_price'], 2);
+            $total['total_tax_price'] = bcadd($total['total_tax_price'], $list['incl_tax_price'], 2);
         }
         return [$lists,$total];
     }
@@ -201,7 +207,7 @@ class GoldBillLController extends GoldBillController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {
