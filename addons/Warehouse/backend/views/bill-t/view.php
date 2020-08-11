@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                         'data-toggle' => 'modal',
                         'class' => 'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]);
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [

@@ -205,7 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_weight'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gold_weight', $model->gold_weight, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                     'class' => 'form-control',
@@ -217,7 +217,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_price'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gold_price', $model->gold_price, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_price', [
                                     'class' => 'form-control',
@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_amount'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_amount', $model->gold_amount, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gold_amount', $model->gold_amount, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
                                     'class' => 'form-control',
@@ -241,7 +241,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_loss'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gold_loss', $model->gold_loss, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gold_loss', $model->gold_loss, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
                                     'class' => 'form-control',
@@ -253,7 +253,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gross_weight'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gross_weight', $model->gross_weight, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gross_weight', $model->gross_weight, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gross_weight', [
                                     'class' => 'form-control',
@@ -477,7 +477,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'diamond_carat',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('diamond_carat', $model->diamond_carat, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('diamond_carat', $model->diamond_carat, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'diamond_carat'],
                                 'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
@@ -655,7 +655,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
@@ -667,7 +667,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'market_price',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('market_price', $model->market_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('market_price', $model->market_price, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'market_price', [
@@ -691,7 +691,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'parts_gold_weight',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('parts_gold_weight', $model->parts_gold_weight, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('parts_gold_weight', $model->parts_gold_weight, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_gold_weight'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
@@ -703,7 +703,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'parts_num',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('parts_num', $model->parts_num, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('parts_num', $model->parts_num, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_num'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_num', [
@@ -715,7 +715,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'parts_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
@@ -727,7 +727,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'parts_price',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('parts_price', $model->parts_price, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_price'],
                                 'filter' => Html::activeTextInput($searchModel, 'parts_price', [
@@ -761,7 +761,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'main_stone_num',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('main_stone_num', $model->main_stone_num, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('main_stone_num', $model->main_stone_num, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_num'],
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
@@ -822,7 +822,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_num1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_num1', $model->second_stone_num1, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_num1', $model->second_stone_num1, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_num1'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
@@ -834,7 +834,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_weight1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_weight1', $model->second_stone_weight1, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_weight1', $model->second_stone_weight1, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight1'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
@@ -846,7 +846,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_price1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_price1', $model->second_stone_price1, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_price1', $model->second_stone_price1, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price1'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
@@ -948,7 +948,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_num2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_num2', $model->second_stone_num2, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_num2', $model->second_stone_num2, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_num2'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
@@ -960,7 +960,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_weight2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_weight2', $model->second_stone_weight2, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_weight2', $model->second_stone_weight2, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight2'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
@@ -1023,7 +1023,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'second_stone_price2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('second_stone_price2', $model->second_stone_price2, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('second_stone_price2', $model->second_stone_price2, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price2'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
@@ -1035,7 +1035,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'gong_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('gong_fee', $model->gong_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('gong_fee', $model->gong_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gong_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
@@ -1047,7 +1047,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'bukou_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
@@ -1059,7 +1059,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'xianqian_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
@@ -1071,7 +1071,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'cert_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cert_fee', $model->cert_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('cert_fee', $model->cert_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
@@ -1095,7 +1095,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'fense_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
@@ -1107,7 +1107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'biaomiangongyi_fee',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id'=>$model->id]);
+                                    return  Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id'=>$model->id, 'onfocus'=>'rfClearVal(this)']);
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
@@ -1167,8 +1167,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- tab-content end -->
 </div>
 <script type="text/javascript">
-    $(function(){
-        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'],"批量填充"); ?>');
-        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit','check'=>1],"批量填充", ['input_type'=>'select']); ?>');
+    $(function () {
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
     });
+
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if(val <= 0){
+            $(obj).val("");
+        }
+    }
 </script>
