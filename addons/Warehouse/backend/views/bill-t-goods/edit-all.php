@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
                                     if($model->auto_goods_id){
-                                        return  Html::ajaxInput('goods_id', $model->goods_id, ['data-id'=>$model->id]);
+                                        return  Html::ajaxInput('goods_id', $model->goods_id, ['data-id'=>$model->id, 'class'=>'form-control goods_trim']);
                                     }else{
                                         return $model->goods_id??"";
                                     }

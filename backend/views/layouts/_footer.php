@@ -356,6 +356,7 @@ $this->registerJs($script);
         }
 
         var val = $(obj).val();
+        $(obj).val(val.trim());
         var name = $(obj).attr('name');
         var data = {'id':id};
         data[name] = val;
