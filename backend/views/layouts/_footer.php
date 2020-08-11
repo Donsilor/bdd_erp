@@ -356,15 +356,20 @@ $this->registerJs($script);
         }
 
         var val = $(obj).val();
-        $(obj).val(val.trim());
         var name = $(obj).attr('name');
         var data = {'id':id};
-        data[name] = val;
-
         if(type == 'number' && isNaN(val)){
             rfAffirm('只能为数字');
             return false;
         }
+
+        $(obj).val(val.trim());
+        if(type == 'number' && val == ""){
+            $(obj).val('0.00');
+            val = 0;
+        }
+
+        data[name] = val;
         $.ajax({
             type: "get",
             url: url,
