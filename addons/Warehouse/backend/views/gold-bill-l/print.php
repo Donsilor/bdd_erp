@@ -61,7 +61,7 @@
                         <div>重量(g)</div>
                     </td>
                     <td>
-                        <div>金价</div>
+                        <div>金价/g</div>
                     </td>
                     <td>
                         <div>金料额</div>
@@ -129,7 +129,7 @@
                             <div>重量(g)</div>
                         </td>
                         <td>
-                            <div>金价</div>
+                            <div>金价/g</div>
                         </td>
                         <td>
                             <div>金料额</div>

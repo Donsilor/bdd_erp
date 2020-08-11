@@ -172,7 +172,7 @@ class GoldBillLController extends GoldBillController
             ['名称', 'gold_name' , 'text'],
             ['款号', 'style_sn' , 'text'],
             ['重量(g)', 'gold_weight' , 'text'],
-            ['金价	', 'gold_price' , 'text'],
+            ['金价/g	', 'gold_price' , 'text'],
             ['金料总额	', 'cost_price' , 'text'],
             ['含税总额	', 'incl_tax_price' , 'text'],
             ['备注', 'remark' , 'text'],
