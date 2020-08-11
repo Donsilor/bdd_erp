@@ -56,6 +56,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name' => 'id',  //设置每行数据的复选框属性
                             ],
                             [
+                                'attribute' => 'id',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
