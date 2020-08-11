@@ -66,7 +66,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
                             <td><?= $model->customer_email ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
-                            <td><?= $model->express_no ?></td>
+                            <td><?= $model->express_no ?>
+                            <?php if($model->express_no){
+                                echo Html::a("(物流轨迹)", ['logistics', 'id' => $model->id], 
+                                        [
+                                            'style'=>"text-decoration:underline;color:#3c8dbc",
+                                            'class' => 'openIframe',
+                                            'data-width' => '60%',
+                                            'data-height' => '80%',
+                                            'data-offset' => '20px',                                                
+                                       ]);
+                            }?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
@@ -625,7 +635,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-    <!-- box end -->
+    <!-- box end -->    
+    
         <div id="flow">
 
         </div>
