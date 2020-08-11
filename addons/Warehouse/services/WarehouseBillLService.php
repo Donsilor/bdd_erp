@@ -251,7 +251,7 @@ class WarehouseBillLService extends Service
                 throw new \Exception($this->getError($model));
             }
             $value[] = array_values($item);
-            if (count($value) > 10) {
+            if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
                 if (false === $res) {
                     throw new \Exception("创建货品信息失败[code=1]");
