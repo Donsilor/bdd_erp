@@ -117,6 +117,7 @@ use Yii;
  * @property string $second_stone_weight3 副石3重量(ct)
  * @property string $second_stone_price3 副石3买入单价
  * @property int $source_detail_id 来源明细ID
+ * @property int $auto_goods_id 是否手动录入货号
  * @property string $remark 备注
  * @property int $status 状态
  * @property int $creator_id 创建人
@@ -140,7 +141,7 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'second_stone_num3', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'parts_num', 'main_stone_num', 'second_stone_num1', 'second_stone_num2', 'second_stone_num3', 'auto_goods_id', 'source_detail_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'suttle_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'factory_cost', 'bukou_fee', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'total_gong_fee', 'chain_long', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_weight3', 'second_stone_price3'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -268,6 +269,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_weight3' => '副石3重量(ct)',
             'second_stone_price3' => '副石3买入单价',
             'source_detail_id' => '来源明细ID',
+            'auto_goods_id' => '是否手动录入货号',
             'remark' => '备注',
             'status' => '状态',
             'creator_id' => '创建人',

@@ -81,6 +81,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'goods_id',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    if($model->auto_goods_id){
+                                        return  Html::ajaxInput('goods_id', $model->goods_id, ['data-id'=>$model->id]);
+                                    }else{
+                                        return $model->goods_id??"";
+                                    }
+                                },
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:160px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'goods_name'],
