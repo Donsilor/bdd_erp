@@ -126,6 +126,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
+                        [
+                            'attribute'=>'incl_tax_price',
+                            'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
                         /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'remark', [
