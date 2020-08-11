@@ -363,7 +363,7 @@ $this->registerJs($script);
             return false;
         }
 
-        $(obj).val(val.trim());
+        $(obj).val(val.replace(/\s*/g,""));
         if(type == 'number' && val == ""){
             $(obj).val('0.00');
             val = 0;
