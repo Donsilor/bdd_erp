@@ -226,7 +226,7 @@ class BillTController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其他入库单',
-                    'log_msg' => '单据取消'
+                    'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
@@ -265,7 +265,7 @@ class BillTController extends BaseController
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '其他收货单',
-                'log_msg' => '取消单据'
+                'log_msg' => '单据取消'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','操作成功');
