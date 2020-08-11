@@ -47,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->payType->name ??'' ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('distribute_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
+                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>                            
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?></td>
                         </tr>
