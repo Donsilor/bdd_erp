@@ -19,7 +19,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function rules()
     {
         $rules = [
-            [['goods_sn', 'is_wholesale', 'goods_num'], 'required']
+            [['goods_sn', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required']
         ];
         return array_merge(parent::rules() , $rules);
     }

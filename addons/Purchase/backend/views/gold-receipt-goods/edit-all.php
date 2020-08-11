@@ -147,6 +147,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'incl_tax_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                /*'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('incl_tax_price', $model->incl_tax_price, ['data-id'=>$model->id]);
+                                },*/
+                                'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'goods_status',
                                 'value' => function ($model){
                                     return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);

@@ -19,6 +19,7 @@ use Yii;
  * @property string $material_type 商品类型
  * @property double $goods_weight 重量
  * @property string $cost_price 成本价
+ * @property string $incl_tax_price 含税总额
  * @property string $gold_price 金料价格/克
  * @property string $goods_remark 商品备注
  * @property int $put_in_type 入库方式
@@ -48,7 +49,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
         return [
             [['receipt_id', 'purchase_sn'], 'required'],
             [['id', 'receipt_id', 'xuhao', 'purchase_detail_id', 'goods_status', 'goods_num', 'put_in_type', 'to_warehouse_id', 'iqc_reason', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['goods_weight', 'cost_price', 'gold_price'], 'number'],
+            [['goods_weight', 'cost_price', 'gold_price', 'incl_tax_price'], 'number'],
             [['goods_sn', 'purchase_sn'], 'string', 'max' => 30],
             [['material_type'], 'string', 'max' => 10],
             [['goods_name', 'goods_remark', 'iqc_remark'], 'string', 'max' => 255],
@@ -74,6 +75,7 @@ class PurchaseGoldReceiptGoods extends BaseModel
             'material_type' => '金料材质',
             'goods_weight' => '金料总重/克',
             'cost_price' => '金料总额',
+            'incl_tax_price' => '含税总额',
             'gold_price' => '金料单价/克',
             'goods_remark' => '备注',
             'put_in_type' => '入库方式',

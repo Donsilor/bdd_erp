@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php if($bill->bill_status == BillStatusEnum::SAVE){ ?>
                     <?= Html::create(['ajax-edit', 'bill_id' => $bill->id,'returnUrl' => Url::getReturnUrl()], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
                     <?php }?>
                 </div>
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModalLg',
+                                                'data-target' => '#ajaxModal',
                                             ]);
                                         }
                                     },
