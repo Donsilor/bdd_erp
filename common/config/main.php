@@ -101,7 +101,7 @@ return [
             // ... 您可以在这里配置组件的更多属性
         ],
         /** ------ 微信SDK ------ **/
-        'wechat' => [
+        /* 'wechat' => [
             'class' => 'common\components\Wechat',
             'userOptions' => [],  // 用户身份类参数
             'sessionParam' => 'wechatUser', // 微信用户信息将存储在会话在这个密钥
@@ -109,7 +109,7 @@ return [
             'rebinds' => [
                 'cache' => 'common\components\WechatCache',
             ]
-        ],
+        ], */
         /** ------ i18n 国际化 ------ **/
         'i18n' => [
                 'translations' => [
@@ -124,8 +124,14 @@ return [
         ],
         'area' => ['class' => 'common\components\Area'],
 		'attr' => ['class' => 'common\components\Attribute'],
-        'trans'=>['class'=>'common\components\Transaction'],
-        'goldTool'=>['class'=>'common\components\GoldTool'],
-        'shopAttr'=>['class'=>'common\components\ShopAttribute']
+        'trans'=> ['class'=>'common\components\Transaction'],
+        'goldTool'=> ['class'=>'common\components\GoldTool'],
+        'shopAttr'=> ['class'=>'common\components\ShopAttribute'],
+        'jdSdk' => [
+                'class' => 'common\components\JdSdk',
+                'appKey' => '600FE385E066028D2A1B30C46C54E54C',
+                'appSecret' => '1a693572f25440d8905672fac4611a6a',
+                'accessToken'=>'be99c0f3103140abbdbf63a185bc9e4dwzjm',
+        ],
     ],
 ];

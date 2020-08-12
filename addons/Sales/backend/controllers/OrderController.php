@@ -32,11 +32,9 @@ class OrderController extends BaseController
     public $modelClass = OrderForm::class;
 
     public function actionTest()
-    {
-        echo $rmbPrice = Yii::$app->goldTool->getGoldRmbPrice(),'-';
-        echo $rmbPrice = Yii::$app->goldTool->getGoldUsdPrice();
-        
-        //Yii::$app->shopService->orderSync->syncOrder(1369);
+    {   
+        $order_no = '130311942049';
+        Yii::$app->jdSdk->getOrderInfo($order_no);
         exit;
     }    
     /**
