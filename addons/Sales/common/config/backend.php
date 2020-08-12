@@ -76,6 +76,18 @@ return [
 
         ],
         [
+            'title' => '退款管理',
+            'route' => 'indexReturn',
+            'icon' => 'fa fa-superpowers',
+            'child' => [
+                [
+                    'title' => '退款列表',
+                    'route' => 'return/index',
+                ],
+            ],
+
+        ],
+        [
             'title' => '功能配置',
             'route' => 'indexConfig',
             'icon' => 'fa fa-superpowers',

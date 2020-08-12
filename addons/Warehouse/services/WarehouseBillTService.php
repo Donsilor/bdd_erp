@@ -28,6 +28,7 @@ class WarehouseBillTService extends Service
      * 单据汇总
      * @param int $bill_id
      * @throws
+     * @return bool
      */
     public function warehouseBillTSummary($bill_id)
     {
