@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false) ?>
+                    <span style="color:red;">Ctrl+F键可快速查找字段名</span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -59,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'id',
                                 'filter' => false,
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -85,28 +86,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'product_type_id',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model) {
-                                    return $model->productType->name ?? '';
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id', Yii::$app->styleService->productType::getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:120px;'
-
-                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'style_cate_id',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => 'styleCate.name',
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', Yii::$app->styleService->styleCate::getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', $model->getCateMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'product_type_id',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model) {
+                                    return $model->productType->name ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id', $model->getProductMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:120px;'
@@ -114,62 +114,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'style_sex',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model) {
-                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', \addons\Style\common\enums\StyleSexEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'goods_id',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'goods_name',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:200px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'style_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'produce_sn',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:120px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'order_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -178,496 +140,384 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'qiban_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model) {
-                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', \addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'factory_mo',
+                                'attribute' => 'goods_name',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:200px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'gold_weight',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'gold_loss',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'suttle_weight',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'gold_price',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'gold_amount',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'gross_weight',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'gross_weight', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'xiangkou',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->xiangkou);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGKOU), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'finger_hk',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->finger_hk);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::PORT_NO), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'finger',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->finger);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'cert_type',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->cert_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'cert_id',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'goods_num',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'material',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->material);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'material', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
+                            /* [
+                                 'attribute' => 'material',
+                                 'value' => function ($model) {
+                                     return Yii::$app->attr->valueName($model->material);
+                                 },
+                                 'filter' => Html::activeDropDownList($searchModel, 'material', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL), [
+                                     'prompt' => '全部',
+                                     'class' => 'form-control',
+                                     'style' => 'width:80px;'
+                                 ]),
+                                 'headerOptions' => ['class' => 'col-md-1'],
+                             ],*/
                             [
                                 'attribute' => 'material_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->material_type);
+                                    return Yii::$app->attr->valueName($model->material_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type', $model->getPartsMaterialMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'material_color',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->material_color);
+                                    return Yii::$app->attr->valueName($model->material_color) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
-                                'attribute' => 'is_inlay',
+                                'attribute' => 'goods_num',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'finger_hk',
                                 'value' => function ($model) {
-                                    return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
+                                    return Yii::$app->attr->valueName($model->finger_hk) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', \addons\Style\common\enums\InlayEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
-                                'attribute' => 'kezi',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'kezi', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'diamond_carat',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'diamond_color',
+                                'attribute' => 'finger',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_color);
+                                    return Yii::$app->attr->valueName($model->finger) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger', $model->getFingerMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_shape',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_shape);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_shape', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_clarity',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_clarity);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_cut',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_cut);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cut', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_polish',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_polish);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_polish', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_symmetry',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_symmetry);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'main_stone_colour',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->main_stone_colour);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_COLOUR), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'main_stone_size',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_size', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'diamond_fluorescence',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_fluorescence);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_discount',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'diamond_discount', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'diamond_cert_type',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->diamond_cert_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'diamond_cert_id',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'diamond_cert_id', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'jintuo_type',
-                                'value' => function ($model) {
-                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'market_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'length',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'length', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'parts_gold_weight',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
+                                'attribute' => 'product_size',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'xiangkou',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->xiangkou) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou', $model->getXiangkouMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                            ],
+                            [
+                                'attribute' => 'kezi',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'filter' => Html::activeTextInput($searchModel, 'kezi', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'parts_num',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'parts_num', [
+                                'attribute' => 'chain_type',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->chain_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                            ],
-                            [
-                                'attribute' => 'parts_fee',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'parts_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'chain_long',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'chain_long', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'chain_type',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->chain_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_TYPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
                                 'attribute' => 'cramp_ring',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->cramp_ring);
+                                    return Yii::$app->attr->valueName($model->cramp_ring) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_BUCKLE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'talon_head_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->talon_head_type);
+                                    return Yii::$app->attr->valueName($model->talon_head_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'talon_head_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::TALON_HEAD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'talon_head_type', $model->getTalonHeadTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
-                                'attribute' => 'xiangqian_craft',
+                                'attribute' => 'gold_weight',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'suttle_weight',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'gold_loss',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'gold_price',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'gold_amount',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'cert_id',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'cert_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->xiangqian_craft);
+                                    return Yii::$app->attr->valueName($model->cert_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGQIAN_CRAFT), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', $model->getCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
-                                'attribute' => 'goods_color',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->goods_color);
+                                'attribute' => 'diamond_cert_id',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                                'filter' => Html::activeTextInput($searchModel, 'diamond_cert_id', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'diamond_cert_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->diamond_cert_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::GOODS_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type', $model->getDiamondCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
                             ],
                             [
-                                'attribute' => 'biaomiangongyi',
+                                'attribute' => 'diamond_carat',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'diamond_carat', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'diamond_shape',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->biaomiangongyi);
+                                    return Yii::$app->attr->valueName($model->diamond_shape) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FACEWORK), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_shape', $model->getDiamondClarityMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
                             ],
                             [
-                                'attribute' => 'product_size',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
+                                'attribute' => 'diamond_color',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_color) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_color', $model->getDiamondColorMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_clarity',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_clarity) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity', $model->getDiamondClarityMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_cut',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_cut) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cut', $model->getDiamondCutMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_polish',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_polish) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_polish', $model->getDiamondPolishMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_symmetry',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_symmetry) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry', $model->getDiamondSymmetryMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_fluorescence',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->diamond_fluorescence) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence', $model->getDiamondFluorescenceMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+                            ],
+                            [
+                                'attribute' => 'diamond_discount',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#d5c59f;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'diamond_discount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_pei_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->main_pei_type) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', $model->getPeiStoneTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_sn',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
@@ -675,20 +525,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_stone_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->main_stone_type);
+                                    return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                             ],
                             [
-                                'attribute' => 'main_stone_sn',
+                                'attribute' => 'main_cert_id',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_cert_id', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
@@ -696,17 +546,125 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_stone_num',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'main_stone_num', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_weight',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'main_stone_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_shape',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->main_stone_shape) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_color',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->main_stone_color) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_clarity',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->main_stone_clarity) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity', $model->getMainStoneClarityMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_cut',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->main_stone_cut) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_cut', $model->getMainStoneCutMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_colour',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->main_stone_colour) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', $model->getMainStoneColourMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
+                                'attribute' => 'main_stone_size',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_size', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'main_stone_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_amount',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'main_stone_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_pei_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->second_pei_type) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', $model->getPeiStoneTypeMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
@@ -714,17 +672,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_sn1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_cert_id1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
@@ -732,107 +681,140 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_type1',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_type1);
+                                    return Yii::$app->attr->valueName($model->second_stone_type1) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                            ],
+                            [
+                                'attribute' => 'second_cert_id1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_num1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_weight1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_shape1',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->second_stone_shape1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_color1',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->second_stone_color1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_clarity1',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->second_stone_clarity1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', $model->getSecondStoneClarity1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_colour1',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->second_stone_colour1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_size1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'second_stone_price1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
-                                'attribute' => 'second_stone_color1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_color1);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'second_stone_clarity1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_clarity1);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'second_stone_shape1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_shape1);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'second_stone_color1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_color1);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'second_stone_clarity1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_clarity1);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute' => 'second_stone_size1',
+                                'attribute' => 'second_stone_amount1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_pei_type2',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->second_pei_type2) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', $model->getPeiStoneTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
@@ -840,73 +822,97 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_type2',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_type2);
+                                    return Yii::$app->attr->valueName($model->second_stone_type2) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                            ],
+                            [
+                                'attribute' => 'second_cert_id2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id2', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_num2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_weight2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_shape2',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_shape2);
+                                    return Yii::$app->attr->valueName($model->second_stone_shape2) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape2', $model->getSecondStoneShape2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
                             [
                                 'attribute' => 'second_stone_color2',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_color2);
+                                    return Yii::$app->attr->valueName($model->second_stone_color2) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', $model->getSecondStoneColor2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
                             [
                                 'attribute' => 'second_stone_clarity2',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_clarity2);
+                                    return Yii::$app->attr->valueName($model->second_stone_clarity2) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', $model->getSecondStoneClarity2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
+                            /*[
+                                'attribute' => 'second_stone_colour2',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->second_stone_colour2)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],*/
                             [
                                 'attribute' => 'second_stone_size2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_size2', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -915,83 +921,438 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_price2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_amount2',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_type3',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->second_stone_type3) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                            ],
+                            [
+                                'attribute' => 'second_stone_num3',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_weight3',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_price3',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'stone_remark',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                                'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:160px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_gong_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_way',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PartsWayEnum::getValue($model->is_inlay) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPartsWayMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->parts_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_type', $model->getPartsTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                            ],
+                            [
+                                'attribute' => 'parts_material',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->parts_material) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_material', $model->getPartsMaterialMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                            ],
+                            [
+                                'attribute' => 'parts_num',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_num', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_gold_weight',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_price',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_amount',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'gong_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
-                                'attribute' => 'bukou_fee',
+                                'attribute' => 'basic_gong_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'xiangqian_craft',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->xiangqian_craft) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', $model->getXiangqianCraftMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                            ],
+                            [
+                                'attribute' => 'xianqian_price',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, xianqian_price, [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'xianqian_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'biaomiangongyi',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Yii::$app->attr->valueName($model->biaomiangongyi) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:100px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                            ],
+                            [
+                                'attribute' => 'biaomiangongyi_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'fense_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'penlasha_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'penlasha_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'bukou_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'templet_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'templet_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'cert_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'other_fee',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'factory_cost',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'markup_rate',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'fense_fee',
+                                'attribute' => 'factory_mo',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'order_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'style_sex',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model) {
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
                             ],
                             [
-                                'attribute' => 'biaomiangongyi_fee',
+                                'attribute' => 'jintuo_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->is_inlay) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                            ],
+                            [
+                                'attribute' => 'is_inlay',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
+                                    'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                             ],
                             [
                                 'attribute' => 'remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'filter' => Html::activeTextInput($searchModel, 'remark', [
                                     'class' => 'form-control',
                                     'style' => 'width:160px;'
                                 ]),
+                            ],
+                            /*[
+                                'attribute' => 'produce_sn',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:120px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'gross_weight',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'gross_weight', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],*/
+                            [
+                                'attribute' => 'market_price',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -1017,7 +1378,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                             ]
                         ]
                     ]); ?>

@@ -92,7 +92,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMaterialTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE) ?? [];
     }
 
     /**
@@ -116,7 +116,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMaterialColorMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR) ?? [];
     }
 
     /**
@@ -140,7 +140,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getPortNoMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO) ?? [];
     }
 
     /**
@@ -164,7 +164,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getFingerMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::FINGER);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::FINGER) ?? [];
     }
 
     /**
@@ -188,7 +188,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getXiangkouMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU) ?? [];
     }
 
     /**
@@ -212,7 +212,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getChainTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE) ?? [];
     }
 
     /**
@@ -236,7 +236,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getCrampRingMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE) ?? [];
     }
 
     /**
@@ -260,7 +260,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getTalonHeadTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::TALON_HEAD_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::TALON_HEAD_TYPE) ?? [];
     }
 
     /**
@@ -284,7 +284,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getCertTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE) ?? [];
     }
 
     /**
@@ -308,7 +308,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondCertTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE) ?? [];
     }
 
     /**
@@ -332,7 +332,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondColorMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR) ?? [];
     }
 
     /**
@@ -356,7 +356,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondShapeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE) ?? [];
     }
 
     /**
@@ -380,7 +380,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondClarityMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY) ?? [];
     }
 
     /**
@@ -404,7 +404,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondCutMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT) ?? [];
     }
 
     /**
@@ -428,7 +428,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondPolishMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH) ?? [];
     }
 
     /**
@@ -452,7 +452,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondSymmetryMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY) ?? [];
     }
 
     /**
@@ -476,7 +476,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getDiamondFluorescenceMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE) ?? [];
     }
 
     /**
@@ -500,7 +500,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE) ?? [];
     }
 
     /**
@@ -524,7 +524,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneColorMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR) ?? [];
     }
 
     /**
@@ -548,7 +548,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneShapeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SHAPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SHAPE) ?? [];
     }
 
     /**
@@ -572,7 +572,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneClarityMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY) ?? [];
     }
 
     /**
@@ -596,7 +596,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneCutMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CUT);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CUT) ?? [];
     }
 
     /**
@@ -620,7 +620,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getMainStoneColourMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOUR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOUR) ?? [];
     }
 
     /**
@@ -644,7 +644,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneType1Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE) ?? [];
     }
 
     /**
@@ -668,7 +668,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneShape1Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_SHAPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_SHAPE) ?? [];
     }
 
     /**
@@ -692,7 +692,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneColor1Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR) ?? [];
     }
 
     /**
@@ -716,7 +716,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneClarity1Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY) ?? [];
     }
 
     /**
@@ -740,7 +740,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneColour1Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOUR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOUR) ?? [];
     }
 
     /**
@@ -764,7 +764,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneType2Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE) ?? [];
     }
 
     /**
@@ -788,7 +788,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneShape2Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_SHAPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_SHAPE) ?? [];
     }
 
     /**
@@ -812,7 +812,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneColor2Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_COLOR);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_COLOR) ?? [];
     }
 
     /**
@@ -836,7 +836,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneClarity2Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_CLARITY);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_CLARITY) ?? [];
     }
 
     /**
@@ -860,7 +860,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getSecondStoneType3Map()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_TYPE) ?? [];
     }
 
     /**
@@ -884,7 +884,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getPartsTypeMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE) ?? [];
     }
 
     /**
@@ -908,7 +908,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getPartsMaterialMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE) ?? [];
     }
 
     /**
@@ -932,7 +932,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getXiangqianCraftMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
     }
 
     /**
@@ -956,7 +956,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getFaceCraftMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT);
+        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
     }
 
     /**
@@ -989,7 +989,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getJietuoTypeMap()
     {
-        return  \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
+        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
     }
 
     /**
@@ -998,6 +998,24 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getIsInlayMap()
     {
-        return  \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPartsWayMap()
+    {
+        return \addons\Warehouse\common\enums\PartsWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配石方式(类型)
+     * @return array
+     */
+    public function getPeiStoneTypeMap()
+    {
+        return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getMap() ?? [];
     }
 }
