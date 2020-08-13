@@ -2,6 +2,9 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Supply\common\enums\PeijianTypeEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
+use addons\Supply\common\enums\TempletTypeEnum;
 use Yii;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseGoods;
@@ -155,6 +158,18 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $org_value = PeiliaoTypeEnum::getValue($org_value);
                 $value = PeiliaoTypeEnum::getValue($value);
             }
+            if($code == 'peishi_type') {
+                $org_value = PeishiTypeEnum::getValue($org_value);
+                $value = PeishiTypeEnum::getValue($value);
+            }
+            if($code == 'peijian_type') {
+                $org_value = PeijianTypeEnum::getValue($org_value);
+                $value = PeijianTypeEnum::getValue($value);
+            }
+            if($code == 'templet_type') {
+                $org_value = TempletTypeEnum::getValue($org_value);
+                $value = PeijianTypeEnum::getValue($value);
+            }
             $apply_info[$code] = ['label'=>$label,'value'=>$value,'org_value'=>$org_value,'changed'=>($value != $org_value)];
         }
         $this->apply_info = $apply_info;
@@ -201,7 +216,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function createApply()
     {
         //主要信息
-        $fields = array('goods_name','cost_price','goods_num','peiliao_type','peishi_type');
+        $fields = array('goods_name','cost_price','goods_num','peiliao_type','peishi_type','peijian_type','templet_type');
         $apply_info = array();
         foreach ($fields as $field) {
             $apply_info[] = array(
@@ -235,8 +250,12 @@ class PurchaseGoodsForm extends PurchaseGoods
         }
         //其他信息
         $fields = array(
-                'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_loss','jiagong_fee',
-                'xiangqian_fee','gong_fee','gaitu_fee','penla_fee','unit_cost_price','parts_weight','parts_price','parts_fee','factory_cost_price','stone_info','parts_info','remark','goods_image'
+                'main_stone_price','second_stone_price1','second_stone_price2','gold_price','gold_cost_price','gold_amount','gross_weight',
+                'gold_loss','single_stone_weight','parts_material','parts_num','parts_weight','parts_price','parts_amount','suttle_weight',
+                'peishi_fee','peishi_amount','xianqian_price','factory_cost_price','factory_mo','parts_price','factory_cost_price','factory_mo',
+                'jiagong_fee','xiangqian_fee','gong_fee','biaomiangongyi_fee','fense_fee','bukou_fee','penrasa_fee','edition_fee','gaitu_fee',
+                'penla_fee','parts_fee','cert_fee','unit_cost_price','factory_total_price','company_total_price','stone_info','parts_remark',
+                'remark'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(

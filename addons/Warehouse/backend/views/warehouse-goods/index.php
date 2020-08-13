@@ -742,7 +742,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'peijian_material',
+                            'attribute'=>'parts_material',
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -757,7 +757,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'peijian_price',
+                            'attribute'=>'parts_price',
                             'filter' => false,
                             'headerOptions' => [],
                         ],

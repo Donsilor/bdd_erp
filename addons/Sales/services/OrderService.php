@@ -304,6 +304,7 @@ class OrderService extends Service
         }        
         $models = $query->all();        
         foreach ($models as $model){
+            $style = Style::find()->where(['style_sn'=>$model->style_sn])->one();
             $goods = [
                     'order_detail_id' =>$model->id,
                     'goods_image'=>$model->goods_image,
@@ -311,6 +312,7 @@ class OrderService extends Service
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
                     'style_sn' => $model->style_sn,
+                    'style_id' => $style->id,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
                     'jintuo_type'=>$model->jintuo_type,

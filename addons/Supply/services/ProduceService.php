@@ -114,6 +114,7 @@ class ProduceService extends Service
                 $produce->inlay_type = $produceAttr->attr_value_id;
             }
         }
+
         $produce->follower_name = $produce->follower->username ?? '';
         //更新布产单属性到布产单横向字段
         if (false === $produce->save(true)) {
@@ -123,6 +124,7 @@ class ProduceService extends Service
             //更新配石配料信息
             $this->updatePeiliao($produce);
         }
+
         if ($is_new === true) {
             $follower_name = $produce->follower ? $produce->follower->username : '';
             $supplier_name = $produce->supplier ? $produce->supplier->supplier_name : '';
@@ -188,6 +190,7 @@ class ProduceService extends Service
     public function updatePeiliao($form)
     {
         $attrValues = ArrayHelper::map($form->attrs ?? [], 'attr_id', 'attr_value');
+
         $this->createProduceGold($form, $attrValues);
         $this->createProduceStone($form, $attrValues);
         $this->createProduceParts($form, $attrValues);
@@ -466,6 +469,16 @@ class ProduceService extends Service
                         throw new \Exception($this->getError($model));
                     }
                 }
+                //日志
+                $log = [
+                    'produce_id' => $form->id,
+                    'produce_sn' => $form->produce_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'bc_status' => $form->bc_status,
+                    'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
+                    'log_msg' => ($is_new ? "生成" : "更新") . "配件单:" . $model->id,
+                ];
+                $this->createProduceLog($log);
             }
         }
         //重置配件单
@@ -474,16 +487,7 @@ class ProduceService extends Service
                 throw new \Exception($this->getError($form));
             }
         }
-        //日志
-        $log = [
-            'produce_id' => $form->id,
-            'produce_sn' => $form->produce_sn,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'bc_status' => $form->bc_status,
-            'log_module' => LogModuleEnum::getValue(LogModuleEnum::TO_PEILIAO),
-            'log_msg' => ($is_new ? "生成" : "更新") . "配件单:" . $model->id,
-        ];
-        $this->createProduceLog($log);
+
     }
 
     /**

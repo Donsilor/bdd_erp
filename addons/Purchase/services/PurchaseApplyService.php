@@ -3,7 +3,9 @@
 namespace addons\Purchase\services;
 
 
+use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\SnHelper;
@@ -199,6 +201,8 @@ class PurchaseApplyService extends Service
                              "stone_info"=>$apply_goods->stone_info,
                              "parts_info"=>$apply_goods->parts_info,
                              "remark"=>$apply_goods->remark,
+                             //非镶嵌 配石类型默认不配石
+                             "peishi_type" => $apply_goods->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "",
                              "created_at"=>time(),
                              "updated_at"=>time(),
                      ];
