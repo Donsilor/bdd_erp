@@ -40,7 +40,7 @@ class GoldStyle extends BaseModel
     {
         return [
             [['style_sn'], 'unique'],
-            [['gold_type', 'style_sn'], 'required'],
+            [['gold_type', 'style_sn', 'gold_name'], 'required'],
             [['auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_type'], 'string', 'max' => 10],
             [['style_sn'], 'string', 'max' => 30],

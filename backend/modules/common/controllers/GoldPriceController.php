@@ -7,6 +7,8 @@ use common\models\base\SearchModel;
 use common\models\common\GoldPrice;
 use Yii;
 use common\traits\Curd;
+use common\enums\OperateTypeEnum;
+use common\models\forms\GoldPriceChangeForm;
 
 /**
  * 商品分类
@@ -71,7 +73,33 @@ class GoldPriceController extends BaseController
             'model' => $model,
         ]);
     }
-    
+    /**
+     * 手动更新金价
+     * @return mixed|string|\yii\console\Response|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxPrice()
+    {
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $this->modelClass = GoldPriceChangeForm::class;
+        $model = $this->findModel($id);
+        // ajax 验证
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->sync_type = OperateTypeEnum::USER;
+            $model->sync_user = Yii::$app->user->identity->username;
+            $model->sync_time = time();
+            if(true === $model->save()){
+                $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }else{
+                $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     /**
      * 删除
      *

@@ -216,7 +216,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods}',
+                            'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if(in_array($model->bill_status, [BillStatusEnum::SAVE])){
@@ -246,9 +246,16 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'goods' => function($url, $model, $key){
                                     return Html::a('明细', ['templet-bill-l-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
+                                'cancel' => function($url, $model, $key){
+                                    if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::SAVE) {
+                                        return Html::delete(['cancel', 'id' => $model->id],'取消',[
+                                            'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
+                                        ]);
+                                    }
+                                },
                                 'delete' => function($url, $model, $key){
-                                    if($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['delete', 'id' => $model->id],'取消');
+                                    if($model->bill_status == \addons\Warehouse\common\enums\TempletBillStatusEnum::CANCEL) {
+                                        return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },
                             ],

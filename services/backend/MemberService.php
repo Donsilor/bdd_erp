@@ -46,7 +46,17 @@ class MemberService extends Service
             ->asArray()
             ->all();
     }
-
+    /**
+     * 查询用户列表
+     * @param unknown $ids
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function findAllByIds($ids) 
+    {
+        return Member::find()->select(['id','mobile','username'])
+            ->where(['id' => $ids])
+            ->all();
+    }
     /**
      * @param $id
      * @return array|\yii\db\ActiveRecord|null

@@ -132,6 +132,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute' => 'incl_tax_price',
+                                'format' => 'raw',
+                                //'value' => function ($model, $key, $index, $column){
+                                //    return  Html::ajaxInput('incl_tax_price', $model->incl_tax_price, ['data-id'=>$model->id]);
+                                //},
+                                'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute' => 'remark',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){

@@ -101,7 +101,7 @@ class PurchaseStoneReceiptGoods extends BaseModel
             'goods_fluorescence' => '荧光',
             'goods_colour' => '色彩',
             'goods_norms' => '规格',
-            'goods_size' => '尺寸',
+            'goods_size' => '尺寸(mm)',
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
             'cost_price' => '石料总额',

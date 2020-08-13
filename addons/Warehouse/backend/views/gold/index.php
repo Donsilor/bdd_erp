@@ -34,6 +34,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -121,6 +122,13 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
+                        [
+                            'attribute'=>'incl_tax_price',
+                            'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width' => '120'],

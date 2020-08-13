@@ -310,6 +310,7 @@ class PurchaseService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
+                $goods[$k]['incl_tax_price'] = $model->incl_tax_price;
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_shape'] = $model->stone_shape;

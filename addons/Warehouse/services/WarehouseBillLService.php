@@ -2,16 +2,16 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Warehouse\common\models\WarehouseBillGoodsL;
+use addons\Warehouse\common\enums\GoodSourceEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
@@ -29,43 +29,47 @@ class WarehouseBillLService extends Service
 
     /**
      * 收货单据汇总
-     * @param unknown $bill_id
+     * @param integer $bill_id
+     * @return bool
      */
     public function warehouseBillLSummary($bill_id)
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
             ->select(['sum(1) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
-            ->where(['bill_id'=>$bill_id])
+            ->where(['bill_id' => $bill_id])
             ->asArray()->one();
-        if($sum) {
-            $result = WarehouseBill::updateAll(['goods_num'=>$sum['goods_num']/1, 'total_cost'=>$sum['total_cost']/1, 'total_market'=>$sum['total_market']/1],['id'=>$bill_id]);
+        if ($sum) {
+            $result = WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
         }
         return $result;
     }
 
     /**
-     * 创建收货入库单
      *
+     * 创建收货入库单
      * @param array $bill
      * @param array $goods
+     * @return object
+     * @throws \Exception
      */
-    public function createBillL($bill, $goods){
+    public function createBillL($bill, $goods)
+    {
         $billM = new WarehouseBill();
         $billM->attributes = $bill;
         $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        if(false === $billM->save()){
+        if (false === $billM->save()) {
             throw new \Exception($this->getError($billM));
         }
         $bill_id = $billM->attributes['id'];
         $goodsM = new WarehouseBillGoodsL();
-        foreach ($goods as $k => &$good){
+        foreach ($goods as $k => &$good) {
             $good['goods_id'] = SnHelper::createGoodsId();
             $good['bill_id'] = $bill_id;
             $good['bill_no'] = $billM->bill_no;
             $good['bill_type'] = $billM->bill_type;
             $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
+            if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
         }
@@ -73,17 +77,17 @@ class WarehouseBillLService extends Service
         $key = array_keys($goods[0]);
         foreach ($goods as $item) {
             $value[] = array_values($item);
-            if(count($value)>10){
+            if (count($value) > 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
-                if(false === $res){
+                if (false === $res) {
                     throw new \Exception("创建收货单据明细失败1");
                 }
                 $value = [];
             }
         }
-        if(!empty($value)){
+        if (!empty($value)) {
             $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
-            if(false === $res){
+            if (false === $res) {
                 throw new \Exception("创建收货单据明细失败2");
             }
         }
@@ -92,45 +96,47 @@ class WarehouseBillLService extends Service
 
     /**
      * 收货入库单审核
-     * @param $form
+     * @param WarehouseBill $form
+     * @throws
      */
     public function auditBillL($form)
     {
-        if(false === $form->validate()) {
+        if (false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if($form->audit_status == AuditStatusEnum::PASS){
+        if ($form->audit_status == AuditStatusEnum::PASS) {
             $form->bill_status = BillStatusEnum::CONFIRM;
-        }else{
+        } else {
             $form->bill_status = BillStatusEnum::SAVE;
         }
         $billGoods = WarehouseBillGoodsL::find()->where(['bill_id' => $form->id])->all();
-        if(empty($billGoods)){
+        if (empty($billGoods)) {
             throw new \Exception("单据明细不能为空");
         }
-        $bill = WarehouseBill::findOne(['id'=>$form->id]);
+        $bill = WarehouseBill::findOne(['id' => $form->id]);
         $goods = $bill_goods = $goods_ids = [];
         foreach ($billGoods as $good) {
             $goods_ids[] = $good->goods_id;
             //$good  = new WarehouseBillGoodsL();
             $goods[] = [
                 'goods_id' => $good->goods_id,
-                'goods_name' =>$good->goods_name,
+                'goods_name' => $good->goods_name,
                 'goods_image' => $good->goods_image,
                 'style_sn' => $good->style_sn,
-                'product_type_id'=>$good->product_type_id,
-                'style_cate_id'=>$good->style_cate_id,
+                'product_type_id' => $good->product_type_id,
+                'style_cate_id' => $good->style_cate_id,
                 'style_sex' => $good->style_sex,
                 'style_channel_id' => $good->style_channel_id,
                 'qiban_sn' => $good->qiban_sn,
                 'qiban_type' => $good->qiban_type,
-                'goods_status'=>GoodsStatusEnum::IN_STOCK,
-                'supplier_id'=>$bill->supplier_id,
-                'put_in_type'=>$bill->put_in_type,
-                'company_id'=> 1,//暂时为1
-                'warehouse_id' => $bill->to_warehouse_id?:0,
-                'order_detail_id' => (string)$good->order_detail_id??"",
-                'order_sn' => $good->order_sn??"",
+                'goods_status' => GoodsStatusEnum::IN_STOCK,
+                'goods_source' => GoodSourceEnum::QUICK_STORAGE,
+                'supplier_id' => $bill->supplier_id,
+                'put_in_type' => $bill->put_in_type,
+                'company_id' => 1,//暂时为1
+                'warehouse_id' => $bill->to_warehouse_id ?: 0,
+                'order_detail_id' => (string)$good->order_detail_id ?? "",
+                'order_sn' => $good->order_sn ?? "",
                 'produce_sn' => $good->produce_sn,
                 'kezi' => $good->kezi,
                 'biaomiangongyi' => $good->biaomiangongyi,
@@ -241,76 +247,79 @@ class WarehouseBillLService extends Service
         $key = array_keys($goods[0]);
         foreach ($goods as $item) {
             $model->setAttributes($item);
-            if(!$model->validate()){
+            if (!$model->validate()) {
                 throw new \Exception($this->getError($model));
             }
             $value[] = array_values($item);
-            if(count($value)>10){
+            if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
-                if(false === $res){
-                    throw new \Exception("创建货品信息失败1");
+                if (false === $res) {
+                    throw new \Exception("创建货品信息失败[code=1]");
                 }
-                $value=[];
+                $value = [];
             }
         }
-        if(!empty($value)){
+        if (!empty($value)) {
             $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
-            if(false === $res){
-                throw new \Exception("创建货品信息失败2");
+            if (false === $res) {
+                throw new \Exception("创建货品信息失败[code=2]");
             }
         }
         $value = [];
         $key = array_keys($bill_goods[0]);
         foreach ($bill_goods as $item) {
             $goodsM->setAttributes($item);
-            if(!$goodsM->validate()){
+            if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
             $value[] = array_values($item);
-            if(count($value)>10){
+            if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
-                if(false === $res){
-                    throw new \Exception("创建收货单明细失败");
+                if (false === $res) {
+                    throw new \Exception("创建收货单明细失败[code=1]");
                 }
             }
         }
-        if(!empty($value)){
+        if (!empty($value)) {
             $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $key, $value)->execute();
-            if(false === $res){
-                throw new \Exception("创建收货单明细失败");
+            if (false === $res) {
+                throw new \Exception("创建收货单明细失败[code=2]");
             }
         }
         //创建货号
         $ids = WarehouseGoods::find()->select(['id'])->where(['goods_id' => $goods_ids])->all();
-        $ids = ArrayHelper::getColumn($ids,'id');
-        if($ids){
+        $ids = ArrayHelper::getColumn($ids, 'id');
+        if ($ids) {
             foreach ($ids as $id) {
-                $goods = WarehouseGoods::findOne(['id'=>$id]);
+                $goods = WarehouseGoods::findOne(['id' => $id]);
                 $old_goods_id = $goods->goods_id;
-                $goods_id = \Yii::$app->warehouseService->warehouseGoods->createGoodsId($goods);
-                $bGoodsM = WarehouseBillGoods::findOne(['goods_id'=>$old_goods_id]);
-                $bGoodsM->goods_id = $goods_id;
-                if(false === $bGoodsM->save(true,['id', 'goods_id'])){
-                    throw new \Exception($this->getError($bGoodsM));
-                }
-                $goodsL = WarehouseBillGoodsL::findOne(['goods_id'=>$old_goods_id]);
-                $goodsL->goods_id = $goods_id;
-                if(false === $goodsL->save(true,['id', 'goods_id'])){
-                    throw new \Exception($this->getError($goodsL));
+                $goodsL = WarehouseBillGoodsL::findOne(['goods_id' => $old_goods_id]);
+                if (!$goodsL->auto_goods_id) {
+                    $goods_id = \Yii::$app->warehouseService->warehouseGoods->createGoodsId($goods);
+                    $bGoodsM = WarehouseBillGoods::findOne(['goods_id' => $old_goods_id]);
+                    $bGoodsM->goods_id = $goods_id;
+                    if (false === $bGoodsM->save(true, ['id', 'goods_id'])) {
+                        throw new \Exception($this->getError($bGoodsM));
+                    }
+                    $goodsL->goods_id = $goods_id;
+                    if (false === $goodsL->save(true, ['id', 'goods_id'])) {
+                        throw new \Exception($this->getError($goodsL));
+                    }
                 }
             }
         }
-        if($form->order_type == OrderTypeEnum::ORDER_L && $form->audit_status == AuditStatusEnum::PASS){
+        if ($form->order_type == OrderTypeEnum::ORDER_L
+            && $form->audit_status == AuditStatusEnum::PASS) {
             //同步采购收货单货品状态
             $ids = ArrayHelper::getColumn($billGoods, 'source_detail_id');
-            if($ids){
-                $res = PurchaseReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$ids]);
-                if(false === $res) {
+            if ($ids) {
+                $res = PurchaseReceiptGoods::updateAll(['goods_status' => ReceiptGoodsStatusEnum::WAREHOUSE], ['id' => $ids]);
+                if (false === $res) {
                     throw new \Exception("同步采购收货单货品状态失败");
                 }
             }
         }
-        if(false === $form->save()) {
+        if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
     }

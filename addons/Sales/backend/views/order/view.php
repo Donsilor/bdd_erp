@@ -47,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->payType->name ??'' ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('distribute_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
+                            <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>                            
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?></td>
                         </tr>
@@ -66,7 +66,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
                             <td><?= $model->customer_email ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
-                            <td><?= $model->express_no ?></td>
+                            <td><?= $model->express_no ?>
+                            <?php if($model->express_no){
+                                echo Html::a("(物流轨迹)", ['logistics', 'id' => $model->id], 
+                                        [
+                                            'style'=>"text-decoration:underline;color:#3c8dbc",
+                                            'class' => 'openIframe',
+                                            'data-width' => '60%',
+                                            'data-height' => '80%',
+                                            'data-offset' => '20px',                                                
+                                       ]);
+                            }?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
@@ -625,7 +635,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-    <!-- box end -->
+    <!-- box end -->    
+    
         <div id="flow">
 
         </div>

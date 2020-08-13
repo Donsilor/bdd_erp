@@ -1048,6 +1048,7 @@ class PurchaseReceiptService extends Service
                 'gold_weight' => $model->goods_weight,
                 'cost_price' => $model->cost_price,
                 'gold_price' => $model->gold_price,
+                'incl_tax_price' => $model->incl_tax_price,
                 'source_detail_id' =>$model->id,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time(),

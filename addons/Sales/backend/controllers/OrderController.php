@@ -32,13 +32,11 @@ class OrderController extends BaseController
     public $modelClass = OrderForm::class;
 
     public function actionTest()
-    {
-        echo $rmbPrice = Yii::$app->goldTool->getGoldRmbPrice(),'-';
-        echo $rmbPrice = Yii::$app->goldTool->getGoldUsdPrice();
-        
-        //Yii::$app->shopService->orderSync->syncOrder(1369);
+    {   
+        $order_no = '130311942049';
+        Yii::$app->jdSdk->getOrderInfo($order_no);
         exit;
-    }
+    }    
     /**
      * Renders the index view for the module
      * @return string
@@ -185,7 +183,20 @@ class OrderController extends BaseController
                 'returnUrl'=>$this->returnUrl,
         ]);
     }
-    
+    /**
+     * 物流轨迹日志
+     */
+    public function actionLogistics()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $logistics = \Yii::$app->logistics->kd100($model->express_no, $model->express->api_code ?? null, true);
+        return $this->render($this->action->id, [
+                'model' => $model,
+                'logistics'=>$logistics,
+        ]);
+    }
     /**
      * 取消订单
      * @throws Exception

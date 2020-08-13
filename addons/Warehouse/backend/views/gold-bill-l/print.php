@@ -61,7 +61,13 @@
                         <div>重量(g)</div>
                     </td>
                     <td>
-                        <div>价格</div>
+                        <div>金价/g</div>
+                    </td>
+                    <td>
+                        <div>金料额</div>
+                    </td>
+                    <td>
+                        <div>含税价</div>
                     </td>
                     <td>
                         <div>备注</div>
@@ -93,6 +99,12 @@
                         <div><?= $val['gold_price'] ?></div>
                     </td>
                     <td>
+                        <div><?= $val['cost_price'] ?></div>
+                    </td>
+                    <td>
+                        <div><?= $val['incl_tax_price'] ?></div>
+                    </td>
+                    <td>
                         <div><?= $val['remark'] ?></div>
                     </td>
                 </tr>
@@ -117,7 +129,13 @@
                             <div>重量(g)</div>
                         </td>
                         <td>
-                            <div>价格</div>
+                            <div>金价/g</div>
+                        </td>
+                        <td>
+                            <div>金料额</div>
+                        </td>
+                        <td>
+                            <div>含税价</div>
                         </td>
                         <td>
                             <div>备注</div>
@@ -128,7 +146,12 @@
                 }
                 ?>
                 <tr>
-                    <td colspan="7"><div>合计</div></td>
+                    <td colspan="4"><div>合计：</div></td>
+                    <td><div><?= $total['total_weight'] ?></div></td>
+                    <td><div></div></td>
+                    <td><div><?= $total['total_cost_price'] ?></div></td>
+                    <td><div><?= $total['total_tax_price'] ?></div></td>
+                    <td><div></div></td>
                 </tr>
 			</table>
             <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">审核人：<?= $model->auditor->username ?? ''?></span></span></div>

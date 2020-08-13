@@ -28,6 +28,7 @@ class WarehouseBillTService extends Service
      * 单据汇总
      * @param int $bill_id
      * @throws
+     * @return bool
      */
     public function warehouseBillTSummary($bill_id)
     {
@@ -143,6 +144,7 @@ class WarehouseBillTService extends Service
             $goodsInfo[$i]['bill_type'] = $bill->bill_type;
             $goodsInfo[$i]['goods_id'] = SnHelper::createGoodsId();
             $goodsInfo[$i]['is_wholesale'] = $form->is_wholesale;//批发
+            $goodsInfo[$i]['auto_goods_id'] = $form->auto_goods_id;
             $goodsM->setAttributes($goodsInfo[$i]);
             if(!$goodsM->validate()){
                 throw new \Exception($this->getError($goodsM));

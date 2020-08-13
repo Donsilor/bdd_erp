@@ -64,7 +64,7 @@ class PurchaseGoldGoods extends BaseModel
             'goods_sn' => '金料款号',
             'goods_name' => '商品名称',
             'goods_num' => '商品数量',
-            'goods_weight' => '金料总重',
+            'goods_weight' => '金料总重(g)',
             'material_type' => '金料材质',
             'cost_price' => '金料总额',
             'incl_tax_price' => '含税总额',
