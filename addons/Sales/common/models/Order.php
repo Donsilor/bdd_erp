@@ -73,7 +73,7 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency','customer_name'], 'required'],
-            [['merchant_id', 'goods_num','sale_channel_id','pay_type', 'pay_status', 'pay_time','out_pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'pay_time','out_pay_time','order_time', 'finished_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'delivery_time', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
@@ -101,6 +101,7 @@ class Order extends BaseModel
             'currency' => '订单货币',
             'order_sn' => '订单编号',            
             'pay_sn' => '点款支付单号',
+            'apply_id' => '申请单ID',
             'pay_type' => '支付方式',
             'pay_status' => '支付状态',
             'pay_time' => '支付时间',

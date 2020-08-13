@@ -577,12 +577,12 @@ class OrderGoodsController extends BaseController
                 $model->is_inlay = $style->is_inlay;
                 $model->goods_image = $style->style_image;
 
-                $styleForm = new StyleAttrForm();
-                $styleForm->style_id = $style->id;
-                $styleForm->initAttrs();
+//                $styleForm = new StyleAttrForm();
+//                $styleForm->style_id = $style->id;
+//                $styleForm->initAttrs();
 
-                $model->attr_custom = $styleForm->attr_custom;
-                $model->attr_require = [];
+//                $model->attr_custom = $styleForm->attr_custom;
+//                $model->attr_require = $styleForm->attr_require;
 
             }
         }
@@ -591,6 +591,12 @@ class OrderGoodsController extends BaseController
     }
 
 
+    /***
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     * @throws \yii\db\Exception
+     * 绑定现货
+     */
     public function actionStock(){
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
@@ -617,6 +623,12 @@ class OrderGoodsController extends BaseController
         ]);
     }
 
+
+    /***
+     * @return mixed|\yii\web\Response
+     * @throws \yii\db\Exception
+     * 解绑
+     */
     public function actionUntie(){
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -690,9 +702,9 @@ class OrderGoodsController extends BaseController
                 $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
-                    'from_order_id'=>$model->order_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$model->order->order_sn,
+                    'order_detail_id'=>$model->order_id,
+                    'order_detail_id' => $model->id,
+                    'order_sn'=>$model->order->order_sn,
                     'from_type' => FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     'bc_status' => BuChanEnum::INITIALIZATION,

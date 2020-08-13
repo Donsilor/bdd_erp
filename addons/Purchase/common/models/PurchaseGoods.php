@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
+use addons\Shop\common\models\OrderGoods;
 use addons\Style\common\models\StyleChannel;
 use Yii;
 use addons\Style\common\models\ProductType;
@@ -218,6 +219,15 @@ class PurchaseGoods extends BaseModel
     public function getAttrs()
     {
         return $this->hasMany(PurchaseGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
+    }
+
+    /**
+     * 订单明细 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderGoods()
+    {
+        return $this->hasOne(OrderGoods::class, ['id'=>'order_detail_id'])->alias('orderGoods');
     }
 
 

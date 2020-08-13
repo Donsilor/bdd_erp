@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
 
                     <?php
-                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED && empty($model->apply_id)) {
                         echo Html::edit(['ajax-purchase-apply','id'=>$model->id], '申请采购', [
                             'class'=>'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"申请采购", "确定申请采购吗？");return false;',
@@ -193,12 +193,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                      ?>
                     <?php
-                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
-                        echo Html::button('布产', [
-                            'class'=>'btn btn-success btn-xs',
-                            'onclick' => 'batchBuchan()',
-                        ]);
-                    }
+//                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
+//                        echo Html::button('布产', [
+//                            'class'=>'btn btn-success btn-xs',
+//                            'onclick' => 'batchBuchan()',
+//                        ]);
+//                    }
                     ?>
                 </div>
                 <div class="table-responsive col-lg-12">

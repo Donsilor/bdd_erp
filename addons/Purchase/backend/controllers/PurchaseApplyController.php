@@ -179,10 +179,10 @@ class PurchaseApplyController extends BaseController
             //批量创建采购单
             Yii::$app->purchaseService->apply->createPurchase($ids);
             $trans->commit();
-            return ResultHelper::json(200,"保存成功");
+            return $this->message("保存成功", $this->redirect(['index']), 'success');
         } catch (\Exception $e){
             $trans->rollback();
-            return ResultHelper::json(422,$e->getMessage());
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
         
         

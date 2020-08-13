@@ -296,7 +296,7 @@ class PurchaseReceiptService extends Service
             if ($the_num<=0) {
                 throw new \Exception($message."没有可出货数量");
             }
-            $purchase = Purchase::findOne(['id' => $produce->from_order_id]);
+            $purchase = Purchase::findOne(['id' => $produce->purchase_detail_id]);
             if(!$purchase){
                 throw new \Exception($message."对应的采购单号不对");
             }
@@ -427,8 +427,8 @@ class PurchaseReceiptService extends Service
                 $goods = [
                     'receipt_id' => $form->id,
                     'produce_sn' => $produce_sn,
-                    'purchase_sn' => $produce->from_order_sn,
-                    'order_sn' => $produce->from_order_sn,
+                    'purchase_sn' => $produce->purchase_sn,
+                    'order_sn' => $produce->order_sn,
                     'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                     'goods_name' => $produce->goods_name,
                     'goods_num' => 1,
