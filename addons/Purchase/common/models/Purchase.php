@@ -2,7 +2,7 @@
 
 namespace addons\Purchase\common\models;
 
-use addons\Style\common\models\StyleChannel;
+use addons\Sales\common\models\SaleChannel;
 use Yii;
 use common\models\backend\Member;
 use addons\Supply\common\models\Supplier;
@@ -150,6 +150,6 @@ class Purchase extends BaseModel
      */
     public function getChannel()
     {
-        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }

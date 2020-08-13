@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Sales\common\models\OrderGoods;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\enums\PeijianTypeEnum;
 use common\helpers\SnHelper;
@@ -143,7 +144,7 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
-            
+            $order_goods = OrderGoods::find()->where(['id'=>$model->order_detail_id])->one();
             $peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
             $peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
             $peijian_status = PeijianTypeEnum::getPeijianStatus($model->peijian_type);
@@ -155,11 +156,12 @@ class PurchaseService extends Service
             //$model = new PurchaseGoods();
             $goods = [
                     'goods_name' =>$model->goods_name,
-                    'goods_num' =>$model->goods_num,                   
-                    'from_order_id'=>$model->purchase_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$purchase->purchase_sn,
-                    'from_type' => FromTypeEnum::PURCHASE,
+                    'goods_num' =>$model->goods_num,
+                    'order_detail_id' =>$model->order_detail_id,
+                    'purchase_detail_id' => $model->id,
+                    'purchase_sn'=>$purchase->purchase_sn,
+                    'order_sn'=>$order_goods->order->order_sn ?? '',
+                    'from_type' => empty($model->order_detail_id) ? FromTypeEnum::PURCHASE : FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     'peiliao_type'=>$model->peiliao_type,
                     'peishi_type'=>$model->peishi_type,

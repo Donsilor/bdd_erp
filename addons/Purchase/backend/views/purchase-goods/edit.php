@@ -190,9 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>                      
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'product_size')->textInput() ?>
-                        </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'factory_mo')->textInput() ?>
                         </div>

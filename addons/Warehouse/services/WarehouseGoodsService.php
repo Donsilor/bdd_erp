@@ -105,7 +105,7 @@ class WarehouseGoodsService extends Service
         }else{
             $outbound_cost = $warehouse_goods->cost_price * (1 + 0.05);
         }
-        return $outbound_cost;
+        return round ($outbound_cost,2);
 
     }
 

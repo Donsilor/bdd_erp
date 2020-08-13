@@ -130,6 +130,7 @@ class PurchaseApplyService extends Service
                         throw new \Exception($this->getError($goodsAttr));
                     }
                 }
+                unset($applyGoods);
             }
             return $apply;
         }catch (\Exception $e){
@@ -161,7 +162,7 @@ class PurchaseApplyService extends Service
             throw new \Exception("请选择同一采购分类的申请单");
         }
 
-        $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->all();
+        $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->select(['supplier_id'])->all();
         foreach ($group_apply_ids as $channel_id=>$apply_ids){
             foreach ($supplierIds as $supplierId){
                 $supplier_id = $supplierId['supplier_id'];

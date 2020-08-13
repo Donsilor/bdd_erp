@@ -336,6 +336,12 @@ class OrderService extends Service
         $applyInfo['channel_id'] = $order->sale_channel_id;
         //同步采购申请单
         $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);
+
+        //更新订单申请单ID
+        $order->apply_id = $apply->id;
+        if(false === $order->save(true,['apply_id'])) {
+            throw new \Exception($this->getError($order));
+        }
         return $apply;
     }
     /**
@@ -363,9 +369,9 @@ class OrderService extends Service
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
-                    'from_order_id'=>$model->order_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$order->order_sn,
+                    'order_detail_id'=>$model->order_id,
+                    'order_detail_id' => $model->id,
+                    'order_sn'=>$order->order_sn,
                     'from_type' => FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     //'peiliao_type'=>$model->peiliao_type,

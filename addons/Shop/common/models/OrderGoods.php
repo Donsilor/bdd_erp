@@ -84,11 +84,20 @@ class OrderGoods extends BaseModel
         ];
     }
     /**
-     * 对应快递模型
+     * 对应款模型
      * @return \yii\db\ActiveQuery
      */
     public function getStyle()
     {
         return $this->hasOne(Style::class, ['id'=>'style_id']);
+    }
+
+    /**
+     * 对应订单模型
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class, ['id'=>'order_id'])->alias('order');
     }
 }

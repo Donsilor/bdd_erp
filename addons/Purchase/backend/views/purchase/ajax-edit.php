@@ -63,7 +63,7 @@ $form = ActiveForm::begin([
            <div class="row">
                <div class="col-sm-6">
                    <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
-                       'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
+                       'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
                        'options' => ['placeholder' => '请选择'],
                        'pluginOptions' => [
                            'allowClear' => true

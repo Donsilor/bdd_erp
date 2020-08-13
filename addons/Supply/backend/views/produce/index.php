@@ -90,8 +90,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
             ],
             [
-                    'attribute' => 'from_order_sn',
-                    'filter' => Html::activeTextInput($searchModel, 'from_order_sn', [
+                    'attribute' => 'purchase_sn',
+                    'value'=>function($model){
+                        if($model->from_type == \addons\Supply\common\enums\FromTypeEnum::ORDER){
+                            return $model->purchase_sn."({$model->order_sn})";
+                        }else{
+                            return $model->purchase_sn;
+                        }
+                    },
+                    'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                             'class' => 'form-control',
                             'style' => 'width:150px;',
                     ]),

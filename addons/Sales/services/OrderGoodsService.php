@@ -110,7 +110,6 @@ class OrderGoodsService extends Service
         if(empty($wareshouse_goods)){
             throw new \Exception("不存在或者不是库存状态",422);
         }
-
         $model->jintuo_type = $wareshouse_goods->jintuo_type;
         $model->qiban_type = $wareshouse_goods->qiban_type;
         $model->style_sex = $wareshouse_goods->style_sex;
@@ -327,12 +326,11 @@ class OrderGoodsService extends Service
             throw new \Exception($this->getError($wareshouse_goods));
         }
 
-        //删除商品属性
-        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
-
         //还原原有商品属性
         $attr_list = json_decode($model->attr_info,true);
         if($attr_list){
+            //删除商品属性
+            OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
             foreach ($attr_list as $attr){
                 $order_goods_attr = new OrderGoodsAttribute();
                 $order_goods_attr->attributes = $attr;

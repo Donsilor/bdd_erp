@@ -80,7 +80,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value'=>function($model) {
                          return $model->channel->name ?? '';
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->styleService->styleChannel->getDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                             'style'=> 'width:100px;'
