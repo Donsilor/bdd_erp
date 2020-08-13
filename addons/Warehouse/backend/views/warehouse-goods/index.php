@@ -785,6 +785,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'gong_fee',
+                            'filter' => false,
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'total_gong_fee',
                             'filter' => false,
                             'headerOptions' => [],
