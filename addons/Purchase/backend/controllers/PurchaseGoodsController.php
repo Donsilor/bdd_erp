@@ -27,6 +27,11 @@ use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\enums\PeishiStatusEnum;
+use addons\Purchase\common\forms\PurchaseStoneIncreaseForm;
+use addons\Style\common\enums\StonePositionEnum;
+use common\enums\ConfirmEnum;
 /**
  * Attribute
  *
@@ -431,5 +436,44 @@ class PurchaseGoodsController extends BaseController
             'metal_type' => $style->metal_type??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);
+    }
+    
+    /**
+     * ajax补石
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxStoneIncrease()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseStoneIncreaseForm::class;
+        $form = $this->findModel($id); 
+        // ajax 校验
+        $this->activeFormValidate($form);
+        if ($form->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $model = new ProduceStone();
+                //复制石头信息
+                $model->attributes = $form->toArray(['produce_id','produce_sn','from_order_sn','from_type','stone_type','stone_position','stone_weight','stone_spec','shape','secai','carat','color','clarity','cert_type','cert_no']);             
+                $model->stone_num = $form->increase_num;
+                $model->stone_weight = round($model->stone_num * $model->carat,2); 
+                $model->remark = $form->increase_remark;
+                $model->peishi_status = PeishiStatusEnum::PENDING;
+                $model->is_increase = ConfirmEnum::YES;
+                if(false === $model->save()) {
+                     throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }       
+        return $this->renderAjax($this->action->id, [
+                'model' => $form,
+        ]);
     }
 }

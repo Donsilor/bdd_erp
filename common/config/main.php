@@ -22,8 +22,8 @@ return [
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
         ],
-        //BDD官网
-        'db2' => [
+        //BDD正式erp
+        /* 'db' => [
                 'class' => 'yii\db\Connection',
                 'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd_erp;',
                 'username' => 'super',
@@ -32,6 +32,18 @@ return [
                 'tablePrefix'=>'',
                 'attributes' => [
 
+                ],
+        ], */
+        //BDD官网
+        'bddDb' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
+                'charset' => 'utf8',
+                'tablePrefix'=>'',
+                'attributes' => [
+                        
                 ],
         ],
         /** ------ 缓存 ------ **/

@@ -54,6 +54,7 @@ class BillLGoodsController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
+            'model' => new WarehouseBillLGoodsForm(),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
@@ -87,6 +88,7 @@ class BillLGoodsController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
+            'model' => new WarehouseBillLGoodsForm(),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,

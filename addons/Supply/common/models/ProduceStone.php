@@ -55,7 +55,7 @@ class ProduceStone extends BaseModel
     {
         return [
             [['stone_weight','carat'], 'number'],
-            [['produce_id','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['produce_id','is_increase','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
             [['secai','color', 'clarity', 'shape', 'cert_type', 'stone_type'], 'string', 'max' => 10],
             [['remark','stone_spec','audit_remark','peishi_remark'], 'string', 'max' => 255],
@@ -101,6 +101,7 @@ class ProduceStone extends BaseModel
             'peishi_status' => '配石状态',
             'peishi_remark' => '配石备注',
             'remark' => '采购备注',
+            'is_increase' => '是否补石',
             'creator_id' => '创建人ID',
             'creator_name' => '申请人',
             'created_at' => '申请时间',

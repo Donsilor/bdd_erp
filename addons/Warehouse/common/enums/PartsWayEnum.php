@@ -21,8 +21,8 @@ class PartsWayEnum extends \common\enums\BaseEnum
     {
         return [
             self::NO_PEI => '不需配件',
-            self::COMPANY => '公司',
-            self::FACTORY => '工厂',
+            self::COMPANY => '公司配件',
+            self::FACTORY => '工厂配件',
         ];
     }
 
