@@ -246,12 +246,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peijian_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peijian_material') ?>：</td>
-                            <td><?= $model->peijian_material ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_material') ?>：</td>
+                            <td><?= $model->parts_material ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peijian_price') ?>：</td>
-                            <td><?= $model->peijian_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
+                            <td><?= $model->parts_price ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_gold_weight') ?>：</td>
@@ -265,16 +265,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_fee') ?>：</td>
                             <td><?= $model->parts_fee ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
-                            <td><?= $model->gong_fee ?></td>
-                        </tr>
+
 
 
                     </table>
                 </div>
                 <div class="col-xs-6">
                     <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
+                            <td><?= $model->gong_fee ?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
                             <td><?= $model->bukou_fee ?></td>

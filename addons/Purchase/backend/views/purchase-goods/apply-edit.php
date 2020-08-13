@@ -55,8 +55,16 @@ $this->params['breadcrumbs'][] = $this->title;
         			 </div>
         			 <div class="col-lg-4">
                         <?= $form->field($model, 'peiliao_type')->dropDownList(addons\Supply\common\enums\PeiliaoTypeEnum::getMap(),['prompt'=>'请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?> 
-        			 </div>  
+        			 </div>
+                     <div class="col-lg-4">
+                         <?= $form->field($model, 'peijian_type')->dropDownList(\addons\Supply\common\enums\PeijianTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                     </div>
             	 </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'templet_type')->dropDownList(\addons\Supply\common\enums\TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                    </div>
+                </div>
     			 <div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
                  </div>
@@ -101,106 +109,160 @@ $this->params['breadcrumbs'][] = $this->title;
                    <div style="margin: 0px 0 20px 0;">
                         <h3 class="box-title"> 其他信息</h3>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'main_stone_price')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'second_stone_price1')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'second_stone_price2')->textInput() ?>
-                        </div>                        
-                    </div>
-                    <div class="row">                        
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_price')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_cost_price')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_loss')->textInput() ?>
-                        </div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'jiagong_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gong_fee')->textInput() ?>
-                        </div>                        
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'fense_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'bukou_fee')->textInput() ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gaitu_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'penla_fee')->textInput() ?>
-                        </div>  
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'unit_cost_price')->textInput() ?>
-                        </div>                      
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_color')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'single_stone_weight')->textInput() ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'factory_cost_price')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'company_unit_cost')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gold_amount')->textInput() ?>
-                        </div>
-                    </div>
                 <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_price1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_price2')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_cost_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_amount')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gross_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_loss')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'single_stone_weight')->textInput() ?>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_material')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_num')->textInput() ?>
+                    </div>
+
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_weight')->textInput() ?>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_fee')->textInput() ?>
+                        <?= $form->field($model, 'parts_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'suttle_weight')->textInput() ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peishi_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peishi_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_cost_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_fee')->textInput() ?>
+                        <?= $form->field($model, 'parts_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_cost_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'factory_mo')->textInput() ?>
-                    </div>          			
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'jiagong_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gong_fee')->textInput() ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'fense_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'penrasa_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'edition_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gaitu_fee')->textInput() ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'penla_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'cert_fee')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'unit_cost_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_total_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'company_total_price')->textInput() ?>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_info')->textarea() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_info')->textarea() ?>
+                        <?= $form->field($model, 'parts_remark')->textarea() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'remark')->textarea() ?>

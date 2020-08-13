@@ -183,7 +183,8 @@ class PurchaseService extends Service
                     'factory_mo'=>$model->factory_mo,
                     'parts_info'=>$model->parts_info,
                     'factory_distribute_time' => time()
-            ]; 
+            ];
+
             if($model->produce_id && $model->produce){
                 if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
                     //生产中之后的流程，禁止同步
@@ -204,7 +205,7 @@ class PurchaseService extends Service
             $produce = Yii::$app->supplyService->produce->createSyncProduce($goods ,$goods_attrs);
             if($produce) {
                 $model->produce_id = $produce->id;
-            }            
+            }
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model),422);
             }

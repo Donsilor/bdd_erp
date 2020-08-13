@@ -280,7 +280,7 @@ class PurchaseGoodsController extends BaseController
                      $model->apply_info = json_encode($model->apply_info);
                 }
                 $model->is_apply = 0;
-                $model->save(false);  
+                $model->save(false);
                 //金额汇总
                 Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
                 //同步布产单

@@ -59,34 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jintuo_type') ?>：</td>
                                     <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
-                                    <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
-                                </tr>
-							    <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
-                                    <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
-                                    <td><?= $model->goods_num ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
-                                    <td><?= $model->cost_price ?></td>
-                                </tr> 
-                                <tr>
-                                    <td class="col-xs-2 text-right">采购总额：</td>
-                                    <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
-                                    <td><?= $model->remark ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right">商品图片：</td>
-                                    <td><?= \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); ?></td>
-                                </tr>
+
                             </table>
                         </div>
 
@@ -98,61 +71,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
-                                    <td><?= $model->main_stone_price ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
-                                    <td><?= $model->gold_price ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_loss') ?>：</td>
-                                    <td><?= $model->gold_loss ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_type') ?>：</td>
+                                    <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type) ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_cost_price') ?>：</td>
-                                    <td><?= $model->gold_cost_price ?></td>
-                                </tr>
-
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jiagong_fee') ?>：</td>
-                                    <td><?= $model->jiagong_fee ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
+                                    <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xiangqian_fee') ?>：</td>
-                                    <td><?= $model->xiangqian_fee ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
+                                    <td><?= $model->goods_num ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
-                                    <td><?= $model->gong_fee ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gaitu_fee') ?>：</td>
-                                    <td><?= $model->gaitu_fee ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                                    <td><?= $model->cost_price ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('penla_fee') ?>：</td>
-                                    <td><?= $model->penla_fee ?></td>
+                                    <td class="col-xs-2 text-right">采购总额：</td>
+                                    <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('unit_cost_price') ?>：</td>
-                                    <td><?= $model->unit_cost_price ?></td>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
+                                    <td><?= $model->remark ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_cost_price') ?>：</td>
-                                    <td><?= $model->factory_cost_price ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
-                                    <td><?= $model->stone_info ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_remark') ?>：</td>
-                                    <td><?= $model->parts_remark ?></td>
+                                    <td class="col-xs-2 text-right">商品图片：</td>
+                                    <td><?= \common\helpers\ImageHelper::fancyBox(Yii::$app->purchaseService->purchaseGoods->getStyleImage($model),90,90); ?></td>
                                 </tr>
 
                             </table>
@@ -195,21 +139,213 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-hover">
-                   <?php 
-                   if($model->attrs){
-                        foreach ($model->attrs as $attr){
-                            $attrValues[$attr->attr_id] = $attr->attr_value;
-                            ?>
-                            <tr>
-                                <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
-                                <td><?= $attr->attr_value ?></td>
-                            </tr>
-                        <?php 
-                        } 
-                    }
-                    ?>
-                </table>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+                       <?php
+                       if($model->attrs){
+                           $num = ceil(count($model->attrs)/2)-1;
+                            foreach ($model->attrs as $k => $attr){
+                               $attrValues[$attr->attr_id] = $attr->attr_value;
+                               ?>
+                                <tr>
+                                    <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                                    <td><?= $attr->attr_value ?></td>
+                                </tr>
+                            <?php
+                            if($k == $num){
+                         ?>
+                            </table>
+                        </div>
+                        <div class="col-xs-6">
+                            <table class="table table-hover">
+                        <?php
+                            }
+                            }
+                        }
+                        ?>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-qrcode"></i> 其他信息</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
+                            <td><?= $model->main_stone_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price1') ?>：</td>
+                            <td><?= $model->main_stone_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price2') ?>：</td>
+                            <td><?= $model->main_stone_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
+                            <td><?= $model->gold_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_cost_price') ?>：</td>
+                            <td><?= $model->gold_cost_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_amount') ?>：</td>
+                            <td><?= $model->gold_amount ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gross_weight') ?>：</td>
+                            <td><?= $model->gross_weight ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_loss') ?>：</td>
+                            <td><?= $model->gold_loss ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('single_stone_weight') ?>：</td>
+                            <td><?= $model->single_stone_weight ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_material') ?>：</td>
+                            <td><?= $model->parts_material ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_num') ?>：</td>
+                            <td><?= $model->parts_num ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_weight') ?>：</td>
+                            <td><?= $model->parts_weight ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
+                            <td><?= $model->parts_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_amount') ?>：</td>
+                            <td><?= $model->parts_amount ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('suttle_weight') ?>：</td>
+                            <td><?= $model->suttle_weight ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_fee') ?>：</td>
+                            <td><?= $model->peishi_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_amount') ?>：</td>
+                            <td><?= $model->peishi_amount ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xianqian_price') ?>：</td>
+                            <td><?= $model->xianqian_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_cost_price') ?>：</td>
+                            <td><?= $model->factory_cost_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                            <td><?= $model->factory_mo ?></td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
+                            <td><?= $model->parts_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_cost_price') ?>：</td>
+                            <td><?= $model->factory_cost_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                            <td><?= $model->factory_mo ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('jiagong_fee') ?>：</td>
+                            <td><?= $model->jiagong_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xiangqian_fee') ?>：</td>
+                            <td><?= $model->xiangqian_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
+                            <td><?= $model->gong_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('biaomiangongyi_fee') ?>：</td>
+                            <td><?= $model->biaomiangongyi_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('fense_fee') ?>：</td>
+                            <td><?= $model->fense_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
+                            <td><?= $model->bukou_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('penrasa_fee') ?>：</td>
+                            <td><?= $model->penrasa_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('edition_fee') ?>：</td>
+                            <td><?= $model->edition_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gaitu_fee') ?>：</td>
+                            <td><?= $model->gaitu_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('penla_fee') ?>：</td>
+                            <td><?= $model->penla_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_fee') ?>：</td>
+                            <td><?= $model->parts_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_fee') ?>：</td>
+                            <td><?= $model->cert_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('unit_cost_price') ?>：</td>
+                            <td><?= $model->unit_cost_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_total_price') ?>：</td>
+                            <td><?= $model->factory_total_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('company_total_price') ?>：</td>
+                            <td><?= $model->company_total_price ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stone_info') ?>：</td>
+                            <td><?= $model->stone_info ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_remark') ?>：</td>
+                            <td><?= $model->parts_remark ?></td>
+                        </tr>
+
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
