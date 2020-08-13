@@ -42,7 +42,7 @@ class ProduceStoneController extends BaseController
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'stone_position' => SORT_ASC
+                        'id' => SORT_ASC
                 ],
                 'relations' => [
                      
