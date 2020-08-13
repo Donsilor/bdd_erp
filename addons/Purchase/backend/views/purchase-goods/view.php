@@ -4,6 +4,11 @@ use common\helpers\Html;
 use common\helpers\Url;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\AmountHelper;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Supply\common\enums\PeishiStatusEnum;
+use addons\Style\common\enums\StonePositionEnum;
+use common\enums\ConfirmEnum;
 
 $this->title =  '详情';
 $this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
@@ -184,7 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-    <div class="col-xs-12">
+    <div class="col-xs-6">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
@@ -194,9 +199,10 @@ $this->params['breadcrumbs'][] = $this->title;
                    <?php 
                    if($model->attrs){
                         foreach ($model->attrs as $attr){
+                            $attrValues[$attr->attr_id] = $attr->attr_value;
                             ?>
                             <tr>
-                                <td class="col-xs-1 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
+                                <td class="col-xs-2 text-right"><?= Yii::$app->attr->attrName($attr->attr_id)?>：</td>
                                 <td><?= $attr->attr_value ?></td>
                             </tr>
                         <?php 
@@ -207,7 +213,84 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+    <?php if(($produce = $model->produce ?? false) && !empty($attrValues)) {?>
+    <div class="col-xs-6">
+        <?php if($produce->produceGolds ?? false) {?>
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> 金料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>】</font></h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    	<tr><th>金料材质</th><th>金重</th><th>状态</th></tr>
+                    </thead>
+                    <tbody>
+                    	<?php foreach ($produce->produceGolds as $gold) {?>
+                    	<tr>
+                    		<td><?= $gold->gold_type?></td>
+                        	<td><?= $gold->gold_weight/1 ?>g</td>
+                        	<td><?= PeiliaoStatusEnum::getValue($gold->peiliao_status) ?></td>
+                    	</tr>
+                    	<?php }?>   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php }?>
+        <?php if($produce->produceStones ?? false) {?>
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> 石料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>，主石石重=单颗石重，副石石重=副石总重】</font></h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    	<tr><th>石头位置</th><th>石头类型</th><th>数量</th><th>石重</th><th>证书类型</th><th>规格(形状/色彩/颜色/净度/切工)</th><th>补石单</th><th>状态</th><th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($produce->produceStones as $stone) {?>
+                        <tr>
+                    		<td><?= StonePositionEnum::getValue($stone->stone_position)?></td>
+                        	<td><?= $stone->stone_type ? $stone->stone_type : '无'?></td>                        	
+                        	<td><?= $stone->stone_num ? $stone->stone_num : '0'?></td>
+                        	<td><?= ($stone->stone_position == StonePositionEnum::MAIN_STONE ? $stone->carat : $stone->stone_weight)/1;?>ct</td>
+                        	<td><?= $stone->cert_type? $stone->cert_type : '无'?></td>
+                        	<td><?= ($stone->shape? $stone->shape : '无').'/'.($stone->secai? $stone->secai : '无').'/'.($stone->color? $stone->color : '无').'/'.($stone->clarity? $stone->clarity : '无').'/'.($stone->cut? $stone->cut : '无')?></td>
+                        	<td><?php 
+                            	if($stone->is_increase == ConfirmEnum::YES) {
+                            	    echo "<font color='green'>是</font>";
+                            	}else{
+                            	    echo "否";
+                            	}
+                        	    ?></td>
+                        	<td><?= PeishiStatusEnum::getValue($stone->peishi_status) ?></td>
+                        	<td>
+                        	<?php if($stone->is_increase == ConfirmEnum::NO) {?>
+                                	<?= Html::edit(['ajax-stone-increase','id'=>$stone->id ,'returnUrl'=>Url::getReturnUrl()], '补石', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);?>
+                             <?php }else {?>
+                                 <?= Html::edit(['ajax-stone-edit','id'=>$stone->id ,'returnUrl'=>Url::getReturnUrl()], '编辑', [
+                                        'class'=>'btn btn-primary btn-sm',
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#ajaxModal',
+                                    ]);?>
+                             <?php } ?>   
+                                </td>
+                    	</tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php }?>
+    </div>
+    <?php }?>
 </div>
+
 
 
 

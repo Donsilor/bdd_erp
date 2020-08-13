@@ -10,6 +10,7 @@ use common\components\jingdong\request\PopOrderGetRequest;
 use common\components\jingdong\request\PopOrderEnGetRequest;
 use common\components\jingdong\request\OrderVenderRemarkQueryByOrderIdRequest;
 use common\components\jingdong\request\PopOrderPrintDataGetRequest;
+use common\components\jingdong\request\OrderGetRequest;
 
 
 
@@ -59,11 +60,10 @@ class JdSdk extends Component
         $reuqest->setJdOrderId($jdOrderId);
         $reuqest->setCustomKeys($customKeys); */
         
-        /* $reuqest = new PopOrderGetRequest();
+         $reuqest = new OrderGetRequest();
         $reuqest->setOrderId($jdOrderId);
-        $reuqest->setOptionalFields(['orderId']); */
-        $reuqest = new PopOrderPrintDataGetRequest();
-        $reuqest->setOrderId($jdOrderId);
+        $reuqest->setOptionalFields(['orderId']); 
+        
         $res = $this->client->execute($reuqest, $this->accessToken);
         print_r($res);
     }
