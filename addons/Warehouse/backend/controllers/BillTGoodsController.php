@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -230,6 +229,7 @@ class BillTGoodsController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'model' => new WarehouseBillTGoodsForm(),
             'bill' => $bill,
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,

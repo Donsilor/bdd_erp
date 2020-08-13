@@ -237,7 +237,7 @@ class WarehouseBillGoodsL extends BaseModel
             'diamond_cert_type' => '钻石证书类型',
             'diamond_cert_id' => '钻石证书号',
             'jintuo_type' => '金托类型',
-            'market_price' => '市场价(标签价)',
+            'market_price' => '标签价(市场价)',
             'cost_price' => '成本价(公司总成本)',
             'gong_fee' => '工费/g',
             'basic_gong_fee' => '基本工费',

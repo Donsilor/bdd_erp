@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value' => 'styleCate.name',
-                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', Yii::$app->styleService->styleCate::getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', $model->getCateMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:120px;'
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return $model->productType->name ?? '';
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id', Yii::$app->styleService->productType::getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id', $model->getProductMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:120px;'
@@ -154,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', \addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -222,14 +222,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MATERIAL_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'material_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'material_type', $model->getMaterialTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_type', $model->getMaterialTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -240,14 +235,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_color',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MATERIAL_COLOR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR);
-                                    }
-                                    return Html::ajaxSelect($model, 'material_color', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'material_color', $model->getMaterialColorDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -267,14 +257,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'finger_hk',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::PORT_NO);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO);
-                                    }
-                                    return Html::ajaxSelect($model, 'finger_hk', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'finger_hk', $model->getPortNoDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -285,14 +270,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'finger',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::FINGER);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::FINGER);
-                                    }
-                                    return Html::ajaxSelect($model, 'finger', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'finger', $model->getFingerDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger', Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger', $model->getFingerMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -327,14 +307,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::XIANGKOU);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU);
-                                    }
-                                    return Html::ajaxSelect($model, 'xiangkou', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'xiangkou', $model->getXiangkouDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou', Yii::$app->attr->valueMap(AttrIdEnum::XIANGKOU), [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangkou', $model->getXiangkouMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -383,14 +358,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'chain_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::CHAIN_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'chain_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'chain_type', $model->getChainTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -401,14 +371,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cramp_ring',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::CHAIN_BUCKLE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::CHAIN_BUCKLE);
-                                    }
-                                    return Html::ajaxSelect($model, 'cramp_ring', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'cramp_ring', $model->getCrampRingDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::CHAIN_BUCKLE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -419,14 +384,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'talon_head_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::TALON_HEAD_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::TALON_HEAD_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'talon_head_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'talon_head_type', $model->getTalonHeadTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'talon_head_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::TALON_HEAD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'talon_head_type', $model->getTalonHeadTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -538,14 +498,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cert_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_CERT_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'cert_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'cert_type', $model->getCertTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', $model->getCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -568,14 +523,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_cert_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_CERT_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_cert_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_cert_type', $model->getDiamondCertTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cert_type', $model->getDiamondCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -612,14 +562,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_color',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_COLOR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_color', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_color', $model->getDiamondColorDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_color', $model->getDiamondColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -630,14 +575,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_shape',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_SHAPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_shape', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_shape', $model->getDiamondShapeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_shape', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_shape', $model->getDiamondShapeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -648,14 +588,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_clarity',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_CLARITY);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_clarity', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_clarity', $model->getDiamondClarityDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_clarity', $model->getDiamondClarityMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -666,14 +601,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_cut',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_CUT);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_cut', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_cut', $model->getDiamondCutDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cut', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_cut', $model->getDiamondCutMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -684,14 +614,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_polish',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_POLISH);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_polish', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_polish', $model->getDiamondPolishDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_polish', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_polish', $model->getDiamondPolishMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -702,14 +627,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_symmetry',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_SYMMETRY);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_symmetry', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_symmetry', $model->getDiamondSymmetryDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_symmetry', $model->getDiamondSymmetryMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -720,14 +640,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'diamond_fluorescence',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::DIA_FLUORESCENCE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE);
-                                    }
-                                    return Html::ajaxSelect($model, 'diamond_fluorescence', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'diamond_fluorescence', $model->getDiamondFluorescenceDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'diamond_fluorescence', $model->getDiamondFluorescenceMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -777,14 +692,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_stone_type', $model->getMainStoneTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -830,35 +740,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'main_stone_color',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_COLOR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_color', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_COLOR), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR],
-                            ],
-                            [
                                 'attribute' => 'main_stone_shape',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_SHAPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SHAPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_shape', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_stone_shape', $model->getMainStoneShapeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -866,17 +753,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_shape', 'attr-id' => AttrIdEnum::MAIN_STONE_SHAPE],
                             ],
                             [
+                                'attribute' => 'main_stone_color',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'main_stone_color', $model->getMainStoneColorDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR],
+                            ],
+                            [
                                 'attribute' => 'main_stone_clarity',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_CLARITY);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_clarity', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_stone_clarity', $model->getMainStoneClarityDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity', $model->getMainStoneClarityMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -887,14 +782,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_cut',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_CUT);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CUT);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_cut', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_stone_cut', $model->getMainStoneCutDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_cut', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_CUT), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_cut', $model->getMainStoneCutMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -905,14 +795,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_colour',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAIN_STONE_COLOUR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOUR);
-                                    }
-                                    return Html::ajaxSelect($model, 'main_stone_colour', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_stone_colour', $model->getMainStoneColourDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_COLOUR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', $model->getMainStoneColourMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -972,14 +857,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_type1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE1_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_type1', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_type1', $model->getSecondStoneType1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1028,14 +908,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_shape1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE1_SHAPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_SHAPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_shape1', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_shape1', $model->getSecondStoneShape1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1046,14 +921,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_color1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE1_COLOR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOR);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_color1', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_color1', $model->getSecondStoneColor1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1064,14 +934,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_clarity1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE1_CLARITY);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CLARITY);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_clarity1', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_clarity1', $model->getSecondStoneClarity1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', $model->getSecondStoneClarity1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1082,14 +947,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_colour1',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE1_COLOUR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_COLOUR);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_colour1', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_colour1', $model->getSecondStoneColour1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE1_COLOUR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1149,14 +1009,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_type2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE2_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_type2', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_type2', $model->getSecondStoneType2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1205,14 +1060,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_shape2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE2_SHAPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_SHAPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_shape2', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_shape2', $model->getSecondStoneShape2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape2', $model->getSecondStoneShape2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1223,14 +1073,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_color2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE2_COLOR);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_COLOR);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_color2', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_color2', $model->getSecondStoneColor2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', $model->getSecondStoneColor2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1241,14 +1086,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_clarity2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE2_CLARITY);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_CLARITY);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_clarity2', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_clarity2', $model->getSecondStoneClarity2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE2_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', $model->getSecondStoneClarity2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1316,14 +1156,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_type3',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::SIDE_STONE3_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'second_stone_type3', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_stone_type3', $model->getSecondStoneType3Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE3_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1438,14 +1273,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MAT_PARTS_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'parts_type', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'parts_type', $model->getPartsTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'parts_type', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_PARTS_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_type', $model->getPartsTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1456,14 +1286,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_material',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::MATERIAL_TYPE);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE);
-                                    }
-                                    return Html::ajaxSelect($model, 'parts_material', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'parts_material', $model->getPartsMaterialDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'parts_material', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MATERIAL_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_material', $model->getPartsMaterialMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1565,14 +1390,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xiangqian_craft',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::XIANGQIAN_CRAFT);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT);
-                                    }
-                                    return Html::ajaxSelect($model, 'xiangqian_craft', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'xiangqian_craft', $model->getXiangqianCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::XIANGQIAN_CRAFT), [
+                                'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', $model->getXiangqianCraftMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1596,14 +1416,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'biaomiangongyi',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    if (!empty($model->style_sn)) {
-                                        $data = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn, AttrIdEnum::FACEWORK);
-                                    } else {
-                                        $data = \Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK);
-                                    }
-                                    return Html::ajaxSelect($model, 'biaomiangongyi', $data, ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'biaomiangongyi', $model->getFaceCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK), [
+                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -1670,10 +1485,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:200px;'
-                                ]),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:200px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'templet_fee',
@@ -1759,7 +1575,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', \addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1769,9 +1585,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxSelect($model, 'jintuo_type', \addons\Style\common\enums\JintuoTypeEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'jintuo_type', $model->getJietuoTypeMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -1783,9 +1599,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     //return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
-                                    return Html::ajaxSelect($model, 'is_inlay', \addons\Style\common\enums\InlayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'is_inlay', $model->getIsInlayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', \addons\Style\common\enums\InlayEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
