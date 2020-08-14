@@ -8,7 +8,7 @@ namespace addons\Warehouse\common\enums;
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
-class PeiStoneTypeEnum extends \common\enums\BaseEnum
+class PeiShiWayEnum extends \common\enums\BaseEnum
 {
     const NO_PEI = 0;
     const COMPANY = 1;
@@ -21,8 +21,8 @@ class PeiStoneTypeEnum extends \common\enums\BaseEnum
     {
         return [
             self::NO_PEI => '不需配石',
-            self::COMPANY => '公司配石',
-            self::FACTORY => '工厂配石',
+            self::COMPANY => '公司配',
+            self::FACTORY => '工厂配',
         ];
     }
 
