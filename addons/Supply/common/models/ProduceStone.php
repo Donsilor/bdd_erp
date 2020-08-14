@@ -54,6 +54,7 @@ class ProduceStone extends BaseModel
     public function rules()
     {
         return [
+            [['stone_num'], 'required'],
             [['stone_weight','carat'], 'number'],
             [['produce_id','is_increase','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
@@ -101,7 +102,7 @@ class ProduceStone extends BaseModel
             'peishi_status' => '配石状态',
             'peishi_remark' => '配石备注',
             'remark' => '采购备注',
-            'is_increase' => '是否补石',
+            'is_increase' => '补石单',
             'creator_id' => '创建人ID',
             'creator_name' => '申请人',
             'created_at' => '申请时间',

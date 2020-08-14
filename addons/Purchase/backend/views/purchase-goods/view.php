@@ -354,7 +354,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($produce->produceGolds ?? false) {?>
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 金料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>】</font></h3>
+                <h3 class="box-title"><i class="fa fa-info"></i> 配料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>】</font></h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
@@ -377,7 +377,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($produce->produceStones ?? false) {?>
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-info"></i> 石料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>，主石石重=单颗石重，副石石重=副石总重】</font></h3>
+                <h3 class="box-title"><i class="fa fa-info"></i> 配石信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>，主石石重=单颗石重，副石石重=副石总重】</font></h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
@@ -395,7 +395,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	<td><?= ($stone->shape? $stone->shape : '无').'/'.($stone->secai? $stone->secai : '无').'/'.($stone->color? $stone->color : '无').'/'.($stone->clarity? $stone->clarity : '无').'/'.($stone->cut? $stone->cut : '无')?></td>
                         	<td><?php 
                             	if($stone->is_increase == ConfirmEnum::YES) {
-                            	    echo "<font color='green'>是</font>";
+                            	    echo "<font color='red'>是</font>";
                             	}else{
                             	    echo "否";
                             	}
@@ -408,7 +408,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);?>
-                             <?php }else {?>
+                             <?php }else if($stone->peishi_status == PeishiStatusEnum::PENDING) {?>
+                             
                                  <?= Html::edit(['ajax-stone-edit','id'=>$stone->id ,'returnUrl'=>Url::getReturnUrl()], '编辑', [
                                         'class'=>'btn btn-primary btn-sm',
                                         'data-toggle' => 'modal',

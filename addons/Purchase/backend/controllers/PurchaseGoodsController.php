@@ -7,7 +7,6 @@ use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\PartsStyle;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
-use function MongoDB\BSON\toJSON;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -20,7 +19,6 @@ use addons\Style\common\models\Style;
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use common\enums\StatusEnum;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
@@ -30,7 +28,6 @@ use addons\Style\common\enums\QibanTypeEnum;
 use addons\Supply\common\models\ProduceStone;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Purchase\common\forms\PurchaseStoneIncreaseForm;
-use addons\Style\common\enums\StonePositionEnum;
 use common\enums\ConfirmEnum;
 /**
  * Attribute
@@ -439,7 +436,7 @@ class PurchaseGoodsController extends BaseController
     }
     
     /**
-     * ajax补石
+     * ajax补石创建
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -474,6 +471,37 @@ class PurchaseGoodsController extends BaseController
         }       
         return $this->renderAjax($this->action->id, [
                 'model' => $form,
+        ]);
+    }
+    
+    /**
+     * ajax 编辑补石
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxStoneEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = ProduceStone::class;
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();                
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
         ]);
     }
 }
