@@ -252,7 +252,7 @@ class WarehouseBillGoodsL extends BaseModel
             'xianqian_price' => '镶石单价/ct',
             'xianqian_fee' => '镶石费',
             'cert_fee' => '证书费',
-            'markup_rate' => '倍率',
+            'markup_rate' => '倍率[加价率]',
             'extra_stone_fee' => '超石费',
             'tax_fee' => '税费',
             'fense_fee' => '分色/分件费',
