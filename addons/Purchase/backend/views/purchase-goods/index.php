@@ -527,7 +527,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     $side_stone1_price = $model->attr[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
                                     $side_stone1_weight = $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
-                                    return $side_stone1_price;
+                                    $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
                                     return round($side_stone1_weight * $side_stone1_price,2);
                                 },
                                 'filter' => false,
@@ -600,7 +600,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model){
                                     $side_stone2_price = $model->attr[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
                                     $side_stone2_weight = $model->attr[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
-                                    return $side_stone2_weight;
+                                    $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
                                     return round($side_stone2_weight * $side_stone2_price,2);
                                 },
                                 'filter' => false,
