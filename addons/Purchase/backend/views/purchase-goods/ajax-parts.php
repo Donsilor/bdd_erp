@@ -115,7 +115,10 @@ $form = ActiveForm::begin([
 <script>
     var formId = 'purchasegoodsform-parts_info';
 
-    function fillPartsForm(i) {
+    function fillPartsForm(obj) {
+        var id = $(obj).attr("id");
+        var ids = id.split("-");
+        var i = ids[2];
         var style_sn = $("#" + formId + "-" + i + "-style_sn").val();
         if (style_sn != '') {
             $.ajax({
@@ -138,13 +141,4 @@ $form = ActiveForm::begin([
             });
         }
     }
-    $("#" + formId + "-0-style_sn").blur(function () {
-        fillPartsForm(0);
-    });
-    $("#" + formId + "-1-style_sn").blur(function () {
-        fillPartsForm(1);
-    });
-    $("#" + formId + "-2-style_sn").blur(function () {
-        fillPartsForm(2);
-    });
 </script>
