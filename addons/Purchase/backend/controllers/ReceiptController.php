@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -107,7 +108,10 @@ class ReceiptController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-
+            if($isNewRecord){
+                $model->receipt_no = SnHelper::createReceiptSn();
+                //$model->creator_id  = \Yii::$app->user->identity->getId();
+            }
             if(false === $model->save()){
                 $this->message('保存失败：'.$this->getError($model), $this->redirect(['index']), 'error');
             }
