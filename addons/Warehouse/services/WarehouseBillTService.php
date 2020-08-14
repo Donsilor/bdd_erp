@@ -6,6 +6,11 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
+use addons\Warehouse\common\enums\PartsWayEnum;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Warehouse\common\enums\PeiStoneTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use common\enums\StatusEnum;
@@ -334,7 +339,26 @@ class WarehouseBillTService extends Service
      */
     public function calculateFactoryCost($form)
     {
-        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+        $factory_cost = 0;
+        if($form->peiliao_way == PeiLiaoWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        if($form->main_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        if($form->second_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        if($form->second_pei_type2 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        if($form->second_pei_type3 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        if($form->parts_way == PeiJianWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        return sprintf("%.2f", $factory_cost) ?? 0;
     }
 
     /**
