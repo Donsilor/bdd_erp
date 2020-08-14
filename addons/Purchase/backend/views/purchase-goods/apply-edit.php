@@ -111,13 +111,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_price')->textInput() ?>
+                        <?= $form->field($model, 'second_peishi_way')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price1')->textInput() ?>
+                        <?= $form->field($model, 'second_peishi_way1')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price2')->textInput() ?>
+                        <?= $form->field($model, 'second_peishi_way2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_peiliao_way')->dropDownList(\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -195,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'factory_cost_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_mo')->textInput() ?>
+                        <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">

@@ -175,17 +175,39 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-xs-6">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_price') ?>：</td>
-                            <td><?= $model->main_stone_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_sn') ?>：</td>
+                            <td><?= $model->main_stone_sn ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price1') ?>：</td>
-                            <td><?= $model->main_stone_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_sn1') ?>：</td>
+                            <td><?= $model->second_stone_sn1 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price2') ?>：</td>
-                            <td><?= $model->main_stone_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_sn2') ?>：</td>
+                            <td><?= $model->second_stone_sn2 ?></td>
                         </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way1') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way1) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way2') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way2) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peiliao_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->second_peiliao_way) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peijian_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->second_peijian_way) ?></td>
+                        </tr>
+
+
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
                             <td><?= $model->gold_price ?></td>
@@ -238,6 +260,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_fee') ?>：</td>
                             <td><?= $model->peishi_fee ?></td>
                         </tr>
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_amount') ?>：</td>
                             <td><?= $model->peishi_amount ?></td>
@@ -255,10 +282,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->factory_mo ?></td>
                         </tr>
 
-                    </table>
-                </div>
-                <div class="col-xs-6">
-                    <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
                             <td><?= $model->parts_price ?></td>
@@ -281,6 +304,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
+                            <td><?= $model->gong_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('ke_gong_fee') ?>：</td>
                             <td><?= $model->gong_fee ?></td>
                         </tr>
                         <tr>
