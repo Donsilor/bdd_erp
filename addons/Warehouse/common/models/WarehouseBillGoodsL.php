@@ -34,6 +34,7 @@ use Yii;
  * @property string $gold_weight 金重
  * @property string $gold_loss 金损
  * @property string $suttle_weight 净重
+ * @property string $lncl_loss_weight 含耗重(g)
  * @property string $gold_price 金价
  * @property string $gold_amount 金料额
  * @property string $gross_weight 毛重
@@ -132,6 +133,7 @@ use Yii;
  * @property string $second_stone_shape2 副石2形状
  * @property string $second_stone_color2 副石2颜色
  * @property string $second_stone_clarity2 副石2净度
+ * @property string $second_stone_colour2 副石2色彩
  * @property string $second_stone_size2 副石2规格
  * @property string $second_stone_price2 副石2总计价
  * @property string $second_stone_amount2 副石2总额(成本价)
@@ -139,6 +141,7 @@ use Yii;
  * @property int $second_stone_num3 副石3数量
  * @property string $second_stone_weight3 副石3重量(ct)
  * @property string $second_stone_price3 副石3买入单价
+ * @property string $second_stone_amount3 副石3总额(成本价)
  * @property string $stone_remark 石料备注
  * @property string $peishi_fee 配石费
  * @property string $peishi_gong_fee 配石工费
@@ -168,13 +171,13 @@ class WarehouseBillGoodsL extends BaseModel
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
             [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'source_detail_id', 'auto_goods_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['gold_weight', 'gold_loss', 'suttle_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'basic_gong_fee', 'bukou_fee', 'xianqian_price', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'penlasha_fee', 'templet_fee', 'total_gong_fee', 'factory_cost', 'chain_long', 'parts_amount', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_weight3', 'second_stone_price3', 'peishi_fee', 'peishi_gong_fee'], 'number'],
+            [['gold_weight', 'gold_loss', 'suttle_weight', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'basic_gong_fee', 'bukou_fee', 'xianqian_price', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'penlasha_fee', 'templet_fee', 'total_gong_fee', 'factory_cost', 'chain_long', 'parts_amount', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'peishi_fee', 'peishi_gong_fee'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn', 'main_stone_sn', 'main_cert_id', 'second_stone_sn1', 'second_stone_sn2', 'second_cert_id2'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
             [['order_sn'], 'string', 'max' => 40],
             [['gross_weight', 'diamond_cert_id', 'second_cert_id1'], 'string', 'max' => 20],
-            [['finger', 'finger_hk', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'biaomiangongyi', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'parts_material', 'main_stone_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_type3'], 'string', 'max' => 10],
+            [['finger', 'finger_hk', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'biaomiangongyi', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'parts_material', 'main_stone_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3'], 'string', 'max' => 10],
             [['kezi', 'cert_type', 'factory_mo'], 'string', 'max' => 50],
             [['stone_remark', 'remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
@@ -212,6 +215,7 @@ class WarehouseBillGoodsL extends BaseModel
             'gold_weight' => '连石重[金重](g)',
             'gold_loss' => '耗损[金损](%)',
             'suttle_weight' => '净重(g)',
+            'lncl_loss_weight' => '含耗重(g)',
             'gold_price' => '金价/g',
             'gold_amount' => '金料额',
             'gross_weight' => '毛重(g)',
@@ -238,8 +242,8 @@ class WarehouseBillGoodsL extends BaseModel
             'diamond_cert_id' => '钻石证书号',
             'jintuo_type' => '金托类型',
             'market_price' => '标签价(市场价)',
-            'cost_price' => '成本价(公司总成本)',
-            'gong_fee' => '工费/g',
+            'cost_price' => '公司总成本(成本价)',
+            'gong_fee' => '克工费/g',
             'basic_gong_fee' => '基本工费',
             'bukou_fee' => '补口费',
             'xianqian_price' => '镶石单价/ct',
@@ -270,7 +274,7 @@ class WarehouseBillGoodsL extends BaseModel
             'parts_amount' => '配件总额',
             'parts_way' => '配件方式',
             'parts_gold_weight' => '配件金重(g)',
-            'parts_price' => '配件金价',
+            'parts_price' => '配件金价/g',
             'parts_fee' => '配件工费',
             'parts_num' => '配件数量',
             'goods_color' => '货品外部颜色',
@@ -310,6 +314,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_shape2' => '副石2形状',
             'second_stone_color2' => '副石2颜色',
             'second_stone_clarity2' => '副石2净度',
+            'second_stone_colour2' => '副石2色彩',
             'second_stone_size2' => '副石2规格',
             'second_stone_price2' => '副石2单价/ct',
             'second_stone_amount2' => '副石2总额(成本价)',
@@ -317,6 +322,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
             'second_stone_price3' => '副石3单价/ct',
+            'second_stone_amount3' => '副石3总额(成本价)',
             'stone_remark' => '石料备注',
             'peishi_fee' => '配石费',
             'peishi_gong_fee' => '配石工费',

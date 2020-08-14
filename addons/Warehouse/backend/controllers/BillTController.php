@@ -244,6 +244,36 @@ class BillTController extends BaseController
 
     /**
      *
+     * 同步更新价格
+     * @param $id
+     * @return mixed
+     */
+    public function actionSyncUpdatePrice($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+
+            \Yii::$app->warehouseService->billT->syncUpdatePrice($model->bill_id);
+
+            //更新收货单汇总：总金额和总数量
+            $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($id);
+            if (false === $res) {
+                throw new \yii\db\Exception('更新单据汇总失败');
+            }
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '更新成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     *
      * 取消单据
      * @param $id
      * @return mixed
