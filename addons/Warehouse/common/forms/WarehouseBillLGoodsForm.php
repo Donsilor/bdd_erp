@@ -1001,17 +1001,26 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
      * 配件方式
      * @return array
      */
-    public function getPartsWayMap()
+    public function getPeiLiaoWayMap()
     {
-        return \addons\Warehouse\common\enums\PartsWayEnum::getMap() ?? [];
+        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPeiJianWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
     }
 
     /**
      * 配石方式(类型)
      * @return array
      */
-    public function getPeiStoneTypeMap()
+    public function getPeiShiWayMap()
     {
-        return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getMap() ?? [];
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
     }
 }

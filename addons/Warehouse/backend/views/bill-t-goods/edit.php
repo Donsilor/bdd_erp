@@ -42,13 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'material_color')->dropDownList($model->getMaterialColorDrop($model),['prompt'=>'请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
+<!--                    </div>-->
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'material')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::MATERIAL),['prompt'=>'请选择']) ?>
 <!--                    </div>-->
-
                     <div class="col-lg-4">
                         <?= $form->field($model, 'finger_hk')->dropDownList($model->getPortNoDrop($model),['prompt'=>'请选择']) ?>
                     </div>
@@ -113,6 +112,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">金料信息</h5>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peiliao_way')->dropDownList($model->getPeiLiaoWayMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_weight')->textInput() ?>
@@ -282,6 +284,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_clarity2')->dropDownList($model->getSecondStoneClarity2Drop($model),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_colour2')->dropDownList($model->getSecondStoneColour2Drop($model),['prompt'=>'请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_size2')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
@@ -310,7 +315,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">配件信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_way')->dropDownList($model->getPartsWayMap(),['prompt'=>'请选择']) ?>
+                        <?= $form->field($model, 'parts_way')->dropDownList($model->getPeiJianWayMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(),['prompt'=>'请选择']) ?>
