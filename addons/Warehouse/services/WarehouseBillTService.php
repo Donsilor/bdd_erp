@@ -184,7 +184,7 @@ class WarehouseBillTService extends Service
     public function syncUpdatePriceAll($form)
     {
         $goods = WarehouseBillTGoodsForm::findAll(['bill_id'=>$form->id]);
-        if($goods){
+        if(!empty($goods)){
             foreach ($goods as $good) {
                 $this->syncUpdatePrice($good);
             }

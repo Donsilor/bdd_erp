@@ -1,11 +1,8 @@
 <?php
-use yii\widgets\ActiveForm;
 use common\helpers\Html;
 use common\helpers\Url;
-use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\AmountHelper;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
-use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use common\enums\ConfirmEnum;

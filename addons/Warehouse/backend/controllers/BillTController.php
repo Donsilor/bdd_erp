@@ -183,6 +183,7 @@ class BillTController extends BaseController
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
+            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
             //日志
             $log = [
                 'bill_id' => $model->id,
@@ -256,7 +257,7 @@ class BillTController extends BaseController
         try {
             $trans = \Yii::$app->db->beginTransaction();
 
-            \Yii::$app->warehouseService->billT->syncUpdatePrice($model->bill_id);
+            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($id);
 
             //更新收货单汇总：总金额和总数量
             $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($id);
