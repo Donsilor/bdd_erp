@@ -187,8 +187,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->second_stone_sn2 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_peishi_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_peishi_way) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way1') ?>：</td>
@@ -199,12 +199,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way2) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peiliao_way') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->second_peiliao_way) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peijian_way') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->second_peijian_way) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peijian_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->peijian_way) ?></td>
                         </tr>
 
 

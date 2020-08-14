@@ -304,11 +304,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'peiliao_type',
+                            'attribute' => 'peiliao_way',
                             'value' => function($model){
-                                return \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peiliao_type);
+                                return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'peiliao_type',\addons\Supply\common\enums\PeiliaoTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'peiliao_way',\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -389,7 +389,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
+                        [
+                            'attribute'=>'main_peishi_way',
+                            'value' => function($model){
+                                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_peishi_way);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'main_peishi_way',\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
                         [
                             'attribute'=>'main_stone_type',
                             'value' => function($model){
@@ -516,7 +527,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
+                        [
+                            'attribute'=>'second_peishi_way1',
+                            'value' => function($model){
+                                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way1);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_peishi_way1',\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
                         [
                             'attribute'=>'second_stone_type1',
                             'value' => function($model){
@@ -616,6 +638,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->second_peishi_type2);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'second_peishi_type2',\addons\Supply\common\enums\PeishiTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'second_peishi_way2',
+                            'value' => function($model){
+                                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way2);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'second_peishi_way2',\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -725,11 +759,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                          /**副石2结束**/
                         [
-                            'attribute' => 'peijian_type',
+                            'attribute'=>'peijian_way',
                             'value' => function($model){
-                                return \addons\Supply\common\enums\PeijianTypeEnum::getValue($model->peijian_type);
+                                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->peijian_way);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'peijian_type',\addons\Supply\common\enums\PeijianTypeEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'peijian_way',\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -739,6 +773,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute'=>'shiliao_remark',
                             'filter' => false,
+                            'headerOptions' => [],
+                        ],
+
+                        [
+                            'attribute'=>'peijian_cate',
+                            'value' => function($model){
+                                return \addons\Warehouse\common\enums\PeiJianCateEnum::getValue($model->peijian_cate);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'peijian_cate',\addons\Warehouse\common\enums\PeiJianCateEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
                             'headerOptions' => [],
                         ],
                         [
@@ -751,6 +798,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => [],
                         ],
+
                         [
                             'attribute'=>'parts_gold_weight',
                             'filter' => false,
@@ -771,6 +819,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'parts_fee',
+                            'filter' => false,
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'ke_gong_fee',
                             'filter' => false,
                             'headerOptions' => [],
                         ],
@@ -842,6 +895,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => [],
                         ],
+
                         [
                             'attribute'=>'factory_cost',
                             'filter' => false,

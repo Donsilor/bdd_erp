@@ -111,21 +111,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_peishi_way')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                        <?= $form->field($model, 'main_peishi_way')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_peishi_way1')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                        <?= $form->field($model, 'second_peishi_way1')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_peishi_way2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                        <?= $form->field($model, 'second_peishi_way2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择'])?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_peiliao_way')->dropDownList(\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                        <?= $form->field($model, 'peiliao_way')->dropDownList(\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['prompt' => '请选择'])?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])->label("配料类型(只允许黄金/铂金/银进行配料)") ?>
+                        <?= $form->field($model, 'peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])?>
                     </div>
                 </div>
                 <div class="row">
