@@ -812,7 +812,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label'=>'配件额',
                             'value' => function($model){
-                                return round($model->parts_gold_weight * $model->parts_gold_weight,2);
+                                return round($model->parts_gold_weight * $model->parts_price,2);
                             },
                             'filter' => false,
                             'headerOptions' => [],
