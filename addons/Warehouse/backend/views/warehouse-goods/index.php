@@ -1033,7 +1033,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label'=>'库龄',
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDuration(bcsub (time(),$model->created_at));
+                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
+                                    return Yii::$app->formatter->asDuration(bcsub ($model->sales_time,$model->created_at));
+                                }else{
+                                    return Yii::$app->formatter->asDuration(bcsub (time(),$model->created_at));
+                                }
+
                             },
                             'filter' => false,
                             'headerOptions' => [],
