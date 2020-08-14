@@ -29,6 +29,9 @@ use addons\Supply\common\models\ProduceStone;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Purchase\common\forms\PurchaseStoneIncreaseForm;
 use common\enums\ConfirmEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Purchase\common\forms\PurchaseGoldIncreaseForm;
 /**
  * Attribute
  *
@@ -495,6 +498,75 @@ class PurchaseGoodsController extends BaseController
                 }
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
+    /**
+     * ajax补石创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxGoldIncrease()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseGoldIncreaseForm::class;
+        $form = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($form);
+        if ($form->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $model = new ProduceGold();
+                //复制石头信息
+                $model->attributes = $form->toArray(['produce_id','produce_sn','from_order_sn','from_type','gold_type','gold_weight','gold_spec']);
+                $model->gold_weight = $form->increase_weight;
+                $model->remark = $form->increase_remark;
+                $model->peiliao_status = PeiliaoStatusEnum::PENDING;
+                $model->is_increase = ConfirmEnum::YES;
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer."#box-gold"), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $form,
+        ]);
+    }
+    
+    /**
+     * ajax 编辑补料
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxGoldEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = ProduceGold::class;
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer."#box-gold"), 'success');
             }catch (\Exception $e){
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');

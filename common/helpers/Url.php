@@ -212,7 +212,7 @@ class Url extends BaseUrl
      */
     public static function getReturnUrl()
     {
-        return self::buildUrl(Yii::$app->request->url);        
+        return self::buildUrl(Yii::$app->request->url,[],['returnUrl']);        
     }
     
     /**

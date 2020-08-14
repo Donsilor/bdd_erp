@@ -3,19 +3,19 @@
 namespace addons\Purchase\common\forms;
 
 use Yii;
-use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\models\ProduceGold;
 
 /**
  * 补石 Form
  *
- * @property string $increase_num 必填属性 补石数量
+ * @property string $increase_weight 必填属性 补石数量
  * @property string $increase_remark 选填属性
  */
-class PurchaseStoneIncreaseForm extends ProduceStone
-{    
+class PurchaseGoldIncreaseForm extends ProduceGold
+{
     
-
-    public $increase_num;
+    
+    public $increase_weight;
     public $increase_remark;
     
     public $attr;
@@ -25,10 +25,10 @@ class PurchaseStoneIncreaseForm extends ProduceStone
     public function rules()
     {
         $rules = [
-                [['increase_num'], 'required'],
-                [['increase_num'], 'number'],
-                [['increase_remark'], 'string','max'=>255],                 
-         ];
+                [['increase_weight'], 'required'],
+                [['increase_weight'], 'number'],
+                [['increase_remark'], 'string','max'=>255],
+        ];
         return array_merge(parent::rules() , $rules);
     }
     /**
@@ -38,8 +38,8 @@ class PurchaseStoneIncreaseForm extends ProduceStone
     {
         //合并
         return parent::attributeLabels() + [
-                'increase_num'=>'补石数量',
-                'increase_remark'=>'补石备注',
+                'increase_weight'=>'补料克重',
+                'increase_remark'=>'补料备注',
         ];
     }
 }

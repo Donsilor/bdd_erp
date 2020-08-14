@@ -352,21 +352,45 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if(($produce = $model->produce ?? false) && !empty($attrValues)) {?>
     <div class="col-xs-12">
         <?php if($produce->produceGolds ?? false) {?>
-        <div class="box">
+        <div class="box" id="box-gold" name="box-gold">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-info"></i> 配料信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>】</font></h3>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <thead>
-                    	<tr><th>金料材质</th><th>金重</th><th>状态</th></tr>
+                    	<tr><th>金料材质</th><th>金重</th><th>补料单</th><th>状态</th><th>操作</th></tr>
                     </thead>
                     <tbody>
                     	<?php foreach ($produce->produceGolds as $gold) {?>
                     	<tr>
                     		<td><?= $gold->gold_type?></td>
                         	<td><?= $gold->gold_weight/1 ?>g</td>
+                        	<td><?php 
+                            	if($gold->is_increase == ConfirmEnum::YES) {
+                            	    echo "<font color='red'>是</font>";
+                            	}else{
+                            	    echo "否";
+                            	}
+                        	    ?>
+                        	</td>
                         	<td><?= PeiliaoStatusEnum::getValue($gold->peiliao_status) ?></td>
+                        	<td>
+                        	<?php if($gold->is_increase == ConfirmEnum::NO) {?>
+                                	<?= Html::edit(['ajax-gold-increase','id'=>$gold->id ,'returnUrl'=>Url::getReturnUrl()], '补料', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);?>
+                             <?php }else if($gold->peiliao_status == PeiliaoStatusEnum::PENDING) {?>
+                             
+                                 <?= Html::edit(['ajax-gold-edit','id'=>$gold->id ,'returnUrl'=>Url::getReturnUrl()], '编辑', [
+                                        'class'=>'btn btn-primary btn-sm',
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#ajaxModal',
+                                    ]);?>
+                             <?php } ?>   
+                                </td>
                     	</tr>
                     	<?php }?>   
                     </tbody>
@@ -375,7 +399,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <?php }?>
         <?php if($produce->produceStones ?? false) {?>
-        <div class="box">
+        <div class="box" id="box-stone" name="box-stone">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-info"></i> 配石信息<font style="font-size:14px;color:red">【商品数量:<?= $model->goods_num?>，主石石重=单颗石重，副石石重=副石总重】</font></h3>
             </div>
