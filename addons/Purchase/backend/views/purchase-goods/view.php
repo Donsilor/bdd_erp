@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-    <div class="col-xs-6">
+    <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 属性信息</h3>
@@ -350,7 +350,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <?php if(($produce = $model->produce ?? false) && !empty($attrValues)) {?>
-    <div class="col-xs-6">
+    <div class="col-xs-12">
         <?php if($produce->produceGolds ?? false) {?>
         <div class="box">
             <div class="box-header">
