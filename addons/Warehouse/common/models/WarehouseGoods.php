@@ -300,6 +300,7 @@ class WarehouseGoods extends BaseModel
             'shiliao_remark' => '石料备注',
             'peijian_cate' => '配件分类',
             'parts_material' => '配件材质',
+            'parts_amount' => '配件额',
             'parts_price' => '配件金价',
             'xianqian_price' => '镶石单价/颗',
             'peishi_fee' => '配石工费/ct',
