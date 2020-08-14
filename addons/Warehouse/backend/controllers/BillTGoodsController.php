@@ -110,17 +110,18 @@ class BillTGoodsController extends BaseController
         //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
-                //$trans = \Yii::$app->db->beginTransaction();
-                //Yii::$app->warehouseService->billT->addBillTGoods($model);
-                //$trans->commit();
+                $trans = \Yii::$app->db->beginTransaction();
+
+                \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-                if (false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+//                if (false === $model->save()) {
+//                    throw new \Exception($this->getError($model));
+//                }
+                $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');
             } catch (\Exception $e) {
-                //$trans->rollBack();
+                $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
@@ -289,6 +290,35 @@ class BillTGoodsController extends BaseController
             \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
             $trans->commit();
             \Yii::$app->getSession()->setFlash('success', '删除成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     *
+     * 同步更新价格
+     * @return mixed
+     */
+    public function actionUpdatePrice()
+    {
+        $ids = Yii::$app->request->post('ids');
+        if (empty($ids)) {
+            return $this->message("ID不能为空", $this->redirect(['index']), 'error');
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            foreach ($ids as $id) {
+                $model = WarehouseBillTGoodsForm::findOne($id);
+                if(!empty($model)){
+                    \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
+                }
+            }
+            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '刷新成功');
             return $this->redirect(\Yii::$app->request->referrer);
         } catch (\Exception $e) {
             $trans->rollBack();
