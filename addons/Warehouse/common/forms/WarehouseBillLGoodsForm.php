@@ -44,6 +44,7 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
         }
         return [];
     }
+
     /**
      * 根据款号获取属性值
      * @param string $style_sn
@@ -846,6 +847,30 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE2_CLARITY);
         } else {
             $data = $this->getSecondStoneClarity2Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石2色彩列表
+     * @return array
+     */
+    public function getSecondStoneColour2Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_COLOUR) ?? [];
+    }
+
+    /**
+     * 副石2色彩
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneColour2Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE2_COLOUR);
+        } else {
+            $data = $this->getSecondStoneColour2Map();
         }
         return $data ?? [];
     }
