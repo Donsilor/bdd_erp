@@ -42,6 +42,7 @@ $form = ActiveForm::begin([
                     'enableError' => false,
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:120px'
                     ]
                 ],
@@ -52,6 +53,7 @@ $form = ActiveForm::begin([
                     'type' => 'dropDownList',
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:100px',
                         'prompt' => '请选择',
                     ],
@@ -64,6 +66,7 @@ $form = ActiveForm::begin([
                     'type' => 'dropDownList',
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:100px',
                         'prompt' => '请选择',
                     ],
@@ -81,8 +84,8 @@ $form = ActiveForm::begin([
                     ]
                 ],
                 [
-                    'name' => 'parts_weight',
-                    'title' => '配件金重',
+                    'name' => 'parts_gold_weight',
+                    'title' => '配件金重(g)',
                     'enableError' => false,
                     'defaultValue' => '0.000',
                     'options' => [
@@ -93,7 +96,7 @@ $form = ActiveForm::begin([
                 ],
                 [
                     'name' => 'parts_price',
-                    'title' => '配件金额',
+                    'title' => '配件单价/g',
                     'enableError' => false,
                     'defaultValue' => '0.00',
                     'options' => [
@@ -115,7 +118,10 @@ $form = ActiveForm::begin([
 <script>
     var formId = 'purchasegoodsform-parts_info';
 
-    function fillPartsForm(i) {
+    function fillPartsForm(obj) {
+        var id = $(obj).attr("id");
+        var ids = id.split("-");
+        var i = ids[2];
         var style_sn = $("#" + formId + "-" + i + "-style_sn").val();
         if (style_sn != '') {
             $.ajax({
@@ -138,13 +144,4 @@ $form = ActiveForm::begin([
             });
         }
     }
-    $("#" + formId + "-0-style_sn").blur(function () {
-        fillPartsForm(0);
-    });
-    $("#" + formId + "-1-style_sn").blur(function () {
-        fillPartsForm(1);
-    });
-    $("#" + formId + "-2-style_sn").blur(function () {
-        fillPartsForm(2);
-    });
 </script>

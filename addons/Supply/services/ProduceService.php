@@ -9,6 +9,7 @@
 namespace addons\Supply\services;
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\models\PartsStyle;
 use addons\Supply\common\enums\PeijianStatusEnum;
 use addons\Supply\common\models\Factory;
 use addons\Supply\common\models\Produce;
@@ -422,14 +423,15 @@ class ProduceService extends Service
             if (is_array($parts_info)) {
                 foreach ($parts_info as $item) {
                     $style_sn = $item['style_sn'] ?? "";
+                    $style = PartsStyle::findOne(['style_sn'=>$style_sn]);
                     $parts = [
                         'supplier_id' => $form->supplier_id,
                         'style_sn' => $style_sn,
-                        'parts_name' => $item['parts_name'] ?? "",
-                        'parts_type' => $item['parts_type'] ?? "",
-                        'material_type' => $item['material_type'] ?? '',
+                        'parts_name' => $style->parts_name ?? "",
+                        'parts_type' => $style->parts_type ?? "",
+                        'material_type' => $style->metal_type ?? '',
                         'parts_num' => $form->goods_num * ($item['parts_num'] ?? 0),
-                        'parts_weight' => $form->goods_num * ($item['parts_weight'] ?? 0),
+                        'parts_weight' => $form->goods_num * ($item['parts_gold_weight'] ?? 0),
                     ];
                     $model = ProduceParts::find()->where(['produce_id' => $form->id, 'style_sn' => $style_sn])->one();
                     //$model = new ProduceParts();
