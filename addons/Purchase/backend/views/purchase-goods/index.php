@@ -183,13 +183,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'peijian_type',
                                 'value' => function($model) use ($purchase){
                                     $button = "";
-                                    //if($model->peijian_type>1 && $purchase->purchase_status == PurchaseStatusEnum::SAVE){
+                                    if($model->peijian_type>1 && $purchase->purchase_status == PurchaseStatusEnum::SAVE){
                                         $button = Html::edit(['ajax-parts','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑配件',[
                                                 'class' => 'btn btn-primary btn-xs',
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModalLg',
                                             ]);
-                                    //}
+                                    }
                                     return \addons\Supply\common\enums\PeijianTypeEnum::getValue($model->peijian_type).$button;
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'peijian_type',\addons\Supply\common\enums\PeijianTypeEnum::getMap(), [
