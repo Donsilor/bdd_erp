@@ -242,6 +242,9 @@ class Url extends BaseUrl
         if (count($params) > 0) {
             $returnUrlParams = [];
             foreach ($params as $key=>$val){
+                if($val == '') {
+                    continue;
+                }
                 $returnUrlParams[] = $key.'='.$val;
             }
             $returnUrl = $returnUrl . '?' . implode('&', $returnUrlParams);
