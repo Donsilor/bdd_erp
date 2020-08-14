@@ -132,6 +132,7 @@ use Yii;
  * @property string $second_stone_shape2 副石2形状
  * @property string $second_stone_color2 副石2颜色
  * @property string $second_stone_clarity2 副石2净度
+ * @property string $second_stone_colour2 副石2色彩
  * @property string $second_stone_size2 副石2规格
  * @property string $second_stone_price2 副石2总计价
  * @property string $second_stone_amount2 副石2总额(成本价)
