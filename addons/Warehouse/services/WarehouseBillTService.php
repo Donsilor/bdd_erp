@@ -6,6 +6,7 @@ use addons\Purchase\common\models\PurchaseGoods;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
+use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use common\enums\StatusEnum;
 use Yii;
@@ -171,6 +172,24 @@ class WarehouseBillTService extends Service
         }
 
         $this->warehouseBillTSummary($form->bill_id);
+    }
+
+    /**
+     *
+     * 同步更新全部商品价格
+     * @param WarehouseBillTForm $form
+     * @return object
+     * @throws
+     */
+    public function syncUpdatePriceAll($form)
+    {
+        $goods = WarehouseBillTGoodsForm::findAll(['bill_id'=>$form->id]);
+        if($goods){
+            foreach ($goods as $good) {
+                $this->syncUpdatePrice($good);
+            }
+        }
+        return $goods;
     }
 
     /**
@@ -341,4 +360,36 @@ class WarehouseBillTService extends Service
     {
         return bcmul($form->markup_rate, $this->calculateCostPrice($form), 3) ?? 0;
     }
+
+    /**
+     *
+     * 同步更新商品价格
+     * @param WarehouseBillTGoodsForm $form
+     * @return object
+     * @throws
+     */
+    public function syncUpdatePrice($form)
+    {
+        if (!$form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $form->lncl_loss_weight = $this->calculateLossWeight($form);
+        $form->gold_amount = $this->calculateGoldAmount($form);
+        $form->main_stone_amount = $this->calculateMainStoneCost($form);
+        $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);
+        $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);
+        $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);
+        $form->parts_amount = $this->calculatePartsAmount($form);
+        $form->peishi_fee = $this->calculatePeishiFee($form);
+        $form->basic_gong_fee = $this->calculateBasicGongFee($form);
+        $form->xianqian_fee = $this->calculateXiangshiFee($form);
+        $form->factory_cost = $this->calculateFactoryCost($form);
+        $form->cost_price = $this->calculateCostPrice($form);
+        $form->market_price = $this->calculateMarketPrice($form);
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+        return $form;
+    }
+
 }
