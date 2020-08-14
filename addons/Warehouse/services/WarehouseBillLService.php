@@ -153,6 +153,7 @@ class WarehouseBillLService extends Service
                     'peijian_cate' => $good->parts_way,
                     'parts_material' => $good->parts_material,
                     'parts_price' => $good->parts_price,
+                    'parts_amount' => $good->parts_amount,
                     'xianqian_price' => $good->xianqian_price,
                     //金料信息
                     //'peiliao_type' => $good->peiliao_type,
@@ -334,11 +335,11 @@ class WarehouseBillLService extends Service
                     }
                 }
             }
-            if (false === $form->save()) {
-                throw new \Exception($this->getError($form));
-            }
         } else {
             $form->bill_status = BillStatusEnum::SAVE;
+        }
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
         }
     }
 
