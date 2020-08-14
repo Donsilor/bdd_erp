@@ -2,20 +2,21 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Purchase\common\models\PurchaseGoods;
-use addons\Style\common\enums\QibanTypeEnum;
-use addons\Style\common\forms\QibanAttrForm;
-use addons\Style\common\models\Qiban;
-use addons\Warehouse\common\forms\WarehouseBillTForm;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use common\enums\StatusEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Style\common\models\Style;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
+use addons\Warehouse\common\forms\WarehouseBillTForm;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Style\common\models\Style;
+use addons\Style\common\models\Qiban;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Style\common\enums\QibanTypeEnum;
+use common\enums\StatusEnum;
 
 /**
  * 其他收货单
@@ -334,7 +335,40 @@ class WarehouseBillTService extends Service
      */
     public function calculateFactoryCost($form)
     {
-        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+        $factory_cost = 0;
+        if($form->peiliao_way == PeiLiaoWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateGoldAmount($form), 3);
+        }
+        if($form->main_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateMainStoneCost($form), 3);
+        }
+        if($form->second_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone1Cost($form), 3);
+        }
+        if($form->second_pei_type2 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone2Cost($form), 3);
+        }
+        if($form->second_pei_type3 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone3Cost($form), 3);
+        }
+        if($form->parts_way == PeiJianWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        $factory_cost = bcadd($factory_cost, $this->calculateBasicGongFee($form), 3);//基本工费
+        $factory_cost = bcadd($factory_cost, $form->peishi_gong_fee, 3);//配石工费
+        $factory_cost = bcadd($factory_cost, $form->parts_fee, 3);//配件工费
+        $factory_cost = bcadd($factory_cost, $form->templet_fee, 3);//样板工费
+        $factory_cost = bcadd($factory_cost, $form->cert_fee, 3);//证书费
+        $factory_cost = bcadd($factory_cost, $form->biaomiangongyi_fee, 3);//表面工艺费
+        $factory_cost = bcadd($factory_cost, $form->penlasha_fee, 3);//喷拉砂费
+        $factory_cost = bcadd($factory_cost, $form->fense_fee, 3);//分件/分色费
+        $factory_cost = bcadd($factory_cost, $form->bukou_fee, 3);//补口费
+        $factory_cost = bcadd($factory_cost, $form->xianqian_fee, 3);//镶嵌工费
+        $factory_cost = bcadd($factory_cost, $form->extra_stone_fee, 3);//超石费
+        $factory_cost = bcadd($factory_cost, $form->tax_fee, 3);//税费
+        $factory_cost = bcadd($factory_cost, $form->other_fee, 3);//其他补充费用
+
+        return sprintf("%.2f", $factory_cost) ?? 0;
     }
 
     /**

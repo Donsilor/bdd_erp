@@ -1261,9 +1261,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model) {
-                                    return Html::ajaxSelect($model, 'parts_way', $model->getPartsWayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPartsWayMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'

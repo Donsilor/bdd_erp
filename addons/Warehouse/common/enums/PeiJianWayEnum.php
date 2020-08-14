@@ -4,7 +4,7 @@ namespace addons\Warehouse\common\enums;
 
 /**
  *
- * 配石类型
+ * 配件方式
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */

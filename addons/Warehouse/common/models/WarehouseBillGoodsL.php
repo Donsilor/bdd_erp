@@ -31,6 +31,7 @@ use Yii;
  * @property int $put_in_type 入库方式
  * @property string $produce_sn 布产单号
  * @property int $is_wholesale 是否批发
+ * @property int $peiliao_way 配料方式
  * @property string $gold_weight 金重
  * @property string $gold_loss 金损
  * @property string $suttle_weight 净重
@@ -137,6 +138,7 @@ use Yii;
  * @property string $second_stone_size2 副石2规格
  * @property string $second_stone_price2 副石2总计价
  * @property string $second_stone_amount2 副石2总额(成本价)
+ * @property string $second_pei_type3 副石3配石类型
  * @property string $second_stone_type3 副石3类型
  * @property int $second_stone_num3 副石3数量
  * @property string $second_stone_weight3 副石3重量(ct)
@@ -170,7 +172,7 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'source_detail_id', 'auto_goods_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'peiliao_way', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'second_pei_type3', 'source_detail_id', 'auto_goods_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'gold_loss', 'suttle_weight', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'basic_gong_fee', 'bukou_fee', 'xianqian_price', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'penlasha_fee', 'templet_fee', 'total_gong_fee', 'factory_cost', 'chain_long', 'parts_amount', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'peishi_fee', 'peishi_gong_fee'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn', 'main_stone_sn', 'main_cert_id', 'second_stone_sn1', 'second_stone_sn2', 'second_cert_id2'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -212,6 +214,7 @@ class WarehouseBillGoodsL extends BaseModel
             'put_in_type' => '入库方式',
             'produce_sn' => '布产单号',
             'is_wholesale' => '是否批发',
+            'peiliao_way' => '配料方式',
             'gold_weight' => '连石重[金重](g)',
             'gold_loss' => '耗损[金损](%)',
             'suttle_weight' => '净重(g)',
@@ -292,8 +295,8 @@ class WarehouseBillGoodsL extends BaseModel
             'main_stone_size' => '主石规格',
             'main_stone_price' => '主石单价/ct',
             'main_stone_amount' => '主石总额(成本价)',
-            'second_pei_type' => '副石配石类型',
-            'second_stone_sn1' => '副石1编号',
+            'second_pei_type' => '副石1配石类型',
+            'second_stone_sn1' => '副石1编号[石包号]',
             'second_cert_id1' => '副石1证书号',
             'second_stone_type1' => '副石1类型',
             'second_stone_num1' => '副石1粒数',
@@ -318,6 +321,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_size2' => '副石2规格',
             'second_stone_price2' => '副石2单价/ct',
             'second_stone_amount2' => '副石2总额(成本价)',
+            'second_pei_type3' => '副石3配石类型',
             'second_stone_type3' => '副石3类型',
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',

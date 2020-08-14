@@ -44,6 +44,7 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
         }
         return [];
     }
+
     /**
      * 根据款号获取属性值
      * @param string $style_sn
@@ -851,6 +852,30 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 副石2色彩列表
+     * @return array
+     */
+    public function getSecondStoneColour2Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE2_COLOUR) ?? [];
+    }
+
+    /**
+     * 副石2色彩
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneColour2Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE2_COLOUR);
+        } else {
+            $data = $this->getSecondStoneColour2Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
      * 副石3类型列表
      * @return array
      */
@@ -1001,17 +1026,26 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
      * 配件方式
      * @return array
      */
-    public function getPartsWayMap()
+    public function getPeiLiaoWayMap()
     {
-        return \addons\Warehouse\common\enums\PartsWayEnum::getMap() ?? [];
+        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPeiJianWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
     }
 
     /**
      * 配石方式(类型)
      * @return array
      */
-    public function getPeiStoneTypeMap()
+    public function getPeiShiWayMap()
     {
-        return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getMap() ?? [];
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
     }
 }

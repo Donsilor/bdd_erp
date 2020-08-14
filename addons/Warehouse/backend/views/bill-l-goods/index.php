@@ -298,6 +298,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
+                                'attribute' => 'peiliao_way',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'peiliao_way', $model->getPeiLiaoWayMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'gold_weight',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
@@ -320,6 +333,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'lncl_loss_weight',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'lncl_loss_weight', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -492,10 +514,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_pei_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->main_pei_type) ?? "";
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_pei_type) ?? "";
                                 },
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', $model->getPeiStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -648,10 +670,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_pei_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->second_pei_type) ?? "";
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type) ?? "";
                                 },
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', $model->getPeiStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -789,10 +811,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_pei_type2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return \addons\Warehouse\common\enums\PeiStoneTypeEnum::getValue($model->second_pei_type2) ?? "";
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type2) ?? "";
                                 },
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', $model->getPeiStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -884,19 +906,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
-                            /*[
+                            [
                                 'attribute' => 'second_stone_colour2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
                                     return Yii::$app->attr->valueName($model->second_stone_colour2)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour2Map(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour2', $model->getSecondStoneColour2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],*/
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                            ],
                             [
                                 'attribute' => 'second_stone_size2',
                                 'format' => 'raw',
@@ -925,6 +947,19 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_pei_type3',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type3) ?? "";
+                                },
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type3', $model->getPeiShiWayMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_type3',
@@ -969,6 +1004,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'second_stone_amount3',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
@@ -1001,10 +1046,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return \addons\Warehouse\common\enums\PartsWayEnum::getValue($model->is_inlay) ?? "";
+                                    return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->parts_way) ?? "";
                                 },
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPartsWayMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
