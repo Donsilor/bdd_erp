@@ -819,7 +819,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_colour2',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return Yii::$app->attr->valueName($model->second_stone_colour2)??"";
+                                    return Yii::$app->attr->valueName($model->second_stone_colour2) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour2', $model->getSecondStoneColour2Map(), [
                                     'prompt' => '全部',

@@ -16,16 +16,16 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?></h2>
-    <?php echo Html::menuTab($tabList,$tab)?>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no ?></h2>
+    <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
+        if ($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
             echo Html::create(['add', 'receipt_id' => $receipt->id], '添加货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width'=>'90%',
-                'data-height'=>'90%',
-                'data-offset'=>'20px',
+                'data-width' => '90%',
+                'data-height' => '90%',
+                'data-offset' => '20px',
             ]);
             echo '&nbsp;';
             echo Html::a('返回列表', ['receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
@@ -36,25 +36,25 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
+                    <?php echo Html::batchButtons(false) ?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'white-space:nowrap;'],
+                        'options' => ['style' => 'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
-                        'id'=>'grid',
+                        'id' => 'grid',
                         'columns' => [
                             [
                                 'class' => 'yii\grid\SerialColumn',
                                 'visible' => false,
                             ],
                             [
-                                'class'=>'yii\grid\CheckboxColumn',
-                                'name'=>'id',  //设置每行数据的复选框属性
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
                             ],
                             [
-                                'attribute'=>'xuhao',
+                                'attribute' => 'xuhao',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'xuhao', [
                                     'class' => 'form-control',
@@ -66,8 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                    'edit' => function ($url, $model, $key) use ($receipt) {
+                                        if ($receipt->receipt_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -76,8 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == BillStatusEnum::SAVE){
+                                    'delete' => function ($url, $model, $key) use ($receipt) {
+                                        if ($receipt->receipt_status == BillStatusEnum::SAVE) {
                                             return Html::delete(['delete', 'id' => $model->id], '删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
@@ -88,10 +88,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_status',
-                                'value' => function ($model){
+                                'value' => function ($model) {
                                     return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'goods_status',\addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'goods_status', \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;',
@@ -100,19 +100,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                             ],
                             [
-                                'attribute'=>'purchase_sn',
+                                'attribute' => 'purchase_sn',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'purchase_sn', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:120px;'
+                                    'style' => 'width:120px;'
                                 ]),
                             ],
                             [
-                                'attribute'=>'produce_sn',
+                                'attribute' => 'produce_sn',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:120px;'
+                                    'style' => 'width:120px;'
                                 ]),
                             ],
                             [
@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style' => 'width:100px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -135,10 +135,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return  Html::ajaxSelect($model,'product_type_id', \Yii::$app->styleService->productType->getDropDown(), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },*/
                                 'value' => "type.name",
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id', Yii::$app->styleService->productType->getDropDown(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style' => 'width:100px;'
                                 ]),
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -1478,27 +1478,27 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
 //                            ],
                             [
-                                'attribute'=>'barcode',
+                                'attribute' => 'barcode',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('barcode', $model->barcode, ['data-id'=>$model->id]);
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxInput('barcode', $model->barcode, ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'produce_sn', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:100px;'
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
-                                'attribute'=>'goods_remark',
+                                'attribute' => 'goods_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('goods_remark', $model->goods_remark, ['data-id'=>$model->id]);
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxInput('goods_remark', $model->goods_remark, ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_remark', [
                                     'class' => 'form-control',
-                                    'style'=> 'width:150px;'
+                                    'style' => 'width:150px;'
                                 ]),
                             ],
                             [
@@ -1515,8 +1515,8 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'class'=>'yii\grid\CheckboxColumn',
-                                'name'=>'id',  //设置每行数据的复选框属性
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -1524,8 +1524,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
-                                    'edit' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
+                                    'edit' => function ($url, $model, $key) use ($receipt) {
+                                        if ($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'receipt_id' => $receipt->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
                                                 'data-width' => '90%',
@@ -1534,8 +1534,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ]);
                                         }
                                     },
-                                    'delete' => function($url, $model, $key) use($receipt) {
-                                        if($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE){
+                                    'delete' => function ($url, $model, $key) use ($receipt) {
+                                        if ($receipt->receipt_status == \addons\Purchase\common\enums\ReceiptStatusEnum::SAVE) {
                                             return Html::delete(['delete', 'id' => $model->id], '删除', [
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
@@ -1554,8 +1554,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- tab-content end -->
 </div>
 <script type="text/javascript">
-    $(function(){
-        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'],"批量填充"); ?>');
-        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit','check'=>1],"批量填充", ['input_type'=>'select']); ?>');
+    $(function () {
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
     });
+
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val <= 0) {
+            $(obj).val("");
+        }
+    }
 </script>
