@@ -42,6 +42,7 @@ $form = ActiveForm::begin([
                     'enableError' => false,
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:120px'
                     ]
                 ],
@@ -52,6 +53,7 @@ $form = ActiveForm::begin([
                     'type' => 'dropDownList',
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:100px',
                         'prompt' => '请选择',
                     ],
@@ -64,6 +66,7 @@ $form = ActiveForm::begin([
                     'type' => 'dropDownList',
                     'options' => [
                         'class' => 'input-priority',
+                        'readonly' =>'true',
                         'style' => 'width:100px',
                         'prompt' => '请选择',
                     ],
@@ -81,8 +84,8 @@ $form = ActiveForm::begin([
                     ]
                 ],
                 [
-                    'name' => 'parts_weight',
-                    'title' => '配件金重',
+                    'name' => 'parts_gold_weight',
+                    'title' => '配件金重(g)',
                     'enableError' => false,
                     'defaultValue' => '0.000',
                     'options' => [
@@ -93,7 +96,7 @@ $form = ActiveForm::begin([
                 ],
                 [
                     'name' => 'parts_price',
-                    'title' => '配件金额',
+                    'title' => '配件单价/g',
                     'enableError' => false,
                     'defaultValue' => '0.00',
                     'options' => [
