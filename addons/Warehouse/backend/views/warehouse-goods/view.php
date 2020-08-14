@@ -217,6 +217,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->attr->valueName($model->material_type) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peiliao_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
                             <td><?= Yii::$app->attr->valueName($model->material_color) ?></td>
                         </tr>
@@ -242,8 +246,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->suttle_weight ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peijian_type') ?>：</td>
-                            <td><?= \addons\Supply\common\enums\PeiliaoTypeEnum::getValue($model->peijian_type) ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peijian_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->peijian_way) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_material') ?>：</td>
@@ -376,6 +380,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->attr->valueName($model->main_stone_type) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_peishi_way') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_peishi_way) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_num') ?>：</td>
                             <td><?= $model->main_stone_num ?></td>
                         </tr>
@@ -442,7 +450,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="col-xs-6">
                     <table class="table table-hover">
-
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way1') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way1) ?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_type1') ?>：</td>
                             <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->second_peishi_type1) ?></td>
@@ -479,7 +490,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price1') ?>：</td>
                             <td><?= $model->second_stone_price1 ?></td>
                         </tr>
-
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way2') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way2) ?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_type2') ?>：</td>
                             <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->second_peishi_type2) ?></td>

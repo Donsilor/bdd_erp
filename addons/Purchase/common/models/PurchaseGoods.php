@@ -87,7 +87,7 @@ class PurchaseGoods extends BaseModel
             [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price'], 'required'],
 
             [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type','peijian_type','templet_type','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id',
-                'is_apply', 'status', 'created_at', 'updated_at','parts_num','second_peiliao_way','second_peijian_way','second_peishi_way','second_peishi_way1','second_peishi_way2'], 'integer'],
+                'is_apply', 'status', 'created_at', 'updated_at','parts_num','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2'], 'integer'],
             [['cost_price', 'single_stone_weight','gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','factory_total_price','company_total_price','parts_fee','suttle_weight','gross_weight','peishi_fee','peishi_amount',
                 'xianqian_price','penrasa_fee','edition_fee','ke_gong_fee'], 'number'],
@@ -181,9 +181,9 @@ class PurchaseGoods extends BaseModel
             'second_stone_sn1' => '副石1编号',
             'second_stone_sn2' => '副石2编号',
             'ke_gong_fee' => '克/工费',
-            'second_peiliao_way' => '配料方式',
-            'second_peijian_way' => '配件方式',
-            'second_peishi_way' => '主石配石方式',
+            'peiliao_way' => '配料方式',
+            'peijian_way' => '配件方式',
+            'main_peishi_way' => '主石配石方式',
             'second_peishi_way1' => '副石1配石方式',
             'second_peishi_way2' => '副石2配石方式',
         ];
