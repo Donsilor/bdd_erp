@@ -304,15 +304,30 @@ class OrderGoodsController extends BaseController
             if($diamon_id == null){
                 return ResultHelper::json(422, '请选择');
             }
-            $diamond = Diamond::find()->where(['id'=>$diamon_id,'status'=>StatusEnum::ENABLED])->one();
+            $diamond_goods = Diamond::find()->where(['id'=>$diamon_id,'status'=>StatusEnum::ENABLED])->one();
             $model->goods_num = 1;
             $model->order_id = $order_id;
-            $model->goods_sn = $diamond->goods_sn;
+            $model->goods_sn = $diamond_goods->goods_sn;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                $model->goods_price = $diamond->sale_price;
-                $model->goods_pay_price = $diamond->sale_price;
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 1; //钻石
+                $model->goods_num = 1;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_price = $diamond_goods->sale_price;
+                $model->goods_pay_price = $diamond_goods->sale_price;
                 $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $diamond_goods->cate_id;
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = (string)$diamond_goods->goods_id;
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
