@@ -30,6 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::edit(['edit-all', 'receipt_id' => $receipt->id], '批量编辑', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo '&nbsp;';
+            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         }
         if ($receipt->receipt_status == ReceiptStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['warehouse', 'check' => 1], '批量入库', [

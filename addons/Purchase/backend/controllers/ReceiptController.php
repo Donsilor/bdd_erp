@@ -151,13 +151,14 @@ class ReceiptController extends BaseController
         if(!$model->receipt_num){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        $model->receipt_status = ReceiptStatusEnum::PENDING;
         try{
             $trans = \Yii::$app->trans->beginTransaction();
+            $model->audit_status = AuditStatusEnum::PENDING;
+            $model->receipt_status = ReceiptStatusEnum::PENDING;
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
+            \Yii::$app->purchaseService->receipt->syncUpdatePriceAll($model);
             //日志
             $log = [
                     'receipt_id' => $model->id,

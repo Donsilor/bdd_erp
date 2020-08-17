@@ -540,4 +540,33 @@ class ReceiptGoodsController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
+
+    /**
+     *
+     * 同步更新价格
+     * @return mixed
+     */
+    public function actionUpdatePrice()
+    {
+        $ids = Yii::$app->request->post('ids');
+        if (empty($ids)) {
+            return $this->message("ID不能为空", $this->redirect(['index']), 'error');
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            foreach ($ids as $id) {
+                $model = PurchaseReceiptGoodsForm::findOne($id);
+                if(!empty($model)){
+                    \Yii::$app->purchaseService->receipt->syncUpdatePrice($model);
+                }
+            }
+            \Yii::$app->purchaseService->receipt->purchaseReceiptSummary($model->receipt_id, $this->purchaseType);
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '刷新成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
 }
