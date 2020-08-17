@@ -28,6 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset' => '20px',
             ]);
             echo '&nbsp;';
+            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo '&nbsp;';
             echo Html::a('返回列表', ['receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
