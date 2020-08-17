@@ -177,7 +177,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset' => '20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::create(['order-goods/edit-diamond', 'order_id' => $model->id], '裸钻商品', [
+                        echo Html::create(['order-goods/select-diamond', 'order_id' => $model->id], '裸钻商品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '90%',
                             'data-height' => '90%',

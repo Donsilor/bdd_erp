@@ -289,7 +289,147 @@ class OrderGoodsController extends BaseController
     }
 
 
+
+    /****
+     * 选择裸钻
+     */
+    public function actionSelectDiamond(){
+        $order_id = Yii::$app->request->get('order_id');
+
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if (Yii::$app->request->post()) {
+            $diamon_id = Yii::$app->request->post('diamon_id');
+            if($diamon_id == null){
+                return ResultHelper::json(422, '请选择');
+            }
+            $diamond = Diamond::find()->where(['id'=>$diamon_id,'status'=>StatusEnum::ENABLED])->one();
+            $model->goods_num = 1;
+            $model->order_id = $order_id;
+            $model->goods_sn = $diamond->goods_sn;
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_price = $diamond->sale_price;
+                $model->goods_pay_price = $diamond->sale_price;
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        $searchModel = new SearchModel([
+            'model' => Diamond::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => 5
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=', 'status', StatusEnum::ENABLED]);
+        $dataProvider->query->andWhere(['=', 'audit_status', AuditStatusEnum::PASS]);
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'order_id' => $order_id,
+            'model' =>$model
+
+        ]);
+    }
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     * 编辑裸钻
+     */
     public function actionEditDiamond(){
+
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if($model->isNewRecord){
+            $cert_id = Yii::$app->request->get('cert_id');
+            $search = Yii::$app->request->get('search');
+            $order_id = Yii::$app->request->get('order_id');
+            if($search && $cert_id) {
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+                if(empty($diamond_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此裸钻不存在或者审核没通过', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 1; //钻石
+                $model->goods_num = 1;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_pay_price = $diamond_goods->sale_price;
+                //$model->goods_price = $diamond_goods->sale_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $cert_id;
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = (string)$diamond_goods->goods_id;
+            }
+
+        }else{
+            $order_goods_attr = OrderGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+            $model->cert_id = $order_goods_attr->attr_value;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+
+    }
+
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     * 编辑裸钻(备份)
+     */
+    public function actionEditDiamondBackups(){
 
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
