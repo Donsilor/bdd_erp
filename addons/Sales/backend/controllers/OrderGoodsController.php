@@ -324,7 +324,7 @@ class OrderGoodsController extends BaseController
                 $model->style_sn = '';
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
-                $model->cert_id = $diamond_goods->cate_id;
+                $model->cert_id = $diamond_goods->cert_id;
                 $model->order_id = $order_id;
                 $model->currency = $model->order->currency;
                 $model->goods_id = (string)$diamond_goods->goods_id;
