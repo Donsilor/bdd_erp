@@ -59,6 +59,7 @@ class ProduceStone extends BaseModel
             [['produce_id','is_increase','from_type', 'stone_num', 'stone_position','supplier_id', 'caigou_time', 'songshi_time', 'peishi_time', 'peishi_status','audit_status', 'audit_time','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['from_order_sn','stone_sn','delivery_no','cert_no' ,'caigou_user', 'songshi_user', 'peishi_user','audit_user', 'creator_name'], 'string', 'max' => 30],
             [['secai','color', 'clarity', 'shape', 'cert_type', 'stone_type'], 'string', 'max' => 10],
+            [['produce_sn'], 'string', 'max' => 30],
             [['remark','stone_spec','audit_remark','peishi_remark'], 'string', 'max' => 255],
         ];
     }

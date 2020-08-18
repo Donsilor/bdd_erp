@@ -75,7 +75,7 @@ class ProduceGoldController extends BaseController
             return $this->message('布产单不是待领料状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }          
         foreach($produce->produceGolds ?? [] as $produceGold) {
-            if($produceGold->peiliao_status != PeiliaoStatusEnum::TO_LINGLIAO){
+            if($produceGold->peiliao_status < PeiliaoStatusEnum::TO_LINGLIAO){
                 return $this->message("(ID={$produceGold->id})配料单不是待领料状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }        

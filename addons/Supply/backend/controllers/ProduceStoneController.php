@@ -77,7 +77,7 @@ class ProduceStoneController extends BaseController
             return $this->message('布产单不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         foreach($produce->produceStones ?? [] as $produceStone) {
-            if($produceStone->peishi_status != PeishiStatusEnum::TO_LINGSHI){
+            if($produceStone->peishi_status < PeishiStatusEnum::TO_LINGSHI){
                 return $this->message("(ID={$produceStone->id})配料单不是待领石状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
