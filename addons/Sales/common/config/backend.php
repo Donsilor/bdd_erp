@@ -84,6 +84,18 @@ return [
                     'title' => '退款列表',
                     'route' => 'return/index',
                 ],
+                [
+                    'title' => '主管审核',
+                    'route' => 'leader/index',
+                ],
+                [
+                    'title' => '商品部审核',
+                    'route' => 'storekeeper/index',
+                ],
+                [
+                    'title' => '财务审核',
+                    'route' => 'finance/index',
+                ],
             ],
 
         ],

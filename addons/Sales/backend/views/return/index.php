@@ -65,14 +65,54 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => Html::activeTextInput($searchModel, 'return_no', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'order_sn',
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                 'class' => 'form-control',
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'return_type',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\ReturnTypeEnum::getValue($model->return_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'return_type',\addons\Sales\common\enums\ReturnTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'return_by',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\ReturnByEnum::getValue($model->return_by);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'return_by',\addons\Sales\common\enums\ReturnByEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'customer_name',
+                            'filter' => Html::activeTextInput($searchModel, 'customer_name', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'created_at',
@@ -96,6 +136,52 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
+                        ],
+                        [
+                            'attribute'=>'real_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'real_amount', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'leader_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->leader_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'leader_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'storekeeper_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->storekeeper_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'storekeeper_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'finance_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->finance_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'finance_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
