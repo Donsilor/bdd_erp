@@ -22,7 +22,7 @@ class SalesReturnLog extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('sales_return_log');
+        return self::tableFullName('return_log');
     }
 
     /**

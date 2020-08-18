@@ -3,6 +3,7 @@
 namespace addons\Sales\common\models;
 
 use Yii;
+use common\models\backend\Member;
 
 /**
  * This is the model class for table "sales_return".
@@ -29,6 +30,22 @@ use Yii;
  * @property string $bank_card 银行账户
  * @property int $is_finance_refund 是否财务退款
  * @property int $is_quick_refund 是否快速退款
+ * @property int $leader_id 部门主管
+ * @property int $leader_status 主管审核状态
+ * @property string $leader_remark 主管审核意见
+ * @property int $leader_time 主管审核时间
+ * @property int $storekeeper_id 库管
+ * @property int $storekeeper_status 库管审核
+ * @property string $storekeeper_remark 库管审核备注
+ * @property int $storekeeper_time 库管审核时间
+ * @property int $finance_id 财务
+ * @property int $finance_status 财务审核状态
+ * @property string $finance_remark 财务审核备注
+ * @property int $finance_time 财务审核时间
+ * @property int $payer_id 实际付款人
+ * @property int $pay_status 支付状态
+ * @property string $pay_remark 付款备注
+ * @property string $pay_receipt 付款凭证
  * @property int $check_status 审核状态(0.未操作，1.主管审核通过，2.库管审核通过，3.财务审核通过)
  * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
@@ -43,7 +60,7 @@ class SalesReturn extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('sales_return');
+        return self::tableFullName('return');
     }
 
     /**
@@ -53,11 +70,11 @@ class SalesReturn extends BaseModel
     {
         return [
             [['return_no', 'order_id', 'order_sn', 'order_detail_id'], 'required'],
-            [['order_id', 'order_detail_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'check_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'order_detail_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['should_amount', 'apply_amount', 'real_amount'], 'number'],
             [['return_no', 'customer_mobile'], 'string', 'max' => 30],
             [['order_sn'], 'string', 'max' => 50],
-            [['return_reason', 'remark'], 'string', 'max' => 255],
+            [['return_reason', 'leader_remark', 'storekeeper_remark', 'finance_remark', 'pay_remark', 'pay_receipt', 'remark'], 'string', 'max' => 255],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_email'], 'string', 'max' => 120],
             [['currency'], 'string', 'max' => 3],
@@ -82,10 +99,10 @@ class SalesReturn extends BaseModel
             'apply_amount' => '申请退款金额',
             'real_amount' => '实退金额',
             'return_reason' => '退款原因',
-            'return_by' => '退款方式(1.退商品，2.不退商品)',
-            'return_type' => '退款类型(1.打卡，2.转单)',
+            'return_by' => '退款方式',
+            'return_type' => '申请类型',
             'customer_id' => '客户ID',
-            'customer_name' => '客户姓名',
+            'customer_name' => '收款人',
             'customer_mobile' => '客户手机',
             'customer_email' => '客户邮箱',
             'currency' => '货币',
@@ -93,12 +110,61 @@ class SalesReturn extends BaseModel
             'bank_card' => '银行账户',
             'is_finance_refund' => '是否财务退款',
             'is_quick_refund' => '是否快速退款',
+            'leader_id' => '部门主管',
+            'leader_status' => '主管审核状态',
+            'leader_remark' => '主管审核意见',
+            'leader_time' => '主管审核时间',
+            'storekeeper_id' => '库管',
+            'storekeeper_status' => '库管审核',
+            'storekeeper_remark' => '库管审核备注',
+            'storekeeper_time' => '库管审核时间',
+            'finance_id' => '财务',
+            'finance_status' => '财务审核状态',
+            'finance_remark' => '财务审核备注',
+            'finance_time' => '财务审核时间',
+            'payer_id' => '实际付款人',
+            'pay_status' => '支付状态',
+            'pay_remark' => '付款备注',
+            'pay_receipt' => '付款凭证',
             'check_status' => '审核状态(0.未操作，1.主管审核通过，2.库管审核通过，3.财务审核通过)',
             'remark' => '备注',
             'status' => '状态 1启用 0禁用 -1删除',
-            'creator_id' => '创建人',
-            'created_at' => '创建时间',
+            'creator_id' => '申请人',
+            'created_at' => '申请时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 部门主管
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLeader()
+    {
+        return $this->hasOne(Member::class, ['id'=>'leader_id'])->alias('leader');
+    }
+    /**
+     * 库管
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStorekeeper()
+    {
+        return $this->hasOne(Member::class, ['id'=>'storekeeper_id'])->alias('storekeeper');
+    }
+    /**
+     * 财务
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinance()
+    {
+        return $this->hasOne(Member::class, ['id'=>'finance_id'])->alias('finance');
     }
 }
