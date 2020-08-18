@@ -120,7 +120,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'starting_fee')->textInput() ?>
                         </div>
-
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'warranty_period')->widget(\kartik\date\DatePicker::class, [
+                                'options' => [
+                                    'value' => $model->isNewRecord ? date('Y-m-d') : date('Y-m-d', $model->warranty_period),
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true,//今日高亮
+                                    'autoclose' => true,//选择后自动关闭
+                                    'todayBtn' => true,//今日按钮显示
+                                ]
+                            ]);?>
+                        </div>
                     </div>
                     <div class="row">
                         <?php if($model->is_inlay == InlayEnum::Yes && $model->jintuo_type == JintuoTypeEnum::Chengpin) {?>

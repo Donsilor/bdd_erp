@@ -5,6 +5,7 @@ namespace addons\Style\common\models;
 use addons\Purchase\common\models\PurchaseGoods;
 use common\models\backend\Member;
 use Yii;
+use common\helpers\StringHelper;
 
 /**
  * This is the model class for table "style_qiban".
@@ -65,7 +66,9 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id', 'created_at', 'updated_at', 'is_apply'], 'integer'],
+            [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id',
+                'created_at', 'updated_at', 'is_apply'], 'integer'],
+            [['warranty_period'],'safe'],
             [['sale_price', 'market_price','kinto_price','starting_fee', 'cost_price'], 'number'],
             [['format_info'], 'string'],
             [['qiban_name', 'audit_remark', 'stone_info', 'parts_info', 'remark', 'format_remark'], 'string', 'max' => 255],
@@ -74,7 +77,6 @@ class Qiban extends BaseModel
             [['style_images'], 'string', 'max' => 2000],
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -114,6 +116,7 @@ class Qiban extends BaseModel
             'creator_id' => Yii::t('app', '创建人'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
+            'warranty_period' => Yii::t('app', '款式保版期'),
             'format_sn' => Yii::t('app', '图纸编号'),
             'format_images' => Yii::t('app', '图纸图片'),
             'format_video' => Yii::t('app', '版式视频'),
@@ -138,6 +141,8 @@ class Qiban extends BaseModel
             $this->style_image = $style_images[0] ?? '';
             $this->style_images = join(',',$style_images);
         }
+
+        $this->warranty_period = StringHelper::dateToInt($this->warranty_period);
         return parent::beforeValidate();
     }
 

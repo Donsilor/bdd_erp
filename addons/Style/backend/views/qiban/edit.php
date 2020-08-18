@@ -49,10 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'style_channel_id')->dropDownList(Yii::$app->styleService->styleChannel->getDropDown(),['prompt'=>'请选择'])?>
+                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'jintuo_type')->dropDownList(\addons\Style\common\enums\JintuoTypeEnum::getMap(),['prompt'=>'请选择','onchange'=>"searchGoods()"]) ?>
+                            <?= $form->field($model, 'style_channel_id')->dropDownList(Yii::$app->styleService->styleChannel->getDropDown(),['prompt'=>'请选择'])?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'cost_price')->textInput() ?>
@@ -109,6 +109,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'starting_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'warranty_period')->widget(\kartik\date\DatePicker::class, [
+                                'options' => [
+                                    'value' => $model->isNewRecord ? date('Y-m-d') : date('Y-m-d', $model->warranty_period),
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true,//今日高亮
+                                    'autoclose' => true,//选择后自动关闭
+                                    'todayBtn' => true,//今日按钮显示
+                                ]
+                            ]);?>
                         </div>
 
                     </div>
