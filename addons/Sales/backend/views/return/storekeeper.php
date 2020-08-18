@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('sale_channel', '退款单列表');
+$this->title = Yii::t('sale_channel', '商品部审核');
 $this->params['breadcrumbs'][] = $this->title;
 
 $params = Yii::$app->request->queryParams;
