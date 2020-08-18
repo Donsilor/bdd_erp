@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\ReturnStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -55,6 +56,120 @@ class ReturnController extends BaseController
         }
 
         //$dataProvider->query->andWhere(['>',ReturnForm::tableName().'.status',-1]);
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * 主管审核
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionLeader()
+    {
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'creator' => ['username'],
+            ]
+        ]);
+
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams,['created_at']);
+
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',ReturnForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::SAVE]);
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * 商品部审核
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionStorekeeper()
+    {
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'creator' => ['username'],
+            ]
+        ]);
+
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams,['created_at']);
+
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',ReturnForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::LEADER]);
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * 财务审核
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionFinance()
+    {
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'creator' => ['username'],
+            ]
+        ]);
+
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams,['created_at']);
+
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=',ReturnForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        }
+
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::STOREKEEPER]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

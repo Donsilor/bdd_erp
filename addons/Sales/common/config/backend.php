@@ -86,15 +86,15 @@ return [
                 ],
                 [
                     'title' => '主管审核',
-                    'route' => 'leader/index',
+                    'route' => 'return/leader',
                 ],
                 [
                     'title' => '商品部审核',
-                    'route' => 'storekeeper/index',
+                    'route' => 'return/storekeeper',
                 ],
                 [
                     'title' => '财务审核',
-                    'route' => 'finance/index',
+                    'route' => 'return/finance',
                 ],
             ],
 
