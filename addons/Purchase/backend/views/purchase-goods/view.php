@@ -6,6 +6,7 @@ use addons\Supply\common\enums\PeiliaoStatusEnum;
 use addons\Supply\common\enums\PeishiStatusEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use common\enums\ConfirmEnum;
+use addons\Supply\common\enums\BuChanEnum;
 
 $this->title =  '详情';
 $this->params['breadcrumbs'][] = ['label' => '采购商品', 'url' => ['index']];
@@ -400,7 +401,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	</td>
                         	<td><?= PeiliaoStatusEnum::getValue($gold->peiliao_status) ?></td>
                         	<td>
-                        	<?php if($gold->is_increase == ConfirmEnum::NO) {?>
+                        	<?php if($gold->is_increase == ConfirmEnum::NO && $produce->bc_status >= BuChanEnum::TO_PRODUCTION) {?>
                                 	<?= Html::edit(['ajax-gold-increase','id'=>$gold->id ,'returnUrl'=>Url::getReturnUrl()], '补料', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
@@ -450,7 +451,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         	    ?></td>
                         	<td><?= PeishiStatusEnum::getValue($stone->peishi_status) ?></td>
                         	<td>
-                        	<?php if($stone->is_increase == ConfirmEnum::NO) {?>
+                        	<?php if($stone->is_increase == ConfirmEnum::NO && $produce->bc_status >= BuChanEnum::TO_PRODUCTION) {?>
                                 	<?= Html::edit(['ajax-stone-increase','id'=>$stone->id ,'returnUrl'=>Url::getReturnUrl()], '补石', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',

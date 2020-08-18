@@ -32,6 +32,7 @@ use common\enums\ConfirmEnum;
 use addons\Supply\common\enums\PeiliaoStatusEnum;
 use addons\Supply\common\models\ProduceGold;
 use addons\Purchase\common\forms\PurchaseGoldIncreaseForm;
+use addons\Supply\common\models\Produce;
 /**
  * Attribute
  *
@@ -456,7 +457,7 @@ class PurchaseGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 $model = new ProduceStone();
                 //复制石头信息
-                $model->attributes = $form->toArray(['produce_id','produce_sn','from_order_sn','from_type','stone_type','stone_position','stone_weight','stone_spec','shape','secai','carat','color','clarity','cert_type','cert_no']);             
+                $model->attributes = $form->toArray(['produce_id','produce_sn','supplier_id','from_order_sn','from_type','stone_type','stone_position','stone_weight','stone_spec','shape','secai','carat','color','clarity','cert_type','cert_no']);             
                 $model->stone_num = $form->increase_num;
                 $model->stone_weight = round($model->stone_num * $model->carat,2); 
                 $model->remark = $form->increase_remark;
@@ -465,6 +466,7 @@ class PurchaseGoodsController extends BaseController
                 if(false === $model->save()) {
                      throw new \Exception($this->getError($model));
                 }
+                Produce::updateAll(['peishi_status'=>PeishiStatusEnum::PENDING],['id'=>$form->produce_id]);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
@@ -526,7 +528,7 @@ class PurchaseGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 $model = new ProduceGold();
                 //复制石头信息
-                $model->attributes = $form->toArray(['produce_id','produce_sn','from_order_sn','from_type','gold_type','gold_weight','gold_spec']);
+                $model->attributes = $form->toArray(['produce_id','produce_sn','supplier_id','from_order_sn','from_type','gold_type','gold_weight','gold_spec']);
                 $model->gold_weight = $form->increase_weight;
                 $model->remark = $form->increase_remark;
                 $model->peiliao_status = PeiliaoStatusEnum::PENDING;
@@ -534,6 +536,7 @@ class PurchaseGoodsController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                Produce::updateAll(['peiliao_status'=>PeiliaoStatusEnum::PENDING],['id'=>$form->produce_id]);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer."#box-gold"), 'success');
             }catch (\Exception $e){
