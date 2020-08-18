@@ -6,25 +6,24 @@ use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Sales\common\models\Express;
-use addons\Sales\common\forms\ExpressForm;
+use addons\Sales\common\forms\ReturnForm;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
 /**
- * 物流快递
+ * 退款单
  *
- * Class ExpressController
+ * Class ReturnController
  * @package addons\Sales\backend\controllers
  */
-class ExpressController extends BaseController
+class ReturnController extends BaseController
 {
     use Curd;
 
     /**
-     * @var Express
+     * @var ReturnForm
      */
-    public $modelClass = ExpressForm::class;
+    public $modelClass = ReturnForm::class;
     /**
      * 首页
      *
@@ -42,9 +41,7 @@ class ExpressController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'member' => ['username'],
                 'creator' => ['username'],
-                'auditor' => ['username'],
             ]
         ]);
 
@@ -53,11 +50,11 @@ class ExpressController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Express::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Express::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',ReturnForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        //$dataProvider->query->andWhere(['>',Express::tableName().'.status',-1]);
+        //$dataProvider->query->andWhere(['>',ReturnForm::tableName().'.status',-1]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -74,13 +71,13 @@ class ExpressController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new ExpressForm();
+        $model = $model ?? new ReturnForm();
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if($model->isNewRecord){
-                    $model->status = StatusEnum::DISABLED;
+                    //$model->status = StatusEnum::DISABLED;
                 }
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
@@ -105,9 +102,9 @@ class ExpressController extends BaseController
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new ExpressForm();
+        $model = $model ?? new ReturnForm();
         if($model->audit_status != AuditStatusEnum::SAVE){
-            return $this->message('快递公司不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+            return $this->message('退款单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $model->audit_status = AuditStatusEnum::PENDING;
         if(false === $model->save()){
@@ -125,7 +122,7 @@ class ExpressController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new ExpressForm();
+        $model = $model ?? new ReturnForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -166,38 +163,11 @@ class ExpressController extends BaseController
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index', 'id'=>$id]));
         $model = $this->findModel($id);
-        $model = $model ?? new ExpressForm();
-        if($model->settlement_way){
-            $arr = explode(',', $model->settlement_way);
-            $arr = array_filter($arr);
-            $str = '';
-            foreach ($arr as $val){
-                $str .= ','. \addons\Sales\common\enums\SettlementWayEnum::getValue($val);
-            }
-            $model->settlement_way = trim( $str,',' );
-        }
-        if($model->settlement_period){
-            $arr = explode(',', $model->settlement_period);
-            $arr = array_filter($arr);
-            $str = '';
-            foreach ($arr as $val){
-                $str .= ','. \addons\Sales\common\enums\SettlementPeriodEnum::getValue($val);
-            }
-            $model->settlement_period = trim( $str,',' );
-        }
-        if($model->delivery_scope){
-            $arr = explode(',', $model->delivery_scope);
-            $arr = array_filter($arr);
-            $str = '';
-            foreach ($arr as $val){
-                $str .= ','. \addons\Sales\common\enums\DeliveryScopeEnum::getValue($val);
-            }
-            $model->delivery_scope = trim( $str,',' );
-        }
+        $model = $model ?? new ReturnForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->salesService->express->menuTabList($id, $returnUrl),
+            'tabList'=>\Yii::$app->salesService->return->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
