@@ -20,6 +20,7 @@ use common\components\Service;
  * @property \addons\Sales\services\FqcConfigService $fqc FQC配置
  * @property \addons\Sales\services\ShippingService $shipping 订单发货
  * @property \addons\Sales\services\OrderFqcService $orderFqc 订单质检
+ * @property \addons\Sales\services\ReturnService $return 订单退款
  */
 class Application extends Service
 {
@@ -39,5 +40,6 @@ class Application extends Service
         'fqc' => 'addons\Sales\services\FqcConfigService',
         'orderFqc' => 'addons\Sales\services\OrderFqcService',
         'shipping' => 'addons\Sales\services\ShippingService',
+        'return' => 'addons\Sales\services\ReturnService',
     ];
 }

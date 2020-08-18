@@ -63,6 +63,7 @@ return [
             'merapi/config/main-local.php',
         ],
     ],
+
     'Production' => [
         'path' => 'prod',
         'setWritable' => [

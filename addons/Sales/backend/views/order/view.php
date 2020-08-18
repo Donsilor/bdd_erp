@@ -117,7 +117,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                     ?>
-
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-edit-fee', 'id' => $model->id], '编辑费用', [
+                            'data-toggle' => 'modal',
+                            'class' => 'btn btn-primary btn-ms',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
                     <?php
                     if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
                         echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
@@ -177,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-offset' => '20px',
                         ]);
                         echo '&nbsp;';
-                        echo Html::create(['order-goods/edit-diamond', 'order_id' => $model->id], '裸钻商品', [
+                        echo Html::create(['order-goods/select-diamond', 'order_id' => $model->id], '裸钻商品', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '90%',
                             'data-height' => '90%',
