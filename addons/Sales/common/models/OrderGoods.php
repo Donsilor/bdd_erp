@@ -53,7 +53,7 @@ class OrderGoods extends BaseModel
         return [
             [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
             [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
-            [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate'], 'number'],
+            [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate','assess_cost'], 'number'],
             [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
             [['goods_id'], 'string', 'max' => 20],
             [['goods_name'], 'string', 'max' => 300],
@@ -89,6 +89,7 @@ class OrderGoods extends BaseModel
             'goods_image' => '商品图片',
             'style_sex' => '款式性别',
             'goods_price' => '商品原价',
+            'assess_cost' => '预估成本',
             'goods_pay_price' => '实际成交价',
             'goods_discount' => '优惠金额',
             'goods_spec' => '商品规格',

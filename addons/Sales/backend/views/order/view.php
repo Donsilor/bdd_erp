@@ -117,7 +117,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                     ?>
-
+                    <?php
+                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                        echo Html::edit(['ajax-edit-fee', 'id' => $model->id], '编辑费用', [
+                            'data-toggle' => 'modal',
+                            'class' => 'btn btn-primary btn-ms',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
                     <?php
                     if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
                         echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
