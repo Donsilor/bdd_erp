@@ -6,6 +6,7 @@ use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\SalesReturn;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\helpers\ArrayHelper;
@@ -509,7 +510,43 @@ class OrderController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }       
     }
-        
-    
+
+    /**
+     * 退款
+     * @return \yii\web\Response|mixed|string|string
+     */
+    public function actionReturn()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = SalesReturn::class;
+        $model = $this->findModel($id);
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord) {
+            $model->order_id = $id;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //更新采购汇总：总金额和总数量
+                //\Yii::$app->salesService->order->orderSummary($model->order_id);
+                $trans->commit();
+
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
 }
 

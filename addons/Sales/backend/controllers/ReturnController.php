@@ -2,12 +2,13 @@
 
 namespace addons\Sales\backend\controllers;
 
-use addons\Sales\common\enums\ReturnStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
+use addons\Sales\common\models\SalesReturn;
 use addons\Sales\common\forms\ReturnForm;
+use addons\Sales\common\enums\ReturnStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
