@@ -518,13 +518,13 @@ class OrderController extends BaseController
      * @var SalesReturn $model
      * @return mixed
      */
-    public function actionEdit()
+    public function actionReturn()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
         $id = Yii::$app->request->get('id');
-        $this->modelClass = ReturnForm::class;
-        $model = $this->findModel($id) ?? new ReturnForm();
+        $model = new ReturnForm();
+        $order = $this->findModel($id) ?? new Order();
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));
@@ -542,8 +542,25 @@ class OrderController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $dataProvider = null;
+        if (!is_null($id)) {
+            $searchModel = new SearchModel([
+                'model' => OrderGoodsForm::class,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ],
+                'pageSize' => 1000,
+            ]);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['=', 'order_id', $id]);
+            $dataProvider->setSort(false);
+        }
         return $this->render($this->action->id, [
             'model' => $model,
+            'order' => $order,
+            'dataProvider' => $dataProvider,
         ]);
     }
 }
