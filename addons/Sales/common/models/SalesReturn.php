@@ -109,7 +109,7 @@ class SalesReturn extends BaseModel
             'bank_name' => '开户银行',
             'bank_card' => '银行账户',
             'is_finance_refund' => '是否财务退款',
-            'is_quick_refund' => '是否快速退款',
+            'is_quick_refund' => '是否平台极速退款',
             'leader_id' => '部门主管',
             'leader_status' => '主管审核状态',
             'leader_remark' => '主管审核意见',

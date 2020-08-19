@@ -3,6 +3,8 @@
 namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\ReturnByEnum;
+use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\ReturnForm;
@@ -10,6 +12,7 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\SalesReturn;
 use addons\Sales\common\models\SalesReturnLog;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
 use common\enums\FlowStatusEnum;
 use common\helpers\ArrayHelper;
 use Yii;
@@ -531,6 +534,7 @@ class OrderController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
+                \Yii::$app->salesService->return->createOrderLog($log);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
@@ -557,6 +561,8 @@ class OrderController extends BaseController
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
             $dataProvider->setSort(false);
         }
+        $model->is_quick_refund = ConfirmEnum::NO;
+        $model->return_type = ReturnTypeEnum::CARD;
         return $this->render($this->action->id, [
             'model' => $model,
             'order' => $order,

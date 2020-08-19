@@ -27,4 +27,15 @@ class ReturnService
         ];
     }
 
+    /**
+     * @param $model
+     * @throws \Exception
+     * 绑定现货
+     */
+    public function return($model)
+    {
+
+    }
+
+
 }
