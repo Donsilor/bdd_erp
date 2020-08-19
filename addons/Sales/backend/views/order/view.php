@@ -161,11 +161,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if ($model->order_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY) {
-                        echo Html::edit(['ajax-return', 'id' => $model->id], '退款', [
-                            'data-toggle' => 'modal',
-                            'class' => 'btn btn-primary btn-ms',
-                            'data-target' => '#ajaxModalLg',
+                    if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY) {
+                        echo Html::edit(['return', 'id' => $model->id], '退款', [
+                            //'data-toggle' => 'modal',
+                            'class' => 'btn btn-primary btn-ms openIframe',
+                            //'data-target' => '#ajaxModalLg',
+                            'data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px'
                         ]);
                     }
                     ?>

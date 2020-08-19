@@ -5,8 +5,10 @@ namespace addons\Sales\backend\controllers;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
+use addons\Sales\common\forms\ReturnForm;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\SalesReturn;
+use addons\Sales\common\models\SalesReturnLog;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\helpers\ArrayHelper;
@@ -513,40 +515,36 @@ class OrderController extends BaseController
 
     /**
      * 退款
-     * @return \yii\web\Response|mixed|string|string
+     * @var SalesReturn $model
+     * @return mixed
      */
-    public function actionReturn()
+    public function actionEdit()
     {
+        $this->layout = '@backend/views/layouts/iframe';
+
         $id = Yii::$app->request->get('id');
-        $this->modelClass = SalesReturn::class;
-        $model = $this->findModel($id);
-        $isNewRecord = $model->isNewRecord;
-        if($isNewRecord) {
-            $model->order_id = $id;
-        }
-        // ajax 校验
-        $this->activeFormValidate($model);
+        $this->modelClass = ReturnForm::class;
+        $model = $this->findModel($id) ?? new ReturnForm();
         if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
+                if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                //更新采购汇总：总金额和总数量
-                //\Yii::$app->salesService->order->orderSummary($model->order_id);
                 $trans->commit();
-
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e) {
-                $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
             }
         }
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
         ]);
     }
-
-
 }
 
