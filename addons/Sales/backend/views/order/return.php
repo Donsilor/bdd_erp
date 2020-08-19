@@ -93,7 +93,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    </div>-->
 <!--                </div>-->
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'return_reason')->textarea() ?>
+                    </div>
+                    <div class="col-lg-6">
                         <?= $form->field($model, 'remark')->textarea() ?>
                     </div>
                 </div>
