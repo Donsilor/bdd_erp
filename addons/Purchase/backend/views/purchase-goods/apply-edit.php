@@ -122,14 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peiliao_way')->dropDownList(\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['prompt' => '请选择'])?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
@@ -141,85 +133,82 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'peiliao_way')->dropDownList(\addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['prompt' => '请选择'])?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_cost_price')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_amount')->textInput() ?>
-                    </div>
+
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'gross_weight')->textInput() ?>
-                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_loss')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'single_stone_weight')->textInput() ?>
+                        <?= $form->field($model, 'suttle_weight')->textInput() ?>
                     </div>
 
                 </div>
                 <div class="row">
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peijian_cate')->dropDownList(\addons\Warehouse\common\enums\PeiJianCateEnum::getMap(), ['prompt' => '请选择'])?>
+                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_material')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_num')->textInput() ?>
-                    </div>
 
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_weight')->textInput() ?>
-                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_num')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'parts_price')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_amount')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'suttle_weight')->textInput() ?>
-                    </div>
+
+
                 </div>
 
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'peishi_fee')->textInput() ?>
                     </div>
+
                     <div class="col-lg-4">
                         <?= $form->field($model, 'peishi_amount')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                        <?= $form->field($model, 'jiagong_fee')->textInput() ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_cost_price')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_price')->textInput() ?>
-                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'factory_cost_price')->textInput() ?>
                     </div>
+
                     <div class="col-lg-4">
                         <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
                     </div>
                 </div>
+
                 <div class="row">
+
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'jiagong_fee')->textInput() ?>
+                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'xiangqian_fee')->textInput() ?>

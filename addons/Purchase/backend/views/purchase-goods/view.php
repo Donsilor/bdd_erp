@@ -254,10 +254,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->parts_amount ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('suttle_weight') ?>：</td>
-                            <td><?= $model->suttle_weight ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_fee') ?>：</td>
                             <td><?= $model->peishi_fee ?></td>
                         </tr>

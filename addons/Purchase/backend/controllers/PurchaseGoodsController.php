@@ -213,6 +213,8 @@ class PurchaseGoodsController extends BaseController
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
+        //非镶切 配石类型默认不配石
+        $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "";
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -231,6 +233,7 @@ class PurchaseGoodsController extends BaseController
             }
         }
         $model->initApplyEdit();
+
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);

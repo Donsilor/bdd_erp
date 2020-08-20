@@ -106,32 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-                        [
-                            'attribute' => 'style_sex',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;'
-                            ]),
-                        ],
-                        [
-                            'attribute'=>'qiban_type',
-                            'value'=> function($model){
-                                return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
 
-                            ]),
-                            'headerOptions' => [],
-                        ],
 
                         [
                             'attribute'=>'goods_name',
@@ -450,7 +425,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'主石金额',
+                            'label'=>'主石成本',
                             'value' => function($model){
                                 return round($model->diamond_carat * $model->main_stone_price,2);
                             },
@@ -588,7 +563,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'副石1金额',
+                            'label'=>'副石1成本',
                             'value' => function($model){
                                 return round($model->second_stone_weight1 * $model->second_stone_price1,2);
                             },
@@ -714,7 +689,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'副石2金额',
+                            'label'=>'副石2成本',
                             'value' => function($model){
                                 return round($model->second_stone_weight2 * $model->second_stone_price2,2);
                             },
@@ -1057,6 +1032,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
                             ]),
+                        ],
+                        [
+                            'attribute' => 'style_sex',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:80px;'
+                            ]),
+                        ],
+                        [
+                            'attribute'=>'qiban_type',
+                            'value'=> function($model){
+                                return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+
+                            ]),
+                            'headerOptions' => [],
                         ],
                         [
                             'label' => '首次入库时间',

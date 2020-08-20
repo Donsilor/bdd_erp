@@ -191,7 +191,6 @@ class ProduceService extends Service
     public function updatePeiliao($form)
     {
         $attrValues = ArrayHelper::map($form->attrs ?? [], 'attr_id', 'attr_value');
-
         $this->createProduceGold($form, $attrValues);
         $this->createProduceStone($form, $attrValues);
         $this->createProduceParts($form, $attrValues);
@@ -206,6 +205,7 @@ class ProduceService extends Service
     {
         $is_new = false;
         $reset = false;
+        $attrValues = array_filter($attrValues);
         $gold = [
             'supplier_id' => $form->supplier_id,
             'gold_type' => $attrValues[AttrIdEnum::MATERIAL] ?? '',
@@ -222,6 +222,7 @@ class ProduceService extends Service
             $model->peiliao_status = ($form->peiliao_status == PeiliaoStatusEnum::NONE) ? PeiliaoStatusEnum::NONE : PeiliaoStatusEnum::IN_PEILIAO;
             $is_new = true;
         } else {
+
             if ($model->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
                 //已领料禁止更新
                 return;
