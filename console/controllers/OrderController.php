@@ -18,7 +18,12 @@ use addons\Shop\common\enums\SyncPlatformEnum;
  */
 class OrderController extends Controller
 {
-    
+ 
+    public function actionTest()
+    {
+        $order_no = '130311942049';
+        \Yii::$app->jdSdk->getOrderInfo($order_no);
+    }
     /**
      * 拉去官网订单
      * @param string $batch
