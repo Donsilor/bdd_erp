@@ -7,14 +7,14 @@ use common\helpers\Url;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '快递公司详情';
+$this->title = '退款详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title ?> - <?= $model->name?> - <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></h2>
+    <h2 class="page-header"><?= $this->title ?> - <?= $model->return_no?> - <?= \addons\Sales\common\enums\CheckStatusEnum::getValue($model->check_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="row">
          <div class="col-xs-12">

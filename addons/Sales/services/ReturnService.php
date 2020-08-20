@@ -11,7 +11,7 @@ namespace addons\Sales\services;
 use addons\Sales\common\enums\DeliveryStatusEnum;
 use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
-use addons\Sales\common\enums\ReturnStatusEnum;
+use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderGoods;
 use common\helpers\SnHelper;
@@ -75,7 +75,7 @@ class ReturnService
                 //'bank_name' => '',
                 'bank_card' => $order->customer_account,
                 'is_quick_refund' => $form->is_quick_refund,
-                'check_status' => ReturnStatusEnum::SAVE,
+                'check_status' => CheckStatusEnum::SAVE,
                 'remark' => $form->remark,
                 'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),

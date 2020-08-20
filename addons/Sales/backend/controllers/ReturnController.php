@@ -8,7 +8,7 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Sales\common\models\SalesReturn;
 use addons\Sales\common\forms\ReturnForm;
-use addons\Sales\common\enums\ReturnStatusEnum;
+use addons\Sales\common\enums\CheckStatusEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 
@@ -94,7 +94,7 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::SAVE]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -132,7 +132,7 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::LEADER]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -170,7 +170,7 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',ReturnStatusEnum::STOREKEEPER]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
