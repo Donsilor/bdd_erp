@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                                 [
                                     'class' => 'yii\grid\CheckboxColumn',
-                                    'name' => 'id',  //设置每行数据的复选框属性
+                                    'name' => 'ids',  //设置每行数据的复选框属性
                                     'headerOptions' => ['width' => '30'],
                                 ],
                                 'id',
@@ -93,12 +93,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    </div>-->
 <!--                </div>-->
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <?= $form->field($model, 'return_reason')->textarea() ?>
                     </div>
-                    <div class="col-lg-6">
-                        <?= $form->field($model, 'remark')->textarea() ?>
-                    </div>
+<!--                    <div class="col-lg-6">-->
+<!--                        --><?//= $form->field($model, 'remark')->textarea() ?>
+<!--                    </div>-->
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

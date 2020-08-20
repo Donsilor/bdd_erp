@@ -3,13 +3,15 @@
 use common\helpers\Html;
 use common\helpers\ImageHelper;
 use common\helpers\Url;
+use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('sale_channel', '主管审核');
+$this->title = Yii::t('leader', '主管审核');
 $this->params['breadcrumbs'][] = $this->title;
 
 $params = Yii::$app->request->queryParams;
@@ -21,15 +23,15 @@ $params = $params ? "&".http_build_query($params) : '';
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-<!--                <div class="box-tools" style="right: 100px;">-->
-<!--                    --><?//= Html::create(['ajax-edit'], '创建', [
-//                        'data-toggle' => 'modal',
-//                        'data-target' => '#ajaxModalLg',
-//                    ]); ?>
-<!--                </div>-->
-<!--                <div class="box-tools" >-->
-<!--                    <a href="--><?//= Url::to(['index?action=export'.$params])?><!--" class="blue">导出Excel</a>-->
-<!--                </div>-->
+                <!--                <div class="box-tools" style="right: 100px;">-->
+                <!--                    --><?//= Html::create(['ajax-edit'], '创建', [
+                //                        'data-toggle' => 'modal',
+                //                        'data-target' => '#ajaxModalLg',
+                //                    ]); ?>
+                <!--                </div>-->
+                <!--                <div class="box-tools" >-->
+                <!--                    <a href="--><?//= Url::to(['index?action=export'.$params])?><!--" class="blue">导出Excel</a>-->
+                <!--                </div>-->
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -69,13 +71,25 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute'=>'order_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'goods_id',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'creator_id',
+                            'value' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
@@ -138,6 +152,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             }
                         ],
                         [
+                            'attribute'=>'should_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'should_amount', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'apply_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute'=>'real_amount',
                             'filter' => Html::activeTextInput($searchModel, 'real_amount', [
                                 'class' => 'form-control',
@@ -184,24 +212,37 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {apply} {audit} {view}',
+                            'template' => '{audit} {view}',
                             'buttons' => [
-                                'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
-                                    ]);
-                                },
-                                'apply' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
-                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                                            'class'=>'btn btn-info btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
+//                                'edit' => function($url, $model, $key){
+//                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+//                                        'data-toggle' => 'modal',
+//                                        'data-target' => '#ajaxModalLg',
+//                                    ]);
+//                                },
+//                                'apply' => function($url, $model, $key){
+//                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+//                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+//                                            'class'=>'btn btn-info btn-sm',
+//                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
+//                                        ]);
+//                                    }
+//                                },
                                 'audit' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
@@ -214,14 +255,14 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'view' => function($url, $model, $key){
                                     return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
-                                'status' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
-                                         return Html::status($model->status);
-                                    }
-                                },
-                                'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
-                                },
+//                                'status' => function($url, $model, $key){
+//                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
+//                                         return Html::status($model->status);
+//                                    }
+//                                },
+//                                'delete' => function($url, $model, $key){
+//                                    return Html::delete(['delete', 'id' => $model->id]);
+//                                },
                             ],
                         ]
                     ]

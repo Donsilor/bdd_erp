@@ -17,9 +17,6 @@ return [
     'components' => [
         'db' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
-                'username' => 'super',
-                'password' => 'Bdd123o123',
                 'charset' => 'utf8',
         ],
         //BDD正式erp
@@ -143,7 +140,7 @@ return [
                 'class' => 'common\components\JdSdk',
                 'appKey' => '600FE385E066028D2A1B30C46C54E54C',
                 'appSecret' => '1a693572f25440d8905672fac4611a6a',
-                'accessToken'=>'be99c0f3103140abbdbf63a185bc9e4dwzjm',
+                'refreshToken'=>'e5a3eb79e4b64dfd9efa4f42fd9883dfm2vi',
         ],
     ],
 ];

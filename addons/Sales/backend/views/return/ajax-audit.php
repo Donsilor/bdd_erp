@@ -20,8 +20,9 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?= $form->field($model, 'audit_status')->radioList(\common\enums\AuditStatusEnum::getAuditMap()); ?>
-            <?= $form->field($model, 'audit_remark')->textArea(); ?>
+            <?= $form->field($model, 'check_status')->hiddenInput()->label(false); ?>
+            <?= $form->field($model, $status)->radioList(\common\enums\AuditStatusEnum::getAuditMap()) ?>
+            <?= $form->field($model, $remark)->textArea(); ?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
