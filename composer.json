@@ -60,7 +60,9 @@
         "overtrue/wechat": "~4.2.2",
         "mingyoung/dingtalk": "2.0",
         "finecho/logistics": "^3.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+		"monolog/monolog" : "1.24.0",
+		"netresearch/jsonmapper" : "1.6.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
