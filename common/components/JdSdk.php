@@ -59,8 +59,7 @@ class JdSdk extends Component
         /* $reuqest = new B2bOrderGetRequest();
         $reuqest->setJdOrderId($jdOrderId);
         $reuqest->setCustomKeys($customKeys); */
-        
-         $reuqest = new OrderGetRequest();
+        $reuqest = new PopOrderGetRequest();
         $reuqest->setOrderId($jdOrderId);
         $reuqest->setOptionalFields(['orderId']); 
         
