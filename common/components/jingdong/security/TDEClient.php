@@ -141,7 +141,7 @@ final class TDEClient
      * @return TDEClient
      * @throws Common\Exception\JosGwException
      * @throws Common\Exception\VoucherInfoGetException
-     * @throws \JsonMapper_Exception
+     * @throws \Exception
      */
     public static function getInstance($accessToken, $appKey, $appSecret, $serverUrl='https://api.jd.com/routerjson')
     {

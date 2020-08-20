@@ -14,7 +14,7 @@ use Monolog\Formatter\LineFormatter;
 use ACES\Common\TDEStatus;
 use ACES\Common\Exception\ServiceErrorException;
 use ACES\Common\MKey;
-use JsonMapper;
+use ACES\Common\JsonMapper;
 use ACES\Common\KStoreType;
 use ACES\Common\KeyRequest;
 use ACES\Common\Token;
