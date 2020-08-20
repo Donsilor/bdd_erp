@@ -3,6 +3,7 @@
 
 namespace ACES\Common\domain;
 
+use ACES\Common\JsonMapper;
 
 abstract class JosBaseResponse
 {
@@ -86,7 +87,7 @@ abstract class JosBaseResponse
         $josResponse = json_decode($josJsonResponse);
         foreach ($josResponse as $k => $response) {
             //TODO thread safe？
-            $jsonMapper = new \JsonMapper();
+            $jsonMapper = new JsonMapper();
             $jsonMapper->map($response, $targetResponse);
             return $targetResponse;
         }

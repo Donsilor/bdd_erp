@@ -10,7 +10,7 @@ use ACES\Common\ProduceRequest;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
-use JsonMapper;
+use ACES\Common\JsonMapper;
 use ACES\Common\ProduceResponse;
 
 if(!defined("LOGCONSOLE")){

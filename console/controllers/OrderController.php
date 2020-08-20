@@ -22,7 +22,7 @@ class OrderController extends Controller
  
     public function actionTest()
     {
-        
+
         $str = 'AATeCTuByvoNw86Uq88qqxp43A9uheI0jdsUkQvEiPiK5Pb0PQTEyJDE78NJyunQiXUP3czSWcSv6uwnI6TsFBRPBMcvLNlzbVUuBk7f3H5R8zaVh4CElCHkTfa/1VpuQwk=';
         \Yii::$app->jdSdk->getTest($str);exit;
         //$order_no = '130311942049';
