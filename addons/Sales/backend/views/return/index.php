@@ -202,26 +202,26 @@ $params = $params ? "&".http_build_query($params) : '';
                                         ]);
                                     }
                                 },
-                                'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
-                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                                            'class'=>'btn btn-success btn-sm',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
-                                        ]);
-                                    }
-                                },
+//                                'audit' => function($url, $model, $key){
+//                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+//                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+//                                            'class'=>'btn btn-success btn-sm',
+//                                            'data-toggle' => 'modal',
+//                                            'data-target' => '#ajaxModal',
+//                                        ]);
+//                                    }
+//                                },
                                 'view' => function($url, $model, $key){
                                     return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
-                                'status' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
-                                         return Html::status($model->status);
-                                    }
-                                },
-                                'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete', 'id' => $model->id]);
-                                },
+//                                'status' => function($url, $model, $key){
+//                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
+//                                         return Html::status($model->status);
+//                                    }
+//                                },
+//                                'delete' => function($url, $model, $key){
+//                                    return Html::delete(['delete', 'id' => $model->id]);
+//                                },
                             ],
                         ]
                     ]

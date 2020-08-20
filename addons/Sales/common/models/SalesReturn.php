@@ -46,7 +46,10 @@ use common\models\backend\Member;
  * @property int $pay_status 支付状态
  * @property string $pay_remark 付款备注
  * @property string $pay_receipt 付款凭证
- * @property int $check_status 审核状态(0.未操作，1.主管审核通过，2.库管审核通过，3.财务审核通过)
+ * @property int $check_status 确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)
+ * @property int $audit_status 审核状态
+ * @property int $audit_time 审核时间
+ * @property string $audit_remark 审核备注
  * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $creator_id 创建人
@@ -70,11 +73,11 @@ class SalesReturn extends BaseModel
     {
         return [
             [['return_no', 'order_id', 'order_sn', 'order_detail_id'], 'required'],
-            [['order_id', 'order_detail_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'order_detail_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['should_amount', 'apply_amount', 'real_amount'], 'number'],
             [['return_no', 'customer_mobile'], 'string', 'max' => 30],
             [['order_sn'], 'string', 'max' => 50],
-            [['return_reason', 'leader_remark', 'storekeeper_remark', 'finance_remark', 'pay_remark', 'pay_receipt', 'remark'], 'string', 'max' => 255],
+            [['return_reason', 'leader_remark', 'storekeeper_remark', 'finance_remark', 'pay_remark', 'pay_receipt', 'audit_remark', 'remark'], 'string', 'max' => 255],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_email'], 'string', 'max' => 120],
             [['currency'], 'string', 'max' => 3],
@@ -126,7 +129,11 @@ class SalesReturn extends BaseModel
             'pay_status' => '支付状态',
             'pay_remark' => '付款备注',
             'pay_receipt' => '付款凭证',
-            'check_status' => '审核状态(0.未操作，1.主管审核通过，2.库管审核通过，3.财务审核通过)',
+            'check_status' => '确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)',
+            'auditor_id' => '审核人',
+            'audit_status' => '审核状态',
+            'audit_time' => '审核时间',
+            'audit_remark' => '审核备注',
             'remark' => '备注',
             'status' => '状态 1启用 0禁用 -1删除',
             'creator_id' => '申请人',
