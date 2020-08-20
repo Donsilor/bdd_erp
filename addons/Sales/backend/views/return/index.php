@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('sale_channel', '退款单列表');
+$this->title = Yii::t('index', '退款单列表');
 $this->params['breadcrumbs'][] = $this->title;
 
 $params = Yii::$app->request->queryParams;
@@ -69,6 +69,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute'=>'order_sn',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                 'class' => 'form-control',
                             ]),
@@ -206,15 +210,30 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
+                            'attribute' => 'audit_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'template' => '{edit} {apply} {audit} {view}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
-                                    ]);
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
                                 },
                                 'apply' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
