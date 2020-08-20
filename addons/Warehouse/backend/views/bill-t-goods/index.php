@@ -1298,6 +1298,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'market_price',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'factory_mo',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
@@ -1391,16 +1401,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],*/
-                            [
-                                'attribute' => 'market_price',
-                                'format' => 'raw',
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
