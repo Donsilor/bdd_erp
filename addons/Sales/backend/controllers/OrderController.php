@@ -524,20 +524,19 @@ class OrderController extends BaseController
     public function actionReturn()
     {
         $this->layout = '@backend/views/layouts/iframe';
-
         $id = Yii::$app->request->get('id');
+        $ids = Yii::$app->request->post('ids');
         $model = new ReturnForm();
+        $model->ids = $ids;
         $order = $this->findModel($id) ?? new Order();
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
-                return ResultHelper::json(422, $this->getError($model));
+                //return ResultHelper::json(422, $this->getError($model));
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                \Yii::$app->salesService->return->createOrderLog($log);
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }
+
+                \Yii::$app->salesService->return->salesReturn($model, $order);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

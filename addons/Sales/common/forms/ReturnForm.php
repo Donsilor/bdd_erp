@@ -4,6 +4,7 @@ namespace addons\Sales\common\forms;
 
 use Yii;
 use addons\Sales\common\models\salesReturn;
+use common\helpers\StringHelper;
 use common\helpers\ArrayHelper;
 
 /**
@@ -11,6 +12,8 @@ use common\helpers\ArrayHelper;
  */
 class ReturnForm extends salesReturn
 {
+    public $ids;
+
     /**
      * {@inheritdoc}
      */
@@ -31,6 +34,16 @@ class ReturnForm extends salesReturn
         return ArrayHelper::merge(parent::attributeLabels() , [
 
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds(){
+        if($this->ids){
+            return StringHelper::explode($this->ids);
+        }
+        return [];
     }
 
 }
