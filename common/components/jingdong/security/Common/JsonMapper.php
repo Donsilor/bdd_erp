@@ -322,7 +322,7 @@ class JsonMapper
      *
      * @return void
      */
-    protected function checkMissingData($providedProperties, ReflectionClass $rc)
+    protected function checkMissingData($providedProperties, \ReflectionClass $rc)
     {
         foreach ($rc->getProperties() as $property) {
             $rprop = $rc->getProperty($property->name);
@@ -416,7 +416,7 @@ class JsonMapper
      *                 ReflectionMethod or ReflectionProperty, or null)
      *               Third value: type of the property
      */
-    protected function inspectProperty(ReflectionClass $rc, $name)
+    protected function inspectProperty(\ReflectionClass $rc, $name)
     {
         //try setter method first
         $setter = 'set' . $this->getCamelCaseName($name);
@@ -576,7 +576,7 @@ class JsonMapper
         if ($useParameter) {
             return new $class($jvalue);
         } else {
-            return (new ReflectionClass($class))->newInstanceWithoutConstructor();
+            return (new \ReflectionClass($class))->newInstanceWithoutConstructor();
         }
     }
 
