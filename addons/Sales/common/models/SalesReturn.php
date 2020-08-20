@@ -131,13 +131,13 @@ class SalesReturn extends BaseModel
             'pay_status' => '支付状态',
             'pay_remark' => '付款备注',
             'pay_receipt' => '付款凭证',
-            'check_status' => '确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)',
+            'check_status' => '确认状态',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用 -1删除',
+            'status' => '状态',
             'creator_id' => '申请人',
             'created_at' => '申请时间',
             'updated_at' => '更新时间',
@@ -151,6 +151,22 @@ class SalesReturn extends BaseModel
     public function getCreator()
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    /**
+     * 付款人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayer()
+    {
+        return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('payer');
+    }
+    /**
+     * 审核人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuditor()
+    {
+        return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
     /**
      * 部门主管
@@ -175,5 +191,13 @@ class SalesReturn extends BaseModel
     public function getFinance()
     {
         return $this->hasOne(Member::class, ['id'=>'finance_id'])->alias('finance');
+    }
+    /**
+     * 渠道
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
 }
