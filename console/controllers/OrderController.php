@@ -21,8 +21,9 @@ class OrderController extends Controller
  
     public function actionTest()
     {
-        $order_no = '130311942049';
-        \Yii::$app->jdSdk->getOrderInfo($order_no);
+        //$order_no = '130311942049';
+        //\Yii::$app->jdSdk->getOrderInfo($order_no);
+        \Yii::$app->jdSdk->getOrderList(null, null);
     }
     /**
      * 拉去官网订单
