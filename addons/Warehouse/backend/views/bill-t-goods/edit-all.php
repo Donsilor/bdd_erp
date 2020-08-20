@@ -1288,7 +1288,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_name',
                                 'format' => 'raw',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
