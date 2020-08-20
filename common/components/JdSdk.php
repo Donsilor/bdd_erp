@@ -30,6 +30,8 @@ class JdSdk extends Component
     
     public $accessToken;
     
+    public $refreshToken;
+    
     private $client;   
     
     public function init()
@@ -38,8 +40,19 @@ class JdSdk extends Component
             $this->client = new JdClient();
         }
         $this->client->appKey = $this->appKey;
-        $this->client->appSecret = $this->appSecret;
-        $this->client->accessToken = $this->accessToken;
+        $this->client->appSecret = $this->appSecret; 
+        //获取access _token
+        if($this->refreshToken) {
+            $url = "https://auth.360buy.com/oauth/token?grant_type=refresh_token&client_id=".$this->appKey."&client_secret=".$this->appSecret."&refresh_token=".$this->refreshToken;
+            $jsonData = file_get_contents($url);
+            $data = json_decode($jsonData,true);
+            if(empty($data['access_token'])) {
+                throw new \Exception("access_token error");
+            }else {
+                $this->accessToken = $data['access_token'];
+                $this->client->accessToken = $this->accessToken;
+            }
+        }
         parent::init();
     }
     /**
@@ -80,7 +93,8 @@ class JdSdk extends Component
         ];
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
-        $request->setOrderState(['WAIT_SELLER_STOCK_OUT','WAIT_GOODS_RECEIVE_CONFIRM','FINISHED_L']);
+        $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
+        $request->setOrderState($order_state);
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
         $request->setPageSize($page_size);
