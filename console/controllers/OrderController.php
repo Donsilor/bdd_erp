@@ -9,6 +9,7 @@ use addons\Shop\common\models\OrderSync;
 use common\enums\ConfirmEnum;
 use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\enums\SyncPlatformEnum;
+use ACES\TDEClient;
 
 
 /**
@@ -21,6 +22,9 @@ class OrderController extends Controller
  
     public function actionTest()
     {
+        
+        $str = 'AATeCTuByvoNw86Uq88qqxp43A9uheI0jdsUkQvEiPiK5Pb0PQTEyJDE78NJyunQiXUP3czSWcSv6uwnI6TsFBRPBMcvLNlzbVUuBk7f3H5R8zaVh4CElCHkTfa/1VpuQwk=';
+        \Yii::$app->jdSdk->getTest($str);exit;
         //$order_no = '130311942049';
         //\Yii::$app->jdSdk->getOrderInfo($order_no);
         \Yii::$app->jdSdk->getOrderList(null, null);
