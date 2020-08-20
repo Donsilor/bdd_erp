@@ -1607,10 +1607,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'class' => 'yii\grid\CheckboxColumn',
-                                'name' => 'id',  //设置每行数据的复选框属性
-                            ],
-                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
@@ -1635,7 +1631,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                            ]
+                            ],
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
+                            ],
                         ]
                     ]); ?>
                 </div>
