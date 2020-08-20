@@ -44,6 +44,11 @@ class ReturnController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
+                'auditor' => ['username'],
+                'leader' => ['username'],
+                'storekeeper' => ['username'],
+                'finance' => ['username'],
+                'payer' => ['username'],
             ]
         ]);
 
