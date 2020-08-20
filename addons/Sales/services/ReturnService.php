@@ -8,8 +8,11 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\enums\DeliveryStatusEnum;
 use addons\Sales\common\enums\RefundStatusEnum;
+use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\ReturnStatusEnum;
+use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderGoods;
 use common\helpers\SnHelper;
 use common\helpers\Url;
@@ -47,7 +50,11 @@ class ReturnService
         }
         foreach ($form->ids as $id) {
             $goods = OrderGoods::findOne($id);
-
+            if($order->delivery_status == DeliveryStatusEnum::HAS_SEND){
+                $form->return_by = ReturnByEnum::GOODS;
+            }else{
+                $form->return_by = ReturnByEnum::NO_GOODS;
+            }
             $return = [
                 'return_no' => SnHelper::createReturnSn(),
                 'order_id' => $order->id,

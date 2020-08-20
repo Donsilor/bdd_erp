@@ -21,15 +21,15 @@ $params = $params ? "&".http_build_query($params) : '';
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools" style="right: 100px;">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
-                </div>
-                <div class="box-tools" >
-                    <a href="<?= Url::to(['index?action=export'.$params])?>" class="blue">导出Excel</a>
-                </div>
+<!--                <div class="box-tools" style="right: 100px;">-->
+<!--                    --><?//= Html::create(['ajax-edit'], '创建', [
+//                        'data-toggle' => 'modal',
+//                        'data-target' => '#ajaxModalLg',
+//                    ]); ?>
+<!--                </div>-->
+<!--                <div class="box-tools" >-->
+<!--                    <a href="--><?//= Url::to(['index?action=export'.$params])?><!--" class="blue">导出Excel</a>-->
+<!--                </div>-->
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -75,7 +75,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute'=>'goods_id',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'creator_id',
+                            'value' => 'creator.username',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
@@ -136,6 +144,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value'=>function($model){
                                 return Yii::$app->formatter->asDatetime($model->created_at);
                             }
+                        ],
+                        [
+                            'attribute'=>'should_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'should_amount', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'apply_amount',
+                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute'=>'real_amount',
