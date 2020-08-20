@@ -12,7 +12,7 @@ class CheckStatusEnum extends \common\enums\BaseEnum
     const LEADER = 1;
     const STOREKEEPER = 2;
     const FINANCE = 3;
-    const OVER = 10;
+    const DONE = 10;
 
     /**
      * @return array
@@ -24,7 +24,7 @@ class CheckStatusEnum extends \common\enums\BaseEnum
             self::LEADER => "主管确认通过",
             self::STOREKEEPER => "库管确认通过",
             self::FINANCE => "财务确认通过",
-            self::OVER => '退款完成',
+            self::DONE => '退款完成',
         ];
     }
 

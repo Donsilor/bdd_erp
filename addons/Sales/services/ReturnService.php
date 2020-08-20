@@ -14,6 +14,8 @@ use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderGoods;
+use common\enums\AuditStatusEnum;
+use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use addons\Sales\common\forms\ReturnForm;
@@ -95,5 +97,43 @@ class ReturnService
         return $form;
     }
 
-
+    /**
+     * @param ReturnForm $form
+     * @throws \Exception
+     * @return object $form
+     * 退款-审核
+     */
+    public function auditReturn($form)
+    {
+        $check_status = $form->check_status;
+        if($check_status == CheckStatusEnum::SAVE){
+            $form->leader_id = \Yii::$app->user->getId();
+            $form->leader_time = time();
+            if($form->leader_status == AuditStatusEnum::PASS){
+                $form->check_status = CheckStatusEnum::LEADER;
+            }
+        }elseif($check_status == CheckStatusEnum::LEADER){
+            $form->storekeeper_id = \Yii::$app->user->getId();
+            $form->storekeeper_time = time();
+            if($form->storekeeper_status == AuditStatusEnum::PASS){
+                $form->check_status = CheckStatusEnum::STOREKEEPER;
+            }else{
+                //$form->check_status = CheckStatusEnum::SAVE;
+            }
+        }elseif($check_status == CheckStatusEnum::STOREKEEPER){
+            $form->finance_id = \Yii::$app->user->getId();
+            $form->finance_time = time();
+            if($form->finance_status == AuditStatusEnum::PASS){
+                $form->check_status = CheckStatusEnum::FINANCE;
+            }else{
+                //$form->check_status = CheckStatusEnum::LEADER;
+            }
+        }else{
+            throw new \Exception("审核失败");
+        }
+        if(false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+        return $form;
+    }
 }

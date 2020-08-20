@@ -48,6 +48,7 @@ use common\models\backend\Member;
  * @property string $pay_remark 付款备注
  * @property string $pay_receipt 付款凭证
  * @property int $check_status 确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)
+ * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
  * @property string $audit_remark 审核备注
@@ -97,7 +98,7 @@ class SalesReturn extends BaseModel
             'order_id' => '订单ID',
             'order_sn' => '订单号',
             'order_detail_id' => '订单明细ID',
-            'goods_id' => '条码号',
+            'goods_id' => '条码号(货号)',
             'channel_id' => '所属渠道',
             'goods_num' => '商品数量',
             'should_amount' => '应退金额',
@@ -133,7 +134,7 @@ class SalesReturn extends BaseModel
             'pay_receipt' => '付款凭证',
             'check_status' => '确认状态',
             'auditor_id' => '审核人',
-            'audit_status' => '审核状态',
+            'audit_status' => '单据审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',

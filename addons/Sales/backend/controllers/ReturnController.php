@@ -87,6 +87,11 @@ class ReturnController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
+                'auditor' => ['username'],
+                'leader' => ['username'],
+                'storekeeper' => ['username'],
+                'finance' => ['username'],
+                'payer' => ['username'],
             ]
         ]);
 
@@ -100,6 +105,7 @@ class ReturnController extends BaseController
         }
 
         $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::SAVE]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -125,6 +131,11 @@ class ReturnController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
+                'auditor' => ['username'],
+                'leader' => ['username'],
+                'storekeeper' => ['username'],
+                'finance' => ['username'],
+                'payer' => ['username'],
             ]
         ]);
 
@@ -138,6 +149,7 @@ class ReturnController extends BaseController
         }
 
         $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -163,6 +175,11 @@ class ReturnController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
+                'auditor' => ['username'],
+                'leader' => ['username'],
+                'storekeeper' => ['username'],
+                'finance' => ['username'],
+                'payer' => ['username'],
             ]
         ]);
 
@@ -176,6 +193,7 @@ class ReturnController extends BaseController
         }
 
         $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -217,25 +235,36 @@ class ReturnController extends BaseController
     }
 
     /**
-     * @return mixed
      * 提交审核
+     * @throws
+     * @return mixed
      */
-    public function actionAjaxApply(){
+    public function actionAjaxApply()
+    {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new ReturnForm();
         if($model->audit_status != AuditStatusEnum::SAVE){
             return $this->message('退款单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            $model->audit_status = AuditStatusEnum::PENDING;
+            $model->leader_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
     }
 
     /**
-     * 快递公司-审核
+     * 退款-审核
      * @throws
      * @return mixed
      */
@@ -249,17 +278,8 @@ class ReturnController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                if($model->audit_status == AuditStatusEnum::PASS){
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
-                    $model->status = StatusEnum::ENABLED;
-                }else{
-                    $model->status = StatusEnum::DISABLED;
-                    $model->audit_status = AuditStatusEnum::SAVE;
-                }
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+
+                \Yii::$app->salesService->return->auditReturn($model);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
@@ -267,9 +287,25 @@ class ReturnController extends BaseController
             }
             return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
-        $model->audit_status  = AuditStatusEnum::PASS;
+
+        if ($model->check_status == CheckStatusEnum::SAVE) {
+            $status = "leader_status";
+            $remark = "leader_remark";
+        } elseif ($model->check_status == CheckStatusEnum::LEADER) {
+            $status = "storekeeper_status";
+            $remark = "storekeeper_remark";
+        } elseif ($model->check_status == CheckStatusEnum::STOREKEEPER) {
+            $status = "finance_status";
+            $remark = "finance_remark";
+        } else {
+            $status = "audit_status";
+            $remark = "audit_remark";
+        }
+        $model->$status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+            'status' => $status,
+            'remark' => $remark,
         ]);
     }
 

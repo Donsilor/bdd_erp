@@ -3,14 +3,14 @@
 namespace addons\Sales\common\forms;
 
 use Yii;
-use addons\Sales\common\models\salesReturn;
+use addons\Sales\common\models\SalesReturn;
 use common\helpers\StringHelper;
 use common\helpers\ArrayHelper;
 
 /**
  * 退款单 Form
  */
-class ReturnForm extends salesReturn
+class ReturnForm extends SalesReturn
 {
     public $ids;
 

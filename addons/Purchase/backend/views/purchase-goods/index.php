@@ -140,32 +140,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 ]),
                             ],
-                            [
-                                'attribute' => 'style_sex',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model){
-                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute'=>'qiban_type',
-                                'value'=> function($model){
-                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
 
-                                ]),
-                                'headerOptions' => [],
-                            ],
+
 
                             [
                                 'attribute'=>'goods_name',
@@ -180,19 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
 
-                            [
-                                'attribute' => 'jintuo_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model){
-                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
+
                             [
                                 'attribute' => 'peishi_type',
                                 'value' => function($model){
@@ -284,7 +248,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'尺寸',
                                 'value'=> function($model){
-                                    return $model->attr[AttrIdEnum::DIA_LENGTH] ?? "";
+                                    return $model->attr[AttrIdEnum::CHAIN_LENGTH] ?? "";
                                 }
                             ],
                             [
@@ -444,13 +408,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
-                                'label'=>'	主石买入单价',
+                                'label'=>'	主石单价',
                                 'value'=> function($model){
                                     return $model->attr[AttrIdEnum::MAIN_STONE_PRICE] ?? "";
                                 }
                             ],
                             [
-                                'label'=>'主石金额',
+                                'label'=>'主石成本',
                                 'value' => function($model){
                                     $main_stone_price = $model->attr[AttrIdEnum::MAIN_STONE_PRICE] ?? 0;
                                     $main_stone_weight = $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? 0;
@@ -517,13 +481,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
-                                'label'=>'	副石1买入单价',
+                                'label'=>'	副石1单价',
                                 'value'=> function($model){
                                     return $model->attr[AttrIdEnum::SIDE_STONE1_PRICE] ?? "";
                                 }
                             ],
                             [
-                                'label'=>'副石1金额',
+                                'label'=>'副石1成本',
                                 'value' => function($model){
                                     $side_stone1_price = $model->attr[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
                                     $side_stone1_weight = $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
@@ -590,13 +554,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
-                                'label'=>'	副石2买入单价',
+                                'label'=>'	副石2单价',
                                 'value'=> function($model){
                                     return $model->attr[AttrIdEnum::SIDE_STONE2_PRICE] ?? "";
                                 }
                             ],
                             [
-                                'label'=>'副石2金额',
+                                'label'=>'副石2成本',
                                 'value' => function($model){
                                     $side_stone2_price = $model->attr[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
                                     $side_stone2_weight = $model->attr[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
@@ -680,11 +644,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],
-                            [
-                                'attribute'=>'ke_gong_fee',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
+
                             [
                                 'attribute'=>'peishi_fee',
                                 'filter' => false,
@@ -692,6 +652,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'peishi_amount',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'ke_gong_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],
@@ -706,7 +671,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'xianqian_price',
+                                'attribute'=>'xiangqian_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],
@@ -772,6 +737,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
 
+
                             [
                                 'attribute' => 'style_channel_id',
                                 'format' => 'raw',
@@ -828,6 +794,45 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                                     'format' => 'raw',
                                     'headerOptions' => ['width' => '150'],                                    
+                            ],
+                            [
+                                'attribute' => 'style_sex',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'style_sex',\addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'qiban_type',
+                                'value'=> function($model){
+                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type',\addons\Style\common\enums\QibanTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'jintuo_type',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'jintuo_type',\addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
