@@ -14,6 +14,11 @@ use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
@@ -117,6 +122,7 @@ class ReturnService
             $form->storekeeper_time = time();
             if($form->storekeeper_status == AuditStatusEnum::PASS){
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
+                $this->createBillD($form);
             }else{
                 //$form->check_status = CheckStatusEnum::SAVE;
             }
@@ -133,6 +139,95 @@ class ReturnService
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
+        }
+        return $form;
+    }
+
+    /**
+     * @param ReturnForm $form
+     * @throws \Exception
+     * @return object $form
+     * 创建销售退货单
+     */
+    public function createBillD($form)
+    {
+        $goods_ids[$form->order_detail_id] = $form->goods_id;
+        if(empty($goods_ids)){
+            throw new \Exception("货号[条码号]不能为空");
+        }
+        $bill_goods = [];
+        $total_cost = $total_sale = $total_market = 0;
+        foreach ($goods_ids as $id => $goods_id) {
+            if(!$goods_id){
+                throw new \Exception("货号不能为空");
+            }
+            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            if(!$goods){
+                throw new \Exception("货号".$goods_id."不存在");
+            }
+            if($goods->goods_status != GoodsStatusEnum::IN_STOCK){
+                throw new \Exception("货号".$goods_id."不是已销售状态");
+            }
+            $orderGoods = OrderGoods::findOne($id);
+            //$goodsAccount = OrderAccount::findOne($id);
+            //$goods = new WarehouseGoods();
+            $bill_goods[] = [
+                'goods_id' => $goods_id,
+                'goods_name' => $goods->goods_name,
+                'style_sn' => $goods->style_sn,
+                'goods_num' => $goods->goods_num,
+                'order_detail_id' => $id,
+                'source_detail_id' => $id,
+                'put_in_type' => $goods->put_in_type,
+                'warehouse_id' => $goods->warehouse_id,
+                'material' => $goods->material,
+                'material_type' => $goods->material_type,
+                'material_color' => $goods->material_color,
+                'gold_weight' => $goods->gold_weight,
+                'gold_loss' => $goods->gold_loss,
+                'diamond_carat' => $goods->diamond_carat,
+                'diamond_color' => $goods->diamond_color,
+                'diamond_clarity' => $goods->diamond_clarity,
+                'diamond_cert_id' => $goods->diamond_cert_id,
+                'diamond_cert_type' => $goods->diamond_cert_type,
+                'cost_price' => $goods->cost_price,
+                'sale_price' => $form->real_amount,
+                'market_price' => $goods->market_price,
+                'markup_rate' => 1,
+                'status' => StatusEnum::ENABLED,
+                'creator_id' =>\Yii::$app->user->identity->getId(),
+                'created_at' => time(),
+            ];
+
+            $total_cost = bcadd($total_cost, $goods->cost_price, 2);
+            $total_market = bcadd($total_market, $goods->market_price, 2);
+            $total_sale = bcadd($total_sale, $orderGoods->goods_pay_price, 2);
+        }
+        $bill = [
+            'bill_type' => BillTypeEnum::BILL_TYPE_D,
+            'bill_status' => BillStatusEnum::PENDING,
+            'channel_id' => $form->sale_channel_id,
+            'order_sn' => $form->order_sn,
+            'order_type' => OrderTypeEnum::ORDER_K,
+            'goods_num' => count($bill_goods),
+            'total_cost' => $total_cost,
+            'total_market' => $total_market,
+            'total_sale' => $total_sale,
+            'auditor_id' => \Yii::$app->user->identity->getId(),
+            'audit_status' => AuditStatusEnum::PASS,
+            'audit_time' => time(),
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+
+        //1.创建销售退货单
+        \Yii::$app->warehouseService->billD->createBillD($bill, $bill_goods);
+
+        //2.更新商品库存状态
+        $condition = ['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_STOCK], $condition);
+        if($execute_num <> count($bill_goods)){
+            throw new \Exception("货品改变状态数量与明细数量不一致");
         }
         return $form;
     }

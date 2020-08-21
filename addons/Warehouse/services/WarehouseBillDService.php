@@ -22,7 +22,7 @@ class WarehouseBillDService extends WarehouseBillService
      * @param array $goods
      * @throws
      */
-    public function createBillS($bill, $goods){
+    public function createBillD($bill, $goods){
         $billM = new WarehouseBill();
         $billM->attributes = $bill;
         $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
