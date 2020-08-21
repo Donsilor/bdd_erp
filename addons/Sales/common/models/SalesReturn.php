@@ -13,7 +13,7 @@ use common\models\backend\Member;
  * @property int $order_id 订单ID
  * @property string $order_sn 订单号
  * @property int $order_detail_id 订单明细ID
- * @package string $goods_id 货号
+ * @property string $goods_id 货号
  * @property int $channel_id 所属渠道
  * @property int $goods_num 商品数量
  * @property string $should_amount 应退金额
@@ -114,20 +114,20 @@ class SalesReturn extends BaseModel
             'currency' => '货币',
             'bank_name' => '开户银行',
             'bank_card' => '银行账户',
-            'is_finance_refund' => '是否财务退款',
-            'is_quick_refund' => '是否平台极速退款',
+            'is_finance_refund' => '是否需财务退款(线下退款)',
+            'is_quick_refund' => '平台是否已极速退款',
             'leader_id' => '部门主管',
-            'leader_status' => '主管审核状态',
-            'leader_remark' => '主管审核意见',
-            'leader_time' => '主管审核时间',
-            'storekeeper_id' => '库管',
-            'storekeeper_status' => '库管审核',
-            'storekeeper_remark' => '库管审核备注',
-            'storekeeper_time' => '库管审核时间',
+            'leader_status' => '主管确认状态',
+            'leader_remark' => '主管确认意见',
+            'leader_time' => '主管确认时间',
+            'storekeeper_id' => '商品部',
+            'storekeeper_status' => '商品部确认',
+            'storekeeper_remark' => '商品部确认备注',
+            'storekeeper_time' => '商品部确认时间',
             'finance_id' => '财务',
-            'finance_status' => '财务审核状态',
-            'finance_remark' => '财务审核备注',
-            'finance_time' => '财务审核时间',
+            'finance_status' => '财务确认状态',
+            'finance_remark' => '财务确认备注',
+            'finance_time' => '财务确认时间',
             'payer_id' => '实际付款人',
             'pay_status' => '支付状态',
             'pay_remark' => '付款备注',

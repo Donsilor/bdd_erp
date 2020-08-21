@@ -13,8 +13,20 @@ use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
+use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillDForm;
+use addons\Warehouse\common\forms\WarehouseBillLForm;
+use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
+use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
@@ -98,6 +110,76 @@ class ReturnService
     }
 
     /**
+     *
+     * 退款-转单
+     * @param Order $order
+     * @param array $ids
+     * @throws \Exception
+     * @return object $form
+     */
+    public function auditZhuandan($order, $ids)
+    {
+        //1.创建新订单
+        $newOrder = clone $order;
+        $newOrder->id = null;
+        if(false == $newOrder->save()) {
+            throw new \Exception($this->getError($newOrder));
+        }
+        \Yii::$app->salesService->order->createOrderSn($newOrder);
+
+        $order_amount = $goods_amount = $discount_amount = 0;
+        //2.添加商品
+        foreach ($ids as $id) {
+            $goods = OrderGoods::findOne($id);
+            $newGoods = clone $goods;
+            $newGoods->id = null;
+            $newGoods->order_id = $newOrder->id;
+            if(false == $newGoods->save()) {
+                throw new \Exception($this->getError($newGoods));
+            }
+            $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
+            $goods_amount = bcadd($goods_amount, $newGoods->goods_price, 3);
+            $discount_amount = bcadd($discount_amount, $newGoods->goods_discount, 3);
+        }
+
+        //3.创建订单金额
+        $account = new OrderAccount();
+        $account->order_id = $newOrder->id;
+        $account->order_amount = $order_amount;
+        $account->goods_amount = $goods_amount;
+        $account->discount_amount = $discount_amount;
+        $account->paid_amount = $order_amount;
+        //$account->pay_amount = $order_amount;
+        if(false == $account->save()) {
+            throw new \Exception($this->getError($account));
+        }
+
+        //4.创建订单地址信息
+        $address = OrderAddress::find()->where(['order_id'=>$newOrder->id])->one();
+        if(!$address) {
+            $address = new OrderAddress();
+            $address->order_id = $newOrder->id;
+            if(false == $address->save()) {
+                throw new \Exception($this->getError($address));
+            }
+        }
+
+        //5.创建订单日志
+        $log = [
+            'order_id' => $newOrder->id,
+            'order_sn' => $newOrder->order_sn,
+            'order_status' => $newOrder->order_status,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_time' => time(),
+            'log_module' => '创建订单',
+            'log_msg' => "创建订单, 订单号:".$newOrder->order_sn,
+        ];
+        \Yii::$app->salesService->orderLog->createOrderLog($log);
+
+        return $order;
+    }
+
+    /**
      * @param ReturnForm $form
      * @throws \Exception
      * @return object $form
@@ -117,6 +199,7 @@ class ReturnService
             $form->storekeeper_time = time();
             if($form->storekeeper_status == AuditStatusEnum::PASS){
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
+                $this->createBillD($form);
             }else{
                 //$form->check_status = CheckStatusEnum::SAVE;
             }
@@ -125,6 +208,36 @@ class ReturnService
             $form->finance_time = time();
             if($form->finance_status == AuditStatusEnum::PASS){
                 $form->check_status = CheckStatusEnum::FINANCE;
+                $order = Order::findOne($form->order_id);
+                $order->refund_status = RefundStatusEnum::HAS_RETURN;
+                if(false === $order->save()){
+                    throw new \Exception($this->getError($order));
+                }
+                $goods = OrderGoods::findOne($form->order_detail_id);
+                $goods->is_return = ConfirmEnum::YES;
+                if(false === $goods->save()){
+                    throw new \Exception($this->getError($goods));
+                }
+                //1.审核销售退货单
+                $where = ['order_sn' => $form->order_sn, 'bill_status'=>BillStatusEnum::PENDING, 'bill_type'=>BillTypeEnum::BILL_TYPE_D];
+                $bill = WarehouseBillDForm::find()->where($where)->one();
+                if(!empty($bill)){
+                    $bill->bill_status = BillStatusEnum::CONFIRM;
+                    $bill->audit_status = AuditStatusEnum::PASS;
+                }else{
+                    throw new \Exception("销售退货单不存在");
+                }
+                //2.更新商品库存状态
+                $condition = ['goods_id'=>$form->goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
+                WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_STOCK], $condition);
+
+                //3.更新订单金额
+                $account = OrderAccount::findOne($form->order_id);
+                //$account->order_amount = bcsub($account->order_amount, $form->real_amount, 2);
+                $account->refund_amount = bcadd($account->refund_amount, $form->real_amount, 2);
+                if(false === $account->save()){
+                    throw new \Exception($this->getError($account));
+                }
             }else{
                 //$form->check_status = CheckStatusEnum::LEADER;
             }
@@ -133,6 +246,95 @@ class ReturnService
         }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
+        }
+        return $form;
+    }
+
+    /**
+     * @param ReturnForm $form
+     * @throws \Exception
+     * @return object $form
+     * 创建销售退货单
+     */
+    public function createBillD($form)
+    {
+        $goods_ids[$form->order_detail_id] = $form->goods_id;
+        if(empty($goods_ids)){
+            throw new \Exception("货号[条码号]不能为空");
+        }
+        $bill_goods = [];
+        $total_cost = $total_sale = $total_market = 0;
+        foreach ($goods_ids as $id => $goods_id) {
+            if(!$goods_id){
+                throw new \Exception("货号不能为空");
+            }
+            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            if(!$goods){
+                throw new \Exception("货号".$goods_id."不存在");
+            }
+            if($goods->goods_status != GoodsStatusEnum::HAS_SOLD){
+                throw new \Exception("货号".$goods_id."不是已销售状态");
+            }
+            $orderGoods = OrderGoods::findOne($id);
+            //$goodsAccount = OrderAccount::findOne($id);
+            //$goods = new WarehouseGoods();
+            $bill_goods[] = [
+                'goods_id' => $goods_id,
+                'goods_name' => $goods->goods_name,
+                'style_sn' => $goods->style_sn,
+                'goods_num' => $goods->goods_num,
+                'order_detail_id' => $id,
+                'source_detail_id' => $id,
+                'put_in_type' => $goods->put_in_type,
+                'warehouse_id' => $goods->warehouse_id,
+                'material' => $goods->material,
+                'material_type' => $goods->material_type,
+                'material_color' => $goods->material_color,
+                'gold_weight' => $goods->gold_weight,
+                'gold_loss' => $goods->gold_loss,
+                'diamond_carat' => $goods->diamond_carat,
+                'diamond_color' => $goods->diamond_color,
+                'diamond_clarity' => $goods->diamond_clarity,
+                'diamond_cert_id' => $goods->diamond_cert_id,
+                'diamond_cert_type' => $goods->diamond_cert_type,
+                'cost_price' => $goods->cost_price,
+                'sale_price' => $form->real_amount,
+                'market_price' => $goods->market_price,
+                'markup_rate' => 1,
+                'status' => StatusEnum::ENABLED,
+                'creator_id' =>\Yii::$app->user->identity->getId(),
+                'created_at' => time(),
+            ];
+
+            $total_cost = bcadd($total_cost, $goods->cost_price, 2);
+            $total_market = bcadd($total_market, $goods->market_price, 2);
+            $total_sale = bcadd($total_sale, $form->real_amount, 2);
+        }
+        $bill = [
+            'bill_type' => BillTypeEnum::BILL_TYPE_D,
+            'bill_status' => BillStatusEnum::PENDING,
+            'channel_id' => $form->sale_channel_id,
+            'order_sn' => $form->order_sn,
+            'order_type' => OrderTypeEnum::ORDER_K,
+            'goods_num' => count($bill_goods),
+            'total_cost' => $total_cost,
+            'total_market' => $total_market,
+            'total_sale' => $total_sale,
+            'auditor_id' => \Yii::$app->user->identity->getId(),
+            'audit_status' => AuditStatusEnum::PENDING,
+            'audit_time' => time(),
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+
+        //1.创建销售退货单
+        \Yii::$app->warehouseService->billD->createBillD($bill, $bill_goods);
+
+        //2.更新商品库存状态
+        $condition = ['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_REFUND], $condition);
+        if($execute_num <> count($bill_goods)){
+            throw new \Exception("货品改变状态数量与明细数量不一致");
         }
         return $form;
     }

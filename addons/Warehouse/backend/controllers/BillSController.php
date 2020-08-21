@@ -151,13 +151,13 @@ class BillSController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index']));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-s/index', 'id'=>$id]));
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
             'model' => $model,

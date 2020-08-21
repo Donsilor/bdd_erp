@@ -9,6 +9,7 @@ use addons\Shop\common\models\OrderSync;
 use common\enums\ConfirmEnum;
 use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\enums\SyncPlatformEnum;
+use ACES\TDEClient;
 
 
 /**
@@ -23,7 +24,7 @@ class OrderController extends Controller
     {
         //$order_no = '130311942049';
         //\Yii::$app->jdSdk->getOrderInfo($order_no);
-        \Yii::$app->jdSdk->getOrderList(null, null);
+        \Yii::$app->jdSdk->getOrderList(null, null,1,1);
     }
     /**
      * 拉去官网订单
