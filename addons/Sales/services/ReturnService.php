@@ -13,13 +13,18 @@ use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
+use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\OrderGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillDForm;
+use addons\Warehouse\common\forms\WarehouseBillLForm;
+use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
@@ -131,6 +136,36 @@ class ReturnService
             $form->finance_time = time();
             if($form->finance_status == AuditStatusEnum::PASS){
                 $form->check_status = CheckStatusEnum::FINANCE;
+                $order = Order::findOne($form->order_id);
+                $order->refund_status = RefundStatusEnum::HAS_RETURN;
+                if(false === $order->save()){
+                    throw new \Exception($this->getError($order));
+                }
+                $goods = OrderGoods::findOne($form->order_detail_id);
+                $goods->is_return = ConfirmEnum::YES;
+                if(false === $goods->save()){
+                    throw new \Exception($this->getError($goods));
+                }
+                //1.审核销售退货单
+                $where = ['order_sn' => $form->order_sn, 'bill_status'=>BillStatusEnum::PENDING, 'bill_type'=>BillTypeEnum::BILL_TYPE_D];
+                $bill = WarehouseBillDForm::find()->where($where)->one();
+                if(!empty($bill)){
+                    $bill->bill_status = BillStatusEnum::CONFIRM;
+                    $bill->audit_status = AuditStatusEnum::PASS;
+                }else{
+                    throw new \Exception("销售退货单不存在");
+                }
+                //2.更新商品库存状态
+                $condition = ['goods_id'=>$form->goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
+                WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_STOCK], $condition);
+
+                //3.更新订单金额
+                $account = OrderAccount::findOne($form->order_id);
+                //$account->order_amount = bcsub($account->order_amount, $form->real_amount, 2);
+                $account->refund_amount = bcadd($account->refund_amount, $form->real_amount, 2);
+                if(false === $account->save()){
+                    throw new \Exception($this->getError($account));
+                }
             }else{
                 //$form->check_status = CheckStatusEnum::LEADER;
             }
