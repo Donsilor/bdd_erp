@@ -201,7 +201,7 @@ class ReturnService
 
             $total_cost = bcadd($total_cost, $goods->cost_price, 2);
             $total_market = bcadd($total_market, $goods->market_price, 2);
-            $total_sale = bcadd($total_sale, $orderGoods->goods_pay_price, 2);
+            $total_sale = bcadd($total_sale, $form->real_amount, 2);
         }
         $bill = [
             'bill_type' => BillTypeEnum::BILL_TYPE_D,
