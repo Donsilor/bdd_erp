@@ -14,6 +14,7 @@ use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
@@ -25,6 +26,7 @@ use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
+use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
@@ -105,6 +107,76 @@ class ReturnService
         }
 
         return $form;
+    }
+
+    /**
+     *
+     * 退款-转单
+     * @param Order $order
+     * @param array $ids
+     * @throws \Exception
+     * @return object $form
+     */
+    public function auditZhuandan($order, $ids)
+    {
+        //1.创建新订单
+        $newOrder = clone $order;
+        $newOrder->id = null;
+        if(false == $newOrder->save()) {
+            throw new \Exception($this->getError($newOrder));
+        }
+        \Yii::$app->salesService->order->createOrderSn($newOrder);
+
+        $order_amount = $goods_amount = $discount_amount = 0;
+        //2.添加商品
+        foreach ($ids as $id) {
+            $goods = OrderGoods::findOne($id);
+            $newGoods = clone $goods;
+            $newGoods->id = null;
+            $newGoods->order_id = $newOrder->id;
+            if(false == $newGoods->save()) {
+                throw new \Exception($this->getError($newGoods));
+            }
+            $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
+            $goods_amount = bcadd($goods_amount, $newGoods->goods_price, 3);
+            $discount_amount = bcadd($discount_amount, $newGoods->goods_discount, 3);
+        }
+
+        //3.创建订单金额
+        $account = new OrderAccount();
+        $account->order_id = $newOrder->id;
+        $account->order_amount = $order_amount;
+        $account->goods_amount = $goods_amount;
+        $account->discount_amount = $discount_amount;
+        $account->paid_amount = $order_amount;
+        //$account->pay_amount = $order_amount;
+        if(false == $account->save()) {
+            throw new \Exception($this->getError($account));
+        }
+
+        //4.创建订单地址信息
+        $address = OrderAddress::find()->where(['order_id'=>$newOrder->id])->one();
+        if(!$address) {
+            $address = new OrderAddress();
+            $address->order_id = $newOrder->id;
+            if(false == $address->save()) {
+                throw new \Exception($this->getError($address));
+            }
+        }
+
+        //5.创建订单日志
+        $log = [
+            'order_id' => $newOrder->id,
+            'order_sn' => $newOrder->order_sn,
+            'order_status' => $newOrder->order_status,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_time' => time(),
+            'log_module' => '创建订单',
+            'log_msg' => "创建订单, 订单号:".$newOrder->order_sn,
+        ];
+        \Yii::$app->salesService->orderLog->createOrderLog($log);
+
+        return $order;
     }
 
     /**
