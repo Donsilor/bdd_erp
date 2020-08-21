@@ -4,14 +4,9 @@ namespace common\components;
 
 use Yii;
 use yii\base\Component;
-use common\components\jingdong\JdClient;
-use common\components\jingdong\request\B2bOrderGetRequest;
-use common\components\jingdong\request\PopOrderGetRequest;
-use common\components\jingdong\request\PopOrderEnGetRequest;
-use common\components\jingdong\request\OrderVenderRemarkQueryByOrderIdRequest;
-use common\components\jingdong\request\PopOrderPrintDataGetRequest;
-use common\components\jingdong\request\OrderGetRequest;
-use common\components\jingdong\request\PopOrderSearchRequest;
+use JD\JdClient;
+use JD\request\PopOrderGetRequest;
+use JD\request\PopOrderSearchRequest;
 use ACES\TDEClient;
 
 
@@ -94,7 +89,7 @@ class JdSdk extends Component
         ];
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
-        $order_state = ['WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L'];
+        $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
         $request->setOrderState($order_state);
         $request->setOptionalFields($option_fields);
         $request->setPage($page);

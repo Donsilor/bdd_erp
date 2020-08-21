@@ -1,6 +1,6 @@
 <?php
-namespace common\components\jingdong\request;
-use common\components\jingdong\RequestCheckUtil;
+namespace JD\request;
+use JD\RequestCheckUtil;
 
 class PopOrderSearchRequest
 {

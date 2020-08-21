@@ -1,11 +1,13 @@
 <?php
-namespace common\components\jingdong\request;
-class PopOrderEnGetRequest
+namespace JD\request;
+use JD\RequestCheckUtil;
+
+class PopOrderGetRequest
 {
 	private $apiParas = array();
 	
 	public function getApiMethodName(){
-	  return "jingdong.pop.order.enGet";
+	  return "jingdong.pop.order.get";
 	}
 	
 	public function getApiParas(){
@@ -16,7 +18,8 @@ class PopOrderEnGetRequest
 	}
 	
 	public function check(){
-		
+	    RequestCheckUtil::checkNotNull($this->orderId, 'order_id');
+	    RequestCheckUtil::checkNotNull($this->optionalFields, 'optional_fields');
 	}
 	
 	public function putOtherTextParam($key, $value){
@@ -44,7 +47,7 @@ class PopOrderEnGetRequest
 	  return $this->orderState;
 	}
 
-                        	                   			private $optionalFields;
+    private $optionalFields;
     	                                                            
 	public function setOptionalFields($optionalFields){
 		$this->optionalFields = $optionalFields;

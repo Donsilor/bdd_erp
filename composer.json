@@ -61,8 +61,7 @@
         "mingyoung/dingtalk": "2.0",
         "finecho/logistics": "^3.0",
         "ext-bcmath": "*",
-		"monolog/monolog" : "1.24.0",
-		"netresearch/jsonmapper" : "1.6.0"
+		"monolog/monolog" : "1.24.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -91,7 +90,8 @@
     ],
 	"autoload" : {
 		"psr-4" : {
-			"ACES\\" : "common\\components\\jingdong\\security"
+			"ACES\\" : "common\\components\\jingdong\\security",
+			"JD\\" : "common\\components\\jingdong\\jd"
 		}
 	}
 }

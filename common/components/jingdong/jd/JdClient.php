@@ -1,5 +1,5 @@
 <?php
-namespace common\components\jingdong;
+namespace JD;
 
 class JdClient
 {
