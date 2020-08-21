@@ -94,8 +94,6 @@ class OrderGoodsService extends Service
                 throw new \Exception($this->getError($model));
             }
 
-          //更新采购汇总：总金额和总数量
-          \Yii::$app->salesService->order->orderSummary($model->order_id);
 
 
     }
