@@ -51,6 +51,7 @@ class SalesDetail extends BaseModel
             [['goods_price', 'sale_price', 'cost_price', 'refund_price'], 'number'],
             [['goods_name'], 'string', 'max' => 100],
             [['orde_sn','goods_sn'], 'string', 'max' => 20],
+            [['remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -80,6 +81,7 @@ class SalesDetail extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'creator_id' => '创建人',
+            'remark' => '备注',
         ];
     }
 

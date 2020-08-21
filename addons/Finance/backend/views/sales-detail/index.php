@@ -10,7 +10,7 @@ use addons\Finance\common\enums\FinanceStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '银行支付单';
+$this->title = '财务销售明细单';
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -127,13 +127,13 @@ $params = $params ? "&".http_build_query($params) : '';
 
             [
                 'attribute' => 'goods_num',
-                'format' => 'raw',
+                'filter' => false,
                 'headerOptions' => ['width'=>'100'],
             ],
 
             [
                 'attribute' => 'goods_price',
-                'format' => 'raw',
+                'filter' => false,
                 'headerOptions' => ['width'=>'100'],
             ],
             [
@@ -162,7 +162,7 @@ $params = $params ? "&".http_build_query($params) : '';
             ],
             [
                 'attribute' => 'sale_price',
-                'format' => 'raw',
+                'filter' => false,
                 'headerOptions' => ['width'=>'100'],
             ],
             [
@@ -191,7 +191,7 @@ $params = $params ? "&".http_build_query($params) : '';
             ],
             [
                 'attribute' => 'cost_price',
-                'format' => 'raw',
+                'filter' => false,
                 'headerOptions' => ['width'=>'100'],
             ],
             [
@@ -220,7 +220,7 @@ $params = $params ? "&".http_build_query($params) : '';
             ],
             [
                 'attribute' => 'refund_price',
-                'format' => 'raw',
+                'filter' => false,
                 'headerOptions' => ['width'=>'100'],
             ],
             [
@@ -260,6 +260,24 @@ $params = $params ? "&".http_build_query($params) : '';
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'120'],
             ],
+            [
+                'attribute' => 'remark',
+                'filter' => false,
+
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => '操作',
+                'template' => '{goods} {edit} {ajax-audit} {close}',
+                'buttons' => [
+                    'edit' => function($url, $model, $key){
+                        return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl(), 'id' => $model->id], '编辑', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModalLg',
+                        ]);
+                    },
+                ]
+            ]
 
         ]
       ]);

@@ -90,6 +90,43 @@ class SalesDetailController extends BaseController
             'searchModel' => $searchModel,
         ]);
     }
+
+
+
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                    return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                $trans->commit();
+                return $this->message('操作成功', $this->redirect(['index']), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
     /**
      * 详情展示页
      * @return string
