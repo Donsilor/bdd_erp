@@ -46,8 +46,8 @@ class SalesDetail extends BaseModel
     public function rules()
     {
         return [
-            [['dept_id', 'sale_channel_id', 'goods_name', 'product_type_id','order_id', 'orde_sn','goods_sn'], 'required'],
-            [['dept_id', 'sale_channel_id', 'product_type_id', 'goods_num', 'pay_time', 'delivery_time', 'refund_time', 'return_time', 'return_by', 'created_at', 'updated_at', 'creator_id','order_id'], 'integer'],
+            [['dept_id', 'sale_channel_id', 'goods_name', 'product_type_id','order_id', 'orde_sn','order_detail_id'], 'required'],
+            [['dept_id', 'sale_channel_id', 'product_type_id', 'goods_num', 'pay_time', 'delivery_time', 'refund_time', 'return_time', 'return_by', 'created_at', 'updated_at', 'creator_id','order_id','order_detail_id'], 'integer'],
             [['goods_price', 'sale_price', 'cost_price', 'refund_price'], 'number'],
             [['goods_name'], 'string', 'max' => 100],
             [['orde_sn','goods_sn'], 'string', 'max' => 20],

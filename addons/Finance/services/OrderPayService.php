@@ -77,6 +77,7 @@ class OrderPayService extends Service
         foreach ($order_goods_list as $order_goods){
             $sale_detail = [
                 'order_id' => $order_goods->order_id,
+                'order_detail_id' => $order_goods->id,
                 'orde_sn' => $order_goods->order->order_sn,
                 'dept_id' => $order_goods->order->creator->dept_id,
                 'sale_channel_id' => $order_goods->order->sale_channel_id,

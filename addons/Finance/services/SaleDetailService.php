@@ -27,11 +27,11 @@ class SaleDetailService extends Service
             if(!isset($form['order_id'])) {
                 throw new \Exception("参数order_id不存在");
             }
-            if(!isset($form['goods_sn'])) {
-                throw new \Exception("参数goods_sn不存在");
+            if(!isset($form['order_detail_id'])) {
+                throw new \Exception("参数order_detail_id不存在");
             }
 
-            $saleDetail = SalesDetail::find()->where(['order_id'=>$form['order_id'],'goods_sn'=>$form['goods_sn']])->one();
+            $saleDetail = SalesDetail::find()->where(['order_id'=>$form['order_id'],'order_detail_id'=>$form['order_detail_id']])->one();
             if(!$saleDetail){;
                 $saleDetail = new SalesDetail();
             }
