@@ -28,8 +28,7 @@ class JdSdk extends Component
     
     public $refreshToken;
     
-    private $client;   
-    
+    private $client;
     public function init()
     {
         if(!$this->client) {
@@ -48,7 +47,7 @@ class JdSdk extends Component
                 $this->accessToken = $data['access_token'];
                 $this->client->accessToken = $this->accessToken;
             }
-        }
+        }        
         parent::init();
     }
     /**
@@ -82,6 +81,8 @@ class JdSdk extends Component
      */
     public function getOrderList($start_date, $end_date, $page = 1 ,$page_size = 20)
     {
+       
+        
         $option_fields = [
             'orderId','orderTotalPrice','orderSellerPrice','orderPayment','freightPrice',
             'sellerDiscount','orderState','deliveryType','invoiceEasyInfo','orderRemark','orderStartTime',
@@ -100,16 +101,22 @@ class JdSdk extends Component
         $request->setSortType(0);
         //查询时间类型，0按修改时间查询，1为按订单创建时间查询；其它数字同0，也按订单修改（订单状态、修改运单号）修改时间
         $request->setDateType(1);// 1订单创建时间，0订单修改时间
-        $res = $this->client->execute($request, $this->accessToken);
-        print_r($res);
+        $responce = $this->client->execute($request, $this->accessToken);
+
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }  
+        $total_count = $responce->orderTotal;
+        $page_total = floor($total_count/$page_size);
         
-    }
-    
-    public function getTest($str) {
-        
-       $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
-       $res = $tde->decrypt($str);
-       print_r($res);
+        $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
+        $order_list = $responce->jingdong_pop_order_search_responce->searchorderinfo_result->orderInfoList;
+        foreach ($order_list as $order) {
+            
+        }
+        echo $total_count;
+        print_r($page_total);
+        return [$order_list,$page_total];
     }
     
     
