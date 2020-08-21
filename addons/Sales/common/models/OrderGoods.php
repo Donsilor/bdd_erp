@@ -32,6 +32,7 @@ use Yii;
  * @property string $produce_sn 布产编号
  * @property int $is_stock 是否现货(1是0否)
  * @property int $is_gift 是否赠品
+ * @property int $is_return 是否退款
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -51,7 +52,7 @@ class OrderGoods extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
+            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'is_return', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
             [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
             [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate','assess_cost'], 'number'],
             [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
@@ -102,6 +103,7 @@ class OrderGoods extends BaseModel
             'is_stock' => '是否现货',
             'is_gift' => '是否赠品',
             'is_bc' => '是否布产',
+            'is_return' => '是否退款',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
