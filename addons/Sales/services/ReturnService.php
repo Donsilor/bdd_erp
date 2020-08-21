@@ -165,7 +165,7 @@ class ReturnService
             if(!$goods){
                 throw new \Exception("货号".$goods_id."不存在");
             }
-            if($goods->goods_status != GoodsStatusEnum::IN_STOCK){
+            if($goods->goods_status != GoodsStatusEnum::HAS_SOLD){
                 throw new \Exception("货号".$goods_id."不是已销售状态");
             }
             $orderGoods = OrderGoods::findOne($id);
