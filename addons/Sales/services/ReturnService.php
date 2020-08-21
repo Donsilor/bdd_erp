@@ -214,7 +214,7 @@ class ReturnService
             'total_market' => $total_market,
             'total_sale' => $total_sale,
             'auditor_id' => \Yii::$app->user->identity->getId(),
-            'audit_status' => AuditStatusEnum::PASS,
+            'audit_status' => AuditStatusEnum::PENDING,
             'audit_time' => time(),
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),
@@ -225,7 +225,7 @@ class ReturnService
 
         //2.更新商品库存状态
         $condition = ['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_STOCK], $condition);
+        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_REFUND], $condition);
         if($execute_num <> count($bill_goods)){
             throw new \Exception("货品改变状态数量与明细数量不一致");
         }
