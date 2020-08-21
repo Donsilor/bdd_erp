@@ -2,31 +2,29 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-
-use addons\Warehouse\common\forms\WarehouseBillBForm;
-use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\forms\WarehouseBillDForm;
+use addons\Warehouse\common\forms\WarehouseBillDGoodsForm;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use common\helpers\StringHelper;
 use common\enums\StatusEnum;
 use yii\base\Exception;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillBGoodsForm;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
-
 
 /**
- * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
+ * BillDGoodsController implements the CRUD actions for BillDGoodsController model.
  */
-class BillBGoodsController extends BaseController
+class BillDGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillBGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_B;
+    public $modelClass = WarehouseBillDGoodsForm::class;
+    public $billType = BillTypeEnum::BILL_TYPE_D;
 
     /**
      * Lists all WarehouseBillBGoods models.
@@ -36,7 +34,7 @@ class BillBGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index', 'bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-d/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

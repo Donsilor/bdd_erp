@@ -20,6 +20,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
     const BILL_TYPE_C   = 'C';
     const BILL_TYPE_A   = 'A';
     const BILL_TYPE_J   = 'J';
+    const BILL_TYPE_D   = 'D';
     const BILL_TYPE_WX  = 'WX';
 
 
@@ -35,6 +36,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
             self::BILL_TYPE_W   => '盘点单',
             self::BILL_TYPE_A   => '调整单',
             self::BILL_TYPE_J   => '借货单',
+            self::BILL_TYPE_D   => '销售退货单',
             self::BILL_TYPE_B   => '退货返厂单',
             self::BILL_TYPE_T   => '其他收货单',
             self::BILL_TYPE_C   => '其他出库单',
