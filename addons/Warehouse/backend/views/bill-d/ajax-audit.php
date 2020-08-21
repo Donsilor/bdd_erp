@@ -1,6 +1,5 @@
 <?php
 
-use addons\Sales\common\enums\CheckStatusEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 
@@ -21,19 +20,8 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
-            <?php if($model->check_status == CheckStatusEnum::STOREKEEPER) {?>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <?= $form->field($model, 'is_finance_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
-                    </div>
-                    <div class="col-lg-6">
-                        <?= $form->field($model, 'is_quick_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
-                    </div>
-                </div>
-            <?php } ?>
-            <?= $form->field($model, 'check_status')->hiddenInput()->label(false); ?>
-            <?= $form->field($model, $status)->radioList(\common\enums\AuditStatusEnum::getAuditMap()) ?>
-            <?= $form->field($model, $remark)->textArea(); ?>
+            <?= $form->field($model, 'audit_status')->radioList(\common\enums\AuditStatusEnum::getAuditMap()); ?>
+            <?= $form->field($model, 'audit_remark')->textArea(); ?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->

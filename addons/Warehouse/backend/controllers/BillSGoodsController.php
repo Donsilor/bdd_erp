@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\forms\WarehouseBillBForm;
+use addons\Warehouse\common\forms\WarehouseBillSGoodsForm;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
@@ -23,19 +24,18 @@ use addons\Warehouse\common\models\WarehouseGoods;
 class BillSGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillBGoodsForm::class;
+    public $modelClass = WarehouseBillSGoodsForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_S;
 
     /**
-     * Lists all WarehouseBillBGoods models.
+     * Lists all WarehouseBillSGoodsForm models.
      * @return mixed
      */
     public function actionIndex()
     {
-
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index']));
         $bill_id = Yii::$app->request->get('bill_id');
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
