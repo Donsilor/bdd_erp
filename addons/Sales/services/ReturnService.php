@@ -199,7 +199,9 @@ class ReturnService
             $form->storekeeper_time = time();
             if($form->storekeeper_status == AuditStatusEnum::PASS){
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
-                $this->createBillD($form);
+                if($form->return_by == ReturnByEnum::GOODS){
+                    $this->createBillD($form);
+                }
             }else{
                 //$form->check_status = CheckStatusEnum::SAVE;
             }
@@ -218,19 +220,20 @@ class ReturnService
                 if(false === $goods->save()){
                     throw new \Exception($this->getError($goods));
                 }
-                //1.审核销售退货单
-                $where = ['order_sn' => $form->order_sn, 'bill_status'=>BillStatusEnum::PENDING, 'bill_type'=>BillTypeEnum::BILL_TYPE_D];
-                $bill = WarehouseBillDForm::find()->where($where)->one();
-                if(!empty($bill)){
-                    $bill->bill_status = BillStatusEnum::CONFIRM;
-                    $bill->audit_status = AuditStatusEnum::PASS;
-                }else{
-                    throw new \Exception("销售退货单不存在");
+                if($form->return_by == ReturnByEnum::GOODS) {
+                    //1.审核销售退货单
+                    $where = ['order_sn' => $form->order_sn, 'bill_status' => BillStatusEnum::PENDING, 'bill_type' => BillTypeEnum::BILL_TYPE_D];
+                    $bill = WarehouseBillDForm::find()->where($where)->one();
+                    if (!empty($bill)) {
+                        $bill->bill_status = BillStatusEnum::CONFIRM;
+                        $bill->audit_status = AuditStatusEnum::PASS;
+                    } else {
+                        throw new \Exception("销售退货单不存在");
+                    }
+                    //2.更新商品库存状态
+                    $condition = ['goods_id' => $form->goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
+                    WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], $condition);
                 }
-                //2.更新商品库存状态
-                $condition = ['goods_id'=>$form->goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
-                WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_STOCK], $condition);
-
                 //3.更新订单金额
                 $account = OrderAccount::findOne($form->order_id);
                 //$account->order_amount = bcsub($account->order_amount, $form->real_amount, 2);
