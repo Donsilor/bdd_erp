@@ -196,8 +196,8 @@ class SalesDetailController extends BaseController
     private function getData($ids){
         $select = ['s.*','type.name as product_type_name','channel.name as channel_name','depart.name as depart_name'];
         $query = SalesDetail::find()->alias('s')
-            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
-            ->leftJoin(SaleChannel::tableName().' channel','channel.id=g.sale_channel_id')
+            ->leftJoin(ProductType::tableName().' type','type.id=s.product_type_id')
+            ->leftJoin(SaleChannel::tableName().' channel','channel.id=s.sale_channel_id')
             ->leftJoin(Department::tableName().' depart','depart.id=s.dept_id')
             ->where(['s.id' => $ids])
             ->select($select);
