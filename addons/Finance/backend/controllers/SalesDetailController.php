@@ -11,6 +11,7 @@ use addons\Style\common\models\ProductType;
 use common\enums\TargetType;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
+use common\helpers\StringHelper;
 use common\models\common\Department;
 
 use Yii;
@@ -160,13 +161,12 @@ class SalesDetailController extends BaseController
      */
     public function actionExport($ids=null){
         $name = '财务销售明细单';
-        if(!is_array($ids)){
-            $ids = \common\helpers\StringHelper::explodeIds($ids);
+        if(!is_object($ids)) {
+            $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
-
         list($list,) = $this->getData($ids);
         $header = [
             ['订单号', 'orde_sn' , 'text'],
