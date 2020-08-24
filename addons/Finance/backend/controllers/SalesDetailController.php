@@ -3,21 +3,20 @@
 namespace addons\Finance\backend\controllers;
 
 
-use addons\Finance\common\enums\FinanceStatusEnum;
-use addons\Finance\common\forms\BankPayForm;
 use addons\Finance\common\models\BankPay;
 use addons\Finance\common\models\SalesDetail;
-use common\enums\CurrencyEnum;
-use common\enums\FlowStatusEnum;
+use addons\Sales\common\enums\ReturnByEnum;
+use addons\Sales\common\models\SaleChannel;
+use addons\Style\common\models\ProductType;
 use common\enums\TargetType;
-use common\helpers\ResultHelper;
-use common\models\common\Flow;
-use common\models\common\FlowDetails;
+use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
+use common\models\common\Department;
+
 use Yii;
-use common\enums\AuditStatusEnum;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use common\helpers\SnHelper;
+
 
 
 /**
@@ -85,6 +84,12 @@ class SalesDetailController extends BaseController
             list($start_date, $end_date) = explode('/', $searchParams['return_time']);
             $dataProvider->query->andFilterWhere(['between', SalesDetail::tableName().'.return_time', strtotime($start_date), strtotime($end_date) + 86400]);
         }
+
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(SalesDetail::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -147,7 +152,68 @@ class SalesDetailController extends BaseController
 
 
 
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '财务销售明细单';
+        if(!is_array($ids)){
+            $ids = \common\helpers\StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
 
+        list($list,) = $this->getData($ids);
+        $header = [
+            ['订单号', 'orde_sn' , 'text'],
+            ['部门', 'depart_name' , 'text'],
+            ['销售渠道', 'channel_name' , 'text'],
+            ['商品名称', 'goods_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['货号', 'goods_sn' , 'text'],
+            ['数量', 'goods_num' ,  'text'],
+            ['单价', 'goods_price' , 'text'],
+            ['平台收款日期', 'pay_time', 'date', 'Y-m-d'],
+            ['销售金额', 'sale_price' , 'text'],
+            ['发货时间', 'delivery_time', 'date', 'Y-m-d'],
+            ['采购成本', 'cost_price' , 'text'],
+            ['退款时间', 'refund_time', 'date', 'Y-m-d'],
+            ['退款金额', 'refund_price' , 'text'],
+            ['退货时间', 'return_time', 'date', 'Y-m-d'],
+            ['退款方式', 'return_by' , 'text'],
+
+
+
+        ];
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+
+
+    private function getData($ids){
+        $select = ['s.*','type.name as product_type_name','channel.name as channel_name','depart.name as depart_name'];
+        $query = SalesDetail::find()->alias('s')
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(SaleChannel::tableName().' channel','channel.id=g.sale_channel_id')
+            ->leftJoin(Department::tableName().' depart','depart.id=s.dept_id')
+            ->where(['s.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+        ];
+        foreach ($lists as &$list){
+            //退款方式
+            $list['return_by'] = ReturnByEnum::getValue($list['return_by']);
+            //统计
+
+
+        }
+        return [$lists,$total];
+    }
 
 
 
