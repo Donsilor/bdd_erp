@@ -22,10 +22,10 @@ $params = $params ? "&".http_build_query($params) : '';
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-<!--                    --><?//= Html::button('导出', [
-//                        'class'=>'btn btn-success btn-xs',
-//                        'onclick' => 'batchExport()',
-//                    ]);?>
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">  
