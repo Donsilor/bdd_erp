@@ -156,13 +156,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'apply_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute'=>'apply_amount',
+//                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute'=>'real_amount',
                             'filter' => Html::activeTextInput($searchModel, 'real_amount', [
