@@ -23,8 +23,8 @@ $form = ActiveForm::begin([
         ])->hint('账号创建后不可修改') ?>
         <?= $form->field($model, 'password')->passwordInput() ?>
         <?php if ($model->id != Yii::$app->params['adminAccount']) { ?>
-            <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department->getDropDown()) ?>
-            <?= $form->field($model, 'role_id')->dropDownList(Yii::$app->services->rbacAuthRole->getDropDown(AppEnum::BACKEND, true)) ?>
+            <?= $form->field($model, 'dept_id')->dropDownList(Yii::$app->services->department->getDropDown(),['prompt' => '请选择']) ?>
+            <?= $form->field($model, 'role_id')->dropDownList(Yii::$app->services->rbacAuthRole->getDropDown(AppEnum::BACKEND, true),['prompt' => '请选择']) ?>
         <?php } ?>
     </div>
     <div class="modal-footer">
