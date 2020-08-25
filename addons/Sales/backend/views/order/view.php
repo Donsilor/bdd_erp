@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY) {
                         echo Html::edit(['return', 'id' => $model->id], '退款', [
                             //'data-toggle' => 'modal',
-                            'class' => 'btn btn-primary btn-ms openIframe',
+                            'class' => 'btn btn-warning btn-ms openIframe',
                             //'data-target' => '#ajaxModalLg',
                             'data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px'
                         ]);

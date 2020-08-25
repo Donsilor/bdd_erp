@@ -12,8 +12,6 @@ use common\models\backend\Member;
  * @property string $return_no 退款编号
  * @property int $order_id 订单ID
  * @property string $order_sn 订单号
- * @property int $order_detail_id 订单明细ID
- * @property string $goods_id 货号
  * @property int $channel_id 所属渠道
  * @property int $goods_num 商品数量
  * @property string $should_amount 应退金额
@@ -48,11 +46,11 @@ use common\models\backend\Member;
  * @property string $pay_remark 付款备注
  * @property string $pay_receipt 付款凭证
  * @property int $check_status 确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)
- * @property int $auditor_id 审核人
- * @property int $audit_status 审核状态
- * @property int $audit_time 审核时间
- * @property string $audit_remark 审核备注
  * @property string $remark 备注
+ * @property int $audit_status 审核状态
+ * @property string $audit_remark 审核备注
+ * @property int $audit_time 审核时间
+ * @property int $auditor_id 审核人
  * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
@@ -74,16 +72,17 @@ class SalesReturn extends BaseModel
     public function rules()
     {
         return [
-            [['return_no', 'order_id', 'order_sn', 'order_detail_id'], 'required'],
-            [['order_id', 'order_detail_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['return_no', 'order_id', 'order_sn'], 'required'],
+            [['order_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'audit_status', 'audit_time', 'auditor_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['should_amount', 'apply_amount', 'real_amount'], 'number'],
             [['return_no', 'customer_mobile'], 'string', 'max' => 30],
             [['order_sn'], 'string', 'max' => 50],
-            [['return_reason', 'leader_remark', 'storekeeper_remark', 'finance_remark', 'pay_remark', 'pay_receipt', 'audit_remark', 'remark'], 'string', 'max' => 255],
+            [['return_reason'], 'string', 'max' => 10],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_email'], 'string', 'max' => 120],
             [['currency'], 'string', 'max' => 3],
-            [['goods_id', 'bank_name', 'bank_card'], 'string', 'max' => 100],
+            [['bank_name', 'bank_card'], 'string', 'max' => 100],
+            [['leader_remark', 'storekeeper_remark', 'finance_remark', 'pay_remark', 'pay_receipt', 'remark', 'audit_remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -97,8 +96,6 @@ class SalesReturn extends BaseModel
             'return_no' => '退款编号',
             'order_id' => '订单ID',
             'order_sn' => '订单号',
-            'order_detail_id' => '订单明细ID',
-            'goods_id' => '条码号(货号)',
             'channel_id' => '所属渠道',
             'goods_num' => '商品数量',
             'should_amount' => '应退金额',
@@ -106,41 +103,41 @@ class SalesReturn extends BaseModel
             'real_amount' => '实退金额',
             'return_reason' => '退款原因',
             'return_by' => '退款方式',
-            'return_type' => '申请类型',
+            'return_type' => '退款类型',
             'customer_id' => '客户ID',
-            'customer_name' => '收款人',
+            'customer_name' => '客户姓名',
             'customer_mobile' => '客户手机',
             'customer_email' => '客户邮箱',
             'currency' => '货币',
             'bank_name' => '开户银行',
             'bank_card' => '银行账户',
-            'is_finance_refund' => '是否需财务退款(线下退款)',
-            'is_quick_refund' => '平台是否已极速退款',
+            'is_finance_refund' => '是否财务退款',
+            'is_quick_refund' => '是否快速退款',
             'leader_id' => '部门主管',
-            'leader_status' => '主管确认状态',
-            'leader_remark' => '主管确认意见',
-            'leader_time' => '主管确认时间',
-            'storekeeper_id' => '商品部',
-            'storekeeper_status' => '商品部确认',
-            'storekeeper_remark' => '商品部确认备注',
-            'storekeeper_time' => '商品部确认时间',
+            'leader_status' => '主管审核状态',
+            'leader_remark' => '主管审核意见',
+            'leader_time' => '主管审核时间',
+            'storekeeper_id' => '库管',
+            'storekeeper_status' => '库管审核',
+            'storekeeper_remark' => '库管审核备注',
+            'storekeeper_time' => '库管审核时间',
             'finance_id' => '财务',
-            'finance_status' => '财务确认状态',
-            'finance_remark' => '财务确认备注',
-            'finance_time' => '财务确认时间',
+            'finance_status' => '财务审核状态',
+            'finance_remark' => '财务审核备注',
+            'finance_time' => '财务审核时间',
             'payer_id' => '实际付款人',
             'pay_status' => '支付状态',
             'pay_remark' => '付款备注',
             'pay_receipt' => '付款凭证',
             'check_status' => '确认状态',
-            'auditor_id' => '审核人',
-            'audit_status' => '单据审核状态',
-            'audit_time' => '审核时间',
-            'audit_remark' => '审核备注',
             'remark' => '备注',
+            'audit_status' => '审核状态',
+            'audit_remark' => '审核备注',
+            'audit_time' => '审核时间',
+            'auditor_id' => '审核人',
             'status' => '状态',
-            'creator_id' => '申请人',
-            'created_at' => '申请时间',
+            'creator_id' => '创建人',
+            'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }

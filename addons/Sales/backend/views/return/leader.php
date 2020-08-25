@@ -80,13 +80,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'goods_id',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute'=>'goods_id',
+//                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',

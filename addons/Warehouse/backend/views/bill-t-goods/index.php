@@ -365,7 +365,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            [
+                            /*[
                                 'attribute' => 'cert_id',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'filter' => Html::activeTextInput($searchModel, 'cert_id', [
@@ -510,7 +510,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'main_pei_type',
                                 'format' => 'raw',
@@ -882,7 +882,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
-                            [
+                            /*[
                                 'attribute' => 'second_stone_color2',
                                 'value' => function ($model) {
                                     return Yii::$app->attr->valueName($model->second_stone_color2) ?? "";
@@ -918,7 +918,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'second_stone_size2',
                                 'format' => 'raw',
@@ -949,7 +949,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                             ],
-                            [
+                            /*[
                                 'attribute' => 'second_pei_type3',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
@@ -1013,15 +1013,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
-                            ],
+                            ],*/
                             [
-                                'attribute' => 'stone_remark',
+                                'attribute' => 'peishi_gong_fee',
                                 'format' => 'raw',
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
-                                'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:160px;'
-                                ]),
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'peishi_fee',
@@ -1034,14 +1035,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'peishi_gong_fee',
+                                'attribute' => 'stone_remark',
                                 'format' => 'raw',
-                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
+                                'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:160px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'parts_way',
