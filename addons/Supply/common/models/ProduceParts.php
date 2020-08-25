@@ -58,7 +58,6 @@ class ProduceParts extends BaseModel
         return [
             [['produce_id', 'supplier_id', 'from_type', 'parts_num', 'caigou_time', 'songjian_time', 'peijian_time', 'peijian_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['parts_weight'], 'number'],
-            [['created_at', 'updated_at'], 'required'],
             [['produce_sn', 'delivery_no', 'from_order_sn', 'caigou_user', 'songjian_user', 'style_sn', 'peijian_user', 'creator_name'], 'string', 'max' => 30],
             [['parts_type', 'material_type', 'parts_shape', 'parts_color', 'parts_size', 'chain_type', 'cramp_ring'], 'string', 'max' => 10],
             [['parts_spec', 'remark', 'peijian_remark'], 'string', 'max' => 255],

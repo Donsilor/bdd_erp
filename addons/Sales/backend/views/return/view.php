@@ -7,7 +7,7 @@ use common\helpers\Url;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '退款详情';
+$this->title = '退款单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
@@ -35,10 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                                      <td><?= $model->order_sn ?></td>
                                  </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_id') ?>：</td>
-                                     <td><?= $model->goods_id ?></td>
-                                 </tr>
+<!--                                 <tr>-->
+<!--                                     <td class="col-xs-3 text-right">--><?//= $model->getAttributeLabel('goods_id') ?><!--：</td>-->
+<!--                                     <td>--><?//= $model->goods_id ?><!--</td>-->
+<!--                                 </tr>-->
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                                      <td><?= $model->goods_num ?></td>
@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('leader_id') ?>：</td>
-                                     <td><?= $model->leader->uasername??"" ?></td>
+                                     <td><?= $model->leader->username??"" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('leader_status') ?>：</td>
@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('storekeeper_id') ?>：</td>
-                                     <td><?= $model->storekeeper_id ?></td>
+                                     <td><?= $model->storekeeper->username??"" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('storekeeper_status') ?>：</td>
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finance_id') ?>：</td>
-                                     <td><?= $model->finance_id ?></td>
+                                     <td><?= $model->finance->username??"" ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finance_status') ?>：</td>

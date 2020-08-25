@@ -783,9 +783,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
-                            'label'=>'配件额',
+                            'attribute'=>'parts_amount',
                             'value' => function($model){
-                                return round($model->parts_gold_weight * $model->parts_price,2);
+                                return $model->parts_amount;
+//                                return round($model->parts_gold_weight * $model->parts_price,2);
                             },
                             'filter' => false,
                             'headerOptions' => [],
@@ -823,6 +824,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute'=>'xianqian_price',
+                            'filter' => false,
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'xianqian_fee',
                             'filter' => false,
                             'headerOptions' => [],
                         ],

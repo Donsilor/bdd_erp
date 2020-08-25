@@ -253,10 +253,9 @@ class PurchaseGoodsForm extends PurchaseGoods
                 'gold_price','gold_cost_price','gold_amount','gross_weight',
                 'gold_loss','single_stone_weight','parts_material','parts_num','parts_weight','parts_price','parts_amount','suttle_weight',
                 'peishi_fee','peishi_amount','xianqian_price','factory_cost_price','factory_mo','parts_price','factory_cost_price','factory_mo',
-                'jiagong_fee','xiangqian_fee','gong_fee','biaomiangongyi_fee','fense_fee','bukou_fee','penrasa_fee','edition_fee','gaitu_fee',
+                'jiagong_fee','gong_fee','biaomiangongyi_fee','fense_fee','bukou_fee','penrasa_fee','edition_fee','gaitu_fee',
                 'penla_fee','parts_fee','cert_fee','unit_cost_price','factory_total_price','company_total_price','stone_info','parts_remark',
-                'remark','main_stone_sn','second_stone_sn1','second_stone_sn2','ke_gong_fee','peiliao_way','peijian_way',
-                'main_peishi_way','second_peishi_way1','second_peishi_way2'
+                'remark','main_stone_sn','second_stone_sn1','second_stone_sn2','ke_gong_fee','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(
