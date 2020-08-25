@@ -87,12 +87,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'talon_head_type')->dropDownList($model->getTalonHeadTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_type')->dropDownList($model->getCertTypeDrop($model), ['prompt' => '请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_id')->textInput() ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'cert_type')->dropDownList($model->getCertTypeDrop($model), ['prompt' => '请选择']) ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'cert_id')->textInput() ?>
+<!--                    </div>-->
                     <div class="col-lg-4">
                         <?= $form->field($model, 'markup_rate')->textInput() ?>
                     </div>
