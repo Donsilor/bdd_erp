@@ -3,11 +3,11 @@
 use common\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = '订单日志';
+$this->title = '退款单日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">订单详情 - <?php echo $order->order_sn ?? ''?></h2>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $return->return_no?> - <?= \addons\Sales\common\enums\CheckStatusEnum::getValue($return->check_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-14">
@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>'white-space:nowrap;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -29,19 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'format' => 'raw',
                                 'headerOptions' => ['width'=>'80'],
-                            ],
-                            [
-                                'attribute'=>'order_sn',
-                                'value' => function($model) use($order){
-                                    return $order->order_sn;
-                                },
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute'=>'log_module',
-                                'filter' => false,
-                                'headerOptions' => [],
                             ],
                             [
                                 'attribute'=>'log_msg',

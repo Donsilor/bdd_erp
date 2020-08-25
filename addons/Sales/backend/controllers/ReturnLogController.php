@@ -30,7 +30,7 @@ class ReturnLogController extends BaseController
     {
         $return_id = Yii::$app->request->get('return_id');
 
-        $return = SalesReturn::find()->where(['return_id' => $return_id])->one();
+        $return = SalesReturn::find()->where(['id' => $return_id])->one();
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

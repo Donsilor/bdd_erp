@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\models\SalesReturn;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
@@ -58,9 +59,11 @@ class ReturnGoodsController extends BaseController
 
         $dataProvider->query->andWhere(['=',ReturnGoodsForm::tableName().'.return_id', $return_id]);
 
+        $return = SalesReturn::find()->where(['id' => $return_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'return' => $return,
             'tab' => $tab,
             'tabList'=>\Yii::$app->salesService->return->menuTabList($return_id, $returnUrl),
         ]);

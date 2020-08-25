@@ -253,7 +253,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('查看', ['return-goods/index', 'return_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
 //                                'status' => function($url, $model, $key){
 //                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
