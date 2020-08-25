@@ -81,17 +81,11 @@ class JdSdk extends Component
      */
     public function getOrderList($start_date, $end_date, $page = 1 ,$page_size = 20)
     {
-       
-        
-        $option_fields = [
-            'orderId','orderTotalPrice','orderSellerPrice','orderPayment','freightPrice',
-            'sellerDiscount','orderState','deliveryType','invoiceEasyInfo','orderRemark','orderStartTime',
-            'orderEndTime','consigneeInfo','itemInfoList','orderExt','paymentConfirmTime'            
-        ];
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
         $request->setOrderState($order_state);
+        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime';
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
         $request->setPageSize($page_size);
@@ -106,17 +100,23 @@ class JdSdk extends Component
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }  
-        $total_count = $responce->orderTotal;
-        $page_total = floor($total_count/$page_size);
+        $result = $responce->jingdong_pop_order_search_responce->searchorderinfo_result;
+        
+        $order_total= $result->orderTotal;
+        $page_total = floor($order_total/$page_size);
         
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
-        $order_list = $responce->jingdong_pop_order_search_responce->searchorderinfo_result->orderInfoList;
-        foreach ($order_list as $order) {
+        $order_list = $result->orderInfoList;
+        foreach ($order_list as & $order) {
+            $order->consigneeInfo->fullAddress = $tde->decrypt($order->consigneeInfo->fullAddress);
+            echo $order->consigneeInfo->fullAddress.'-'; continue;
+            $order->consigneeInfo->telephone= $tde->decrypt($order->consigneeInfo->telephone);
+            $order->consigneeInfo->fullname= $tde->decrypt($order->consigneeInfo->fullname);
+            $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
             
+            $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
         }
-        echo $total_count;
-        print_r($page_total);
-        return [$order_list,$page_total];
+        return [$order_list,$page_total,$order_total];
     }
     
     

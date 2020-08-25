@@ -1,0 +1,360 @@
+<?php
+
+namespace addons\Sales\services;
+
+
+use Yii;
+use common\components\Service;
+
+/**
+ * Bdd 订单同步
+ * Class OrderBddService
+ * @package services\common
+ */
+class JdOrderService extends Service
+{
+    /**
+     * 同步订单到erp
+     * @param int $order_id 订单Id
+     */
+    public function syncOrder($order)
+    {
+        if(!$order) {
+            throw new \Exception("order不能为空");
+        }
+        if(!$order->itemInfoList) {
+            throw new \Exception("order->itemInfoList不能为空");
+        }
+        if(!$order->consigneeInfo) {
+            throw new \Exception("order->consigneeInfo不能为空");
+        }
+        $orderInfo = $this->getErpOrderData($order);
+        $goodsList = $this->getErpOrderGoodsData($order);
+        $addressInfo = $this->getErpOrderAddressData($order);
+        $accountInfo = $this->getErpOrderAccountData($order);
+        $customerInfo = $this->getErpCustomerData($order);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);            
+            $trans->commit();
+        }catch (\Exception $e){
+            $trans->rollback();
+            throw $e;
+        }
+    }
+    /**
+     * ERP订单主表表单
+     * @param Order $order
+     */
+    public function getErpOrderData($order)
+    {
+        return [
+            "language"=>'zh_CN',
+            "currency"=>'CNY',
+            "pay_type"=>$this->getErpPayType($order),//京东（平台支付）
+            "pay_status"=>$this->getErpPayStatus($order),//已支付
+            "pay_time"=>$order->paymentConfirmTime ? strtotime($order->paymentConfirmTime):null,
+            //"out_pay_sn"=>$order->order_id,
+            //"out_pay_time"=>$order->payment_time,
+            'goods_num'=>1,
+            "order_status"=>$this->getErpOrderStatus($order),
+            "refund_status"=>0,
+            "express_id"=>$this->getErpExpressId($order),
+            "express_no"=>$order->waybill,
+            "distribute_status"=>$this->getErpDistributeStatus($order),
+            "delivery_status"=>$this->getErpDeliveryStatus($order),
+            "delivery_time"=>$order->delivery_time,
+            "receive_type"=>$order->deliveryType,//送货类型
+            "sale_channel_id"=>$this->getErpSaleChannelId($order),
+            "order_from"=>$this->getErpOrderFrom($order),
+            "order_type"=>$this->getErpOrderType($order),
+            "is_invoice"=>$order->is_invoice,
+            "out_trade_no"=>$order->order_id,
+            //"area_id"=>,
+            "customer_name"=>$order->consigneeInfo->fullname,
+            "customer_mobile"=>$this->getErpCustomerMobile($order),
+            //"customer_email"=>$order->consigneeInfo->email,
+            "customer_message"=>$order->orderRemark,
+            "store_remark"=>$order->venderRemark,
+            'order_time'=>strtotime($order->orderStartTime),
+        ];
+    }
+    /**
+     * ERP 客户资料 表单
+     * @param Order $order
+     */
+    public function getErpCustomerData($order)
+    {
+        return [
+            //"firstname"=>$order->address->firstname,
+            //"lastname"=>$order->address->lastname,
+            "realname"=>$order->consigneeInfo->fullname,
+            "channel_id"=>$this->getErpSaleChannelId($order),
+            "source_id"=>5,//京东商城
+            //"head_portrait"=>$order->member->head_portrait,
+            //"gender"=>$order->member->gender,
+            //"marriage"=>$order->member->marriage,
+            //"google_account"=>$order->member->google_account,
+            //"facebook_account"=>$order->member->facebook_account,
+            //"qq"=>$order->member->qq,
+            "mobile"=>$this->getErpCustomerMobile($order),
+            //"email"=>$order->address->email,
+            //"birthday"=>$order->member->birthday,
+            "home_phone"=>$order->consigneeInfo->telephone,
+            //"country_id"=>$order->address->country_id,
+            //"province_id"=>$order->address->province_id,
+            //"city_id"=>$order->address->city_id,
+            "address"=>$order->consigneeInfo->fullAddress,
+        ];
+    }
+    /**
+     * ERP订单商品 表单
+     * @param Order $order
+     */
+    public function getErpOrderAddressData($order)
+    {
+        return [
+            //"country_id"=>$order->address->country_id,
+            //"province_id"=>$order->address->province_id,
+            //"city_id"=>$order->address->city_id,
+            //"firstname"=>$order->address->firstname,
+            //"lastname"=>$order->address->lastname,
+            "realname"=>$order->consigneeInfo->fullname,
+            "country_name"=>'中国',
+            "province_name"=>$order->consigneeInfo->province,
+            "city_name"=>$order->consigneeInfo->city,
+            "address_details"=>$order->consigneeInfo->fullAddress,
+            //"zip_code"=>$order->address->zip_code,
+            "mobile"=>$order->consigneeInfo->mobile,
+            "mobile_code"=>'+86',
+            //"email"=>$order->address->email,
+        ];
+    }
+    /**
+     * ERP订单商品 表单
+     * @param Order $order
+     */
+    public function getErpOrderGoodsData($order)
+    {
+        $erpGoodsList = [];
+        foreach ($order->itemInfoList ?? [] as $model) {
+            $erpGoods = [
+                "goods_name" => $model->skuName,
+                //"goods_image"=> $model->goods_image,
+                "style_sn"=> $model->productNo,
+                "goods_sn"=> $model->skuId,
+                "jintuo_type"=> $this->getErpJintuoType($model),
+                "goods_num"=> $model->itemTotal,
+                "goods_price"=> $model->jdPrice,
+                "goods_pay_price"=> $model->jdPrice,
+                "goods_discount"=> 0,
+                "currency"=> 'CNY',
+                "exchange_rate"=> 1,
+                "delivery_status"=> $this->getErpDeliveryStatus($order),
+                "is_stock"=>$model->productNo ? 1:0,
+                "is_gift"=>$model->productNo ? 0:1,
+                "goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
+            ];
+            $erpGoodsList[] = $erpGoods;
+        }
+        
+        return $erpGoodsList;
+    }
+    
+    /**
+     * ERP订单商品属性表单
+     * @param OrderGoods $model 订单商品Model
+     */
+    public function getErpOrderGoodsAttrsData($model)
+    {
+        return [];
+    }
+    /**
+     *
+     * @param sting $material
+     * /**
+     BDD官网主成色：
+     28     18K白金      【erp材质： 18K     28     金料颜色：246
+     29  18K黄金         【erp材质： 18K     28    金料颜色：247
+     30   18K玫瑰金     【erp材质： 18K     28       金料颜色：248
+     31   14K白金      【erp材质： 14K     33     金料颜色：246
+     32   14k黄金          【erp材质： 14K     33    金料颜色：247
+     33   14K玫瑰金   【erp材质： 14K     33    金料颜色：248
+     34   铂金         【erp材质： Pt950    34    金料颜色：246
+     35    银925    【erp材质： Ag925    35    金料颜色：246
+     204   合金   【erp材质： Ag925   29
+     212   足金    【erp材质： Au999           31   金料颜色：247
+     * @return string[]|number[]
+     */
+    public function getErpMaterialAndColor($material)
+    {
+        
+        $material_type = '';
+        $material_type = '';
+        if($material == "18K白金") {
+            $material_type = 18;
+            $material_color = 246;
+        }elseif($material == "18K黄金") {
+            $material_type = 18;
+            $material_color = 247;
+        }elseif($material == "18K白金") {
+            $material_type = 18;
+            $material_color = 246;
+        }elseif($material == "18K玫瑰金") {
+            $material_type = 18;
+            $material_color = 248;
+        }elseif($material == "14k黄金") {
+            $material_type = 33;
+            $material_color = 247;
+        }elseif($material == "14K玫瑰金") {
+            $material_type = 18;
+            $material_color = 248;
+        }elseif($material == "铂金") {
+            $material_type = 34;
+            $material_color = 246;
+        }elseif($material == "银925") {
+            $material_type = 35;
+            $material_color = 246;
+        }elseif($material == "合金") {
+            $material_type = 35;
+            $material_color = 246;
+        }elseif($material == "足金") {
+            $material_type = 31;
+            $material_color = 247;
+        }
+        return [$material_type,$material_color];
+    }
+    /**
+     * ERP订单金额表单
+     * @param Order $order
+     */
+    public function getErpOrderAccountData($order)
+    {
+        return  [
+            "order_amount"=>$order->account->order_amount,
+            "goods_amount"=>$order->account->goods_amount,
+            "discount_amount"=>$order->account->discount_amount,
+            "pay_amount"=>$order->account->pay_amount,
+            "refund_amount"=>$order->account->refund_amount,
+            "shipping_fee"=>$order->account->shipping_fee,
+            "tax_fee"=>$order->account->tax_fee,
+            "safe_fee"=>$order->account->safe_fee,
+            "other_fee"=>$order->account->other_fee,
+            "exchange_rate"=>$order->account->exchange_rate,
+            "currency"=>$order->account->currency,
+            "coupon_amount"=>$order->account->coupon_amount,
+            "card_amount"=>$order->account->card_amount,
+            "paid_amount"=>$order->account->paid_amount,
+            "paid_currency"=>$order->account->paid_currency,
+        ];
+    }
+    /**
+     * ERP 订单支付状态
+     * @param Order $order
+     */
+    public static function getErpPayStatus($order)
+    {
+        return 1;//已支付
+    }
+    /**
+     * ERP 订单客户手机
+     * @param Order $order
+     */
+    public static function getErpCustomerMobile($order)
+    {
+        return '86-'.$order->consigneeInfo->mobile;
+    }
+    /**
+     * ERP 订单销售渠道
+     * @param Order $order
+     */
+    public static function getErpSaleChannelId($order)
+    {
+        return 6;//京东渠道
+    }
+    /**
+     * ERP 订单来源
+     * @param Order $order
+     */
+    public static function getErpOrderFrom($order)
+    {
+        return \addons\Sales\common\enums\OrderFromEnum::FROM_JD;
+    }
+    /**
+     * ERP 订单支付方式
+     * @param Order $order
+     */
+    public static function getErpPayType($order)
+    {
+         return 8; //京东平台支付
+    }
+    /**
+     * ERP 订单配货状态
+     * @param Order $order
+     */
+    public static function getErpDistributeStatus($order)
+    {
+        $erp_distribute_status = \addons\Sales\common\enums\DistributeStatusEnum::SAVE;
+        $map = [
+            'WAIT_GOODS_RECEIVE_CONFIRM '=>\addons\Sales\common\enums\DistributeStatusEnum::HAS_PEIHUO,
+            'FINISHED_L' =>\addons\Sales\common\enums\DistributeStatusEnum::HAS_PEIHUO
+        ];
+        return $map[$order->orderState] ?? $erp_distribute_status;
+    }
+    /**
+     * ERP 订单发货状态
+     * @param Order $order
+     */
+    public static function getErpDeliveryStatus($order)
+    {
+        $erp_delivery_status = \addons\Sales\common\enums\DeliveryStatusEnum::SAVE;
+        $map = [
+            'WAIT_GOODS_RECEIVE_CONFIRM '=>\addons\Sales\common\enums\DeliveryStatusEnum::HAS_SEND,
+            'FINISHED_L' =>\addons\Sales\common\enums\DeliveryStatusEnum::HAS_SEND
+        ];
+        return $map[$order->orderState] ?? $erp_delivery_status;
+    }
+    /**
+     * ERP 订单快递方式
+     * @param Order $order
+     */
+    public static function getErpExpressId($order)
+    {
+        $erp_express_id = 5;//京东快递
+        $map = [
+            2087=>5
+        ];
+        return $map[$order->logisticsId] ?? $erp_express_id;
+    }
+    /**
+     * ERP 订单状态
+     * @param Order $order
+     */
+    public static function getErpOrderStatus($order)
+    {
+        $erp_order_status = \addons\Sales\common\enums\OrderStatusEnum::SAVE;
+        $map = [
+            'WAIT_SELLER_STOCK_OUT'=>\addons\Sales\common\enums\OrderStatusEnum::SAVE,
+            'WAIT_GOODS_RECEIVE_CONFIRM '=>\addons\Sales\common\enums\OrderStatusEnum::CONFORMED,
+            'FINISHED_L' =>\addons\Sales\common\enums\OrderStatusEnum::CONFORMED
+        ];
+        return $map[$order->orderState] ?? $erp_order_status;
+    }
+    /**
+     * ERP 订单类型 1现货 2期货
+     * @param Order $order
+     */
+    public static function getErpOrderType($order)
+    {
+        return \addons\Sales\common\enums\OrderTypeEnum::FUTURE;
+    }
+    /**
+     * ERP 金托类型
+     * @param OrderGoods $goods
+     */
+    public static function getErpJintuoType($goods)
+    {
+        $erp_jintuo_type = \addons\Style\common\enums\JintuoTypeEnum::Chengpin;       
+        return $erp_jintuo_type;
+    }
+}
