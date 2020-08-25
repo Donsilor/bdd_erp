@@ -31,10 +31,9 @@ class ReturnGoodsController extends BaseController
      */
     public function actionIndex()
     {
-
         $return_id = Yii::$app->request->get('return_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['return/index', 'return_id'=>$return_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['return-goods/index', 'return_id'=>$return_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
