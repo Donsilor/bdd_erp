@@ -17,7 +17,18 @@ return [
     'components' => [
         'db' => [
                 'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=8.129.190.33;port=3389;dbname=bdd_erp;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
                 'charset' => 'utf8',
+                'tablePrefix' => '',
+                'attributes' => [
+                        // PDO::ATTR_STRINGIFY_FETCHES => false, // 提取的时候将数值转换为字符串
+                        // PDO::ATTR_EMULATE_PREPARES => false, // 启用或禁用预处理语句的模拟
+                ],
+                // 'enableSchemaCache' => true, // 是否开启缓存, 请了解其中机制在开启，不了解谨慎
+                // 'schemaCacheDuration' => 3600, // 缓存时间
+                // 'schemaCache' => 'cache', // 缓存名称
         ],
         //BDD正式erp
         /* 'db' => [
