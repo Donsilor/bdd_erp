@@ -35,10 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                                      <td><?= $model->order_sn ?></td>
                                  </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_id') ?>：</td>
-                                     <td><?= $model->goods_id ?></td>
-                                 </tr>
+<!--                                 <tr>-->
+<!--                                     <td class="col-xs-3 text-right">--><?//= $model->getAttributeLabel('goods_id') ?><!--：</td>-->
+<!--                                     <td>--><?//= $model->goods_id ?><!--</td>-->
+<!--                                 </tr>-->
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                                      <td><?= $model->goods_num ?></td>
