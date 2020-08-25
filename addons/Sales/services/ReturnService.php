@@ -38,7 +38,7 @@ class ReturnService
 
     /**
      * 退款单 tab
-     * @param int $return_id 快递公司ID
+     * @param int $return_id 退款ID
      * @param string $returnUrl
      * @return array
      */
@@ -46,27 +46,28 @@ class ReturnService
     {
         return [
             1 => ['name' => '退款单详情', 'url' => Url::to(['return/view', 'id' => $return_id, 'tab' => 1, 'returnUrl' => $returnUrl])],
-            //2=>['name'=>'快递配送区域','url'=>Url::to(['express-area/index','express_id'=>$return_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+            2 => ['name' => '退款单明细', 'url' => Url::to(['return-goods/index', 'return_id' => $return_id, 'tab' => 2, 'returnUrl' => $returnUrl])],
+            3 => ['name' => '退款单日志', 'url' => Url::to(['return-log/index', 'return_id' => $return_id, 'tab' => 3, 'returnUrl' => $returnUrl])],
         ];
     }
 
     /**
      * @param ReturnForm $form
      * @param Order $order
-     * @throws \Exception
      * @return object $form
      * 退款
+     * @throws \Exception
      */
     public function salesReturn($form, $order)
     {
-        if(empty($form->ids) && !is_array($form->ids)){
+        if (empty($form->ids) && !is_array($form->ids)) {
             throw new \Exception("请选择需要退款的商品");
         }
         foreach ($form->ids as $id) {
             $goods = OrderGoods::findOne($id);
-            if($order->delivery_status == DeliveryStatusEnum::HAS_SEND){
+            if ($order->delivery_status == DeliveryStatusEnum::HAS_SEND) {
                 $form->return_by = ReturnByEnum::GOODS;
-            }else{
+            } else {
                 $form->return_by = ReturnByEnum::NO_GOODS;
             }
             $return = [
@@ -95,14 +96,14 @@ class ReturnService
                 'created_at' => time(),
             ];
             $form->attributes = $return;
-            if(false === $form->save()){
+            if (false === $form->save()) {
                 throw new \Exception($this->getError($form));
             }
         }
 
         //同步订单信息
         $order->refund_status = RefundStatusEnum::APPLY;
-        if(false === $order->save()){
+        if (false === $order->save()) {
             throw new \Exception($this->getError($order));
         }
 
@@ -114,15 +115,15 @@ class ReturnService
      * 退款-转单
      * @param Order $order
      * @param array $ids
-     * @throws \Exception
      * @return object $form
+     * @throws \Exception
      */
     public function auditZhuandan($order, $ids)
     {
         //1.创建新订单
         $newOrder = clone $order;
         $newOrder->id = null;
-        if(false == $newOrder->save()) {
+        if (false == $newOrder->save()) {
             throw new \Exception($this->getError($newOrder));
         }
         \Yii::$app->salesService->order->createOrderSn($newOrder);
@@ -134,7 +135,7 @@ class ReturnService
             $newGoods = clone $goods;
             $newGoods->id = null;
             $newGoods->order_id = $newOrder->id;
-            if(false == $newGoods->save()) {
+            if (false == $newGoods->save()) {
                 throw new \Exception($this->getError($newGoods));
             }
             $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
@@ -150,16 +151,16 @@ class ReturnService
         $account->discount_amount = $discount_amount;
         $account->paid_amount = $order_amount;
         //$account->pay_amount = $order_amount;
-        if(false == $account->save()) {
+        if (false == $account->save()) {
             throw new \Exception($this->getError($account));
         }
 
         //4.创建订单地址信息
-        $address = OrderAddress::find()->where(['order_id'=>$newOrder->id])->one();
-        if(!$address) {
+        $address = OrderAddress::find()->where(['order_id' => $newOrder->id])->one();
+        if (!$address) {
             $address = new OrderAddress();
             $address->order_id = $newOrder->id;
-            if(false == $address->save()) {
+            if (false == $address->save()) {
                 throw new \Exception($this->getError($address));
             }
         }
@@ -172,7 +173,7 @@ class ReturnService
             'log_type' => LogTypeEnum::ARTIFICIAL,
             'log_time' => time(),
             'log_module' => '创建订单',
-            'log_msg' => "创建订单, 订单号:".$newOrder->order_sn,
+            'log_msg' => "创建订单, 订单号:" . $newOrder->order_sn,
         ];
         \Yii::$app->salesService->orderLog->createOrderLog($log);
 
@@ -181,46 +182,46 @@ class ReturnService
 
     /**
      * @param ReturnForm $form
-     * @throws \Exception
      * @return object $form
      * 退款-审核
+     * @throws \Exception
      */
     public function auditReturn($form)
     {
         $check_status = $form->check_status;
-        if($check_status == CheckStatusEnum::SAVE){
+        if ($check_status == CheckStatusEnum::SAVE) {
             $form->leader_id = \Yii::$app->user->getId();
             $form->leader_time = time();
-            if($form->leader_status == AuditStatusEnum::PASS){
+            if ($form->leader_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::LEADER;
             }
-        }elseif($check_status == CheckStatusEnum::LEADER){
+        } elseif ($check_status == CheckStatusEnum::LEADER) {
             $form->storekeeper_id = \Yii::$app->user->getId();
             $form->storekeeper_time = time();
-            if($form->storekeeper_status == AuditStatusEnum::PASS){
+            if ($form->storekeeper_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
-                if($form->return_by == ReturnByEnum::GOODS){
+                if ($form->return_by == ReturnByEnum::GOODS) {
                     $this->createBillD($form);
                 }
-            }else{
+            } else {
                 //$form->check_status = CheckStatusEnum::SAVE;
             }
-        }elseif($check_status == CheckStatusEnum::STOREKEEPER){
+        } elseif ($check_status == CheckStatusEnum::STOREKEEPER) {
             $form->finance_id = \Yii::$app->user->getId();
             $form->finance_time = time();
-            if($form->finance_status == AuditStatusEnum::PASS){
+            if ($form->finance_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::FINANCE;
                 $order = Order::findOne($form->order_id);
                 $order->refund_status = RefundStatusEnum::HAS_RETURN;
-                if(false === $order->save()){
+                if (false === $order->save()) {
                     throw new \Exception($this->getError($order));
                 }
                 $goods = OrderGoods::findOne($form->order_detail_id);
                 $goods->is_return = ConfirmEnum::YES;
-                if(false === $goods->save()){
+                if (false === $goods->save()) {
                     throw new \Exception($this->getError($goods));
                 }
-                if($form->return_by == ReturnByEnum::GOODS) {
+                if ($form->return_by == ReturnByEnum::GOODS) {
                     //1.审核销售退货单
                     $where = ['order_sn' => $form->order_sn, 'bill_status' => BillStatusEnum::PENDING, 'bill_type' => BillTypeEnum::BILL_TYPE_D];
                     $bill = WarehouseBillDForm::find()->where($where)->one();
@@ -238,16 +239,16 @@ class ReturnService
                 $account = OrderAccount::findOne($form->order_id);
                 //$account->order_amount = bcsub($account->order_amount, $form->real_amount, 2);
                 $account->refund_amount = bcadd($account->refund_amount, $form->real_amount, 2);
-                if(false === $account->save()){
+                if (false === $account->save()) {
                     throw new \Exception($this->getError($account));
                 }
-            }else{
+            } else {
                 //$form->check_status = CheckStatusEnum::LEADER;
             }
-        }else{
+        } else {
             throw new \Exception("审核失败");
         }
-        if(false === $form->save()) {
+        if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
         return $form;
@@ -255,28 +256,28 @@ class ReturnService
 
     /**
      * @param ReturnForm $form
-     * @throws \Exception
      * @return object $form
      * 创建销售退货单
+     * @throws \Exception
      */
     public function createBillD($form)
     {
         $goods_ids[$form->order_detail_id] = $form->goods_id;
-        if(empty($goods_ids)){
+        if (empty($goods_ids)) {
             throw new \Exception("货号[条码号]不能为空");
         }
         $bill_goods = [];
         $total_cost = $total_sale = $total_market = 0;
         foreach ($goods_ids as $id => $goods_id) {
-            if(!$goods_id){
+            if (!$goods_id) {
                 throw new \Exception("货号不能为空");
             }
-            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
-            if(!$goods){
-                throw new \Exception("货号".$goods_id."不存在");
+            $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id])->one();
+            if (!$goods) {
+                throw new \Exception("货号" . $goods_id . "不存在");
             }
-            if($goods->goods_status != GoodsStatusEnum::HAS_SOLD){
-                throw new \Exception("货号".$goods_id."不是已销售状态");
+            if ($goods->goods_status != GoodsStatusEnum::HAS_SOLD) {
+                throw new \Exception("货号" . $goods_id . "不是已销售状态");
             }
             $orderGoods = OrderGoods::findOne($id);
             //$goodsAccount = OrderAccount::findOne($id);
@@ -305,7 +306,7 @@ class ReturnService
                 'market_price' => $goods->market_price,
                 'markup_rate' => 1,
                 'status' => StatusEnum::ENABLED,
-                'creator_id' =>\Yii::$app->user->identity->getId(),
+                'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),
             ];
 
@@ -334,9 +335,9 @@ class ReturnService
         \Yii::$app->warehouseService->billD->createBillD($bill, $bill_goods);
 
         //2.更新商品库存状态
-        $condition = ['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
-        $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_REFUND], $condition);
-        if($execute_num <> count($bill_goods)){
+        $condition = ['goods_id' => $goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
+        $execute_num = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_REFUND], $condition);
+        if ($execute_num <> count($bill_goods)) {
             throw new \Exception("货品改变状态数量与明细数量不一致");
         }
         return $form;

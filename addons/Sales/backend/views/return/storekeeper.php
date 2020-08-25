@@ -59,6 +59,37 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
+                            'attribute'=>'created_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'created_at',
+                                'value' => $searchModel->created_at,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:160px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            }
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'value' => 'creator.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'attribute'=>'return_no',
                             'format' => 'raw',
                             'value'=>function($model) {
@@ -80,21 +111,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'goods_id',
-                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'creator_id',
-                            'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
-                            ]),
-                        ],
+//                        [
+//                            'attribute'=>'goods_id',
+//                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'return_type',
                             'format' => 'raw',
@@ -129,47 +152,18 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute'=>'created_at',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'created_at',
-                                'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
-                        ],
-                        [
                             'attribute'=>'should_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'should_amount', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'apply_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute'=>'apply_amount',
+//                            'filter' => false,
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute'=>'real_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'real_amount', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -253,7 +247,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('查看', ['return-goods/index', 'return_id', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
 //                                'status' => function($url, $model, $key){
 //                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {

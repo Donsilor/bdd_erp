@@ -106,7 +106,6 @@ trait AuthRoleTrait
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-
             // 创建角色关联的权限信息
             Yii::$app->services->rbacAuthItemChild->accredit($model->id, $data['userTreeIds'] ?? [], WhetherEnum::DISABLED, $this->appId);
             Yii::$app->services->rbacAuthItemChild->accredit($model->id, $data['plugTreeIds'] ?? [], WhetherEnum::ENABLED, $this->appId);
