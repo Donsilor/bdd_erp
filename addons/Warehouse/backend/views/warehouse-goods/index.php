@@ -803,6 +803,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute'=>'gong_fee',
                             'filter' => false,
+                            'value' => function($model){
+                                return $model->ke_gong_fee * $model->gross_weight;
+                            },
                             'headerOptions' => [],
                         ],
                         [
