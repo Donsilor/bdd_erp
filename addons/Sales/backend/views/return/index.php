@@ -151,23 +151,17 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute'=>'should_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'should_amount', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
 //                        [
 //                            'attribute'=>'apply_amount',
-//                            'filter' => Html::activeTextInput($searchModel, 'apply_amount', [
-//                                'class' => 'form-control',
-//                            ]),
+//                            'filter' => false,
 //                            'headerOptions' => ['class' => 'col-md-1'],
 //                        ],
                         [
                             'attribute'=>'real_amount',
-                            'filter' => Html::activeTextInput($searchModel, 'real_amount', [
-                                'class' => 'form-control',
-                            ]),
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
